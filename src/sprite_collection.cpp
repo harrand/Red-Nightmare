@@ -1,6 +1,6 @@
 #include "sprite_collection.hpp"
 
-SpriteCollection::SpriteCollection(): AssetBuffer(), player(this->emplace_texture("player", load_player_texture())), large_asteroid(this->emplace_texture("large_asteroid", load_large_asteroid_texture())), medium_asteroid(this->emplace_texture("medium_asteroid", load_medium_asteroid_texture())), small_asteroid(this->emplace_texture("small_asteroid", load_small_asteroid_texture())), ufo(this->emplace_texture("ufo", load_ufo_texture())){}
+SpriteCollection::SpriteCollection(): AssetBuffer(), player(this->emplace_texture("player", load_player_texture())), large_asteroid(this->emplace_texture("large_asteroid", load_large_asteroid_texture())), medium_asteroid(this->emplace_texture("medium_asteroid", load_medium_asteroid_texture())), small_asteroid(this->emplace_texture("small_asteroid", load_small_asteroid_texture())), ufo(this->emplace_texture("ufo", load_ufo_texture())), bullet(this->emplace_texture("bullet", load_bullet_texture())){}
 
 const Texture& SpriteCollection::get_player() const
 {
@@ -27,6 +27,11 @@ const Texture& SpriteCollection::get_ufo() const
     return this->ufo;
 }
 
+const Texture& SpriteCollection::get_bullet() const
+{
+    return this->bullet;
+}
+
 Texture SpriteCollection::load_player_texture()
 {
     return {"../res/textures/player.png"};
@@ -50,4 +55,10 @@ Texture SpriteCollection::load_small_asteroid_texture()
 Texture SpriteCollection::load_ufo_texture()
 {
     return {"../res/textures/ufo.png"};
+}
+
+Texture SpriteCollection::load_bullet_texture()
+{
+    Bitmap<PixelRGBA> white_pixel{std::vector<PixelRGBA>{PixelRGBA{255, 255, 255, 255}}, 1, 1};
+    return {white_pixel};
 }

@@ -21,18 +21,13 @@ void init()
     Shader render_shader{"../src/shaders/3D"};
     EntityManager manager{wnd};
     manager.enable_screen_wrapping({wnd.get_width(), wnd.get_height()});
-    Player& player = manager.spawn_player({400, 300}, 0.0f, {40.0f, 40.0f});
+    manager.spawn_player({400, 300}, 0.0f, {40.0f, 40.0f});
     Camera camera;
-    auto previous = tz::utility::time::now();
-    decltype(previous) delta = 0;
     Timer tick_timer;
     constexpr int tps = 60;
     while(!wnd.is_close_requested())
     {
         tick_timer.update();
-        auto now = tz::utility::time::now();
-        delta = now - previous;
-        previous = now;
         using namespace tz::graphics;
         wnd.clear(BufferBit::COLOUR_AND_DEPTH);
         if(tick_timer.millis_passed(1000.0f / tps))

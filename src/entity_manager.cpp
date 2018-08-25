@@ -1,5 +1,4 @@
 #include "entity_manager.hpp"
-#include "graphics/gui/gui.hpp"
 
 EntityManager::EntityManager(Window& wnd): Scene(), key_listener(wnd), mouse_listener(wnd), sprite_collection(), quad(tz::util::gui::gui_quad()), screen_wrapping_bounds(std::nullopt){}
 
@@ -32,8 +31,12 @@ void EntityManager::update(float delta)
             player->position_screenspace.y += forward.y * delta;
         }
         if(this->key_listener.catch_key_pressed("F"))
-            player->shoot();
+            player->shoot(*this);
         player->update(delta);
+    }
+    for(Bullet* bullet : this->get_bullets())
+    {
+        bullet->update(delta);
     }
     this->handle_screen_wrapping();
     Scene::update(delta);
@@ -59,6 +62,11 @@ void EntityManager::disable_screen_wrapping()
     this->screen_wrapping_bounds = std::nullopt;
 }
 
+const SpriteCollection& EntityManager::get_sprite_collection() const
+{
+    return this->sprite_collection;
+}
+
 void EntityManager::handle_screen_wrapping()
 {
     if(!this->screen_wrapping_enabled())
@@ -67,14 +75,34 @@ void EntityManager::handle_screen_wrapping()
     for(Sprite& sprite : this->get_mutable_sprites())
     {
         auto& position = sprite.position_screenspace;
+        bool needs_erasing = false;
+        Bullet* bullet_component = dynamic_cast<Bullet*>(&sprite);
         if(position.x < 0)
-            position.x = wrap_bounds.x ;
+        {
+            if(bullet_component != nullptr)
+                needs_erasing = true;
+            position.x = wrap_bounds.x;
+        }
         else if(position.x > wrap_bounds.x)
+        {
+            if(bullet_component != nullptr)
+                needs_erasing = true;
             position.x = 0;
+        }
         if(position.y < 0)
+        {
+            if(bullet_component != nullptr)
+                needs_erasing = true;
             position.y = wrap_bounds.y;
+        }
         else if(position.y > wrap_bounds.y)
+        {
+            if(bullet_component != nullptr)
+                needs_erasing = true;
             position.y = 0;
+        }
+        if(needs_erasing)
+            this->remove_sprite(sprite);
     }
 }
 
@@ -94,4 +122,22 @@ std::vector<Player*> EntityManager::get_players()
             players.push_back(player_component);
     }
     return players;
+}
+
+std::vector<Bullet*> EntityManager::get_bullets()
+{
+    std::vector<Bullet*> bullets;
+    for(auto& sprite_ptr : this->heap_sprites)
+    {
+        Bullet* bullet_component = dynamic_cast<Bullet*>(sprite_ptr.get());
+        if(bullet_component != nullptr)
+            bullets.push_back(bullet_component);
+    }
+    for(Sprite& sprite : this->stack_sprites)
+    {
+        Bullet* bullet_component = dynamic_cast<Bullet*>(&sprite);
+        if(bullet_component != nullptr)
+            bullets.push_back(bullet_component);
+    }
+    return bullets;
 }

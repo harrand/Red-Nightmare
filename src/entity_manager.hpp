@@ -4,6 +4,7 @@
 #include "core/scene.hpp"
 #include "sprite_collection.hpp"
 #include "player.hpp"
+#include "bullet.hpp"
 
 class EntityManager : public Scene
 {
@@ -16,9 +17,11 @@ public:
     std::optional<Vector2I> get_screen_wapping_bounds() const;
     void enable_screen_wrapping(Vector2I bounds);
     void disable_screen_wrapping();
+    const SpriteCollection& get_sprite_collection() const;
 protected:
     void handle_screen_wrapping();
     std::vector<Player*> get_players();
+    std::vector<Bullet*> get_bullets();
     KeyListener key_listener;
     MouseListener mouse_listener;
     SpriteCollection sprite_collection;

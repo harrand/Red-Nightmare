@@ -4,6 +4,7 @@
 
 #include "player.hpp"
 #include "audio/audio.hpp"
+#include "entity_manager.hpp"
 
 Player::Player(Vector2I position, float rotation, Vector2F scale, const Texture *player_texture) : Sprite(position, rotation, scale, player_texture), PhysicsObject(1.0f), texture(player_texture){}
 
@@ -44,9 +45,10 @@ std::optional<AABB> Player::get_boundary() const
     return AABB{minimum, maximum};
 }
 
-void Player::shoot()
+Bullet& Player::shoot(EntityManager& entity_manager)
 {
     Player::play_shoot_sound();
+    return entity_manager.emplace<Bullet>(this->position_screenspace, this->forward(), &entity_manager.get_sprite_collection().get_bullet());
 }
 
 void Player::play_shoot_sound()
