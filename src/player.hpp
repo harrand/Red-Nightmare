@@ -1,15 +1,14 @@
 #ifndef TOPAZASTEROIDS_PLAYER_HPP
 #define TOPAZASTEROIDS_PLAYER_HPP
-#include "graphics/sprite.hpp"
-#include "physics/physics_object.hpp"
+#include "physics/dynamic_sprite.hpp"
 #include "bullet.hpp"
 
 class EntityManager;
 
-class Player : public Sprite, public PhysicsObject
+class Player : public DynamicSprite
 {
 public:
-    Player(Vector2I position, float rotation, Vector2F scale, const Texture* player_texture);
+    Player(Vector2F position, float rotation, Vector2F scale, const Texture* player_texture);
     Vector2F forward() const;
     virtual void update(float delta) override;
     virtual std::optional<AABB> get_boundary() const;

@@ -22,6 +22,7 @@ void init()
     EntityManager manager{wnd};
     manager.enable_screen_wrapping({wnd.get_width(), wnd.get_height()});
     manager.spawn_player({400, 300}, 0.0f, {40.0f, 40.0f});
+    manager.spawn_asteroid({600, 300}, 0.0f, {100.0f, 100.0f}, Asteroid::Type::LARGE);
     Camera camera;
     Timer tick_timer;
     constexpr int tps = 60;
@@ -34,6 +35,7 @@ void init()
         {
             manager.update(tick_timer.get_range() / 1000.0f);
             tick_timer.reload();
+            manager.enable_screen_wrapping({wnd.get_width(), wnd.get_height()});
         }
         manager.render(render_shader, &gui_shader, camera, {wnd.get_width(), wnd.get_height()});
         wnd.update(gui_shader, nullptr);

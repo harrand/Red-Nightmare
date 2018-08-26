@@ -6,7 +6,7 @@
 #include "audio/audio.hpp"
 #include "entity_manager.hpp"
 
-Player::Player(Vector2I position, float rotation, Vector2F scale, const Texture *player_texture) : Sprite(position, rotation, scale, player_texture), PhysicsObject(1.0f), texture(player_texture){}
+Player::Player(Vector2F position, float rotation, Vector2F scale, const Texture *player_texture) : DynamicSprite(1.0f, position, rotation, scale, player_texture), texture(player_texture){}
 
 Vector2F Player::forward() const
 {
@@ -20,14 +20,12 @@ void Player::update(float delta)
     {
         float half_delta = delta * 0.5f;
         auto vel = this->velocity * half_delta;
-        this->position_screenspace.x += vel.x;
-        this->position_screenspace.y += vel.y;
-        this->set_rotation(this->get_rotation() + (this->angular_velocity * half_delta).z);
-        PhysicsObject::update(delta);
+        this->position_screenspace += vel.xy();
+        this->set_rotation(this->get_rotation() + this->angular_velocity.z * half_delta);
+        DynamicSprite::update(delta);
         vel = this->velocity * half_delta;
-        this->position_screenspace.x += vel.x;
-        this->position_screenspace.y += vel.y;
-        this->set_rotation (this->get_rotation() + (this->angular_velocity * half_delta).z);
+        this->position_screenspace += vel.xy();
+        this->set_rotation (this->get_rotation() + this->angular_velocity.z * half_delta);
     };
     // Perform forest-ruth motion integration. It utilises verlet-integration, so it more expensive but yields more accurate results.
     using namespace tz::utility::numeric;
@@ -39,7 +37,7 @@ void Player::update(float delta)
 std::optional<AABB> Player::get_boundary() const
 {
     Vector2F half_scale = this->scale / 2.0f;
-    Vector3F centre = {static_cast<float>(this->position_screenspace.x), static_cast<float>(this->position_screenspace.y), 0.0f};
+    Vector3F centre = {this->position_screenspace.x, this->position_screenspace.y, 0.0f};
     Vector3F minimum = {centre.x - half_scale.x, centre.y - half_scale.y, 0.0f};
     Vector3F maximum = {centre.x + half_scale.x, centre.y + half_scale.y, 0.0f};
     return AABB{minimum, maximum};

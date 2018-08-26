@@ -7,11 +7,11 @@ class Asteroid : public Sprite
 {
 public:
     enum class Type{LARGE, MEDIUM, SMALL};
-    Asteroid(Vector2I position, float rotation, Vector2F scale, Type type, Texture* asteroid_texture);
+    Asteroid(Vector2F position, float rotation, Vector2F scale, Type type, const Texture* asteroid_texture);
     Type get_type() const;
 private:
     Type type;
-    Texture* texture;
+    const Texture* texture;
 };
 
 

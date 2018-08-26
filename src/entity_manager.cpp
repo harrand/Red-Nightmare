@@ -11,9 +11,27 @@ bool EntityManager::has_player() const
     return contains;
 }
 
-Player& EntityManager::spawn_player(Vector2I position, float rotation, Vector2F scale)
+Player& EntityManager::spawn_player(Vector2F position, float rotation, Vector2F scale)
 {
     return this->emplace<Player>(position, rotation, scale, &this->sprite_collection.get_player());
+}
+
+Asteroid& EntityManager::spawn_asteroid(Vector2F position, float rotation, Vector2F scale, Asteroid::Type type)
+{
+    const Texture* asteroid_texture = nullptr;
+    switch(type)
+    {
+        case Asteroid::Type::LARGE:
+            asteroid_texture = &this->sprite_collection.get_large_asteroid();
+            break;
+        case Asteroid::Type::MEDIUM:
+            asteroid_texture = &this->sprite_collection.get_medium_asteroid();
+            break;
+        case Asteroid::Type::SMALL:
+            asteroid_texture = &this->sprite_collection.get_small_asteroid();
+            break;
+    }
+    return this->emplace<Asteroid>(position, rotation, scale, type, asteroid_texture);
 }
 
 void EntityManager::update(float delta)
@@ -26,9 +44,14 @@ void EntityManager::update(float delta)
             player->set_rotation(player->get_rotation() - delta * 10);
         if(this->key_listener.is_key_pressed("Space"))
         {
-            Vector2F forward = player->forward() * 250.0f;
-            player->position_screenspace.x += forward.x * delta;
-            player->position_screenspace.y += forward.y * delta;
+            Vector2F forward = player->forward() * 30.0f;
+            player->clear_forces();
+            player->add_force({forward, 0.0f});
+        }
+        else
+        {
+            player->clear_forces();
+            player->velocity *= 0.95f;
         }
         if(this->key_listener.catch_key_pressed("F"))
             player->shoot(*this);
