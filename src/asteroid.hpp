@@ -13,6 +13,7 @@ public:
     Type get_type() const;
     static void play_explosion_sound();
     static int get_score_on_kill(Asteroid::Type type);
+    static constexpr float large_asteroid_size = 100.0f;
     static constexpr int score_large_asteroid = 20;
     static constexpr int score_medium_asteroid = 50;
     static constexpr int score_small_asteroid = 100;

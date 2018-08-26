@@ -16,7 +16,7 @@ public:
     virtual void on_collision(Asteroid& asteroid);
     virtual void on_collision(Player& player);
     static constexpr float base_bullet_speed_multiplier = 250.0f;
-    static constexpr float bullet_size = 3;
+    static constexpr float bullet_size = 6;
 private:
     virtual void on_collision(PhysicsObject& other) override;
     EntityManager& manager;

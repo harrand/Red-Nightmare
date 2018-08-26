@@ -3,6 +3,7 @@
 #include "utility/time.hpp"
 #include "entity_manager.hpp"
 #include "graphics/gui/display.hpp"
+#include "entity_spawner.hpp"
 
 void init();
 
@@ -24,8 +25,9 @@ void init()
     Shader render_shader{"../src/shaders/3D"};
     EntityManager manager{wnd};
     manager.enable_screen_wrapping({wnd.get_width(), wnd.get_height()});
+    EntitySpawner spawner{manager, EntitySpawnerMetrics{}};
     Player& player = manager.spawn_player({400, 300}, 0.0f, {40.0f, 40.0f});
-    Asteroid& example_asteroid = manager.spawn_asteroid({600, 300}, 0.0f, {100.0f, 100.0f}, Asteroid::Type::LARGE);
+    Asteroid& example_asteroid = manager.spawn_asteroid({600, 300}, 0.0f, {Asteroid::large_asteroid_size, Asteroid::large_asteroid_size}, Asteroid::Type::LARGE);
     example_asteroid.velocity = {0.0f, 35.0f};
     Camera camera;
     Timer tick_timer;
@@ -41,6 +43,7 @@ void init()
             tick_timer.reload();
             manager.enable_screen_wrapping({wnd.get_width(), wnd.get_height()});
             score_label.set_text(tz::utility::generic::cast::to_string(player.get_score()));
+            spawner.tick_update(tps);
         }
         manager.render(render_shader, &gui_shader, camera, {wnd.get_width(), wnd.get_height()});
         wnd.update(gui_shader, nullptr);

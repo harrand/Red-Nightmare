@@ -10,5 +10,5 @@ include_directories(TopazAsteroids ${PROJECT_SOURCE_DIR}/src)
 link_directories(${PROJECT_SOURCE_DIR}/lib)
 
 add_executable(TopazAsteroids
-        src/main.cpp src/player.cpp src/player.hpp src/sprite_collection.cpp src/sprite_collection.hpp src/asteroid.cpp src/asteroid.hpp src/entity_manager.cpp src/entity_manager.hpp src/bullet.cpp src/bullet.hpp src/audio_manager.cpp src/audio_manager.hpp)
+        src/main.cpp src/player.cpp src/player.hpp src/sprite_collection.cpp src/sprite_collection.hpp src/asteroid.cpp src/asteroid.hpp src/entity_manager.cpp src/entity_manager.hpp src/bullet.cpp src/bullet.hpp src/audio_manager.cpp src/audio_manager.hpp src/entity_spawner.cpp src/entity_spawner.hpp)
 target_link_libraries(TopazAsteroids OpenGL32 SDL2 SDL2_ttf topaz)
