@@ -3,10 +3,10 @@
 //
 
 #include "player.hpp"
-#include "audio/audio.hpp"
 #include "entity_manager.hpp"
+#include "audio_manager.hpp"
 
-Player::Player(Vector2F position, float rotation, Vector2F scale, const Texture *player_texture) : DynamicSprite(1.0f, position, rotation, scale, player_texture), texture(player_texture){}
+Player::Player(Vector2F position, float rotation, Vector2F scale, const Texture *player_texture) : DynamicSprite(1.0f, position, rotation, scale, player_texture), texture(player_texture), score(0){}
 
 Vector2F Player::forward() const
 {
@@ -46,10 +46,20 @@ std::optional<AABB> Player::get_boundary() const
 Bullet& Player::shoot(EntityManager& entity_manager)
 {
     Player::play_shoot_sound();
-    return entity_manager.emplace<Bullet>(this->position_screenspace, this->forward(), &entity_manager.get_sprite_collection().get_bullet());
+    return entity_manager.emplace<Bullet>(this->position_screenspace, this->forward(), &entity_manager.get_sprite_collection().get_bullet(), entity_manager, this);
+}
+
+int Player::get_score() const
+{
+    return this->score;
+}
+
+void Player::set_score(int score)
+{
+    this->score = score;
 }
 
 void Player::play_shoot_sound()
 {
-    tz::audio::play_async(AudioClip{"../res/sounds/shoot.wav"});
+    AudioManager::play_shoot_sound();
 }

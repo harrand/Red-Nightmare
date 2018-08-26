@@ -14,9 +14,12 @@ public:
     virtual std::optional<AABB> get_boundary() const;
     virtual void on_collision([[maybe_unused]] PhysicsObject& other){}
     Bullet& shoot(EntityManager& entity_manager);
+    int get_score() const;
+    void set_score(int score);
     static void play_shoot_sound();
 private:
     const Texture* texture;
+    int score;
 };
 
 

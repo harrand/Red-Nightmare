@@ -36,6 +36,8 @@ Asteroid& EntityManager::spawn_asteroid(Vector2F position, float rotation, Vecto
 
 void EntityManager::update(float delta)
 {
+    Scene::update(delta);
+
     for(Player* player : this->get_players())
     {
         if(this->key_listener.is_key_pressed("A"))
@@ -62,7 +64,6 @@ void EntityManager::update(float delta)
         bullet->update(delta);
     }
     this->handle_screen_wrapping();
-    Scene::update(delta);
 }
 
 bool EntityManager::screen_wrapping_enabled() const
