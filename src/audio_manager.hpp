@@ -11,6 +11,7 @@ class AudioManager
 public:
     static void play_shoot_sound();
     static void play_asteroid_explosion_sound();
+    static void play_player_struck_sound();
 };
 
 

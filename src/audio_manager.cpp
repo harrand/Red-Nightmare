@@ -14,3 +14,8 @@ void AudioManager::play_asteroid_explosion_sound()
 {
     tz::audio::play_async(AudioClip{"../res/sounds/explosion.wav"});
 }
+
+void AudioManager::play_player_struck_sound()
+{
+    tz::audio::play_async(AudioClip{"../res/sounds/struck.wav"});
+}

@@ -16,10 +16,18 @@ public:
     Bullet& shoot(EntityManager& entity_manager);
     int get_score() const;
     void set_score(int score);
+    bool is_dead() const;
+    unsigned int get_lives() const;
+    void set_lives(unsigned int lives);
+    void add_lives(unsigned int lives);
+    void remove_lives(unsigned int lives);
     static void play_shoot_sound();
+    static void play_struck_sound();
+    static constexpr unsigned int default_lives = 5;
 private:
     const Texture* texture;
     int score;
+    unsigned int lives;
 };
 
 

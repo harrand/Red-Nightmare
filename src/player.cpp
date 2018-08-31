@@ -6,7 +6,7 @@
 #include "entity_manager.hpp"
 #include "audio_manager.hpp"
 
-Player::Player(Vector2F position, float rotation, Vector2F scale, const Texture *player_texture) : DynamicSprite(1.0f, position, rotation, scale, player_texture), texture(player_texture), score(0){}
+Player::Player(Vector2F position, float rotation, Vector2F scale, const Texture *player_texture) : DynamicSprite(1.0f, position, rotation, scale, player_texture), texture(player_texture), score(0), lives(Player::default_lives){}
 
 Vector2F Player::forward() const
 {
@@ -59,7 +59,40 @@ void Player::set_score(int score)
     this->score = score;
 }
 
+bool Player::is_dead() const
+{
+    return this->lives == 0;
+}
+
+unsigned int Player::get_lives() const
+{
+    return this->lives;
+}
+
+void Player::set_lives(unsigned int lives)
+{
+    this->lives = lives;
+}
+
+void Player::add_lives(unsigned int lives)
+{
+    this->lives += lives;
+}
+
+void Player::remove_lives(unsigned int lives)
+{
+    if(lives > this->lives)
+        this->lives = 0;
+    else
+        this->lives -= lives;
+}
+
 void Player::play_shoot_sound()
 {
     AudioManager::play_shoot_sound();
+}
+
+void Player::play_struck_sound()
+{
+    AudioManager::play_player_struck_sound();
 }

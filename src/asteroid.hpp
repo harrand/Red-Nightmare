@@ -3,12 +3,15 @@
 #include "physics/dynamic_sprite.hpp"
 
 class EntityManager;
+class Player;
 
 class Asteroid : public DynamicSprite
 {
 public:
     enum class Type{LARGE, MEDIUM, SMALL};
     Asteroid(Vector2F position, float rotation, Vector2F scale, Type type, const Texture* asteroid_texture);
+    virtual void on_collision(Player& player);
+    virtual void on_collision(Asteroid& asteroid);
     void explode(EntityManager& manager);
     Type get_type() const;
     static void play_explosion_sound();
@@ -19,6 +22,7 @@ public:
     static constexpr int score_small_asteroid = 100;
 private:
     std::pair<Asteroid*, Asteroid*> spawn_daughters(EntityManager& manager, Asteroid::Type daughter_type);
+    virtual void on_collision(PhysicsObject& other) override;
     Type type;
     const Texture* texture;
 };

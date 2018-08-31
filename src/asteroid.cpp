@@ -4,6 +4,17 @@
 
 Asteroid::Asteroid(Vector2F position, float rotation, Vector2F scale, Asteroid::Type type, const Texture* asteroid_texture): DynamicSprite(1.0f, position, rotation, scale, asteroid_texture), type(type){}
 
+void Asteroid::on_collision(Player &player)
+{
+    player.remove_lives(1);
+    Player::play_struck_sound();
+}
+
+void Asteroid::on_collision(Asteroid& asteroid)
+{
+    this->velocity *= -1.0f;
+}
+
 void Asteroid::explode(EntityManager& manager)
 {
     switch(this->type)
@@ -51,4 +62,14 @@ std::pair<Asteroid*, Asteroid*> Asteroid::spawn_daughters(EntityManager& manager
     daughter_a.velocity = this->velocity * -std::sqrt(2);
     daughter_b.velocity = this->velocity * std::sqrt(2);
     return {&daughter_a, &daughter_b};
+}
+
+void Asteroid::on_collision(PhysicsObject& other)
+{
+    Player* player_component = dynamic_cast<Player*>(&other);
+    if(player_component != nullptr)
+        this->on_collision(*player_component);
+    Asteroid* asteroid_component = dynamic_cast<Asteroid*>(&other);
+    if(asteroid_component != nullptr)
+        this->on_collision(*asteroid_component);
 }
