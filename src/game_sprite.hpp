@@ -28,6 +28,8 @@ class GameSprite : public DynamicSprite
 public:
     GameSprite(Vector2F position, float rotation, Vector2F scale, PossiblyAnimatedTexture texture);
     virtual void update(float delta_time) override;
+    void set_texture(const Texture* unanimated_texture);
+    void set_animation(AnimatedTexture* animated_texture);
 private:
     using DynamicSprite::set_texture;
     PossiblyAnimatedTexture texture;

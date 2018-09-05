@@ -30,6 +30,12 @@ void EntityManager::update(float delta)
             player->velocity += {-Player::default_speed, 0.0f, 0.0f};
         if(this->key_listener.is_key_pressed("D"))
             player->velocity += {Player::default_speed, 0.0f, 0.0f};
+        if(player->velocity.x > 0.0f)
+            player->set_animation(&this->sprite_collection.get_player_right());
+        else if(player->velocity.x < 0.0f)
+            player->set_animation(&this->sprite_collection.get_player_left());
+        else
+            player->set_texture(&this->sprite_collection.get_player_idle());
         player->update(delta);
     }
     this->handle_screen_wrapping();

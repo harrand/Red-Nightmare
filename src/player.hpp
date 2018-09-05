@@ -9,7 +9,6 @@ class Player : public GameSprite
 public:
     Player(Vector2F position, float rotation, Vector2F scale, const Texture* player_texture);
     Vector2F forward() const;
-    virtual void update(float delta_time) override;
     virtual std::optional<AABB> get_boundary() const;
     virtual void on_collision([[maybe_unused]] PhysicsObject& other){}
     bool is_dead() const;

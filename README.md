@@ -1,9 +1,15 @@
-# Asteroids (Topaz)
+# Red Nightmare
 ## About
 
-Asteroids (Topaz) is a modern reimplementation of the Atari Asteroids arcade game. This third-party implementation of Asteroids runs on PC, Mac and Linux using the Topaz engine.
+I have created this reimplementation twice. There is a university coursework edition aswell as the Topaz implementation. The coursework edition uses an unlicensed library, but the game itself can be found [here](https://github.com/Harrand/Red-Nightmare-Coursework-Edition).
 
-I have created this reimplementation twice. There is a Unity implementation aswell as this Topaz implementation. The Unity version can be found [here](https://github.com/Harrand/Asteroids).
+### Story
+
+Red Nightmare is a unique 2D game. You play as a powerful wizard stranded in a monster-infested forest. You are not being preyed upon by these monsters however; it is they who are preyed upon by ***you***. Luckily, you are a powerful wizard, armed with telekinesis and a magic fireball companion.
+
+You can use your telekinetic magic to drag the monsters into harms way. Anything that gets too close to your fireball will be incinerated, including yourself. You can also command your fireball to move to a target location; either to protect yourself from invading monsters or to move into groups of monsters to demolish them.
+
+Beware, however; a presence lingers in the forest, causing it to decay and die. It is a powerful presence indeed, but not your own. Can you survive the nightmare?
 
 ### Built With
 

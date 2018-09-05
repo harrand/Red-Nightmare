@@ -6,10 +6,12 @@ class SpriteCollection : protected AssetBuffer
 {
 public:
     SpriteCollection();
-    const Texture& get_player_idle() const;
+    Texture& get_player_idle();
+    AnimatedTexture& get_player_right();
+    AnimatedTexture& get_player_left();
     static Texture load_player_idle_texture();
-private:
-    Texture& player_idle;
+    static PolyFrameTexture::FrameMap load_player_right_animation();
+    static PolyFrameTexture::FrameMap load_player_left_animation();
 };
 
 

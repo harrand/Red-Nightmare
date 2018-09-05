@@ -12,11 +12,6 @@ Vector2F Player::forward() const
     return {-std::sin(this->get_rotation()), std::cos(this->get_rotation())};
 }
 
-void Player::update(float delta_time)
-{
-    GameSprite::update(delta_time);
-}
-
 std::optional<AABB> Player::get_boundary() const
 {
     Vector2F half_scale = this->scale / 2.0f;

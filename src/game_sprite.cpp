@@ -10,7 +10,12 @@ PossiblyAnimatedTexture::PossiblyAnimatedTexture(AnimatedTexture* animated_textu
 void PossiblyAnimatedTexture::update(float delta_time)
 {
     if(this->is_animated())
-        std::get<AnimatedTexture*>(this->texture)->update(delta_time);
+    {
+        AnimatedTexture* animation = std::get<AnimatedTexture*>(this->texture);
+        animation->update(1000.0f * delta_time);
+        std::cout << "current animation frame = " << animation->get_current_frame() << "\n";
+        std::cout << "current animation frame dimensions = " << animation->get_frame_texture().get_width() << ", " << animation->get_frame_texture().get_height() << "\n";
+    }
 }
 
 bool PossiblyAnimatedTexture::is_animated() const
@@ -60,8 +65,18 @@ GameSprite::GameSprite(Vector2F position, float rotation, Vector2F scale, Possib
 void GameSprite::update(float delta_time)
 {
     this->texture.update(delta_time);
-    DynamicSprite::update(delta_time);
     this->update_texture();
+    DynamicSprite::update(delta_time);
+}
+
+void GameSprite::set_texture(const Texture* unanimated_texture)
+{
+    this->texture.set_texture(unanimated_texture);
+}
+
+void GameSprite::set_animation(AnimatedTexture* animated_texture)
+{
+    this->texture.set_animation(animated_texture);
 }
 
 void GameSprite::update_texture()
