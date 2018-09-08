@@ -16,6 +16,11 @@ Cursor& EntityManager::spawn_cursor()
     return this->emplace<Cursor>(&this->sprite_collection.get_off_rune());
 }
 
+Fireball& EntityManager::spawn_fireball(Vector2F position, float rotation, Vector2F scale)
+{
+    return this->emplace<Fireball>(position, rotation, scale, &this->sprite_collection.get_fireball());
+}
+
 Player& EntityManager::spawn_player(Vector2F position, float rotation, Vector2F scale)
 {
     return this->emplace<Player>(position, rotation, scale, &this->sprite_collection.get_player_idle());
@@ -49,7 +54,7 @@ bool EntityManager::screen_wrapping_enabled() const
     return this->screen_wrapping_bounds.has_value();
 }
 
-std::optional<Vector2I> EntityManager::get_screen_wapping_bounds() const
+std::optional<Vector2I> EntityManager::get_screen_wrapping_bounds() const
 {
     return this->screen_wrapping_bounds;
 }

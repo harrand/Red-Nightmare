@@ -6,6 +6,7 @@
 #include "player.hpp"
 #include "ghost.hpp"
 #include "cursor.hpp"
+#include "fireball.hpp"
 
 class EntityManager : public Scene
 {
@@ -13,19 +14,21 @@ public:
     EntityManager(Window& event_window);
     bool has_player() const;
     Cursor& spawn_cursor();
+    Fireball& spawn_fireball(Vector2F position, float rotation, Vector2F scale);
     Player& spawn_player(Vector2F position, float rotation, Vector2F scale);
     Ghost& spawn_ghost(Vector2F position, float rotation, Vector2F scale);
     virtual void update(float delta) override;
     KeyListener& get_key_listener();
     const MouseListener& get_mouse_listener() const;
     bool screen_wrapping_enabled() const;
-    std::optional<Vector2I> get_screen_wapping_bounds() const;
+    std::optional<Vector2I> get_screen_wrapping_bounds() const;
     void enable_screen_wrapping(Vector2I bounds);
     void disable_screen_wrapping();
     SpriteCollection& get_sprite_collection();
 
     friend class Entity;
     friend class Cursor;
+    friend class Fireball;
 protected:
     void handle_screen_wrapping();
     std::vector<Entity*> get_entities();

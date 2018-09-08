@@ -39,20 +39,29 @@ unsigned int Entity::get_health() const
     return this->health;
 }
 
-void Entity::set_health(unsigned int health)
+void Entity::set_health(EntityManager& manager, unsigned int health)
 {
+    bool was_dead = this->is_dead();
     this->health = health;
+    if(!was_dead && this->is_dead())
+        this->on_death(manager);
 }
 
-void Entity::add_health(unsigned int health)
+void Entity::add_health(EntityManager& manager, unsigned int health)
 {
+    bool was_dead = this->is_dead();
     this->health += health;
+    if(!was_dead && this->is_dead())
+        this->on_death(manager);
 }
 
-void Entity::remove_health(unsigned int health)
+void Entity::remove_health(EntityManager& manager, unsigned int health)
 {
-    if (health > this->health)
+    if (health >= this->health)
+    {
+        this->on_death(manager);
         this->health = 0;
+    }
     else
         this->health -= health;
 }

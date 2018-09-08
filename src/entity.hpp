@@ -15,13 +15,14 @@ class Entity : public GameSprite
 public:
     Entity(Vector2F position, float rotation, Vector2F scale, const Texture* texture);
     virtual void update(EntityManager& manager, float delta_time);
+    virtual void on_death([[maybe_unused]] EntityManager& manager){}
     Vector2F forward() const;
     bool is_moving() const;
     bool is_dead() const;
     unsigned int get_health() const;
-    void set_health(unsigned int health);
-    void add_health(unsigned int health);
-    void remove_health(unsigned int health);
+    void set_health(EntityManager& manager, unsigned int health);
+    void add_health(EntityManager& manager, unsigned int health);
+    void remove_health(EntityManager& manager, unsigned int health);
     const Vector2F* get_target() const;
     bool has_target() const;
     void set_target(Vector2F target);

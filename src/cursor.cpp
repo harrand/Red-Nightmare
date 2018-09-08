@@ -5,7 +5,10 @@
 #include "cursor.hpp"
 #include "entity_manager.hpp"
 
-Cursor::Cursor(const Texture* cursor_texture) : Entity({}, 0.0f, {Cursor::CURSOR_SIZE, Cursor::CURSOR_SIZE}, cursor_texture), active(false), held_entities(){}
+Cursor::Cursor(const Texture* cursor_texture) : Entity({}, 0.0f, {Cursor::CURSOR_SIZE, Cursor::CURSOR_SIZE}, cursor_texture), active(false), held_entities()
+{
+    this->angular_velocity = {0.0f, 0.0f, 1.0f};
+}
 
 void Cursor::update(EntityManager& manager, float delta_time)
 {
@@ -23,7 +26,7 @@ void Cursor::update(EntityManager& manager, float delta_time)
     }
     for(Ghost* ghost : manager.get_ghosts())
     {
-        if(ghost->get_boundary().has_value() && ghost->get_boundary().value().intersects({this->position_screenspace, 0.0f}) && this->is_activated())
+        if(ghost->get_boundary().has_value() && ghost->get_boundary().value().intersects({this->position_screenspace, 0.0f}) && this->is_activated() && !ghost->is_dead())
         {
             ghost->set_kinematic(true);
             this->held_entities.emplace(ghost, ghost->position_screenspace - this->position_screenspace);
