@@ -25,10 +25,12 @@ public:
     SpriteCollection& get_sprite_collection();
 
     friend class Entity;
+    friend class Cursor;
 protected:
     void handle_screen_wrapping();
     std::vector<Entity*> get_entities();
     std::vector<Player*> get_players();
+    std::vector<Ghost*> get_ghosts();
     KeyListener key_listener;
     MouseListener mouse_listener;
     SpriteCollection sprite_collection;

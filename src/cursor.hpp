@@ -15,6 +15,7 @@ public:
     static constexpr float CURSOR_SIZE = 35.0f;
 private:
     bool active;
+    std::unordered_map<Entity*, Vector2F> held_entities;
 };
 
 

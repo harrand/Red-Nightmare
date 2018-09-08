@@ -5,7 +5,7 @@
 #include "player.hpp"
 #include "entity_manager.hpp"
 
-Entity::Entity(Vector2F position, float rotation, Vector2F scale, const Texture* texture) : GameSprite(position, rotation, scale, texture), health(Entity::default_health), target(std::nullopt){}
+Entity::Entity(Vector2F position, float rotation, Vector2F scale, const Texture* texture) : GameSprite(position, rotation, scale, texture), health(Entity::default_health), target(std::nullopt), kinematic(false){}
 
 Vector2F Entity::forward() const
 {
@@ -14,8 +14,13 @@ Vector2F Entity::forward() const
 
 void Entity::update([[maybe_unused]] EntityManager& manager, float delta_time)
 {
-    if(this->has_target())
-        this->velocity = {(*this->get_target() - this->position_screenspace).normalised() * Entity::default_speed, 0.0f};
+    if(!this->is_kinematic())
+    {
+        if(this->has_target())
+            this->velocity = {(*this->get_target() - this->position_screenspace).normalised() * Entity::default_speed, 0.0f};
+    }
+    else
+        this->velocity = {};
     GameSprite::update(delta_time);
 }
 
@@ -73,6 +78,16 @@ void Entity::set_target(Vector2F target)
 void Entity::remove_target()
 {
     this->target = std::nullopt;
+}
+
+bool Entity::is_kinematic() const
+{
+    return this->kinematic;
+}
+
+void Entity::set_kinematic(bool kinematic)
+{
+    this->kinematic = kinematic;
 }
 
 Player* Entity::get_closest_player(EntityManager& manager)

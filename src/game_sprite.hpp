@@ -28,12 +28,14 @@ class GameSprite : public DynamicSprite
 public:
     GameSprite(Vector2F position, float rotation, Vector2F scale, PossiblyAnimatedTexture texture);
     virtual void update(float delta_time) override;
+    virtual void on_collision([[maybe_unused]] GameSprite& other){}
     void set_texture(const Texture* unanimated_texture);
     void set_animation(AnimatedTexture* animated_texture);
 private:
     using DynamicSprite::set_texture;
-    PossiblyAnimatedTexture texture;
     void update_texture();
+    virtual void on_collision(PhysicsObject& other) override;
+    PossiblyAnimatedTexture texture;
 };
 
 

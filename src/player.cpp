@@ -23,7 +23,7 @@ void Player::update(EntityManager& manager, float delta_time)
         this->set_animation(&manager.get_sprite_collection().get_player_right());
     else if(this->velocity.x < 0.0f)
         this->set_animation(&manager.get_sprite_collection().get_player_left());
-    else if(manager.get_mouse_listener().is_left_clicked())
+    else if(manager.get_mouse_listener().is_left_clicked() && this->velocity.y == 0.0f)
         this->set_texture(&manager.get_sprite_collection().get_player_special());
     else
         this->set_texture(&manager.get_sprite_collection().get_player_idle());

@@ -84,3 +84,10 @@ void GameSprite::update_texture()
     else
         DynamicSprite::set_texture(this->texture.get_unanimate_texture());
 }
+
+void GameSprite::on_collision(PhysicsObject& other)
+{
+    GameSprite* sprite_component = dynamic_cast<GameSprite*>(&other);
+    if(sprite_component != nullptr)
+        this->on_collision(*sprite_component);
+}

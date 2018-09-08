@@ -125,3 +125,15 @@ std::vector<Player*> EntityManager::get_players()
     }
     return players;
 }
+
+std::vector<Ghost*> EntityManager::get_ghosts()
+{
+    std::vector<Ghost*> ghosts;
+    for(Entity* entity : this->get_entities())
+    {
+        Ghost* ghost_component = dynamic_cast<Ghost*>(entity);
+        if(ghost_component != nullptr)
+            ghosts.push_back(ghost_component);
+    }
+    return ghosts;
+}

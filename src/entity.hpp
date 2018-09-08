@@ -26,12 +26,15 @@ public:
     bool has_target() const;
     void set_target(Vector2F target);
     void remove_target();
+    bool is_kinematic() const;
+    void set_kinematic(bool kinematic);
     static constexpr unsigned int default_health = 100;
     static constexpr float default_speed = 50.0f;
 protected:
     Player* get_closest_player(EntityManager& manager);
     unsigned int health;
     std::optional<Vector2F> target;
+    bool kinematic;
 };
 
 

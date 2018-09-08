@@ -5,7 +5,7 @@
 #include "cursor.hpp"
 #include "entity_manager.hpp"
 
-Cursor::Cursor(const Texture* cursor_texture) : Entity({}, 0.0f, {Cursor::CURSOR_SIZE, Cursor::CURSOR_SIZE}, cursor_texture), active(false){}
+Cursor::Cursor(const Texture* cursor_texture) : Entity({}, 0.0f, {Cursor::CURSOR_SIZE, Cursor::CURSOR_SIZE}, cursor_texture), active(false), held_entities(){}
 
 void Cursor::update(EntityManager& manager, float delta_time)
 {
@@ -20,6 +20,23 @@ void Cursor::update(EntityManager& manager, float delta_time)
     {
         this->set_texture(&manager.get_sprite_collection().get_off_rune());
         this->active = false;
+    }
+    for(Ghost* ghost : manager.get_ghosts())
+    {
+        if(ghost->get_boundary().has_value() && ghost->get_boundary().value().intersects({this->position_screenspace, 0.0f}) && this->is_activated())
+        {
+            ghost->set_kinematic(true);
+            this->held_entities.emplace(ghost, ghost->position_screenspace - this->position_screenspace);
+        }
+        else
+        {
+            ghost->set_kinematic(false);
+            this->held_entities.erase(ghost);
+        }
+    }
+    for(const auto& [entity, offset] : this->held_entities)
+    {
+        entity->position_screenspace = this->position_screenspace + offset;
     }
     Entity::update(manager, delta_time);
 }
