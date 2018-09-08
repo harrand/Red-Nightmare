@@ -22,7 +22,9 @@ void init()
     Shader render_shader{"../src/shaders/3D"};
     EntityManager manager{wnd};
     manager.enable_screen_wrapping({wnd.get_width(), wnd.get_height()});
+    Cursor& cursor = manager.spawn_cursor();
     Player& player = manager.spawn_player({10, 10}, 0.0f, {100, 100});
+    Ghost& ghost = manager.spawn_ghost({200, 10}, 0.0f, {100, 100});
     Camera camera;
     Timer tick_timer;
     constexpr int tps = 60;

@@ -1,21 +1,14 @@
 #ifndef TOPAZASTEROIDS_PLAYER_HPP
 #define TOPAZASTEROIDS_PLAYER_HPP
-#include "game_sprite.hpp"
+#include "entity.hpp"
 
 class EntityManager;
 
-class Player : public GameSprite
+class Player : public Entity
 {
 public:
     Player(Vector2F position, float rotation, Vector2F scale, const Texture* player_texture);
-    Vector2F forward() const;
-    virtual std::optional<AABB> get_boundary() const;
-    virtual void on_collision([[maybe_unused]] PhysicsObject& other){}
-    bool is_dead() const;
-    unsigned int get_health() const;
-    void set_health(unsigned int health);
-    void add_health(unsigned int health);
-    void remove_health(unsigned int health);
+    virtual void update(EntityManager& manager, float delta_time) override;
     static void play_shoot_sound();
     static void play_struck_sound();
     static constexpr unsigned int default_health = 100;

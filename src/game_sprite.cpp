@@ -13,8 +13,6 @@ void PossiblyAnimatedTexture::update(float delta_time)
     {
         AnimatedTexture* animation = std::get<AnimatedTexture*>(this->texture);
         animation->update(1000.0f * delta_time);
-        std::cout << "current animation frame = " << animation->get_current_frame() << "\n";
-        std::cout << "current animation frame dimensions = " << animation->get_frame_texture().get_width() << ", " << animation->get_frame_texture().get_height() << "\n";
     }
 }
 

@@ -11,34 +11,37 @@ bool EntityManager::has_player() const
     return contains;
 }
 
+Cursor& EntityManager::spawn_cursor()
+{
+    return this->emplace<Cursor>(&this->sprite_collection.get_off_rune());
+}
+
 Player& EntityManager::spawn_player(Vector2F position, float rotation, Vector2F scale)
 {
     return this->emplace<Player>(position, rotation, scale, &this->sprite_collection.get_player_idle());
 }
 
+Ghost& EntityManager::spawn_ghost(Vector2F position, float rotation, Vector2F scale)
+{
+    return this->emplace<Ghost>(position, rotation, scale, &this->sprite_collection.get_ghost_idle());
+}
+
 void EntityManager::update(float delta)
 {
     Scene::update(delta);
-    for(Player* player : this->get_players())
-    {
-        player->velocity = {};
-        if(this->key_listener.is_key_pressed("W"))
-            player->velocity += {0.0f, Player::default_speed, 0.0f};
-        if(this->key_listener.is_key_pressed("S"))
-            player->velocity += {0.0f, -Player::default_speed, 0.0f};
-        if(this->key_listener.is_key_pressed("A"))
-            player->velocity += {-Player::default_speed, 0.0f, 0.0f};
-        if(this->key_listener.is_key_pressed("D"))
-            player->velocity += {Player::default_speed, 0.0f, 0.0f};
-        if(player->velocity.x > 0.0f)
-            player->set_animation(&this->sprite_collection.get_player_right());
-        else if(player->velocity.x < 0.0f)
-            player->set_animation(&this->sprite_collection.get_player_left());
-        else
-            player->set_texture(&this->sprite_collection.get_player_idle());
-        player->update(delta);
-    }
+    for(Entity* entity: this->get_entities())
+        entity->update(*this, delta);
     this->handle_screen_wrapping();
+}
+
+KeyListener& EntityManager::get_key_listener()
+{
+    return this->key_listener;
+}
+
+const MouseListener& EntityManager::get_mouse_listener() const
+{
+    return this->mouse_listener;
 }
 
 bool EntityManager::screen_wrapping_enabled() const
@@ -61,7 +64,7 @@ void EntityManager::disable_screen_wrapping()
     this->screen_wrapping_bounds = std::nullopt;
 }
 
-const SpriteCollection& EntityManager::get_sprite_collection() const
+SpriteCollection& EntityManager::get_sprite_collection()
 {
     return this->sprite_collection;
 }
@@ -93,18 +96,30 @@ void EntityManager::handle_screen_wrapping()
     }
 }
 
-std::vector<Player*> EntityManager::get_players()
+std::vector<Entity*> EntityManager::get_entities()
 {
-    std::vector<Player*> players;
+    std::vector<Entity*> entities;
     for(auto& sprite_ptr : this->heap_sprites)
     {
-        Player* player_component = dynamic_cast<Player*>(sprite_ptr.get());
-        if(player_component != nullptr)
-            players.push_back(player_component);
+        Entity* entity_component = dynamic_cast<Entity*>(sprite_ptr.get());
+        if(entity_component != nullptr)
+            entities.push_back(entity_component);
     }
     for(Sprite& sprite : this->stack_sprites)
     {
-        Player* player_component = dynamic_cast<Player*>(&sprite);
+        Entity* entity_component = dynamic_cast<Entity*>(&sprite);
+        if(entity_component != nullptr)
+            entities.push_back(entity_component);
+    }
+    return entities;
+}
+
+std::vector<Player*> EntityManager::get_players()
+{
+    std::vector<Player*> players;
+    for(Entity* entity : this->get_entities())
+    {
+        Player* player_component = dynamic_cast<Player*>(entity);
         if(player_component != nullptr)
             players.push_back(player_component);
     }
