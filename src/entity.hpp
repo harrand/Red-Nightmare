@@ -13,7 +13,7 @@ class EntityManager;
 class Entity : public GameSprite
 {
 public:
-    Entity(Vector2F position, float rotation, Vector2F scale, const Texture* texture);
+    Entity(Vector2F position, float rotation, Vector2F scale, const Texture* texture, unsigned int health = Entity::default_health, float speed = Entity::default_speed);
     virtual void update(EntityManager& manager, float delta_time);
     virtual void on_death([[maybe_unused]] EntityManager& manager){}
     Vector2F forward() const;
@@ -23,6 +23,8 @@ public:
     void set_health(EntityManager& manager, unsigned int health);
     void add_health(EntityManager& manager, unsigned int health);
     void remove_health(EntityManager& manager, unsigned int health);
+    float get_speed() const;
+    void set_speed(float speed);
     const Vector2F* get_target() const;
     bool has_target() const;
     void set_target(Vector2F target);
@@ -34,6 +36,7 @@ public:
 protected:
     Player* get_closest_player(EntityManager& manager);
     unsigned int health;
+    float speed;
     std::optional<Vector2F> target;
     bool kinematic;
 };

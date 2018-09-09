@@ -9,12 +9,14 @@ class Player : public Entity
 public:
     Player(Vector2F position, float rotation, Vector2F scale, const Texture* player_texture);
     virtual void update(EntityManager& manager, float delta_time) override;
-    static void play_shoot_sound();
-    static void play_struck_sound();
-    static constexpr unsigned int default_health = 100;
+    virtual void on_death(EntityManager& manager) override;
+    unsigned int get_souls() const;
+    void set_souls(unsigned int souls);
+    void add_souls(unsigned int souls);
+    void remove_souls(unsigned int souls);
     static constexpr float default_speed = 50.0f;
 private:
-    unsigned int health;
+    unsigned int souls;
 };
 
 

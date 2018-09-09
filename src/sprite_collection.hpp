@@ -18,6 +18,9 @@ public:
     Texture& get_on_rune();
     Texture& get_off_rune();
     Texture& get_fireball();
+    Texture& get_frostball();
+    Texture& get_blackball();
+    Texture& get_powerup_missile_growth();
     static Texture load_player_idle_texture();
     static Texture load_player_dead_texture();
     static PolyFrameTexture::FrameMap load_player_right_animation();
@@ -26,10 +29,13 @@ public:
     static Texture load_on_rune_texture();
     static Texture load_off_rune_texture();
     static Texture load_fireball_texture();
+    static Texture load_frostball_texture();
+    static Texture load_blackball_texture();
     static Texture load_ghost_idle_texture();
     static Texture load_ghost_dead_texture();
     static PolyFrameTexture::FrameMap load_ghost_right_animation();
     static PolyFrameTexture::FrameMap load_ghost_left_animation();
+    static Texture load_powerup_missile_growth_texture();
 };
 
 

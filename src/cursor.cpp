@@ -14,7 +14,7 @@ void Cursor::update(EntityManager& manager, float delta_time)
 {
     this->position_screenspace = manager.get_mouse_listener().get_mouse_position();
     Player* closest = this->get_closest_player(manager);
-    if(manager.get_mouse_listener().is_left_clicked() && closest != nullptr && !closest->is_moving())
+    if(manager.get_mouse_listener().is_left_clicked() && closest != nullptr && (!closest->is_moving() || closest->net_force().length() > 0.0f) && manager.has_any_alive_player())
     {
         this->set_texture(&manager.get_sprite_collection().get_on_rune());
         this->active = true;
@@ -26,7 +26,7 @@ void Cursor::update(EntityManager& manager, float delta_time)
     }
     for(Ghost* ghost : manager.get_ghosts())
     {
-        if(ghost->get_boundary().has_value() && ghost->get_boundary().value().intersects({this->position_screenspace, 0.0f}) && this->is_activated() && !ghost->is_dead())
+        if(ghost->get_boundary().has_value() && ghost->get_boundary().value().intersects({this->position_screenspace, 0.0f}) && this->is_activated() && !ghost->is_dead() && manager.has_any_alive_player())
         {
             ghost->set_kinematic(true);
             this->held_entities.emplace(ghost, ghost->position_screenspace - this->position_screenspace);

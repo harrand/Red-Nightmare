@@ -5,7 +5,7 @@
 #include "player.hpp"
 #include "entity_manager.hpp"
 
-Entity::Entity(Vector2F position, float rotation, Vector2F scale, const Texture* texture) : GameSprite(position, rotation, scale, texture), health(Entity::default_health), target(std::nullopt), kinematic(false){}
+Entity::Entity(Vector2F position, float rotation, Vector2F scale, const Texture* texture, unsigned int health, float speed) : GameSprite(position, rotation, scale, texture), health(health), speed(speed), target(std::nullopt), kinematic(false){}
 
 Vector2F Entity::forward() const
 {
@@ -17,7 +17,7 @@ void Entity::update([[maybe_unused]] EntityManager& manager, float delta_time)
     if(!this->is_kinematic())
     {
         if(this->has_target())
-            this->velocity = {(*this->get_target() - this->position_screenspace).normalised() * Entity::default_speed, 0.0f};
+            this->velocity = {(*this->get_target() - this->position_screenspace).normalised() * this->speed, 0.0f};
     }
     else
         this->velocity = {};
@@ -64,6 +64,16 @@ void Entity::remove_health(EntityManager& manager, unsigned int health)
     }
     else
         this->health -= health;
+}
+
+float Entity::get_speed() const
+{
+    return this->speed;
+}
+
+void Entity::set_speed(float speed)
+{
+    this->speed = speed;
 }
 
 const Vector2F* Entity::get_target() const

@@ -12,7 +12,7 @@ public:
     Ghost(Vector2F position, float rotation, Vector2F scale, const Texture* ghost_texture);
     virtual void update(EntityManager& manager, float delta_time) override;
     virtual void on_death(EntityManager& manager) override;
-    static constexpr unsigned int default_health = 1;
+    static constexpr unsigned int default_health = 5;
     static constexpr float default_speed = 50.0f;
 };
 
