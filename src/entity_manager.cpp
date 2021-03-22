@@ -32,27 +32,32 @@ Cursor& EntityManager::spawn_cursor()
 
 Fireball& EntityManager::spawn_fireball(Vector2F position, float rotation, Vector2F scale)
 {
-    return this->emplace<Fireball>(position, rotation, scale, &this->sprite_collection.get_fireball());
+    return this->emplace<Fireball>(this->scale_normalised_position(position), rotation, scale, &this->sprite_collection.get_fireball());
 }
 
 Frostball& EntityManager::spawn_frostball(Vector2F position, float rotation, Vector2F scale)
 {
-    return this->emplace<Frostball>(position, rotation, scale, &this->sprite_collection.get_frostball());
+    return this->emplace<Frostball>(this->scale_normalised_position(position), rotation, scale, &this->sprite_collection.get_frostball());
 }
 
 Blackball& EntityManager::spawn_blackball(Vector2F position, float rotation, Vector2F scale)
 {
-    return this->emplace<Blackball>(position, rotation, scale, &this->sprite_collection.get_blackball());
+    return this->emplace<Blackball>(this->scale_normalised_position(position), rotation, scale, &this->sprite_collection.get_blackball());
 }
 
 Player& EntityManager::spawn_player(Vector2F position, float rotation, Vector2F scale)
 {
-    return this->emplace<Player>(position, rotation, scale, &this->sprite_collection.get_player_idle());
+    return this->emplace<Player>(this->scale_normalised_position(position), rotation, scale, &this->sprite_collection.get_player_idle());
 }
 
 Ghost& EntityManager::spawn_ghost(Vector2F position, float rotation, Vector2F scale)
 {
-    return this->emplace<Ghost>(position, rotation, scale, &this->sprite_collection.get_ghost_idle());
+    return this->emplace<Ghost>(this->scale_normalised_position(position), rotation, scale, &this->sprite_collection.get_ghost_idle());
+}
+
+Nightmare& EntityManager::spawn_nightmare(Vector2F position, float rotation, Vector2F scale)
+{
+    return this->emplace<Nightmare>(this->scale_normalised_position(position), rotation, scale, &this->sprite_collection.get_nightmare_idle());
 }
 
 void EntityManager::update(float delta)
@@ -170,6 +175,18 @@ std::vector<Ghost*> EntityManager::get_ghosts()
     return ghosts;
 }
 
+std::vector<Nightmare*> EntityManager::get_nightmares()
+{
+    std::vector<Nightmare*> nightmares;
+    for(Entity* entity : this->get_entities())
+    {
+        Nightmare* nightmare_component = dynamic_cast<Nightmare*>(entity);
+        if(nightmare_component != nullptr)
+            nightmares.push_back(nightmare_component);
+    }
+    return nightmares;
+}
+
 void EntityManager::handle_screen_wrapping()
 {
     if(!this->screen_wrapping_enabled())
@@ -195,4 +212,11 @@ void EntityManager::handle_screen_wrapping()
             position.y = 0;
         }
     }
+}
+
+Vector2F EntityManager::scale_normalised_position(Vector2F normalised_position)
+{
+    normalised_position.x *= this->get_window().get_width();
+    normalised_position.y *= this->get_window().get_height();
+    return normalised_position;
 }

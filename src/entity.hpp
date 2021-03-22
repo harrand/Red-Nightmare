@@ -20,9 +20,9 @@ public:
     bool is_moving() const;
     bool is_dead() const;
     unsigned int get_health() const;
-    void set_health(EntityManager& manager, unsigned int health);
-    void add_health(EntityManager& manager, unsigned int health);
-    void remove_health(EntityManager& manager, unsigned int health);
+    virtual void set_health(EntityManager& manager, unsigned int health);
+    virtual void add_health(EntityManager& manager, unsigned int health);
+    virtual void remove_health(EntityManager& manager, unsigned int health);
     float get_speed() const;
     void set_speed(float speed);
     const Vector2F* get_target() const;
@@ -32,7 +32,7 @@ public:
     bool is_kinematic() const;
     void set_kinematic(bool kinematic);
     static constexpr unsigned int default_health = 100;
-    static constexpr float default_speed = 50.0f;
+    static constexpr float default_speed = 0.1f;
 protected:
     Player* get_closest_player(EntityManager& manager);
     unsigned int health;

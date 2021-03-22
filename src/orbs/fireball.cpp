@@ -18,8 +18,16 @@ void Fireball::update(EntityManager &manager, float delta_time)
     {
         if(dynamic_cast<Cursor*>(entity) != nullptr || dynamic_cast<Fireball*>(entity) != nullptr)
             continue;
+        Nightmare* nightmare_component = dynamic_cast<Nightmare*>(entity);
         if(this->get_boundary().value().intersects(entity->get_boundary().value()) && !entity->is_dead())
-            entity->remove_health(manager, 2);
+        {
+            if(nightmare_component != nullptr)
+                nightmare_component->set_held_by_orb(true);
+            else
+                entity->remove_health(manager, 2);
+        }
+        else if(nightmare_component != nullptr)
+            nightmare_component->set_held_by_orb(false);
     }
     Entity::update(manager, delta_time);
 }

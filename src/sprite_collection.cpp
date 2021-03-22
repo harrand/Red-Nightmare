@@ -16,6 +16,10 @@ SpriteCollection::SpriteCollection(): AssetBuffer()
     this->emplace_texture("ghost_dead", load_ghost_dead_texture());
     this->emplace_animated_texture("ghost_right", load_ghost_right_animation(), 10);
     this->emplace_animated_texture("ghost_left", load_ghost_left_animation(), 10);
+    this->emplace_texture("nightmare_idle", load_nightmare_idle_texture());
+    this->emplace_texture("nightmare_dead", load_nightmare_dead_texture());
+    this->emplace_animated_texture("nightmare_right", load_nightmare_right_animation(), 10);
+    this->emplace_animated_texture("nightmare_left", load_nightmare_left_animation(), 10);
     this->emplace_texture("powerup_missile_growth", load_powerup_missile_growth_texture());
 }
 
@@ -57,6 +61,26 @@ AnimatedTexture& SpriteCollection::get_ghost_right()
 AnimatedTexture& SpriteCollection::get_ghost_left()
 {
     return *this->find_animated_texture("ghost_left");
+}
+
+Texture& SpriteCollection::get_nightmare_idle()
+{
+    return *this->find_texture("nightmare_idle");
+}
+
+Texture& SpriteCollection::get_nightmare_dead()
+{
+    return *this->find_texture("nightmare_dead");
+}
+
+AnimatedTexture& SpriteCollection::get_nightmare_left()
+{
+    return *this->find_animated_texture("nightmare_left");
+}
+
+AnimatedTexture& SpriteCollection::get_nightmare_right()
+{
+    return *this->find_animated_texture("nightmare_right");
 }
 
 Texture& SpriteCollection::get_player_special()
@@ -162,6 +186,26 @@ PolyFrameTexture::FrameMap SpriteCollection::load_ghost_right_animation()
 PolyFrameTexture::FrameMap SpriteCollection::load_ghost_left_animation()
 {
     return {{0, {"../res/textures/ghost/left_1.png"}}, {1, {"../res/textures/ghost/left_2.png"}}};
+}
+
+Texture SpriteCollection::load_nightmare_idle_texture()
+{
+    return {"../res/textures/boss/idle.png"};
+}
+
+Texture SpriteCollection::load_nightmare_dead_texture()
+{
+    return {"../res/textures/boss/dead.png"};
+}
+
+PolyFrameTexture::FrameMap SpriteCollection::load_nightmare_right_animation()
+{
+    return {{0, {"../res/textures/boss/right_1.png"}}, {1, {"../res/textures/boss/right_2.png"}}};
+}
+
+PolyFrameTexture::FrameMap SpriteCollection::load_nightmare_left_animation()
+{
+    return {{0, {"../res/textures/boss/left_1.png"}}, {1, {"../res/textures/boss/left_2.png"}}};
 }
 
 Texture SpriteCollection::load_powerup_missile_growth_texture()

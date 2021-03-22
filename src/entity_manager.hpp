@@ -4,6 +4,7 @@
 #include "core/scene.hpp"
 #include "sprite_collection.hpp"
 #include "player.hpp"
+#include "enemies/nightmare.hpp"
 #include "enemies/ghost.hpp"
 #include "cursor.hpp"
 #include "orbs/fireball.hpp"
@@ -24,6 +25,7 @@ public:
     Blackball& spawn_blackball(Vector2F position, float rotation, Vector2F scale);
     Player& spawn_player(Vector2F position, float rotation, Vector2F scale);
     Ghost& spawn_ghost(Vector2F position, float rotation, Vector2F scale);
+    Nightmare& spawn_nightmare(Vector2F position, float rotation, Vector2F scale);
     virtual void update(float delta) override;
     KeyListener& get_key_listener();
     const MouseListener& get_mouse_listener() const;
@@ -37,10 +39,12 @@ public:
     std::vector<Player*> get_players();
     std::vector<const Player*> get_players() const;
     std::vector<Ghost*> get_ghosts();
+    std::vector<Nightmare*> get_nightmares();
 
     friend class Player;
 protected:
     void handle_screen_wrapping();
+    Vector2F scale_normalised_position(Vector2F normalised_position);
     Window& window;
     Font default_font;
     KeyListener key_listener;

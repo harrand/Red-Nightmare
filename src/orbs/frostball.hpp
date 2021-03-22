@@ -12,7 +12,7 @@ public:
     Frostball(Vector2F position, float rotation, Vector2F scale, const Texture* frostball_texture);
     virtual void update(EntityManager& manager, float delta_time) override;
     static constexpr unsigned int default_health = 1;
-    static constexpr float default_speed = 25.0f;
+    static constexpr float default_speed = 0.1f;
 };
 
 

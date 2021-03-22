@@ -14,6 +14,10 @@ public:
     Texture& get_ghost_dead();
     AnimatedTexture& get_ghost_right();
     AnimatedTexture& get_ghost_left();
+    Texture& get_nightmare_idle();
+    Texture& get_nightmare_dead();
+    AnimatedTexture& get_nightmare_right();
+    AnimatedTexture& get_nightmare_left();
     Texture& get_player_special();
     Texture& get_on_rune();
     Texture& get_off_rune();
@@ -35,6 +39,10 @@ public:
     static Texture load_ghost_dead_texture();
     static PolyFrameTexture::FrameMap load_ghost_right_animation();
     static PolyFrameTexture::FrameMap load_ghost_left_animation();
+    static Texture load_nightmare_idle_texture();
+    static Texture load_nightmare_dead_texture();
+    static PolyFrameTexture::FrameMap load_nightmare_right_animation();
+    static PolyFrameTexture::FrameMap load_nightmare_left_animation();
     static Texture load_powerup_missile_growth_texture();
 };
 

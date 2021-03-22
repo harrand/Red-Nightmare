@@ -13,13 +13,13 @@ void Player::update(EntityManager& manager, float delta_time)
     if(this->is_dead())
         return;
     if(manager.get_key_listener().is_key_pressed("W"))
-        this->velocity += {0.0f, Player::default_speed, 0.0f};
+        this->velocity += {0.0f, Player::default_speed * manager.get_window().get_height(), 0.0f};
     if(manager.get_key_listener().is_key_pressed("S"))
-        this->velocity += {0.0f, -Player::default_speed, 0.0f};
+        this->velocity += {0.0f, -Player::default_speed * manager.get_window().get_height(), 0.0f};
     if(manager.get_key_listener().is_key_pressed("A"))
-        this->velocity += {-Player::default_speed, 0.0f, 0.0f};
+        this->velocity += {-Player::default_speed * manager.get_window().get_width(), 0.0f, 0.0f};
     if(manager.get_key_listener().is_key_pressed("D"))
-        this->velocity += {Player::default_speed, 0.0f, 0.0f};
+        this->velocity += {Player::default_speed * manager.get_window().get_width(), 0.0f, 0.0f};
     if(this->velocity.x > 0.0f)
         this->set_animation(&manager.get_sprite_collection().get_player_right());
     else if(this->velocity.x < 0.0f)

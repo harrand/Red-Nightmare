@@ -12,6 +12,7 @@ Blackball::Blackball(Vector2F position, float rotation, Vector2F scale, const Te
 
 void Blackball::update(EntityManager &manager, float delta_time)
 {
+    this->speed = Blackball::default_speed / this->scale.length();
     if(manager.get_mouse_listener().is_right_clicked() && manager.has_any_alive_player())
         this->set_target(manager.get_mouse_listener().get_mouse_position());
     for(Entity* entity : manager.get_entities())
@@ -31,8 +32,16 @@ void Blackball::update(EntityManager &manager, float delta_time)
             entity->remove_health(manager, static_cast<unsigned int>(1 + this->scale.length() * 0.005f));
             if(entity->is_dead())
             {
-                this->scale *= 1.025f;
-                this->angular_velocity *= 1.025f;
+                if(dynamic_cast<Nightmare*>(entity) != nullptr)
+                {
+                    this->scale *= 2.0f;
+                    this->angular_velocity *= 2.0f;
+                }
+                else
+                {
+                    this->scale *= 1.025f;
+                    this->angular_velocity *= 1.025f;
+                }
             }
         }
     }

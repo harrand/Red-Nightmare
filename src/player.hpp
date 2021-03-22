@@ -14,7 +14,7 @@ public:
     void set_souls(unsigned int souls);
     void add_souls(unsigned int souls);
     void remove_souls(unsigned int souls);
-    static constexpr float default_speed = 50.0f;
+    static constexpr float default_speed = 0.15f;
 private:
     unsigned int souls;
 };

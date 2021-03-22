@@ -13,7 +13,7 @@ public:
     virtual void update(EntityManager& manager, float delta_time) override;
     virtual void on_death(EntityManager& manager) override;
     static constexpr unsigned int default_health = 5;
-    static constexpr float default_speed = 50.0f;
+    static constexpr float default_speed = 0.1f;
 };
 
 

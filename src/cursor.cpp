@@ -24,6 +24,15 @@ void Cursor::update(EntityManager& manager, float delta_time)
         this->set_texture(&manager.get_sprite_collection().get_off_rune());
         this->active = false;
     }
+    for(Nightmare* nightmare : manager.get_nightmares())
+    {
+        if(nightmare->get_boundary().has_value() && nightmare->get_boundary().value().intersects({this->position_screenspace, 0.0f}) && this->is_activated() && !nightmare->is_dead() && manager.has_any_alive_player())
+        {
+            nightmare->set_held_by_cursor(true);
+        }
+        else
+            nightmare->set_held_by_cursor(false);
+    }
     for(Ghost* ghost : manager.get_ghosts())
     {
         if(ghost->get_boundary().has_value() && ghost->get_boundary().value().intersects({this->position_screenspace, 0.0f}) && this->is_activated() && !ghost->is_dead() && manager.has_any_alive_player())

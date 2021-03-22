@@ -17,7 +17,11 @@ void Entity::update([[maybe_unused]] EntityManager& manager, float delta_time)
     if(!this->is_kinematic())
     {
         if(this->has_target())
+        {
             this->velocity = {(*this->get_target() - this->position_screenspace).normalised() * this->speed, 0.0f};
+            this->velocity.x *= manager.get_window().get_width();
+            this->velocity.y *= manager.get_window().get_height();
+        }
     }
     else
         this->velocity = {};

@@ -30,12 +30,25 @@ void Ghost::update(EntityManager& manager, float delta_time)
     }
     if(this->is_dead())
         return;
-    if(this->velocity.x > 0.0f)
-        this->set_animation(&manager.get_sprite_collection().get_ghost_right());
-    else if(this->velocity.x < 0.0f)
-        this->set_animation(&manager.get_sprite_collection().get_ghost_left());
+    if(this->has_target())
+    {
+        Vector2F to_target = this->target.value() - this->position_screenspace;
+        if (to_target.x > 0.0f)
+            this->set_animation(&manager.get_sprite_collection().get_ghost_right());
+        else if (to_target.x < 0.0f)
+            this->set_animation(&manager.get_sprite_collection().get_ghost_left());
+        else
+            this->set_texture(&manager.get_sprite_collection().get_ghost_idle());
+    }
     else
-        this->set_texture(&manager.get_sprite_collection().get_ghost_idle());
+    {
+        if (this->velocity.x > 0.0f)
+            this->set_animation(&manager.get_sprite_collection().get_ghost_right());
+        else if (this->velocity.x < 0.0f)
+            this->set_animation(&manager.get_sprite_collection().get_ghost_left());
+        else
+            this->set_texture(&manager.get_sprite_collection().get_ghost_idle());
+    }
     Entity::update(manager, delta_time);
 }
 
