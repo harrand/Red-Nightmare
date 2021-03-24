@@ -18,6 +18,37 @@ namespace rn
         Size
     };
 
+    constexpr const char* get_sprite_state_name(SpriteState state)
+    {
+        switch(state)
+        {
+            case SpriteState::Up:
+                return "Up";
+            break;
+            case SpriteState::Down:
+                return "Down";
+            break;
+            case SpriteState::Left:
+                return "Left";
+            break;
+            case SpriteState::Right:
+                return "Right";
+            break;
+            case SpriteState::Idle:
+                return "Idle";
+            break;
+            case SpriteState::Dead:
+                return "Dead";
+            break;
+            case SpriteState::Casting:
+                return "Casting";
+            break;
+            default:
+                return "<Unknown Sprite State>";
+            break;
+        }
+    }
+
     class Sprite
     {
     public:

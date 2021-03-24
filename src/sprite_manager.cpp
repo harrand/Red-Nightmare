@@ -2,11 +2,16 @@
 
 namespace rn
 {
-    bool SpriteType::operator<(const SpriteType& rhs) const
+    bool SpriteType::operator==(const SpriteType& rhs) const
     {
-        bool name_later = std::string{this->name} < std::string{rhs.name};
-        bool state_later = static_cast<std::size_t>(this->state) < static_cast<std::size_t>(rhs.state);
-        return name_later && state_later;
+        return std::string{this->name} == rhs.name && this->state == rhs.state;
+    }
+
+    std::size_t SpriteType::HashFunction::operator()(const SpriteType& type) const
+    {
+        std::size_t lhs_hash = std::hash<std::string>{}(type.name);
+        lhs_hash ^= std::hash<std::size_t>{}(static_cast<std::size_t>(type.state));
+        return lhs_hash;
     }
 
     rn::Sprite SpriteTextureStorage::get(const char* base_sprite_name) const
@@ -58,5 +63,14 @@ namespace rn
         }
 
         return {sprite_textures};
+    }
+
+    void SpriteTextureStorage::enum_sprite_names(std::vector<const char*>& names) const
+    {
+        names.reserve(names.size() + this->sprite_names.size());
+        for(const std::string& name : this->sprite_names)
+        {
+            names.push_back(name.c_str());
+        }
     }
 }

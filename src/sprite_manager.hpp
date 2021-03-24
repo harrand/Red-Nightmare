@@ -2,7 +2,8 @@
 #define REDNIGHTMARE_SPRITE_MANAGER_HPP
 #include "gl/texture.hpp"
 #include "sprite.hpp"
-#include <map>
+#include <unordered_map>
+#include <unordered_set>
 
 namespace rn
 {
@@ -11,7 +12,12 @@ namespace rn
         const char* name;
         rn::SpriteState state;
 
-        bool operator<(const SpriteType& rhs) const;
+        bool operator==(const SpriteType& rhs) const;
+
+        struct HashFunction
+        {
+            std::size_t operator()(const SpriteType& type) const;
+        };
     };
 
     class SpriteTextureStorage
@@ -21,8 +27,10 @@ namespace rn
         template<class PixelType>
         void add_texture(const char* base_sprite_name, rn::SpriteState state, const tz::gl::Image<PixelType>& image);
         rn::Sprite get(const char* base_sprite_name) const;
+        void enum_sprite_names(std::vector<const char*>& names) const;
     private:
-        std::map<SpriteType, tz::gl::Texture> tex_storage;
+        std::unordered_map<SpriteType, tz::gl::Texture, SpriteType::HashFunction> tex_storage;
+        std::unordered_set<std::string> sprite_names;
     };
 }
 
