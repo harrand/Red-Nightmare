@@ -9,6 +9,7 @@
 
 // IO Includes
 #include "gl/tz_stb_image/image_reader.hpp"
+#include "GLFW/glfw3.h"
 
 // Buffer includes
 #include "core/matrix.hpp"
@@ -35,6 +36,7 @@ tz::gl::ShaderPreprocessor pre(tz::gl::Object& o);
 tz::gl::ShaderProgram compile_base_shaders(tz::gl::ShaderPreprocessor& p);
 tz::gl::SSBO* get_ssbo(tz::gl::ShaderPreprocessor& pre, tz::gl::Object& o, const char* name);
 tz::gl::UBO* get_ubo(tz::gl::ShaderPreprocessor& pre, tz::gl::Object& o, const char* name);
+void register_listeners(tz::Vec3& player_pos, rn::SpriteState& player_state);
 
 std::size_t ubo_module_id;
 std::size_t ssbo_module_id;
@@ -61,7 +63,12 @@ int main()
 {
     tz::initialise("Red Nightmare");
     {
-        tz::get().render_settings().set_culling(tz::RenderSettings::CullTarget::Nothing);
+        tz::get().render_settings().set_culling(tz::RenderSettings::CullTarget::FrontFaces);
+        // 2D game so no depth-testing (transparency in images gets depth-tested!)
+        glDisable(GL_DEPTH_TEST);
+        // Blend transparent pixels with background colour
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         tz::gl::Manager m;
         tz::dui::track_object(&*m);
@@ -86,7 +93,7 @@ int main()
         {
             tz::render::SceneElement ele{square_mesh_idx};
             ele.transform.position = tz::Vec3{0.0f, 0.0f, 0.0f};
-            ele.transform.rotation = tz::Vec3{0.0f, 0.0f, tz::pi};
+            ele.transform.rotation = tz::Vec3{0.0f, tz::pi, tz::pi};
 			ele.transform.scale = tz::Vec3{10.0f, 10.0f, 10.0f};
 			ele.camera.position = tz::Vec3{0.0f, 0.0f, 15.0f};
             ele.camera.fov = 1.57f;
@@ -96,7 +103,8 @@ int main()
             scene.add(ele);
         }
 
-        tz::render::SceneElement& player_element = scene.get(0);
+        constexpr std::size_t player_id = 0;
+        tz::render::SceneElement& player_element = scene.get(player_id);
         player_element.transform.position[0] = -10.0f;
 
         // Render setup
@@ -113,26 +121,36 @@ int main()
         tz::dui::emplace_window<rn::dui::SpriteManagerWindow>(sprites);
 
         // Other Game Initialisation
+        tz::mem::UniformPool<tz::gl::BindlessTextureHandle> handle_pool = entity_textures_ubo->map_uniform<tz::gl::BindlessTextureHandle>();
+        for(std::size_t i = 0; i < scene_max_size; i++)
         {
-            tz::mem::UniformPool<tz::gl::BindlessTextureHandle> handle_pool = entity_textures_ubo->map_uniform<tz::gl::BindlessTextureHandle>();
-            for(std::size_t i = 0; i < scene_max_size; i++)
-            {
-                // Initial Sprite Textures
-                rn::Sprite player_idle = sprites.get("player");
-                player_idle.set_state(rn::SpriteState::Casting);
-                handle_pool.set(i, player_idle.get_texture());
-            }
+            // Initial Sprite Textures
+            rn::Sprite player_idle = sprites.get("player");
+            player_idle.set_state(rn::SpriteState::Casting);
+            handle_pool.set(i, player_idle.get_texture());
         }
+
+        rn::SpriteState player_state = rn::SpriteState::Casting;
+
+        register_listeners(player_element.transform.position, player_state);
 
         while(!wnd.is_close_requested())
         {
             device.clear();
             (*m).bind();
             // Scene elements manipulation
+            // Update player sprite.
+            {
+                rn::Sprite player_sprite = sprites.get("player");
+                player_sprite.set_state(player_state);
+                handle_pool.set(player_id, player_sprite.get_texture());
+            }
+
             scene.configure(device);
             device.render();
             tz::update();
             wnd.update();
+
         }
     }
     tz::terminate();
@@ -143,11 +161,11 @@ tz::gl::IndexedMesh square_mesh()
     tz::gl::IndexedMesh square;
     square.vertices.push_back(tz::gl::Vertex{{{-0.5f, -0.5f, 0.0f}}, {{0.0f, 0.0f}}, {{0.0f, 0.0f, -1.0f}}, {{}}, {{}}});
     square.vertices.push_back(tz::gl::Vertex{{{0.5f, -0.5f, 0.0f}}, {{1.0f, 0.0f}}, {{0.0f, 0.0f, -1.0f}}, {{}}, {{}}});
-    square.vertices.push_back(tz::gl::Vertex{{{0.5f, 0.5f, 0.0f}}, {{1.0f, 0.5f}}, {{0.0f, 0.0f, -1.0f}}, {{}}, {{}}});
+    square.vertices.push_back(tz::gl::Vertex{{{0.5f, 0.5f, 0.0f}}, {{1.0f, 1.0f}}, {{0.0f, 0.0f, -1.0f}}, {{}}, {{}}});
     
     square.vertices.push_back(tz::gl::Vertex{{{-0.5f, -0.5f, 0.0f}}, {{0.0f, 0.0f}}, {{0.0f, 0.0f, -1.0f}}, {{}}, {{}}});
-    square.vertices.push_back(tz::gl::Vertex{{{0.5f, 0.5f, 0.0f}}, {{1.0f, 0.5f}}, {{0.0f, 0.0f, -1.0f}}, {{}}, {{}}});
-    square.vertices.push_back(tz::gl::Vertex{{{-0.5f, 0.5f, 0.0f}}, {{0.0f, 0.5f}}, {{0.0f, 0.0f, -1.0f}}, {{}}, {{}}});
+    square.vertices.push_back(tz::gl::Vertex{{{0.5f, 0.5f, 0.0f}}, {{1.0f, 1.0f}}, {{0.0f, 0.0f, -1.0f}}, {{}}, {{}}});
+    square.vertices.push_back(tz::gl::Vertex{{{-0.5f, 0.5f, 0.0f}}, {{0.0f, 1.0f}}, {{0.0f, 0.0f, -1.0f}}, {{}}, {{}}});
     square.indices = {0, 1, 2, 3, 4, 5};
     return square;
 }
@@ -210,4 +228,61 @@ tz::gl::UBO* get_ubo(tz::gl::ShaderPreprocessor& p, tz::gl::Object& o, const cha
 {
     std::size_t buf_id = static_cast<tz::gl::p::UBOModule*>(p[ubo_module_id])->get_buffer_id(name);
     return o.get<tz::gl::BufferType::UniformStorage>(buf_id);
+}
+
+void register_listeners(tz::Vec3& player_pos, rn::SpriteState& player_state)
+{
+    tz::IWindow& wnd = tz::get().window();
+    wnd.register_this();
+    wnd.emplace_custom_key_listener([&player_pos, &player_state](tz::input::KeyPressEvent e)
+    {
+        constexpr float multiplier = 1.0f;
+        switch(e.key)
+        {
+        case GLFW_KEY_W:
+            if(e.action == GLFW_RELEASE)
+            {
+                player_state = rn::SpriteState::Idle;
+            }
+            else
+            {
+                player_pos += tz::Vec3{0.0f, 1.0f, 0.0f} * multiplier;
+                player_state = rn::SpriteState::Up;
+            }
+        break;
+        case GLFW_KEY_S:
+            if(e.action == GLFW_RELEASE)
+            {
+                player_state = rn::SpriteState::Idle;
+            }
+            else
+            {
+                player_pos += tz::Vec3{0.0f, -1.0f, 0.0f} * multiplier;
+                player_state = rn::SpriteState::Down;
+            }
+        break;
+        case GLFW_KEY_A:
+            if(e.action == GLFW_RELEASE)
+            {
+                player_state = rn::SpriteState::Idle;
+            }
+            else
+            {
+                player_pos += tz::Vec3{-1.0f, 0.0f, 0.0f} * multiplier;
+                player_state = rn::SpriteState::Left;
+            }
+        break;
+        case GLFW_KEY_D:
+            if(e.action == GLFW_RELEASE)
+            {
+                player_state = rn::SpriteState::Idle;
+            }
+            else
+            {
+                player_pos += tz::Vec3{1.0f, 0.0f, 0.0f} * multiplier;
+                player_state = rn::SpriteState::Right;
+            }
+        break;
+        }
+    });
 }
