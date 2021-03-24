@@ -49,6 +49,7 @@ rn::SpriteTextureStorage collate_sprites()
     {
         sts.add_texture(name, state, read_image<tz::gl::PixelRGBA8>(uri));
     };
+    // Player
     reg("player", rn::SpriteState::Up, "res/textures/player/idle.png");
     reg("player", rn::SpriteState::Down, "res/textures/player/idle.png");
     reg("player", rn::SpriteState::Left, "res/textures/player/left_1.png");
@@ -56,6 +57,24 @@ rn::SpriteTextureStorage collate_sprites()
     reg("player", rn::SpriteState::Idle, "res/textures/player/idle.png");
     reg("player", rn::SpriteState::Dead, "res/textures/player/dead.png");
     reg("player", rn::SpriteState::Casting, "res/textures/player/special.png");
+
+    // Nightmare
+    reg("boss", rn::SpriteState::Up, "res/textures/boss/idle.png");
+    reg("boss", rn::SpriteState::Down, "res/textures/boss/idle.png");
+    reg("boss", rn::SpriteState::Left, "res/textures/boss/left_1.png");
+    reg("boss", rn::SpriteState::Right, "res/textures/boss/right_1.png");
+    reg("boss", rn::SpriteState::Idle, "res/textures/boss/idle.png");
+    reg("boss", rn::SpriteState::Dead, "res/textures/boss/dead.png");
+    reg("boss", rn::SpriteState::Casting, "res/textures/boss/special.png");
+
+    // Ghost
+    reg("ghost", rn::SpriteState::Up, "res/textures/ghost/idle.png");
+    reg("ghost", rn::SpriteState::Down, "res/textures/ghost/idle.png");
+    reg("ghost", rn::SpriteState::Left, "res/textures/ghost/left_1.png");
+    reg("ghost", rn::SpriteState::Right, "res/textures/ghost/right_1.png");
+    reg("ghost", rn::SpriteState::Idle, "res/textures/ghost/idle.png");
+    reg("ghost", rn::SpriteState::Dead, "res/textures/ghost/dead.png");
+    reg("ghost", rn::SpriteState::Casting, "res/textures/ghost/special.png");
     return sts;
 }
 
@@ -81,7 +100,7 @@ int main()
         // MVP matrix for every scene element. Each MVP stored as a single matrix.
         transform_ssbo->terminal_resize(sizeof(tz::Mat4) * scene_max_size);
         
-        tz::gl::UBO* entity_textures_ubo = get_ubo(prep, *m, "entity_textures");
+        tz::gl::SSBO* entity_textures_ubo = get_ssbo(prep, *m, "entity_textures");
         // Sampler for each scene element.
         entity_textures_ubo->terminal_resize(sizeof(tz::gl::BindlessTextureHandle) * scene_max_size);
 
@@ -104,12 +123,16 @@ int main()
         }
 
         constexpr std::size_t player_id = 0;
+        constexpr std::size_t nightmare_id = 1;
+        constexpr std::size_t first_ghost_id = 2;
         tz::render::SceneElement& player_element = scene.get(player_id);
-        player_element.transform.position[0] = -10.0f;
+        tz::render::SceneElement& nightmare_element = scene.get(nightmare_id);
+        player_element.transform.position[0] = -15.0f;
+        nightmare_element.transform.position[0] = 15.0f;
 
         // Render setup
         tz::IWindow& wnd = tz::get().window();
-        wnd.get_frame()->set_clear_color(0.4f, 0.4f, 1.0f);
+        wnd.get_frame()->set_clear_color(0.05f, 0.05f, 0.05f);
 
         rn::SpriteTextureStorage sprites = collate_sprites();
 
@@ -122,11 +145,11 @@ int main()
 
         // Other Game Initialisation
         tz::mem::UniformPool<tz::gl::BindlessTextureHandle> handle_pool = entity_textures_ubo->map_uniform<tz::gl::BindlessTextureHandle>();
-        for(std::size_t i = 0; i < scene_max_size; i++)
+        for(std::size_t i = first_ghost_id; i < scene_max_size; i++)
         {
             // Initial Sprite Textures
-            rn::Sprite player_idle = sprites.get("player");
-            player_idle.set_state(rn::SpriteState::Casting);
+            rn::Sprite player_idle = sprites.get("ghost");
+            player_idle.set_state(rn::SpriteState::Idle);
             handle_pool.set(i, player_idle.get_texture());
         }
 
@@ -144,6 +167,12 @@ int main()
                 rn::Sprite player_sprite = sprites.get("player");
                 player_sprite.set_state(player_state);
                 handle_pool.set(player_id, player_sprite.get_texture());
+            }
+            // Nightmare isn't a ghost.
+            {
+                rn::Sprite nightmare_idle = sprites.get("boss");
+                nightmare_idle.set_state(rn::SpriteState::Casting);
+                handle_pool.set(nightmare_id, nightmare_idle.get_texture());
             }
 
             scene.configure(device);

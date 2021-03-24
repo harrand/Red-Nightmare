@@ -6,7 +6,7 @@ in vec2 f_texcoord;
 in mat4 f_mvp;
 flat in int f_drawid;
 
-#ubo entity_textures
+#ssbo entity_textures
 {
     tz_bindless_sampler entity_texture[#@RNSCENEMAXSIZE];
 };

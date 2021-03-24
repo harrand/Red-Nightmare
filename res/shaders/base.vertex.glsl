@@ -8,7 +8,7 @@ layout (location = 1) in vec2 v_texcoord;
     mat4 mvp[#@RNSCENEMAXSIZE];
 };
 
-#ubo entity_textures
+#ssbo entity_textures
 {
     tz_bindless_sampler entity_texture[#@RNSCENEMAXSIZE];
 };
@@ -16,7 +16,7 @@ layout (location = 1) in vec2 v_texcoord;
 out vec3 f_pos;
 out vec2 f_texcoord;
 out mat4 f_mvp;
-out int f_drawid;
+flat out int f_drawid;
 
 void main()
 {
