@@ -36,7 +36,7 @@ tz::gl::ShaderPreprocessor pre(tz::gl::Object& o);
 tz::gl::ShaderProgram compile_base_shaders(tz::gl::ShaderPreprocessor& p);
 tz::gl::SSBO* get_ssbo(tz::gl::ShaderPreprocessor& pre, tz::gl::Object& o, const char* name);
 tz::gl::UBO* get_ubo(tz::gl::ShaderPreprocessor& pre, tz::gl::Object& o, const char* name);
-void register_listeners(tz::Vec3& player_pos, rn::SpriteState& player_state);
+void register_listeners(tz::Vec3& player_pos, rn::SpriteState& player_state, tz::Vec3& rune_pos, rn::SpriteState& rune_state);
 
 std::size_t ubo_module_id;
 std::size_t ssbo_module_id;
@@ -75,6 +75,15 @@ rn::SpriteTextureStorage collate_sprites()
     reg("ghost", rn::SpriteState::Idle, "res/textures/ghost/idle.png");
     reg("ghost", rn::SpriteState::Dead, "res/textures/ghost/dead.png");
     reg("ghost", rn::SpriteState::Casting, "res/textures/ghost/special.png");
+
+    // Rune
+    reg("rune", rn::SpriteState::Up, "res/textures/rune_off.png");
+    reg("rune", rn::SpriteState::Down, "res/textures/rune_off.png");
+    reg("rune", rn::SpriteState::Left, "res/textures/rune_off.png");
+    reg("rune", rn::SpriteState::Right, "res/textures/rune_off.png");
+    reg("rune", rn::SpriteState::Idle, "res/textures/rune_off.png");
+    reg("rune", rn::SpriteState::Dead, "res/textures/rune_off.png");
+    reg("rune", rn::SpriteState::Casting, "res/textures/rune_on.png");
     return sts;
 }
 
@@ -113,7 +122,7 @@ int main()
             tz::render::SceneElement ele{square_mesh_idx};
             ele.transform.position = tz::Vec3{0.0f, 0.0f, 0.0f};
             ele.transform.rotation = tz::Vec3{0.0f, tz::pi, tz::pi};
-			ele.transform.scale = tz::Vec3{10.0f, 10.0f, 10.0f};
+			ele.transform.scale = tz::Vec3{3.5f, 3.5f, 3.5f};
 			ele.camera.position = tz::Vec3{0.0f, 0.0f, 15.0f};
             ele.camera.fov = 1.57f;
 			ele.camera.aspect_ratio = 1920.0f/1080.0f;
@@ -124,11 +133,15 @@ int main()
 
         constexpr std::size_t player_id = 0;
         constexpr std::size_t nightmare_id = 1;
-        constexpr std::size_t first_ghost_id = 2;
+        constexpr std::size_t rune_id = 2;
+        constexpr std::size_t first_ghost_id = 3;
         tz::render::SceneElement& player_element = scene.get(player_id);
         tz::render::SceneElement& nightmare_element = scene.get(nightmare_id);
+        tz::render::SceneElement& rune_element = scene.get(rune_id);
         player_element.transform.position[0] = -15.0f;
         nightmare_element.transform.position[0] = 15.0f;
+        rune_element.transform.position[0] = -20.0f;
+        rune_element.transform.scale = tz::Vec3{1.5f, 1.5f, 1.5f};
 
         // Render setup
         tz::IWindow& wnd = tz::get().window();
@@ -152,10 +165,25 @@ int main()
             player_idle.set_state(rn::SpriteState::Idle);
             handle_pool.set(i, player_idle.get_texture());
         }
+        // Nightmare isn't a ghost.
+        {
+            rn::Sprite nightmare_idle = sprites.get("boss");
+            nightmare_idle.set_state(rn::SpriteState::Casting);
+            handle_pool.set(nightmare_id, nightmare_idle.get_texture());
+        }
+        // Neither is the rune.
+        {
+            rn::Sprite rune_idle = sprites.get("rune");
+            rune_idle.set_state(rn::SpriteState::Idle);
+            handle_pool.set(rune_id, rune_idle.get_texture());
+        }
+
+        float rune_rotation_z = 0.0f;
 
         rn::SpriteState player_state = rn::SpriteState::Casting;
+        rn::SpriteState rune_state = rn::SpriteState::Idle;
 
-        register_listeners(player_element.transform.position, player_state);
+        register_listeners(player_element.transform.position, player_state, rune_element.transform.position, rune_state);
 
         while(!wnd.is_close_requested())
         {
@@ -168,12 +196,13 @@ int main()
                 player_sprite.set_state(player_state);
                 handle_pool.set(player_id, player_sprite.get_texture());
             }
-            // Nightmare isn't a ghost.
+            // Update rune sprite
             {
-                rn::Sprite nightmare_idle = sprites.get("boss");
-                nightmare_idle.set_state(rn::SpriteState::Casting);
-                handle_pool.set(nightmare_id, nightmare_idle.get_texture());
+                rn::Sprite rune_sprite = sprites.get("rune");
+                rune_sprite.set_state(rune_state);
+                handle_pool.set(rune_id, rune_sprite.get_texture());
             }
+            rune_element.transform.rotation[2] = rune_rotation_z -= 0.03f;
 
             scene.configure(device);
             device.render();
@@ -259,13 +288,13 @@ tz::gl::UBO* get_ubo(tz::gl::ShaderPreprocessor& p, tz::gl::Object& o, const cha
     return o.get<tz::gl::BufferType::UniformStorage>(buf_id);
 }
 
-void register_listeners(tz::Vec3& player_pos, rn::SpriteState& player_state)
+void register_listeners(tz::Vec3& player_pos, rn::SpriteState& player_state, tz::Vec3& rune_pos, rn::SpriteState& rune_state)
 {
     tz::IWindow& wnd = tz::get().window();
     wnd.register_this();
     wnd.emplace_custom_key_listener([&player_pos, &player_state](tz::input::KeyPressEvent e)
     {
-        constexpr float multiplier = 1.0f;
+        constexpr float multiplier = 0.3f;
         switch(e.key)
         {
         case GLFW_KEY_W:
@@ -314,4 +343,32 @@ void register_listeners(tz::Vec3& player_pos, rn::SpriteState& player_state)
         break;
         }
     });
+
+    wnd.emplace_custom_mouse_listener(
+			[&rune_pos](tz::input::MouseUpdateEvent mue)
+			{
+                //rune_pos[0] = static_cast<float>(mue.xpos);
+                //rune_pos[1] = static_cast<float>(mue.ypos);
+			}
+			,
+			[&rune_state, &player_state](tz::input::MouseClickEvent mce)
+			{
+				if(mce.button == GLFW_MOUSE_BUTTON_LEFT)
+				{
+					if(mce.action == GLFW_PRESS || mce.action == GLFW_REPEAT)
+					{
+                        if(mce.action == GLFW_PRESS)
+                        {
+                            rune_state = rn::SpriteState::Casting;
+                        }
+						player_state = rn::SpriteState::Casting;
+					}
+					if(mce.action == GLFW_RELEASE)
+					{
+						rune_state = rn::SpriteState::Idle;
+                        player_state = rn::SpriteState::Idle;
+					}
+				}
+			}
+		);
 }
