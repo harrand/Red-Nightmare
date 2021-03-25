@@ -33,6 +33,26 @@
 constexpr std::size_t scene_max_size = 512;
 constexpr float universal_scale = 100.0f;
 constexpr tz::Vec3 cam_pos{0.0f, 0.0f, 15.0f};
+const char* player_sprite_name = "player";
+
+enum class PlayerSkin
+{
+    Default,
+    Hokenian
+};
+
+void set_player_skin(PlayerSkin skin)
+{
+    switch(skin)
+    {
+        case PlayerSkin::Default:
+            player_sprite_name = "player";
+        break;
+        case PlayerSkin::Hokenian:
+            player_sprite_name = "player_hokenian";
+        break;
+    }
+}
 
 tz::gl::IndexedMesh square_mesh();
 tz::gl::ShaderPreprocessor pre(tz::gl::Object& o);
@@ -61,6 +81,15 @@ rn::SpriteTextureStorage collate_sprites()
     reg("player", rn::SpriteState::Idle, "res/textures/player/idle.png");
     reg("player", rn::SpriteState::Dead, "res/textures/player/dead.png");
     reg("player", rn::SpriteState::Casting, "res/textures/player/special.png");
+
+    // Player (Hokenian Skin)
+    reg("player_hokenian", rn::SpriteState::Up, "res/textures/player/skins/hokenian/idle.png");
+    reg("player_hokenian", rn::SpriteState::Down, "res/textures/player/skins/hokenian/idle.png");
+    reg("player_hokenian", rn::SpriteState::Left, "res/textures/player/skins/hokenian/left_1.png");
+    reg("player_hokenian", rn::SpriteState::Right, "res/textures/player/skins/hokenian/right_1.png");
+    reg("player_hokenian", rn::SpriteState::Idle, "res/textures/player/skins/hokenian/idle.png");
+    reg("player_hokenian", rn::SpriteState::Dead, "res/textures/player/skins/hokenian/dead.png");
+    reg("player_hokenian", rn::SpriteState::Casting, "res/textures/player/skins/hokenian/special.png");
 
     // Nightmare
     reg("boss", rn::SpriteState::Up, "res/textures/boss/idle.png");
@@ -127,7 +156,7 @@ int main()
             tz::render::SceneElement2D ele{square_mesh_idx};
             ele.transform.position = tz::Vec3{0.0f, 0.0f, 0.0f};
             ele.transform.rotation = tz::Vec3{0.0f, tz::pi, tz::pi};
-			ele.transform.scale = tz::Vec3{0.15f, 0.15f, 0.15f} * universal_scale;
+			ele.transform.scale = tz::Vec3{0.10f, 0.10f, 0.10f} * universal_scale;
 			ele.camera.position = cam_pos;
             ele.camera.top = universal_scale / aspect_ratio;
             ele.camera.bottom = -universal_scale / aspect_ratio;
@@ -148,7 +177,9 @@ int main()
         player_element.transform.position[0] = universal_scale * -0.15f;
         nightmare_element.transform.position[0] = universal_scale * 0.15f;
         rune_element.transform.position[0] = universal_scale * -0.2f;
-        rune_element.transform.scale = tz::Vec3{0.07f, 0.07f, 0.07f} * universal_scale;
+        rune_element.transform.scale = tz::Vec3{0.05f, 0.05f, 0.05f} * universal_scale;
+
+        set_player_skin(PlayerSkin::Hokenian);
 
         // Render setup
         tz::IWindow& wnd = tz::get().window();
@@ -188,7 +219,7 @@ int main()
 
         float rune_rotation_z = 0.0f;
 
-        rn::SpriteState player_state = rn::SpriteState::Casting;
+        rn::SpriteState player_state = rn::SpriteState::Idle;
         rn::SpriteState rune_state = rn::SpriteState::Idle;
 
         register_listeners(player_element.transform.position, player_state, rune_element.transform.position, rune_state);
@@ -200,7 +231,7 @@ int main()
             // Scene elements manipulation
             // Update player sprite.
             {
-                rn::Sprite player_sprite = sprites.get("player");
+                rn::Sprite player_sprite = sprites.get(player_sprite_name);
                 player_sprite.set_state(player_state);
                 handle_pool.set(player_id, player_sprite.get_texture());
             }
@@ -300,9 +331,9 @@ void register_listeners(tz::Vec3& player_pos, rn::SpriteState& player_state, tz:
 {
     tz::IWindow& wnd = tz::get().window();
     wnd.register_this();
-    wnd.emplace_custom_key_listener([&player_pos, &player_state](tz::input::KeyPressEvent e)
+    wnd.emplace_custom_key_listener([&player_pos, &player_state, &rune_state](tz::input::KeyPressEvent e)
     {
-        constexpr float multiplier = 0.03f * universal_scale;
+        constexpr float multiplier = 0.01f * universal_scale;
         switch(e.key)
         {
         case GLFW_KEY_W:
@@ -314,6 +345,7 @@ void register_listeners(tz::Vec3& player_pos, rn::SpriteState& player_state, tz:
             {
                 player_pos += tz::Vec3{0.0f, 1.0f, 0.0f} * multiplier;
                 player_state = rn::SpriteState::Up;
+                rune_state = rn::SpriteState::Idle;
             }
         break;
         case GLFW_KEY_S:
@@ -325,6 +357,7 @@ void register_listeners(tz::Vec3& player_pos, rn::SpriteState& player_state, tz:
             {
                 player_pos += tz::Vec3{0.0f, -1.0f, 0.0f} * multiplier;
                 player_state = rn::SpriteState::Down;
+                rune_state = rn::SpriteState::Idle;
             }
         break;
         case GLFW_KEY_A:
@@ -336,6 +369,7 @@ void register_listeners(tz::Vec3& player_pos, rn::SpriteState& player_state, tz:
             {
                 player_pos += tz::Vec3{-1.0f, 0.0f, 0.0f} * multiplier;
                 player_state = rn::SpriteState::Left;
+                rune_state = rn::SpriteState::Idle;
             }
         break;
         case GLFW_KEY_D:
@@ -347,6 +381,7 @@ void register_listeners(tz::Vec3& player_pos, rn::SpriteState& player_state, tz:
             {
                 player_pos += tz::Vec3{1.0f, 0.0f, 0.0f} * multiplier;
                 player_state = rn::SpriteState::Right;
+                rune_state = rn::SpriteState::Idle;
             }
         break;
         }
@@ -363,15 +398,12 @@ void register_listeners(tz::Vec3& player_pos, rn::SpriteState& player_state, tz:
 			{
 				if(mce.button == GLFW_MOUSE_BUTTON_LEFT)
 				{
-					if(mce.action == GLFW_PRESS || mce.action == GLFW_REPEAT)
+					if(mce.action == GLFW_PRESS && player_state == rn::SpriteState::Idle)
 					{
-                        if(mce.action == GLFW_PRESS)
-                        {
-                            rune_state = rn::SpriteState::Casting;
-                        }
+                        rune_state = rn::SpriteState::Casting;
 						player_state = rn::SpriteState::Casting;
 					}
-					if(mce.action == GLFW_RELEASE)
+					else if(mce.action == GLFW_RELEASE)
 					{
 						rune_state = rn::SpriteState::Idle;
                         player_state = rn::SpriteState::Idle;
