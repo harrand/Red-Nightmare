@@ -152,6 +152,7 @@ int main()
 
         // Render setup
         tz::IWindow& wnd = tz::get().window();
+        wnd.set_cursor_showing(false);
         wnd.get_frame()->set_clear_color(0.05f, 0.05f, 0.05f);
 
         rn::SpriteTextureStorage sprites = collate_sprites();
