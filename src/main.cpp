@@ -27,9 +27,12 @@
 
 // Rendering includes
 #include "render/scene.hpp"
+#include "gl/screen.hpp"
 #include "render/device.hpp"
 
 constexpr std::size_t scene_max_size = 512;
+constexpr float universal_scale = 100.0f;
+constexpr tz::Vec3 cam_pos{0.0f, 0.0f, 15.0f};
 
 tz::gl::IndexedMesh square_mesh();
 tz::gl::ShaderPreprocessor pre(tz::gl::Object& o);
@@ -37,6 +40,7 @@ tz::gl::ShaderProgram compile_base_shaders(tz::gl::ShaderPreprocessor& p);
 tz::gl::SSBO* get_ssbo(tz::gl::ShaderPreprocessor& pre, tz::gl::Object& o, const char* name);
 tz::gl::UBO* get_ubo(tz::gl::ShaderPreprocessor& pre, tz::gl::Object& o, const char* name);
 void register_listeners(tz::Vec3& player_pos, rn::SpriteState& player_state, tz::Vec3& rune_pos, rn::SpriteState& rune_state);
+tz::Vec3 screen_space_to_world_space(tz::Vec2 screen_space);
 
 std::size_t ubo_module_id;
 std::size_t ssbo_module_id;
@@ -114,20 +118,23 @@ int main()
         entity_textures_ubo->terminal_resize(sizeof(tz::gl::BindlessTextureHandle) * scene_max_size);
 
         // Scene setup.
-        tz::render::Scene scene{transform_ssbo->map()};
+        tz::render::StandardScene2D scene{transform_ssbo->map()};
         tz::render::AssetBuffer::Index square_mesh_idx = scene.add_mesh({m, square_handle});
 
+        const float aspect_ratio = tz::gl::Screen::primary().get_aspect_ratio();
         for(std::size_t i = 0; i < scene_max_size; i++)
         {
-            tz::render::SceneElement ele{square_mesh_idx};
+            tz::render::SceneElement2D ele{square_mesh_idx};
             ele.transform.position = tz::Vec3{0.0f, 0.0f, 0.0f};
             ele.transform.rotation = tz::Vec3{0.0f, tz::pi, tz::pi};
-			ele.transform.scale = tz::Vec3{3.5f, 3.5f, 3.5f};
-			ele.camera.position = tz::Vec3{0.0f, 0.0f, 15.0f};
-            ele.camera.fov = 1.57f;
-			ele.camera.aspect_ratio = 1920.0f/1080.0f;
-			ele.camera.near = 0.1f;
-			ele.camera.far = 20000.0f;
+			ele.transform.scale = tz::Vec3{0.15f, 0.15f, 0.15f} * universal_scale;
+			ele.camera.position = cam_pos;
+            ele.camera.top = universal_scale / aspect_ratio;
+            ele.camera.bottom = -universal_scale / aspect_ratio;
+            ele.camera.left = -universal_scale;
+            ele.camera.right = universal_scale;
+            ele.camera.near = -universal_scale;
+            ele.camera.far = universal_scale;
             scene.add(ele);
         }
 
@@ -135,13 +142,13 @@ int main()
         constexpr std::size_t nightmare_id = 1;
         constexpr std::size_t rune_id = 2;
         constexpr std::size_t first_ghost_id = 3;
-        tz::render::SceneElement& player_element = scene.get(player_id);
-        tz::render::SceneElement& nightmare_element = scene.get(nightmare_id);
-        tz::render::SceneElement& rune_element = scene.get(rune_id);
-        player_element.transform.position[0] = -15.0f;
-        nightmare_element.transform.position[0] = 15.0f;
-        rune_element.transform.position[0] = -20.0f;
-        rune_element.transform.scale = tz::Vec3{1.5f, 1.5f, 1.5f};
+        tz::render::SceneElement2D& player_element = scene.get(player_id);
+        tz::render::SceneElement2D& nightmare_element = scene.get(nightmare_id);
+        tz::render::SceneElement2D& rune_element = scene.get(rune_id);
+        player_element.transform.position[0] = universal_scale * -0.15f;
+        nightmare_element.transform.position[0] = universal_scale * 0.15f;
+        rune_element.transform.position[0] = universal_scale * -0.2f;
+        rune_element.transform.scale = tz::Vec3{0.07f, 0.07f, 0.07f} * universal_scale;
 
         // Render setup
         tz::IWindow& wnd = tz::get().window();
@@ -294,7 +301,7 @@ void register_listeners(tz::Vec3& player_pos, rn::SpriteState& player_state, tz:
     wnd.register_this();
     wnd.emplace_custom_key_listener([&player_pos, &player_state](tz::input::KeyPressEvent e)
     {
-        constexpr float multiplier = 0.3f;
+        constexpr float multiplier = 0.03f * universal_scale;
         switch(e.key)
         {
         case GLFW_KEY_W:
@@ -347,8 +354,8 @@ void register_listeners(tz::Vec3& player_pos, rn::SpriteState& player_state, tz:
     wnd.emplace_custom_mouse_listener(
 			[&rune_pos](tz::input::MouseUpdateEvent mue)
 			{
-                //rune_pos[0] = static_cast<float>(mue.xpos);
-                //rune_pos[1] = static_cast<float>(mue.ypos);
+                tz::Vec2 mouse_screen_space{static_cast<float>(mue.xpos), static_cast<float>(mue.ypos)};
+                rune_pos = screen_space_to_world_space(mouse_screen_space);
 			}
 			,
 			[&rune_state, &player_state](tz::input::MouseClickEvent mce)
@@ -371,4 +378,17 @@ void register_listeners(tz::Vec3& player_pos, rn::SpriteState& player_state, tz:
 				}
 			}
 		);
+}
+
+tz::Vec3 screen_space_to_world_space(tz::Vec2 screen_space)
+{
+    tz::gl::Screen monitor = tz::gl::Screen::primary();
+    screen_space[0] /= monitor.get_width();
+    screen_space[1] /= monitor.get_height();
+    // screen space y goes down->up, but we want up->down
+    screen_space[1] = (1.0f - screen_space[1]);
+    screen_space -= tz::Vec2{0.5f, 0.5f};
+    screen_space[0] *= universal_scale * 2;
+    screen_space[1] *= universal_scale * 2 / monitor.get_aspect_ratio();
+    return {screen_space[0], screen_space[1], 0.0f};
 }
