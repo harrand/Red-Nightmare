@@ -33,12 +33,18 @@
 constexpr std::size_t scene_max_size = 512;
 constexpr float universal_scale = 100.0f;
 constexpr tz::Vec3 cam_pos{0.0f, 0.0f, 15.0f};
-const char* player_sprite_name = "player";
+
+constexpr char player_skin_default_name[] = "player";
+constexpr char player_skin_hokenian_name[] = "player/hokenian";
+constexpr char player_skin_anthir_name[] = "player/anthir";
+
+const char* player_sprite_name = player_skin_default_name;
 
 enum class PlayerSkin
 {
     Default,
-    Hokenian
+    Hokenian,
+    Anthir
 };
 
 void set_player_skin(PlayerSkin skin)
@@ -46,10 +52,13 @@ void set_player_skin(PlayerSkin skin)
     switch(skin)
     {
         case PlayerSkin::Default:
-            player_sprite_name = "player";
+            player_sprite_name = player_skin_default_name;
         break;
         case PlayerSkin::Hokenian:
-            player_sprite_name = "player_hokenian";
+            player_sprite_name = player_skin_hokenian_name;
+        break;
+        case PlayerSkin::Anthir:
+            player_sprite_name = player_skin_anthir_name;
         break;
     }
 }
@@ -74,22 +83,31 @@ rn::SpriteTextureStorage collate_sprites()
         sts.add_texture(name, state, read_image<tz::gl::PixelRGBA8>(uri));
     };
     // Player
-    reg("player", rn::SpriteState::Up, "res/textures/player/idle.png");
-    reg("player", rn::SpriteState::Down, "res/textures/player/idle.png");
-    reg("player", rn::SpriteState::Left, "res/textures/player/left_1.png");
-    reg("player", rn::SpriteState::Right, "res/textures/player/right_1.png");
-    reg("player", rn::SpriteState::Idle, "res/textures/player/idle.png");
-    reg("player", rn::SpriteState::Dead, "res/textures/player/dead.png");
-    reg("player", rn::SpriteState::Casting, "res/textures/player/special.png");
+    reg(player_skin_default_name, rn::SpriteState::Up, "res/textures/player/idle.png");
+    reg(player_skin_default_name, rn::SpriteState::Down, "res/textures/player/idle.png");
+    reg(player_skin_default_name, rn::SpriteState::Left, "res/textures/player/left_1.png");
+    reg(player_skin_default_name, rn::SpriteState::Right, "res/textures/player/right_1.png");
+    reg(player_skin_default_name, rn::SpriteState::Idle, "res/textures/player/idle.png");
+    reg(player_skin_default_name, rn::SpriteState::Dead, "res/textures/player/dead.png");
+    reg(player_skin_default_name, rn::SpriteState::Casting, "res/textures/player/special.png");
 
     // Player (Hokenian Skin)
-    reg("player_hokenian", rn::SpriteState::Up, "res/textures/player/skins/hokenian/idle.png");
-    reg("player_hokenian", rn::SpriteState::Down, "res/textures/player/skins/hokenian/idle.png");
-    reg("player_hokenian", rn::SpriteState::Left, "res/textures/player/skins/hokenian/left_1.png");
-    reg("player_hokenian", rn::SpriteState::Right, "res/textures/player/skins/hokenian/right_1.png");
-    reg("player_hokenian", rn::SpriteState::Idle, "res/textures/player/skins/hokenian/idle.png");
-    reg("player_hokenian", rn::SpriteState::Dead, "res/textures/player/skins/hokenian/dead.png");
-    reg("player_hokenian", rn::SpriteState::Casting, "res/textures/player/skins/hokenian/special.png");
+    reg(player_skin_hokenian_name, rn::SpriteState::Up, "res/textures/player/skins/hokenian/idle.png");
+    reg(player_skin_hokenian_name, rn::SpriteState::Down, "res/textures/player/skins/hokenian/idle.png");
+    reg(player_skin_hokenian_name, rn::SpriteState::Left, "res/textures/player/skins/hokenian/left_1.png");
+    reg(player_skin_hokenian_name, rn::SpriteState::Right, "res/textures/player/skins/hokenian/right_1.png");
+    reg(player_skin_hokenian_name, rn::SpriteState::Idle, "res/textures/player/skins/hokenian/idle.png");
+    reg(player_skin_hokenian_name, rn::SpriteState::Dead, "res/textures/player/skins/hokenian/dead.png");
+    reg(player_skin_hokenian_name, rn::SpriteState::Casting, "res/textures/player/skins/hokenian/special.png");
+
+    // Player (Anthir Skin)
+    reg(player_skin_anthir_name, rn::SpriteState::Up, "res/textures/player/skins/anthir/idle.png");
+    reg(player_skin_anthir_name, rn::SpriteState::Down, "res/textures/player/skins/anthir/idle.png");
+    reg(player_skin_anthir_name, rn::SpriteState::Left, "res/textures/player/skins/anthir/left_1.png");
+    reg(player_skin_anthir_name, rn::SpriteState::Right, "res/textures/player/skins/anthir/right_1.png");
+    reg(player_skin_anthir_name, rn::SpriteState::Idle, "res/textures/player/skins/anthir/idle.png");
+    reg(player_skin_anthir_name, rn::SpriteState::Dead, "res/textures/player/skins/anthir/dead.png");
+    reg(player_skin_anthir_name, rn::SpriteState::Casting, "res/textures/player/skins/anthir/special.png");
 
     // Nightmare
     reg("boss", rn::SpriteState::Up, "res/textures/boss/idle.png");
@@ -179,7 +197,7 @@ int main()
         rune_element.transform.position[0] = universal_scale * -0.2f;
         rune_element.transform.scale = tz::Vec3{0.05f, 0.05f, 0.05f} * universal_scale;
 
-        set_player_skin(PlayerSkin::Hokenian);
+        set_player_skin(PlayerSkin::Default);
 
         // Render setup
         tz::IWindow& wnd = tz::get().window();
