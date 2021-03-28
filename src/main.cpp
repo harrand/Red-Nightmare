@@ -10,6 +10,7 @@
 
 // IO Includes
 #include "gl/tz_stb_image/image_reader.hpp"
+#include "core/scheduler.hpp"
 #include "GLFW/glfw3.h"
 #include <chrono>
 
@@ -218,6 +219,7 @@ int main()
 
         // Other Game Initialisation
         tz::mem::UniformPool<tz::gl::BindlessTextureHandle> handle_pool = entity_textures_ubo->map_uniform<tz::gl::BindlessTextureHandle>();
+        tz::FixedUpdateScheduler fixed_update{1000.0f / 60.0f}; // 60 TPS
         for(std::size_t i = first_ghost_id; i < scene_max_size; i++)
         {
             // Initial Sprite Textures
@@ -247,45 +249,53 @@ int main()
 
         while(!wnd.is_close_requested())
         {
-            constexpr float multiplier = 0.01f * universal_scale;
-            bool moving = false;
-            if(kl.is_key_down(GLFW_KEY_W))
-            {
-                player_element.transform.position += tz::Vec3{0.0f, 1.0f, 0.0f} * multiplier;
-                player_state = rn::SpriteState::Up;
-                rune_state = rn::SpriteState::Idle;
-                moving = true;
-            }
-            if(kl.is_key_down(GLFW_KEY_S))
-            {
-                player_element.transform.position += tz::Vec3{0.0f, -1.0f, 0.0f} * multiplier;
-                player_state = rn::SpriteState::Down;
-                rune_state = rn::SpriteState::Idle;
-                moving = true;
-            }
-            if(kl.is_key_down(GLFW_KEY_A))
-            {
-                player_element.transform.position += tz::Vec3{-1.0f, 0.0f, 0.0f} * multiplier;
-                player_state = rn::SpriteState::Left;
-                rune_state = rn::SpriteState::Idle;
-                moving = true;
-            }
-            if(kl.is_key_down(GLFW_KEY_D))
-            {
-                player_element.transform.position += tz::Vec3{1.0f, 0.0f, 0.0f} * multiplier;
-                player_state = rn::SpriteState::Right;
-                rune_state = rn::SpriteState::Idle;
-                moving = true;
-            }
-            if(!moving)
-            {
-                player_state = rn::SpriteState::Idle;
-            }
-            
             static unsigned long long old_time = get_current_time();
             unsigned long long new_time = get_current_time();
             auto delta_millis = static_cast<float>(new_time - old_time);
             old_time = new_time;
+
+            fixed_update.update(delta_millis);
+            {
+                tz::FixedUpdateTick tick = fixed_update.tick();
+                if(tick)
+                {
+                    constexpr float multiplier = 0.0025f * universal_scale;
+                    bool moving = false;
+                    if(kl.is_key_down(GLFW_KEY_W))
+                    {
+                        player_element.transform.position += tz::Vec3{0.0f, 1.0f, 0.0f} * multiplier;
+                        player_state = rn::SpriteState::Up;
+                        rune_state = rn::SpriteState::Idle;
+                        moving = true;
+                    }
+                    if(kl.is_key_down(GLFW_KEY_S))
+                    {
+                        player_element.transform.position += tz::Vec3{0.0f, -1.0f, 0.0f} * multiplier;
+                        player_state = rn::SpriteState::Down;
+                        rune_state = rn::SpriteState::Idle;
+                        moving = true;
+                    }
+                    if(kl.is_key_down(GLFW_KEY_A))
+                    {
+                        player_element.transform.position += tz::Vec3{-1.0f, 0.0f, 0.0f} * multiplier;
+                        player_state = rn::SpriteState::Left;
+                        rune_state = rn::SpriteState::Idle;
+                        moving = true;
+                    }
+                    if(kl.is_key_down(GLFW_KEY_D))
+                    {
+                        player_element.transform.position += tz::Vec3{1.0f, 0.0f, 0.0f} * multiplier;
+                        player_state = rn::SpriteState::Right;
+                        rune_state = rn::SpriteState::Idle;
+                        moving = true;
+                    }
+                    if(!moving && player_state != rn::SpriteState::Casting)
+                    {
+                        player_state = rn::SpriteState::Idle;
+                    }
+                }
+            }
+
             set_player_skin(player_skin);
 
             device.clear();
