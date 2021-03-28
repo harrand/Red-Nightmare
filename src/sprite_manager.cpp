@@ -14,6 +14,14 @@ namespace rn
         return lhs_hash;
     }
 
+    void SpriteTextureStorage::update(float delta_millis)
+    {
+        for(auto&[type, tex] : this->tex_storage)
+        {
+            tex.update(delta_millis);
+        }
+    }
+
     rn::Sprite SpriteTextureStorage::get(const char* base_sprite_name) const
     {
         SpriteType type{base_sprite_name, rn::SpriteState::Up};
@@ -59,7 +67,7 @@ namespace rn
         {
             type.state = static_cast<SpriteState>(i);
             assert_contains_type();
-            sprite_textures[i] = this->tex_storage.at(type).get_terminal_handle();
+            sprite_textures[i] = handleify(this->tex_storage.at(type));
         }
 
         return {sprite_textures};

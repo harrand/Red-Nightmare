@@ -8,9 +8,14 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ASTEROIDS_COMPILE_FLAGS}")
 add_executable(RedNightmare
         src/main.cpp
         
+        src/dui/player_manager_window.cpp
+        src/dui/player_manager_window.hpp
         src/dui/sprite_manager_window.cpp
         src/dui/sprite_manager_window.hpp
 
+        src/animated_texture.cpp
+        src/animated_texture.inl
+        src/animated_texture.hpp
         src/sprite_manager.cpp
         src/sprite_manager.inl
         src/sprite_manager.hpp

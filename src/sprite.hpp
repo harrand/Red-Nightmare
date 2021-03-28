@@ -1,6 +1,7 @@
 #ifndef REDNIGHTMARE_SPRITE_HPP
 #define REDNIGHTMARE_SPRITE_HPP
 #include "gl/texture.hpp"
+#include "animated_texture.hpp"
 #include <array>
 
 namespace rn
@@ -52,7 +53,7 @@ namespace rn
     class Sprite
     {
     public:
-        using TextureMap = std::array<tz::gl::BindlessTextureHandle, static_cast<std::size_t>(SpriteState::Size)>;
+        using TextureMap = std::array<rn::AnimatedTexture<tz::gl::BindlessTextureHandle>, static_cast<std::size_t>(SpriteState::Size)>;
 
         Sprite(TextureMap sprite_textures, SpriteState default_state = SpriteState::Idle);
         
