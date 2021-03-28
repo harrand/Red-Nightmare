@@ -66,7 +66,7 @@ tz::gl::ShaderPreprocessor pre(tz::gl::Object& o);
 tz::gl::ShaderProgram compile_base_shaders(tz::gl::ShaderPreprocessor& p);
 tz::gl::SSBO* get_ssbo(tz::gl::ShaderPreprocessor& pre, tz::gl::Object& o, const char* name);
 tz::gl::UBO* get_ubo(tz::gl::ShaderPreprocessor& pre, tz::gl::Object& o, const char* name);
-void register_listeners(tz::Vec3& player_pos, rn::SpriteState& player_state, tz::Vec3& rune_pos, rn::SpriteState& rune_state);
+tz::input::KeyListener& register_listeners(rn::SpriteState& player_state, tz::Vec3& rune_pos, rn::SpriteState& rune_state);
 tz::Vec3 screen_space_to_world_space(tz::Vec2 screen_space);
 
 std::size_t ubo_module_id;
@@ -243,10 +243,45 @@ int main()
         rn::SpriteState player_state = rn::SpriteState::Idle;
         rn::SpriteState rune_state = rn::SpriteState::Idle;
 
-        register_listeners(player_element.transform.position, player_state, rune_element.transform.position, rune_state);
+        tz::input::KeyListener& kl = register_listeners(player_state, rune_element.transform.position, rune_state);
 
         while(!wnd.is_close_requested())
         {
+            constexpr float multiplier = 0.01f * universal_scale;
+            bool moving = false;
+            if(kl.is_key_down(GLFW_KEY_W))
+            {
+                player_element.transform.position += tz::Vec3{0.0f, 1.0f, 0.0f} * multiplier;
+                player_state = rn::SpriteState::Up;
+                rune_state = rn::SpriteState::Idle;
+                moving = true;
+            }
+            if(kl.is_key_down(GLFW_KEY_S))
+            {
+                player_element.transform.position += tz::Vec3{0.0f, -1.0f, 0.0f} * multiplier;
+                player_state = rn::SpriteState::Down;
+                rune_state = rn::SpriteState::Idle;
+                moving = true;
+            }
+            if(kl.is_key_down(GLFW_KEY_A))
+            {
+                player_element.transform.position += tz::Vec3{-1.0f, 0.0f, 0.0f} * multiplier;
+                player_state = rn::SpriteState::Left;
+                rune_state = rn::SpriteState::Idle;
+                moving = true;
+            }
+            if(kl.is_key_down(GLFW_KEY_D))
+            {
+                player_element.transform.position += tz::Vec3{1.0f, 0.0f, 0.0f} * multiplier;
+                player_state = rn::SpriteState::Right;
+                rune_state = rn::SpriteState::Idle;
+                moving = true;
+            }
+            if(!moving)
+            {
+                player_state = rn::SpriteState::Idle;
+            }
+            
             static unsigned long long old_time = get_current_time();
             unsigned long long new_time = get_current_time();
             auto delta_millis = static_cast<float>(new_time - old_time);
@@ -355,65 +390,11 @@ tz::gl::UBO* get_ubo(tz::gl::ShaderPreprocessor& p, tz::gl::Object& o, const cha
     return o.get<tz::gl::BufferType::UniformStorage>(buf_id);
 }
 
-void register_listeners(tz::Vec3& player_pos, rn::SpriteState& player_state, tz::Vec3& rune_pos, rn::SpriteState& rune_state)
+tz::input::KeyListener& register_listeners(rn::SpriteState& player_state, tz::Vec3& rune_pos, rn::SpriteState& rune_state)
 {
     tz::IWindow& wnd = tz::get().window();
     wnd.register_this();
-    wnd.emplace_custom_key_listener([&player_pos, &player_state, &rune_state](tz::input::KeyPressEvent e)
-    {
-        constexpr float multiplier = 0.01f * universal_scale;
-        switch(e.key)
-        {
-        case GLFW_KEY_W:
-            if(e.action == GLFW_RELEASE)
-            {
-                player_state = rn::SpriteState::Idle;
-            }
-            else
-            {
-                player_pos += tz::Vec3{0.0f, 1.0f, 0.0f} * multiplier;
-                player_state = rn::SpriteState::Up;
-                rune_state = rn::SpriteState::Idle;
-            }
-        break;
-        case GLFW_KEY_S:
-            if(e.action == GLFW_RELEASE)
-            {
-                player_state = rn::SpriteState::Idle;
-            }
-            else
-            {
-                player_pos += tz::Vec3{0.0f, -1.0f, 0.0f} * multiplier;
-                player_state = rn::SpriteState::Down;
-                rune_state = rn::SpriteState::Idle;
-            }
-        break;
-        case GLFW_KEY_A:
-            if(e.action == GLFW_RELEASE)
-            {
-                player_state = rn::SpriteState::Idle;
-            }
-            else
-            {
-                player_pos += tz::Vec3{-1.0f, 0.0f, 0.0f} * multiplier;
-                player_state = rn::SpriteState::Left;
-                rune_state = rn::SpriteState::Idle;
-            }
-        break;
-        case GLFW_KEY_D:
-            if(e.action == GLFW_RELEASE)
-            {
-                player_state = rn::SpriteState::Idle;
-            }
-            else
-            {
-                player_pos += tz::Vec3{1.0f, 0.0f, 0.0f} * multiplier;
-                player_state = rn::SpriteState::Right;
-                rune_state = rn::SpriteState::Idle;
-            }
-        break;
-        }
-    });
+    tz::input::KeyListener& kl = wnd.emplace_custom_key_listener();
 
     wnd.emplace_custom_mouse_listener(
 			[&rune_pos](tz::input::MouseUpdateEvent mue)
@@ -439,6 +420,7 @@ void register_listeners(tz::Vec3& player_pos, rn::SpriteState& player_state, tz:
 				}
 			}
 		);
+    return kl;
 }
 
 tz::Vec3 screen_space_to_world_space(tz::Vec2 screen_space)
