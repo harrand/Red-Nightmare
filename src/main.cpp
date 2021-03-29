@@ -189,7 +189,7 @@ int main()
             scene.add(ele);
         }
 
-        constexpr std::size_t player_id = 0;
+        constexpr std::size_t player_id = scene_max_size - 1;
         constexpr std::size_t nightmare_id = 1;
         constexpr std::size_t rune_id = 2;
         constexpr std::size_t first_ghost_id = 3;
