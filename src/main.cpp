@@ -92,8 +92,8 @@ rn::SpriteTextureStorage collate_sprites()
     // Player
     reg(player_skin_default_name, rn::SpriteState::Up, {"res/textures/player/up_1.png", "res/textures/player/up_2.png", "res/textures/player/up_3.png", "res/textures/player/up_2.png"});
     reg(player_skin_default_name, rn::SpriteState::Down, {"res/textures/player/down_1.png", "res/textures/player/down_2.png", "res/textures/player/down_3.png", "res/textures/player/down_2.png"});
-    reg(player_skin_default_name, rn::SpriteState::Left, {"res/textures/player/left_1.png", "res/textures/player/left_2.png", "res/textures/player/left_3.png", "res/textures/player/left_2.png"});
-    reg(player_skin_default_name, rn::SpriteState::Right, {"res/textures/player/right_1.png", "res/textures/player/right_2.png", "res/textures/player/right_3.png", "res/textures/player/right_2.png"});
+    reg(player_skin_default_name, rn::SpriteState::Left, {"res/textures/player/move_1.png", "res/textures/player/move_2.png", "res/textures/player/move_3.png", "res/textures/player/move_2.png"});
+    reg(player_skin_default_name, rn::SpriteState::Right, {"res/textures/player/move_1.png", "res/textures/player/move_2.png", "res/textures/player/move_3.png", "res/textures/player/move_2.png"});
     reg(player_skin_default_name, rn::SpriteState::Idle, {"res/textures/player/idle.png"});
     reg(player_skin_default_name, rn::SpriteState::Dead, {"res/textures/player/dead.png"});
     reg(player_skin_default_name, rn::SpriteState::Casting, {"res/textures/player/special.png"});
@@ -126,11 +126,11 @@ rn::SpriteTextureStorage collate_sprites()
     reg("boss", rn::SpriteState::Casting, {"res/textures/boss/special.png"});
 
     // Ghost
-    reg("ghost", rn::SpriteState::Up, {"res/textures/ghost/idle.png"});
-    reg("ghost", rn::SpriteState::Down, {"res/textures/ghost/idle.png"});
+    reg("ghost", rn::SpriteState::Up, {"res/textures/ghost/idle1.png", "res/textures/ghost/idle2.png", "res/textures/ghost/idle3.png", "res/textures/ghost/idle2.png"});
+    reg("ghost", rn::SpriteState::Down, {"res/textures/ghost/idle1.png", "res/textures/ghost/idle2.png", "res/textures/ghost/idle3.png", "res/textures/ghost/idle2.png"});
     reg("ghost", rn::SpriteState::Left, {"res/textures/ghost/left_1.png"});
     reg("ghost", rn::SpriteState::Right, {"res/textures/ghost/right_1.png"});
-    reg("ghost", rn::SpriteState::Idle, {"res/textures/ghost/idle.png"});
+    reg("ghost", rn::SpriteState::Idle, {"res/textures/ghost/idle1.png", "res/textures/ghost/idle2.png", "res/textures/ghost/idle3.png", "res/textures/ghost/idle2.png"});
     reg("ghost", rn::SpriteState::Dead, {"res/textures/ghost/dead.png"});
     reg("ghost", rn::SpriteState::Casting, {"res/textures/ghost/special.png"});
 
@@ -149,7 +149,7 @@ int main()
 {
     tz::initialise("Red Nightmare");
     {
-        tz::get().render_settings().set_culling(tz::RenderSettings::CullTarget::FrontFaces);
+        tz::get().render_settings().set_culling(tz::RenderSettings::CullTarget::Nothing);
         // 2D game so no depth-testing (transparency in images gets depth-tested!)
         glDisable(GL_DEPTH_TEST);
         // Blend transparent pixels with background colour
@@ -235,7 +235,7 @@ int main()
             {
                 return {tz::range<float>(cam_data.left, cam_data.right), tz::range<float>(cam_data.top, cam_data.bottom), 0.0f};
             };
-            ghost_ele.transform.position = rand_pos(ghost_ele.camera);
+            //ghost_ele.transform.position = rand_pos(ghost_ele.camera);
         }
         // Nightmare isn't a ghost.
         {
@@ -303,6 +303,7 @@ int main()
                     if(moving)
                     {
                         player_element.transform.position += pos_delta.normalised() * multiplier;
+                        player_element.transform.scale[0] = 0.1f * universal_scale * (player_state == rn::SpriteState::Right ? -1.0f : 1.0f);
                     }
                     else if(player_state != rn::SpriteState::Casting)
                     {
@@ -327,6 +328,15 @@ int main()
                 rn::Sprite rune_sprite = sprites.get("rune");
                 rune_sprite.set_state(rune_state);
                 handle_pool.set(rune_id, rune_sprite.get_texture());
+            }
+            {
+                // Update ghost sprites
+                for(std::size_t i = first_ghost_id; i < last_ghost_id; i++)
+                {
+                    rn::Sprite ghost_sprite = sprites.get("ghost");
+                    ghost_sprite.set_state(rn::SpriteState::Idle);
+                    handle_pool.set(i, ghost_sprite.get_texture());
+                }
             }
             rune_element.transform.rotation[2] = rune_rotation_z -= 0.03f;
 
