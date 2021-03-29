@@ -79,7 +79,7 @@ rn::SpriteTextureStorage collate_sprites()
     using namespace tz::ext::stb;
     auto reg = [&sts](const char* name, rn::SpriteState state, std::initializer_list<const char*> uri)
     {
-        rn::AnimatedTexture<tz::gl::Image<tz::gl::PixelRGBA8>> img{20};
+        rn::AnimatedTexture<tz::gl::Image<tz::gl::PixelRGBA8>> img{8};
         for(const char* cur_uri : uri)
         {
             img.add_frame(1, read_image<tz::gl::PixelRGBA8>(cur_uri));
@@ -89,8 +89,8 @@ rn::SpriteTextureStorage collate_sprites()
     // Player
     reg(player_skin_default_name, rn::SpriteState::Up, {"res/textures/player/idle.png"});
     reg(player_skin_default_name, rn::SpriteState::Down, {"res/textures/player/idle.png"});
-    reg(player_skin_default_name, rn::SpriteState::Left, {"res/textures/player/left_1.png", "res/textures/player/left_2.png"});
-    reg(player_skin_default_name, rn::SpriteState::Right, {"res/textures/player/right_1.png", "res/textures/player/right_2.png"});
+    reg(player_skin_default_name, rn::SpriteState::Left, {"res/textures/player/left_1.png", "res/textures/player/left_2.png", "res/textures/player/left_3.png"});
+    reg(player_skin_default_name, rn::SpriteState::Right, {"res/textures/player/right_1.png", "res/textures/player/right_2.png", "res/textures/player/right_3.png"});
     reg(player_skin_default_name, rn::SpriteState::Idle, {"res/textures/player/idle.png"});
     reg(player_skin_default_name, rn::SpriteState::Dead, {"res/textures/player/dead.png"});
     reg(player_skin_default_name, rn::SpriteState::Casting, {"res/textures/player/special.png"});
