@@ -235,7 +235,7 @@ int main()
             {
                 return {tz::range<float>(cam_data.left, cam_data.right), tz::range<float>(cam_data.top, cam_data.bottom), 0.0f};
             };
-            //ghost_ele.transform.position = rand_pos(ghost_ele.camera);
+            ghost_ele.transform.position = rand_pos(ghost_ele.camera);
         }
         // Nightmare isn't a ghost.
         {
