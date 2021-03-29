@@ -33,6 +33,9 @@
 #include "gl/screen.hpp"
 #include "render/device.hpp"
 
+// Other includes
+#include "core/random.hpp"
+
 constexpr std::size_t scene_max_size = 512;
 constexpr float universal_scale = 100.0f;
 constexpr tz::Vec3 cam_pos{0.0f, 0.0f, 15.0f};
@@ -191,8 +194,9 @@ int main()
 
         constexpr std::size_t player_id = scene_max_size - 1;
         constexpr std::size_t nightmare_id = 1;
-        constexpr std::size_t rune_id = 2;
+        constexpr std::size_t rune_id = player_id - 1;
         constexpr std::size_t first_ghost_id = 3;
+        constexpr std::size_t last_ghost_id = rune_id - 1;
         tz::render::SceneElement2D& player_element = scene.get(player_id);
         tz::render::SceneElement2D& nightmare_element = scene.get(nightmare_id);
         tz::render::SceneElement2D& rune_element = scene.get(rune_id);
@@ -220,12 +224,18 @@ int main()
         // Other Game Initialisation
         tz::mem::UniformPool<tz::gl::BindlessTextureHandle> handle_pool = entity_textures_ubo->map_uniform<tz::gl::BindlessTextureHandle>();
         tz::FixedUpdateScheduler fixed_update{1000.0f / 60.0f}; // 60 TPS
-        for(std::size_t i = first_ghost_id; i < scene_max_size; i++)
+        for(std::size_t i = first_ghost_id; i <= last_ghost_id; i++)
         {
             // Initial Sprite Textures
             rn::Sprite player_idle = sprites.get("ghost");
             player_idle.set_state(rn::SpriteState::Idle);
             handle_pool.set(i, player_idle.get_texture());
+            tz::render::SceneElement2D& ghost_ele = scene.get(i);
+            auto rand_pos = [](const tz::gl::CameraDataOrthographic& cam_data)->tz::Vec3
+            {
+                return {tz::range<float>(cam_data.left, cam_data.right), tz::range<float>(cam_data.top, cam_data.bottom), 0.0f};
+            };
+            ghost_ele.transform.position = rand_pos(ghost_ele.camera);
         }
         // Nightmare isn't a ghost.
         {
