@@ -261,35 +261,40 @@ int main()
                 {
                     constexpr float multiplier = 0.0025f * universal_scale;
                     bool moving = false;
+                    tz::Vec3 pos_delta{0.0f, 0.0f, 0.0f};
                     if(kl.is_key_down(GLFW_KEY_W))
                     {
-                        player_element.transform.position += tz::Vec3{0.0f, 1.0f, 0.0f} * multiplier;
+                        pos_delta += tz::Vec3{0.0f, 1.0f, 0.0f};
                         player_state = rn::SpriteState::Up;
                         rune_state = rn::SpriteState::Idle;
                         moving = true;
                     }
                     if(kl.is_key_down(GLFW_KEY_S))
                     {
-                        player_element.transform.position += tz::Vec3{0.0f, -1.0f, 0.0f} * multiplier;
+                        pos_delta += tz::Vec3{0.0f, -1.0f, 0.0f};
                         player_state = rn::SpriteState::Down;
                         rune_state = rn::SpriteState::Idle;
                         moving = true;
                     }
                     if(kl.is_key_down(GLFW_KEY_A))
                     {
-                        player_element.transform.position += tz::Vec3{-1.0f, 0.0f, 0.0f} * multiplier;
+                        pos_delta += tz::Vec3{-1.0f, 0.0f, 0.0f};
                         player_state = rn::SpriteState::Left;
                         rune_state = rn::SpriteState::Idle;
                         moving = true;
                     }
                     if(kl.is_key_down(GLFW_KEY_D))
                     {
-                        player_element.transform.position += tz::Vec3{1.0f, 0.0f, 0.0f} * multiplier;
+                        pos_delta += tz::Vec3{1.0f, 0.0f, 0.0f};
                         player_state = rn::SpriteState::Right;
                         rune_state = rn::SpriteState::Idle;
                         moving = true;
                     }
-                    if(!moving && player_state != rn::SpriteState::Casting)
+                    if(moving)
+                    {
+                        player_element.transform.position += pos_delta.normalised() * multiplier;
+                    }
+                    else if(player_state != rn::SpriteState::Casting)
                     {
                         player_state = rn::SpriteState::Idle;
                     }
