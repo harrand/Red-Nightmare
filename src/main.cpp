@@ -90,10 +90,10 @@ rn::SpriteTextureStorage collate_sprites()
         sts.add_texture(name, state, img);
     };
     // Player
-    reg(player_skin_default_name, rn::SpriteState::Up, {"res/textures/player/idle.png"});
-    reg(player_skin_default_name, rn::SpriteState::Down, {"res/textures/player/idle.png"});
-    reg(player_skin_default_name, rn::SpriteState::Left, {"res/textures/player/left_1.png", "res/textures/player/left_2.png", "res/textures/player/left_3.png"});
-    reg(player_skin_default_name, rn::SpriteState::Right, {"res/textures/player/right_1.png", "res/textures/player/right_2.png", "res/textures/player/right_3.png"});
+    reg(player_skin_default_name, rn::SpriteState::Up, {"res/textures/player/up_1.png", "res/textures/player/up_2.png", "res/textures/player/up_3.png", "res/textures/player/up_2.png"});
+    reg(player_skin_default_name, rn::SpriteState::Down, {"res/textures/player/down_1.png", "res/textures/player/down_2.png", "res/textures/player/down_3.png", "res/textures/player/down_2.png"});
+    reg(player_skin_default_name, rn::SpriteState::Left, {"res/textures/player/left_1.png", "res/textures/player/left_2.png", "res/textures/player/left_3.png", "res/textures/player/left_2.png"});
+    reg(player_skin_default_name, rn::SpriteState::Right, {"res/textures/player/right_1.png", "res/textures/player/right_2.png", "res/textures/player/right_3.png", "res/textures/player/right_2.png"});
     reg(player_skin_default_name, rn::SpriteState::Idle, {"res/textures/player/idle.png"});
     reg(player_skin_default_name, rn::SpriteState::Dead, {"res/textures/player/dead.png"});
     reg(player_skin_default_name, rn::SpriteState::Casting, {"res/textures/player/special.png"});
