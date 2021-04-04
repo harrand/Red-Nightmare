@@ -29,6 +29,7 @@
 #include "gl/modules/ubo.hpp"
 
 // Rendering includes
+#include "algo/image_processing.hpp"
 #include "render/scene.hpp"
 #include "gl/screen.hpp"
 #include "render/device.hpp"
@@ -80,12 +81,17 @@ rn::SpriteTextureStorage collate_sprites()
 {
     rn::SpriteTextureStorage sts;
     using namespace tz::ext::stb;
-    auto reg = [&sts](const char* name, rn::SpriteState state, std::initializer_list<const char*> uri)
+    auto reg = [&sts](const char* name, rn::SpriteState state, std::initializer_list<const char*> uri, std::optional<tz::algo::ImageFlipDirection> flip_dir = {})
     {
         rn::AnimatedTexture<tz::gl::Image<tz::gl::PixelRGBA8>> img{8};
         for(const char* cur_uri : uri)
         {
-            img.add_frame(1, read_image<tz::gl::PixelRGBA8>(cur_uri));
+            tz::gl::Image<tz::gl::PixelRGBA8> loaded_img = read_image<tz::gl::PixelRGBA8>(cur_uri);
+            if(flip_dir.has_value())
+            {
+                tz::algo::flip_image<tz::gl::PixelRGBA8>(loaded_img, flip_dir.value());
+            }
+            img.add_frame(1, loaded_img);
         }
         sts.add_texture(name, state, img);
     };
@@ -93,7 +99,7 @@ rn::SpriteTextureStorage collate_sprites()
     reg(player_skin_default_name, rn::SpriteState::Up, {"res/textures/player/up_1.png", "res/textures/player/up_2.png", "res/textures/player/up_3.png", "res/textures/player/up_2.png"});
     reg(player_skin_default_name, rn::SpriteState::Down, {"res/textures/player/down_1.png", "res/textures/player/down_2.png", "res/textures/player/down_3.png", "res/textures/player/down_2.png"});
     reg(player_skin_default_name, rn::SpriteState::Left, {"res/textures/player/move_1.png", "res/textures/player/move_2.png", "res/textures/player/move_3.png", "res/textures/player/move_2.png"});
-    reg(player_skin_default_name, rn::SpriteState::Right, {"res/textures/player/move_1.png", "res/textures/player/move_2.png", "res/textures/player/move_3.png", "res/textures/player/move_2.png"});
+    reg(player_skin_default_name, rn::SpriteState::Right, {"res/textures/player/move_1.png", "res/textures/player/move_2.png", "res/textures/player/move_3.png", "res/textures/player/move_2.png"}, tz::algo::ImageFlipDirection::Horizontal);
     reg(player_skin_default_name, rn::SpriteState::Idle, {"res/textures/player/idle.png"});
     reg(player_skin_default_name, rn::SpriteState::Dead, {"res/textures/player/dead.png"});
     reg(player_skin_default_name, rn::SpriteState::Casting, {"res/textures/player/special.png"});
@@ -303,7 +309,6 @@ int main()
                     if(moving)
                     {
                         player_element.transform.position += pos_delta.normalised() * multiplier;
-                        player_element.transform.scale[0] = 0.1f * universal_scale * (player_state == rn::SpriteState::Right ? -1.0f : 1.0f);
                     }
                     else if(player_state != rn::SpriteState::Casting)
                     {
