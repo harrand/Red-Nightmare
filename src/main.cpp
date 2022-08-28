@@ -1,4 +1,5 @@
 #include "quad_renderer.hpp"
+#include "animation.hpp"
 #include "tz/core/tz.hpp"
 #include "tz/dbgui/dbgui.hpp"
 
@@ -8,6 +9,7 @@ int main()
 	tz::initialise({.name = "Red Nightmare"});
 	{
 		game::QuadRenderer qrenderer;
+		game::Animation idle = game::play_animation(game::AnimationID::PlayerClassic_Death);
 
 		bool show_game_menu = false;
 		tz::dbgui::game_menu().add_callback([&show_game_menu]()
@@ -30,14 +32,7 @@ int main()
 				}
 			});
 
-			if(qrenderer.elements().front().texture_id == game::TextureID::PlayerClassic_Idle_1)
-			{
-				qrenderer.elements().front().texture_id = game::TextureID::PlayerClassic_Idle_2;
-			}
-			else
-			{
-				qrenderer.elements().front().texture_id = game::TextureID::PlayerClassic_Idle_1;
-			}
+			qrenderer.elements().front().texture_id = idle.get_texture();
 			tz::window().end_frame();
 		}
 	}

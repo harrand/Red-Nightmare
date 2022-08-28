@@ -17,7 +17,7 @@ namespace game
 		PlayerClassic_Dying_4,
 		PlayerClassic_Dying_5,
 		PlayerClassic_Dying_6,
-		PlayerCLassic_Dying_7,
+		PlayerClassic_Dying_7,
 		PlayerClassic_Dying_8,
 		PlayerClassic_Idle_1,
 		PlayerClassic_Idle_2,

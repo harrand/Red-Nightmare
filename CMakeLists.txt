@@ -9,6 +9,8 @@ add_subdirectory(lib)
 add_app(
 	TARGET rednightmare
 	SOURCE_FILES
+		src/animation.cpp
+		src/animation.hpp
 		src/main.cpp
 		src/images.cpp
 		src/images.hpp
