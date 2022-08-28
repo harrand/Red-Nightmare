@@ -15,9 +15,9 @@ namespace game
 
 		struct ElementData
 		{
-			tz::Vec2 position;
-			float rotation;
-			TextureID texture_id;
+			tz::Vec2 position = {0.0f, 0.0f};
+			float rotation = 0.0f;
+			TextureID texture_id = static_cast<TextureID>(0);
 		};
 	private:
 		tz::gl::Renderer make_renderer();
