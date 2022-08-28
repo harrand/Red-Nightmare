@@ -14,6 +14,8 @@ add_app(
 		src/main.cpp
 		src/images.cpp
 		src/images.hpp
+		src/scene.cpp
+		src/scene.hpp
 		src/quad_renderer.cpp
 		src/quad_renderer.hpp
 	SHADER_SOURCES

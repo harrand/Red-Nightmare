@@ -25,12 +25,13 @@ namespace game
 	{
 		ImGui::Text("Quad Count: %zu", this->quad_count);
 		static int quad_id = 0;
-		if(this->quad_count > 0 && ImGui::CollapsingHeader("Quad Viewer"))
+		if(this->quad_count > 0)
 		{
 			ImGui::SliderInt("Quad Id", &quad_id, 0, this->quad_count - 1);
-			const QuadRenderer::ElementData& elem = this->elements()[quad_id];
-			ImGui::Text("Position: {%.2f, %.2f}", elem.position[0], elem.position[1]);
+			QuadRenderer::ElementData& elem = this->elements()[quad_id];
+			ImGui::DragFloat2("Position", elem.position.data().data(), 0.01f, -1.0f, 1.0f);
 			ImGui::Text("Rotation (Radians): %.2f", elem.rotation);
+			ImGui::DragFloat2("Scale", elem.scale.data().data(), 0.01f, -1.0f, 1.0f);
 			ImGui::Text("Texture ID: %u", static_cast<unsigned int>(elem.texture_id));
 		}
 	}
@@ -49,6 +50,21 @@ namespace game
 	{
 		tz_assert(this->quad_count < QuadRenderer::max_quad_count, "Ran out of quad storage in QuadRenderer.");
 		this->quad_count++;
+	}
+
+	void QuadRenderer::pop()
+	{
+		tz_assert(this->quad_count > 0, "Cannot pop when there are already no quads");
+		this->quad_count--;
+	}
+	
+	void QuadRenderer::clear()
+	{
+		for(auto& elem : this->elements())
+		{
+			elem = QuadRenderer::ElementData{};
+		}
+		this->quad_count = 0;
 	}
 
 	tz::gl::Renderer QuadRenderer::make_renderer()

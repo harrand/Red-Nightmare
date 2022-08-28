@@ -13,6 +13,7 @@ vec2 quad_texcoords[6] = vec2[](
 struct ElementData
 {
 	vec2 position;
+	vec2 scale;
 	float rotation;
 	uint texture_id;
 };
@@ -27,8 +28,11 @@ output(id = 1) vec2 out_texcoord;
 
 void main()
 {
-	out::position = vec4(quad_positions[in::vertex_id % 6] * 0.5f, 0.0, 1.0);
 	const uint quad_id = in::vertex_id / 6;
-	out_texture_id = element.data[quad_id].texture_id;
+	ElementData elem = element.data[quad_id];
+
+	vec2 pos = elem.position + quad_positions[in::vertex_id % 6] * elem.scale;
+	out::position = vec4(pos, 0.0, 1.0);
+	out_texture_id = elem.texture_id;
 	out_texcoord = quad_texcoords[in::vertex_id % 6];
 }

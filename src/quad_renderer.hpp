@@ -17,6 +17,7 @@ namespace game
 		struct ElementData
 		{
 			tz::Vec2 position = {0.0f, 0.0f};
+			tz::Vec2 scale = {0.5f, 0.5f};
 			float rotation = 0.0f;
 			TextureID texture_id = static_cast<TextureID>(0);
 		};
@@ -25,11 +26,13 @@ namespace game
 		std::span<ElementData> elements();
 
 		void push();
+		void pop();
+		void clear();
 	private:
 		tz::gl::Renderer make_renderer();
 
 		static constexpr std::size_t max_quad_count = 2048;
-		std::size_t quad_count = 1;
+		std::size_t quad_count = 0;
 		tz::gl::ResourceHandle element_buffer_handle;
 		tz::gl::Renderer renderer;
 	};
