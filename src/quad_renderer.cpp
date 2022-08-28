@@ -1,6 +1,7 @@
 #include "quad_renderer.hpp"
 #include "tz/gl/imported_shaders.hpp"
 #include "tz/gl/device.hpp"
+#include "tz/dbgui/dbgui.hpp"
 
 #include ImportedShaderHeader(quad, vertex)
 #include ImportedShaderHeader(quad, fragment)
@@ -18,6 +19,20 @@ namespace game
 	{
 		// 2 triangles per quad.
 		this->renderer.render(this->quad_count * 2);
+	}
+
+	void QuadRenderer::dbgui()
+	{
+		ImGui::Text("Quad Count: %zu", this->quad_count);
+		static int quad_id = 0;
+		if(this->quad_count > 0 && ImGui::CollapsingHeader("Quad Viewer"))
+		{
+			ImGui::SliderInt("Quad Id", &quad_id, 0, this->quad_count - 1);
+			const QuadRenderer::ElementData& elem = this->renderer.get_resource(this->element_buffer_handle)->data_as<const QuadRenderer::ElementData>()[quad_id];
+			ImGui::Text("Position: {%.2f, %.2f}", elem.position[0], elem.position[1]);
+			ImGui::Text("Rotation (Radians): %.2f", elem.rotation);
+			ImGui::Text("Texture ID: %u", static_cast<unsigned int>(elem.texture_id));
+		}
 	}
 
 	tz::gl::Renderer QuadRenderer::make_renderer()

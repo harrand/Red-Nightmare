@@ -12,6 +12,7 @@ namespace game
 		QuadRenderer();
 
 		void render();
+		void dbgui();
 
 		struct ElementData
 		{

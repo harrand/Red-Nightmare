@@ -12,7 +12,7 @@ int main()
 		bool show_game_menu = false;
 		tz::dbgui::game_menu().add_callback([&show_game_menu]()
 		{
-			ImGui::MenuItem("Blah", nullptr, &show_game_menu);
+			ImGui::MenuItem("Quad Renderer", nullptr, &show_game_menu);
 		});
 
 		while(!tz::window().is_close_requested())
@@ -20,12 +20,12 @@ int main()
 			tz::window().begin_frame();
 			qrenderer.render();
 
-			tz::dbgui::run([&show_game_menu]()
+			tz::dbgui::run([&show_game_menu, &qrenderer]()
 			{
 				if(show_game_menu)
 				{
-					ImGui::Begin("Blah", &show_game_menu);
-					ImGui::Text("Herp");
+					ImGui::Begin("Quad Renderer", &show_game_menu);
+					qrenderer.dbgui();
 					ImGui::End();
 				}
 			});
