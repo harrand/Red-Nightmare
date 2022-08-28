@@ -1,0 +1,8 @@
+shader(type = vertex);
+
+import <mesh>
+
+void main()
+{
+	out::position = vec4(tz::mesh::fullscreen_quad[in::vertex_id % 6].xzy * 0.5f, 1.0);
+}

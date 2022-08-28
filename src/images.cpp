@@ -5,12 +5,14 @@
 
 // Note: When adding a new image, add a new entry here and in game::texture_data below.
 #include ImportedTextHeader(idle1, png)
+#include ImportedTextHeader(idle2, png)
 
 namespace game
 {
 	std::array<std::string_view, static_cast<int>(TextureID::Count)> texture_data
 	{
-		ImportedTextData(idle1, png)
+		ImportedTextData(idle1, png),
+		ImportedTextData(idle2, png)
 	};
 
 	tz::gl::ImageResource load_image(TextureID texid)
