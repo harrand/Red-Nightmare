@@ -11,4 +11,6 @@ add_app(
 	SHADER_SOURCES
 		src/default.vertex.tzsl
 		src/default.fragment.tzsl
+	CUSTOM_ICON
+		${PROJECT_SOURCE_DIR}/rednightmare.ico
 )
