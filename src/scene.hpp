@@ -1,5 +1,6 @@
 #ifndef REDNIGHTMARE_SCENE_HPP
 #define REDNIGHTMARE_SCENE_HPP
+#include "actor.hpp"
 #include "animation.hpp"
 #include "quad_renderer.hpp"
 
@@ -15,11 +16,12 @@ namespace game
 		bool empty() const;
 
 		void temp_add();
+		void add(ActorType type);
 		void pop();
 		void clear();
 	private:
 		QuadRenderer qrenderer;
-		std::vector<Animation> animations;
+		std::vector<Actor> actors;
 	};
 }
 

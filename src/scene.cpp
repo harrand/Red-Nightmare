@@ -7,7 +7,7 @@ namespace game
 	{
 		for(std::size_t i = 0; i < this->qrenderer.elements().size(); i++)
 		{
-			this->qrenderer.elements()[i].texture_id = this->animations[i].get_texture();
+			this->qrenderer.elements()[i].texture_id = this->actors[i].animation.get_texture();
 		}
 		this->qrenderer.render();
 	}
@@ -46,19 +46,24 @@ namespace game
 
 	void Scene::temp_add()
 	{
-		this->animations.push_back(game::play_animation(AnimationID::PlayerClassic_MoveSide));
+		this->add(ActorType::Player);
 		this->qrenderer.push();
+	}
+
+	void Scene::add(ActorType type)
+	{
+		this->actors.push_back(game::create_actor(type));
 	}
 	
 	void Scene::pop()
 	{
 		this->qrenderer.pop();
-		this->animations.pop_back();
+		this->actors.pop_back();
 	}
 
 	void Scene::clear()
 	{
 		this->qrenderer.clear();
-		this->animations.clear();
+		this->actors.clear();
 	}
 }

@@ -1,4 +1,5 @@
 #include "scene.hpp"
+#include "actor.hpp"
 #include "tz/core/tz.hpp"
 #include "tz/dbgui/dbgui.hpp"
 
@@ -14,6 +15,8 @@ int main()
 		{
 			ImGui::MenuItem("Scene", nullptr, &show_game_menu);
 		});
+
+		scene.add(game::ActorType::Player);
 
 		while(!tz::window().is_close_requested())
 		{
