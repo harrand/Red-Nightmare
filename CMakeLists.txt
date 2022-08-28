@@ -30,6 +30,25 @@ add_text(
 	INPUT_DIR ${PROJECT_SOURCE_DIR}
 	OUTPUT_DIR ${PROJECT_BINARY_DIR}
 	TEXT_FILES
+		res/images/player/classic/dead.png
+		res/images/player/classic/down1.png
+		res/images/player/classic/down2.png
+		res/images/player/classic/down3.png
+		res/images/player/classic/dying1.png
+		res/images/player/classic/dying2.png
+		res/images/player/classic/dying3.png
+		res/images/player/classic/dying4.png
+		res/images/player/classic/dying5.png
+		res/images/player/classic/dying6.png
+		res/images/player/classic/dying7.png
+		res/images/player/classic/dying8.png
 		res/images/player/classic/idle1.png
 		res/images/player/classic/idle2.png
+		res/images/player/classic/side1.png
+		res/images/player/classic/side2.png
+		res/images/player/classic/side3.png
+		res/images/player/classic/special.png
+		res/images/player/classic/up1.png
+		res/images/player/classic/up2.png
+		res/images/player/classic/up3.png
 )

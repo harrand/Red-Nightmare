@@ -9,4 +9,8 @@ resource(id = 1) const texture images[];
 void main()
 {
 	frag_colour = texture(images[in_texture_id], in_texcoord);
+	if(frag_colour.a < 0.9f)
+	{
+		discard;
+	}
 }

@@ -20,6 +20,11 @@ namespace game
 			float rotation = 0.0f;
 			TextureID texture_id = static_cast<TextureID>(0);
 		};
+
+		std::span<const ElementData> elements() const;
+		std::span<ElementData> elements();
+
+		void push();
 	private:
 		tz::gl::Renderer make_renderer();
 

@@ -28,11 +28,27 @@ namespace game
 		if(this->quad_count > 0 && ImGui::CollapsingHeader("Quad Viewer"))
 		{
 			ImGui::SliderInt("Quad Id", &quad_id, 0, this->quad_count - 1);
-			const QuadRenderer::ElementData& elem = this->renderer.get_resource(this->element_buffer_handle)->data_as<const QuadRenderer::ElementData>()[quad_id];
+			const QuadRenderer::ElementData& elem = this->elements()[quad_id];
 			ImGui::Text("Position: {%.2f, %.2f}", elem.position[0], elem.position[1]);
 			ImGui::Text("Rotation (Radians): %.2f", elem.rotation);
 			ImGui::Text("Texture ID: %u", static_cast<unsigned int>(elem.texture_id));
 		}
+	}
+
+	std::span<const QuadRenderer::ElementData> QuadRenderer::elements() const
+	{
+		return this->renderer.get_resource(this->element_buffer_handle)->data_as<const QuadRenderer::ElementData>().subspan(0, this->quad_count);
+	}
+
+	std::span<QuadRenderer::ElementData> QuadRenderer::elements()
+	{
+		return this->renderer.get_resource(this->element_buffer_handle)->data_as<QuadRenderer::ElementData>().subspan(0, this->quad_count);
+	}
+
+	void QuadRenderer::push()
+	{
+		tz_assert(this->quad_count < QuadRenderer::max_quad_count, "Ran out of quad storage in QuadRenderer.");
+		this->quad_count++;
 	}
 
 	tz::gl::Renderer QuadRenderer::make_renderer()

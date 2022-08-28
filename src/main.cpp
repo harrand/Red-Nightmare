@@ -29,6 +29,15 @@ int main()
 					ImGui::End();
 				}
 			});
+
+			if(qrenderer.elements().front().texture_id == game::TextureID::PlayerClassic_Idle_1)
+			{
+				qrenderer.elements().front().texture_id = game::TextureID::PlayerClassic_Idle_2;
+			}
+			else
+			{
+				qrenderer.elements().front().texture_id = game::TextureID::PlayerClassic_Idle_1;
+			}
 			tz::window().end_frame();
 		}
 	}
