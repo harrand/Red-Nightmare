@@ -9,7 +9,7 @@ int main()
 	tz::initialise({.name = "Red Nightmare"});
 	{
 		game::QuadRenderer qrenderer;
-		game::Animation idle = game::play_animation(game::AnimationID::PlayerClassic_Death);
+		game::Animation idle = game::play_animation(game::AnimationID::PlayerClassic_MoveSide);
 
 		bool show_game_menu = false;
 		tz::dbgui::game_menu().add_callback([&show_game_menu]()

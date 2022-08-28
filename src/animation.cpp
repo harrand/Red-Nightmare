@@ -81,6 +81,42 @@ namespace game
 			},
 			.fps = 2,
 			.loop = true
+		},
+		AnimationInfo /*MoveDown*/
+		{
+			.frames =
+			{
+				TextureID::PlayerClassic_Down_1,
+				TextureID::PlayerClassic_Down_2,
+				TextureID::PlayerClassic_Down_3,
+				TextureID::PlayerClassic_Down_2
+			},
+			.fps = 6,
+			.loop = true
+		},
+		AnimationInfo /*MoveUp*/
+		{
+			.frames = 
+			{
+				TextureID::PlayerClassic_Up_1,
+				TextureID::PlayerClassic_Up_2,
+				TextureID::PlayerClassic_Up_3,
+				TextureID::PlayerClassic_Up_2
+			},
+			.fps = 6,
+			.loop = true
+		},
+		AnimationInfo /*MoveSide*/
+		{
+			.frames = 
+			{
+				TextureID::PlayerClassic_Side_1,
+				TextureID::PlayerClassic_Side_2,
+				TextureID::PlayerClassic_Side_3,
+				TextureID::PlayerClassic_Side_2
+			},
+			.fps = 6,
+			.loop = true
 		}
 	};
 

@@ -29,6 +29,9 @@ namespace game
 	{
 		PlayerClassic_Death,
 		PlayerClassic_Idle,
+		PlayerClassic_MoveDown,
+		PlayerClassic_MoveUp,
+		PlayerClassic_MoveSide,
 		Count
 	};
 
