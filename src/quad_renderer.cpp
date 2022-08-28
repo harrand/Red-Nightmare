@@ -43,9 +43,9 @@ namespace game
 		rinfo.shader().set_shader(tz::gl::ShaderStage::Fragment, ImportedShaderSource(quad, fragment));
 
 		// A buffer to store data for each quad (element buffer).
-		std::vector<QuadRenderer::ElementData> element_data;
-		element_data.resize(this->quad_count, {});
-		tz::gl::BufferResource element_buffer = tz::gl::BufferResource::from_many(element_data, tz::gl::ResourceAccess::DynamicVariable);
+		std::array<QuadRenderer::ElementData, QuadRenderer::max_quad_count> element_data;
+		std::fill(element_data.begin(), element_data.end(), QuadRenderer::ElementData{});
+		tz::gl::BufferResource element_buffer = tz::gl::BufferResource::from_many(element_data, tz::gl::ResourceAccess::DynamicFixed);
 		this->element_buffer_handle = rinfo.add_resource(element_buffer);
 
 		// Renderer stores all textures in the game.

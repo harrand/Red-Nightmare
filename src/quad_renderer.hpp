@@ -23,6 +23,7 @@ namespace game
 	private:
 		tz::gl::Renderer make_renderer();
 
+		static constexpr std::size_t max_quad_count = 2048;
 		std::size_t quad_count = 1;
 		tz::gl::ResourceHandle element_buffer_handle;
 		tz::gl::Renderer renderer;
