@@ -100,67 +100,81 @@ namespace game
 
 		const float sp = actor.base_movement;
 		// Handle actions.
+		std::optional<tz::Vec2> chase_target = std::nullopt;
 		if(actor.actions.contains(ActorAction::ChasePlayer))
 		{
 			auto player_id = this->find_first_player();
 			if(player_id.has_value())
 			{
-				auto& player_actor = this->actors[player_id.value()];
-				// We tell the actor to save its motion state in the next fixed-update.
-				actor.actions |= ActorAction::SceneMessage_MaintainMotion;
+				chase_target = this->qrenderer.elements()[player_id.value()].position;
+			}
+		}
+		if(actor.actions.contains(ActorAction::FollowMouse))
+		{
+			tz::Vec2 mouse_pos = static_cast<tz::Vec2>(tz::window().get_mouse_position_state().get_mouse_position());
+			mouse_pos[0] /= tz::window().get_width();
+			mouse_pos[1] /= tz::window().get_height();
+			mouse_pos *= 2.0f;
+			mouse_pos -= tz::Vec2{1.0f, 1.0f};
+			mouse_pos[1] = -mouse_pos[1];
+			chase_target = mouse_pos;
+		}
+		if(chase_target.has_value())
+		{
+			// We tell the actor to save its motion state in the next fixed-update.
+			actor.actions |= ActorAction::SceneMessage_MaintainMotion;
+			{
+				// But because we've done that, we want to clear out the motion state ourselves now because we're about to decide which direction its going (if we dont do this it will end up going in all 4 directions and never moving anywhere)
+				constexpr std::array<ActorAction, 4> motion_actions
 				{
-					// But because we've done that, we want to clear out the motion state ourselves now because we're about to decide which direction its going (if we dont do this it will end up going in all 4 directions and never moving anywhere)
-					constexpr std::array<ActorAction, 4> motion_actions
-					{
-						ActorAction::MoveLeft,
-						ActorAction::MoveRight,
-						ActorAction::MoveUp,
-						ActorAction::MoveDown
-					};
-					for(auto action : motion_actions)
-					{
-						actor.actions.remove(action);
-					}
+					ActorAction::MoveLeft,
+					ActorAction::MoveRight,
+					ActorAction::MoveUp,
+					ActorAction::MoveDown
+				};
+				for(auto action : motion_actions)
+				{
+					actor.actions.remove(action);
 				}
+			}
 
-				// Choose a direction to move towards the player.
-				const tz::Vec2 player_pos = this->qrenderer.elements()[player_id.value()].position;
-				tz::Vec2 dist_to_player = player_pos - quad.position;
-				bool move_horizontal = true, move_vertical = true;
-				constexpr float touch_distance = 0.14f;
-				if(dist_to_player[0] > touch_distance)
-				{
+			// Choose a direction to move towards the player.
+			const tz::Vec2 target_pos = chase_target.value();
+			tz::Vec2 dist_to_target = target_pos - quad.position;
+			bool move_horizontal = true, move_vertical = true;
+			constexpr float touch_distance = 0.14f;
+			if(dist_to_target[0] > touch_distance)
+			{
 
-					actor.actions |= ActorAction::MoveRight;
-				}
-				else if(dist_to_player[0] < -touch_distance)
+				actor.actions |= ActorAction::MoveRight;
+			}
+			else if(dist_to_target[0] < -touch_distance)
+			{
+				actor.actions |= ActorAction::MoveLeft;
+			}
+			else
+			{
+				move_horizontal = false;
+			}
+			if(dist_to_target[1] > touch_distance)
+			{
+				actor.actions |= ActorAction::MoveUp;
+			}
+			else if(dist_to_target[1] < -touch_distance)
+			{
+				actor.actions |= ActorAction::MoveDown;
+			}
+			else
+			{
+				move_vertical = false;
+			}
+			if(!move_vertical && !move_horizontal)
+			{
+				// Something chasing the player has reached the player.
+				if(actor.flags.contains(ActorFlag::HostileGhost) && !actor.dead())
 				{
-					actor.actions |= ActorAction::MoveLeft;
-				}
-				else
-				{
-					move_horizontal = false;
-				}
-				if(dist_to_player[1] > touch_distance)
-				{
-					actor.actions |= ActorAction::MoveUp;
-				}
-				else if(dist_to_player[1] < -touch_distance)
-				{
-					actor.actions |= ActorAction::MoveDown;
-				}
-				else
-				{
-					move_vertical = false;
-				}
-				if(!move_vertical && !move_horizontal)
-				{
-					// Something chasing the player has reached the player.
-					if(actor.flags.contains(ActorFlag::HostileGhost) && !actor.dead())
-					{
-						// If hostile ghost touches a player, damage it.
-						player_actor.current_health -= actor.base_damage;
-					}
+					// If hostile ghost touches a player, damage it.
+					//player_actor.current_health -= actor.base_damage;
 				}
 			}
 		}

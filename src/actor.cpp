@@ -20,7 +20,7 @@ namespace game
 			case ActorType::PlayerClassic_TestEvil:
 				return
 				{
-					.flags = {ActorFlag::HostileGhost},
+					.flags = {ActorFlag::HostileGhost, ActorFlag::MouseControlled},
 					.base_movement = 0.0005f,
 					.skin = ActorSkin::PlayerClassic,
 					.animation = game::play_animation(AnimationID::PlayerClassic_Idle)
@@ -39,6 +39,10 @@ namespace game
 			{
 				// If it wants to chase the player the whole time, let it!
 				this->actions |= ActorAction::ChasePlayer;
+			}
+			if(this->flags.contains(ActorFlag::MouseControlled) && tz::window().get_mouse_button_state().is_mouse_button_down(tz::MouseButton::Left))
+			{
+				this->actions |= ActorAction::FollowMouse;
 			}
 			if(this->flags.contains(ActorFlag::KeyboardControlled))
 			{

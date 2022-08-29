@@ -12,6 +12,8 @@ namespace game
 		Player,
 		/// Move around with WASD.
 		KeyboardControlled,
+		/// Click-to-move to targetted location.
+		MouseControlled,
 		/// Computer controlled. Tries to chase and kill any nearby players.
 		HostileGhost,
 		/// Actor is never considered dead, even if its health is zero.
@@ -35,7 +37,9 @@ namespace game
 		/// Actor should move upwards using its base movement speed.
 		MoveUp,
 		/// Actor should chase the nearest player.
-		ChasePlayer
+		ChasePlayer,
+		/// Actor should move to the mouse cursor.
+		FollowMouse,
 	};
 	using ActorActions = tz::EnumField<ActorAction>;
 
