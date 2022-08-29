@@ -40,7 +40,7 @@ namespace game
 				// If it wants to chase the player the whole time, let it!
 				this->actions |= ActorAction::ChasePlayer;
 			}
-			if(this->flags.contains(ActorFlag::MouseControlled) && tz::window().get_mouse_button_state().is_mouse_button_down(tz::MouseButton::Left))
+			if(this->flags.contains(ActorFlag::MouseControlled) && tz::window().get_mouse_button_state().is_mouse_button_down(tz::MouseButton::Left) && !tz::dbgui::claims_mouse())
 			{
 				this->actions |= ActorAction::FollowMouse;
 			}

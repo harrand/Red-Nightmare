@@ -173,6 +173,11 @@ namespace game
 				// Something chasing the player has reached the player.
 				if(actor.flags.contains(ActorFlag::HostileGhost) && !actor.dead())
 				{
+					auto target_actor_id = this->find_first_player();
+					if(target_actor_id.has_value())
+					{
+						this->actors[target_actor_id.value()].current_health -= actor.base_damage;
+					}
 					// If hostile ghost touches a player, damage it.
 					//player_actor.current_health -= actor.base_damage;
 				}
