@@ -37,25 +37,25 @@ add_text(
 	OUTPUT_DIR ${PROJECT_BINARY_DIR}
 	TEXT_FILES
 		res/images/missing.png
-		res/images/player/classic/dead.png
-		res/images/player/classic/down1.png
-		res/images/player/classic/down2.png
-		res/images/player/classic/down3.png
-		res/images/player/classic/dying1.png
-		res/images/player/classic/dying2.png
-		res/images/player/classic/dying3.png
-		res/images/player/classic/dying4.png
-		res/images/player/classic/dying5.png
-		res/images/player/classic/dying6.png
-		res/images/player/classic/dying7.png
-		res/images/player/classic/dying8.png
-		res/images/player/classic/idle1.png
-		res/images/player/classic/idle2.png
-		res/images/player/classic/side1.png
-		res/images/player/classic/side2.png
-		res/images/player/classic/side3.png
-		res/images/player/classic/special.png
-		res/images/player/classic/up1.png
-		res/images/player/classic/up2.png
-		res/images/player/classic/up3.png
+		res/images/player/classic/player_classic_dead.png
+		res/images/player/classic/player_classic_down1.png
+		res/images/player/classic/player_classic_down2.png
+		res/images/player/classic/player_classic_down3.png
+		res/images/player/classic/player_classic_dying1.png
+		res/images/player/classic/player_classic_dying2.png
+		res/images/player/classic/player_classic_dying3.png
+		res/images/player/classic/player_classic_dying4.png
+		res/images/player/classic/player_classic_dying5.png
+		res/images/player/classic/player_classic_dying6.png
+		res/images/player/classic/player_classic_dying7.png
+		res/images/player/classic/player_classic_dying8.png
+		res/images/player/classic/player_classic_idle1.png
+		res/images/player/classic/player_classic_idle2.png
+		res/images/player/classic/player_classic_side1.png
+		res/images/player/classic/player_classic_side2.png
+		res/images/player/classic/player_classic_side3.png
+		res/images/player/classic/player_classic_special.png
+		res/images/player/classic/player_classic_up1.png
+		res/images/player/classic/player_classic_up2.png
+		res/images/player/classic/player_classic_up3.png
 )

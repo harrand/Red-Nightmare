@@ -17,7 +17,7 @@ namespace game
 		/// Computer controlled. Tries to chase and kill any nearby players.
 		HostileGhost,
 		/// Actor is never considered dead, even if its health is zero.
-		Invincible
+		Invincible,
 	};
 	using ActorFlags = tz::EnumField<ActorFlag>;
 
