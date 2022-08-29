@@ -105,6 +105,7 @@ namespace game
 			auto player_id = this->find_first_player();
 			if(player_id.has_value())
 			{
+				auto& player_actor = this->actors[player_id.value()];
 				// We tell the actor to save its motion state in the next fixed-update.
 				actor.actions |= ActorAction::SceneMessage_MaintainMotion;
 				{
@@ -126,12 +127,13 @@ namespace game
 				const tz::Vec2 player_pos = this->qrenderer.elements()[player_id.value()].position;
 				tz::Vec2 dist_to_player = player_pos - quad.position;
 				bool move_horizontal = true, move_vertical = true;
-				if(dist_to_player[0] > 0.001f)
+				constexpr float touch_distance = 0.14f;
+				if(dist_to_player[0] > touch_distance)
 				{
 
 					actor.actions |= ActorAction::MoveRight;
 				}
-				else if(dist_to_player[0] < -0.001f)
+				else if(dist_to_player[0] < -touch_distance)
 				{
 					actor.actions |= ActorAction::MoveLeft;
 				}
@@ -139,11 +141,11 @@ namespace game
 				{
 					move_horizontal = false;
 				}
-				if(dist_to_player[1] > 0.001f)
+				if(dist_to_player[1] > touch_distance)
 				{
 					actor.actions |= ActorAction::MoveUp;
 				}
-				else if(dist_to_player[1] < -0.001f)
+				else if(dist_to_player[1] < -touch_distance)
 				{
 					actor.actions |= ActorAction::MoveDown;
 				}
@@ -153,7 +155,12 @@ namespace game
 				}
 				if(!move_vertical && !move_horizontal)
 				{
-					// You should become idle.
+					// Something chasing the player has reached the player.
+					if(actor.flags.contains(ActorFlag::HostileGhost) && !actor.dead())
+					{
+						// If hostile ghost touches a player, damage it.
+						player_actor.current_health -= actor.base_damage;
+					}
 				}
 			}
 		}
@@ -181,7 +188,7 @@ namespace game
 	{
 		for(std::size_t i = 0; i < this->size(); i++)
 		{
-			if(this->actors[i].flags.contains(ActorFlag::Player))
+			if(this->actors[i].flags.contains(ActorFlag::Player) && !this->actors[i].dead())
 			{
 				return {i};
 			}

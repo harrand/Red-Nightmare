@@ -60,10 +60,12 @@ namespace game
 		ActorFlags flags = {};
 		/// Base movement speed of the actor.
 		float base_movement = 0.0f;
+		/// Base damage dealt to enemies every fixed update.
+		float base_damage = 0.0083f;
 		/// Maximum health of the actor.
-		unsigned int max_health = 10;
+		float max_health = 10;
 		/// Current health of the actor.
-		unsigned int current_health = 10;
+		float current_health = 10;
 		/// Describes appearance of the actor.
 		ActorSkin skin = {};
 		/// Describes what the actor is upto for this fixed-update.

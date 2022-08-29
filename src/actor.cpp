@@ -67,14 +67,14 @@ namespace game
 
 	bool Actor::dead() const
 	{
-		return !this->flags.contains(ActorFlag::Invincible) && this->current_health == 0;
+		return !this->flags.contains(ActorFlag::Invincible) && this->current_health <= 0.0f;
 	}
 
 	void Actor::dbgui()
 	{
-		ImGui::Text("Health: %u/%u (dead: %s)", this->current_health, this->max_health, this->dead() ? "true" : "false");
+		ImGui::Text("Health: %.2f/%f (dead: %s)", this->current_health, this->max_health, this->dead() ? "true" : "false");
 		ImGui::Text("Invincible: %s", this->flags.contains(ActorFlag::Invincible) ? "true" : "false");
-		ImGui::Text("Base Movement Speed: %.2f", this->base_movement);
+		ImGui::Text("Base Movement Speed: %.5f", this->base_movement);
 		if(ImGui::Button("Kill"))
 		{
 			this->current_health = 0;
