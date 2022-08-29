@@ -17,7 +17,7 @@ namespace game
 		struct ElementData
 		{
 			tz::Vec2 position = {0.0f, 0.0f};
-			tz::Vec2 scale = {0.5f, 0.5f};
+			tz::Vec2 scale = {0.2f, 0.2f};
 			float rotation = 0.0f;
 			TextureID texture_id = static_cast<TextureID>(0);
 		};

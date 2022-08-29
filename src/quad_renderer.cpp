@@ -24,6 +24,15 @@ namespace game
 	void QuadRenderer::dbgui()
 	{
 		ImGui::Text("Quad Count: %zu", this->quad_count);
+		static bool wireframe_mode = false;
+		if(ImGui::Checkbox("Wireframe Mode", &wireframe_mode))
+		{
+			this->renderer.edit(tz::gl::RendererEditBuilder{}
+			.render_state
+			({
+				.wireframe_mode = wireframe_mode
+			}).build());
+		}
 		static int quad_id = 0;
 		if(this->quad_count > 0)
 		{

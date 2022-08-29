@@ -11,7 +11,7 @@ namespace game
 				return
 				{
 					.flags = {ActorFlag::Player, ActorFlag::KeyboardControlled},
-					.base_movement = 0.005f,
+					.base_movement = 0.001f,
 					.skin = ActorSkin::PlayerClassic,
 					.animation = game::play_animation(AnimationID::PlayerClassic_Idle)
 				};
@@ -20,7 +20,7 @@ namespace game
 				return
 				{
 					.flags = {ActorFlag::HostileGhost},
-					.base_movement = 0.0025f,
+					.base_movement = 0.0005f,
 					.skin = ActorSkin::PlayerClassic,
 					.animation = game::play_animation(AnimationID::PlayerClassic_Idle)
 				};
@@ -37,6 +37,7 @@ namespace game
 			// If it wants to chase the player the whole time, let it!
 			this->actions |= ActorAction::ChasePlayer;
 		}
+		AnimationID ending_animation;
 		if(this->flags.contains(ActorFlag::KeyboardControlled))
 		{
 			const auto& kb = tz::window().get_keyboard_state();
@@ -47,7 +48,7 @@ namespace game
 				switch(this->skin)
 				{
 					case ActorSkin::PlayerClassic:
-						this->assign_animation(AnimationID::PlayerClassic_MoveUp);
+						ending_animation = AnimationID::PlayerClassic_MoveUp;
 					break;
 				}
 				this->actions |= ActorAction::MoveUp;
@@ -58,7 +59,7 @@ namespace game
 				switch(this->skin)
 				{
 					case ActorSkin::PlayerClassic:
-						this->assign_animation(AnimationID::PlayerClassic_MoveSide);
+						ending_animation = AnimationID::PlayerClassic_MoveSide;
 					break;
 				}
 				this->actions |= ActorAction::MoveLeft;
@@ -69,7 +70,7 @@ namespace game
 				switch(this->skin)
 				{
 					case ActorSkin::PlayerClassic:
-						this->assign_animation(AnimationID::PlayerClassic_MoveDown);
+						ending_animation = AnimationID::PlayerClassic_MoveDown;
 					break;
 				}
 				this->actions |= ActorAction::MoveDown;
@@ -80,7 +81,7 @@ namespace game
 				switch(this->skin)
 				{
 					case ActorSkin::PlayerClassic:
-						this->assign_animation(AnimationID::PlayerClassic_MoveSide);
+						ending_animation = AnimationID::PlayerClassic_MoveSide;
 					break;
 				}
 				this->actions |= ActorActions{ActorAction::HorizontalFlip, ActorAction::MoveRight};
@@ -91,11 +92,12 @@ namespace game
 				switch(this->skin)
 				{
 					case ActorSkin::PlayerClassic:
-						this->assign_animation(AnimationID::PlayerClassic_Idle);
+						ending_animation = AnimationID::PlayerClassic_Idle;
 					break;
 				}
 			}
 		}
+		this->assign_animation(ending_animation);
 	}
 
 	void Actor::assign_animation(AnimationID id)
