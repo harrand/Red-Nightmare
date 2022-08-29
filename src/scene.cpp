@@ -92,5 +92,25 @@ namespace game
 		{
 			quad.scale[0] = std::abs(quad.scale[0]);
 		}
+
+		const float sp = actor.base_movement;
+		if(actor.actions.contains(ActorAction::MoveLeft))
+		{
+			// Actor wants to move left.
+			quad.position[0] -= sp;
+		}
+		if(actor.actions.contains(ActorAction::MoveRight))
+		{
+			// Actor wants to move right.
+			quad.position[0] += sp;
+		}
+		if(actor.actions.contains(ActorAction::MoveUp))
+		{
+			quad.position[1] += sp;
+		}
+		if(actor.actions.contains(ActorAction::MoveDown))
+		{
+			quad.position[1] -= sp;
+		}
 	}
 }

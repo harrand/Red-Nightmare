@@ -11,7 +11,7 @@ namespace game
 				return
 				{
 					.flags = {ActorFlag::KeyboardControlled},
-					.base_movement = 0.1f,
+					.base_movement = 0.005f,
 					.skin = ActorSkin::PlayerClassic,
 					.animation = game::play_animation(AnimationID::PlayerClassic_Idle)
 				};
@@ -36,6 +36,7 @@ namespace game
 						this->assign_animation(AnimationID::PlayerClassic_MoveUp);
 					break;
 				}
+				this->actions |= ActorAction::MoveUp;
 			}
 			if(kb.is_key_down(tz::KeyCode::A))
 			{
@@ -46,6 +47,7 @@ namespace game
 						this->assign_animation(AnimationID::PlayerClassic_MoveSide);
 					break;
 				}
+				this->actions |= ActorAction::MoveLeft;
 			}
 			if(kb.is_key_down(tz::KeyCode::S))
 			{
@@ -56,6 +58,7 @@ namespace game
 						this->assign_animation(AnimationID::PlayerClassic_MoveDown);
 					break;
 				}
+				this->actions |= ActorAction::MoveDown;
 			}
 			if(kb.is_key_down(tz::KeyCode::D))
 			{
@@ -66,7 +69,7 @@ namespace game
 						this->assign_animation(AnimationID::PlayerClassic_MoveSide);
 					break;
 				}
-				this->actions |= ActorAction::HorizontalFlip;
+				this->actions |= ActorActions{ActorAction::HorizontalFlip, ActorAction::MoveRight};
 			}
 
 			if(!should_move)
