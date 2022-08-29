@@ -31,6 +31,7 @@ namespace game
 
 	enum class AnimationID
 	{
+		Missing,
 		PlayerClassic_Death,
 		PlayerClassic_Idle,
 		PlayerClassic_MoveDown,

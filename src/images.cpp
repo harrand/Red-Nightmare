@@ -4,6 +4,7 @@
 #include "stb_image.h"
 
 // Note: When adding a new image, add a new entry here and in game::texture_data below.
+#include ImportedTextHeader(missing, png)
 #include ImportedTextHeader(dead, png)
 #include ImportedTextHeader(down1, png)
 #include ImportedTextHeader(down2, png)
@@ -30,6 +31,7 @@ namespace game
 {
 	std::array<std::string_view, static_cast<int>(TextureID::Count)> texture_data
 	{
+		ImportedTextData(missing, png),
 		ImportedTextData(dead, png),
 		ImportedTextData(down1, png),
 		ImportedTextData(down2, png),

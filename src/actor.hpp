@@ -20,6 +20,8 @@ namespace game
 	/// Describes internal actions being performed by an actor this fixed update.
 	enum class ActorAction
 	{
+		/// Meta-action. The scene has added an action for movement in the previous fixed-update which we should use again.
+		SceneMessage_MaintainMotion,
 		/// Actor sprite should be horizontally flipped until the next fixed update.
 		HorizontalFlip,
 		/// Actor should move to the left using its base movement speed.
@@ -69,6 +71,7 @@ namespace game
 	private:
 		/// Set the animation, but if we're already running that animation don't reset it.
 		void assign_animation(AnimationID id);
+		void refresh_actions();
 	};
 
 	Actor create_actor(ActorType type);

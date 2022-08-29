@@ -36,6 +36,7 @@ add_text(
 	INPUT_DIR ${PROJECT_SOURCE_DIR}
 	OUTPUT_DIR ${PROJECT_BINARY_DIR}
 	TEXT_FILES
+		res/images/missing.png
 		res/images/player/classic/dead.png
 		res/images/player/classic/down1.png
 		res/images/player/classic/down2.png

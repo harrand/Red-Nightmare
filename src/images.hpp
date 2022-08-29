@@ -7,6 +7,7 @@ namespace game
 	// See top of images.cpp for implementation of TextureIDs. Each textureid corresponds to a compile-time loaded png blob which is converted into an ImageResource at runtime.
 	enum class TextureID : std::uint32_t
 	{
+		Missing,
 		PlayerClassic_Dead,
 		PlayerClassic_Down_1,
 		PlayerClassic_Down_2,

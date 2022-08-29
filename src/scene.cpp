@@ -104,8 +104,27 @@ namespace game
 			auto player_id = this->find_first_player();
 			if(player_id.has_value())
 			{
+				// We tell the actor to save its motion state in the next fixed-update.
+				actor.actions |= ActorAction::SceneMessage_MaintainMotion;
+				{
+					// But because we've done that, we want to clear out the motion state ourselves now because we're about to decide which direction its going (if we dont do this it will end up going in all 4 directions and never moving anywhere)
+					constexpr std::array<ActorAction, 4> motion_actions
+					{
+						ActorAction::MoveLeft,
+						ActorAction::MoveRight,
+						ActorAction::MoveUp,
+						ActorAction::MoveDown
+					};
+					for(auto action : motion_actions)
+					{
+						actor.actions.remove(action);
+					}
+				}
+
 				// Choose a direction to move towards the player.
-				tz::Vec2 dist_to_player = this->qrenderer.elements()[player_id.value()].position - quad.position;
+				const tz::Vec2 player_pos = this->qrenderer.elements()[player_id.value()].position;
+				tz::Vec2 dist_to_player = player_pos - quad.position;
+				bool move_horizontal = true, move_vertical = true;
 				if(dist_to_player[0] > 0.001f)
 				{
 
@@ -115,6 +134,10 @@ namespace game
 				{
 					actor.actions |= ActorAction::MoveLeft;
 				}
+				else
+				{
+					move_horizontal = false;
+				}
 				if(dist_to_player[1] > 0.001f)
 				{
 					actor.actions |= ActorAction::MoveUp;
@@ -122,6 +145,14 @@ namespace game
 				else if(dist_to_player[1] < -0.001f)
 				{
 					actor.actions |= ActorAction::MoveDown;
+				}
+				else
+				{
+					move_vertical = false;
+				}
+				if(!move_vertical && !move_horizontal)
+				{
+					// You should become idle.
 				}
 			}
 		}

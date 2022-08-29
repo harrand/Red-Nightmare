@@ -53,6 +53,15 @@ namespace game
 
 	std::array<AnimationInfo, static_cast<int>(AnimationID::Count)> animation_storage
 	{
+		AnimationInfo /*Missing*/
+		{
+			.frames =
+			{
+				TextureID::Missing
+			},
+			.fps = 1,
+			.loop = false
+		},
 		AnimationInfo /*Death*/
 		{
 			.frames =

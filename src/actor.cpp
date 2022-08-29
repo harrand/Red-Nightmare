@@ -31,71 +31,59 @@ namespace game
 
 	void Actor::update()
 	{
-		this->actions = {};
+		this->refresh_actions();
 		if(this->flags.contains(ActorFlag::HostileGhost))
 		{
 			// If it wants to chase the player the whole time, let it!
 			this->actions |= ActorAction::ChasePlayer;
 		}
-		AnimationID ending_animation;
+		AnimationID ending_animation = AnimationID::Missing;
 		if(this->flags.contains(ActorFlag::KeyboardControlled))
 		{
 			const auto& kb = tz::window().get_keyboard_state();
 			bool should_move = false;
 			if(kb.is_key_down(tz::KeyCode::W))
 			{
-				should_move = true;
-				switch(this->skin)
-				{
-					case ActorSkin::PlayerClassic:
-						ending_animation = AnimationID::PlayerClassic_MoveUp;
-					break;
-				}
 				this->actions |= ActorAction::MoveUp;
 			}
 			if(kb.is_key_down(tz::KeyCode::A))
 			{
-				should_move = true;
-				switch(this->skin)
-				{
-					case ActorSkin::PlayerClassic:
-						ending_animation = AnimationID::PlayerClassic_MoveSide;
-					break;
-				}
 				this->actions |= ActorAction::MoveLeft;
 			}
 			if(kb.is_key_down(tz::KeyCode::S))
 			{
-				should_move = true;
-				switch(this->skin)
-				{
-					case ActorSkin::PlayerClassic:
-						ending_animation = AnimationID::PlayerClassic_MoveDown;
-					break;
-				}
 				this->actions |= ActorAction::MoveDown;
 			}
 			if(kb.is_key_down(tz::KeyCode::D))
 			{
-				should_move = true;
-				switch(this->skin)
-				{
-					case ActorSkin::PlayerClassic:
-						ending_animation = AnimationID::PlayerClassic_MoveSide;
-					break;
-				}
-				this->actions |= ActorActions{ActorAction::HorizontalFlip, ActorAction::MoveRight};
+				this->actions |= ActorAction::MoveRight;
 			}
-
-			if(!should_move)
-			{
-				switch(this->skin)
+		}
+		switch(this->skin)
+		{
+			case ActorSkin::PlayerClassic:
+				if(this->actions.contains(ActorAction::MoveLeft))
 				{
-					case ActorSkin::PlayerClassic:
-						ending_animation = AnimationID::PlayerClassic_Idle;
-					break;
+					ending_animation = AnimationID::PlayerClassic_MoveSide;
 				}
-			}
+				else if(this->actions.contains(ActorAction::MoveRight))
+				{
+					ending_animation = AnimationID::PlayerClassic_MoveSide;
+					this->actions |= ActorAction::HorizontalFlip;
+				}
+				else if(this->actions.contains(ActorAction::MoveUp))
+				{
+					ending_animation = AnimationID::PlayerClassic_MoveUp;
+				}
+				else if(this->actions.contains(ActorAction::MoveDown))
+				{
+					ending_animation = AnimationID::PlayerClassic_MoveDown;
+				}
+				else
+				{
+					ending_animation = AnimationID::PlayerClassic_Idle;
+				}
+			break;
 		}
 		this->assign_animation(ending_animation);
 	}
@@ -106,6 +94,34 @@ namespace game
 		if(this->animation != anim)
 		{
 			this->animation = anim;
+		}
+	}
+
+	void Actor::refresh_actions()
+	{
+		ActorActions preserved_actions;
+		if(this->actions.contains(ActorAction::SceneMessage_MaintainMotion))
+		{
+			// Figure out which motion we were going in, and preserve it.
+			constexpr std::array<ActorAction, 4> move_actions
+			{
+				ActorAction::MoveLeft,
+				ActorAction::MoveRight,
+				ActorAction::MoveDown,
+				ActorAction::MoveUp
+			};
+			for(auto action : move_actions)
+			{
+				if(this->actions.contains(action))
+				{
+					preserved_actions |= action;
+				}
+			}
+		}
+		this->actions = {};
+		for(auto action : preserved_actions)
+		{
+			this->actions |= action;
 		}
 	}
 }
