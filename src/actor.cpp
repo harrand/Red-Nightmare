@@ -78,6 +78,18 @@ namespace game
 	{
 		ImGui::Text("Health: %.2f/%f (dead: %s)", this->current_health, this->max_health, this->dead() ? "true" : "false");
 		ImGui::Text("Invincible: %s", this->flags.contains(ActorFlag::Invincible) ? "true" : "false");
+		ImGui::SameLine();
+		if(ImGui::Button("Toggle"))
+		{
+			if(this->flags.contains(ActorFlag::Invincible))
+			{
+				this->flags.remove(ActorFlag::Invincible);
+			}
+			else
+			{
+				this->flags |= ActorFlag::Invincible;
+			}
+		}
 		ImGui::Text("Base Movement Speed: %.5f", this->base_movement);
 		if(ImGui::Button("Kill"))
 		{
