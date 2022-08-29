@@ -32,12 +32,12 @@ namespace game
 	void Actor::update()
 	{
 		this->refresh_actions();
+
 		if(this->flags.contains(ActorFlag::HostileGhost))
 		{
 			// If it wants to chase the player the whole time, let it!
 			this->actions |= ActorAction::ChasePlayer;
 		}
-		AnimationID ending_animation = AnimationID::Missing;
 		if(this->flags.contains(ActorFlag::KeyboardControlled))
 		{
 			const auto& kb = tz::window().get_keyboard_state();
@@ -59,6 +59,12 @@ namespace game
 				this->actions |= ActorAction::MoveRight;
 			}
 		}
+		this->evaluate_animation();
+	}
+
+	void Actor::evaluate_animation()
+	{
+		AnimationID ending_animation = AnimationID::Missing;
 		switch(this->skin)
 		{
 			case ActorSkin::PlayerClassic:

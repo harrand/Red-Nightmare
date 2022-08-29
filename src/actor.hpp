@@ -69,6 +69,8 @@ namespace game
 		static Actor null(){return {};}
 		bool operator==(const Actor& rhs) const = default;
 	private:
+		/// Figure out which animation we should be using using all the actions at the end of the fixed-update.
+		void evaluate_animation();
 		/// Set the animation, but if we're already running that animation don't reset it.
 		void assign_animation(AnimationID id);
 		void refresh_actions();
