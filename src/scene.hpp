@@ -16,7 +16,6 @@ namespace game
 		std::size_t size() const;
 		bool empty() const;
 
-		void temp_add();
 		void add(ActorType type);
 		void pop();
 		void clear();

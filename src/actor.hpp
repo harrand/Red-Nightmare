@@ -13,7 +13,9 @@ namespace game
 		/// Move around with WASD.
 		KeyboardControlled,
 		/// Computer controlled. Tries to chase and kill any nearby players.
-		HostileGhost
+		HostileGhost,
+		/// Actor is never considered dead, even if its health is zero.
+		Invincible
 	};
 	using ActorFlags = tz::EnumField<ActorFlag>;
 
@@ -58,14 +60,20 @@ namespace game
 		ActorFlags flags = {};
 		/// Base movement speed of the actor.
 		float base_movement = 0.0f;
+		/// Maximum health of the actor.
+		unsigned int max_health = 10;
+		/// Current health of the actor.
+		unsigned int current_health = 10;
 		/// Describes appearance of the actor.
 		ActorSkin skin = {};
 		/// Describes what the actor is upto for this fixed-update.
 		ActorActions actions = {};
 		/// The animation currently playing on the actor.
-		Animation animation = play_animation(static_cast<AnimationID>(0));
+		Animation animation = play_animation(AnimationID::Missing);
 
 		void update();
+		bool dead() const;
+		void dbgui();
 		static Actor null(){return {};}
 		bool operator==(const Actor& rhs) const = default;
 	private:

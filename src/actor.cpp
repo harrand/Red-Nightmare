@@ -1,5 +1,6 @@
 #include "actor.hpp"
 #include "tz/core/tz.hpp"
+#include "tz/dbgui/dbgui.hpp"
 
 namespace game
 {
@@ -19,7 +20,7 @@ namespace game
 			case ActorType::PlayerClassic_TestEvil:
 				return
 				{
-					.flags = {ActorFlag::HostileGhost},
+					.flags = {ActorFlag::HostileGhost, ActorFlag::Invincible},
 					.base_movement = 0.0005f,
 					.skin = ActorSkin::PlayerClassic,
 					.animation = game::play_animation(AnimationID::PlayerClassic_Idle)
@@ -32,34 +33,51 @@ namespace game
 	void Actor::update()
 	{
 		this->refresh_actions();
-
-		if(this->flags.contains(ActorFlag::HostileGhost))
+		if(!this->dead())
 		{
-			// If it wants to chase the player the whole time, let it!
-			this->actions |= ActorAction::ChasePlayer;
-		}
-		if(this->flags.contains(ActorFlag::KeyboardControlled))
-		{
-			const auto& kb = tz::window().get_keyboard_state();
-			bool should_move = false;
-			if(kb.is_key_down(tz::KeyCode::W))
+			if(this->flags.contains(ActorFlag::HostileGhost))
 			{
-				this->actions |= ActorAction::MoveUp;
+				// If it wants to chase the player the whole time, let it!
+				this->actions |= ActorAction::ChasePlayer;
 			}
-			if(kb.is_key_down(tz::KeyCode::A))
+			if(this->flags.contains(ActorFlag::KeyboardControlled))
 			{
-				this->actions |= ActorAction::MoveLeft;
-			}
-			if(kb.is_key_down(tz::KeyCode::S))
-			{
-				this->actions |= ActorAction::MoveDown;
-			}
-			if(kb.is_key_down(tz::KeyCode::D))
-			{
-				this->actions |= ActorAction::MoveRight;
+				const auto& kb = tz::window().get_keyboard_state();
+				bool should_move = false;
+				if(kb.is_key_down(tz::KeyCode::W))
+				{
+					this->actions |= ActorAction::MoveUp;
+				}
+				if(kb.is_key_down(tz::KeyCode::A))
+				{
+					this->actions |= ActorAction::MoveLeft;
+				}
+				if(kb.is_key_down(tz::KeyCode::S))
+				{
+					this->actions |= ActorAction::MoveDown;
+				}
+				if(kb.is_key_down(tz::KeyCode::D))
+				{
+					this->actions |= ActorAction::MoveRight;
+				}
 			}
 		}
 		this->evaluate_animation();
+	}
+
+	bool Actor::dead() const
+	{
+		return !this->flags.contains(ActorFlag::Invincible) && this->current_health == 0;
+	}
+
+	void Actor::dbgui()
+	{
+		ImGui::Text("Health: %u/%u (dead: %s)", this->current_health, this->max_health, this->dead() ? "true" : "false");
+		ImGui::Text("Base Movement Speed: %.2f", this->base_movement);
+		if(ImGui::Button("Kill"))
+		{
+			this->current_health = 0;
+		}
 	}
 
 	void Actor::evaluate_animation()
@@ -88,6 +106,10 @@ namespace game
 				else
 				{
 					ending_animation = AnimationID::PlayerClassic_Idle;
+				}
+				if(this->dead())
+				{
+					ending_animation = AnimationID::PlayerClassic_Death;
 				}
 			break;
 		}

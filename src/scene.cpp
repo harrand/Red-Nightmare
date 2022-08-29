@@ -30,7 +30,7 @@ namespace game
 		ImGui::Spacing();
 		if(ImGui::Button("Debug Add Player"))
 		{
-			this->temp_add();
+			this->add(ActorType::PlayerClassic);
 		}
 		if(ImGui::Button("Debug Add Evil Player"))
 		{
@@ -43,6 +43,12 @@ namespace game
 		if(ImGui::Button("Clear Scene"))
 		{
 			this->clear();
+		}
+		if(this->size() > 0 && ImGui::CollapsingHeader("Actors"))
+		{
+			static int actor_id = 0;
+			ImGui::SliderInt("Actor ID", &actor_id, 0, this->size() - 1);
+			this->actors[actor_id].dbgui();
 		}
 		if(ImGui::CollapsingHeader("Quad Renderer"))
 		{
@@ -58,11 +64,6 @@ namespace game
 	bool Scene::empty() const
 	{
 		return this->size() == 0;
-	}
-
-	void Scene::temp_add()
-	{
-		this->add(ActorType::PlayerClassic);
 	}
 
 	void Scene::add(ActorType type)
