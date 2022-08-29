@@ -11,6 +11,7 @@ namespace game
 	public:
 		Scene() = default;
 		void render();
+		void update();
 		void dbgui();
 		std::size_t size() const;
 		bool empty() const;
@@ -20,6 +21,8 @@ namespace game
 		void pop();
 		void clear();
 	private:
+		void actor_post_update(std::size_t id);
+
 		QuadRenderer qrenderer;
 		std::vector<Actor> actors;
 	};

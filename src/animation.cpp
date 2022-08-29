@@ -46,6 +46,11 @@ namespace game
 		return this->info.frames[frame_id];
 	}
 
+	bool Animation::operator==(const Animation& rhs) const
+	{
+		return this->info == rhs.info;
+	}
+
 	std::array<AnimationInfo, static_cast<int>(AnimationID::Count)> animation_storage
 	{
 		AnimationInfo /*Death*/

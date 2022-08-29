@@ -10,6 +10,8 @@ namespace game
 		std::vector<TextureID> frames;
 		unsigned int fps;
 		bool loop;
+
+		bool operator==(const AnimationInfo& info) const = default;
 	};
 
 	class Animation
@@ -20,6 +22,8 @@ namespace game
 		bool complete() const;
 		const AnimationInfo& get_info() const;
 		TextureID get_texture();
+
+		bool operator==(const Animation& rhs) const;
 	private:
 		AnimationInfo info;
 		tz::Duration begin;

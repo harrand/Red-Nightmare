@@ -5,11 +5,23 @@ namespace game
 {
 	void Scene::render()
 	{
+		tz_assert(this->actors.size() == this->qrenderer.elements().size(), "Scene actor list and QuadRenderer size no longer match. Logic Error");
 		for(std::size_t i = 0; i < this->qrenderer.elements().size(); i++)
 		{
 			this->qrenderer.elements()[i].texture_id = this->actors[i].animation.get_texture();
 		}
 		this->qrenderer.render();
+	}
+
+	void Scene::update()
+	{
+		for(std::size_t i = 0; i < this->size(); i++)
+		{
+			Actor& actor = this->actors[i];
+
+			actor.update();
+			this->actor_post_update(i);
+		}
 	}
 	
 	void Scene::dbgui()
@@ -46,13 +58,13 @@ namespace game
 
 	void Scene::temp_add()
 	{
-		this->add(ActorType::Player);
-		this->qrenderer.push();
+		this->add(ActorType::PlayerClassic);
 	}
 
 	void Scene::add(ActorType type)
 	{
 		this->actors.push_back(game::create_actor(type));
+		this->qrenderer.push();
 	}
 	
 	void Scene::pop()
@@ -65,5 +77,20 @@ namespace game
 	{
 		this->qrenderer.clear();
 		this->actors.clear();
+	}
+
+	void Scene::actor_post_update(std::size_t id)
+	{
+		Actor& actor = this->actors[id];
+		QuadRenderer::ElementData& quad = this->qrenderer.elements()[id];
+		// If actor wants to flip horizontally, do that now.
+		if(actor.actions.contains(ActorAction::HorizontalFlip))
+		{
+			quad.scale[0] = -std::abs(quad.scale[0]);
+		}
+		else
+		{
+			quad.scale[0] = std::abs(quad.scale[0]);
+		}
 	}
 }
