@@ -20,7 +20,7 @@ namespace game
 			case ActorType::PlayerClassic_TestEvil:
 				return
 				{
-					.flags = {ActorFlag::HostileGhost, ActorFlag::Invincible},
+					.flags = {ActorFlag::HostileGhost},
 					.base_movement = 0.0005f,
 					.skin = ActorSkin::PlayerClassic,
 					.animation = game::play_animation(AnimationID::PlayerClassic_Idle)
@@ -73,6 +73,7 @@ namespace game
 	void Actor::dbgui()
 	{
 		ImGui::Text("Health: %u/%u (dead: %s)", this->current_health, this->max_health, this->dead() ? "true" : "false");
+		ImGui::Text("Invincible: %s", this->flags.contains(ActorFlag::Invincible) ? "true" : "false");
 		ImGui::Text("Base Movement Speed: %.2f", this->base_movement);
 		if(ImGui::Button("Kill"))
 		{
