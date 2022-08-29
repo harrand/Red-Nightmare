@@ -10,8 +10,17 @@ namespace game
 			case ActorType::PlayerClassic:
 				return
 				{
-					.flags = {ActorFlag::KeyboardControlled},
+					.flags = {ActorFlag::Player, ActorFlag::KeyboardControlled},
 					.base_movement = 0.005f,
+					.skin = ActorSkin::PlayerClassic,
+					.animation = game::play_animation(AnimationID::PlayerClassic_Idle)
+				};
+			break;
+			case ActorType::PlayerClassic_TestEvil:
+				return
+				{
+					.flags = {ActorFlag::HostileGhost},
+					.base_movement = 0.0025f,
 					.skin = ActorSkin::PlayerClassic,
 					.animation = game::play_animation(AnimationID::PlayerClassic_Idle)
 				};
@@ -23,6 +32,11 @@ namespace game
 	void Actor::update()
 	{
 		this->actions = {};
+		if(this->flags.contains(ActorFlag::HostileGhost))
+		{
+			// If it wants to chase the player the whole time, let it!
+			this->actions |= ActorAction::ChasePlayer;
+		}
 		if(this->flags.contains(ActorFlag::KeyboardControlled))
 		{
 			const auto& kb = tz::window().get_keyboard_state();

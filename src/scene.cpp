@@ -32,6 +32,10 @@ namespace game
 		{
 			this->temp_add();
 		}
+		if(ImGui::Button("Debug Add Evil Player"))
+		{
+			this->add(ActorType::PlayerClassic_TestEvil);
+		}
 		if(this->size() > 0 && ImGui::Button("Pop Back"))
 		{
 			this->pop();
@@ -94,6 +98,33 @@ namespace game
 		}
 
 		const float sp = actor.base_movement;
+		// Handle actions.
+		if(actor.actions.contains(ActorAction::ChasePlayer))
+		{
+			auto player_id = this->find_first_player();
+			if(player_id.has_value())
+			{
+				// Choose a direction to move towards the player.
+				tz::Vec2 dist_to_player = this->qrenderer.elements()[player_id.value()].position - quad.position;
+				if(dist_to_player[0] > 0.001f)
+				{
+
+					actor.actions |= ActorAction::MoveRight;
+				}
+				else if(dist_to_player[0] < -0.001f)
+				{
+					actor.actions |= ActorAction::MoveLeft;
+				}
+				if(dist_to_player[1] > 0.001f)
+				{
+					actor.actions |= ActorAction::MoveUp;
+				}
+				else if(dist_to_player[1] < -0.001f)
+				{
+					actor.actions |= ActorAction::MoveDown;
+				}
+			}
+		}
 		if(actor.actions.contains(ActorAction::MoveLeft))
 		{
 			// Actor wants to move left.
@@ -112,5 +143,17 @@ namespace game
 		{
 			quad.position[1] -= sp;
 		}
+	}
+
+	std::optional<std::size_t> Scene::find_first_player() const
+	{
+		for(std::size_t i = 0; i < this->size(); i++)
+		{
+			if(this->actors[i].flags.contains(ActorFlag::Player))
+			{
+				return {i};
+			}
+		}
+		return std::nullopt;
 	}
 }

@@ -8,8 +8,12 @@ namespace game
 	/// Describes immutable characteristics for a specific actor.
 	enum class ActorFlag
 	{
-		/// Move around with WASD
+		/// Actor will be targetted by things that target players.
+		Player,
+		/// Move around with WASD.
 		KeyboardControlled,
+		/// Computer controlled. Tries to chase and kill any nearby players.
+		HostileGhost
 	};
 	using ActorFlags = tz::EnumField<ActorFlag>;
 
@@ -25,7 +29,9 @@ namespace game
 		/// Actor should move downwards using its base movement speed.
 		MoveDown,
 		/// Actor should move upwards using its base movement speed.
-		MoveUp
+		MoveUp,
+		/// Actor should chase the nearest player.
+		ChasePlayer
 	};
 	using ActorActions = tz::EnumField<ActorAction>;
 
@@ -39,7 +45,9 @@ namespace game
 	enum class ActorType
 	{
 		/// A keyboard-controlled player using the classic skin.
-		PlayerClassic
+		PlayerClassic,
+		/// A computer-controlled player using the classic skin, but all it does is chase any nearby real players.
+		PlayerClassic_TestEvil
 	};
 
 	struct Actor
