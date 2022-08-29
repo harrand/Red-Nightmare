@@ -26,7 +26,7 @@ namespace game
 	
 	void Scene::dbgui()
 	{
-		ImGui::Text("Scene");
+		ImGui::Text("Current Scene");
 		ImGui::Spacing();
 		if(ImGui::Button("Debug Add Player"))
 		{

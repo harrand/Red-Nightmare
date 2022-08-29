@@ -10,10 +10,10 @@ int main()
 	{
 		game::Scene scene;
 
-		bool show_game_menu = false;
-		tz::dbgui::game_menu().add_callback([&show_game_menu]()
+		bool show_current_scene = false;
+		tz::dbgui::game_menu().add_callback([&show_current_scene]()
 		{
-			ImGui::MenuItem("Scene", nullptr, &show_game_menu);
+			ImGui::MenuItem("Current Scene", nullptr, &show_current_scene);
 		});
 
 		scene.add(game::ActorType::PlayerClassic);
@@ -33,11 +33,11 @@ int main()
 				fixed_update.reset();
 			}
 
-			tz::dbgui::run([&show_game_menu, &scene]()
+			tz::dbgui::run([&show_current_scene, &scene]()
 			{
-				if(show_game_menu)
+				if(show_current_scene)
 				{
-					ImGui::Begin("Scene", &show_game_menu);
+					ImGui::Begin("Current Scene", &show_current_scene);
 					scene.dbgui();
 					ImGui::End();
 				}
