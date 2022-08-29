@@ -20,7 +20,7 @@ namespace game
 	/// Describes internal actions being performed by an actor this fixed update.
 	enum class ActorAction
 	{
-		/// Meta-action. The scene has added an action for movement in the previous fixed-update which we should use again.
+		/// Meta-action. Normally every fixed-update we clear out all previous actions. If this action exists though, any actions related to motion (e.g MoveLeft) are preserved a single time.
 		SceneMessage_MaintainMotion,
 		/// Actor sprite should be horizontally flipped until the next fixed update.
 		HorizontalFlip,
