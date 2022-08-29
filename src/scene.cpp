@@ -171,7 +171,7 @@ namespace game
 			if(!move_vertical && !move_horizontal)
 			{
 				// Something chasing the player has reached the player.
-				if(actor.flags.contains(ActorFlag::HostileGhost) && !actor.dead())
+				if(actor.flags.contains(ActorFlag::HostileGhost) && !actor.actions.contains(ActorAction::FollowMouse) && !actor.dead())
 				{
 					auto target_actor_id = this->find_first_player();
 					if(target_actor_id.has_value())
