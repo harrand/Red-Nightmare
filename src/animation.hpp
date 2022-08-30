@@ -37,6 +37,11 @@ namespace game
 		PlayerClassic_MoveDown,
 		PlayerClassic_MoveUp,
 		PlayerClassic_MoveSide,
+		Nightmare_Death,
+		Nightmare_Idle,
+		Nightmare_MoveDown,
+		Nightmare_MoveUp,
+		Nightmare_MoveSide,
 		Count
 	};
 

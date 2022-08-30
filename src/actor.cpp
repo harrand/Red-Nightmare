@@ -20,10 +20,20 @@ namespace game
 			case ActorType::PlayerClassic_TestEvil:
 				return
 				{
-					.flags = {ActorFlag::HostileGhost, ActorFlag::MouseControlled},
+					.flags = {ActorFlag::HostileGhost},
 					.base_movement = 0.0005f,
 					.skin = ActorSkin::PlayerClassic,
 					.animation = game::play_animation(AnimationID::PlayerClassic_Idle)
+				};
+			break;
+			case ActorType::Nightmare:
+				return
+				{
+					.flags = {ActorFlag::HostileGhost},
+					.base_movement = 0.0014f,
+					.base_damage = 0.03f,
+					.skin = ActorSkin::Nightmare,
+					.animation = game::play_animation(AnimationID::Nightmare_Idle)
 				};
 			break;
 		}
@@ -79,7 +89,7 @@ namespace game
 		ImGui::Text("Health: %.2f/%f (dead: %s)", this->current_health, this->max_health, this->dead() ? "true" : "false");
 		ImGui::Text("Invincible: %s", this->flags.contains(ActorFlag::Invincible) ? "true" : "false");
 		ImGui::SameLine();
-		if(ImGui::Button("Toggle"))
+		if(ImGui::Button("Toggle Invincible"))
 		{
 			if(this->flags.contains(ActorFlag::Invincible))
 			{
@@ -88,6 +98,19 @@ namespace game
 			else
 			{
 				this->flags |= ActorFlag::Invincible;
+			}
+		}
+		ImGui::Text("Controlled: %s", this->flags.contains(ActorFlag::MouseControlled) ? "true" : "false");
+		ImGui::SameLine();
+		if(ImGui::Button("Toggle Controlled"))
+		{
+			if(this->flags.contains(ActorFlag::MouseControlled))
+			{
+				this->flags.remove(ActorFlag::MouseControlled);
+			}
+			else
+			{
+				this->flags |= ActorFlag::MouseControlled;
 			}
 		}
 		ImGui::Text("Base Movement Speed: %.5f", this->base_movement);
@@ -127,6 +150,33 @@ namespace game
 				if(this->dead())
 				{
 					ending_animation = AnimationID::PlayerClassic_Death;
+				}
+			break;
+			case ActorSkin::Nightmare:
+				if(this->actions.contains(ActorAction::MoveLeft))
+				{
+					ending_animation = AnimationID::Nightmare_MoveSide;
+				}
+				else if(this->actions.contains(ActorAction::MoveRight))
+				{
+					ending_animation = AnimationID::Nightmare_MoveSide;
+					this->actions |= ActorAction::HorizontalFlip;
+				}
+				else if(this->actions.contains(ActorAction::MoveUp))
+				{
+					ending_animation = AnimationID::Nightmare_MoveUp;
+				}
+				else if(this->actions.contains(ActorAction::MoveDown))
+				{
+					ending_animation = AnimationID::Nightmare_MoveDown;
+				}
+				else
+				{
+					ending_animation = AnimationID::Nightmare_Idle;
+				}
+				if(this->dead())
+				{
+					ending_animation = AnimationID::Nightmare_Death;
 				}
 			break;
 		}

@@ -36,6 +36,10 @@ namespace game
 		{
 			this->add(ActorType::PlayerClassic_TestEvil);
 		}
+		if(ImGui::Button("Debug Add Nightmare Boss"))
+		{
+			this->add(ActorType::Nightmare);
+		}
 		if(this->size() > 0 && ImGui::Button("Pop Back"))
 		{
 			this->pop();

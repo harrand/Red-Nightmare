@@ -62,7 +62,7 @@ namespace game
 			.fps = 1,
 			.loop = false
 		},
-		AnimationInfo /*Death*/
+		AnimationInfo /*PlayerClassic_Death*/
 		{
 			.frames =
 			{
@@ -86,7 +86,7 @@ namespace game
 			.fps = 8,
 			.loop = false
 		},
-		AnimationInfo /*Idle*/
+		AnimationInfo /*PlayerClassic_Idle*/
 		{
 			.frames =
 			{
@@ -96,7 +96,7 @@ namespace game
 			.fps = 2,
 			.loop = true
 		},
-		AnimationInfo /*MoveDown*/
+		AnimationInfo /*PlayerClassic_MoveDown*/
 		{
 			.frames =
 			{
@@ -108,7 +108,7 @@ namespace game
 			.fps = 6,
 			.loop = true
 		},
-		AnimationInfo /*MoveUp*/
+		AnimationInfo /*PlayerClassic_MoveUp*/
 		{
 			.frames = 
 			{
@@ -120,7 +120,7 @@ namespace game
 			.fps = 6,
 			.loop = true
 		},
-		AnimationInfo /*MoveSide*/
+		AnimationInfo /*PlayerClassic_MoveSide*/
 		{
 			.frames = 
 			{
@@ -130,6 +130,76 @@ namespace game
 				TextureID::PlayerClassic_Side_2
 			},
 			.fps = 6,
+			.loop = true
+		},
+		AnimationInfo /*Nightmare_Death*/
+		{
+			.frames =
+			{
+				TextureID::Nightmare_Dying_1,
+				TextureID::Nightmare_Dying_2,
+				TextureID::Nightmare_Dying_3,
+				TextureID::Nightmare_Dying_4,
+				TextureID::Nightmare_Dying_5,
+				TextureID::Nightmare_Dying_6,
+				TextureID::Nightmare_Dying_6,
+				TextureID::Nightmare_Dying_6,
+				TextureID::Nightmare_Dying_7,
+				TextureID::Nightmare_Dying_7,
+				TextureID::Nightmare_Dying_7,
+				TextureID::Nightmare_Dying_7,
+				TextureID::Nightmare_Dying_7,
+				TextureID::Nightmare_Dying_7,
+				TextureID::Nightmare_Dying_8,
+				TextureID::Nightmare_Dead
+			},
+			.fps = 8,
+			.loop = false
+		},
+		AnimationInfo /*Nightmare_Idle*/
+		{
+			.frames =
+			{
+				TextureID::Nightmare_Idle_1,
+				TextureID::Nightmare_Idle_2
+			},
+			.fps = 2,
+			.loop = true
+		},
+		AnimationInfo /*Nightmare_MoveDown*/
+		{
+			.frames =
+			{
+				TextureID::Nightmare_Down_1,
+				TextureID::Nightmare_Down_2,
+				TextureID::Nightmare_Down_3,
+				TextureID::Nightmare_Down_2
+			},
+			.fps = 9,
+			.loop = true
+		},
+		AnimationInfo /*Nightmare_MoveUp*/
+		{
+			.frames = 
+			{
+				TextureID::Nightmare_Up_1,
+				TextureID::Nightmare_Up_2,
+				TextureID::Nightmare_Up_3,
+				TextureID::Nightmare_Up_2
+			},
+			.fps = 9,
+			.loop = true
+		},
+		AnimationInfo /*Nightmare_MoveSide*/
+		{
+			.frames = 
+			{
+				TextureID::Nightmare_Side_1,
+				TextureID::Nightmare_Side_2,
+				TextureID::Nightmare_Side_3,
+				TextureID::Nightmare_Side_2
+			},
+			.fps = 9,
 			.loop = true
 		}
 	};

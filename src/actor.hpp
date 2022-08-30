@@ -47,7 +47,9 @@ namespace game
 	enum class ActorSkin
 	{
 		/// Actor looks like the player from the old incarnations of Red Nightmare.
-		PlayerClassic
+		PlayerClassic,
+		/// Actor looks like the Nightmare boss.
+		Nightmare
 	};
 
 	enum class ActorType
@@ -55,7 +57,9 @@ namespace game
 		/// A keyboard-controlled player using the classic skin.
 		PlayerClassic,
 		/// A computer-controlled player using the classic skin, but all it does is chase any nearby real players.
-		PlayerClassic_TestEvil
+		PlayerClassic_TestEvil,
+		/// A computer-controlled boss monster, called Nightmare that uses its own skin.
+		Nightmare
 	};
 
 	struct Actor
