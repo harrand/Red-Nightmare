@@ -153,7 +153,7 @@ namespace game
 				TextureID::Nightmare_Dying_2,
 				TextureID::Nightmare_Dying_1
 			},
-			.fps = 8,
+			.fps = 10,
 			.loop = false
 		},
 		AnimationInfo /*Nightmare_Death*/
@@ -172,7 +172,7 @@ namespace game
 				TextureID::Nightmare_Dying_10,
 				TextureID::Nightmare_Dead
 			},
-			.fps = 8,
+			.fps = 10,
 			.loop = false
 		},
 		AnimationInfo /*Nightmare_Idle*/

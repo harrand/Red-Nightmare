@@ -22,7 +22,7 @@ namespace game
 				return
 				{
 					.type = ActorType::PlayerClassic_TestEvil,
-					.flags = {ActorFlag::HostileGhost, ActorFlag::Player},
+					.flags = {ActorFlag::HostileGhost},
 					.base_movement = 0.0005f,
 					.max_health = 0.1f,
 					.current_health = 0.1f,
