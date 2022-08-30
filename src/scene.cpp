@@ -133,9 +133,9 @@ namespace game
 			quad.scale[0] = std::abs(quad.scale[0]);
 		}
 
-		const float sp = actor.base_movement;
 		// Handle actions.
 		std::optional<tz::Vec2> chase_target = std::nullopt;
+		// Actor will chase whatever the player's position is.
 		if(actor.actions.contains(ActorAction::ChasePlayer))
 		{
 			auto player_id = this->find_first_player();
@@ -144,6 +144,7 @@ namespace game
 				chase_target = this->qrenderer.elements()[player_id.value()].position;
 			}
 		}
+		// Actor will chase the mouse cursor location relative to the game window.
 		if(actor.actions.contains(ActorAction::FollowMouse))
 		{
 			tz::Vec2 mouse_pos = static_cast<tz::Vec2>(tz::window().get_mouse_position_state().get_mouse_position());
@@ -154,9 +155,10 @@ namespace game
 			mouse_pos[1] = -mouse_pos[1];
 			chase_target = mouse_pos;
 		}
+		// It's chasing something, but we don't care about what it's chasing.
 		if(chase_target.has_value())
 		{
-			// We tell the actor to save its motion state in the next fixed-update.
+			// We tell the actor to save its motion state in the next fixed-update, so it can decide on which animation to use based upon the direction we're making it move.
 			actor.actions |= ActorAction::SceneMessage_MaintainMotion;
 			{
 				// But because we've done that, we want to clear out the motion state ourselves now because we're about to decide which direction its going (if we dont do this it will end up going in all 4 directions and never moving anywhere)
@@ -173,59 +175,65 @@ namespace game
 				}
 			}
 
-			// Choose a direction to move towards the player.
+			// Get the displacement between the actor and its chase target.
 			const tz::Vec2 target_pos = chase_target.value();
 			tz::Vec2 dist_to_target = target_pos - quad.position;
+			// Find out which direction we need to go, or if we're already at the target.
 			bool move_horizontal = true, move_vertical = true;
 			constexpr float touch_distance = 0.14f;
 			if(dist_to_target[0] > touch_distance)
 			{
-
+				// We need to move right.
 				actor.actions |= ActorAction::MoveRight;
 			}
 			else if(dist_to_target[0] < -touch_distance)
 			{
+				// We need to move left.
 				actor.actions |= ActorAction::MoveLeft;
 			}
 			else
 			{
+				// We don't need to move horizontally, we're x-aligned with our chase target.
 				move_horizontal = false;
 			}
 			if(dist_to_target[1] > touch_distance)
 			{
+				// We need to move upwards.
 				actor.actions |= ActorAction::MoveUp;
 			}
 			else if(dist_to_target[1] < -touch_distance)
 			{
+				// We need to move downwards.
 				actor.actions |= ActorAction::MoveDown;
 			}
 			else
 			{
+				// We don't need to move vertically, we're y-aligned with our chase target.
 				move_vertical = false;
 			}
 			if(!move_vertical && !move_horizontal)
 			{
-				// Something chasing the player has reached the player.
+				// Something chasing a target has reached it.
 				if(actor.flags.contains(ActorFlag::HostileGhost) && !actor.actions.contains(ActorAction::FollowMouse) && !actor.dead())
 				{
+					// The living actor is an enemy, and should have finished chasing the player. We need to find the player's actor and damage it with the enemy's base damage.
 					auto target_actor_id = this->find_first_player();
 					if(target_actor_id.has_value() && target_actor_id.value() != id)
 					{
+						// Hit the player for the enemy's base damage.
 						actor.damage(this->actors[target_actor_id.value()]);
 					}
-					// If hostile ghost touches a player, damage it.
-					//player_actor.current_health -= actor.base_damage;
 				}
 			}
 		}
+		// We now know for certain whether the actor wants to move or not. Now we can finally carry out the movement.
+		const float sp = actor.base_movement;
 		if(actor.actions.contains(ActorAction::MoveLeft))
 		{
-			// Actor wants to move left.
 			quad.position[0] -= sp;
 		}
 		if(actor.actions.contains(ActorAction::MoveRight))
 		{
-			// Actor wants to move right.
 			quad.position[0] += sp;
 		}
 		if(actor.actions.contains(ActorAction::MoveUp))
@@ -240,6 +248,7 @@ namespace game
 
 	std::optional<std::size_t> Scene::find_first_player() const
 	{
+		// Player Finding will only target living players.
 		for(std::size_t i = 0; i < this->size(); i++)
 		{
 			if(this->actors[i].flags.contains(ActorFlag::Player) && !this->actors[i].dead())
