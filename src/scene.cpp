@@ -209,7 +209,7 @@ namespace game
 				if(actor.flags.contains(ActorFlag::HostileGhost) && !actor.actions.contains(ActorAction::FollowMouse) && !actor.dead())
 				{
 					auto target_actor_id = this->find_first_player();
-					if(target_actor_id.has_value())
+					if(target_actor_id.has_value() && target_actor_id.value() != id)
 					{
 						actor.damage(this->actors[target_actor_id.value()]);
 					}

@@ -22,8 +22,10 @@ namespace game
 				return
 				{
 					.type = ActorType::PlayerClassic_TestEvil,
-					.flags = {ActorFlag::HostileGhost},
+					.flags = {ActorFlag::HostileGhost, ActorFlag::Player},
 					.base_movement = 0.0005f,
+					.max_health = 0.1f,
+					.current_health = 0.1f,
 					.skin = ActorSkin::PlayerClassic,
 					.animation = game::play_animation(AnimationID::PlayerClassic_Idle)
 				};
