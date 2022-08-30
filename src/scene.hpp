@@ -4,6 +4,8 @@
 #include "animation.hpp"
 #include "quad_renderer.hpp"
 
+#include <random>
+
 namespace game
 {
 	class Scene
@@ -25,6 +27,7 @@ namespace game
 
 		QuadRenderer qrenderer;
 		std::vector<Actor> actors;
+		std::default_random_engine rng;
 	};
 }
 

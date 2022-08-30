@@ -48,7 +48,7 @@ namespace game
 			{
 				for(auto& actor : this->actors)
 				{
-					actor = game::create_actor(actor.type);
+					actor.respawn();
 				}
 			}
 			if(ImGui::Button("Clear Scene"))
@@ -116,6 +116,13 @@ namespace game
 	{
 		Actor& actor = this->actors[id];
 		QuadRenderer::ElementData& quad = this->qrenderer.elements()[id];
+		// If actor wants to teleport to a random location, do it now.
+		if(actor.actions.contains(ActorAction::RandomTeleport))
+		{
+			std::uniform_real_distribution<float> dist{-1.0f, 1.0f};
+			quad.position[0] = dist(this->rng);
+			quad.position[1] = dist(this->rng);
+		}
 		// If actor wants to flip horizontally, do that now.
 		if(actor.actions.contains(ActorAction::HorizontalFlip))
 		{
@@ -204,7 +211,7 @@ namespace game
 					auto target_actor_id = this->find_first_player();
 					if(target_actor_id.has_value())
 					{
-						this->actors[target_actor_id.value()].current_health -= actor.base_damage;
+						actor.damage(this->actors[target_actor_id.value()]);
 					}
 					// If hostile ghost touches a player, damage it.
 					//player_actor.current_health -= actor.base_damage;

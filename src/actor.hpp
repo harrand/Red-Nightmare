@@ -17,7 +17,13 @@ namespace game
 		/// Computer controlled. Tries to chase and kill any nearby players.
 		HostileGhost,
 		/// Actor is never considered dead, even if its health is zero.
-		Invincible
+		Invincible,
+		/// Whenever actor causes damage, also hurts itself.
+		SelfHarm,
+		/// Whenever actor dies, respawn in the same position.
+		RespawnOnDeath,
+		/// When respawned, do so in a completely random location.
+		RandomRespawnLocation,
 	};
 	using ActorFlags = tz::EnumField<ActorFlag>;
 
@@ -42,6 +48,8 @@ namespace game
 		FollowMouse,
 		/// Actor can't do any action until its current animation finishes.
 		AnimationPause,
+		/// Actor should teleport to a random location in the world.
+		RandomTeleport
 	};
 	using ActorActions = tz::EnumField<ActorAction>;
 
@@ -87,6 +95,8 @@ namespace game
 		void update();
 		bool dead() const;
 		void dbgui();
+		void damage(Actor& victim);
+		void respawn();
 		static Actor null(){return {};}
 		bool operator==(const Actor& rhs) const = default;
 	private:

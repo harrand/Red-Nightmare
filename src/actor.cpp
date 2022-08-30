@@ -32,9 +32,11 @@ namespace game
 				return
 				{
 					.type = ActorType::Nightmare,
-					.flags = {ActorFlag::HostileGhost},
+					.flags = {ActorFlag::HostileGhost, ActorFlag::SelfHarm, ActorFlag::RespawnOnDeath, ActorFlag::RandomRespawnLocation},
 					.base_movement = 0.0014f,
-					.base_damage = 0.03f,
+					.base_damage = 1.0f,
+					.max_health = 0.001,
+					.current_health = 0.001,
 					.skin = ActorSkin::Nightmare,
 					.actions = {ActorAction::AnimationPause},
 					.animation = game::play_animation(AnimationID::Nightmare_Spawn)
@@ -88,6 +90,19 @@ namespace game
 				}
 			}
 		}
+		else
+		{
+			// Actor is dead.
+			if(this->flags.contains(ActorFlag::RespawnOnDeath))
+			{
+				// Wait for its death animation to finish.
+				if(this->animation.complete())
+				{
+					this->respawn();
+					return;
+				}
+			}
+		}
 		this->evaluate_animation();
 	}
 
@@ -129,6 +144,25 @@ namespace game
 		if(ImGui::Button("Kill"))
 		{
 			this->current_health = 0;
+		}
+	}
+
+	void Actor::damage(Actor& victim)
+	{
+		victim.current_health -= this->base_damage;
+		if(this->flags.contains(ActorFlag::SelfHarm))
+		{
+			this->current_health -= this->base_damage;
+		}
+	}
+
+	void Actor::respawn()
+	{
+		bool should_spawn_randomly = this->flags.contains(ActorFlag::RandomRespawnLocation);
+		*this = game::create_actor(this->type);
+		if(should_spawn_randomly)
+		{
+			this->actions |= ActorAction::RandomTeleport;
 		}
 	}
 
