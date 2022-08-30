@@ -37,6 +37,7 @@ namespace game
 		PlayerClassic_MoveDown,
 		PlayerClassic_MoveUp,
 		PlayerClassic_MoveSide,
+		Nightmare_Spawn,
 		Nightmare_Death,
 		Nightmare_Idle,
 		Nightmare_MoveDown,

@@ -41,6 +41,8 @@ namespace game
 		Nightmare_Dying_6,
 		Nightmare_Dying_7,
 		Nightmare_Dying_8,
+		Nightmare_Dying_9,
+		Nightmare_Dying_10,
 		Nightmare_Idle_1,
 		Nightmare_Idle_2,
 		Nightmare_Side_1,

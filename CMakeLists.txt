@@ -71,6 +71,8 @@ add_text(
 		res/images/enemies/nightmare/nightmare_dying6.png
 		res/images/enemies/nightmare/nightmare_dying7.png
 		res/images/enemies/nightmare/nightmare_dying8.png
+		res/images/enemies/nightmare/nightmare_dying9.png
+		res/images/enemies/nightmare/nightmare_dying10.png
 		res/images/enemies/nightmare/nightmare_idle1.png
 		res/images/enemies/nightmare/nightmare_idle2.png
 		res/images/enemies/nightmare/nightmare_side1.png

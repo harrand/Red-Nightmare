@@ -39,6 +39,8 @@
 #include ImportedTextHeader(nightmare_dying6, png)
 #include ImportedTextHeader(nightmare_dying7, png)
 #include ImportedTextHeader(nightmare_dying8, png)
+#include ImportedTextHeader(nightmare_dying9, png)
+#include ImportedTextHeader(nightmare_dying10, png)
 #include ImportedTextHeader(nightmare_idle1, png)
 #include ImportedTextHeader(nightmare_idle2, png)
 #include ImportedTextHeader(nightmare_side1, png)
@@ -88,6 +90,8 @@ namespace game
 		ImportedTextData(nightmare_dying6, png),
 		ImportedTextData(nightmare_dying7, png),
 		ImportedTextData(nightmare_dying8, png),
+		ImportedTextData(nightmare_dying9, png),
+		ImportedTextData(nightmare_dying10, png),
 		ImportedTextData(nightmare_idle1, png),
 		ImportedTextData(nightmare_idle2, png),
 		ImportedTextData(nightmare_side1, png),

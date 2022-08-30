@@ -132,6 +132,25 @@ namespace game
 			.fps = 6,
 			.loop = true
 		},
+		AnimationInfo /*Nightmare_Spawn*/
+		{
+			.frames =
+			{
+				TextureID::Nightmare_Dead,
+				TextureID::Nightmare_Dying_10,
+				TextureID::Nightmare_Dying_9,
+				TextureID::Nightmare_Dying_8,
+				TextureID::Nightmare_Dying_7,
+				TextureID::Nightmare_Dying_6,
+				TextureID::Nightmare_Dying_5,
+				TextureID::Nightmare_Dying_4,
+				TextureID::Nightmare_Dying_3,
+				TextureID::Nightmare_Dying_2,
+				TextureID::Nightmare_Dying_1
+			},
+			.fps = 8,
+			.loop = false
+		},
 		AnimationInfo /*Nightmare_Death*/
 		{
 			.frames =
@@ -142,15 +161,10 @@ namespace game
 				TextureID::Nightmare_Dying_4,
 				TextureID::Nightmare_Dying_5,
 				TextureID::Nightmare_Dying_6,
-				TextureID::Nightmare_Dying_6,
-				TextureID::Nightmare_Dying_6,
-				TextureID::Nightmare_Dying_7,
-				TextureID::Nightmare_Dying_7,
-				TextureID::Nightmare_Dying_7,
-				TextureID::Nightmare_Dying_7,
-				TextureID::Nightmare_Dying_7,
 				TextureID::Nightmare_Dying_7,
 				TextureID::Nightmare_Dying_8,
+				TextureID::Nightmare_Dying_9,
+				TextureID::Nightmare_Dying_10,
 				TextureID::Nightmare_Dead
 			},
 			.fps = 8,
