@@ -66,6 +66,7 @@ namespace game
 
 	struct Actor
 	{
+		ActorType type = {};
 		/// Describes the characteristics of the actor.
 		ActorFlags flags = {};
 		/// Base movement speed of the actor.

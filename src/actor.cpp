@@ -11,6 +11,7 @@ namespace game
 			case ActorType::PlayerClassic:
 				return
 				{
+					.type = ActorType::PlayerClassic,
 					.flags = {ActorFlag::Player, ActorFlag::KeyboardControlled},
 					.base_movement = 0.001f,
 					.skin = ActorSkin::PlayerClassic,
@@ -20,6 +21,7 @@ namespace game
 			case ActorType::PlayerClassic_TestEvil:
 				return
 				{
+					.type = ActorType::PlayerClassic_TestEvil,
 					.flags = {ActorFlag::HostileGhost},
 					.base_movement = 0.0005f,
 					.skin = ActorSkin::PlayerClassic,
@@ -29,6 +31,7 @@ namespace game
 			case ActorType::Nightmare:
 				return
 				{
+					.type = ActorType::Nightmare,
 					.flags = {ActorFlag::HostileGhost},
 					.base_movement = 0.0014f,
 					.base_damage = 0.03f,

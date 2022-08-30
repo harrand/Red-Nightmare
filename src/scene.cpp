@@ -28,6 +28,34 @@ namespace game
 	{
 		ImGui::Text("Current Scene");
 		ImGui::Spacing();
+		if(ImGui::CollapsingHeader("Mass Control"))
+		{
+			if(ImGui::Button("Kill Everyone"))
+			{
+				for(auto& actor : this->actors)
+				{
+					actor.current_health = 0;
+				}
+			}
+			if(ImGui::Button("Resurrect Everyone"))
+			{
+				for(auto& actor : this->actors)
+				{
+					actor.current_health = actor.max_health;
+				}
+			}
+			if(ImGui::Button("Respawn Everyone"))
+			{
+				for(auto& actor : this->actors)
+				{
+					actor = game::create_actor(actor.type);
+				}
+			}
+			if(ImGui::Button("Clear Scene"))
+			{
+				this->clear();
+			}
+		}
 		if(ImGui::Button("Debug Add Player"))
 		{
 			this->add(ActorType::PlayerClassic);
@@ -43,10 +71,6 @@ namespace game
 		if(this->size() > 0 && ImGui::Button("Pop Back"))
 		{
 			this->pop();
-		}
-		if(ImGui::Button("Clear Scene"))
-		{
-			this->clear();
 		}
 		if(this->size() > 0 && ImGui::CollapsingHeader("Actors"))
 		{
