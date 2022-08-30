@@ -17,7 +17,7 @@ namespace game
 		/// Computer controlled. Tries to chase and kill any nearby players.
 		HostileGhost,
 		/// Actor is never considered dead, even if its health is zero.
-		Invincible,
+		Invincible
 	};
 	using ActorFlags = tz::EnumField<ActorFlag>;
 
@@ -40,6 +40,8 @@ namespace game
 		ChasePlayer,
 		/// Actor should move to the mouse cursor.
 		FollowMouse,
+		/// Actor can't do any action until its current animation finishes.
+		AnimationPause,
 	};
 	using ActorActions = tz::EnumField<ActorAction>;
 
@@ -91,6 +93,8 @@ namespace game
 		void evaluate_animation();
 		/// Set the animation, but if we're already running that animation don't reset it.
 		void assign_animation(AnimationID id);
+		/// Assign animation, but block all actions until the animation completes.
+		void assign_blocking_animation(AnimationID id);
 		void refresh_actions();
 	};
 

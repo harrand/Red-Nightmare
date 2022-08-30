@@ -21,6 +21,11 @@ namespace game
 		return elapsed_millis >= length;
 	}
 
+	const AnimationInfo& Animation::get_info() const
+	{
+		return this->info;
+	}
+
 	TextureID Animation::get_texture()
 	{
 		auto now = tz::system_time().millis<unsigned long long>();

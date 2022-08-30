@@ -33,7 +33,8 @@ namespace game
 					.base_movement = 0.0014f,
 					.base_damage = 0.03f,
 					.skin = ActorSkin::Nightmare,
-					.animation = game::play_animation(AnimationID::Nightmare_Idle)
+					.actions = {ActorAction::AnimationPause},
+					.animation = game::play_animation(AnimationID::Nightmare_Spawn)
 				};
 			break;
 		}
@@ -43,6 +44,14 @@ namespace game
 	void Actor::update()
 	{
 		this->refresh_actions();
+		if(this->actions.contains(ActorAction::AnimationPause))
+		{
+			if(this->animation.complete())
+			{
+				this->actions.remove(ActorAction::AnimationPause);
+			}
+			return;
+		}
 		if(!this->dead())
 		{
 			if(this->flags.contains(ActorFlag::HostileGhost))
@@ -192,9 +201,20 @@ namespace game
 		}
 	}
 
+	void Actor::assign_blocking_animation(AnimationID id)
+	{
+		tz_assert(!game::play_animation(id).get_info().loop, "Assigning a blocking animation to an actor is fine, but the animation is looped, meaning the actor will be blocked forever.");
+		this->assign_animation(id);
+		this->actions |= ActorAction::AnimationPause;
+	}
+
 	void Actor::refresh_actions()
 	{
 		ActorActions preserved_actions;
+		if(this->actions.contains(ActorAction::AnimationPause))
+		{
+			preserved_actions |= ActorAction::AnimationPause;
+		}
 		if(this->actions.contains(ActorAction::SceneMessage_MaintainMotion))
 		{
 			// Figure out which motion we were going in, and preserve it.

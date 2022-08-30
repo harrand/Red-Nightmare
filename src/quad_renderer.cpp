@@ -82,6 +82,7 @@ namespace game
 
 		rinfo.shader().set_shader(tz::gl::ShaderStage::Vertex, ImportedShaderSource(quad, vertex));
 		rinfo.shader().set_shader(tz::gl::ShaderStage::Fragment, ImportedShaderSource(quad, fragment));
+		rinfo.set_clear_colour({0.3f, 0.3f, 0.3f, 1.0f});
 
 		// A buffer to store data for each quad (element buffer).
 		std::array<QuadRenderer::ElementData, QuadRenderer::max_quad_count> element_data;
