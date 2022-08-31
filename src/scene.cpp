@@ -214,7 +214,22 @@ namespace game
 			if(!move_vertical && !move_horizontal)
 			{
 				// Something chasing a target has reached it.
-				if(actor.flags.contains(ActorFlag::HostileGhost) && !actor.actions.contains(ActorAction::FollowMouse) && !actor.dead())
+
+				// If it's meant to be fast until rest, time to remove that flag because it's now at rest.
+				actor.flags.remove(ActorFlag::FastUntilRest);
+				if(actor.flags.contains(ActorFlag::DieAtRest))
+				{
+					actor.current_health = 0;
+				}
+				if(actor.actions.contains(ActorAction::FollowMouse))
+				{
+					// Something following the mouse cursor has reached it.
+					if(actor.flags.contains(ActorFlag::ChaseMouse))
+					{
+						actor.flags.remove(ActorFlag::ChaseMouse);
+					}
+				}
+				else if(actor.flags.contains(ActorFlag::HostileGhost) && !actor.dead())
 				{
 					// The living actor is an enemy, and should have finished chasing the player. We need to find the player's actor and damage it with the enemy's base damage.
 					auto target_actor_id = this->find_first_player();
@@ -227,7 +242,15 @@ namespace game
 			}
 		}
 		// We now know for certain whether the actor wants to move or not. Now we can finally carry out the movement.
-		const float sp = actor.base_movement;
+		float sp = actor.base_movement;
+		const bool will_move = actor.actions.contains(ActorAction::MoveLeft)
+				    || actor.actions.contains(ActorAction::MoveRight)
+				    || actor.actions.contains(ActorAction::MoveUp)
+				    || actor.actions.contains(ActorAction::MoveDown);
+		if(will_move && actor.flags.contains(ActorFlag::FastUntilRest))
+		{
+			sp *= 4.0f;
+		}
 		if(actor.actions.contains(ActorAction::MoveLeft))
 		{
 			quad.position[0] -= sp;

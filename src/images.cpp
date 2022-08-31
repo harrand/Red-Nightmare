@@ -27,6 +27,8 @@
 #include ImportedTextHeader(player_classic_up2, png)
 #include ImportedTextHeader(player_classic_up3, png)
 
+#include ImportedTextHeader(player_classic_default_fireball, png)
+
 #include ImportedTextHeader(nightmare_dead, png)
 #include ImportedTextHeader(nightmare_down1, png)
 #include ImportedTextHeader(nightmare_down2, png)
@@ -77,6 +79,8 @@ namespace game
 		ImportedTextData(player_classic_up1, png),
 		ImportedTextData(player_classic_up2, png),
 		ImportedTextData(player_classic_up3, png),
+
+		ImportedTextData(player_classic_default_fireball, png),
 
 		ImportedTextData(nightmare_dead, png),
 		ImportedTextData(nightmare_down1, png),

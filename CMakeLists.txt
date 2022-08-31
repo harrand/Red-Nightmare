@@ -59,6 +59,8 @@ add_text(
 		res/images/player/akhara/skins/classic/player_classic_up2.png
 		res/images/player/akhara/skins/classic/player_classic_up3.png
 
+		res/images/player/akhara/ability/player_classic_default_fireball.png
+
 		res/images/enemies/nightmare/nightmare_dead.png
 		res/images/enemies/nightmare/nightmare_down1.png
 		res/images/enemies/nightmare/nightmare_down2.png

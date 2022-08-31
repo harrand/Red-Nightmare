@@ -29,6 +29,7 @@ namespace game
 		PlayerClassic_Up_1,
 		PlayerClassic_Up_2,
 		PlayerClassic_Up_3,
+		PlayerClassic_Default_Fireball,
 		Nightmare_Dead,
 		Nightmare_Down_1,
 		Nightmare_Down_2,

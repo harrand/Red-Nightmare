@@ -137,6 +137,15 @@ namespace game
 			.fps = 6,
 			.loop = true
 		},
+		AnimationInfo /*PlayerClassic_DefaultFireball_Idle*/
+		{
+			.frames =
+			{
+				TextureID::PlayerClassic_Default_Fireball
+			},
+			.fps = 1,
+			.loop = true
+		},
 		AnimationInfo /*Nightmare_Spawn*/
 		{
 			.frames =

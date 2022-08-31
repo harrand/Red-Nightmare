@@ -30,6 +30,19 @@ namespace game
 					.animation = game::play_animation(AnimationID::PlayerClassic_Idle)
 				};
 			break;
+			case ActorType::PlayerClassic_Orb:
+				return
+				{
+					.type = ActorType::PlayerClassic_Orb,
+					.flags = {ActorFlag::HostileGhost, ActorFlag::Ally, ActorFlag::Hazardous, ActorFlag::ClickToLaunch},
+					.base_movement = 0.001f,
+					.base_damage = default_base_damage * 2.0f,
+					.max_health = 0.1f,
+					.current_health = 0.1f,
+					.skin = ActorSkin::PlayerClassic_DefaultFireball,
+					.animation = game::play_animation(AnimationID::PlayerClassic_DefaultFireball_Idle)
+				};
+			break;
 			case ActorType::Nightmare:
 				return
 				{
@@ -61,12 +74,16 @@ namespace game
 		}
 		if(!this->dead())
 		{
+			if(this->flags.contains(ActorFlag::ClickToLaunch) && tz::window().get_mouse_button_state().is_mouse_button_down(tz::MouseButton::Left))
+			{
+				this->flags |= {ActorFlag::ChaseMouse, ActorFlag::FastUntilRest, ActorFlag::DieAtRest};
+			}
 			if(this->flags.contains(ActorFlag::HostileGhost))
 			{
 				// If it wants to chase the player the whole time, let it!
 				this->actions |= ActorAction::ChasePlayer;
 			}
-			if(this->flags.contains(ActorFlag::MouseControlled) && tz::window().get_mouse_button_state().is_mouse_button_down(tz::MouseButton::Left) && !tz::dbgui::claims_mouse())
+			if(this->flags.contains(ActorFlag::MouseControlled) || this->flags.contains(ActorFlag::ChaseMouse))
 			{
 				this->actions |= ActorAction::FollowMouse;
 			}
@@ -151,6 +168,11 @@ namespace game
 
 	void Actor::damage(Actor& victim)
 	{
+		// Actors cannot damage its allies.
+		if(this->is_ally_of(victim))
+		{
+			return;
+		}
 		victim.current_health -= this->base_damage;
 		if(this->flags.contains(ActorFlag::SelfHarm))
 		{
@@ -168,11 +190,34 @@ namespace game
 		}
 	}
 
+	bool Actor::is_ally_of(const Actor& actor) const
+	{
+		// Players cannot hurt other players.
+		if(this->flags.contains(ActorFlag::Player) && actor.flags.contains(ActorFlag::Player))
+		{
+			return true;
+		}
+		// Allies cannot hurt players.
+		if(this->flags.contains(ActorFlag::Ally) && actor.flags.contains(ActorFlag::Player))
+		{
+			return true;
+		}
+		// Players cannot hurt allies.
+		if(this->flags.contains(ActorFlag::Player) && actor.flags.contains(ActorFlag::Ally))
+		{
+			return true;
+		}
+		return false;
+	}
+
 	void Actor::evaluate_animation()
 	{
 		AnimationID ending_animation = AnimationID::Missing;
 		switch(this->skin)
 		{
+			case ActorSkin::PlayerClassic_DefaultFireball:
+				ending_animation = AnimationID::PlayerClassic_DefaultFireball_Idle;
+			break;
 			case ActorSkin::PlayerClassic:
 				if(this->actions.contains(ActorAction::MoveLeft))
 				{

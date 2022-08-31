@@ -12,10 +12,14 @@ namespace game
 		Player,
 		/// Move around with WASD.
 		KeyboardControlled,
-		/// Click-to-move to targetted location.
+		/// Actor will always chase the mouse cursor.
 		MouseControlled,
+		// Actor will move towards the mouse cursor until it reaches it once.
+		ChaseMouse,
 		/// Computer controlled. Tries to chase and kill any nearby players.
 		HostileGhost,
+		/// Actor is considered an ally to the player.
+		Ally,
 		/// Actor is never considered dead, even if its health is zero.
 		Invincible,
 		/// Whenever actor causes damage, also hurts itself.
@@ -24,6 +28,14 @@ namespace game
 		RespawnOnDeath,
 		/// When respawned, do so in a completely random location.
 		RandomRespawnLocation,
+		/// Attempts to deal damage to all actors nearby. TODO: Implement.
+		Hazardous,
+		/// Actor will very quickly charge to the mouse location upon left click. Note: Actors with ClickToLaunch ignore death mechanics.
+		ClickToLaunch,
+		/// Actor will move 4x faster than normal until it stops.
+		FastUntilRest,
+		/// If the actor ever stops, it instantly dies.
+		DieAtRest,
 	};
 	using ActorFlags = tz::EnumField<ActorFlag>;
 
@@ -44,12 +56,12 @@ namespace game
 		MoveUp,
 		/// Actor should chase the nearest player.
 		ChasePlayer,
-		/// Actor should move to the mouse cursor.
+		/// Actor should move towards the mouse cursor this fixed update.
 		FollowMouse,
 		/// Actor can't do any action until its current animation finishes.
 		AnimationPause,
 		/// Actor should teleport to a random location in the world.
-		RandomTeleport
+		RandomTeleport,
 	};
 	using ActorActions = tz::EnumField<ActorAction>;
 
@@ -59,7 +71,9 @@ namespace game
 		/// Actor looks like the player from the old incarnations of Red Nightmare.
 		PlayerClassic,
 		/// Actor looks like the Nightmare boss.
-		Nightmare
+		Nightmare,
+		/// Actor looks like Akhara's default fireball.
+		PlayerClassic_DefaultFireball,
 	};
 
 	enum class ActorType
@@ -68,9 +82,15 @@ namespace game
 		PlayerClassic,
 		/// A computer-controlled player using the classic skin, but all it does is chase any nearby real players.
 		PlayerClassic_TestEvil,
+		/// An actor which acts as Akhara's passive elemental orb.
+		PlayerClassic_Orb,
 		/// A computer-controlled boss monster, called Nightmare that uses its own skin.
 		Nightmare
 	};
+	
+	constexpr float default_base_movement = 0.0f;
+	constexpr float default_base_damage = 0.0083f;
+	constexpr float default_max_health = 10;
 
 	struct Actor
 	{
@@ -78,13 +98,13 @@ namespace game
 		/// Describes the characteristics of the actor.
 		ActorFlags flags = {};
 		/// Base movement speed of the actor.
-		float base_movement = 0.0f;
+		float base_movement = default_base_movement;
 		/// Base damage dealt to enemies every fixed update.
-		float base_damage = 0.0083f;
+		float base_damage = default_base_damage;
 		/// Maximum health of the actor.
-		float max_health = 10;
+		float max_health = default_max_health;
 		/// Current health of the actor.
-		float current_health = 10;
+		float current_health = default_max_health;
 		/// Describes appearance of the actor.
 		ActorSkin skin = {};
 		/// Describes what the actor is upto for this fixed-update.
@@ -100,6 +120,7 @@ namespace game
 		static Actor null(){return {};}
 		bool operator==(const Actor& rhs) const = default;
 	private:
+		bool is_ally_of(const Actor& actor) const;
 		/// Figure out which animation we should be using using all the actions at the end of the fixed-update.
 		void evaluate_animation();
 		/// Set the animation, but if we're already running that animation don't reset it.
