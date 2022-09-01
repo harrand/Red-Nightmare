@@ -9,7 +9,12 @@ namespace game
 {
 	enum class ActionID
 	{
-		ChaseTarget
+		ChaseMouse,
+		ChaseTarget,
+		LaunchToMouse,
+		Launch,
+		TeleportToPlayer,
+		Teleport,
 	};
 
 	template<ActionID ID>
@@ -19,6 +24,10 @@ namespace game
 	{
 	public:
 		virtual constexpr ActionID get_id() const = 0;
+		bool get_is_complete() const{return this->is_complete;}
+		void set_is_complete(bool is_complete){this->is_complete = is_complete;}
+	private:
+		bool is_complete = false;
 	};
 
 	template<ActionID ID>
@@ -41,6 +50,18 @@ namespace game
 		tz::Vec2 target_position;
 	};
 
+	template<>
+	struct ActionParams<ActionID::Launch>
+	{
+		tz::Vec2 direction;
+	};
+
+	template<>
+	struct ActionParams<ActionID::Teleport>
+	{
+		tz::Vec2 position;
+	};
+
 	/// Represents something that can carry out actions.
 	class ActionEntity
 	{
@@ -51,15 +72,19 @@ namespace game
 		ActionEntity& operator=(const ActionEntity& rhs) = delete;
 		ActionEntity& operator=(ActionEntity&& rhs) = default;
 
-		using Handle = tz::Handle<ActionEntity>;
 		template<ActionID ID>
-		Handle add(ActionParams<ID> params);
+		bool add(ActionParams<ID> params = {});
+
 		template<ActionID ID>
 		bool has() const;
+
 		template<ActionID ID>
 		const Action<ID>* get() const;
 		template<ActionID ID>
 		Action<ID>* get();
+
+		std::size_t size() const;
+		void update();
 	private:
 		std::vector<std::unique_ptr<IAction>> actions;
 	};

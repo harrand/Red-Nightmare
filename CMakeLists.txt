@@ -24,6 +24,8 @@ add_app(
 		src/scene.hpp
 		src/quad_renderer.cpp
 		src/quad_renderer.hpp
+		src/util.cpp
+		src/util.hpp
 	SHADER_SOURCES
 		src/default.vertex.tzsl
 		src/default.fragment.tzsl

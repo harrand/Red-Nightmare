@@ -32,6 +32,8 @@ namespace game
 		DeadResurrectOnPlayerTouch,
 		/// When respawned, do so in a completely random location.
 		RandomRespawnLocation,
+		/// When respawned, do so at a player's location.
+		RespawnOnPlayer,
 		/// Attempts to deal damage to all actors nearby.
 		HazardousToAll,
 		/// Attempts to deal damage to any enemies that are nearby.
@@ -42,6 +44,8 @@ namespace game
 		FastUntilRest,
 		/// If the actor ever stops, it instantly dies.
 		DieAtRest,
+		/// If the actor reaches out-of-bounds, respawn.
+		RespawnIfOOB,
 	};
 	using ActorFlags = tz::EnumField<ActorFlag>;
 

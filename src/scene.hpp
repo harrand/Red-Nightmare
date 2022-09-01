@@ -25,6 +25,8 @@ namespace game
 		void actor_post_update(std::size_t id);
 		std::optional<std::size_t> find_first_player() const;
 		bool actor_collision_query(std::size_t actor_a, std::size_t actor_b) const;
+		bool is_in_bounds(std::size_t actor_id) const;
+		std::pair<tz::Vec2, tz::Vec2> get_world_boundaries() const;
 
 		QuadRenderer qrenderer;
 		std::vector<Actor> actors;

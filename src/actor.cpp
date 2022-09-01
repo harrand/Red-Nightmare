@@ -1,19 +1,10 @@
 #include "actor.hpp"
+#include "util.hpp"
 #include "tz/core/tz.hpp"
 #include "tz/dbgui/dbgui.hpp"
 
 namespace game
 {
-	tz::Vec2 get_mouse_world_location()
-	{
-		tz::Vec2 mouse_pos = static_cast<tz::Vec2>(tz::window().get_mouse_position_state().get_mouse_position());
-		mouse_pos[0] /= tz::window().get_width();
-		mouse_pos[1] /= tz::window().get_height();
-		mouse_pos *= 2.0f;
-		mouse_pos -= tz::Vec2{1.0f, 1.0f};
-		mouse_pos[1] = -mouse_pos[1];
-		return mouse_pos;
-	}
 
 	Actor create_actor(ActorType type)
 	{
@@ -46,7 +37,7 @@ namespace game
 				return
 				{
 					.type = ActorType::PlayerClassic_Orb,
-					.flags = {ActorFlag::HazardousToEnemies, ActorFlag::ClickToLaunch, ActorFlag::DeadRespawnOnPlayerTouch},
+					.flags = {ActorFlag::HazardousToEnemies, ActorFlag::ClickToLaunch, ActorFlag::RespawnOnPlayer, ActorFlag::RespawnIfOOB},
 					.faction = Faction::PlayerFriend,
 					.base_movement = 0.001f,
 					.base_damage = default_base_damage * 2.0f,
@@ -78,6 +69,7 @@ namespace game
 	void Actor::update()
 	{
 		this->refresh_actions();
+		this->entity.update();
 		if(this->actions.contains(ActorAction::AnimationPause))
 		{
 			if(this->animation.complete())
@@ -90,7 +82,8 @@ namespace game
 		{
 			if(this->flags.contains(ActorFlag::ClickToLaunch) && tz::window().get_mouse_button_state().is_mouse_button_down(tz::MouseButton::Left) && !tz::dbgui::claims_mouse())
 			{
-				this->flags |= {ActorFlag::ChaseMouse, ActorFlag::FastUntilRest, ActorFlag::DieAtRest};
+				this->entity.add<ActionID::LaunchToMouse>();
+				this->flags |= {ActorFlag::FastUntilRest, ActorFlag::DieAtRest};
 			}
 			if(this->flags.contains(ActorFlag::Aggressive) && this->faction == Faction::PlayerEnemy)
 			{
@@ -101,10 +94,7 @@ namespace game
 			{
 				if(tz::window().get_mouse_button_state().is_mouse_button_down(tz::MouseButton::Left))
 				{
-					this->entity.add<ActionID::ChaseTarget>
-					(ActionParams<ActionID::ChaseTarget>{
-						.target_position = get_mouse_world_location()
-					});
+					this->entity.add<ActionID::ChaseMouse>();
 				}
 			}
 			if(this->flags.contains(ActorFlag::MouseControlled))
@@ -184,6 +174,7 @@ namespace game
 			}
 		}
 		ImGui::Text("Base Movement Speed: %.5f", this->base_movement);
+		ImGui::Text("Entity Action Count: %zu", this->entity.size());
 		if(ImGui::Button("Kill"))
 		{
 			this->current_health = 0;
@@ -207,10 +198,15 @@ namespace game
 	void Actor::respawn()
 	{
 		bool should_spawn_randomly = this->flags.contains(ActorFlag::RandomRespawnLocation);
+		bool should_spawn_on_player = this->flags.contains(ActorFlag::RespawnOnPlayer);
 		*this = game::create_actor(this->type);
 		if(should_spawn_randomly)
 		{
 			this->actions |= ActorAction::RandomTeleport;
+		}
+		else if(should_spawn_on_player)
+		{
+			this->entity.add<ActionID::TeleportToPlayer>();
 		}
 	}
 

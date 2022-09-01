@@ -1,5 +1,9 @@
 #include "scene.hpp"
+#include "util.hpp"
 #include "tz/dbgui/dbgui.hpp"
+#include "tz/core/assert.hpp"
+
+#include "tz/core/report.hpp"
 
 namespace game
 {
@@ -118,6 +122,10 @@ namespace game
 	{
 		Actor& actor = this->actors[id];
 		QuadRenderer::ElementData& quad = this->qrenderer.elements()[id];
+		if(actor.flags.contains(ActorFlag::RespawnIfOOB) && !this->is_in_bounds(id))
+		{
+			actor.respawn();
+		}
 		// If actor wants to teleport to a random location, do it now.
 		if(actor.actions.contains(ActorAction::RandomTeleport))
 		{
@@ -146,11 +154,61 @@ namespace game
 				chase_target = this->qrenderer.elements()[player_id.value()].position;
 			}
 		}
-		// Actor will chase the mouse cursor location relative to the game window.
+
+		// Entity Actions
+
+		// Recursive Entity Actions (Can add other actions).
+		if(actor.entity.has<ActionID::ChaseMouse>())
+		{
+			actor.entity.add<ActionID::ChaseTarget>
+			({
+				.target_position = util::get_mouse_world_location()
+			});
+			actor.entity.get<ActionID::ChaseMouse>()->set_is_complete(true);
+		}
+		if(actor.entity.has<ActionID::LaunchToMouse>())
+		{
+			tz::Vec2 mouse_pos = util::get_mouse_world_location();
+			tz::Vec2 to_mouse = mouse_pos - quad.position;
+			actor.entity.add<ActionID::Launch>
+			({
+				.direction = to_mouse
+			});
+		}
+		if(actor.entity.has<ActionID::TeleportToPlayer>())
+		{
+			auto maybe_player_id = this->find_first_player();
+			tz_assert(maybe_player_id.has_value(), "Actor wants to teleport to player, but there aren't any");
+			actor.entity.add<ActionID::Teleport>
+			({
+				.position = this->qrenderer.elements()[maybe_player_id.value()].position
+			});
+			actor.entity.get<ActionID::TeleportToPlayer>()->set_is_complete(true);
+		}
+		// Concrete Entity Actions
 		if(actor.entity.has<ActionID::ChaseTarget>())
 		{
 			chase_target = actor.entity.get<ActionID::ChaseTarget>()->data().target_position;
 		}
+		if(actor.entity.has<ActionID::Launch>())
+		{
+			auto action = actor.entity.get<ActionID::Launch>();
+			tz_report("direction: {%.2f, %.2f}", action->data().direction[0], action->data().direction[1]);
+			float speed = actor.base_movement;
+			if(actor.flags.contains(ActorFlag::FastUntilRest))
+			{
+				speed *= 16.0f;
+			}
+			quad.position += action->data().direction.normalised() * speed;
+		}
+		if(actor.entity.has<ActionID::Teleport>())
+		{
+			auto action = actor.entity.get<ActionID::Teleport>();
+			quad.position = action->data().position;
+			action->set_is_complete(true);
+		}
+
+		// Actor will chase the mouse cursor location relative to the game window.
 		if(actor.actions.contains(ActorAction::FollowMouse))
 		{
 			tz::Vec2 mouse_pos = static_cast<tz::Vec2>(tz::window().get_mouse_position_state().get_mouse_position());
@@ -339,5 +397,22 @@ namespace game
 
 		tz::Vec2 displacement = a.position - b.position;
 		return displacement.length() <= touch_distance;
+	}
+
+	bool Scene::is_in_bounds(std::size_t actor_id) const
+	{
+		tz::Vec2 pos = this->qrenderer.elements()[actor_id].position;
+		auto bounds = this->get_world_boundaries();
+		return
+			bounds.first[0] <= pos[0] && pos[0] <= bounds.second[0]
+		     && bounds.first[1] <= pos[1] && pos[1] <= bounds.second[1];
+	}
+
+	std::pair<tz::Vec2, tz::Vec2> Scene::get_world_boundaries() const
+	{
+		return
+		{
+			tz::Vec2{-1.0f, -1.0f}, tz::Vec2{1.0f, 1.0f}
+		};
 	}
 }

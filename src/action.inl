@@ -1,12 +1,16 @@
 namespace game
 {
 	template<ActionID ID>
-	ActionEntity::Handle ActionEntity::add(ActionParams<ID> params)
+	bool ActionEntity::add(ActionParams<ID> params)
 	{
+		if(this->has<ID>())
+		{
+			return false;
+		}
 		auto derived_ptr = std::make_unique<Action<ID>>(params);
 		Action<ID>* derived_owner = derived_ptr.release();
 		this->actions.push_back(std::unique_ptr<IAction>(static_cast<IAction*>(derived_owner)));
-		return static_cast<tz::HandleValue>(this->actions.size());
+		return true;
 	}
 
 	template<ActionID ID>
