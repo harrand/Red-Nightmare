@@ -215,6 +215,16 @@ namespace game
 		{
 			quad.scale[0] = std::abs(quad.scale[0]);
 		}
+		if(actor.entity.has<ActionID::VerticalFlip>())
+		{
+			auto action = actor.entity.get<ActionID::VerticalFlip>();
+			quad.scale[1] = -std::abs(quad.scale[1]);
+			action->set_is_complete(true);
+		}
+		else
+		{
+			quad.scale[1] = std::abs(quad.scale[1]);
+		}
 
 		// Actor will chase the mouse cursor location relative to the game window.
 		if(actor.actions.contains(ActorAction::FollowMouse))
