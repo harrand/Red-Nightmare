@@ -3,6 +3,8 @@
 
 namespace game
 {
+	constexpr float touch_distance = 0.14f;
+
 	void Scene::render()
 	{
 		tz_assert(this->actors.size() == this->qrenderer.elements().size(), "Scene actor list and QuadRenderer size no longer match. Logic Error");
@@ -180,7 +182,6 @@ namespace game
 			tz::Vec2 dist_to_target = target_pos - quad.position;
 			// Find out which direction we need to go, or if we're already at the target.
 			bool move_horizontal = true, move_vertical = true;
-			constexpr float touch_distance = 0.14f;
 			if(dist_to_target[0] > touch_distance)
 			{
 				// We need to move right.
@@ -249,7 +250,7 @@ namespace game
 				    || actor.actions.contains(ActorAction::MoveDown);
 		if(will_move && actor.flags.contains(ActorFlag::FastUntilRest))
 		{
-			sp *= 4.0f;
+			sp *= 8.0f;
 		}
 		if(actor.actions.contains(ActorAction::MoveLeft))
 		{
@@ -267,6 +268,46 @@ namespace game
 		{
 			quad.position[1] -= sp;
 		}
+
+		// Functionality for actors which are hazardous. They should attempt to damage anything that gets too close.
+		if(actor.flags.contains(ActorFlag::Hazardous))
+		{
+			
+			for(std::size_t i = 0; i < this->size(); i++)
+			{
+				if(i == id)
+				{
+					continue;
+				}
+				if(this->actor_collision_query(id, i))
+				{
+					actor.damage(this->actors[i]);
+				}
+			}
+		}
+		// Functionality for actors which collide with players.
+		if(actor.flags.contains(ActorFlag::DeadRespawnOnPlayerTouch) || actor.flags.contains(ActorFlag::DeadResurrectOnPlayerTouch))
+		{
+			for(std::size_t i = 0; i < this->size(); i++)
+			{
+				if(i == id)
+				{
+					continue;
+				}
+				if(this->actors[i].flags.contains(ActorFlag::Player) && this->actor_collision_query(id, i))
+				{
+					// Actor is touching a player.
+					if(actor.flags.contains(ActorFlag::DeadResurrectOnPlayerTouch))
+					{
+						actor.current_health = actor.max_health;
+					}
+					if(actor.flags.contains(ActorFlag::DeadRespawnOnPlayerTouch))
+					{
+						actor.respawn();
+					}
+				}
+			}
+		}
 	}
 
 	std::optional<std::size_t> Scene::find_first_player() const
@@ -280,5 +321,14 @@ namespace game
 			}
 		}
 		return std::nullopt;
+	}
+
+	bool Scene::actor_collision_query(std::size_t actor_a, std::size_t actor_b) const
+	{
+		const QuadRenderer::ElementData& a = this->qrenderer.elements()[actor_a];
+		const QuadRenderer::ElementData& b = this->qrenderer.elements()[actor_b];
+
+		tz::Vec2 displacement = a.position - b.position;
+		return displacement.length() <= touch_distance;
 	}
 }

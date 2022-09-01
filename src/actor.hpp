@@ -20,19 +20,25 @@ namespace game
 		HostileGhost,
 		/// Actor is considered an ally to the player.
 		Ally,
+		/// Actor is considered an ally to actors of the same type.
+		Identitarian,
 		/// Actor is never considered dead, even if its health is zero.
 		Invincible,
 		/// Whenever actor causes damage, also hurts itself.
 		SelfHarm,
 		/// Whenever actor dies, respawn in the same position.
 		RespawnOnDeath,
+		/// Whenever the actor is dead and touched by a player, respawn.
+		DeadRespawnOnPlayerTouch,
+		/// Whenever the actor is dead and touched by a player, resurrect.
+		DeadResurrectOnPlayerTouch,
 		/// When respawned, do so in a completely random location.
 		RandomRespawnLocation,
 		/// Attempts to deal damage to all actors nearby. TODO: Implement.
 		Hazardous,
 		/// Actor will very quickly charge to the mouse location upon left click. Note: Actors with ClickToLaunch ignore death mechanics.
 		ClickToLaunch,
-		/// Actor will move 4x faster than normal until it stops.
+		/// Actor will move 8x faster than normal until it stops.
 		FastUntilRest,
 		/// If the actor ever stops, it instantly dies.
 		DieAtRest,

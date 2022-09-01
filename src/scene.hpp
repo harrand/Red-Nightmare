@@ -24,6 +24,7 @@ namespace game
 	private:
 		void actor_post_update(std::size_t id);
 		std::optional<std::size_t> find_first_player() const;
+		bool actor_collision_query(std::size_t actor_a, std::size_t actor_b) const;
 
 		QuadRenderer qrenderer;
 		std::vector<Actor> actors;

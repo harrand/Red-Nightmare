@@ -34,7 +34,7 @@ namespace game
 				return
 				{
 					.type = ActorType::PlayerClassic_Orb,
-					.flags = {ActorFlag::HostileGhost, ActorFlag::Ally, ActorFlag::Hazardous, ActorFlag::ClickToLaunch},
+					.flags = {ActorFlag::HostileGhost, ActorFlag::Ally, ActorFlag::Hazardous, ActorFlag::ClickToLaunch, ActorFlag::DeadRespawnOnPlayerTouch, ActorFlag::Identitarian},
 					.base_movement = 0.001f,
 					.base_damage = default_base_damage * 2.0f,
 					.max_health = 0.1f,
@@ -74,7 +74,7 @@ namespace game
 		}
 		if(!this->dead())
 		{
-			if(this->flags.contains(ActorFlag::ClickToLaunch) && tz::window().get_mouse_button_state().is_mouse_button_down(tz::MouseButton::Left))
+			if(this->flags.contains(ActorFlag::ClickToLaunch) && tz::window().get_mouse_button_state().is_mouse_button_down(tz::MouseButton::Left) && !tz::dbgui::claims_mouse())
 			{
 				this->flags |= {ActorFlag::ChaseMouse, ActorFlag::FastUntilRest, ActorFlag::DieAtRest};
 			}
@@ -204,6 +204,11 @@ namespace game
 		}
 		// Players cannot hurt allies.
 		if(this->flags.contains(ActorFlag::Player) && actor.flags.contains(ActorFlag::Ally))
+		{
+			return true;
+		}
+		// Identitarians are allies of their own kind.
+		if(this->flags.contains(ActorFlag::Identitarian) && this->type == actor.type)
 		{
 			return true;
 		}
