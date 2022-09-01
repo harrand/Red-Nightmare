@@ -134,7 +134,7 @@ namespace game
 			quad.position[1] = dist(this->rng);
 		}
 		// If actor wants to flip horizontally, do that now.
-		if(actor.actions.contains(ActorAction::HorizontalFlip))
+		/*if(actor.actions.contains(ActorAction::HorizontalFlip))
 		{
 			quad.scale[0] = -std::abs(quad.scale[0]);
 		}
@@ -142,6 +142,7 @@ namespace game
 		{
 			quad.scale[0] = std::abs(quad.scale[0]);
 		}
+		*/
 
 		// Handle actions.
 		std::optional<tz::Vec2> chase_target = std::nullopt;
@@ -168,11 +169,13 @@ namespace game
 		}
 		if(actor.entity.has<ActionID::LaunchToMouse>())
 		{
+			auto action = actor.entity.get<ActionID::LaunchToMouse>();
 			tz::Vec2 mouse_pos = util::get_mouse_world_location();
 			tz::Vec2 to_mouse = mouse_pos - quad.position;
 			actor.entity.add<ActionID::Launch>
 			({
-				.direction = to_mouse
+				.direction = to_mouse,
+				.speed_multiplier = action->data().speed_multiplier
 			});
 		}
 		if(actor.entity.has<ActionID::TeleportToPlayer>())
@@ -193,12 +196,7 @@ namespace game
 		if(actor.entity.has<ActionID::Launch>())
 		{
 			auto action = actor.entity.get<ActionID::Launch>();
-			tz_report("direction: {%.2f, %.2f}", action->data().direction[0], action->data().direction[1]);
-			float speed = actor.base_movement;
-			if(actor.flags.contains(ActorFlag::FastUntilRest))
-			{
-				speed *= 16.0f;
-			}
+			const float speed = actor.base_movement * action->data().speed_multiplier;
 			quad.position += action->data().direction.normalised() * speed;
 		}
 		if(actor.entity.has<ActionID::Teleport>())
@@ -206,6 +204,16 @@ namespace game
 			auto action = actor.entity.get<ActionID::Teleport>();
 			quad.position = action->data().position;
 			action->set_is_complete(true);
+		}
+		if(actor.entity.has<ActionID::HorizontalFlip>())
+		{
+			auto action = actor.entity.get<ActionID::HorizontalFlip>();
+			quad.scale[0] = -std::abs(quad.scale[0]);
+			action->set_is_complete(true);
+		}
+		else
+		{
+			quad.scale[0] = std::abs(quad.scale[0]);
 		}
 
 		// Actor will chase the mouse cursor location relative to the game window.
@@ -278,8 +286,6 @@ namespace game
 			{
 				// Something chasing a target has reached it.
 
-				// If it's meant to be fast until rest, time to remove that flag because it's now at rest.
-				actor.flags.remove(ActorFlag::FastUntilRest);
 				if(actor.flags.contains(ActorFlag::DieAtRest))
 				{
 					actor.current_health = 0;
@@ -306,14 +312,6 @@ namespace game
 		}
 		// We now know for certain whether the actor wants to move or not. Now we can finally carry out the movement.
 		float sp = actor.base_movement;
-		const bool will_move = actor.actions.contains(ActorAction::MoveLeft)
-				    || actor.actions.contains(ActorAction::MoveRight)
-				    || actor.actions.contains(ActorAction::MoveUp)
-				    || actor.actions.contains(ActorAction::MoveDown);
-		if(will_move && actor.flags.contains(ActorFlag::FastUntilRest))
-		{
-			sp *= 8.0f;
-		}
 		if(actor.actions.contains(ActorAction::MoveLeft))
 		{
 			quad.position[0] -= sp;

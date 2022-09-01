@@ -7,14 +7,41 @@
 
 namespace game
 {
+	/// Actions cause an actor to do something until the action is considered complete. Some actions occur instantly, but many do not.
 	enum class ActionID
 	{
+		/**
+		 * Move to the mouse cursor's location.
+		 * - Always moves at base movement speed.
+		 * - Completes when the actor arrives at the location.
+		 */
 		ChaseMouse,
+		/**
+		 * Move to the target location.
+		 * - Always moves at base movement speed.
+		 * - Completes when the actor arrives at the location.
+		 */
 		ChaseTarget,
+		/**
+		 * Launch towards the mouse cursor with a speed boost.
+		 * - Moves proportionally to base speed.
+		 * - Never completes, unless the actor goes out-of-bounds.
+		 */
 		LaunchToMouse,
+		/**
+		 * Launch towards the target location with a speed boost.
+		 * - Moves proportionally to base speed.
+		 * - Never completes, unless the actor goes out-of-bounds.
+		 */
 		Launch,
+		/// Teleport to the player. If there are multiple players, the player with the lowest actor-id is chosen.
 		TeleportToPlayer,
+		/// Teleport to the target location.
 		Teleport,
+		/// Flip the actor's sprite horizontally.
+		HorizontalFlip,
+		/// Flip the actor's sprite vertically.
+		VerticalFlip,
 	};
 
 	template<ActionID ID>
@@ -51,9 +78,16 @@ namespace game
 	};
 
 	template<>
+	struct ActionParams<ActionID::LaunchToMouse>
+	{
+		float speed_multiplier = 1.0f;
+	};
+
+	template<>
 	struct ActionParams<ActionID::Launch>
 	{
 		tz::Vec2 direction;
+		float speed_multiplier = 1.0f;
 	};
 
 	template<>

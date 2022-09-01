@@ -40,8 +40,6 @@ namespace game
 		HazardousToEnemies,
 		/// Actor will very quickly charge to the mouse location upon left click. Note: Actors with ClickToLaunch ignore death mechanics.
 		ClickToLaunch,
-		/// Actor will move 8x faster than normal until it stops.
-		FastUntilRest,
 		/// If the actor ever stops, it instantly dies.
 		DieAtRest,
 		/// If the actor reaches out-of-bounds, respawn.
@@ -54,8 +52,6 @@ namespace game
 	{
 		/// Meta-action. Normally every fixed-update we clear out all previous actions. If this action exists though, any actions related to motion (e.g MoveLeft) are preserved a single time.
 		SceneMessage_MaintainMotion,
-		/// Actor sprite should be horizontally flipped until the next fixed update.
-		HorizontalFlip,
 		/// Actor should move to the left using its base movement speed.
 		MoveLeft,
 		/// Actor should move to the right using its base movement speed.

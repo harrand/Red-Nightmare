@@ -82,8 +82,11 @@ namespace game
 		{
 			if(this->flags.contains(ActorFlag::ClickToLaunch) && tz::window().get_mouse_button_state().is_mouse_button_down(tz::MouseButton::Left) && !tz::dbgui::claims_mouse())
 			{
-				this->entity.add<ActionID::LaunchToMouse>();
-				this->flags |= {ActorFlag::FastUntilRest, ActorFlag::DieAtRest};
+				this->entity.add<ActionID::LaunchToMouse>
+				({
+					.speed_multiplier = 8.0f
+				});
+				this->flags |= {ActorFlag::DieAtRest};
 			}
 			if(this->flags.contains(ActorFlag::Aggressive) && this->faction == Faction::PlayerEnemy)
 			{
@@ -271,7 +274,7 @@ namespace game
 				else if(this->actions.contains(ActorAction::MoveRight))
 				{
 					ending_animation = AnimationID::PlayerClassic_MoveSide;
-					this->actions |= ActorAction::HorizontalFlip;
+					this->entity.add<ActionID::HorizontalFlip>();
 				}
 				else if(this->actions.contains(ActorAction::MoveUp))
 				{
@@ -298,7 +301,7 @@ namespace game
 				else if(this->actions.contains(ActorAction::MoveRight))
 				{
 					ending_animation = AnimationID::Nightmare_MoveSide;
-					this->actions |= ActorAction::HorizontalFlip;
+					this->entity.add<ActionID::HorizontalFlip>();
 				}
 				else if(this->actions.contains(ActorAction::MoveUp))
 				{
