@@ -122,9 +122,16 @@ namespace game
 	{
 		Actor& actor = this->actors[id];
 		QuadRenderer::ElementData& quad = this->qrenderer.elements()[id];
-		if(actor.flags.contains(ActorFlag::RespawnIfOOB) && !this->is_in_bounds(id))
+		if(!this->is_in_bounds(id))
 		{
-			actor.respawn();
+			if(actor.flags.contains(ActorFlag::DieIfOOB))
+			{
+				actor.current_health = 0;
+			}
+			if(actor.flags.contains(ActorFlag::RespawnIfOOB))
+			{
+				actor.respawn();
+			}
 		}
 		// If actor wants to teleport to a random location, do it now.
 		if(actor.actions.contains(ActorAction::RandomTeleport))
@@ -133,16 +140,19 @@ namespace game
 			quad.position[0] = dist(this->rng);
 			quad.position[1] = dist(this->rng);
 		}
-		// If actor wants to flip horizontally, do that now.
-		/*if(actor.actions.contains(ActorAction::HorizontalFlip))
+
+		if(actor.flags.contains(ActorFlag::InvisibleWhileDead))
 		{
-			quad.scale[0] = -std::abs(quad.scale[0]);
+			if(actor.dead())
+			{
+				quad.scale *= 0.0f;
+			}
+			else
+			{
+				// default scale. TODO: dont hardcode
+				quad.scale = {0.2f, 0.2f};
+			}
 		}
-		else
-		{
-			quad.scale[0] = std::abs(quad.scale[0]);
-		}
-		*/
 
 		// Handle actions.
 		std::optional<tz::Vec2> chase_target = std::nullopt;
@@ -159,13 +169,13 @@ namespace game
 		// Entity Actions
 
 		// Recursive Entity Actions (Can add other actions).
-		if(actor.entity.has<ActionID::ChaseMouse>())
+		if(actor.entity.has<ActionID::GotoMouse>())
 		{
-			actor.entity.add<ActionID::ChaseTarget>
+			actor.entity.add<ActionID::GotoTarget>
 			({
 				.target_position = util::get_mouse_world_location()
 			});
-			actor.entity.get<ActionID::ChaseMouse>()->set_is_complete(true);
+			actor.entity.get<ActionID::GotoMouse>()->set_is_complete(true);
 		}
 		if(actor.entity.has<ActionID::LaunchToMouse>())
 		{
@@ -181,17 +191,19 @@ namespace game
 		if(actor.entity.has<ActionID::TeleportToPlayer>())
 		{
 			auto maybe_player_id = this->find_first_player();
-			tz_assert(maybe_player_id.has_value(), "Actor wants to teleport to player, but there aren't any");
-			actor.entity.add<ActionID::Teleport>
-			({
-				.position = this->qrenderer.elements()[maybe_player_id.value()].position
-			});
+			if(maybe_player_id.has_value())
+			{
+				actor.entity.add<ActionID::Teleport>
+				({
+					.position = this->qrenderer.elements()[maybe_player_id.value()].position
+				});
+			}
 			actor.entity.get<ActionID::TeleportToPlayer>()->set_is_complete(true);
 		}
 		// Concrete Entity Actions
-		if(actor.entity.has<ActionID::ChaseTarget>())
+		if(actor.entity.has<ActionID::GotoTarget>())
 		{
-			chase_target = actor.entity.get<ActionID::ChaseTarget>()->data().target_position;
+			chase_target = actor.entity.get<ActionID::GotoTarget>()->data().target_position;
 		}
 		if(actor.entity.has<ActionID::Launch>())
 		{
@@ -353,7 +365,7 @@ namespace game
 				{
 					Actor& victim = this->actors[i];
 					bool should_hurt = actor.flags.contains(ActorFlag::HazardousToAll) || (actor.flags.contains(ActorFlag::HazardousToEnemies) && actor.is_enemy_of(victim));
-					if(should_hurt)
+					if(should_hurt && !actor.dead() && !victim.dead())
 					{
 						actor.damage(victim);
 					}

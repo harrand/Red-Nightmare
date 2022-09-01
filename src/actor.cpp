@@ -37,12 +37,12 @@ namespace game
 				return
 				{
 					.type = ActorType::PlayerClassic_Orb,
-					.flags = {ActorFlag::HazardousToEnemies, ActorFlag::ClickToLaunch, ActorFlag::RespawnOnPlayer, ActorFlag::RespawnIfOOB},
+					.flags = {ActorFlag::HazardousToEnemies, ActorFlag::ClickToLaunch, ActorFlag::RespawnOnPlayer, ActorFlag::DieIfOOB, ActorFlag::RespawnOnClick, ActorFlag::SelfHarm, ActorFlag::InvisibleWhileDead},
 					.faction = Faction::PlayerFriend,
 					.base_movement = 0.001f,
 					.base_damage = default_base_damage * 2.0f,
-					.max_health = 0.1f,
-					.current_health = 0.1f,
+					.max_health = 0.0001f,
+					.current_health = 0.0f,
 					.skin = ActorSkin::PlayerClassic_DefaultFireball,
 					.animation = game::play_animation(AnimationID::PlayerClassic_DefaultFireball_Idle)
 				};
@@ -78,9 +78,10 @@ namespace game
 			}
 			return;
 		}
+		const bool is_left_clicked = tz::window().get_mouse_button_state().is_mouse_button_down(tz::MouseButton::Left) && !tz::dbgui::claims_mouse();
 		if(!this->dead())
 		{
-			if(this->flags.contains(ActorFlag::ClickToLaunch) && tz::window().get_mouse_button_state().is_mouse_button_down(tz::MouseButton::Left) && !tz::dbgui::claims_mouse())
+			if(this->flags.contains(ActorFlag::ClickToLaunch) && is_left_clicked)
 			{
 				this->entity.add<ActionID::LaunchToMouse>
 				({
@@ -93,11 +94,11 @@ namespace game
 				// If it wants to chase the player the whole time, let it!
 				this->actions |= ActorAction::ChasePlayer;
 			}
-			if(this->flags.contains(ActorFlag::ChaseMouse) && !this->entity.has<ActionID::ChaseTarget>())
+			if(this->flags.contains(ActorFlag::ChaseMouse) && !this->entity.has<ActionID::GotoTarget>())
 			{
 				if(tz::window().get_mouse_button_state().is_mouse_button_down(tz::MouseButton::Left))
 				{
-					this->entity.add<ActionID::ChaseMouse>();
+					this->entity.add<ActionID::GotoMouse>();
 				}
 			}
 			if(this->flags.contains(ActorFlag::MouseControlled))
@@ -129,10 +130,15 @@ namespace game
 		else
 		{
 			// Actor is dead.
+			if(this->flags.contains(ActorFlag::RespawnOnClick) && is_left_clicked)
+			{
+				this->respawn();
+				return;
+			}
 			if(this->flags.contains(ActorFlag::RespawnOnDeath))
 			{
 				// Wait for its death animation to finish.
-				if(this->animation.complete())
+				if(this->animation.complete() || this->animation.get_info().loop)
 				{
 					this->respawn();
 					return;
@@ -203,6 +209,7 @@ namespace game
 		bool should_spawn_randomly = this->flags.contains(ActorFlag::RandomRespawnLocation);
 		bool should_spawn_on_player = this->flags.contains(ActorFlag::RespawnOnPlayer);
 		*this = game::create_actor(this->type);
+		this->current_health = this->max_health;
 		if(should_spawn_randomly)
 		{
 			this->actions |= ActorAction::RandomTeleport;

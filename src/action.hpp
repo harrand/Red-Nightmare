@@ -15,13 +15,13 @@ namespace game
 		 * - Always moves at base movement speed.
 		 * - Completes when the actor arrives at the location.
 		 */
-		ChaseMouse,
+		GotoMouse,
 		/**
 		 * Move to the target location.
 		 * - Always moves at base movement speed.
 		 * - Completes when the actor arrives at the location.
 		 */
-		ChaseTarget,
+		GotoTarget,
 		/**
 		 * Launch towards the mouse cursor with a speed boost.
 		 * - Moves proportionally to base speed.
@@ -72,7 +72,7 @@ namespace game
 	// Action implementations.
 	
 	template<>
-	struct ActionParams<ActionID::ChaseTarget>
+	struct ActionParams<ActionID::GotoTarget>
 	{
 		tz::Vec2 target_position;
 	};
@@ -108,6 +108,9 @@ namespace game
 
 		template<ActionID ID>
 		bool add(ActionParams<ID> params = {});
+
+		template<ActionID ID>
+		bool set(ActionParams<ID> params = {});
 
 		template<ActionID ID>
 		bool has() const;

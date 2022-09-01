@@ -24,6 +24,8 @@ namespace game
 		Invincible,
 		/// Whenever actor causes damage, also hurts itself.
 		SelfHarm,
+		/// If the mouse is left-clicked. Respawn.
+		RespawnOnClick,
 		/// Whenever actor dies, respawn in the same position.
 		RespawnOnDeath,
 		/// Whenever the actor is dead and touched by a player, respawn.
@@ -44,6 +46,10 @@ namespace game
 		DieAtRest,
 		/// If the actor reaches out-of-bounds, respawn.
 		RespawnIfOOB,
+		/// If the actor reaches out-of-bounds, die.
+		DieIfOOB,
+		/// If the actor is dead, it is invisible.
+		InvisibleWhileDead
 	};
 	using ActorFlags = tz::EnumField<ActorFlag>;
 

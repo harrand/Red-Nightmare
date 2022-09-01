@@ -14,6 +14,20 @@ namespace game
 	}
 
 	template<ActionID ID>
+	bool ActionEntity::set(ActionParams<ID> params)
+	{
+		if(this->has<ID>())
+		{
+			this->get<ID>()->data() = params;
+			return false;
+		}
+		else
+		{
+			this->add<ID>(params);
+		}
+	}
+
+	template<ActionID ID>
 	bool ActionEntity::has() const
 	{
 		for(const auto& action_ptr : this->actions)
