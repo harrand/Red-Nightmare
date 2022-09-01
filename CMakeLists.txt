@@ -13,6 +13,7 @@ add_app(
 		src/actor.hpp
 		src/animation.cpp
 		src/animation.hpp
+		src/faction.hpp
 		src/main.cpp
 		src/images.cpp
 		src/images.hpp
