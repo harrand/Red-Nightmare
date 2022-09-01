@@ -230,7 +230,7 @@ namespace game
 						actor.flags.remove(ActorFlag::ChaseMouse);
 					}
 				}
-				else if(actor.flags.contains(ActorFlag::HostileGhost) && !actor.dead())
+				else if(actor.faction == Faction::PlayerEnemy && !actor.dead())
 				{
 					// The living actor is an enemy, and should have finished chasing the player. We need to find the player's actor and damage it with the enemy's base damage.
 					auto target_actor_id = this->find_first_player();
@@ -270,7 +270,7 @@ namespace game
 		}
 
 		// Functionality for actors which are hazardous. They should attempt to damage anything that gets too close.
-		if(actor.flags.contains(ActorFlag::Hazardous))
+		if(actor.flags.contains(ActorFlag::HazardousToAll) || actor.flags.contains(ActorFlag::HazardousToEnemies))
 		{
 			
 			for(std::size_t i = 0; i < this->size(); i++)
@@ -281,7 +281,12 @@ namespace game
 				}
 				if(this->actor_collision_query(id, i))
 				{
-					actor.damage(this->actors[i]);
+					Actor& victim = this->actors[i];
+					bool should_hurt = actor.flags.contains(ActorFlag::HazardousToAll) || (actor.flags.contains(ActorFlag::HazardousToEnemies) && actor.is_enemy_of(victim));
+					if(should_hurt)
+					{
+						actor.damage(victim);
+					}
 				}
 			}
 		}

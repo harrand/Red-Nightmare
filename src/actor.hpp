@@ -1,6 +1,7 @@
 #ifndef REDNIGHTMARE_ACTOR_HPP
 #define REDNIGHTMARE_ACTOR_HPP
 #include "animation.hpp"
+#include "faction.hpp"
 #include "tz/core/containers/enum_field.hpp"
 
 namespace game
@@ -10,18 +11,14 @@ namespace game
 	{
 		/// Actor will be targetted by things that target players.
 		Player,
+		/// Actor will attack enemy targets without provocation.
+		Aggressive,
 		/// Move around with WASD.
 		KeyboardControlled,
 		/// Actor will always chase the mouse cursor.
 		MouseControlled,
 		// Actor will move towards the mouse cursor until it reaches it once.
 		ChaseMouse,
-		/// Computer controlled. Tries to chase and kill any nearby players.
-		HostileGhost,
-		/// Actor is considered an ally to the player.
-		Ally,
-		/// Actor is considered an ally to actors of the same type.
-		Identitarian,
 		/// Actor is never considered dead, even if its health is zero.
 		Invincible,
 		/// Whenever actor causes damage, also hurts itself.
@@ -34,8 +31,10 @@ namespace game
 		DeadResurrectOnPlayerTouch,
 		/// When respawned, do so in a completely random location.
 		RandomRespawnLocation,
-		/// Attempts to deal damage to all actors nearby. TODO: Implement.
-		Hazardous,
+		/// Attempts to deal damage to all actors nearby.
+		HazardousToAll,
+		/// Attempts to deal damage to any enemies that are nearby.
+		HazardousToEnemies,
 		/// Actor will very quickly charge to the mouse location upon left click. Note: Actors with ClickToLaunch ignore death mechanics.
 		ClickToLaunch,
 		/// Actor will move 8x faster than normal until it stops.
@@ -103,6 +102,8 @@ namespace game
 		ActorType type = {};
 		/// Describes the characteristics of the actor.
 		ActorFlags flags = {};
+		/// Describes the allegiances of the actor.
+		Faction faction = Faction::Default;
 		/// Base movement speed of the actor.
 		float base_movement = default_base_movement;
 		/// Base damage dealt to enemies every fixed update.
@@ -123,10 +124,13 @@ namespace game
 		void dbgui();
 		void damage(Actor& victim);
 		void respawn();
+
+		bool is_ally_of(const Actor& actor) const;
+		bool is_enemy_of(const Actor& actor) const;
+
 		static Actor null(){return {};}
 		bool operator==(const Actor& rhs) const = default;
 	private:
-		bool is_ally_of(const Actor& actor) const;
 		/// Figure out which animation we should be using using all the actions at the end of the fixed-update.
 		void evaluate_animation();
 		/// Set the animation, but if we're already running that animation don't reset it.

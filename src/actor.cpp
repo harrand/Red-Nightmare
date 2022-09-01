@@ -22,7 +22,8 @@ namespace game
 				return
 				{
 					.type = ActorType::PlayerClassic_TestEvil,
-					.flags = {ActorFlag::HostileGhost},
+					.flags = {ActorFlag::Aggressive},
+					.faction = Faction::PlayerEnemy,
 					.base_movement = 0.0005f,
 					.max_health = 0.1f,
 					.current_health = 0.1f,
@@ -34,7 +35,8 @@ namespace game
 				return
 				{
 					.type = ActorType::PlayerClassic_Orb,
-					.flags = {ActorFlag::HostileGhost, ActorFlag::Ally, ActorFlag::Hazardous, ActorFlag::ClickToLaunch, ActorFlag::DeadRespawnOnPlayerTouch, ActorFlag::Identitarian},
+					.flags = {ActorFlag::HazardousToEnemies, ActorFlag::ClickToLaunch, ActorFlag::DeadRespawnOnPlayerTouch},
+					.faction = Faction::PlayerFriend,
 					.base_movement = 0.001f,
 					.base_damage = default_base_damage * 2.0f,
 					.max_health = 0.1f,
@@ -47,7 +49,8 @@ namespace game
 				return
 				{
 					.type = ActorType::Nightmare,
-					.flags = {ActorFlag::HostileGhost, ActorFlag::SelfHarm, ActorFlag::RespawnOnDeath, ActorFlag::RandomRespawnLocation},
+					.flags = {ActorFlag::Aggressive, ActorFlag::SelfHarm, ActorFlag::RespawnOnDeath, ActorFlag::RandomRespawnLocation},
+					.faction = Faction::PlayerEnemy,
 					.base_movement = 0.0014f,
 					.base_damage = 1.0f,
 					.max_health = 0.001,
@@ -78,7 +81,7 @@ namespace game
 			{
 				this->flags |= {ActorFlag::ChaseMouse, ActorFlag::FastUntilRest, ActorFlag::DieAtRest};
 			}
-			if(this->flags.contains(ActorFlag::HostileGhost))
+			if(this->flags.contains(ActorFlag::Aggressive) && this->faction == Faction::PlayerEnemy)
 			{
 				// If it wants to chase the player the whole time, let it!
 				this->actions |= ActorAction::ChasePlayer;
@@ -197,18 +200,38 @@ namespace game
 		{
 			return true;
 		}
-		// Allies cannot hurt players.
-		if(this->flags.contains(ActorFlag::Ally) && actor.flags.contains(ActorFlag::Player))
+		// PlayerFriends cannot hurt players.
+		if(this->faction == Faction::PlayerFriend && actor.flags.contains(ActorFlag::Player))
 		{
 			return true;
 		}
-		// Players cannot hurt allies.
-		if(this->flags.contains(ActorFlag::Player) && actor.flags.contains(ActorFlag::Ally))
+		// Players cannot hurt PlayerFriends.
+		if(this->flags.contains(ActorFlag::Player) && actor.faction == Faction::PlayerFriend)
 		{
 			return true;
 		}
-		// Identitarians are allies of their own kind.
-		if(this->flags.contains(ActorFlag::Identitarian) && this->type == actor.type)
+		return false;
+	}
+
+	bool Actor::is_enemy_of(const Actor& actor) const
+	{
+		// Players see PlayerEnemy faction members as enemies... obviously
+		if(this->flags.contains(ActorFlag::Player) && actor.faction == Faction::PlayerEnemy)
+		{
+			return true;
+		}
+		// PlayerEnemy faction members see Players as enemies.
+		if(this->faction == Faction::PlayerEnemy && actor.flags.contains(ActorFlag::Player))
+		{
+			return true;	
+		}
+		// PlayerFriend faction members see PlayerEnemy faction members as enemies.
+		if(this->faction == Faction::PlayerFriend && actor.faction == Faction::PlayerEnemy)
+		{
+			return true;
+		}
+		// PlayerEnemy faction members see PlayerFriend faction members as enemies.
+		if(this->faction == Faction::PlayerEnemy && actor.faction == Faction::PlayerFriend)
 		{
 			return true;
 		}
