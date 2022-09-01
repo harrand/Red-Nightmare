@@ -147,6 +147,10 @@ namespace game
 			}
 		}
 		// Actor will chase the mouse cursor location relative to the game window.
+		if(actor.entity.has<ActionID::ChaseTarget>())
+		{
+			chase_target = actor.entity.get<ActionID::ChaseTarget>()->data().target_position;
+		}
 		if(actor.actions.contains(ActorAction::FollowMouse))
 		{
 			tz::Vec2 mouse_pos = static_cast<tz::Vec2>(tz::window().get_mouse_position_state().get_mouse_position());

@@ -2,6 +2,7 @@
 #define REDNIGHTMARE_ACTOR_HPP
 #include "animation.hpp"
 #include "faction.hpp"
+#include "action.hpp"
 #include "tz/core/containers/enum_field.hpp"
 
 namespace game
@@ -116,6 +117,8 @@ namespace game
 		ActorSkin skin = {};
 		/// Describes what the actor is upto for this fixed-update.
 		ActorActions actions = {};
+		// New actions implementation: Describes what the actor is upto for this fixed-update.
+		ActionEntity entity = {};
 		/// The animation currently playing on the actor.
 		Animation animation = play_animation(AnimationID::Missing);
 
