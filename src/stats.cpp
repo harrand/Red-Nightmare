@@ -32,4 +32,24 @@ namespace game
 		}
 		return {};
 	}
+
+	void StatBuffs::update()
+	{
+
+	}
+
+	void StatBuffs::add(BuffID buff)
+	{
+		this->buffs.push_back(game::get_buff(buff));
+	}
+
+	std::span<const StatBuff> StatBuffs::elements() const
+	{
+		return this->buffs;
+	}
+
+	std::span<StatBuff> StatBuffs::elements()
+	{
+		return this->buffs;
+	}
 }

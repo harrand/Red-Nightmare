@@ -115,8 +115,7 @@ namespace game
 			}
 			if(this->flags.contains(ActorFlag::Aggressive) && this->faction == Faction::PlayerEnemy)
 			{
-				// If it wants to chase the player the whole time, let it!
-				this->actions |= ActorAction::ChasePlayer;
+				this->entity.set<ActionID::GotoPlayer>();
 			}
 			if(this->flags.contains(ActorFlag::MouseControlled))
 			{
@@ -180,11 +179,11 @@ namespace game
 			{
 				if(ImGui::Button("Berserk"))
 				{
-					this->buffs.add(game::get_buff(BuffID::Berserk));
+					this->buffs.add(BuffID::Berserk);
 				}
 				if(ImGui::Button("Sprint"))
 				{
-					this->buffs.add(game::get_buff(BuffID::Sprint));
+					this->buffs.add(BuffID::Sprint);
 				}
 			}
 		}
@@ -255,7 +254,7 @@ namespace game
 	Stats Actor::get_current_stats() const
 	{
 		Stats result = this->base_stats;
-		for(const StatBuff& buff : this->buffs)
+		for(const StatBuff& buff : this->buffs.elements())
 		{
 			result.movement_speed += buff.add_speed_boost;
 			result.movement_speed *= buff.multiply_speed_boost;

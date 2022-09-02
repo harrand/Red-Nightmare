@@ -172,16 +172,6 @@ namespace game
 
 		// Handle actions.
 		std::optional<tz::Vec2> chase_target = std::nullopt;
-		// Actor will chase whatever the player's position is.
-		if(actor.actions.contains(ActorAction::ChasePlayer))
-		{
-			auto player_id = this->find_first_player();
-			if(player_id.has_value())
-			{
-				chase_target = this->qrenderer.elements()[player_id.value()].position;
-			}
-		}
-
 		// Entity Actions
 
 		// Recursive Entity Actions (Can add other actions).
@@ -216,8 +206,21 @@ namespace game
 			}
 			actor.entity.get<ActionID::TeleportToPlayer>()->set_is_complete(true);
 		}
+		if(actor.entity.has<ActionID::GotoPlayer>())
+		{
+			auto player_id = this->find_first_player();
+			if(player_id.has_value())
+			{
+				auto action = actor.entity.get<ActionID::GotoPlayer>();
+				actor.entity.set<ActionID::GotoTarget>
+				({
+					.target_position = this->qrenderer.elements()[player_id.value()].position
+				});
+				action->set_is_complete(true);
+			}
+		}
 		// Concrete Entity Actions
-		if(actor.entity.has<ActionID::GotoTarget>())
+		if(actor.entity.has<ActionID::GotoTarget>() && !actor.dead())
 		{
 			auto action = actor.entity.get<ActionID::GotoTarget>();
 			chase_target = actor.entity.get<ActionID::GotoTarget>()->data().target_position;

@@ -69,8 +69,6 @@ namespace game
 		MoveDown,
 		/// Actor should move upwards using its base movement speed.
 		MoveUp,
-		/// Actor should chase the nearest player.
-		ChasePlayer,
 		/// Actor can't do any action until its current animation finishes.
 		AnimationPause,
 	};

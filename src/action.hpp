@@ -16,6 +16,7 @@ namespace game
 		 * - Completes instantly. Spawns a GotoTarget action in its stead.
 		 */
 		GotoMouse,
+		GotoPlayer,
 		/**
 		 * Move to the target location.
 		 * - Always moves at base movement speed.

@@ -1,7 +1,8 @@
 #ifndef REDNIGHTMARE_STATS_HPP
 #define REDNIGHTMARE_STATS_HPP
-#include "tz/core/containers/basic_list.hpp"
+#include <vector>
 #include <limits>
+#include <span>
 
 namespace game
 {
@@ -46,7 +47,17 @@ namespace game
 
 	StatBuff get_buff(BuffID buff);
 
-	using StatBuffs = tz::BasicList<StatBuff>;
+	class StatBuffs
+	{
+	public:
+		StatBuffs() = default;
+		void update();
+		void add(BuffID buff);
+		std::span<const StatBuff> elements() const;
+		std::span<StatBuff> elements();
+	private:
+		std::vector<StatBuff> buffs;
+	};
 }
 
 #endif // REDNIGHTMARE_STATS_HPP
