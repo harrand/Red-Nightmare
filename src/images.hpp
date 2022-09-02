@@ -8,6 +8,7 @@ namespace game
 	enum class TextureID : std::uint32_t
 	{
 		Missing,
+		Invisible,
 		PlayerClassic_Dead,
 		PlayerClassic_Down_1,
 		PlayerClassic_Down_2,

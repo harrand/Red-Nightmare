@@ -43,6 +43,7 @@ add_text(
 	OUTPUT_DIR ${PROJECT_BINARY_DIR}
 	TEXT_FILES
 		res/images/missing.png
+		res/images/invisible.png
 		res/images/player/akhara/skins/classic/player_classic_dead.png
 		res/images/player/akhara/skins/classic/player_classic_down1.png
 		res/images/player/akhara/skins/classic/player_classic_down2.png

@@ -327,6 +327,13 @@ namespace game
 					ending_animation = AnimationID::Nightmare_Death;
 				}
 			break;
+			case ActorSkin::DebugOnlyVisible:
+				#if TZ_DEBUG
+					ending_animation = AnimationID::Missing;
+				#else
+					ending_animation = AnimationID::Invisible;
+				#endif
+			break;
 		}
 		this->assign_animation(ending_animation);
 	}

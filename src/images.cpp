@@ -5,6 +5,7 @@
 
 // Note: When adding a new image, add a new entry here and in game::texture_data below.
 #include ImportedTextHeader(missing, png)
+#include ImportedTextHeader(invisible, png)
 #include ImportedTextHeader(player_classic_dead, png)
 #include ImportedTextHeader(player_classic_down1, png)
 #include ImportedTextHeader(player_classic_down2, png)
@@ -58,6 +59,7 @@ namespace game
 	std::array<std::string_view, static_cast<int>(TextureID::Count)> texture_data
 	{
 		ImportedTextData(missing, png),
+		ImportedTextData(invisible, png),
 		ImportedTextData(player_classic_dead, png),
 		ImportedTextData(player_classic_down1, png),
 		ImportedTextData(player_classic_down2, png),

@@ -67,6 +67,15 @@ namespace game
 			.fps = 1,
 			.loop = false
 		},
+		AnimationInfo /*Invisible*/
+		{
+			.frames =
+			{
+				TextureID::Invisible
+			},
+			.fps = 1,
+			.loop = false
+		},
 		AnimationInfo /*PlayerClassic_Death*/
 		{
 			.frames =
@@ -162,7 +171,7 @@ namespace game
 				TextureID::Nightmare_Dying_2,
 				TextureID::Nightmare_Dying_1
 			},
-			.fps = 10,
+			.fps = 16,
 			.loop = false
 		},
 		AnimationInfo /*Nightmare_Death*/
@@ -181,7 +190,7 @@ namespace game
 				TextureID::Nightmare_Dying_10,
 				TextureID::Nightmare_Dead
 			},
-			.fps = 10,
+			.fps = 16,
 			.loop = false
 		},
 		AnimationInfo /*Nightmare_Idle*/
