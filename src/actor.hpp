@@ -19,8 +19,6 @@ namespace game
 		KeyboardControlled,
 		/// Actor will always chase the mouse cursor.
 		MouseControlled,
-		// Actor will move towards the mouse cursor until it reaches it once.
-		ChaseMouse,
 		/// Actor is never considered dead, even if its health is zero.
 		Invincible,
 		/// Whenever actor causes damage, also hurts itself.
@@ -73,8 +71,6 @@ namespace game
 		MoveUp,
 		/// Actor should chase the nearest player.
 		ChasePlayer,
-		/// Actor should move towards the mouse cursor this fixed update.
-		FollowMouse,
 		/// Actor can't do any action until its current animation finishes.
 		AnimationPause,
 	};

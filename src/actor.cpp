@@ -118,16 +118,9 @@ namespace game
 				// If it wants to chase the player the whole time, let it!
 				this->actions |= ActorAction::ChasePlayer;
 			}
-			if(this->flags.contains(ActorFlag::ChaseMouse) && !this->entity.has<ActionID::GotoTarget>())
-			{
-				if(tz::window().get_mouse_button_state().is_mouse_button_down(tz::MouseButton::Left))
-				{
-					this->entity.add<ActionID::GotoMouse>();
-				}
-			}
 			if(this->flags.contains(ActorFlag::MouseControlled))
 			{
-				this->actions |= ActorAction::FollowMouse;
+				this->entity.set<ActionID::GotoMouse>();
 			}
 			if(this->flags.contains(ActorFlag::KeyboardControlled))
 			{

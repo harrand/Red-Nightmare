@@ -219,7 +219,14 @@ namespace game
 		// Concrete Entity Actions
 		if(actor.entity.has<ActionID::GotoTarget>())
 		{
+			auto action = actor.entity.get<ActionID::GotoTarget>();
 			chase_target = actor.entity.get<ActionID::GotoTarget>()->data().target_position;
+			// If they're within touching distance, this is done.
+			float dist = (action->data().target_position - quad.position).length();
+			if(dist <= touch_distance * 2)
+			{
+				action->set_is_complete(true);
+			}
 		}
 		if(actor.entity.has<ActionID::Launch>())
 		{
@@ -254,17 +261,6 @@ namespace game
 			quad.scale[1] = std::abs(quad.scale[1]);
 		}
 
-		// Actor will chase the mouse cursor location relative to the game window.
-		if(actor.actions.contains(ActorAction::FollowMouse))
-		{
-			tz::Vec2 mouse_pos = static_cast<tz::Vec2>(tz::window().get_mouse_position_state().get_mouse_position());
-			mouse_pos[0] /= tz::window().get_width();
-			mouse_pos[1] /= tz::window().get_height();
-			mouse_pos *= 2.0f;
-			mouse_pos -= tz::Vec2{1.0f, 1.0f};
-			mouse_pos[1] = -mouse_pos[1];
-			chase_target = mouse_pos;
-		}
 		// It's chasing something, but we don't care about what it's chasing.
 		if(chase_target.has_value())
 		{
@@ -327,14 +323,6 @@ namespace game
 				if(actor.flags.contains(ActorFlag::DieAtRest))
 				{
 					actor.base_stats.current_health = 0;
-				}
-				if(actor.actions.contains(ActorAction::FollowMouse))
-				{
-					// Something following the mouse cursor has reached it.
-					if(actor.flags.contains(ActorFlag::ChaseMouse))
-					{
-						actor.flags.remove(ActorFlag::ChaseMouse);
-					}
 				}
 				else if(actor.faction == Faction::PlayerEnemy && !actor.dead())
 				{

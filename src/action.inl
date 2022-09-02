@@ -19,11 +19,13 @@ namespace game
 		if(this->has<ID>())
 		{
 			this->get<ID>()->data() = params;
+			this->get<ID>()->set_is_complete(false);
 			return false;
 		}
 		else
 		{
 			this->add<ID>(params);
+			return true;
 		}
 	}
 
