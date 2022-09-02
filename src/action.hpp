@@ -12,14 +12,17 @@ namespace game
 	{
 		/**
 		 * Move to the mouse cursor's location.
-		 * - Always moves at base movement speed.
 		 * - Completes instantly. Spawns a GotoTarget action in its stead.
 		 */
 		GotoMouse,
+		/**
+		 * Move to a player's location.
+		 * - If there are no players, this does nothing.
+		 * - Completes instantly. Spawns a GotoTarget action in its stead.
+		 */
 		GotoPlayer,
 		/**
 		 * Move to the target location.
-		 * - Always moves at base movement speed.
 		 * - Completes when the actor arrives at the location.
 		 */
 		GotoTarget,
