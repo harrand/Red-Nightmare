@@ -24,6 +24,8 @@ namespace game
 		Invincible,
 		/// Whenever actor causes damage, also hurts itself.
 		SelfHarm,
+		/// Actor constantly damages itself.
+		Rot,
 		/// If the mouse is left-clicked. Respawn.
 		RespawnOnClick,
 		/// Whenever actor dies, respawn in the same position.
@@ -49,7 +51,9 @@ namespace game
 		/// If the actor reaches out-of-bounds, die.
 		DieIfOOB,
 		/// If the actor is dead, it is invisible.
-		InvisibleWhileDead
+		InvisibleWhileDead,
+		/// If the actor dies, spawns a ghost.
+		Haunted
 	};
 	using ActorFlags = tz::EnumField<ActorFlag>;
 
@@ -99,7 +103,9 @@ namespace game
 		/// An actor which acts as Akhara's passive elemental orb.
 		PlayerClassic_Orb,
 		/// A computer-controlled boss monster, called Nightmare that uses its own skin.
-		Nightmare
+		Nightmare,
+		/// An uninteractable actor which periodically spawns evil players.
+		EvilPlayer_TestSpawner
 	};
 	
 	constexpr float default_base_movement = 0.0f;

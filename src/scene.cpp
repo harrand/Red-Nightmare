@@ -74,6 +74,10 @@ namespace game
 		{
 			this->add(ActorType::Nightmare);
 		}
+		if(ImGui::Button("Debug Add Evil Player Spawner"))
+		{
+			this->add(ActorType::EvilPlayer_TestSpawner);
+		}
 		if(this->size() > 0 && ImGui::Button("Pop Back"))
 		{
 			this->pop();
@@ -132,6 +136,13 @@ namespace game
 			{
 				actor.respawn();
 			}
+		}
+		if(actor.flags.contains(ActorFlag::Haunted) && actor.dead())
+		{
+			// Note: Right now this could spam forever.
+			this->add(ActorType::PlayerClassic_TestEvil);
+			// Teleport it to our location.
+			this->qrenderer.elements().back().position = quad.position;
 		}
 		// If actor wants to teleport to a random location, do it now.
 		if(actor.actions.contains(ActorAction::RandomTeleport))

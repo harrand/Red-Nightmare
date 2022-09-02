@@ -27,8 +27,8 @@ namespace game
 					.flags = {ActorFlag::Aggressive},
 					.faction = Faction::PlayerEnemy,
 					.base_movement = 0.0005f,
-					.max_health = 0.1f,
-					.current_health = 0.1f,
+					.max_health = 0.01f,
+					.current_health = 0.01f,
 					.skin = ActorSkin::PlayerClassic,
 					.animation = game::play_animation(AnimationID::PlayerClassic_Idle)
 				};
@@ -62,6 +62,14 @@ namespace game
 					.animation = game::play_animation(AnimationID::Nightmare_Spawn)
 				};
 			break;
+			case ActorType::EvilPlayer_TestSpawner:
+				return
+				{
+					.type = ActorType::EvilPlayer_TestSpawner,
+					.flags = {ActorFlag::RandomRespawnLocation, ActorFlag::RespawnOnDeath, ActorFlag::Rot, ActorFlag::Haunted},
+					.skin = ActorSkin::DebugOnlyVisible
+				};
+			break;
 		}
 		return Actor::null();
 	}
@@ -81,6 +89,10 @@ namespace game
 		const bool is_left_clicked = tz::window().get_mouse_button_state().is_mouse_button_down(tz::MouseButton::Left) && !tz::dbgui::claims_mouse();
 		if(!this->dead())
 		{
+			if(this->flags.contains(ActorFlag::Rot))
+			{
+				this->damage(*this);
+			}
 			if(this->flags.contains(ActorFlag::ClickToLaunch) && is_left_clicked)
 			{
 				this->entity.add<ActionID::LaunchToMouse>

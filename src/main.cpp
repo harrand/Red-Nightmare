@@ -18,6 +18,7 @@ int main()
 
 		scene.add(game::ActorType::PlayerClassic);
 		scene.add(game::ActorType::PlayerClassic_Orb);
+		scene.add(game::ActorType::EvilPlayer_TestSpawner);
 
 		using namespace tz::literals;
 		tz::Delay fixed_update = 1667_us;
