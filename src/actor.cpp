@@ -15,7 +15,10 @@ namespace game
 				{
 					.type = ActorType::PlayerClassic,
 					.flags = {ActorFlag::Player, ActorFlag::KeyboardControlled},
-					.base_movement = 0.001f,
+					.stats =
+					{
+						.base_movement_speed = 0.001f
+					},
 					.skin = ActorSkin::PlayerClassic,
 					.animation = game::play_animation(AnimationID::PlayerClassic_Idle)
 				};
@@ -26,9 +29,12 @@ namespace game
 					.type = ActorType::PlayerClassic_TestEvil,
 					.flags = {ActorFlag::Aggressive},
 					.faction = Faction::PlayerEnemy,
-					.base_movement = 0.0005f,
-					.max_health = 0.01f,
-					.current_health = 0.01f,
+					.stats =
+					{
+						.base_movement_speed = 0.0005f,
+						.max_health = 0.01f,
+						.current_health = 0.01f
+					},
 					.skin = ActorSkin::PlayerClassic,
 					.animation = game::play_animation(AnimationID::PlayerClassic_Idle)
 				};
@@ -39,10 +45,13 @@ namespace game
 					.type = ActorType::PlayerClassic_Orb,
 					.flags = {ActorFlag::HazardousToEnemies, ActorFlag::ClickToLaunch, ActorFlag::RespawnOnPlayer, ActorFlag::DieIfOOB, ActorFlag::RespawnOnClick, ActorFlag::SelfHarm, ActorFlag::InvisibleWhileDead},
 					.faction = Faction::PlayerFriend,
-					.base_movement = 0.001f,
-					.base_damage = default_base_damage * 2.0f,
-					.max_health = 0.0001f,
-					.current_health = 0.0f,
+					.stats =
+					{
+						.base_movement_speed = 0.001f,
+						.base_damage = default_base_damage * 2.0f,
+						.max_health = 0.0001f,
+						.current_health = 0.0f
+					},
 					.skin = ActorSkin::PlayerClassic_DefaultFireball,
 					.animation = game::play_animation(AnimationID::PlayerClassic_DefaultFireball_Idle)
 				};
@@ -53,10 +62,13 @@ namespace game
 					.type = ActorType::Nightmare,
 					.flags = {ActorFlag::Aggressive, ActorFlag::SelfHarm, ActorFlag::RespawnOnDeath, ActorFlag::RandomRespawnLocation},
 					.faction = Faction::PlayerEnemy,
-					.base_movement = 0.0014f,
-					.base_damage = 1.0f,
-					.max_health = 0.001,
-					.current_health = 0.001,
+					.stats =
+					{
+						.base_movement_speed = 0.0014f,
+						.base_damage = 1.0f,
+						.max_health = 0.001f,
+						.current_health = 0.001f
+					},
 					.skin = ActorSkin::Nightmare,
 					.actions = {ActorAction::AnimationPause},
 					.animation = game::play_animation(AnimationID::Nightmare_Spawn)
@@ -162,12 +174,12 @@ namespace game
 
 	bool Actor::dead() const
 	{
-		return !this->flags.contains(ActorFlag::Invincible) && this->current_health <= 0.0f;
+		return !this->flags.contains(ActorFlag::Invincible) && this->stats.current_health <= 0.0f;
 	}
 
 	void Actor::dbgui()
 	{
-		ImGui::Text("Health: %.2f/%f (dead: %s)", this->current_health, this->max_health, this->dead() ? "true" : "false");
+		ImGui::Text("Health: %.2f/%f (dead: %s)", this->stats.current_health, this->stats.max_health, this->dead() ? "true" : "false");
 		ImGui::Text("Invincible: %s", this->flags.contains(ActorFlag::Invincible) ? "true" : "false");
 		ImGui::SameLine();
 		if(ImGui::Button("Toggle Invincible"))
@@ -194,11 +206,11 @@ namespace game
 				this->flags |= ActorFlag::MouseControlled;
 			}
 		}
-		ImGui::Text("Base Movement Speed: %.5f", this->base_movement);
+		ImGui::Text("Base Movement Speed: %.5f", this->stats.base_movement_speed);
 		ImGui::Text("Entity Action Count: %zu", this->entity.size());
 		if(ImGui::Button("Kill"))
 		{
-			this->current_health = 0;
+			this->stats.current_health = 0;
 		}
 	}
 
@@ -209,10 +221,10 @@ namespace game
 		{
 			return;
 		}
-		victim.current_health -= this->base_damage;
+		victim.stats.current_health -= this->stats.base_damage;
 		if(this->flags.contains(ActorFlag::SelfHarm))
 		{
-			this->current_health -= this->base_damage;
+			this->stats.current_health -= this->stats.base_damage;
 		}
 	}
 
@@ -221,7 +233,7 @@ namespace game
 		bool should_spawn_randomly = this->flags.contains(ActorFlag::RandomRespawnLocation);
 		bool should_spawn_on_player = this->flags.contains(ActorFlag::RespawnOnPlayer);
 		*this = game::create_actor(this->type);
-		this->current_health = this->max_health;
+		this->stats.current_health = this->stats.max_health;
 		if(should_spawn_randomly)
 		{
 			this->actions |= ActorAction::RandomTeleport;

@@ -3,6 +3,7 @@
 #include "animation.hpp"
 #include "faction.hpp"
 #include "action.hpp"
+#include "stats.hpp"
 #include "tz/core/containers/enum_field.hpp"
 
 namespace game
@@ -107,10 +108,6 @@ namespace game
 		/// An uninteractable actor which periodically spawns evil players.
 		EvilPlayer_TestSpawner
 	};
-	
-	constexpr float default_base_movement = 0.0f;
-	constexpr float default_base_damage = 0.0083f;
-	constexpr float default_max_health = 10;
 
 	struct Actor
 	{
@@ -119,14 +116,8 @@ namespace game
 		ActorFlags flags = {};
 		/// Describes the allegiances of the actor.
 		Faction faction = Faction::Default;
-		/// Base movement speed of the actor.
-		float base_movement = default_base_movement;
-		/// Base damage dealt to enemies every fixed update.
-		float base_damage = default_base_damage;
-		/// Maximum health of the actor.
-		float max_health = default_max_health;
-		/// Current health of the actor.
-		float current_health = default_max_health;
+		/// Current stats of the actor.
+		Stats stats = {};
 		/// Describes appearance of the actor.
 		ActorSkin skin = {};
 		/// Describes what the actor is upto for this fixed-update.

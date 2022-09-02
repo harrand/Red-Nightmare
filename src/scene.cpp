@@ -40,14 +40,14 @@ namespace game
 			{
 				for(auto& actor : this->actors)
 				{
-					actor.current_health = 0;
+					actor.stats.current_health = 0;
 				}
 			}
 			if(ImGui::Button("Resurrect Everyone"))
 			{
 				for(auto& actor : this->actors)
 				{
-					actor.current_health = actor.max_health;
+					actor.stats.current_health = actor.stats.max_health;
 				}
 			}
 			if(ImGui::Button("Respawn Everyone"))
@@ -130,7 +130,7 @@ namespace game
 		{
 			if(actor.flags.contains(ActorFlag::DieIfOOB))
 			{
-				actor.current_health = 0;
+				actor.stats.current_health = 0;
 			}
 			if(actor.flags.contains(ActorFlag::RespawnIfOOB))
 			{
@@ -219,7 +219,7 @@ namespace game
 		if(actor.entity.has<ActionID::Launch>())
 		{
 			auto action = actor.entity.get<ActionID::Launch>();
-			const float speed = actor.base_movement * action->data().speed_multiplier;
+			const float speed = actor.stats.base_movement_speed * action->data().speed_multiplier;
 			quad.position += action->data().direction.normalised() * speed;
 		}
 		if(actor.entity.has<ActionID::Teleport>())
@@ -321,7 +321,7 @@ namespace game
 
 				if(actor.flags.contains(ActorFlag::DieAtRest))
 				{
-					actor.current_health = 0;
+					actor.stats.current_health = 0;
 				}
 				if(actor.actions.contains(ActorAction::FollowMouse))
 				{
@@ -344,7 +344,7 @@ namespace game
 			}
 		}
 		// We now know for certain whether the actor wants to move or not. Now we can finally carry out the movement.
-		float sp = actor.base_movement;
+		float sp = actor.stats.base_movement_speed;
 		if(actor.actions.contains(ActorAction::MoveLeft))
 		{
 			quad.position[0] -= sp;
@@ -397,7 +397,7 @@ namespace game
 					// Actor is touching a player.
 					if(actor.flags.contains(ActorFlag::DeadResurrectOnPlayerTouch))
 					{
-						actor.current_health = actor.max_health;
+						actor.stats.current_health = actor.stats.max_health;
 					}
 					if(actor.flags.contains(ActorFlag::DeadRespawnOnPlayerTouch))
 					{
