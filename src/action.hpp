@@ -13,7 +13,7 @@ namespace game
 		/**
 		 * Move to the mouse cursor's location.
 		 * - Always moves at base movement speed.
-		 * - Completes when the actor arrives at the location.
+		 * - Completes instantly. Spawns a GotoTarget action in its stead.
 		 */
 		GotoMouse,
 		/**
