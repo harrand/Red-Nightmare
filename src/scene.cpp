@@ -144,11 +144,17 @@ namespace game
 			this->qrenderer.elements().back().position = quad.position;
 		}
 		// If actor wants to teleport to a random location, do it now.
-		if(actor.actions.contains(ActorAction::RandomTeleport))
+		if(actor.entity.has<ActionID::RandomTeleport>())
 		{
-			std::uniform_real_distribution<float> dist{-1.0f, 1.0f};
-			quad.position[0] = dist(this->rng);
-			quad.position[1] = dist(this->rng);
+			auto action = actor.entity.get<ActionID::RandomTeleport>();
+			auto bound_pair = this->get_world_boundaries();
+			std::uniform_real_distribution<float> distx{bound_pair.first[0], bound_pair.second[0]};
+			std::uniform_real_distribution<float> disty{bound_pair.first[1], bound_pair.second[1]};
+			actor.entity.add<ActionID::Teleport>
+			({
+				.position = {distx(this->rng), disty(this->rng)}
+			});
+			action->set_is_complete(true);
 		}
 
 		if(actor.flags.contains(ActorFlag::InvisibleWhileDead))

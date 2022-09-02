@@ -251,7 +251,7 @@ namespace game
 		this->base_stats.current_health = this->get_current_stats().max_health;
 		if(should_spawn_randomly)
 		{
-			this->actions |= ActorAction::RandomTeleport;
+			this->entity.add<ActionID::RandomTeleport>();
 		}
 		else if(should_spawn_on_player)
 		{

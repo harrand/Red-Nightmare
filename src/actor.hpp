@@ -77,8 +77,6 @@ namespace game
 		FollowMouse,
 		/// Actor can't do any action until its current animation finishes.
 		AnimationPause,
-		/// Actor should teleport to a random location in the world.
-		RandomTeleport,
 	};
 	using ActorActions = tz::EnumField<ActorAction>;
 

@@ -36,6 +36,8 @@ namespace game
 		Launch,
 		/// Teleport to the player. If there are multiple players, the player with the lowest actor-id is chosen.
 		TeleportToPlayer,
+		/// Teleport to a random location in the current level. Respects scene boundaries.
+		RandomTeleport,
 		/// Teleport to the target location.
 		Teleport,
 		/// Flip the actor's sprite horizontally.
