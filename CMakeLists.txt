@@ -22,6 +22,7 @@ add_app(
 		src/images.hpp
 		src/scene.cpp
 		src/scene.hpp
+		src/stats.cpp
 		src/stats.hpp
 		src/quad_renderer.cpp
 		src/quad_renderer.hpp

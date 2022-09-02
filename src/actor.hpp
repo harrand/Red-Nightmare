@@ -117,7 +117,7 @@ namespace game
 		/// Describes the allegiances of the actor.
 		Faction faction = Faction::Default;
 		/// Current stats of the actor.
-		Stats stats = {};
+		Stats base_stats = {};
 		/// Describes appearance of the actor.
 		ActorSkin skin = {};
 		/// Describes what the actor is upto for this fixed-update.
@@ -126,12 +126,15 @@ namespace game
 		ActionEntity entity = {};
 		/// The animation currently playing on the actor.
 		Animation animation = play_animation(AnimationID::Missing);
+		/// All buffs to stats currently applied on the actor.
+		StatBuffs buffs = {};
 
 		void update();
 		bool dead() const;
 		void dbgui();
 		void damage(Actor& victim);
 		void respawn();
+		Stats get_current_stats() const;
 
 		bool is_ally_of(const Actor& actor) const;
 		bool is_enemy_of(const Actor& actor) const;

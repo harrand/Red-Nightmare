@@ -15,9 +15,9 @@ namespace game
 				{
 					.type = ActorType::PlayerClassic,
 					.flags = {ActorFlag::Player, ActorFlag::KeyboardControlled},
-					.stats =
+					.base_stats =
 					{
-						.base_movement_speed = 0.001f
+						.movement_speed = 0.001f
 					},
 					.skin = ActorSkin::PlayerClassic,
 					.animation = game::play_animation(AnimationID::PlayerClassic_Idle)
@@ -29,9 +29,9 @@ namespace game
 					.type = ActorType::PlayerClassic_TestEvil,
 					.flags = {ActorFlag::Aggressive},
 					.faction = Faction::PlayerEnemy,
-					.stats =
+					.base_stats =
 					{
-						.base_movement_speed = 0.0005f,
+						.movement_speed = 0.0005f,
 						.max_health = 0.01f,
 						.current_health = 0.01f
 					},
@@ -45,10 +45,10 @@ namespace game
 					.type = ActorType::PlayerClassic_Orb,
 					.flags = {ActorFlag::HazardousToEnemies, ActorFlag::ClickToLaunch, ActorFlag::RespawnOnPlayer, ActorFlag::DieIfOOB, ActorFlag::RespawnOnClick, ActorFlag::SelfHarm, ActorFlag::InvisibleWhileDead},
 					.faction = Faction::PlayerFriend,
-					.stats =
+					.base_stats =
 					{
-						.base_movement_speed = 0.001f,
-						.base_damage = default_base_damage * 2.0f,
+						.movement_speed = 0.001f,
+						.damage = default_base_damage * 2.0f,
 						.max_health = 0.0001f,
 						.current_health = 0.0f
 					},
@@ -62,10 +62,10 @@ namespace game
 					.type = ActorType::Nightmare,
 					.flags = {ActorFlag::Aggressive, ActorFlag::SelfHarm, ActorFlag::RespawnOnDeath, ActorFlag::RandomRespawnLocation},
 					.faction = Faction::PlayerEnemy,
-					.stats =
+					.base_stats =
 					{
-						.base_movement_speed = 0.0014f,
-						.base_damage = 1.0f,
+						.movement_speed = 0.0014f,
+						.damage = 1.0f,
 						.max_health = 0.001f,
 						.current_health = 0.001f
 					},
@@ -174,12 +174,27 @@ namespace game
 
 	bool Actor::dead() const
 	{
-		return !this->flags.contains(ActorFlag::Invincible) && this->stats.current_health <= 0.0f;
+		return !this->flags.contains(ActorFlag::Invincible) && this->base_stats.current_health <= 0.0f;
 	}
 
 	void Actor::dbgui()
 	{
-		ImGui::Text("Health: %.2f/%f (dead: %s)", this->stats.current_health, this->stats.max_health, this->dead() ? "true" : "false");
+		ImGui::Text("Health: %.2f/%f (dead: %s)", this->base_stats.current_health, this->get_current_stats().max_health, this->dead() ? "true" : "false");
+		if(ImGui::CollapsingHeader("Current Stats"))
+		{
+			this->get_current_stats().dbgui();
+			if(ImGui::CollapsingHeader("Debug Buffs:"))
+			{
+				if(ImGui::Button("Berserk"))
+				{
+					this->buffs.add(game::get_buff(BuffID::Berserk));
+				}
+				if(ImGui::Button("Sprint"))
+				{
+					this->buffs.add(game::get_buff(BuffID::Sprint));
+				}
+			}
+		}
 		ImGui::Text("Invincible: %s", this->flags.contains(ActorFlag::Invincible) ? "true" : "false");
 		ImGui::SameLine();
 		if(ImGui::Button("Toggle Invincible"))
@@ -206,11 +221,11 @@ namespace game
 				this->flags |= ActorFlag::MouseControlled;
 			}
 		}
-		ImGui::Text("Base Movement Speed: %.5f", this->stats.base_movement_speed);
+		ImGui::Text("Movement Speed: %.5f", this->get_current_stats().movement_speed);
 		ImGui::Text("Entity Action Count: %zu", this->entity.size());
 		if(ImGui::Button("Kill"))
 		{
-			this->stats.current_health = 0;
+			this->base_stats.current_health = 0;
 		}
 	}
 
@@ -221,10 +236,10 @@ namespace game
 		{
 			return;
 		}
-		victim.stats.current_health -= this->stats.base_damage;
+		victim.base_stats.current_health -= this->get_current_stats().damage;
 		if(this->flags.contains(ActorFlag::SelfHarm))
 		{
-			this->stats.current_health -= this->stats.base_damage;
+			this->base_stats.current_health -= this->get_current_stats().damage;
 		}
 	}
 
@@ -233,7 +248,7 @@ namespace game
 		bool should_spawn_randomly = this->flags.contains(ActorFlag::RandomRespawnLocation);
 		bool should_spawn_on_player = this->flags.contains(ActorFlag::RespawnOnPlayer);
 		*this = game::create_actor(this->type);
-		this->stats.current_health = this->stats.max_health;
+		this->base_stats.current_health = this->get_current_stats().max_health;
 		if(should_spawn_randomly)
 		{
 			this->actions |= ActorAction::RandomTeleport;
@@ -242,6 +257,23 @@ namespace game
 		{
 			this->entity.add<ActionID::TeleportToPlayer>();
 		}
+	}
+
+	Stats Actor::get_current_stats() const
+	{
+		Stats result = this->base_stats;
+		for(const StatBuff& buff : this->buffs)
+		{
+			result.movement_speed += buff.add_speed_boost;
+			result.movement_speed *= buff.multiply_speed_boost;
+			result.damage += buff.add_damage;
+			result.damage *= buff.multiply_damage;
+			result.defense += buff.add_defense;
+			result.defense *= buff.multiply_defense;
+			result.max_health += buff.add_health;
+			result.max_health *= buff.multiply_health;
+		}
+		return result;
 	}
 
 	bool Actor::is_ally_of(const Actor& actor) const

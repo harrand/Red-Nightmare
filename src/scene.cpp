@@ -40,14 +40,14 @@ namespace game
 			{
 				for(auto& actor : this->actors)
 				{
-					actor.stats.current_health = 0;
+					actor.base_stats.current_health = 0;
 				}
 			}
 			if(ImGui::Button("Resurrect Everyone"))
 			{
 				for(auto& actor : this->actors)
 				{
-					actor.stats.current_health = actor.stats.max_health;
+					actor.base_stats.current_health = actor.get_current_stats().max_health;
 				}
 			}
 			if(ImGui::Button("Respawn Everyone"))
@@ -62,25 +62,24 @@ namespace game
 				this->clear();
 			}
 		}
-		if(ImGui::Button("Debug Add Player"))
+		if(ImGui::CollapsingHeader("Debug Spawning"))
 		{
-			this->add(ActorType::PlayerClassic);
-		}
-		if(ImGui::Button("Debug Add Evil Player"))
-		{
-			this->add(ActorType::PlayerClassic_TestEvil);
-		}
-		if(ImGui::Button("Debug Add Nightmare Boss"))
-		{
-			this->add(ActorType::Nightmare);
-		}
-		if(ImGui::Button("Debug Add Evil Player Spawner"))
-		{
-			this->add(ActorType::EvilPlayer_TestSpawner);
-		}
-		if(this->size() > 0 && ImGui::Button("Pop Back"))
-		{
-			this->pop();
+			if(ImGui::Button("Debug Add Player"))
+			{
+				this->add(ActorType::PlayerClassic);
+			}
+			if(ImGui::Button("Debug Add Evil Player"))
+			{
+				this->add(ActorType::PlayerClassic_TestEvil);
+			}
+			if(ImGui::Button("Debug Add Nightmare Boss"))
+			{
+				this->add(ActorType::Nightmare);
+			}
+			if(ImGui::Button("Debug Add Evil Player Spawner"))
+			{
+				this->add(ActorType::EvilPlayer_TestSpawner);
+			}
 		}
 		if(this->size() > 0 && ImGui::CollapsingHeader("Actors"))
 		{
@@ -130,7 +129,7 @@ namespace game
 		{
 			if(actor.flags.contains(ActorFlag::DieIfOOB))
 			{
-				actor.stats.current_health = 0;
+				actor.base_stats.current_health = 0;
 			}
 			if(actor.flags.contains(ActorFlag::RespawnIfOOB))
 			{
@@ -219,7 +218,7 @@ namespace game
 		if(actor.entity.has<ActionID::Launch>())
 		{
 			auto action = actor.entity.get<ActionID::Launch>();
-			const float speed = actor.stats.base_movement_speed * action->data().speed_multiplier;
+			const float speed = actor.get_current_stats().movement_speed * action->data().speed_multiplier;
 			quad.position += action->data().direction.normalised() * speed;
 		}
 		if(actor.entity.has<ActionID::Teleport>())
@@ -321,7 +320,7 @@ namespace game
 
 				if(actor.flags.contains(ActorFlag::DieAtRest))
 				{
-					actor.stats.current_health = 0;
+					actor.base_stats.current_health = 0;
 				}
 				if(actor.actions.contains(ActorAction::FollowMouse))
 				{
@@ -344,7 +343,7 @@ namespace game
 			}
 		}
 		// We now know for certain whether the actor wants to move or not. Now we can finally carry out the movement.
-		float sp = actor.stats.base_movement_speed;
+		float sp = actor.get_current_stats().movement_speed;
 		if(actor.actions.contains(ActorAction::MoveLeft))
 		{
 			quad.position[0] -= sp;
@@ -397,7 +396,7 @@ namespace game
 					// Actor is touching a player.
 					if(actor.flags.contains(ActorFlag::DeadResurrectOnPlayerTouch))
 					{
-						actor.stats.current_health = actor.stats.max_health;
+						actor.base_stats.current_health = actor.get_current_stats().max_health;
 					}
 					if(actor.flags.contains(ActorFlag::DeadRespawnOnPlayerTouch))
 					{
