@@ -56,6 +56,19 @@ namespace game
 					.animation = game::play_animation(AnimationID::PlayerClassic_DefaultFireball_Idle)
 				};
 			break;
+			case ActorType::FireSmoke:
+				return
+				{
+					.type = ActorType::FireSmoke,
+					.flags = {ActorFlag::Rot, ActorFlag::BlockingAnimations, ActorFlag::InvisibleWhileDead},
+					.base_stats =
+					{
+						.max_health = 0.1f,
+						.current_health = 0.01f
+					},
+					.skin = ActorSkin::FireSmoke
+				};
+			break;
 			case ActorType::Nightmare:
 				return
 				{
@@ -70,7 +83,6 @@ namespace game
 						.current_health = 0.001f
 					},
 					.skin = ActorSkin::Nightmare,
-					.animation = game::play_animation(AnimationID::Nightmare_Spawn)
 				};
 			break;
 			case ActorType::EvilPlayer_TestSpawner:
@@ -88,6 +100,7 @@ namespace game
 	void Actor::update()
 	{
 		this->entity.update();
+		this->evaluate_animation();
 		if(this->flags.contains(ActorFlag::BlockingAnimations))
 		{
 			if(!this->animation.get_info().loop && !this->animation.complete())
@@ -158,7 +171,6 @@ namespace game
 				}
 			}
 		}
-		this->evaluate_animation();
 	}
 
 	bool Actor::dead() const
@@ -317,6 +329,9 @@ namespace game
 		{
 			case ActorSkin::PlayerClassic_DefaultFireball:
 				ending_animation = AnimationID::PlayerClassic_DefaultFireball_Idle;
+			break;
+			case ActorSkin::FireSmoke:
+				ending_animation = AnimationID::PlayerClassic_FireSmoke;
 			break;
 			case ActorSkin::PlayerClassic:
 				if(this->motion.contains(ActorMotion::MoveLeft))

@@ -39,6 +39,7 @@ namespace game
 		PlayerClassic_MoveUp,
 		PlayerClassic_MoveSide,
 		PlayerClassic_DefaultFireball_Idle,
+		PlayerClassic_FireSmoke,
 		Nightmare_Spawn,
 		Nightmare_Death,
 		Nightmare_Idle,

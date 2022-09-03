@@ -67,6 +67,7 @@ namespace game
 			if(ImGui::Button("Debug Add Player"))
 			{
 				this->add(ActorType::PlayerClassic);
+				this->add(ActorType::PlayerClassic_Orb);
 			}
 			if(ImGui::Button("Debug Add Evil Player"))
 			{
@@ -360,6 +361,13 @@ namespace game
 						if(should_hurt && !actor.dead() && !victim.dead())
 						{
 							actor.damage(victim);
+							tz_report("boom");
+							// TODO: Data-drive this.
+							if(actor.type == ActorType::PlayerClassic_Orb)
+							{
+								this->add(ActorType::FireSmoke);
+								this->qrenderer.elements().back().position = quad.position;
+							}
 						}
 					}
 				}

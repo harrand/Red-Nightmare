@@ -155,6 +155,21 @@ namespace game
 			.fps = 1,
 			.loop = true
 		},
+		AnimationInfo /*PlayerClassic_FireSmoke*/
+		{
+			.frames =
+			{
+				TextureID::PlayerClassic_Default_Fireball_Particles_0,
+				TextureID::PlayerClassic_Default_Fireball_Particles_1,
+				TextureID::PlayerClassic_Default_Fireball_Particles_2,
+				TextureID::PlayerClassic_Default_Fireball_Particles_3,
+				TextureID::PlayerClassic_Default_Fireball_Particles_4,
+				TextureID::PlayerClassic_Default_Fireball_Particles_5,
+				TextureID::PlayerClassic_Default_Fireball_Particles_6,
+			},
+			.fps = 9,
+			.loop = false
+		},
 		AnimationInfo /*Nightmare_Spawn*/
 		{
 			.frames =

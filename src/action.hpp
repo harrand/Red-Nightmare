@@ -7,6 +7,9 @@
 
 namespace game
 {
+	// Pre-declares.
+	enum class ActorType;
+
 	/// Actions cause an actor to do something until the action is considered complete. Some actions occur instantly, but many do not.
 	enum class ActionID
 	{
@@ -48,6 +51,8 @@ namespace game
 		HorizontalFlip,
 		/// Flip the actor's sprite vertically.
 		VerticalFlip,
+		/// Spawn an actor as soon as possible once.
+		SpawnActor
 	};
 
 	template<ActionID ID>
@@ -100,6 +105,12 @@ namespace game
 	struct ActionParams<ActionID::Teleport>
 	{
 		tz::Vec2 position;
+	};
+
+	template<>
+	struct ActionParams<ActionID::SpawnActor>
+	{
+		ActorType actor;
 	};
 
 	/// Represents something that can carry out actions.

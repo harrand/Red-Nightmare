@@ -72,6 +72,8 @@ namespace game
 	{
 		/// Actor looks like the player from the old incarnations of Red Nightmare.
 		PlayerClassic,
+		/// Actor looks like a fiery-smokey particle effect.
+		FireSmoke,
 		/// Actor looks like the Nightmare boss.
 		Nightmare,
 		/// Actor looks like Akhara's default fireball.
@@ -88,6 +90,8 @@ namespace game
 		PlayerClassic_TestEvil,
 		/// An actor which acts as Akhara's passive elemental orb.
 		PlayerClassic_Orb,
+		/// An actor which acts as a fiery particle effect. Dies by itself after a while.
+		FireSmoke,
 		/// A computer-controlled boss monster, called Nightmare that uses its own skin.
 		Nightmare,
 		/// An uninteractable actor which periodically spawns evil players.
