@@ -144,18 +144,6 @@ namespace game
 			this->qrenderer.elements().back().position = quad.position;
 		}
 		// If actor wants to teleport to a random location, do it now.
-		if(actor.entity.has<ActionID::RandomTeleport>())
-		{
-			auto action = actor.entity.get<ActionID::RandomTeleport>();
-			auto bound_pair = this->get_world_boundaries();
-			std::uniform_real_distribution<float> distx{bound_pair.first[0], bound_pair.second[0]};
-			std::uniform_real_distribution<float> disty{bound_pair.first[1], bound_pair.second[1]};
-			actor.entity.add<ActionID::Teleport>
-			({
-				.position = {distx(this->rng), disty(this->rng)}
-			});
-			action->set_is_complete(true);
-		}
 
 		if(actor.flags.contains(ActorFlag::InvisibleWhileDead))
 		{
@@ -175,6 +163,18 @@ namespace game
 		// Entity Actions
 
 		// Recursive Entity Actions (Can add other actions).
+		if(actor.entity.has<ActionID::RandomTeleport>())
+		{
+			auto action = actor.entity.get<ActionID::RandomTeleport>();
+			auto bound_pair = this->get_world_boundaries();
+			std::uniform_real_distribution<float> distx{bound_pair.first[0], bound_pair.second[0]};
+			std::uniform_real_distribution<float> disty{bound_pair.first[1], bound_pair.second[1]};
+			actor.entity.add<ActionID::Teleport>
+			({
+				.position = {distx(this->rng), disty(this->rng)}
+			});
+			action->set_is_complete(true);
+		}
 		if(actor.entity.has<ActionID::GotoMouse>())
 		{
 			actor.entity.add<ActionID::GotoTarget>
