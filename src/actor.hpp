@@ -68,16 +68,6 @@ namespace game
 	/// Describes internal actions being performed by an actor this fixed update.
 	enum class ActorAction
 	{
-		/// Meta-action. Normally every fixed-update we clear out all previous actions. If this action exists though, any actions related to motion (e.g MoveLeft) are preserved a single time.
-		SceneMessage_MaintainMotion,
-		/// Actor should move to the left using its base movement speed.
-		MoveLeft,
-		/// Actor should move to the right using its base movement speed.
-		MoveRight,
-		/// Actor should move downwards using its base movement speed.
-		MoveDown,
-		/// Actor should move upwards using its base movement speed.
-		MoveUp,
 		/// Actor can't do any action until its current animation finishes.
 		AnimationPause,
 	};

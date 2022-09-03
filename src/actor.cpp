@@ -409,24 +409,6 @@ namespace game
 		{
 			preserved_actions |= ActorAction::AnimationPause;
 		}
-		if(this->actions.contains(ActorAction::SceneMessage_MaintainMotion))
-		{
-			// Figure out which motion we were going in, and preserve it.
-			constexpr std::array<ActorAction, 4> move_actions
-			{
-				ActorAction::MoveLeft,
-				ActorAction::MoveRight,
-				ActorAction::MoveDown,
-				ActorAction::MoveUp
-			};
-			for(auto action : move_actions)
-			{
-				if(this->actions.contains(action))
-				{
-					preserved_actions |= action;
-				}
-			}
-		}
 		this->actions = {};
 		for(auto action : preserved_actions)
 		{
