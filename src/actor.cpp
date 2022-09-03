@@ -60,7 +60,7 @@ namespace game
 				return
 				{
 					.type = ActorType::Nightmare,
-					.flags = {ActorFlag::Aggressive, ActorFlag::SelfHarm, ActorFlag::RespawnOnDeath, ActorFlag::RandomRespawnLocation},
+					.flags = {ActorFlag::Aggressive, ActorFlag::SelfHarm, ActorFlag::RespawnOnDeath, ActorFlag::RandomRespawnLocation, ActorFlag::BlockingAnimations},
 					.faction = Faction::PlayerEnemy,
 					.base_stats =
 					{
@@ -70,7 +70,6 @@ namespace game
 						.current_health = 0.001f
 					},
 					.skin = ActorSkin::Nightmare,
-					.actions = {ActorAction::AnimationPause},
 					.animation = game::play_animation(AnimationID::Nightmare_Spawn)
 				};
 			break;
@@ -88,15 +87,13 @@ namespace game
 
 	void Actor::update()
 	{
-		this->refresh_actions();
 		this->entity.update();
-		if(this->actions.contains(ActorAction::AnimationPause))
+		if(this->flags.contains(ActorFlag::BlockingAnimations))
 		{
-			if(this->animation.complete())
+			if(!this->animation.get_info().loop && !this->animation.complete())
 			{
-				this->actions.remove(ActorAction::AnimationPause);
+				return;
 			}
-			return;
 		}
 		const bool is_left_clicked = tz::window().get_mouse_button_state().is_mouse_button_down(tz::MouseButton::Left) && !tz::dbgui::claims_mouse();
 		if(!this->dead())
@@ -392,27 +389,6 @@ namespace game
 		if(this->animation != anim)
 		{
 			this->animation = anim;
-		}
-	}
-
-	void Actor::assign_blocking_animation(AnimationID id)
-	{
-		tz_assert(!game::play_animation(id).get_info().loop, "Assigning a blocking animation to an actor is fine, but the animation is looped, meaning the actor will be blocked forever.");
-		this->assign_animation(id);
-		this->actions |= ActorAction::AnimationPause;
-	}
-
-	void Actor::refresh_actions()
-	{
-		ActorActions preserved_actions;
-		if(this->actions.contains(ActorAction::AnimationPause))
-		{
-			preserved_actions |= ActorAction::AnimationPause;
-		}
-		this->actions = {};
-		for(auto action : preserved_actions)
-		{
-			this->actions |= action;
 		}
 	}
 }

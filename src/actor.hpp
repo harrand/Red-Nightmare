@@ -52,7 +52,9 @@ namespace game
 		/// If the actor is dead, it is invisible.
 		InvisibleWhileDead,
 		/// If the actor dies, spawns a ghost.
-		Haunted
+		Haunted,
+		/// If the actor is doing a non-looping animation, they won't take any action until it is complete.
+		BlockingAnimations,
 	};
 	using ActorFlags = tz::EnumField<ActorFlag>;
 
@@ -64,14 +66,6 @@ namespace game
 		MoveDown
 	};
 	using ActorMotions = tz::EnumField<ActorMotion>;
-
-	/// Describes internal actions being performed by an actor this fixed update.
-	enum class ActorAction
-	{
-		/// Actor can't do any action until its current animation finishes.
-		AnimationPause,
-	};
-	using ActorActions = tz::EnumField<ActorAction>;
 
 	/// Describes the general appearance of the actor. Will be used to automatically select which animations will be suitable for use. This might be refactored into something better.
 	enum class ActorSkin
@@ -111,8 +105,7 @@ namespace game
 		Stats base_stats = {};
 		/// Describes appearance of the actor.
 		ActorSkin skin = {};
-		/// Describes what the actor is upto for this fixed-update.
-		ActorActions actions = {};
+		/// Describes the actors movements for this fixed-update.
 		ActorMotions motion = {};
 		// New actions implementation: Describes what the actor is upto for this fixed-update.
 		ActionEntity entity = {};
@@ -138,9 +131,6 @@ namespace game
 		void evaluate_animation();
 		/// Set the animation, but if we're already running that animation don't reset it.
 		void assign_animation(AnimationID id);
-		/// Assign animation, but block all actions until the animation completes.
-		void assign_blocking_animation(AnimationID id);
-		void refresh_actions();
 	};
 
 	Actor create_actor(ActorType type);
