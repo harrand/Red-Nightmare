@@ -124,22 +124,22 @@ namespace game
 			if(this->flags.contains(ActorFlag::KeyboardControlled))
 			{
 				const auto& kb = tz::window().get_keyboard_state();
-				bool should_move = false;
+				this->motion = {};
 				if(kb.is_key_down(tz::KeyCode::W))
 				{
-					this->actions |= ActorAction::MoveUp;
+					this->motion |= ActorMotion::MoveUp;
 				}
 				if(kb.is_key_down(tz::KeyCode::A))
 				{
-					this->actions |= ActorAction::MoveLeft;
+					this->motion |= ActorMotion::MoveLeft;
 				}
 				if(kb.is_key_down(tz::KeyCode::S))
 				{
-					this->actions |= ActorAction::MoveDown;
+					this->motion |= ActorMotion::MoveDown;
 				}
 				if(kb.is_key_down(tz::KeyCode::D))
 				{
-					this->actions |= ActorAction::MoveRight;
+					this->motion |= ActorMotion::MoveRight;
 				}
 			}
 		}
@@ -322,20 +322,20 @@ namespace game
 				ending_animation = AnimationID::PlayerClassic_DefaultFireball_Idle;
 			break;
 			case ActorSkin::PlayerClassic:
-				if(this->actions.contains(ActorAction::MoveLeft))
+				if(this->motion.contains(ActorMotion::MoveLeft))
 				{
 					ending_animation = AnimationID::PlayerClassic_MoveSide;
 				}
-				else if(this->actions.contains(ActorAction::MoveRight))
+				else if(this->motion.contains(ActorMotion::MoveRight))
 				{
 					ending_animation = AnimationID::PlayerClassic_MoveSide;
 					this->entity.add<ActionID::HorizontalFlip>();
 				}
-				else if(this->actions.contains(ActorAction::MoveUp))
+				else if(this->motion.contains(ActorMotion::MoveUp))
 				{
 					ending_animation = AnimationID::PlayerClassic_MoveUp;
 				}
-				else if(this->actions.contains(ActorAction::MoveDown))
+				else if(this->motion.contains(ActorMotion::MoveDown))
 				{
 					ending_animation = AnimationID::PlayerClassic_MoveDown;
 				}
@@ -349,20 +349,20 @@ namespace game
 				}
 			break;
 			case ActorSkin::Nightmare:
-				if(this->actions.contains(ActorAction::MoveLeft))
+				if(this->motion.contains(ActorMotion::MoveLeft))
 				{
 					ending_animation = AnimationID::Nightmare_MoveSide;
 				}
-				else if(this->actions.contains(ActorAction::MoveRight))
+				else if(this->motion.contains(ActorMotion::MoveRight))
 				{
 					ending_animation = AnimationID::Nightmare_MoveSide;
 					this->entity.add<ActionID::HorizontalFlip>();
 				}
-				else if(this->actions.contains(ActorAction::MoveUp))
+				else if(this->motion.contains(ActorMotion::MoveUp))
 				{
 					ending_animation = AnimationID::Nightmare_MoveUp;
 				}
-				else if(this->actions.contains(ActorAction::MoveDown))
+				else if(this->motion.contains(ActorMotion::MoveDown))
 				{
 					ending_animation = AnimationID::Nightmare_MoveDown;
 				}

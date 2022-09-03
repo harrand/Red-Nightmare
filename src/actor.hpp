@@ -56,6 +56,15 @@ namespace game
 	};
 	using ActorFlags = tz::EnumField<ActorFlag>;
 
+	enum class ActorMotion
+	{
+		MoveLeft,
+		MoveRight,
+		MoveUp,
+		MoveDown
+	};
+	using ActorMotions = tz::EnumField<ActorMotion>;
+
 	/// Describes internal actions being performed by an actor this fixed update.
 	enum class ActorAction
 	{
@@ -114,6 +123,7 @@ namespace game
 		ActorSkin skin = {};
 		/// Describes what the actor is upto for this fixed-update.
 		ActorActions actions = {};
+		ActorMotions motion = {};
 		// New actions implementation: Describes what the actor is upto for this fixed-update.
 		ActionEntity entity = {};
 		/// The animation currently playing on the actor.

@@ -267,23 +267,7 @@ namespace game
 		// It's chasing something, but we don't care about what it's chasing.
 		if(chase_target.has_value())
 		{
-			// We tell the actor to save its motion state in the next fixed-update, so it can decide on which animation to use based upon the direction we're making it move.
-			actor.actions |= ActorAction::SceneMessage_MaintainMotion;
-			{
-				// But because we've done that, we want to clear out the motion state ourselves now because we're about to decide which direction its going (if we dont do this it will end up going in all 4 directions and never moving anywhere)
-				constexpr std::array<ActorAction, 4> motion_actions
-				{
-					ActorAction::MoveLeft,
-					ActorAction::MoveRight,
-					ActorAction::MoveUp,
-					ActorAction::MoveDown
-				};
-				for(auto action : motion_actions)
-				{
-					actor.actions.remove(action);
-				}
-			}
-
+			actor.motion = {};
 			// Get the displacement between the actor and its chase target.
 			const tz::Vec2 target_pos = chase_target.value();
 			tz::Vec2 dist_to_target = target_pos - quad.position;
@@ -292,12 +276,12 @@ namespace game
 			if(dist_to_target[0] > touch_distance)
 			{
 				// We need to move right.
-				actor.actions |= ActorAction::MoveRight;
+				actor.motion |= ActorMotion::MoveRight;
 			}
 			else if(dist_to_target[0] < -touch_distance)
 			{
 				// We need to move left.
-				actor.actions |= ActorAction::MoveLeft;
+				actor.motion |= ActorMotion::MoveLeft;
 			}
 			else
 			{
@@ -307,12 +291,11 @@ namespace game
 			if(dist_to_target[1] > touch_distance)
 			{
 				// We need to move upwards.
-				actor.actions |= ActorAction::MoveUp;
+				actor.motion |= ActorMotion::MoveUp;
 			}
 			else if(dist_to_target[1] < -touch_distance)
 			{
-				// We need to move downwards.
-				actor.actions |= ActorAction::MoveDown;
+				actor.motion |= ActorMotion::MoveDown;
 			}
 			else
 			{
@@ -340,64 +323,67 @@ namespace game
 			}
 		}
 		// We now know for certain whether the actor wants to move or not. Now we can finally carry out the movement.
-		float sp = actor.get_current_stats().movement_speed;
-		if(actor.actions.contains(ActorAction::MoveLeft))
+		if(!actor.dead())
 		{
-			quad.position[0] -= sp;
-		}
-		if(actor.actions.contains(ActorAction::MoveRight))
-		{
-			quad.position[0] += sp;
-		}
-		if(actor.actions.contains(ActorAction::MoveUp))
-		{
-			quad.position[1] += sp;
-		}
-		if(actor.actions.contains(ActorAction::MoveDown))
-		{
-			quad.position[1] -= sp;
-		}
-
-		// Functionality for actors which are hazardous. They should attempt to damage anything that gets too close.
-		if(actor.flags.contains(ActorFlag::HazardousToAll) || actor.flags.contains(ActorFlag::HazardousToEnemies))
-		{
-			
-			for(std::size_t i = 0; i < this->size(); i++)
+			float sp = actor.get_current_stats().movement_speed;
+			if(actor.motion.contains(ActorMotion::MoveLeft))
 			{
-				if(i == id)
+				quad.position[0] -= sp;
+			}
+			if(actor.motion.contains(ActorMotion::MoveRight))
+			{
+				quad.position[0] += sp;
+			}
+			if(actor.motion.contains(ActorMotion::MoveUp))
+			{
+				quad.position[1] += sp;
+			}
+			if(actor.motion.contains(ActorMotion::MoveDown))
+			{
+				quad.position[1] -= sp;
+			}
+
+			// Functionality for actors which are hazardous. They should attempt to damage anything that gets too close.
+			if(actor.flags.contains(ActorFlag::HazardousToAll) || actor.flags.contains(ActorFlag::HazardousToEnemies))
+			{
+				
+				for(std::size_t i = 0; i < this->size(); i++)
 				{
-					continue;
-				}
-				if(this->actor_collision_query(id, i))
-				{
-					Actor& victim = this->actors[i];
-					bool should_hurt = actor.flags.contains(ActorFlag::HazardousToAll) || (actor.flags.contains(ActorFlag::HazardousToEnemies) && actor.is_enemy_of(victim));
-					if(should_hurt && !actor.dead() && !victim.dead())
+					if(i == id)
 					{
-						actor.damage(victim);
+						continue;
+					}
+					if(this->actor_collision_query(id, i))
+					{
+						Actor& victim = this->actors[i];
+						bool should_hurt = actor.flags.contains(ActorFlag::HazardousToAll) || (actor.flags.contains(ActorFlag::HazardousToEnemies) && actor.is_enemy_of(victim));
+						if(should_hurt && !actor.dead() && !victim.dead())
+						{
+							actor.damage(victim);
+						}
 					}
 				}
 			}
-		}
-		// Functionality for actors which collide with players.
-		if(actor.flags.contains(ActorFlag::DeadRespawnOnPlayerTouch) || actor.flags.contains(ActorFlag::DeadResurrectOnPlayerTouch))
-		{
-			for(std::size_t i = 0; i < this->size(); i++)
+			// Functionality for actors which collide with players.
+			if(actor.flags.contains(ActorFlag::DeadRespawnOnPlayerTouch) || actor.flags.contains(ActorFlag::DeadResurrectOnPlayerTouch))
 			{
-				if(i == id)
+				for(std::size_t i = 0; i < this->size(); i++)
 				{
-					continue;
-				}
-				if(this->actors[i].flags.contains(ActorFlag::Player) && this->actor_collision_query(id, i))
-				{
-					// Actor is touching a player.
-					if(actor.flags.contains(ActorFlag::DeadResurrectOnPlayerTouch))
+					if(i == id)
 					{
-						actor.base_stats.current_health = actor.get_current_stats().max_health;
+						continue;
 					}
-					if(actor.flags.contains(ActorFlag::DeadRespawnOnPlayerTouch))
+					if(this->actors[i].flags.contains(ActorFlag::Player) && this->actor_collision_query(id, i))
 					{
-						actor.respawn();
+						// Actor is touching a player.
+						if(actor.flags.contains(ActorFlag::DeadResurrectOnPlayerTouch))
+						{
+							actor.base_stats.current_health = actor.get_current_stats().max_health;
+						}
+						if(actor.flags.contains(ActorFlag::DeadRespawnOnPlayerTouch))
+						{
+							actor.respawn();
+						}
 					}
 				}
 			}
