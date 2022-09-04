@@ -48,7 +48,7 @@ namespace game
 					.base_stats =
 					{
 						.movement_speed = 0.001f,
-						.damage = default_base_damage * 2.0f,
+						.damage = default_base_damage / 2.0f,
 						.max_health = 0.0001f,
 						.current_health = 0.0f
 					},

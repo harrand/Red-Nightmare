@@ -45,7 +45,7 @@ namespace game
 		Berserk,
 		/// 70% more movement speed for 5 seconds.
 		Sprint,
-		/// 50% less movement speed for 5 seconds.
+		/// 70% less movement speed for 5 seconds.
 		Chill
 	};
 
