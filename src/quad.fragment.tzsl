@@ -2,6 +2,7 @@ shader(type = fragment);
 
 input(id = 0, flat) uint in_texture_id;
 input(id = 1) vec2 in_texcoord;
+input(id = 2) vec3 colour_offset;
 output(id = 0) vec4 frag_colour;
 
 resource(id = 1) const texture images[];
@@ -9,6 +10,7 @@ resource(id = 1) const texture images[];
 void main()
 {
 	frag_colour = texture(images[in_texture_id], in_texcoord);
+	frag_colour.xyz += colour_offset;
 	if(frag_colour.a < 0.9f)
 	{
 		discard;
