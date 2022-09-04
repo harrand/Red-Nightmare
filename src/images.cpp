@@ -28,6 +28,21 @@
 #include ImportedTextHeader(player_classic_up2, png)
 #include ImportedTextHeader(player_classic_up3, png)
 
+#include ImportedTextHeader(player_classic_lowpoly_down0, png)
+#include ImportedTextHeader(player_classic_lowpoly_down1, png)
+#include ImportedTextHeader(player_classic_lowpoly_down2, png)
+#include ImportedTextHeader(player_classic_lowpoly_down3, png)
+#include ImportedTextHeader(player_classic_lowpoly_idle0, png)
+#include ImportedTextHeader(player_classic_lowpoly_idle1, png)
+#include ImportedTextHeader(player_classic_lowpoly_side0, png)
+#include ImportedTextHeader(player_classic_lowpoly_side1, png)
+#include ImportedTextHeader(player_classic_lowpoly_side2, png)
+#include ImportedTextHeader(player_classic_lowpoly_side3, png)
+#include ImportedTextHeader(player_classic_lowpoly_up0, png)
+#include ImportedTextHeader(player_classic_lowpoly_up1, png)
+#include ImportedTextHeader(player_classic_lowpoly_up2, png)
+#include ImportedTextHeader(player_classic_lowpoly_up3, png)
+
 #include ImportedTextHeader(player_classic_default_fireball, png)
 #include ImportedTextHeader(player_classic_default_fireball_particles_0, png)
 #include ImportedTextHeader(player_classic_default_fireball_particles_1, png)
@@ -88,6 +103,21 @@ namespace game
 		ImportedTextData(player_classic_up1, png),
 		ImportedTextData(player_classic_up2, png),
 		ImportedTextData(player_classic_up3, png),
+
+		ImportedTextData(player_classic_lowpoly_down0, png),
+		ImportedTextData(player_classic_lowpoly_down1, png),
+		ImportedTextData(player_classic_lowpoly_down2, png),
+		ImportedTextData(player_classic_lowpoly_down3, png),
+		ImportedTextData(player_classic_lowpoly_idle0, png),
+		ImportedTextData(player_classic_lowpoly_idle1, png),
+		ImportedTextData(player_classic_lowpoly_side0, png),
+		ImportedTextData(player_classic_lowpoly_side1, png),
+		ImportedTextData(player_classic_lowpoly_side2, png),
+		ImportedTextData(player_classic_lowpoly_side3, png),
+		ImportedTextData(player_classic_lowpoly_up0, png),
+		ImportedTextData(player_classic_lowpoly_up1, png),
+		ImportedTextData(player_classic_lowpoly_up2, png),
+		ImportedTextData(player_classic_lowpoly_up3, png),
 
 		ImportedTextData(player_classic_default_fireball, png),
 		ImportedTextData(player_classic_default_fireball_particles_0, png),

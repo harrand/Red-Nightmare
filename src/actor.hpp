@@ -74,6 +74,8 @@ namespace game
 	{
 		/// Actor looks like the player from the old incarnations of Red Nightmare.
 		PlayerClassic,
+		/// Actor looks like the redesigned Akhara Ceitus low-resolution sprites.
+		PlayerClassic_LowPoly,
 		/// Actor looks like a fiery-smokey particle effect.
 		FireSmoke,
 		/// Actor looks like the Nightmare boss.

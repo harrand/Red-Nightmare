@@ -146,6 +146,52 @@ namespace game
 			.fps = 6,
 			.loop = true
 		},
+		AnimationInfo /*PlayerClassic_LowPoly_MoveDown*/
+		{
+			.frames = 
+			{
+				TextureID::PlayerClassic_LowPoly_Down0,
+				TextureID::PlayerClassic_LowPoly_Down1,
+				TextureID::PlayerClassic_LowPoly_Down2,
+				TextureID::PlayerClassic_LowPoly_Down3
+			},
+			.fps = 6,
+			.loop = true
+		},
+		AnimationInfo /*PlayerClassic_LowPoly_Idle*/
+		{
+			.frames = 
+			{
+				TextureID::PlayerClassic_LowPoly_Idle0,
+				TextureID::PlayerClassic_LowPoly_Idle1
+			},
+			.fps = 1,
+			.loop = true
+		},
+		AnimationInfo /*PlayerClassic_LowPoly_MoveSide*/
+		{
+			.frames = 
+			{
+				TextureID::PlayerClassic_LowPoly_Side0,
+				TextureID::PlayerClassic_LowPoly_Side1,
+				TextureID::PlayerClassic_LowPoly_Side2,
+				TextureID::PlayerClassic_LowPoly_Side3
+			},
+			.fps = 6,
+			.loop = true
+		},
+		AnimationInfo /*PlayerClassic_LowPoly_MoveUp*/
+		{
+			.frames = 
+			{
+				TextureID::PlayerClassic_LowPoly_Up0,
+				TextureID::PlayerClassic_LowPoly_Up1,
+				TextureID::PlayerClassic_LowPoly_Up2,
+				TextureID::PlayerClassic_LowPoly_Up3
+			},
+			.fps = 6,
+			.loop = true
+		},
 		AnimationInfo /*PlayerClassic_DefaultFireball_Idle*/
 		{
 			.frames =

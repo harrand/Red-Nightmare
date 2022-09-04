@@ -19,7 +19,7 @@ namespace game
 					{
 						.movement_speed = 0.001f
 					},
-					.skin = ActorSkin::PlayerClassic,
+					.skin = ActorSkin::PlayerClassic_LowPoly,
 					.animation = game::play_animation(AnimationID::PlayerClassic_Idle)
 				};
 			break;
@@ -361,6 +361,34 @@ namespace game
 				}
 				if(this->dead())
 				{
+					ending_animation = AnimationID::PlayerClassic_Death;
+				}
+			break;
+			case ActorSkin::PlayerClassic_LowPoly:
+				if(this->motion.contains(ActorMotion::MoveLeft))
+				{
+					ending_animation = AnimationID::PlayerClassic_LowPoly_MoveSide;
+				}
+				else if(this->motion.contains(ActorMotion::MoveRight))
+				{
+					ending_animation = AnimationID::PlayerClassic_LowPoly_MoveSide;
+					this->entity.add<ActionID::HorizontalFlip>();
+				}
+				else if(this->motion.contains(ActorMotion::MoveUp))
+				{
+					ending_animation = AnimationID::PlayerClassic_LowPoly_MoveUp;
+				}
+				else if(this->motion.contains(ActorMotion::MoveDown))
+				{
+					ending_animation = AnimationID::PlayerClassic_LowPoly_MoveDown;
+				}
+				else
+				{
+					ending_animation = AnimationID::PlayerClassic_LowPoly_Idle;
+				}
+				if(this->dead())
+				{
+					// TODO: Death animation for LowPoly
 					ending_animation = AnimationID::PlayerClassic_Death;
 				}
 			break;

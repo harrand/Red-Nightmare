@@ -68,6 +68,21 @@ add_text(
 		res/images/player/akhara/skins/classic/player_classic_up2.png
 		res/images/player/akhara/skins/classic/player_classic_up3.png
 
+		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_down0.png
+		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_down1.png
+		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_down2.png
+		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_down3.png
+		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_idle0.png
+		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_idle1.png
+		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_side0.png
+		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_side1.png
+		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_side2.png
+		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_side3.png
+		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_up0.png
+		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_up1.png
+		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_up2.png
+		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_up3.png
+
 		res/images/player/akhara/ability/player_classic_default_fireball.png
 		res/images/player/akhara/ability/player_classic_default_fireball_particles_0.png
 		res/images/player/akhara/ability/player_classic_default_fireball_particles_1.png
