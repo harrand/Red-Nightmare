@@ -5,7 +5,8 @@ import "statuseffect"
 vec3 status_effect_colours[StatusEffect_Count] = vec3[](
 	vec3(0.5f, 0.5f, 0.5f),
 	vec3(0.3f, 0.3f, 1.0f),
-	vec3(0.3f, 1.0f, 0.3f)
+	vec3(0.3f, 1.0f, 0.3f),
+	vec3(1.0f, 0.3f, 0.3f)
 );
 
 vec2 quad_positions[6] = vec2[](

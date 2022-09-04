@@ -165,7 +165,7 @@ namespace game
 				TextureID::PlayerClassic_LowPoly_Idle0,
 				TextureID::PlayerClassic_LowPoly_Idle1
 			},
-			.fps = 1,
+			.fps = 2,
 			.loop = true
 		},
 		AnimationInfo /*PlayerClassic_LowPoly_MoveSide*/

@@ -450,6 +450,10 @@ namespace game
 		const Actor& actor = this->actors[id];
 		QuadRenderer::ElementData& quad = this->qrenderer.elements()[id];
 		int status_effect = StatusEffect_None;
+		if(actor.buffs.contains(BuffID::Berserk))
+		{
+			status_effect = StatusEffect_Enrage;
+		}
 		if(actor.buffs.contains(BuffID::Chill))
 		{
 			status_effect = StatusEffect_Cold;
