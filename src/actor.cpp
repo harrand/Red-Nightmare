@@ -194,6 +194,10 @@ namespace game
 				{
 					this->buffs.add(BuffID::Sprint);
 				}
+				if(ImGui::Button("Chill"))
+				{
+					this->buffs.add(BuffID::Chill);
+				}
 			}
 		}
 		ImGui::Text("Invincible: %s", this->flags.contains(ActorFlag::Invincible) ? "true" : "false");

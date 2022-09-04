@@ -3,6 +3,7 @@
 #include "tz/gl/renderer.hpp"
 #include "tz/gl/resource.hpp"
 #include "images.hpp"
+#include "statuseffect.tzsl"
 
 namespace game
 {
@@ -20,6 +21,8 @@ namespace game
 			tz::Vec2 scale = {0.2f, 0.2f};
 			float rotation = 0.0f;
 			TextureID texture_id = static_cast<TextureID>(0);
+			std::uint32_t status_effect_id = StatusEffect_None;
+			float pad0;
 		};
 
 		std::span<const ElementData> elements() const;

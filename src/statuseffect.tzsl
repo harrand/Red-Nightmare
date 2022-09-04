@@ -1,0 +1,4 @@
+const int StatusEffect_None = 0x00;
+const int StatusEffect_Cold = 0x01;
+const int StatusEffect_Poison = 0x02;
+const int StatusEffect_Count = 0x03;

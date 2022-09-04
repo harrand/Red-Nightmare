@@ -12,6 +12,18 @@ namespace game
 		ImGui::Text("Defense: %.1f", this->defense * global_multiplier);
 	}
 
+	bool StatBuff::operator==(const StatBuff& rhs) const
+	{
+		return this->multiply_speed_boost == rhs.multiply_speed_boost
+		    && this->add_speed_boost == rhs.add_speed_boost
+		    && this->multiply_damage == rhs.multiply_damage
+		    && this->add_damage == rhs.add_damage
+		    && this->multiply_defense == rhs.multiply_defense
+		    && this->add_defense == rhs.add_defense
+		    && this->multiply_health == rhs.multiply_health
+		    && this->add_health == rhs.add_health;
+	}
+
 	StatBuff get_buff(BuffID buff)
 	{
 		switch(buff)
@@ -29,6 +41,13 @@ namespace game
 					.time_remaining_millis = 5000.0f
 				};
 			break;
+			case BuffID::Chill:
+				return
+				{
+					.multiply_speed_boost = 0.5f,
+					.time_remaining_millis = 5000.0f
+				};
+			break;
 		}
 		return {};
 	}
@@ -41,6 +60,11 @@ namespace game
 	void StatBuffs::add(BuffID buff)
 	{
 		this->buffs.push_back(game::get_buff(buff));
+	}
+
+	bool StatBuffs::contains(BuffID buff) const
+	{
+		return std::find(this->buffs.begin(), this->buffs.end(), game::get_buff(buff)) != this->buffs.end();
 	}
 
 	std::span<const StatBuff> StatBuffs::elements() const

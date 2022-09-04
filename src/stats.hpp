@@ -32,6 +32,8 @@ namespace game
 		float multiply_health = 1.0f;
 		float add_health = 0.0f;
 
+		bool operator==(const StatBuff& rhs) const;
+
 		/// Default buff duration is 2 minutes.
 		float time_remaining_millis = std::numeric_limits<float>::max();
 		unsigned int stacks = 1;
@@ -42,7 +44,9 @@ namespace game
 		/// 1000% damage forever.
 		Berserk,
 		/// 70% more movement speed for 5 seconds.
-		Sprint
+		Sprint,
+		/// 50% less movement speed for 5 seconds.
+		Chill
 	};
 
 	StatBuff get_buff(BuffID buff);
@@ -53,6 +57,7 @@ namespace game
 		StatBuffs() = default;
 		void update();
 		void add(BuffID buff);
+		bool contains(BuffID buff) const;
 		std::span<const StatBuff> elements() const;
 		std::span<StatBuff> elements();
 	private:

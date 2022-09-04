@@ -29,6 +29,7 @@ namespace game
 		bool actor_collision_query(std::size_t actor_a, std::size_t actor_b) const;
 		bool is_in_bounds(std::size_t actor_id) const;
 		std::pair<tz::Vec2, tz::Vec2> get_world_boundaries() const;
+		void update_status_events(std::size_t id);
 		void garbage_collect(std::size_t id);
 
 		QuadRenderer qrenderer;

@@ -402,6 +402,7 @@ namespace game
 				}
 			}
 		}
+		this->update_status_events(id);
 		this->garbage_collect(id);
 	}
 
@@ -442,6 +443,18 @@ namespace game
 		{
 			tz::Vec2{-1.0f, -1.0f}, tz::Vec2{1.0f, 1.0f}
 		};
+	}
+
+	void Scene::update_status_events(std::size_t id)
+	{
+		const Actor& actor = this->actors[id];
+		QuadRenderer::ElementData& quad = this->qrenderer.elements()[id];
+		int status_effect = StatusEffect_None;
+		if(actor.buffs.contains(BuffID::Chill))
+		{
+			status_effect = StatusEffect_Cold;
+		}
+		quad.status_effect_id = status_effect;
 	}
 
 	void Scene::garbage_collect(std::size_t id)
