@@ -58,7 +58,7 @@ namespace game
 	void QuadRenderer::push()
 	{
 		tz_assert(this->quad_count < QuadRenderer::max_quad_count, "Ran out of quad storage in QuadRenderer.");
-		this->quad_count++;
+		this->elements()[this->quad_count++] = {};
 	}
 
 	void QuadRenderer::pop()
@@ -74,6 +74,13 @@ namespace game
 			elem = QuadRenderer::ElementData{};
 		}
 		this->quad_count = 0;
+	}
+
+	void QuadRenderer::erase(std::size_t id)
+	{
+		tz_assert(id < this->elements().size(), "Invalid Quad ID");
+		std::swap(this->elements()[id], this->elements().back());
+		this->pop();
 	}
 
 	tz::gl::Renderer QuadRenderer::make_renderer()

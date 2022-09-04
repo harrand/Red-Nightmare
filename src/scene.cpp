@@ -122,6 +122,13 @@ namespace game
 		this->actors.clear();
 	}
 
+	void Scene::erase(std::size_t id)
+	{
+		this->qrenderer.erase(id);
+		std::swap(this->actors[id], this->actors.back());
+		this->actors.pop_back();
+	}
+
 	void Scene::actor_post_update(std::size_t id)
 	{
 		Actor& actor = this->actors[id];
@@ -396,6 +403,7 @@ namespace game
 				}
 			}
 		}
+		this->garbage_collect(id);
 	}
 
 	std::optional<std::size_t> Scene::find_first_player() const
@@ -435,5 +443,41 @@ namespace game
 		{
 			tz::Vec2{-1.0f, -1.0f}, tz::Vec2{1.0f, 1.0f}
 		};
+	}
+
+	void Scene::garbage_collect(std::size_t id)
+	{
+		// Erase means to swap with the last and then pop it back
+		const bool dead = this->actors[id].dead();
+		if(dead)
+		{
+			auto iter = this->despawn_timer.find(id);
+			if(iter != this->despawn_timer.end())
+			{
+				// It has an entry, see if its timed out.
+				if(iter->second.done() && !this->actors[id].flags.contains(ActorFlag::DoNotGarbageCollect))
+				{
+					// Timed out. we purge.
+					// Erase will swap us with the last element and then kill last element (i.e us).
+					// So if last element has a despawn timer aswell it must become id.
+					auto last_id = this->size() - 1;
+					if(this->despawn_timer.find(last_id) != this->despawn_timer.end())
+					{
+						iter->second = this->despawn_timer.at(last_id);
+						this->despawn_timer.erase(last_id);
+					}
+					this->erase(id);
+				}
+			}
+			else
+			{
+				using namespace tz::literals;
+				this->despawn_timer.emplace(id, 45_s);
+			}
+		}
+		else
+		{
+			this->despawn_timer.erase(id);
+		}
 	}
 }

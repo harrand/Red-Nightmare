@@ -28,6 +28,7 @@ namespace game
 		void push();
 		void pop();
 		void clear();
+		void erase(std::size_t elem);
 	private:
 		tz::gl::Renderer make_renderer();
 
