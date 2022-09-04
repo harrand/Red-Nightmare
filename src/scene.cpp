@@ -368,7 +368,6 @@ namespace game
 						if(should_hurt && !actor.dead() && !victim.dead())
 						{
 							actor.damage(victim);
-							tz_report("boom");
 							// TODO: Data-drive this.
 							if(actor.type == ActorType::PlayerClassic_Orb)
 							{
