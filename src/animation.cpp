@@ -216,6 +216,21 @@ namespace game
 			.fps = 9,
 			.loop = false
 		},
+		AnimationInfo /*PlayerClassic_FireExplosion*/
+		{
+			.frames =
+			{
+				TextureID::FireExplosion_0,
+				TextureID::FireExplosion_1,
+				TextureID::FireExplosion_2,
+				TextureID::FireExplosion_3,
+				TextureID::FireExplosion_4,
+				TextureID::FireExplosion_5,
+				TextureID::FireExplosion_6,
+			},
+			.fps = 11,
+			.loop = false
+		},
 		AnimationInfo /*Nightmare_Spawn*/
 		{
 			.frames =

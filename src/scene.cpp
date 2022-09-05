@@ -271,6 +271,17 @@ namespace game
 		{
 			quad.scale[1] = std::abs(quad.scale[1]);
 		}
+		if(actor.entity.has<ActionID::SpawnActor>())
+		{
+			auto action = actor.entity.get<ActionID::SpawnActor>();
+			this->add(action->data().actor);
+			if(action->data().inherit_faction)
+			{
+				this->actors.back().faction = actor.faction;
+			}
+			this->qrenderer.elements().back().position = quad.position;
+			action->set_is_complete(true);
+		}
 
 		// It's chasing something, but we don't care about what it's chasing.
 		if(chase_target.has_value())

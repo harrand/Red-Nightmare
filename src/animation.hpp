@@ -44,6 +44,7 @@ namespace game
 		PlayerClassic_LowPoly_MoveUp,
 		PlayerClassic_DefaultFireball_Idle,
 		PlayerClassic_FireSmoke,
+		PlayerClassic_FireExplosion,
 		Nightmare_Spawn,
 		Nightmare_Death,
 		Nightmare_Idle,

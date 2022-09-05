@@ -111,6 +111,7 @@ namespace game
 	struct ActionParams<ActionID::SpawnActor>
 	{
 		ActorType actor;
+		bool inherit_faction = false;
 	};
 
 	/// Represents something that can carry out actions.

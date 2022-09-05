@@ -43,7 +43,7 @@ namespace game
 				return
 				{
 					.type = ActorType::PlayerClassic_Orb,
-					.flags = {ActorFlag::HazardousToEnemies, ActorFlag::ClickToLaunch, ActorFlag::RespawnOnPlayer, ActorFlag::DieIfOOB, ActorFlag::RespawnOnClick, ActorFlag::SelfHarm, ActorFlag::InvisibleWhileDead, ActorFlag::DoNotGarbageCollect},
+					.flags = {ActorFlag::HazardousToEnemies, ActorFlag::ClickToLaunch, ActorFlag::RespawnOnPlayer, ActorFlag::DieIfOOB, ActorFlag::RespawnOnClick, ActorFlag::SelfHarm, ActorFlag::InvisibleWhileDead, ActorFlag::DoNotGarbageCollect/*, ActorFlag::ExplodeOnDeath*/},
 					.faction = Faction::PlayerFriend,
 					.base_stats =
 					{
@@ -67,6 +67,19 @@ namespace game
 						.current_health = 0.01f
 					},
 					.skin = ActorSkin::FireSmoke
+				};
+			break;
+			case ActorType::FireExplosion:
+				return
+				{
+					.type = ActorType::FireExplosion,
+					.flags = {ActorFlag::Rot, ActorFlag::BlockingAnimations, ActorFlag::InvisibleWhileDead, ActorFlag::HazardousToEnemies},
+					.base_stats =
+					{
+						.max_health = 0.1f,
+						.current_health = 0.01f
+					},
+					.skin = ActorSkin::FireExplosion
 				};
 			break;
 			case ActorType::Nightmare:
@@ -160,6 +173,15 @@ namespace game
 			{
 				this->respawn();
 				return;
+			}
+			if(this->flags.contains(ActorFlag::ExplodeOnDeath))
+			{
+				this->entity.add<ActionID::SpawnActor>
+				({
+					.actor = ActorType::FireExplosion,
+					.inherit_faction = true
+				});
+				this->flags.remove(ActorFlag::ExplodeOnDeath);
 			}
 			if(this->flags.contains(ActorFlag::RespawnOnDeath))
 			{
@@ -336,6 +358,9 @@ namespace game
 			break;
 			case ActorSkin::FireSmoke:
 				ending_animation = AnimationID::PlayerClassic_FireSmoke;
+			break;
+			case ActorSkin::FireExplosion:
+				ending_animation = AnimationID::PlayerClassic_FireExplosion;
 			break;
 			case ActorSkin::PlayerClassic:
 				if(this->motion.contains(ActorMotion::MoveLeft))

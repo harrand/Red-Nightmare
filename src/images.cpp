@@ -51,6 +51,13 @@
 #include ImportedTextHeader(player_classic_default_fireball_particles_4, png)
 #include ImportedTextHeader(player_classic_default_fireball_particles_5, png)
 #include ImportedTextHeader(player_classic_default_fireball_particles_6, png)
+#include ImportedTextHeader(fire_explosion_0, png)
+#include ImportedTextHeader(fire_explosion_1, png)
+#include ImportedTextHeader(fire_explosion_2, png)
+#include ImportedTextHeader(fire_explosion_3, png)
+#include ImportedTextHeader(fire_explosion_4, png)
+#include ImportedTextHeader(fire_explosion_5, png)
+#include ImportedTextHeader(fire_explosion_6, png)
 
 #include ImportedTextHeader(nightmare_dead, png)
 #include ImportedTextHeader(nightmare_down1, png)
@@ -127,6 +134,13 @@ namespace game
 		ImportedTextData(player_classic_default_fireball_particles_4, png),
 		ImportedTextData(player_classic_default_fireball_particles_5, png),
 		ImportedTextData(player_classic_default_fireball_particles_6, png),
+		ImportedTextData(fire_explosion_0, png),
+		ImportedTextData(fire_explosion_1, png),
+		ImportedTextData(fire_explosion_2, png),
+		ImportedTextData(fire_explosion_3, png),
+		ImportedTextData(fire_explosion_4, png),
+		ImportedTextData(fire_explosion_5, png),
+		ImportedTextData(fire_explosion_6, png),
 
 		ImportedTextData(nightmare_dead, png),
 		ImportedTextData(nightmare_down1, png),

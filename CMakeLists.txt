@@ -91,6 +91,13 @@ add_text(
 		res/images/player/akhara/ability/player_classic_default_fireball_particles_4.png
 		res/images/player/akhara/ability/player_classic_default_fireball_particles_5.png
 		res/images/player/akhara/ability/player_classic_default_fireball_particles_6.png
+		res/images/effects/fire_explosion/fire_explosion_0.png
+		res/images/effects/fire_explosion/fire_explosion_1.png
+		res/images/effects/fire_explosion/fire_explosion_2.png
+		res/images/effects/fire_explosion/fire_explosion_3.png
+		res/images/effects/fire_explosion/fire_explosion_4.png
+		res/images/effects/fire_explosion/fire_explosion_5.png
+		res/images/effects/fire_explosion/fire_explosion_6.png
 
 		res/images/enemies/nightmare/nightmare_dead.png
 		res/images/enemies/nightmare/nightmare_down1.png

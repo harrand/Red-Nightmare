@@ -29,6 +29,8 @@ namespace game
 		RespawnOnClick,
 		/// Whenever actor dies, respawn in the same position.
 		RespawnOnDeath,
+		/// If the actor dies, a fiery explosion happens (Blessing of Volatile Fire).
+		ExplodeOnDeath,
 		/// Whenever the actor is dead and touched by a player, respawn.
 		DeadRespawnOnPlayerTouch,
 		/// Whenever the actor is dead and touched by a player, resurrect.
@@ -78,6 +80,8 @@ namespace game
 		PlayerClassic_LowPoly,
 		/// Actor looks like a fiery-smokey particle effect.
 		FireSmoke,
+		/// Actor looks like a fiery explosion particle effect.
+		FireExplosion,
 		/// Actor looks like the Nightmare boss.
 		Nightmare,
 		/// Actor looks like Akhara's default fireball.
@@ -96,6 +100,8 @@ namespace game
 		PlayerClassic_Orb,
 		/// An actor which acts as a fiery particle effect. Dies by itself after a while.
 		FireSmoke,
+		/// An actor which acts as a fiery explosion particle effect. Dies by itself after a while, but deals large damage to enemies in its radius.
+		FireExplosion,
 		/// A computer-controlled boss monster, called Nightmare that uses its own skin.
 		Nightmare,
 		/// An uninteractable actor which periodically spawns evil players.
