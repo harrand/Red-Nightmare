@@ -133,6 +133,7 @@ namespace game
 	{
 		Actor& actor = this->actors[id];
 		QuadRenderer::ElementData& quad = this->qrenderer.elements()[id];
+		float touchdist = touch_distance;
 		if(!this->is_in_bounds(id))
 		{
 			if(actor.flags.contains(ActorFlag::DieIfOOB))
@@ -143,6 +144,10 @@ namespace game
 			{
 				actor.respawn();
 			}
+		}
+		if(actor.flags.contains(ActorFlag::HighReach))
+		{
+			touchdist *= 1.5f;
 		}
 		if(actor.flags.contains(ActorFlag::Haunted) && actor.dead())
 		{
@@ -164,6 +169,10 @@ namespace game
 				// default scale. TODO: dont hardcode
 				quad.scale = {0.2f, 0.2f};
 			}
+		}
+		if(actor.flags.contains(ActorFlag::LargeSprite))
+		{
+			quad.scale *= 1.5f;
 		}
 
 		// Handle actions.
@@ -234,7 +243,7 @@ namespace game
 			chase_target = actor.entity.get<ActionID::GotoTarget>()->data().target_position;
 			// If they're within touching distance, this is done.
 			float dist = (action->data().target_position - quad.position).length();
-			if(dist <= touch_distance * 2)
+			if(dist <= touchdist * 2)
 			{
 				action->set_is_complete(true);
 			}
@@ -292,12 +301,12 @@ namespace game
 			tz::Vec2 dist_to_target = target_pos - quad.position;
 			// Find out which direction we need to go, or if we're already at the target.
 			bool move_horizontal = true, move_vertical = true;
-			if(dist_to_target[0] > touch_distance)
+			if(dist_to_target[0] > touchdist)
 			{
 				// We need to move right.
 				actor.motion |= ActorMotion::MoveRight;
 			}
-			else if(dist_to_target[0] < -touch_distance)
+			else if(dist_to_target[0] < -touchdist)
 			{
 				// We need to move left.
 				actor.motion |= ActorMotion::MoveLeft;
@@ -307,12 +316,12 @@ namespace game
 				// We don't need to move horizontally, we're x-aligned with our chase target.
 				move_horizontal = false;
 			}
-			if(dist_to_target[1] > touch_distance)
+			if(dist_to_target[1] > touchdist)
 			{
 				// We need to move upwards.
 				actor.motion |= ActorMotion::MoveUp;
 			}
-			else if(dist_to_target[1] < -touch_distance)
+			else if(dist_to_target[1] < -touchdist)
 			{
 				actor.motion |= ActorMotion::MoveDown;
 			}
@@ -436,7 +445,12 @@ namespace game
 		const QuadRenderer::ElementData& b = this->qrenderer.elements()[actor_b];
 
 		tz::Vec2 displacement = a.position - b.position;
-		return displacement.length() <= touch_distance;
+		float touchdist = touch_distance;
+		if(this->actors[actor_a].flags.contains(ActorFlag::HighReach))
+		{
+			touchdist *= 1.5f;
+		}
+		return displacement.length() <= touchdist;
 	}
 
 	bool Scene::is_in_bounds(std::size_t actor_id) const

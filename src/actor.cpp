@@ -35,7 +35,7 @@ namespace game
 						.max_health = 0.01f,
 						.current_health = 0.01f
 					},
-					.skin = ActorSkin::PlayerClassic,
+					.skin = ActorSkin::GhostZombie,
 					.animation = game::play_animation(AnimationID::PlayerClassic_Idle)
 				};
 			break;
@@ -43,7 +43,7 @@ namespace game
 				return
 				{
 					.type = ActorType::PlayerClassic_Orb,
-					.flags = {ActorFlag::HazardousToEnemies, ActorFlag::ClickToLaunch, ActorFlag::RespawnOnPlayer, ActorFlag::DieIfOOB, ActorFlag::RespawnOnClick, ActorFlag::SelfHarm, ActorFlag::InvisibleWhileDead, ActorFlag::DoNotGarbageCollect/*, ActorFlag::ExplodeOnDeath*/},
+					.flags = {ActorFlag::HazardousToEnemies, ActorFlag::ClickToLaunch, ActorFlag::RespawnOnPlayer, ActorFlag::DieIfOOB, ActorFlag::RespawnOnClick, ActorFlag::SelfHarm, ActorFlag::InvisibleWhileDead, ActorFlag::DoNotGarbageCollect, ActorFlag::ExplodeOnDeath},
 					.faction = Faction::PlayerFriend,
 					.base_stats =
 					{
@@ -73,7 +73,7 @@ namespace game
 				return
 				{
 					.type = ActorType::FireExplosion,
-					.flags = {ActorFlag::Rot, ActorFlag::BlockingAnimations, ActorFlag::InvisibleWhileDead, ActorFlag::HazardousToEnemies},
+					.flags = {ActorFlag::Rot, ActorFlag::BlockingAnimations, ActorFlag::InvisibleWhileDead, ActorFlag::HazardousToEnemies, ActorFlag::LargeSprite, ActorFlag::HighReach},
 					.base_stats =
 					{
 						.max_health = 0.1f,
@@ -410,6 +410,34 @@ namespace game
 				else
 				{
 					ending_animation = AnimationID::PlayerClassic_LowPoly_Idle;
+				}
+				if(this->dead())
+				{
+					// TODO: Death animation for LowPoly
+					ending_animation = AnimationID::PlayerClassic_Death;
+				}
+			break;
+			case ActorSkin::GhostZombie:
+				if(this->motion.contains(ActorMotion::MoveLeft))
+				{
+					ending_animation = AnimationID::GhostZombie_MoveSide;
+				}
+				else if(this->motion.contains(ActorMotion::MoveRight))
+				{
+					ending_animation = AnimationID::GhostZombie_MoveSide;
+					this->entity.add<ActionID::HorizontalFlip>();
+				}
+				else if(this->motion.contains(ActorMotion::MoveUp))
+				{
+					ending_animation = AnimationID::GhostZombie_MoveUp;
+				}
+				else if(this->motion.contains(ActorMotion::MoveDown))
+				{
+					ending_animation = AnimationID::GhostZombie_MoveDown;
+				}
+				else
+				{
+					ending_animation = AnimationID::GhostZombie_Idle;
 				}
 				if(this->dead())
 				{

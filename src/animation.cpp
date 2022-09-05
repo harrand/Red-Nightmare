@@ -192,6 +192,52 @@ namespace game
 			.fps = 6,
 			.loop = true
 		},
+		AnimationInfo /*GhostZombie_MoveDown*/
+		{
+			.frames = 
+			{
+				TextureID::GhostZombie_Down_0,
+				TextureID::GhostZombie_Down_1,
+				TextureID::GhostZombie_Down_2,
+				TextureID::GhostZombie_Down_3
+			},
+			.fps = 6,
+			.loop = true
+		},
+		AnimationInfo /*GhostZombie_Idle*/
+		{
+			.frames = 
+			{
+				TextureID::GhostZombie_Idle_0,
+				TextureID::GhostZombie_Idle_1
+			},
+			.fps = 2,
+			.loop = true
+		},
+		AnimationInfo /*GhostZombie_MoveSide*/
+		{
+			.frames = 
+			{
+				TextureID::GhostZombie_Side_0,
+				TextureID::GhostZombie_Side_1,
+				TextureID::GhostZombie_Side_2,
+				TextureID::GhostZombie_Side_3
+			},
+			.fps = 6,
+			.loop = true
+		},
+		AnimationInfo /*GhostZombie_MoveUp*/
+		{
+			.frames = 
+			{
+				TextureID::GhostZombie_Up_0,
+				TextureID::GhostZombie_Up_1,
+				TextureID::GhostZombie_Up_2,
+				TextureID::GhostZombie_Up_3
+			},
+			.fps = 6,
+			.loop = true
+		},
 		AnimationInfo /*PlayerClassic_DefaultFireball_Idle*/
 		{
 			.frames =
