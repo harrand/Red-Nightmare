@@ -43,7 +43,7 @@ namespace game
 				return
 				{
 					.type = ActorType::PlayerClassic_Orb,
-					.flags = {ActorFlag::HazardousToEnemies, ActorFlag::ClickToLaunch, ActorFlag::RespawnOnPlayer, ActorFlag::DieIfOOB, ActorFlag::RespawnOnClick, ActorFlag::SelfHarm, ActorFlag::InvisibleWhileDead, ActorFlag::DoNotGarbageCollect, ActorFlag::ExplodeOnDeath},
+					.flags = {ActorFlag::HazardousToEnemies, ActorFlag::ClickToLaunch, ActorFlag::RespawnOnPlayer, ActorFlag::DieIfOOB, ActorFlag::RespawnOnClick, ActorFlag::SelfHarm, ActorFlag::InvisibleWhileDead, ActorFlag::DoNotGarbageCollect, ActorFlag::ExplodeOnDeath, ActorFlag::Stealth},
 					.faction = Faction::PlayerFriend,
 					.base_stats =
 					{
@@ -73,7 +73,7 @@ namespace game
 				return
 				{
 					.type = ActorType::FireExplosion,
-					.flags = {ActorFlag::Rot, ActorFlag::BlockingAnimations, ActorFlag::InvisibleWhileDead, ActorFlag::HazardousToEnemies, ActorFlag::LargeSprite, ActorFlag::HighReach},
+					.flags = {ActorFlag::Rot, ActorFlag::BlockingAnimations, ActorFlag::InvisibleWhileDead, ActorFlag::HazardousToEnemies, ActorFlag::LargeSprite, ActorFlag::HighReach, ActorFlag::Stealth},
 					.base_stats =
 					{
 						.max_health = 0.1f,
@@ -87,7 +87,7 @@ namespace game
 				{
 					.type = ActorType::Nightmare,
 					.flags = {ActorFlag::Aggressive, ActorFlag::SelfHarm, ActorFlag::RespawnOnDeath, ActorFlag::RandomRespawnLocation, ActorFlag::BlockingAnimations},
-					.faction = Faction::PlayerEnemy,
+					.faction = Faction::PureEnemy,
 					.base_stats =
 					{
 						.movement_speed = 0.0014f,
@@ -102,7 +102,7 @@ namespace game
 				return
 				{
 					.type = ActorType::EvilPlayer_TestSpawner,
-					.flags = {ActorFlag::RandomRespawnLocation, ActorFlag::RespawnOnDeath, ActorFlag::Rot, ActorFlag::Haunted},
+					.flags = {ActorFlag::RandomRespawnLocation, ActorFlag::RespawnOnDeath, ActorFlag::Rot, ActorFlag::Haunted, ActorFlag::Stealth},
 					.skin = ActorSkin::DebugOnlyVisible
 				};
 			break;
@@ -135,10 +135,6 @@ namespace game
 					.speed_multiplier = 8.0f
 				});
 				this->flags |= {ActorFlag::DieAtRest};
-			}
-			if(this->flags.contains(ActorFlag::Aggressive) && this->faction == Faction::PlayerEnemy)
-			{
-				this->entity.set<ActionID::GotoPlayer>();
 			}
 			if(this->flags.contains(ActorFlag::MouseControlled))
 			{
@@ -320,6 +316,14 @@ namespace game
 		{
 			return true;
 		}
+		if(this->faction == Faction::PureEnemy && this->type != actor.type)
+		{
+			return false;
+		}
+		if(this->faction == Faction::PureFriend)
+		{
+			return true;
+		}
 		return false;
 	}
 
@@ -344,6 +348,14 @@ namespace game
 		if(this->faction == Faction::PlayerEnemy && actor.faction == Faction::PlayerFriend)
 		{
 			return true;
+		}
+		if(this->faction == Faction::PureEnemy && this->type != actor.type)
+		{
+			return true;
+		}
+		if(this->faction == Faction::PureFriend)
+		{
+			return false;
 		}
 		return false;
 	}

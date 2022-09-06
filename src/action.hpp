@@ -25,6 +25,11 @@ namespace game
 		 */
 		GotoPlayer,
 		/**
+		 * Move to an actor's location.
+		 * - Completes instantly. Spawns a GotoTarget action in its stead.
+		 */
+		GotoActor,
+		/**
 		 * Move to the target location.
 		 * - Completes when the actor arrives at the location.
 		 */
@@ -81,6 +86,12 @@ namespace game
 	};
 
 	// Action implementations.
+	
+	template<>
+	struct ActionParams<ActionID::GotoActor>
+	{
+		std::size_t actor_id;
+	};
 	
 	template<>
 	struct ActionParams<ActionID::GotoTarget>

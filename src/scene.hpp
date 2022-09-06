@@ -25,6 +25,7 @@ namespace game
 	private:
 		void erase(std::size_t id);
 		void actor_post_update(std::size_t id);
+		std::vector<std::size_t> get_living_players() const;
 		std::optional<std::size_t> find_first_player() const;
 		bool actor_collision_query(std::size_t actor_a, std::size_t actor_b) const;
 		bool is_in_bounds(std::size_t actor_id) const;

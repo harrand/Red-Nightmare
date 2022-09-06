@@ -149,6 +149,25 @@ namespace game
 		{
 			touchdist *= 1.5f;
 		}
+		if(actor.flags.contains(ActorFlag::Aggressive) && !actor.dead())
+		{
+			for(std::size_t i = 0; i < this->size(); i++)
+			{
+				if(i == id)
+				{
+					continue;
+				}
+				Actor& victim = this->actors[i];
+				if(!victim.dead() && actor.is_enemy_of(victim) && !victim.flags.contains(ActorFlag::Stealth))
+				{
+					actor.entity.set<ActionID::GotoActor>
+					({
+						.actor_id = i
+					});
+					break;
+				}
+			}
+		}
 		if(actor.flags.contains(ActorFlag::Haunted) && actor.dead())
 		{
 			// Note: Right now this could spam forever.
@@ -229,12 +248,21 @@ namespace game
 			if(player_id.has_value())
 			{
 				auto action = actor.entity.get<ActionID::GotoPlayer>();
-				actor.entity.set<ActionID::GotoTarget>
+				actor.entity.set<ActionID::GotoActor>
 				({
-					.target_position = this->qrenderer.elements()[player_id.value()].position
+				 	.actor_id = player_id.value()
 				});
 				action->set_is_complete(true);
 			}
+		}
+		if(actor.entity.has<ActionID::GotoActor>())
+		{
+			auto action = actor.entity.get<ActionID::GotoActor>();
+			actor.entity.set<ActionID::GotoTarget>
+			({
+				.target_position = this->qrenderer.elements()[action->data().actor_id].position
+			});
+			action->set_is_complete(true);
 		}
 		// Concrete Entity Actions
 		if(actor.entity.has<ActionID::GotoTarget>() && !actor.dead())
@@ -301,12 +329,27 @@ namespace game
 			tz::Vec2 dist_to_target = target_pos - quad.position;
 			// Find out which direction we need to go, or if we're already at the target.
 			bool move_horizontal = true, move_vertical = true;
-			if(dist_to_target[0] > touchdist)
+			// So why can't we use touchdist here?
+			// Let's say x is a ghost, and y is the player
+			//
+			//	    y
+			//        / |
+			//	x -- 
+			//	If the distance between the two is less than or equal to touchdist, x starts hurting y.
+			//	But, that is not the same than if the horizontal and vertical component of that vector are both touchdist.
+			//	x^2 + y^2 = z^2, z = touchdist
+			//	Thus touchdist^2 = x^2 + y^2
+			//	Assume worst case x == y:
+			//	touchdist^2 = 2x^2
+			//	x^2 = (touchdist^2)/2
+			//	// x = sqrt((touchdist^2) / 2)
+			float sqrt_dist = std::sqrt(std::pow(touchdist, 2) / 2.0f);
+			if(dist_to_target[0] > sqrt_dist)
 			{
 				// We need to move right.
 				actor.motion |= ActorMotion::MoveRight;
 			}
-			else if(dist_to_target[0] < -touchdist)
+			else if(dist_to_target[0] < -sqrt_dist)
 			{
 				// We need to move left.
 				actor.motion |= ActorMotion::MoveLeft;
@@ -316,12 +359,12 @@ namespace game
 				// We don't need to move horizontally, we're x-aligned with our chase target.
 				move_horizontal = false;
 			}
-			if(dist_to_target[1] > touchdist)
+			if(dist_to_target[1] > sqrt_dist)
 			{
 				// We need to move upwards.
 				actor.motion |= ActorMotion::MoveUp;
 			}
-			else if(dist_to_target[1] < -touchdist)
+			else if(dist_to_target[1] < -sqrt_dist)
 			{
 				actor.motion |= ActorMotion::MoveDown;
 			}
@@ -337,16 +380,6 @@ namespace game
 				if(actor.flags.contains(ActorFlag::DieAtRest))
 				{
 					actor.base_stats.current_health = 0;
-				}
-				else if(actor.faction == Faction::PlayerEnemy && !actor.dead())
-				{
-					// The living actor is an enemy, and should have finished chasing the player. We need to find the player's actor and damage it with the enemy's base damage.
-					auto target_actor_id = this->find_first_player();
-					if(target_actor_id.has_value() && target_actor_id.value() != id)
-					{
-						// Hit the player for the enemy's base damage.
-						actor.damage(this->actors[target_actor_id.value()]);
-					}
 				}
 			}
 		}
@@ -374,7 +407,7 @@ namespace game
 			quad.position += position_change.normalised() * sp;
 
 			// Functionality for actors which are hazardous. They should attempt to damage anything that gets too close.
-			if(actor.flags.contains(ActorFlag::HazardousToAll) || actor.flags.contains(ActorFlag::HazardousToEnemies))
+			if(actor.flags.contains(ActorFlag::HazardousToAll) || actor.flags.contains(ActorFlag::HazardousToEnemies) || actor.flags.contains(ActorFlag::Aggressive))
 			{
 				
 				for(std::size_t i = 0; i < this->size(); i++)
@@ -386,7 +419,7 @@ namespace game
 					if(this->actor_collision_query(id, i))
 					{
 						Actor& victim = this->actors[i];
-						bool should_hurt = actor.flags.contains(ActorFlag::HazardousToAll) || (actor.flags.contains(ActorFlag::HazardousToEnemies) && actor.is_enemy_of(victim));
+						bool should_hurt = actor.is_enemy_of(victim);
 						if(should_hurt && !actor.dead() && !victim.dead())
 						{
 							actor.damage(victim);
@@ -428,15 +461,26 @@ namespace game
 		this->garbage_collect(id);
 	}
 
-	std::optional<std::size_t> Scene::find_first_player() const
+	std::vector<std::size_t> Scene::get_living_players() const
 	{
-		// Player Finding will only target living players.
+		std::vector<std::size_t> ret;
 		for(std::size_t i = 0; i < this->size(); i++)
 		{
+			
 			if(this->actors[i].flags.contains(ActorFlag::Player) && !this->actors[i].dead())
 			{
-				return {i};
+				ret.push_back(i);
 			}
+		}
+		return ret;
+	}
+
+	std::optional<std::size_t> Scene::find_first_player() const
+	{
+		auto players = this->get_living_players();
+		if(!players.empty())
+		{
+			return players.front();
 		}
 		return std::nullopt;
 	}
