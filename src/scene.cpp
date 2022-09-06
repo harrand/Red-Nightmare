@@ -464,9 +464,10 @@ namespace game
 
 	std::pair<tz::Vec2, tz::Vec2> Scene::get_world_boundaries() const
 	{
+		const float width_mod = this->qrenderer.get_width_multiplier();
 		return
 		{
-			tz::Vec2{-1.0f, -1.0f}, tz::Vec2{1.0f, 1.0f}
+			tz::Vec2{-width_mod, -1.0f}, tz::Vec2{width_mod, 1.0f}
 		};
 	}
 

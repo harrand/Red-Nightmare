@@ -7,7 +7,7 @@ output(id = 0) vec4 frag_colour;
 
 import <math>
 
-resource(id = 1) const texture images[];
+resource(id = 2) const texture images[];
 
 void main()
 {

@@ -1,4 +1,5 @@
 #include "quad_renderer.hpp"
+#include "tz/core/matrix_transform.hpp"
 #include "tz/gl/imported_shaders.hpp"
 #include "tz/gl/device.hpp"
 #include "tz/dbgui/dbgui.hpp"
@@ -10,13 +11,15 @@ namespace game
 {
 	QuadRenderer::QuadRenderer():
 	element_buffer_handle(tz::nullhand),
+	render_buffer_handle(tz::nullhand),
 	renderer(make_renderer())
 	{
-
+		this->update_render_data();
 	}
 
 	void QuadRenderer::render()
 	{
+		this->update_render_data();
 		// 2 triangles per quad.
 		this->renderer.render(this->quad_count * 2);
 	}
@@ -83,6 +86,11 @@ namespace game
 		this->pop();
 	}
 
+	float QuadRenderer::get_width_multiplier() const
+	{
+		return static_cast<float>(tz::window().get_width()) / tz::window().get_height();
+	}
+
 	tz::gl::Renderer QuadRenderer::make_renderer()
 	{
 		tz::gl::RendererInfo rinfo;
@@ -95,7 +103,10 @@ namespace game
 		std::array<QuadRenderer::ElementData, QuadRenderer::max_quad_count> element_data;
 		std::fill(element_data.begin(), element_data.end(), QuadRenderer::ElementData{});
 		tz::gl::BufferResource element_buffer = tz::gl::BufferResource::from_many(element_data, tz::gl::ResourceAccess::DynamicFixed);
+
+		tz::gl::BufferResource render_buffer = tz::gl::BufferResource::from_one(QuadRenderer::RenderData{});
 		this->element_buffer_handle = rinfo.add_resource(element_buffer);
+		this->render_buffer_handle = rinfo.add_resource(render_buffer);
 
 		// Renderer stores all textures in the game.
 		constexpr std::uint32_t tex_count = static_cast<std::uint32_t>(TextureID::Count);
@@ -111,5 +122,23 @@ namespace game
 		}
 
 		return tz::gl::device().create_renderer(rinfo);
+	}
+
+	void QuadRenderer::update_render_data()
+	{
+		const float aspect_ratio = this->get_width_multiplier();
+		QuadRenderer::RenderData new_data
+		{
+			.projection = tz::orthographic(-aspect_ratio, aspect_ratio, 1.0f, -1.0f, -0.1f, 0.1f)
+		};
+		this->renderer.edit(
+		tz::gl::RendererEditBuilder{}.
+			write
+			({
+				.resource = this->render_buffer_handle,
+				.data = std::as_bytes(std::span<const QuadRenderer::RenderData>{&new_data, 1}),
+			})
+			.build()
+		);
 	}
 }
