@@ -192,6 +192,18 @@ namespace game
 			.fps = 6,
 			.loop = true
 		},
+		AnimationInfo /*GhostZombie_Death*/
+		{
+			.frames = 
+			{
+				TextureID::GhostZombie_Death_0,
+				TextureID::GhostZombie_Death_1,
+				TextureID::GhostZombie_Death_2,
+				TextureID::GhostZombie_Death_3
+			},
+			.fps = 14,
+			.loop = false
+		},
 		AnimationInfo /*GhostZombie_MoveDown*/
 		{
 			.frames = 

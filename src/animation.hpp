@@ -42,6 +42,7 @@ namespace game
 		PlayerClassic_LowPoly_Idle,
 		PlayerClassic_LowPoly_MoveSide,
 		PlayerClassic_LowPoly_MoveUp,
+		GhostZombie_Death,
 		GhostZombie_MoveDown,
 		GhostZombie_Idle,
 		GhostZombie_MoveSide,

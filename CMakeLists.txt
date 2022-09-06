@@ -83,6 +83,10 @@ add_text(
 		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_up2.png
 		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_up3.png
 
+		res/images/enemies/ghosts/zombie/ghost_zombie_death0.png
+		res/images/enemies/ghosts/zombie/ghost_zombie_death1.png
+		res/images/enemies/ghosts/zombie/ghost_zombie_death2.png
+		res/images/enemies/ghosts/zombie/ghost_zombie_death3.png
 		res/images/enemies/ghosts/zombie/ghost_zombie_down0.png
 		res/images/enemies/ghosts/zombie/ghost_zombie_down1.png
 		res/images/enemies/ghosts/zombie/ghost_zombie_down2.png

@@ -441,8 +441,7 @@ namespace game
 				}
 				if(this->dead())
 				{
-					// TODO: Death animation for LowPoly
-					ending_animation = AnimationID::PlayerClassic_Death;
+					ending_animation = AnimationID::GhostZombie_Death;
 				}
 			break;
 			case ActorSkin::Nightmare:
