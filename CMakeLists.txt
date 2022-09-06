@@ -20,6 +20,8 @@ add_app(
 		src/main.cpp
 		src/images.cpp
 		src/images.hpp
+		src/level.cpp
+		src/level.hpp
 		src/scene.cpp
 		src/scene.hpp
 		src/stats.cpp
@@ -141,4 +143,6 @@ add_text(
 		res/images/enemies/nightmare/nightmare_up1.png
 		res/images/enemies/nightmare/nightmare_up2.png
 		res/images/enemies/nightmare/nightmare_up3.png
+
+		res/images/levels/dev_level_0.png
 )

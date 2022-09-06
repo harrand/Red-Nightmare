@@ -122,6 +122,24 @@ namespace game
 		this->actors.clear();
 	}
 
+	void Scene::load_level(LevelID level_id)
+	{
+		Level level = game::load_level(level_id);
+		// Firstly remove everything
+		this->clear();
+		// Add the player and her orb.
+		this->add(ActorType::PlayerClassic);
+		tz_report("Player Spawns at {%.2f, %.2f}", level.player_spawn_location[0], level.player_spawn_location[1]);
+		this->qrenderer.elements().front().position = level.player_spawn_location;
+		this->add(ActorType::PlayerClassic_Orb);
+		// Now add actors from the level.
+		for(const auto& [pos, actor_type] : level.actor_spawns)
+		{
+			this->add(actor_type);
+			this->qrenderer.elements().back().position = pos;
+		}
+	}
+
 	void Scene::erase(std::size_t id)
 	{
 		this->qrenderer.erase(id);

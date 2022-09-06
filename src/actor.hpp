@@ -113,7 +113,8 @@ namespace game
 		/// A computer-controlled boss monster, called Nightmare that uses its own skin.
 		Nightmare,
 		/// An uninteractable actor which periodically spawns evil players.
-		EvilPlayer_TestSpawner
+		EvilPlayer_TestSpawner,
+		Count
 	};
 
 	struct Actor
@@ -135,6 +136,8 @@ namespace game
 		Animation animation = play_animation(AnimationID::Missing);
 		/// All buffs to stats currently applied on the actor.
 		StatBuffs buffs = {};
+		/// Colour representing the actor in a level image. If this is black, then the actor cannot be represented in a level.
+		tz::Vec3ui palette_colour = {0u, 0u, 0u};
 
 		void update();
 		bool dead() const;

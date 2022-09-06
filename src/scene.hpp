@@ -3,6 +3,7 @@
 #include "actor.hpp"
 #include "animation.hpp"
 #include "quad_renderer.hpp"
+#include "level.hpp"
 #include "tz/core/time.hpp"
 
 #include <random>
@@ -22,6 +23,7 @@ namespace game
 		void add(ActorType type);
 		void pop();
 		void clear();
+		void load_level(LevelID level_id);
 	private:
 		void erase(std::size_t id);
 		void actor_post_update(std::size_t id);

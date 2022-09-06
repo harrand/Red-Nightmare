@@ -96,6 +96,7 @@ namespace game
 						.current_health = 0.001f
 					},
 					.skin = ActorSkin::Nightmare,
+					.palette_colour = {64u, 32u, 8u}
 				};
 			break;
 			case ActorType::EvilPlayer_TestSpawner:
@@ -103,7 +104,8 @@ namespace game
 				{
 					.type = ActorType::EvilPlayer_TestSpawner,
 					.flags = {ActorFlag::RandomRespawnLocation, ActorFlag::RespawnOnDeath, ActorFlag::Rot, ActorFlag::Haunted, ActorFlag::Stealth},
-					.skin = ActorSkin::DebugOnlyVisible
+					.skin = ActorSkin::DebugOnlyVisible,
+					.palette_colour = {255u, 64u, 255u}
 				};
 			break;
 		}

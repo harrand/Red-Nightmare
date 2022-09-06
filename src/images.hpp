@@ -105,6 +105,7 @@ namespace game
 	};
 
 	tz::gl::ImageResource load_image(TextureID texid);
+	tz::gl::ImageResource load_image_data(std::string_view img_file_data);
 }
 
 #endif // REDNIGHTMARE_IMAGES_HPP
