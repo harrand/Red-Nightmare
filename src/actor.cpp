@@ -109,6 +109,15 @@ namespace game
 					.palette_colour = {255u, 64u, 255u}
 				};
 			break;
+			case ActorType::Wall:
+				return
+				{
+					.type = ActorType::Wall,
+					.flags = {ActorFlag::Stealth, ActorFlag::Collide},
+					.skin = ActorSkin::DebugOnlyVisible,
+					.palette_colour = {255u, 0u, 0u}
+				};
+			break;
 		}
 		return Actor::null();
 	}

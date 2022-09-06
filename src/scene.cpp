@@ -462,8 +462,12 @@ namespace game
 					}
 				}
 			}
-			// Functionality for actors which collide with players.
-			if(actor.flags.contains(ActorFlag::DeadRespawnOnPlayerTouch) || actor.flags.contains(ActorFlag::DeadResurrectOnPlayerTouch))
+			// Functionality for actors which collide with others.
+			const bool cares_about_collisions =
+				actor.flags.contains(ActorFlag::DeadRespawnOnPlayerTouch)
+			     || actor.flags.contains(ActorFlag::DeadResurrectOnPlayerTouch)
+			     || actor.flags.contains(ActorFlag::Collide);
+			if(cares_about_collisions)
 			{
 				for(std::size_t i = 0; i < this->size(); i++)
 				{
@@ -471,16 +475,28 @@ namespace game
 					{
 						continue;
 					}
-					if(this->actors[i].flags.contains(ActorFlag::Player) && this->actor_collision_query(id, i))
+					Actor& other = this->actors[i];
+					QuadRenderer::ElementData& other_quad = this->qrenderer.elements()[i];
+					if(this->actor_collision_query(id, i))
 					{
-						// Actor is touching a player.
-						if(actor.flags.contains(ActorFlag::DeadResurrectOnPlayerTouch))
+						if(actor.flags.contains(ActorFlag::Collide))
 						{
-							actor.base_stats.current_health = actor.get_current_stats().max_health;
+							// Push other actor away so its not colliding anymore.
+							tz::Vec2 displacement = quad.position - other_quad.position;
+							other_quad.position -= displacement.normalised() * 0.001f;
 						}
-						if(actor.flags.contains(ActorFlag::DeadRespawnOnPlayerTouch))
+						const bool cares_about_player = actor.flags.contains(ActorFlag::DeadRespawnOnPlayerTouch) || actor.flags.contains(ActorFlag::DeadResurrectOnPlayerTouch);
+						if(cares_about_player && other.flags.contains(ActorFlag::Player))
 						{
-							actor.respawn();
+							// Actor is touching a player.
+							if(actor.flags.contains(ActorFlag::DeadResurrectOnPlayerTouch))
+							{
+								actor.base_stats.current_health = actor.get_current_stats().max_health;
+							}
+							if(actor.flags.contains(ActorFlag::DeadRespawnOnPlayerTouch))
+							{
+								actor.respawn();
+							}
 						}
 					}
 				}
@@ -519,13 +535,52 @@ namespace game
 		const QuadRenderer::ElementData& a = this->qrenderer.elements()[actor_a];
 		const QuadRenderer::ElementData& b = this->qrenderer.elements()[actor_b];
 
-		tz::Vec2 displacement = a.position - b.position;
-		float touchdist = touch_distance;
-		if(this->actors[actor_a].flags.contains(ActorFlag::HighReach))
+		const bool accurate = this->actors[actor_a].flags.contains(ActorFlag::Collide);
+
+		if(accurate)
 		{
-			touchdist *= 1.5f;
+			// AABB collision based upon scale.
+			struct AABB
+			{
+				tz::Vec2 min, max;
+			};
+			auto get_aabb = [this](std::size_t actor_id)
+			{
+				const QuadRenderer::ElementData& quad = this->qrenderer.elements()[actor_id];
+				AABB ret{.min = tz::Vec2{-1.0f, -1.0f}, .max = tz::Vec2{1.0f, 1.0f}};
+				tz::Vec2 scale = this->qrenderer.elements()[actor_id].scale;
+				ret.min[0] *= scale[0];
+				ret.max[0] *= scale[0];
+				ret.min[1] *= scale[1];
+				ret.max[1] *= scale[1];
+				ret.min += quad.position;
+				ret.max += quad.position;
+				return ret;
+			};
+
+			AABB a = get_aabb(actor_a);
+			/*
+				point.x >= box.minX &&
+				point.x <= box.maxX &&
+				point.y >= box.minY &&
+				point.y <= box.maxY;
+			 */
+			return b.position[0] >= a.min[0] &&
+			       b.position[0] <= a.max[0] &&
+			       b.position[1] >= a.min[1] &&
+			       b.position[1] <= a.max[1];
 		}
-		return displacement.length() <= touchdist;
+		else
+		{
+			// Circle collision based upon reach.
+			tz::Vec2 displacement = a.position - b.position;
+			float touchdist = touch_distance;
+			if(this->actors[actor_a].flags.contains(ActorFlag::HighReach))
+			{
+				touchdist *= 1.5f;
+			}
+			return displacement.length() <= touchdist;
+		}
 	}
 
 	bool Scene::is_in_bounds(std::size_t actor_id) const

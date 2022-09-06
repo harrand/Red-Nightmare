@@ -65,6 +65,8 @@ namespace game
 		BlockingAnimations,
 		/// If an actor is dead for a long time, the Scene will automatically delete it. If an actor has this flag, this will never happen.
 		DoNotGarbageCollect,
+		/// Anything colliding with the actor cannot move through it.
+		Collide,
 	};
 	using ActorFlags = tz::EnumField<ActorFlag>;
 
@@ -114,6 +116,8 @@ namespace game
 		Nightmare,
 		/// An uninteractable actor which periodically spawns evil players.
 		EvilPlayer_TestSpawner,
+		/// A visible wall, blocking other actors' paths.
+		Wall,
 		Count
 	};
 
