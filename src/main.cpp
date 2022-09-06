@@ -16,10 +16,7 @@ int main()
 			ImGui::MenuItem("Current Scene", nullptr, &show_current_scene);
 		});
 
-		//scene.add(game::ActorType::PlayerClassic);
-		//scene.add(game::ActorType::PlayerClassic_Orb);
-		//scene.add(game::ActorType::EvilPlayer_TestSpawner);
-		scene.load_level(game::LevelID::DevLevel0);
+		scene.load_level(game::LevelID::Empty);
 
 		using namespace tz::literals;
 		tz::Delay fixed_update = 1667_us;

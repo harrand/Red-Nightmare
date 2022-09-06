@@ -4,12 +4,14 @@
 #include "tz/core/imported_text.hpp"
 #include "tz/core/containers/grid_view.hpp"
 
+#include ImportedTextHeader(invisible, png)
 #include ImportedTextHeader(dev_level_0, png)
 
 namespace game
 {
 	std::array<std::string_view, static_cast<int>(LevelID::Count)> level_image_data
 	{
+		ImportedTextData(invisible, png),
 		ImportedTextData(dev_level_0, png)
 	};
 

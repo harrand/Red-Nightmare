@@ -34,6 +34,17 @@ namespace game
 	{
 		ImGui::Text("Current Scene");
 		ImGui::Spacing();
+		if(ImGui::CollapsingHeader("Dev Levels"))
+		{
+			if(ImGui::Button("Empty Level"))
+			{
+				this->load_level(LevelID::Empty);
+			}
+			if(ImGui::Button("DevLevel0"))
+			{
+				this->load_level(LevelID::DevLevel0);
+			}
+		}
 		if(ImGui::CollapsingHeader("Mass Control"))
 		{
 			if(ImGui::Button("Kill Everyone"))

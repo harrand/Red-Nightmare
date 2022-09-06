@@ -25,6 +25,7 @@ namespace game
 
 	enum class LevelID
 	{
+		Empty,
 		DevLevel0,
 		Count
 	};

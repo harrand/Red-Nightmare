@@ -36,7 +36,8 @@ namespace game
 						.current_health = 0.01f
 					},
 					.skin = ActorSkin::GhostZombie,
-					.animation = game::play_animation(AnimationID::PlayerClassic_Idle)
+					.animation = game::play_animation(AnimationID::PlayerClassic_Idle),
+					.palette_colour = {0u, 255u, 0u}
 				};
 			break;
 			case ActorType::PlayerClassic_Orb:
