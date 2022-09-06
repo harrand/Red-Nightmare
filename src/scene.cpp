@@ -354,22 +354,24 @@ namespace game
 		if(!actor.dead())
 		{
 			float sp = actor.get_current_stats().movement_speed;
+			tz::Vec2 position_change{0.0f, 0.0f};
 			if(actor.motion.contains(ActorMotion::MoveLeft))
 			{
-				quad.position[0] -= sp;
+				position_change[0] -= 1;
 			}
 			if(actor.motion.contains(ActorMotion::MoveRight))
 			{
-				quad.position[0] += sp;
+				position_change[0] += 1;
 			}
 			if(actor.motion.contains(ActorMotion::MoveUp))
 			{
-				quad.position[1] += sp;
+				position_change[1] += 1;
 			}
 			if(actor.motion.contains(ActorMotion::MoveDown))
 			{
-				quad.position[1] -= sp;
+				position_change[1] -= 1;
 			}
+			quad.position += position_change.normalised() * sp;
 
 			// Functionality for actors which are hazardous. They should attempt to damage anything that gets too close.
 			if(actor.flags.contains(ActorFlag::HazardousToAll) || actor.flags.contains(ActorFlag::HazardousToEnemies))
