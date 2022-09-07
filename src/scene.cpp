@@ -448,7 +448,7 @@ namespace game
 					if(this->actor_collision_query(id, i))
 					{
 						Actor& victim = this->actors[i];
-						bool should_hurt = actor.is_enemy_of(victim);
+						bool should_hurt = actor.is_enemy_of(victim) && !victim.flags.contains(ActorFlag::Stealth);
 						if(should_hurt && !actor.dead() && !victim.dead())
 						{
 							actor.damage(victim);
