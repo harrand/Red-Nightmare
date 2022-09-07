@@ -28,7 +28,6 @@ namespace game
 			}
 			const bool exists_already = actor_map.find(col) != actor_map.end();
 			tz_assert(!exists_already, "Detected two actor types with identical palette colours that aren't zero. ActorTypes are %d and %d and the palette colour is {%u, %u, %u}", i, static_cast<int>(actor_map[col]), col[0], col[1], col[2]);
-			tz_report("actor_map[{%u, %u, %u}] = %d", col[0], col[1], col[2], static_cast<int>(actor.type));
 			actor_map[col] = actor.type;
 		}
 		ColourAttributeMapping attrib_map;
@@ -96,7 +95,6 @@ namespace game
 					auto iter = palette.actor_palette.find(colour);
 					tz_assert(iter != palette.actor_palette.end(), "Level image contained pixel of colour {%u, %u, %u} which does not match any LevelAttribute nor ActorType. Either the image is malformed, incomplete or meant for a different version of RedNightmare");
 					ret.actor_spawns.emplace_back(pos, iter->second);
-					tz_report("Actor ID %d spawns at {%.2f, %.2f}", iter->second, pos[0], pos[1]);
 				}
 
 			}
