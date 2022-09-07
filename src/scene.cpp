@@ -483,7 +483,8 @@ namespace game
 						{
 							// Push other actor away so its not colliding anymore.
 							tz::Vec2 displacement = quad.position - other_quad.position;
-							other_quad.position -= displacement.normalised() * other.get_current_stats().movement_speed;
+							// Push back with impulse 150% the distance it would've travelled this frame.
+							other_quad.position -= displacement.normalised() * other.get_current_stats().movement_speed * 1.5f;
 						}
 						const bool cares_about_player = actor.flags.contains(ActorFlag::DeadRespawnOnPlayerTouch) || actor.flags.contains(ActorFlag::DeadResurrectOnPlayerTouch);
 						if(cares_about_player && other.flags.contains(ActorFlag::Player))
