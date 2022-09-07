@@ -74,7 +74,7 @@ namespace game
 				return
 				{
 					.type = ActorType::FireExplosion,
-					.flags = {ActorFlag::Rot, ActorFlag::BlockingAnimations, ActorFlag::InvisibleWhileDead, ActorFlag::HazardousToEnemies, ActorFlag::LargeSprite, ActorFlag::HighReach, ActorFlag::Stealth},
+					.flags = {ActorFlag::Rot, ActorFlag::BlockingAnimations, ActorFlag::InvisibleWhileDead, ActorFlag::HazardousToEnemies, ActorFlag::LargeSprite, ActorFlag::HighReach, ActorFlag::Stealth, ActorFlag::Unhittable},
 					.base_stats =
 					{
 						.max_health = 0.1f,
