@@ -19,8 +19,10 @@ namespace game
 		Player,
 		/// Actor will attack enemy targets without provocation.
 		Aggressive,
-		/// Actor will not be attacked by aggressive enemies.
+		/// Actor will not be attacked by aggressive enemies, although it can still be harmed if it gets too close.
 		Stealth,
+		/// Actor can be chased but not hurt by aggressive enemies.
+		Unhittable,
 		/// Move around with WASD.
 		KeyboardControlled,
 		/// Actor will always chase the mouse cursor.

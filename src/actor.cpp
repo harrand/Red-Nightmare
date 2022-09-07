@@ -44,7 +44,7 @@ namespace game
 				return
 				{
 					.type = ActorType::PlayerClassic_Orb,
-					.flags = {ActorFlag::HazardousToEnemies, ActorFlag::ClickToLaunch, ActorFlag::RespawnOnPlayer, ActorFlag::DieIfOOB, ActorFlag::RespawnOnClick, ActorFlag::SelfHarm, ActorFlag::InvisibleWhileDead, ActorFlag::DoNotGarbageCollect, ActorFlag::ExplodeOnDeath, ActorFlag::Stealth},
+					.flags = {ActorFlag::HazardousToEnemies, ActorFlag::ClickToLaunch, ActorFlag::RespawnOnPlayer, ActorFlag::DieIfOOB, ActorFlag::RespawnOnClick, ActorFlag::SelfHarm, ActorFlag::InvisibleWhileDead, ActorFlag::DoNotGarbageCollect, ActorFlag::ExplodeOnDeath, ActorFlag::Stealth, ActorFlag::Unhittable},
 					.faction = Faction::PlayerFriend,
 					.base_stats =
 					{
@@ -113,7 +113,8 @@ namespace game
 				return
 				{
 					.type = ActorType::Wall,
-					.flags = {ActorFlag::Stealth, ActorFlag::Collide},
+					.flags = {ActorFlag::Stealth, ActorFlag::Collide, ActorFlag::Invincible},
+					.faction = Faction::PureEnemy,
 					.skin = ActorSkin::DebugOnlyVisible,
 					.palette_colour = {255u, 0u, 0u}
 				};
@@ -332,7 +333,15 @@ namespace game
 		{
 			return false;
 		}
+		if(actor.faction == Faction::PureEnemy && actor.type != this->type)
+		{
+			return false;
+		}
 		if(this->faction == Faction::PureFriend)
+		{
+			return true;
+		}
+		if(actor.faction == Faction::PureFriend)
 		{
 			return true;
 		}
@@ -365,7 +374,15 @@ namespace game
 		{
 			return true;
 		}
+		if(actor.faction == Faction::PureEnemy && actor.type != this->type)
+		{
+			return true;
+		}
 		if(this->faction == Faction::PureFriend)
+		{
+			return false;
+		}
+		if(actor.faction == Faction::PureFriend)
 		{
 			return false;
 		}
