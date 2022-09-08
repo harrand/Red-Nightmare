@@ -2,6 +2,7 @@
 #include "util.hpp"
 #include "tz/core/tz.hpp"
 #include "tz/dbgui/dbgui.hpp"
+#include "tz/core/profiling/zone.hpp"
 
 namespace game
 {
@@ -125,6 +126,7 @@ namespace game
 
 	void Actor::update()
 	{
+		TZ_PROFZONE("Actor - Update", TZ_PROFCOL_GREEN);
 		this->entity.update();
 		this->evaluate_animation();
 		if(this->flags.contains(ActorFlag::BlockingAnimations))

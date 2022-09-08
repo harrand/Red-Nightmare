@@ -2,6 +2,7 @@
 #include "util.hpp"
 #include "tz/dbgui/dbgui.hpp"
 #include "tz/core/assert.hpp"
+#include "tz/core/profiling/zone.hpp"
 
 #include "tz/core/report.hpp"
 #include <algorithm>
@@ -12,6 +13,7 @@ namespace game
 
 	void Scene::render()
 	{
+		TZ_PROFZONE("Scene - Render", TZ_PROFCOL_GREEN);
 		tz_assert(this->actors.size() == this->qrenderer.elements().size(), "Scene actor list and QuadRenderer size no longer match. Logic Error");
 		for(std::size_t i = 0; i < this->qrenderer.elements().size(); i++)
 		{
@@ -22,6 +24,7 @@ namespace game
 
 	void Scene::update()
 	{
+		TZ_PROFZONE("Scene - Update", TZ_PROFCOL_GREEN);
 		for(std::size_t i = 0; i < this->size(); i++)
 		{
 			Actor& actor = this->actors[i];
@@ -167,6 +170,7 @@ namespace game
 
 	void Scene::actor_post_update(std::size_t id)
 	{
+		TZ_PROFZONE("Actor - Post Update", TZ_PROFCOL_BROWN);
 		Actor& actor = this->actors[id];
 		QuadRenderer::ElementData& quad = this->qrenderer.elements()[id];
 		float touchdist = touch_distance;
@@ -516,6 +520,7 @@ namespace game
 
 	std::vector<std::size_t> Scene::get_living_players() const
 	{
+		TZ_PROFZONE("Scene - Query Living Players", TZ_PROFCOL_GREEN);
 		std::vector<std::size_t> ret;
 		for(std::size_t i = 0; i < this->size(); i++)
 		{
@@ -530,6 +535,7 @@ namespace game
 
 	std::optional<std::size_t> Scene::find_first_player() const
 	{
+		TZ_PROFZONE("Scene - Find First Player", TZ_PROFCOL_GREEN);
 		auto players = this->get_living_players();
 		if(!players.empty())
 		{
@@ -540,6 +546,7 @@ namespace game
 
 	bool Scene::actor_collision_query(std::size_t actor_a, std::size_t actor_b) const
 	{
+		TZ_PROFZONE("Scene - Collision Query", TZ_PROFCOL_GREEN);
 		const QuadRenderer::ElementData& a = this->qrenderer.elements()[actor_a];
 		const QuadRenderer::ElementData& b = this->qrenderer.elements()[actor_b];
 
@@ -593,6 +600,7 @@ namespace game
 
 	bool Scene::is_in_bounds(std::size_t actor_id) const
 	{
+		TZ_PROFZONE("Scene - Bounds Check", TZ_PROFCOL_GREEN);
 		tz::Vec2 pos = this->qrenderer.elements()[actor_id].position;
 		auto bounds = this->get_world_boundaries();
 		return
@@ -612,6 +620,7 @@ namespace game
 
 	void Scene::update_camera()
 	{
+		TZ_PROFZONE("Scene - Camera Update", TZ_PROFCOL_GREEN);
 		auto player_ids = this->get_living_players();
 		std::vector<std::size_t> actors_to_view;
 		if(player_ids.empty())
@@ -647,6 +656,7 @@ namespace game
 
 	void Scene::update_status_events(std::size_t id)
 	{
+		TZ_PROFZONE("Scene - Status Events Update", TZ_PROFCOL_GREEN);
 		const Actor& actor = this->actors[id];
 		QuadRenderer::ElementData& quad = this->qrenderer.elements()[id];
 		int status_effect = StatusEffect_None;
@@ -663,6 +673,7 @@ namespace game
 
 	void Scene::garbage_collect(std::size_t id)
 	{
+		TZ_PROFZONE("Scene - Garbage Collect", TZ_PROFCOL_GREEN);
 		// Erase means to swap with the last and then pop it back
 		const bool dead = this->actors[id].dead();
 		if(dead)

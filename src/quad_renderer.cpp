@@ -3,6 +3,7 @@
 #include "tz/gl/imported_shaders.hpp"
 #include "tz/gl/device.hpp"
 #include "tz/dbgui/dbgui.hpp"
+#include "tz/core/profiling/zone.hpp"
 
 #include ImportedShaderHeader(quad, vertex)
 #include ImportedShaderHeader(quad, fragment)
@@ -19,6 +20,7 @@ namespace game
 
 	void QuadRenderer::render()
 	{
+		TZ_PROFZONE("QuadRenderer - Render", TZ_PROFCOL_GREEN);
 		this->update_render_data();
 		// 2 triangles per quad.
 		this->renderer.render(this->quad_count * 2);
@@ -136,6 +138,7 @@ namespace game
 
 	void QuadRenderer::update_render_data()
 	{
+		TZ_PROFZONE("QuadRenderer - Update Render Data", TZ_PROFCOL_BROWN);
 		RenderData& data = this->renderer.get_resource(this->render_buffer_handle)->data_as<RenderData>().front();
 		const float aspect_ratio = this->get_width_multiplier();
 		data =
