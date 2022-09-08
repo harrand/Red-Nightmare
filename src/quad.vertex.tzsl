@@ -35,6 +35,7 @@ resource(id = 0) const buffer ElementBuffer
 
 struct RenderData
 {
+	mat4 view;
 	mat4 projection;
 };
 
@@ -53,7 +54,7 @@ void main()
 	ElementData elem = element.data[quad_id];
 
 	vec2 pos = elem.position + quad_positions[in::vertex_id % 6] * elem.scale;
-	out::position = render.data.projection * vec4(pos, 0.0, 1.0);
+	out::position = render.data.projection * render.data.view * vec4(pos, 0.0, 1.0);
 	out_texture_id = elem.texture_id;
 	out_texcoord = quad_texcoords[in::vertex_id % 6];
 	out_colour_offset = status_effect_colours[elem.status_effect_id];

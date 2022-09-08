@@ -4,6 +4,7 @@
 #include "tz/core/assert.hpp"
 
 #include "tz/core/report.hpp"
+#include <algorithm>
 
 namespace game
 {
@@ -28,6 +29,7 @@ namespace game
 			actor.update();
 			this->actor_post_update(i);
 		}
+		this->update_camera();
 	}
 	
 	void Scene::dbgui()
@@ -151,6 +153,11 @@ namespace game
 		}
 	}
 
+	tz::Vec2 Scene::get_mouse_position() const
+	{
+		return util::get_mouse_world_location() + this->qrenderer.camera_position();
+	}
+
 	void Scene::erase(std::size_t id)
 	{
 		this->qrenderer.erase(id);
@@ -244,14 +251,14 @@ namespace game
 		{
 			actor.entity.add<ActionID::GotoTarget>
 			({
-				.target_position = util::get_mouse_world_location()
+				.target_position = this->get_mouse_position()
 			});
 			actor.entity.get<ActionID::GotoMouse>()->set_is_complete(true);
 		}
 		if(actor.entity.has<ActionID::LaunchToMouse>())
 		{
 			auto action = actor.entity.get<ActionID::LaunchToMouse>();
-			tz::Vec2 mouse_pos = util::get_mouse_world_location();
+			tz::Vec2 mouse_pos = this->get_mouse_position();
 			tz::Vec2 to_mouse = mouse_pos - quad.position;
 			actor.entity.add<ActionID::Launch>
 			({
@@ -596,10 +603,46 @@ namespace game
 	std::pair<tz::Vec2, tz::Vec2> Scene::get_world_boundaries() const
 	{
 		const float width_mod = this->qrenderer.get_width_multiplier();
+		const tz::Vec2 camera_pos = this->qrenderer.camera_position();
 		return
 		{
-			tz::Vec2{-width_mod, -1.0f}, tz::Vec2{width_mod, 1.0f}
+			tz::Vec2{-width_mod, -1.0f} + camera_pos, tz::Vec2{width_mod, 1.0f} + camera_pos
 		};
+	}
+
+	void Scene::update_camera()
+	{
+		auto player_ids = this->get_living_players();
+		std::vector<std::size_t> actors_to_view;
+		if(player_ids.empty())
+		{
+			actors_to_view.resize(this->size());
+			std::iota(actors_to_view.begin(), actors_to_view.end(), 0ull);
+		}
+		else
+		{
+			actors_to_view = {player_ids};
+		}
+
+		constexpr float fmax = std::numeric_limits<float>::max();
+		constexpr float fmin = std::numeric_limits<float>::min();
+		tz::Vec2 min{fmax, fmax}, max{fmin, fmin}, avg{0.0f, 0.0f};
+		for(std::size_t actor_id : actors_to_view)
+		{
+			tz::Vec2 pos = this->qrenderer.elements()[actor_id].position;
+			min[0] = std::min(min[0], pos[0]);
+			min[1] = std::min(min[1], pos[1]);
+			max[0] = std::max(max[0], pos[0]);
+			max[1] = std::max(max[1], pos[1]);
+			avg[0] += pos[0];
+			avg[1] += pos[1];
+		}
+		avg /= static_cast<float>(actors_to_view.size());
+#if 1
+		this->qrenderer.camera_position() += (avg - this->qrenderer.camera_position()) * 0.001f;
+#else
+		this->qrenderer.camera_position() = avg;
+#endif
 	}
 
 	void Scene::update_status_events(std::size_t id)

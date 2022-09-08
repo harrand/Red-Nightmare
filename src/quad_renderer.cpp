@@ -91,6 +91,16 @@ namespace game
 		return static_cast<float>(tz::window().get_width()) / tz::window().get_height();
 	}
 
+	const tz::Vec2& QuadRenderer::camera_position() const
+	{
+		return this->camera_pos;
+	}
+
+	tz::Vec2& QuadRenderer::camera_position()
+	{
+		return this->camera_pos;
+	}
+
 	tz::gl::Renderer QuadRenderer::make_renderer()
 	{
 		tz::gl::RendererInfo rinfo;
@@ -104,7 +114,7 @@ namespace game
 		std::fill(element_data.begin(), element_data.end(), QuadRenderer::ElementData{});
 		tz::gl::BufferResource element_buffer = tz::gl::BufferResource::from_many(element_data, tz::gl::ResourceAccess::DynamicFixed);
 
-		tz::gl::BufferResource render_buffer = tz::gl::BufferResource::from_one(QuadRenderer::RenderData{});
+		tz::gl::BufferResource render_buffer = tz::gl::BufferResource::from_one(QuadRenderer::RenderData{}, tz::gl::ResourceAccess::DynamicFixed);
 		this->element_buffer_handle = rinfo.add_resource(element_buffer);
 		this->render_buffer_handle = rinfo.add_resource(render_buffer);
 
@@ -126,19 +136,12 @@ namespace game
 
 	void QuadRenderer::update_render_data()
 	{
+		RenderData& data = this->renderer.get_resource(this->render_buffer_handle)->data_as<RenderData>().front();
 		const float aspect_ratio = this->get_width_multiplier();
-		QuadRenderer::RenderData new_data
+		data =
 		{
+			.view = tz::view(this->camera_pos.with_more(0.0f), tz::Vec3{0.0f, 0.0f, 0.0f}),
 			.projection = tz::orthographic(-aspect_ratio, aspect_ratio, 1.0f, -1.0f, -0.1f, 0.1f)
 		};
-		this->renderer.edit(
-		tz::gl::RendererEditBuilder{}.
-			write
-			({
-				.resource = this->render_buffer_handle,
-				.data = std::as_bytes(std::span<const QuadRenderer::RenderData>{&new_data, 1}),
-			})
-			.build()
-		);
 	}
 }

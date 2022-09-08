@@ -34,10 +34,13 @@ namespace game
 		void clear();
 		void erase(std::size_t elem);
 		float get_width_multiplier() const;
+		const tz::Vec2& camera_position() const;
+		tz::Vec2& camera_position();
 	private:
 		struct RenderData
 		{
-			tz::Mat4 projection;
+			tz::Mat4 view = tz::Mat4::identity();
+			tz::Mat4 projection = tz::Mat4::identity();
 		};
 		tz::gl::Renderer make_renderer();
 		void update_render_data();
@@ -49,6 +52,7 @@ namespace game
 		// Stores whole scene data, such as MVP matrix components.
 		tz::gl::ResourceHandle render_buffer_handle;
 		tz::gl::Renderer renderer;
+		tz::Vec2 camera_pos{0.0f, 0.0f};
 	};
 }
 

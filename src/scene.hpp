@@ -25,6 +25,7 @@ namespace game
 		void clear();
 		void load_level(LevelID level_id);
 	private:
+		tz::Vec2 get_mouse_position() const;
 		void erase(std::size_t id);
 		void actor_post_update(std::size_t id);
 		std::vector<std::size_t> get_living_players() const;
@@ -32,6 +33,7 @@ namespace game
 		bool actor_collision_query(std::size_t actor_a, std::size_t actor_b) const;
 		bool is_in_bounds(std::size_t actor_id) const;
 		std::pair<tz::Vec2, tz::Vec2> get_world_boundaries() const;
+		void update_camera();
 		void update_status_events(std::size_t id);
 		void garbage_collect(std::size_t id);
 
