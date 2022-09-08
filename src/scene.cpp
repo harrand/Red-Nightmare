@@ -28,15 +28,19 @@ namespace game
 			this->debug_collision_query_count = 0;
 		#endif
 		TZ_PROFZONE("Scene - Update", TZ_PROFCOL_GREEN);
+
 		for(std::size_t i = 0; i < this->size(); i++)
 		{
 			Actor& actor = this->actors[i];
 
 			actor.update();
 			this->actor_post_update(i);
+			this->update_quadtree(i);
 		}
 		this->update_camera();
-		tz_debug_report("Collision Queries: %zu", this->debug_collision_query_count);
+		this->intersections = this->quadtree.find_all_intersections();
+		this->quadtree.clear();
+		//tz_debug_report("Collision Queries: %zu", this->debug_collision_query_count);
 	}
 	
 	void Scene::dbgui()
@@ -548,61 +552,89 @@ namespace game
 		return std::nullopt;
 	}
 
+	Box Scene::get_bounding_box(std::size_t actor_id) const
+	{
+		const QuadRenderer::ElementData& quad = this->qrenderer.elements()[actor_id];
+		/*
+		if(!this->actors[actor_id].flags.contains(ActorFlag::Collide))
+		{
+			tz::Vec2 pos = quad.position;
+			constexpr float small_float = 0.01f;
+			return {pos - tz::Vec2{small_float, small_float}, pos + tz::Vec2{small_float, small_float}};
+		}
+		*/
+		tz::Vec2 min{-0.5f, -0.5f};
+		tz::Vec2 max{0.5f, 0.5f};
+		tz::Vec2 scale = quad.scale;
+		scale[0] = std::abs(scale[0]);
+		scale[1] = std::abs(scale[0]);
+		min[0] *= scale[0];
+		min[1] *= scale[1];
+		max[0] *= scale[0];
+		max[1] *= scale[1];
+		min += quad.position;
+		max += quad.position;
+		return {min, max};
+	}
+
 	bool Scene::actor_collision_query(std::size_t actor_a, std::size_t actor_b) const
 	{
 		#if TZ_DEBUG
 			this->debug_collision_query_count++;
 		#endif
 		TZ_PROFZONE("Scene - Collision Query", TZ_PROFCOL_GREEN);
-		const QuadRenderer::ElementData& a = this->qrenderer.elements()[actor_a];
-		const QuadRenderer::ElementData& b = this->qrenderer.elements()[actor_b];
+		QuadtreeNode a_node{.actor_id = actor_a};
+		QuadtreeNode b_node{.actor_id = actor_b};
+		return std::find(this->intersections.begin(), this->intersections.end(), std::pair<QuadtreeNode, QuadtreeNode>{a_node, b_node}) != this->intersections.end();
+		//const QuadRenderer::ElementData& a = this->qrenderer.elements()[actor_a];
+		//const QuadRenderer::ElementData& b = this->qrenderer.elements()[actor_b];
 
-		const bool accurate = this->actors[actor_a].flags.contains(ActorFlag::Collide);
+		//const bool accurate = this->actors[actor_a].flags.contains(ActorFlag::Collide);
 
-		if(accurate)
-		{
-			// AABB collision based upon scale.
-			struct AABB
-			{
-				tz::Vec2 min, max;
-			};
-			auto get_aabb = [this](std::size_t actor_id)
-			{
-				const QuadRenderer::ElementData& quad = this->qrenderer.elements()[actor_id];
-				AABB ret{.min = tz::Vec2{-1.0f, -1.0f}, .max = tz::Vec2{1.0f, 1.0f}};
-				tz::Vec2 scale = this->qrenderer.elements()[actor_id].scale;
-				ret.min[0] *= scale[0];
-				ret.max[0] *= scale[0];
-				ret.min[1] *= scale[1];
-				ret.max[1] *= scale[1];
-				ret.min += quad.position;
-				ret.max += quad.position;
-				return ret;
-			};
+		//if(accurate)
+		//{
+		//	// AABB collision based upon scale.
+		//	struct AABB
+		//	{
+		//		tz::Vec2 min, max;
+		//	};
+		//	auto get_aabb = [this](std::size_t actor_id)
+		//	{
+		//		const QuadRenderer::ElementData& quad = this->qrenderer.elements()[actor_id];
+		//		AABB ret{.min = tz::Vec2{-1.0f, -1.0f}, .max = tz::Vec2{1.0f, 1.0f}};
+		//		tz::Vec2 scale = this->qrenderer.elements()[actor_id].scale;
+		//		ret.min[0] *= scale[0];
+		//		ret.max[0] *= scale[0];
+		//		ret.min[1] *= scale[1];
+		//		ret.max[1] *= scale[1];
+		//		ret.min += quad.position;
+		//		ret.max += quad.position;
+		//		return ret;
+		//	};
 
-			AABB a = get_aabb(actor_a);
-			/*
-				point.x >= box.minX &&
-				point.x <= box.maxX &&
-				point.y >= box.minY &&
-				point.y <= box.maxY;
-			 */
-			return b.position[0] >= a.min[0] &&
-			       b.position[0] <= a.max[0] &&
-			       b.position[1] >= a.min[1] &&
-			       b.position[1] <= a.max[1];
-		}
-		else
-		{
-			// Circle collision based upon reach.
-			tz::Vec2 displacement = a.position - b.position;
-			float touchdist = touch_distance;
-			if(this->actors[actor_a].flags.contains(ActorFlag::HighReach))
-			{
-				touchdist *= 1.5f;
-			}
-			return displacement.length() <= touchdist;
-		}
+		//	AABB a = get_aabb(actor_a);
+		//	/*
+		//		point.x >= box.minX &&
+		//		point.x <= box.maxX &&
+		//		point.y >= box.minY &&
+		//		point.y <= box.maxY;
+		//	 */
+		//	return b.position[0] >= a.min[0] &&
+		//	       b.position[0] <= a.max[0] &&
+		//	       b.position[1] >= a.min[1] &&
+		//	       b.position[1] <= a.max[1];
+		//}
+		//else
+		//{
+		//	// Circle collision based upon reach.
+		//	tz::Vec2 displacement = a.position - b.position;
+		//	float touchdist = touch_distance;
+		//	if(this->actors[actor_a].flags.contains(ActorFlag::HighReach))
+		//	{
+		//		touchdist *= 1.5f;
+		//	}
+		//	return displacement.length() <= touchdist;
+		//}
 	}
 
 	bool Scene::is_in_bounds(std::size_t actor_id) const
@@ -676,6 +708,11 @@ namespace game
 			status_effect = StatusEffect_Cold;
 		}
 		quad.status_effect_id = status_effect;
+	}
+
+	void Scene::update_quadtree(std::size_t actor_id)
+	{
+		this->quadtree.add({.actor_id = actor_id, .bounding_box = this->get_bounding_box(actor_id)});
 	}
 
 	void Scene::garbage_collect(std::size_t id)

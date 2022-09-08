@@ -19,6 +19,16 @@ namespace game
 	}
 
 	template<BoxedThing T>
+	void Quadtree<T>::clear()
+	{
+		for(auto& child_ptr : this->root.children)
+		{
+			child_ptr = nullptr;
+		}
+		this->root.values.clear();
+	}
+
+	template<BoxedThing T>
 	std::vector<std::pair<T, T>> Quadtree<T>::find_all_intersections() const
 	{
 		std::vector<std::pair<T, T>> ret;
@@ -30,7 +40,7 @@ namespace game
 	void Quadtree<T>::node_add_value(Node* node, std::size_t depth, const Box& box, const T& value)
 	{
 		tz_assert(node != nullptr, "Passed nullptr to node_add_value");
-		tz_assert(box.contains(value.get_box()), "Passed box which cannot contain value's box boundary.");
+		tz_assert(box.contains(value.get_box()), "Passed box which cannot contain value's box boundary. Depth = %zu", depth);
 		if(node->is_leaf())
 		{
 			// node: should the first clause be inversed?
@@ -101,7 +111,7 @@ namespace game
 			auto id = detail::QuadtreeHelper::find_quadrant_id(box, value.get_box());
 			if(id.has_value())
 			{
-				if(remove(node->children[id.value()].get(), detail::QuadtreeHelper::compute_quadrant_box(box, id.value()), value))
+				if(node_remove(node->children[id.value()].get(), detail::QuadtreeHelper::compute_quadrant_box(box, id.value()), value))
 				{
 					return try_merge(node);
 				}
@@ -161,9 +171,9 @@ namespace game
 	}
 	
 	template<BoxedThing T>
-	void Quadtree<T>::node_find_intersections(Node* node, std::vector<std::pair<T, T>>& intersections) const
+	void Quadtree<T>::node_find_intersections(const Node* node, std::vector<std::pair<T, T>>& intersections) const
 	{
-		for(std::size_t i = 9; i < node->values.size(); i++)
+		for(std::size_t i = 0; i < node->values.size(); i++)
 		{
 			for(std::size_t j = 0; j < i; j++)
 			{
@@ -192,11 +202,11 @@ namespace game
 	}
 
 	template<BoxedThing T>
-	void Quadtree<T>::node_find_descendent_intersections(Node* node, const T& value, std::vector<std::pair<T, T>>& intersections) const
+	void Quadtree<T>::node_find_descendent_intersections(const Node* node, const T& value, std::vector<std::pair<T, T>>& intersections) const
 	{
 		for(const T& other : node->values)
 		{
-			if(value->get_box().intersects(other.get_box()))
+			if(value.get_box().intersects(other.get_box()))
 			{
 				intersections.emplace_back(value, other);
 			}

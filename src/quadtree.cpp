@@ -21,26 +21,26 @@ namespace game
 				 *
 				 *
 				 */
-				case 0:
-					// North west
+				case 2:
+					// south west
 					return {min, min + child_dimensions};
 				break;
-				case 1:
+				case 3:
 				{
-					// North east
+					// south east
 					tz::Vec2 cmin = {min[0] + child_dimensions[0], min[1]};
 					return {cmin, cmin + child_dimensions};
 				}
 				break;
-				case 2:
+				case 0:
 				{
-					// South west
+					// north west
 					tz::Vec2 cmin = {min[0], min[1] + child_dimensions[1]};
 					return {cmin, cmin + child_dimensions};
 				}
 				break;
-				case 3:
-					// South east
+				case 1:
+					// north east
 					return {min + child_dimensions, min + child_dimensions + child_dimensions};
 				break;
 				default:

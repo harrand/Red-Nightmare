@@ -48,7 +48,7 @@ namespace game
 	{
 		return !(this->get_left() >= box.get_right() ||
 			this->get_right() <= box.get_left() ||
-			this->get_top() >= box.get_bottom() ||
-			this->get_bottom() <= box.get_top());
+			this->get_bottom() >= box.get_top() ||
+			this->get_top() <= box.get_bottom());
 	}
 }

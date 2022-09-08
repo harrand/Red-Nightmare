@@ -31,22 +31,26 @@ namespace game
 		void actor_post_update(std::size_t id);
 		std::vector<std::size_t> get_living_players() const;
 		std::optional<std::size_t> find_first_player() const;
+		Box get_bounding_box(std::size_t actor_id) const;
 		bool actor_collision_query(std::size_t actor_a, std::size_t actor_b) const;
 		bool is_in_bounds(std::size_t actor_id) const;
 		std::pair<tz::Vec2, tz::Vec2> get_world_boundaries() const;
 		void update_camera();
 		void update_status_events(std::size_t id);
+		void update_quadtree(std::size_t actor_id);
 		void garbage_collect(std::size_t id);
 
 		struct QuadtreeNode
 		{
 			std::size_t actor_id;
-			Box bounding_box;
+			Box bounding_box = {{}, {0.0f, 0.0f}};
 
 			const Box& get_box() const{return this->bounding_box;}
+			bool operator==(const QuadtreeNode& rhs) const{return this->actor_id == rhs.actor_id;}
 		};
 
 		Quadtree<QuadtreeNode> quadtree{Box{tz::Vec2{-100.0f, -100.0f}, tz::Vec2{100.0f, 100.0f}}};
+		Quadtree<QuadtreeNode>::IntersectionState intersections = {};
 		QuadRenderer qrenderer;
 		std::vector<Actor> actors;
 		std::default_random_engine rng;

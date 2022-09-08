@@ -27,9 +27,11 @@ namespace game
 	class Quadtree
 	{
 	public:
+		using IntersectionState = std::vector<std::pair<T, T>>;
 		Quadtree(Box global_boundary);
 		void add(const T& value);
 		void remove(const T& value);
+		void clear();
 		std::vector<std::pair<T, T>> find_all_intersections() const;
 	private:
 		static constexpr std::size_t threshold = 16;
@@ -52,8 +54,8 @@ namespace game
 		bool node_remove(Node* node, const Box& box, const T& value);
 		void remove_value(Node* node, const T& value);
 		bool try_merge(Node* node);
-		void node_find_intersections(Node* node, std::vector<std::pair<T, T>>& intersections) const;
-		void node_find_descendent_intersections(Node* node, const T& value, std::vector<std::pair<T, T>>& intersections) const;
+		void node_find_intersections(const Node* node, std::vector<std::pair<T, T>>& intersections) const;
+		void node_find_descendent_intersections(const Node* node, const T& value, std::vector<std::pair<T, T>>& intersections) const;
 
 		Box global_boundary;
 		Node root;
