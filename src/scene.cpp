@@ -585,7 +585,11 @@ namespace game
 		TZ_PROFZONE("Scene - Collision Query", TZ_PROFCOL_GREEN);
 		QuadtreeNode a_node{.actor_id = actor_a};
 		QuadtreeNode b_node{.actor_id = actor_b};
-		return std::find(this->intersections.begin(), this->intersections.end(), std::pair<QuadtreeNode, QuadtreeNode>{a_node, b_node}) != this->intersections.end();
+		return std::find_if(this->intersections.begin(), this->intersections.end(), [&a_node, b_node](const auto& pair)
+		{
+			return (pair.first == a_node && pair.second == b_node)
+			    || (pair.first == b_node && pair.second == a_node);
+		}) != this->intersections.end();
 		//const QuadRenderer::ElementData& a = this->qrenderer.elements()[actor_a];
 		//const QuadRenderer::ElementData& b = this->qrenderer.elements()[actor_b];
 
