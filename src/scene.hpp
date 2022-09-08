@@ -4,6 +4,7 @@
 #include "animation.hpp"
 #include "quad_renderer.hpp"
 #include "level.hpp"
+#include "quadtree.hpp"
 #include "tz/core/time.hpp"
 
 #include <random>
@@ -37,10 +38,20 @@ namespace game
 		void update_status_events(std::size_t id);
 		void garbage_collect(std::size_t id);
 
+		struct QuadtreeNode
+		{
+			std::size_t actor_id;
+			Box bounding_box;
+
+			const Box& get_box() const{return this->bounding_box;}
+		};
+
+		Quadtree<QuadtreeNode> quadtree{Box{tz::Vec2{-100.0f, -100.0f}, tz::Vec2{100.0f, 100.0f}}};
 		QuadRenderer qrenderer;
 		std::vector<Actor> actors;
 		std::default_random_engine rng;
 		std::unordered_map<std::size_t, tz::Delay> despawn_timer;
+		mutable std::size_t debug_collision_query_count = 0;
 	};
 }
 

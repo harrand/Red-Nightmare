@@ -24,6 +24,9 @@ namespace game
 
 	void Scene::update()
 	{
+		#if TZ_DEBUG
+			this->debug_collision_query_count = 0;
+		#endif
 		TZ_PROFZONE("Scene - Update", TZ_PROFCOL_GREEN);
 		for(std::size_t i = 0; i < this->size(); i++)
 		{
@@ -33,6 +36,7 @@ namespace game
 			this->actor_post_update(i);
 		}
 		this->update_camera();
+		tz_debug_report("Collision Queries: %zu", this->debug_collision_query_count);
 	}
 	
 	void Scene::dbgui()
@@ -546,6 +550,9 @@ namespace game
 
 	bool Scene::actor_collision_query(std::size_t actor_a, std::size_t actor_b) const
 	{
+		#if TZ_DEBUG
+			this->debug_collision_query_count++;
+		#endif
 		TZ_PROFZONE("Scene - Collision Query", TZ_PROFCOL_GREEN);
 		const QuadRenderer::ElementData& a = this->qrenderer.elements()[actor_a];
 		const QuadRenderer::ElementData& b = this->qrenderer.elements()[actor_b];

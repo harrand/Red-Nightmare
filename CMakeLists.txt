@@ -16,6 +16,8 @@ add_app(
 		src/actor.hpp
 		src/animation.cpp
 		src/animation.hpp
+		src/box.cpp
+		src/box.hpp
 		src/faction.hpp
 		src/main.cpp
 		src/images.cpp
@@ -26,6 +28,9 @@ add_app(
 		src/scene.hpp
 		src/stats.cpp
 		src/stats.hpp
+		src/quadtree.cpp
+		src/quadtree.hpp
+		src/quadtree.inl
 		src/quad_renderer.cpp
 		src/quad_renderer.hpp
 		src/util.cpp
