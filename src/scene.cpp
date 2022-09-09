@@ -39,6 +39,7 @@ namespace game
 		}
 		this->update_camera();
 		this->intersections = this->quadtree.find_all_intersections();
+		this->collision_resolution();
 		this->quadtree.clear();
 		//tz_debug_report("Collision Queries: %zu", this->debug_collision_query_count);
 	}
@@ -456,72 +457,6 @@ namespace game
 				position_change[1] -= 1;
 			}
 			quad.position += position_change.normalised() * sp;
-
-			// Functionality for actors which are hazardous. They should attempt to damage anything that gets too close.
-			if(actor.flags.contains(ActorFlag::HazardousToAll) || actor.flags.contains(ActorFlag::HazardousToEnemies) || actor.flags.contains(ActorFlag::Aggressive))
-			{
-				
-				for(std::size_t i = 0; i < this->size(); i++)
-				{
-					if(i == id)
-					{
-						continue;
-					}
-					Actor& victim = this->actors[i];
-					const bool should_hurt = actor.is_enemy_of(victim) && !victim.flags.contains(ActorFlag::Unhittable);
-					if(should_hurt && !actor.dead() && !victim.dead() && this->actor_collision_query(id, i))
-					{
-						actor.damage(victim);
-						// TODO: Data-drive this.
-						if(actor.type == ActorType::PlayerClassic_Orb)
-						{
-							this->add(ActorType::FireSmoke);
-							this->qrenderer.elements().back().position = quad.position;
-						}
-					}
-				}
-			}
-			// Functionality for actors which collide with others.
-			const bool cares_about_collisions =
-				actor.flags.contains(ActorFlag::DeadRespawnOnPlayerTouch)
-			     || actor.flags.contains(ActorFlag::DeadResurrectOnPlayerTouch)
-			     || actor.flags.contains(ActorFlag::Collide);
-			if(cares_about_collisions)
-			{
-				for(std::size_t i = 0; i < this->size(); i++)
-				{
-					if(i == id)
-					{
-						continue;
-					}
-					Actor& other = this->actors[i];
-					QuadRenderer::ElementData& other_quad = this->qrenderer.elements()[i];
-					const bool cares_about_player = (actor.flags.contains(ActorFlag::DeadRespawnOnPlayerTouch) || actor.flags.contains(ActorFlag::DeadResurrectOnPlayerTouch) && other.flags.contains(ActorFlag::Player));
-					bool collides = actor.flags.contains(ActorFlag::Collide);
-					if((collides || cares_about_player) && this->actor_collision_query(id, i))
-					{
-						if(collides)
-						{
-							// Push other actor away so its not colliding anymore.
-							tz::Vec2 displacement = quad.position - other_quad.position;
-							// Push back with impulse 150% the distance it would've travelled this frame.
-							other_quad.position -= displacement.normalised() * other.get_current_stats().movement_speed * 1.5f;
-						}
-						if(cares_about_player)
-						{
-							// Actor is touching a player.
-							if(actor.flags.contains(ActorFlag::DeadResurrectOnPlayerTouch))
-							{
-								actor.base_stats.current_health = actor.get_current_stats().max_health;
-							}
-							if(actor.flags.contains(ActorFlag::DeadRespawnOnPlayerTouch))
-							{
-								actor.respawn();
-							}
-						}
-					}
-				}
-			}
 		}
 		this->update_status_events(id);
 		this->garbage_collect(id);
@@ -754,6 +689,64 @@ namespace game
 		else
 		{
 			this->despawn_timer.erase(id);
+		}
+	}
+
+	void Scene::collision_resolution()
+	{
+		for(const auto& [node_a, node_b] : this->intersections)
+		{
+			std::size_t a_id = node_a.actor_id;
+			std::size_t b_id = node_b.actor_id;
+
+			this->resolve_collision(a_id, b_id);
+			this->resolve_collision(b_id, a_id);
+		}
+	}
+
+	void Scene::resolve_collision(std::size_t a_id, std::size_t b_id)
+	{
+		Actor& actor = this->actors[a_id];
+		QuadRenderer::ElementData& quad = this->qrenderer.elements()[a_id];
+		Actor& other = this->actors[b_id];
+		QuadRenderer::ElementData& other_quad = this->qrenderer.elements()[b_id];
+
+		const bool wants_to_hurt = (actor.flags.contains(ActorFlag::HazardousToAll) || actor.flags.contains(ActorFlag::HazardousToEnemies) || actor.flags.contains(ActorFlag::Aggressive)) && actor.is_enemy_of(other) && !other.flags.contains(ActorFlag::Unhittable) && !actor.dead() && !other.dead();
+		const bool blocks_colliders = actor.flags.contains(ActorFlag::Collide);
+		const bool wants_touch_player = (actor.flags.contains(ActorFlag::DeadRespawnOnPlayerTouch) || actor.flags.contains(ActorFlag::DeadResurrectOnPlayerTouch) && other.flags.contains(ActorFlag::Player));
+		const bool cares_about_collisions = wants_to_hurt || blocks_colliders || wants_touch_player;
+		if(cares_about_collisions)
+		{
+			if(wants_to_hurt)
+			{
+				actor.damage(other);
+				// TODO: Data-drive this.
+				if(actor.type == ActorType::PlayerClassic_Orb)
+				{
+					this->add(ActorType::FireSmoke);
+					this->qrenderer.elements().back().position = quad.position;
+				}
+			}
+			if(blocks_colliders)
+			{
+				// Push other actor away so its not colliding anymore.
+				tz::Vec2 displacement = quad.position - other_quad.position;
+				// Push back with impulse 150% the distance it would've travelled this frame.
+				other_quad.position -= displacement.normalised() * other.get_current_stats().movement_speed * 1.5f;
+			}
+			if(wants_touch_player)
+			{
+				// Actor is touching a player.
+				if(actor.flags.contains(ActorFlag::DeadResurrectOnPlayerTouch))
+				{
+					actor.base_stats.current_health = actor.get_current_stats().max_health;
+				}
+				if(actor.flags.contains(ActorFlag::DeadRespawnOnPlayerTouch))
+				{
+					actor.respawn();
+				}
+
+			}
 		}
 	}
 }

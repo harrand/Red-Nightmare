@@ -39,6 +39,8 @@ namespace game
 		void update_status_events(std::size_t id);
 		void update_quadtree(std::size_t actor_id);
 		void garbage_collect(std::size_t id);
+		void collision_resolution();
+		void resolve_collision(std::size_t a_id, std::size_t b_id);
 
 		struct QuadtreeNode
 		{
