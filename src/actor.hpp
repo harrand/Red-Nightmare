@@ -98,6 +98,8 @@ namespace game
 		Nightmare,
 		/// Actor looks like Akhara's default fireball.
 		PlayerClassic_DefaultFireball,
+		/// Actor looks like a plain stone texture.
+		Material_Stone,
 		/// On debug builds, looks like the missing placeholder texture. On non-debug builds, completely invisible.
 		DebugOnlyVisible,
 	};

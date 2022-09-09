@@ -101,6 +101,9 @@ namespace game
 		Nightmare_Up_1,
 		Nightmare_Up_2,
 		Nightmare_Up_3,
+
+		Material_Stone,
+
 		Count
 	};
 

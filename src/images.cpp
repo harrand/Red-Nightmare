@@ -102,6 +102,8 @@
 #include ImportedTextHeader(nightmare_up2, png)
 #include ImportedTextHeader(nightmare_up3, png)
 
+#include ImportedTextHeader(material_stone, png)
+
 namespace game
 {
 	std::array<std::string_view, static_cast<int>(TextureID::Count)> texture_data
@@ -202,7 +204,9 @@ namespace game
 		ImportedTextData(nightmare_special, png),
 		ImportedTextData(nightmare_up1, png),
 		ImportedTextData(nightmare_up2, png),
-		ImportedTextData(nightmare_up3, png)
+		ImportedTextData(nightmare_up3, png),
+
+		ImportedTextData(material_stone, png)
 	};
 
 	tz::gl::ImageResource load_image(TextureID texid)

@@ -116,7 +116,7 @@ namespace game
 					.type = ActorType::Wall,
 					.flags = {ActorFlag::Stealth, ActorFlag::Collide, ActorFlag::Invincible},
 					.faction = Faction::PureEnemy,
-					.skin = ActorSkin::DebugOnlyVisible,
+					.skin = ActorSkin::Material_Stone,
 					.palette_colour = {255u, 0u, 0u}
 				};
 			break;
@@ -398,6 +398,9 @@ namespace game
 		{
 			case ActorSkin::PlayerClassic_DefaultFireball:
 				ending_animation = AnimationID::PlayerClassic_DefaultFireball_Idle;
+			break;
+			case ActorSkin::Material_Stone:
+				ending_animation = AnimationID::Material_Stone;
 			break;
 			case ActorSkin::FireSmoke:
 				ending_animation = AnimationID::PlayerClassic_FireSmoke;

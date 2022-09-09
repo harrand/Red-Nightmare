@@ -372,6 +372,15 @@ namespace game
 			},
 			.fps = 9,
 			.loop = true
+		},
+		AnimationInfo /*Material_Stone*/
+		{
+			.frames = 
+			{
+				TextureID::Material_Stone,
+			},
+			.fps = 1,
+			.loop = false
 		}
 	};
 

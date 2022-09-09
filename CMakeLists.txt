@@ -149,5 +149,7 @@ add_text(
 		res/images/enemies/nightmare/nightmare_up2.png
 		res/images/enemies/nightmare/nightmare_up3.png
 
+		res/images/materials/material_stone.png
+
 		res/images/levels/dev_level_0.png
 )

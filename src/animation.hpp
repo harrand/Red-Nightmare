@@ -56,6 +56,7 @@ namespace game
 		Nightmare_MoveDown,
 		Nightmare_MoveUp,
 		Nightmare_MoveSide,
+		Material_Stone,
 		Count
 	};
 
