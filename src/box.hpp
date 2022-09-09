@@ -17,6 +17,8 @@ namespace game
 
 			bool contains(const Box& box) const;
 			bool intersects(const Box& box) const;
+
+			bool operator==(const Box& rhs) const = default;
 		private:
 			tz::Vec2 bottom_left;
 			tz::Vec2 length;

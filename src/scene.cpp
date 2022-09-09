@@ -328,7 +328,10 @@ namespace game
 		{
 			auto action = actor.entity.get<ActionID::Launch>();
 			const float speed = actor.get_current_stats().movement_speed * action->data().speed_multiplier;
-			quad.position += action->data().direction.normalised() * speed;
+			if(!actor.dead())
+			{
+				quad.position += action->data().direction.normalised() * speed;
+			}
 		}
 		if(actor.entity.has<ActionID::Teleport>())
 		{

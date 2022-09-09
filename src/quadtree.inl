@@ -40,7 +40,7 @@ namespace game
 	void Quadtree<T>::node_add_value(Node* node, std::size_t depth, const Box& box, const T& value)
 	{
 		tz_assert(node != nullptr, "Passed nullptr to node_add_value");
-		tz_assert(box.contains(value.get_box()), "Passed box which cannot contain value's box boundary. Depth = %zu", depth);
+		tz_assert(box.contains(value.get_box()), "Passed box which cannot contain value's box boundary. Depth = %zu. Value Box Centre = {%.2f, %.2f}, Value Box Dimensions = {%.2f, %.2f} (Top-level node: %d)", depth, value.get_box().get_centre()[0], value.get_box().get_centre()[1], value.get_box().get_dimensions()[0], value.get_box().get_dimensions()[1], box == this->global_boundary);
 		if(node->is_leaf())
 		{
 			// node: should the first clause be inversed?
