@@ -464,19 +464,16 @@ namespace game
 					{
 						continue;
 					}
-					if(this->actor_collision_query(id, i))
+					Actor& victim = this->actors[i];
+					const bool should_hurt = actor.is_enemy_of(victim) && !victim.flags.contains(ActorFlag::Unhittable);
+					if(should_hurt && !actor.dead() && !victim.dead() && this->actor_collision_query(id, i))
 					{
-						Actor& victim = this->actors[i];
-						bool should_hurt = actor.is_enemy_of(victim) && !victim.flags.contains(ActorFlag::Unhittable);
-						if(should_hurt && !actor.dead() && !victim.dead())
+						actor.damage(victim);
+						// TODO: Data-drive this.
+						if(actor.type == ActorType::PlayerClassic_Orb)
 						{
-							actor.damage(victim);
-							// TODO: Data-drive this.
-							if(actor.type == ActorType::PlayerClassic_Orb)
-							{
-								this->add(ActorType::FireSmoke);
-								this->qrenderer.elements().back().position = quad.position;
-							}
+							this->add(ActorType::FireSmoke);
+							this->qrenderer.elements().back().position = quad.position;
 						}
 					}
 				}
@@ -496,17 +493,18 @@ namespace game
 					}
 					Actor& other = this->actors[i];
 					QuadRenderer::ElementData& other_quad = this->qrenderer.elements()[i];
-					if(this->actor_collision_query(id, i))
+					const bool cares_about_player = (actor.flags.contains(ActorFlag::DeadRespawnOnPlayerTouch) || actor.flags.contains(ActorFlag::DeadResurrectOnPlayerTouch) && other.flags.contains(ActorFlag::Player));
+					bool collides = actor.flags.contains(ActorFlag::Collide);
+					if((collides || cares_about_player) && this->actor_collision_query(id, i))
 					{
-						if(actor.flags.contains(ActorFlag::Collide))
+						if(collides)
 						{
 							// Push other actor away so its not colliding anymore.
 							tz::Vec2 displacement = quad.position - other_quad.position;
 							// Push back with impulse 150% the distance it would've travelled this frame.
 							other_quad.position -= displacement.normalised() * other.get_current_stats().movement_speed * 1.5f;
 						}
-						const bool cares_about_player = actor.flags.contains(ActorFlag::DeadRespawnOnPlayerTouch) || actor.flags.contains(ActorFlag::DeadResurrectOnPlayerTouch);
-						if(cares_about_player && other.flags.contains(ActorFlag::Player))
+						if(cares_about_player)
 						{
 							// Actor is touching a player.
 							if(actor.flags.contains(ActorFlag::DeadResurrectOnPlayerTouch))

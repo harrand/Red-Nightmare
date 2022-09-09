@@ -16,7 +16,7 @@ int main()
 			ImGui::MenuItem("Current Scene", nullptr, &show_current_scene);
 		});
 
-		scene.load_level(game::LevelID::Empty);
+		scene.load_level(game::LevelID::DevLevel0);
 
 		using namespace tz::literals;
 		tz::Delay fixed_update = 1667_us;
