@@ -117,6 +117,22 @@ add_text(
 		res/images/player/akhara/ability/player_classic_default_fireball_particles_4.png
 		res/images/player/akhara/ability/player_classic_default_fireball_particles_5.png
 		res/images/player/akhara/ability/player_classic_default_fireball_particles_6.png
+
+		res/images/effects/block_break/block_break00.png
+		res/images/effects/block_break/block_break01.png
+		res/images/effects/block_break/block_break02.png
+		res/images/effects/block_break/block_break03.png
+		res/images/effects/block_break/block_break04.png
+		res/images/effects/block_break/block_break05.png
+		res/images/effects/block_break/block_break06.png
+		res/images/effects/block_break/block_break07.png
+		res/images/effects/block_break/block_break08.png
+		res/images/effects/block_break/block_break09.png
+		res/images/effects/block_break/block_break10.png
+		res/images/effects/block_break/block_break11.png
+		res/images/effects/block_break/block_break12.png
+		res/images/effects/block_break/block_break13.png
+
 		res/images/effects/fire_explosion/fire_explosion_0.png
 		res/images/effects/fire_explosion/fire_explosion_1.png
 		res/images/effects/fire_explosion/fire_explosion_2.png

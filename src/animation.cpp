@@ -274,6 +274,28 @@ namespace game
 			.fps = 9,
 			.loop = false
 		},
+		AnimationInfo /*BlockBreak*/
+		{
+			.frames =
+			{
+				TextureID::BlockBreak_0,
+				TextureID::BlockBreak_1,
+				TextureID::BlockBreak_2,
+				TextureID::BlockBreak_3,
+				TextureID::BlockBreak_4,
+				TextureID::BlockBreak_5,
+				TextureID::BlockBreak_6,
+				TextureID::BlockBreak_7,
+				TextureID::BlockBreak_8,
+				TextureID::BlockBreak_9,
+				TextureID::BlockBreak_10,
+				TextureID::BlockBreak_11,
+				TextureID::BlockBreak_12,
+				TextureID::BlockBreak_13,
+			},
+			.fps = 24,
+			.loop = false
+		},
 		AnimationInfo /*PlayerClassic_FireExplosion*/
 		{
 			.frames =

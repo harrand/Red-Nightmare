@@ -70,6 +70,22 @@
 #include ImportedTextHeader(player_classic_default_fireball_particles_4, png)
 #include ImportedTextHeader(player_classic_default_fireball_particles_5, png)
 #include ImportedTextHeader(player_classic_default_fireball_particles_6, png)
+
+#include ImportedTextHeader(block_break00, png)
+#include ImportedTextHeader(block_break01, png)
+#include ImportedTextHeader(block_break02, png)
+#include ImportedTextHeader(block_break03, png)
+#include ImportedTextHeader(block_break04, png)
+#include ImportedTextHeader(block_break05, png)
+#include ImportedTextHeader(block_break06, png)
+#include ImportedTextHeader(block_break07, png)
+#include ImportedTextHeader(block_break08, png)
+#include ImportedTextHeader(block_break09, png)
+#include ImportedTextHeader(block_break10, png)
+#include ImportedTextHeader(block_break11, png)
+#include ImportedTextHeader(block_break12, png)
+#include ImportedTextHeader(block_break13, png)
+
 #include ImportedTextHeader(fire_explosion_0, png)
 #include ImportedTextHeader(fire_explosion_1, png)
 #include ImportedTextHeader(fire_explosion_2, png)
@@ -174,6 +190,22 @@ namespace game
 		ImportedTextData(player_classic_default_fireball_particles_4, png),
 		ImportedTextData(player_classic_default_fireball_particles_5, png),
 		ImportedTextData(player_classic_default_fireball_particles_6, png),
+
+		ImportedTextData(block_break00, png),
+		ImportedTextData(block_break01, png),
+		ImportedTextData(block_break02, png),
+		ImportedTextData(block_break03, png),
+		ImportedTextData(block_break04, png),
+		ImportedTextData(block_break05, png),
+		ImportedTextData(block_break06, png),
+		ImportedTextData(block_break07, png),
+		ImportedTextData(block_break08, png),
+		ImportedTextData(block_break09, png),
+		ImportedTextData(block_break10, png),
+		ImportedTextData(block_break11, png),
+		ImportedTextData(block_break12, png),
+		ImportedTextData(block_break13, png),
+
 		ImportedTextData(fire_explosion_0, png),
 		ImportedTextData(fire_explosion_1, png),
 		ImportedTextData(fire_explosion_2, png),

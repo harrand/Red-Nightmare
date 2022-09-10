@@ -124,7 +124,7 @@ namespace game
 				return
 				{
 					.type = ActorType::WallDestructible,
-					.flags = {ActorFlag::Stealth, ActorFlag::Collide, ActorFlag::InvisibleWhileDead},
+					.flags = {ActorFlag::Stealth, ActorFlag::Collide},
 					.faction = Faction::PlayerEnemy,
 					.skin = ActorSkin::Material_Stone,
 					.palette_colour = {127u, 0u, 0u}
@@ -410,7 +410,14 @@ namespace game
 				ending_animation = AnimationID::PlayerClassic_DefaultFireball_Idle;
 			break;
 			case ActorSkin::Material_Stone:
-				ending_animation = AnimationID::Material_Stone;
+				if(this->dead())
+				{
+					ending_animation = AnimationID::BlockBreak;
+				}
+				else
+				{
+					ending_animation = AnimationID::Material_Stone;
+				}
 			break;
 			case ActorSkin::FireSmoke:
 				ending_animation = AnimationID::PlayerClassic_FireSmoke;

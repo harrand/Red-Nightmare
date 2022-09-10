@@ -49,6 +49,7 @@ namespace game
 		GhostZombie_MoveUp,
 		PlayerClassic_DefaultFireball_Idle,
 		PlayerClassic_FireSmoke,
+		BlockBreak,
 		PlayerClassic_FireExplosion,
 		Nightmare_Spawn,
 		Nightmare_Death,
