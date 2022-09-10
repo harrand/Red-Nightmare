@@ -120,6 +120,16 @@ namespace game
 					.palette_colour = {255u, 0u, 0u}
 				};
 			break;
+			case ActorType::WallDestructible:
+				return
+				{
+					.type = ActorType::WallDestructible,
+					.flags = {ActorFlag::Stealth, ActorFlag::Collide, ActorFlag::InvisibleWhileDead},
+					.faction = Faction::PlayerEnemy,
+					.skin = ActorSkin::Material_Stone,
+					.palette_colour = {127u, 0u, 0u}
+				};
+			break;
 		}
 		return Actor::null();
 	}

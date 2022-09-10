@@ -122,6 +122,8 @@ namespace game
 		EvilPlayer_TestSpawner,
 		/// A visible wall, blocking other actors' paths.
 		Wall,
+		/// Just like a wall, but is destructible by the player.
+		WallDestructible,
 		Count
 	};
 
