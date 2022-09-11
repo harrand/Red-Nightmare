@@ -168,4 +168,5 @@ add_text(
 		res/images/materials/material_stone.png
 
 		res/images/levels/dev_level_0.png
+		res/images/levels/dev_level_1.png
 )

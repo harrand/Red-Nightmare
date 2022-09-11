@@ -58,6 +58,10 @@ namespace game
 			{
 				this->load_level(LevelID::DevLevel0);
 			}
+			if(ImGui::Button("DevLevel1"))
+			{
+				this->load_level(LevelID::DevLevel1);
+			}
 		}
 		if(ImGui::CollapsingHeader("Mass Control"))
 		{

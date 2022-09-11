@@ -6,13 +6,15 @@
 
 #include ImportedTextHeader(invisible, png)
 #include ImportedTextHeader(dev_level_0, png)
+#include ImportedTextHeader(dev_level_1, png)
 
 namespace game
 {
 	std::array<std::string_view, static_cast<int>(LevelID::Count)> level_image_data
 	{
 		ImportedTextData(invisible, png),
-		ImportedTextData(dev_level_0, png)
+		ImportedTextData(dev_level_0, png),
+		ImportedTextData(dev_level_1, png)
 	};
 
 	LevelPalette get_level_palette()

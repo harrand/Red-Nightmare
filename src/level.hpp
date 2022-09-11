@@ -27,6 +27,7 @@ namespace game
 	{
 		Empty,
 		DevLevel0,
+		DevLevel1,
 		Count
 	};
 
