@@ -4,6 +4,7 @@
 
 namespace game::util
 {
+	constexpr float stat_global_multiplier = 60.0f;
 	tz::Vec2 get_mouse_world_location();
 }
 

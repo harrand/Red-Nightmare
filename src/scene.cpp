@@ -50,6 +50,7 @@ namespace game
 		ImGui::Spacing();
 		if(ImGui::CollapsingHeader("Dev Levels"))
 		{
+			ImGui::Indent();
 			if(ImGui::Button("Empty Level"))
 			{
 				this->load_level(LevelID::Empty);
@@ -73,9 +74,11 @@ namespace game
 				});
 				this->impl_load_level(game::load_level_from_image(res));
 			}
+			ImGui::Unindent();
 		}
 		if(ImGui::CollapsingHeader("Mass Control"))
 		{
+			ImGui::Indent();
 			if(ImGui::Button("Kill Everyone"))
 			{
 				for(auto& actor : this->actors)
@@ -101,9 +104,11 @@ namespace game
 			{
 				this->clear();
 			}
+			ImGui::Unindent();
 		}
 		if(ImGui::CollapsingHeader("Debug Spawning"))
 		{
+			ImGui::Indent();
 			if(ImGui::Button("Debug Add Player"))
 			{
 				this->add(ActorType::PlayerClassic);
@@ -121,16 +126,21 @@ namespace game
 			{
 				this->add(ActorType::EvilPlayer_TestSpawner);
 			}
+			ImGui::Unindent();
 		}
 		if(this->size() > 0 && ImGui::CollapsingHeader("Actors"))
 		{
+			ImGui::Indent();
 			static int actor_id = 0;
 			ImGui::SliderInt("Actor ID", &actor_id, 0, this->size() - 1);
 			this->actors[actor_id].dbgui();
+			ImGui::Unindent();
 		}
 		if(ImGui::CollapsingHeader("Quad Renderer"))
 		{
+			ImGui::Indent();
 			this->qrenderer.dbgui();
+			ImGui::Unindent();
 		}
 	}
 

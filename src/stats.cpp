@@ -1,15 +1,32 @@
 #include "stats.hpp"
+#include "util.hpp"
 #include "tz/dbgui/dbgui.hpp"
 
 namespace game
 {
 	void Stats::dbgui() const
 	{
-		ImGui::Text("Movement Speed: %u%", static_cast<unsigned int>(100.0f * this->movement_speed / default_base_movement));
-		constexpr float global_multiplier = 360.0f;
-		ImGui::Text("Damage: %.1f", this->damage * global_multiplier);
-		ImGui::Text("Max Health: %.1f", this->max_health * global_multiplier);
-		ImGui::Text("Defense: %.1f", this->defense * global_multiplier);
+		ImGui::BeginTable("Current Stats", 2, ImGuiTableFlags_Borders);
+			ImGui::TableNextColumn();
+			ImGui::Text("Movement Speed");
+			ImGui::TableNextColumn();
+			ImGui::Text("%u%", static_cast<unsigned int>(util::stat_global_multiplier * this->movement_speed / default_base_movement));
+			
+			ImGui::TableNextColumn();
+			ImGui::Text("Damage");
+			ImGui::TableNextColumn();
+			ImGui::Text("%.1f", this->damage * util::stat_global_multiplier);
+
+			ImGui::TableNextColumn();
+			ImGui::Text("Max Health");
+			ImGui::TableNextColumn();
+			ImGui::Text("%.1f", this->max_health * util::stat_global_multiplier);
+
+			ImGui::TableNextColumn();
+			ImGui::Text("Defense");
+			ImGui::TableNextColumn();
+			ImGui::Text("%.1f", this->defense * util::stat_global_multiplier);
+		ImGui::EndTable();
 	}
 
 	bool StatBuff::operator==(const StatBuff& rhs) const

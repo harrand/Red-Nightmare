@@ -237,59 +237,42 @@ namespace game
 
 	void Actor::dbgui()
 	{
-		ImGui::Text("\"%s\"", this->name);
-		ImGui::Spacing();
-		ImGui::Text("Health: %.2f/%f (dead: %s)", this->base_stats.current_health, this->get_current_stats().max_health, this->dead() ? "true" : "false");
-		if(ImGui::CollapsingHeader("Current Stats"))
-		{
-			this->get_current_stats().dbgui();
-			if(ImGui::CollapsingHeader("Debug Buffs:"))
-			{
-				if(ImGui::Button("Berserk"))
-				{
-					this->buffs.add(BuffID::Berserk);
-				}
-				if(ImGui::Button("Sprint"))
-				{
-					this->buffs.add(BuffID::Sprint);
-				}
-				if(ImGui::Button("Chill"))
-				{
-					this->buffs.add(BuffID::Chill);
-				}
-			}
-		}
-		ImGui::Text("Invincible: %s", this->flags.contains(ActorFlag::Invincible) ? "true" : "false");
+		ImGui::Text("\"%s\" (HP: %.2f/%.2f, dead: %s)", this->name, this->base_stats.current_health, this->get_current_stats().max_health, this->dead() ? "true" : "false");
 		ImGui::SameLine();
-		if(ImGui::Button("Toggle Invincible"))
-		{
-			if(this->flags.contains(ActorFlag::Invincible))
-			{
-				this->flags.remove(ActorFlag::Invincible);
-			}
-			else
-			{
-				this->flags |= ActorFlag::Invincible;
-			}
-		}
-		ImGui::Text("Controlled: %s", this->flags.contains(ActorFlag::MouseControlled) ? "true" : "false");
-		ImGui::SameLine();
-		if(ImGui::Button("Toggle Controlled"))
-		{
-			if(this->flags.contains(ActorFlag::MouseControlled))
-			{
-				this->flags.remove(ActorFlag::MouseControlled);
-			}
-			else
-			{
-				this->flags |= ActorFlag::MouseControlled;
-			}
-		}
-		ImGui::Text("Movement Speed: %.5f", this->get_current_stats().movement_speed);
-		ImGui::Text("Entity Action Count: %zu", this->entity.size());
 		if(ImGui::Button("Kill"))
 		{
 			this->base_stats.current_health = 0;
+		}
+		ImGui::Spacing();
+		this->get_current_stats().dbgui();
+		if(ImGui::CollapsingHeader("Debug Buffs:"))
+		{
+			if(ImGui::Button("Berserk"))
+			{
+				this->buffs.add(BuffID::Berserk);
+			}
+			if(ImGui::Button("Sprint"))
+			{
+				this->buffs.add(BuffID::Sprint);
+			}
+			if(ImGui::Button("Chill"))
+			{
+				this->buffs.add(BuffID::Chill);
+			}
+
+			ImGui::Text("Controlled: %s", this->flags.contains(ActorFlag::MouseControlled) ? "true" : "false");
+			ImGui::SameLine();
+			if(ImGui::Button("Toggle Controlled"))
+			{
+				if(this->flags.contains(ActorFlag::MouseControlled))
+				{
+					this->flags.remove(ActorFlag::MouseControlled);
+				}
+				else
+				{
+					this->flags |= ActorFlag::MouseControlled;
+				}
+			}
 		}
 	}
 
