@@ -226,21 +226,21 @@ namespace game
 		}
 		// If actor wants to teleport to a random location, do it now.
 
+		quad.scale = {0.2f, 0.2f};
 		if(actor.flags.contains(ActorFlag::InvisibleWhileDead))
 		{
 			if(actor.dead())
 			{
 				quad.scale *= 0.0f;
 			}
-			else
-			{
-				// default scale. TODO: dont hardcode
-				quad.scale = {0.2f, 0.2f};
-			}
 		}
 		if(actor.flags.contains(ActorFlag::LargeSprite))
 		{
 			quad.scale *= 1.5f;
+		}
+		if(actor.flags.contains(ActorFlag::SmallSprite))
+		{
+			quad.scale *= 0.65f;
 		}
 
 		// Handle actions.
@@ -729,7 +729,6 @@ namespace game
 			}
 			if(blocks_colliders)
 			{
-				// Push other actor away so its not colliding anymore.
 				tz::Vec2 displacement = quad.position - other_quad.position;
 				// Push back with impulse 150% the distance it would've travelled this frame.
 				other_quad.position -= displacement.normalised() * other.get_current_stats().movement_speed * 1.5f;

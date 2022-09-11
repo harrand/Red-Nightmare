@@ -18,10 +18,11 @@ namespace game
 					.flags = {ActorFlag::Player, ActorFlag::KeyboardControlled},
 					.base_stats =
 					{
-						.movement_speed = 0.001f
+						.movement_speed = 0.0016f
 					},
 					.skin = ActorSkin::PlayerClassic_LowPoly,
-					.animation = game::play_animation(AnimationID::PlayerClassic_Idle)
+					.animation = game::play_animation(AnimationID::PlayerClassic_Idle),
+					.name = "PlayerClassic"
 				};
 			break;
 			case ActorType::PlayerClassic_TestEvil:
@@ -32,20 +33,21 @@ namespace game
 					.faction = Faction::PlayerEnemy,
 					.base_stats =
 					{
-						.movement_speed = 0.0005f,
+						.movement_speed = 0.0008f,
 						.max_health = 0.01f,
 						.current_health = 0.01f
 					},
 					.skin = ActorSkin::GhostZombie,
 					.animation = game::play_animation(AnimationID::PlayerClassic_Idle),
-					.palette_colour = {0u, 255u, 0u}
+					.palette_colour = {0u, 255u, 0u},
+					.name = "Ghost Zombie"
 				};
 			break;
 			case ActorType::PlayerClassic_Orb:
 				return
 				{
 					.type = ActorType::PlayerClassic_Orb,
-					.flags = {ActorFlag::HazardousToEnemies, ActorFlag::ClickToLaunch, ActorFlag::RespawnOnPlayer, ActorFlag::DieIfOOB, ActorFlag::RespawnOnClick, ActorFlag::SelfHarm, ActorFlag::InvisibleWhileDead, ActorFlag::DoNotGarbageCollect, ActorFlag::ExplodeOnDeath, ActorFlag::Stealth, ActorFlag::Unhittable},
+					.flags = {ActorFlag::SmallSprite, ActorFlag::HazardousToEnemies, ActorFlag::ClickToLaunch, ActorFlag::RespawnOnPlayer, ActorFlag::DieIfOOB, ActorFlag::RespawnOnClick, ActorFlag::SelfHarm, ActorFlag::InvisibleWhileDead, ActorFlag::DoNotGarbageCollect, ActorFlag::ExplodeOnDeath, ActorFlag::Stealth, ActorFlag::Unhittable},
 					.faction = Faction::PlayerFriend,
 					.base_stats =
 					{
@@ -55,7 +57,8 @@ namespace game
 						.current_health = 0.0f
 					},
 					.skin = ActorSkin::PlayerClassic_DefaultFireball,
-					.animation = game::play_animation(AnimationID::PlayerClassic_DefaultFireball_Idle)
+					.animation = game::play_animation(AnimationID::PlayerClassic_DefaultFireball_Idle),
+					.name = "Akhara's Default Orb"
 				};
 			break;
 			case ActorType::FireSmoke:
@@ -68,7 +71,8 @@ namespace game
 						.max_health = 0.1f,
 						.current_health = 0.01f
 					},
-					.skin = ActorSkin::FireSmoke
+					.skin = ActorSkin::FireSmoke,
+					.name = "Fire Smoke Effect"
 				};
 			break;
 			case ActorType::FireExplosion:
@@ -81,7 +85,8 @@ namespace game
 						.max_health = 0.1f,
 						.current_health = 0.01f
 					},
-					.skin = ActorSkin::FireExplosion
+					.skin = ActorSkin::FireExplosion,
+					.name = "Fire Explosion Hazard"
 				};
 			break;
 			case ActorType::Nightmare:
@@ -98,7 +103,8 @@ namespace game
 						.current_health = 0.001f
 					},
 					.skin = ActorSkin::Nightmare,
-					.palette_colour = {64u, 32u, 8u}
+					.palette_colour = {64u, 32u, 8u},
+					.name = "Nightmare Boss"
 				};
 			break;
 			case ActorType::EvilPlayer_TestSpawner:
@@ -107,27 +113,35 @@ namespace game
 					.type = ActorType::EvilPlayer_TestSpawner,
 					.flags = {ActorFlag::RandomRespawnLocation, ActorFlag::RespawnOnDeath, ActorFlag::Rot, ActorFlag::Haunted, ActorFlag::Stealth},
 					.skin = ActorSkin::DebugOnlyVisible,
-					.palette_colour = {255u, 64u, 255u}
+					.palette_colour = {255u, 64u, 255u},
+					.name = "Spawner (Ghost Zombie)"
 				};
 			break;
 			case ActorType::Wall:
 				return
 				{
 					.type = ActorType::Wall,
-					.flags = {ActorFlag::Stealth, ActorFlag::Collide, ActorFlag::Invincible},
+					.flags = {ActorFlag::Stealth, ActorFlag::Collide, ActorFlag::Invincible, ActorFlag::SmallSprite},
 					.faction = Faction::PureEnemy,
 					.skin = ActorSkin::Material_Stone,
-					.palette_colour = {255u, 0u, 0u}
+					.palette_colour = {255u, 0u, 0u},
+					.name = "Wall"
 				};
 			break;
 			case ActorType::WallDestructible:
 				return
 				{
 					.type = ActorType::WallDestructible,
-					.flags = {ActorFlag::Stealth, ActorFlag::Collide},
+					.flags = {ActorFlag::Stealth, ActorFlag::Collide, ActorFlag::SmallSprite, ActorFlag::DoNotGarbageCollect},
 					.faction = Faction::PlayerEnemy,
+					.base_stats =
+					{
+						.max_health = 1.0f,
+						.current_health = 1.0f
+					},
 					.skin = ActorSkin::Material_Stone,
-					.palette_colour = {127u, 0u, 0u}
+					.palette_colour = {127u, 0u, 0u},
+					.name = "Destructible Wall"
 				};
 			break;
 		}
@@ -223,6 +237,8 @@ namespace game
 
 	void Actor::dbgui()
 	{
+		ImGui::Text("\"%s\"", this->name);
+		ImGui::Spacing();
 		ImGui::Text("Health: %.2f/%f (dead: %s)", this->base_stats.current_health, this->get_current_stats().max_health, this->dead() ? "true" : "false");
 		if(ImGui::CollapsingHeader("Current Stats"))
 		{

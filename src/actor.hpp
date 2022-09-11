@@ -13,6 +13,8 @@ namespace game
 	{
 		/// Actor sprite will be double the normal size.
 		LargeSprite,
+		/// Actor sprite will be half the normal size.
+		SmallSprite,
 		/// Actor has a 50% longer touching radius than other actors.
 		HighReach,
 		/// Actor will be targetted by things that target players.
@@ -148,6 +150,8 @@ namespace game
 		StatBuffs buffs = {};
 		/// Colour representing the actor in a level image. If this is black, then the actor cannot be represented in a level.
 		tz::Vec3ui palette_colour = {0u, 0u, 0u};
+		/// Name for the entity.
+		const char* name = "<Unnamed Entity>";
 
 		void update();
 		bool dead() const;
