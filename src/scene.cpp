@@ -62,6 +62,17 @@ namespace game
 			{
 				this->load_level(LevelID::DevLevel1);
 			}
+			if(ImGui::Button("Procedurally Generated Level"))
+			{
+				tz::gl::ImageResource res = game::random_level_image
+				({
+					.width = 32,
+					.height = 32,
+					.seed = 32u,
+					.blacklist = {ActorType::Nightmare, ActorType::EvilPlayer_TestSpawner}
+				});
+				this->impl_load_level(game::load_level_from_image(res));
+			}
 		}
 		if(ImGui::CollapsingHeader("Mass Control"))
 		{
@@ -154,6 +165,11 @@ namespace game
 	void Scene::load_level(LevelID level_id)
 	{
 		Level level = game::load_level(level_id);
+		this->impl_load_level(level);
+	}
+
+	void Scene::impl_load_level(const Level& level)
+	{
 		// Firstly remove everything
 		this->clear();
 		// Add the player and her orb.

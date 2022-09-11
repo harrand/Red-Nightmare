@@ -129,6 +129,8 @@ namespace game
 		Count
 	};
 
+	using ActorTypes = tz::EnumField<ActorType>;
+
 	struct Actor
 	{
 		ActorType type = {};

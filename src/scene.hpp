@@ -26,6 +26,7 @@ namespace game
 		void clear();
 		void load_level(LevelID level_id);
 	private:
+		void impl_load_level(const Level& level);
 		tz::Vec2 get_mouse_position() const;
 		void erase(std::size_t id);
 		void actor_post_update(std::size_t id);

@@ -4,6 +4,7 @@
 #include "tz/gl/resource.hpp"
 #include <unordered_map>
 #include <utility>
+#include <random>
 
 namespace game
 {
@@ -38,8 +39,29 @@ namespace game
 		std::vector<std::pair<tz::Vec2, ActorType>> actor_spawns = {};
 	};
 
+	struct RandomLevelGenerationOptions
+	{
+		// Number of pixels in each row of the generated level image.
+		unsigned int width;
+		/// Number of rows in the generated level image.
+		unsigned int height;
+		std::size_t seed = 0u;
+		/// Probability of a single pixel being empty space.
+		unsigned int empty_chance = 50;
+		ActorTypes whitelist = {};
+		ActorTypes blacklist = {};
+	};
+
+	struct RandomLevelInfo
+	{
+		RandomLevelGenerationOptions gen_options;
+		std::default_random_engine rng;
+	};
+
 	Level load_level(LevelID lid);
 	Level load_level_from_image(const tz::gl::ImageResource& level_image);
+
+	tz::gl::ImageResource random_level_image(const RandomLevelGenerationOptions& options);
 }
 
 #endif // REDNIGHTMARE_LEVEL_HPP

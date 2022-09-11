@@ -108,4 +108,75 @@ namespace game
 		}
 		return ret;
 	}
+
+	tz::gl::ImageResource random_level_image(const RandomLevelGenerationOptions& options)
+	{
+		constexpr tz::Vec3ui colour_black{0u, 0u, 0u};
+		RandomLevelInfo info
+		{
+			.gen_options = options,
+		};
+
+		info.rng.seed(tz::system_time().millis<unsigned int>());
+
+		std::vector<std::byte> image_data;
+		image_data.resize(4 * info.gen_options.width * info.gen_options.height, std::byte{0});
+
+		tz::Vec2ui dims{info.gen_options.width, info.gen_options.height};
+		using ImageView = tz::GridView<std::byte, 4>;
+		ImageView view{image_data, dims};
+
+		auto colvec_to_bytes = [](std::span<std::byte> bytes, tz::Vec3ui col)
+		{
+			bytes[0] = static_cast<std::byte>(col[0]);
+			bytes[1] = static_cast<std::byte>(col[1]);
+			bytes[2] = static_cast<std::byte>(col[2]);
+			bytes[3] = static_cast<std::byte>(1.0f);
+		};
+		std::vector<tz::Vec3ui> actor_pool;
+		// If we have a whitelist, can only be things from the whitelist.
+		if(!info.gen_options.whitelist.empty())
+		{
+			for(ActorType t : info.gen_options.whitelist)
+			{
+				actor_pool.push_back(game::create_actor(t).palette_colour);
+			}
+		}
+		else
+		{
+			// If no whitelist, can be anything that has a palette colour and isn't in the blacklist.
+			for(int i = 0; i < static_cast<int>(ActorType::Count); i++)
+			{
+				ActorType t = static_cast<ActorType>(i);
+				Actor a = game::create_actor(t);
+				if(a.palette_colour != colour_black && !info.gen_options.blacklist.contains(t))
+				{
+					actor_pool.push_back(a.palette_colour);
+				}
+			}
+		}
+
+		if(!actor_pool.empty())
+		{
+			std::uniform_int_distribution<unsigned int> dist_pct{0, 100};
+			std::uniform_int_distribution<unsigned int> dist_actor_colour{0, static_cast<unsigned int>(actor_pool.size() - 1)};
+
+			for(std::size_t x = 0; x < dims[0]; x++)
+			{
+				for(std::size_t y = 0; y < dims[1]; y++)
+				{
+					std::span<std::byte> pixel = view(x, y);
+					if(dist_pct(info.rng) < info.gen_options.empty_chance)
+					{
+						continue;
+					}
+					tz::Vec3ui desired_colour = actor_pool[dist_actor_colour(info.rng)];
+					colvec_to_bytes(pixel, desired_colour);
+				}
+			}
+		}
+
+		tz::gl::ImageResource res = tz::gl::ImageResource::from_memory(tz::gl::ImageFormat::RGBA32, dims, image_data);
+		return res;
+	}
 }
