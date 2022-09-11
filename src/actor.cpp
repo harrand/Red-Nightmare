@@ -47,12 +47,12 @@ namespace game
 				return
 				{
 					.type = ActorType::PlayerClassic_Orb,
-					.flags = {ActorFlag::SmallSprite, ActorFlag::HazardousToEnemies, ActorFlag::ClickToLaunch, ActorFlag::RespawnOnPlayer, ActorFlag::DieIfOOB, ActorFlag::RespawnOnClick, ActorFlag::SelfHarm, ActorFlag::InvisibleWhileDead, ActorFlag::DoNotGarbageCollect, ActorFlag::ExplodeOnDeath, ActorFlag::Stealth, ActorFlag::Unhittable},
+					.flags = {ActorFlag::SmallSprite, ActorFlag::HazardousToEnemies, ActorFlag::ClickToLaunch, ActorFlag::RespawnOnPlayer, ActorFlag::DieIfOOB, ActorFlag::RespawnOnClick, ActorFlag::SelfHarm, ActorFlag::InvisibleWhileDead, ActorFlag::DoNotGarbageCollect, ActorFlag::Stealth, ActorFlag::Unhittable},
 					.faction = Faction::PlayerFriend,
 					.base_stats =
 					{
 						.movement_speed = 0.001f,
-						.damage = default_base_damage / 2.0f,
+						.damage = default_base_damage * 60.0f,
 						.max_health = 0.0001f,
 						.current_health = 0.0f
 					},
