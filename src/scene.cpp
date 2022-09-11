@@ -626,11 +626,17 @@ namespace game
 			avg[1] += pos[1];
 		}
 		avg /= static_cast<float>(actors_to_view.size());
+		// We want to view 'avg'. If it's far enough from the camera by some constant we will start to move towards it.
+		const tz::Vec2 camera_displacement = avg - this->qrenderer.camera_position();
+		if(camera_displacement.length() > 0.5f)
+		{
+			
 #if 1
-		this->qrenderer.camera_position() += (avg - this->qrenderer.camera_position()) * 0.001f;
+			this->qrenderer.camera_position() += camera_displacement * 0.005f * camera_displacement.length();
 #else
-		this->qrenderer.camera_position() = avg;
+			this->qrenderer.camera_position() = avg;
 #endif
+		}
 	}
 
 	void Scene::update_status_events(std::size_t id)
