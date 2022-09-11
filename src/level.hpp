@@ -1,6 +1,7 @@
 #ifndef REDNIGHTMARE_LEVEL_HPP
 #define REDNIGHTMARE_LEVEL_HPP
 #include "actor.hpp"
+#include "tz/gl/resource.hpp"
 #include <unordered_map>
 #include <utility>
 
@@ -38,6 +39,7 @@ namespace game
 	};
 
 	Level load_level(LevelID lid);
+	Level load_level_from_image(const tz::gl::ImageResource& level_image);
 }
 
 #endif // REDNIGHTMARE_LEVEL_HPP

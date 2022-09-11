@@ -45,9 +45,14 @@ namespace game
 
 	Level load_level(LevelID lid)
 	{
-		constexpr tz::Vec3ui colour_black{0u, 0u, 0u};
 		tz::gl::ImageResource level_image = game::load_image_data(level_image_data[static_cast<int>(lid)]);
-		using ImageView = tz::GridView<std::byte, 4>;
+		return load_level_from_image(level_image);
+	}
+
+	Level load_level_from_image(const tz::gl::ImageResource& level_image)
+	{
+		constexpr tz::Vec3ui colour_black{0u, 0u, 0u};
+		using ImageView = tz::GridView<const std::byte, 4>;
 		ImageView view{level_image.data(), level_image.get_dimensions()};
 
 		// Firstly figure out which colour is meant to be the player spawn point.
