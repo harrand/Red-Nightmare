@@ -1,5 +1,6 @@
 #ifndef REDNIGHTMARE_ACTION_HPP
 #define REDNIGHTMARE_ACTION_HPP
+#include "entity.hpp"
 #include "tz/core/vector.hpp"
 #include "tz/core/handle.hpp"
 #include <vector>
@@ -126,33 +127,11 @@ namespace game
 	};
 
 	/// Represents something that can carry out actions.
-	class ActionEntity
+	class ActionEntity : public Entity<ActionID, IAction, Action, ActionParams>
 	{
 	public:
-		ActionEntity(const ActionEntity& copy) = delete;
-		ActionEntity(ActionEntity&& move) = default;
 		ActionEntity() = default;
-		ActionEntity& operator=(const ActionEntity& rhs) = delete;
-		ActionEntity& operator=(ActionEntity&& rhs) = default;
-
-		template<ActionID ID>
-		bool add(ActionParams<ID> params = {});
-
-		template<ActionID ID>
-		bool set(ActionParams<ID> params = {});
-
-		template<ActionID ID>
-		bool has() const;
-
-		template<ActionID ID>
-		const Action<ID>* get() const;
-		template<ActionID ID>
-		Action<ID>* get();
-
-		std::size_t size() const;
-		void update();
-	private:
-		std::vector<std::unique_ptr<IAction>> actions;
+		virtual void update() override;
 	};
 }
 #include "action.inl"

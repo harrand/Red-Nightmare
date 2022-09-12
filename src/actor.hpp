@@ -2,6 +2,7 @@
 #define REDNIGHTMARE_ACTOR_HPP
 #include "animation.hpp"
 #include "faction.hpp"
+#include "flag.hpp"
 #include "action.hpp"
 #include "stats.hpp"
 #include "tz/core/containers/enum_field.hpp"
@@ -138,6 +139,8 @@ namespace game
 		ActorType type = {};
 		/// Describes the characteristics of the actor.
 		ActorFlags flags = {};
+		/// Describes the characteristics of the actor.
+		FlagEntity flags_new = {};
 		/// Describes the allegiances of the actor.
 		Faction faction = Faction::Default;
 		/// Current stats of the actor.

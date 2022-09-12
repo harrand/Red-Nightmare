@@ -18,7 +18,10 @@ add_app(
 		src/animation.hpp
 		src/box.cpp
 		src/box.hpp
+		src/entity.hpp
+		src/entity.inl
 		src/faction.hpp
+		src/flag.hpp
 		src/main.cpp
 		src/images.cpp
 		src/images.hpp
