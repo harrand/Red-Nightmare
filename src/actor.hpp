@@ -71,6 +71,8 @@ namespace game
 		DoNotGarbageCollect,
 		/// Anything colliding with the actor cannot move through it.
 		Collide,
+		/// Unaffected by actors with Collide.
+		CannotCollide,
 	};
 	using ActorFlags = tz::EnumField<ActorFlag>;
 
@@ -154,6 +156,8 @@ namespace game
 		tz::Vec3ui palette_colour = {0u, 0u, 0u};
 		/// Name for the entity.
 		const char* name = "<Unnamed Entity>";
+		/// Affects how much other actors are pushed if this actor has ActorFlag::Collide.
+		float density = 1.0f;
 
 		void update();
 		bool dead() const;

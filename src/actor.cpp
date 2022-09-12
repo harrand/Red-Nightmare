@@ -29,7 +29,7 @@ namespace game
 				return
 				{
 					.type = ActorType::PlayerClassic_TestEvil,
-					.flags = {ActorFlag::Aggressive},
+					.flags = {ActorFlag::Aggressive, ActorFlag::Collide},
 					.faction = Faction::PlayerEnemy,
 					.base_stats =
 					{
@@ -111,7 +111,7 @@ namespace game
 				return
 				{
 					.type = ActorType::EvilPlayer_TestSpawner,
-					.flags = {ActorFlag::RandomRespawnLocation, ActorFlag::RespawnOnDeath, ActorFlag::Rot, ActorFlag::Haunted, ActorFlag::Stealth},
+					.flags = {ActorFlag::RespawnOnDeath, ActorFlag::Rot, ActorFlag::Haunted, ActorFlag::Stealth},
 					.skin = ActorSkin::DebugOnlyVisible,
 					.palette_colour = {255u, 64u, 255u},
 					.name = "Spawner (Ghost Zombie)"
@@ -121,18 +121,19 @@ namespace game
 				return
 				{
 					.type = ActorType::Wall,
-					.flags = {ActorFlag::Stealth, ActorFlag::Collide, ActorFlag::Invincible, ActorFlag::SmallSprite},
+					.flags = {ActorFlag::Stealth, ActorFlag::Collide, ActorFlag::Invincible, ActorFlag::SmallSprite, ActorFlag::CannotCollide},
 					.faction = Faction::PureEnemy,
 					.skin = ActorSkin::Material_Stone,
 					.palette_colour = {255u, 0u, 0u},
-					.name = "Wall"
+					.name = "Wall",
+					.density = 2.0f
 				};
 			break;
 			case ActorType::WallDestructible:
 				return
 				{
 					.type = ActorType::WallDestructible,
-					.flags = {ActorFlag::Stealth, ActorFlag::Collide, ActorFlag::SmallSprite, ActorFlag::DoNotGarbageCollect},
+					.flags = {ActorFlag::Stealth, ActorFlag::Collide, ActorFlag::SmallSprite, ActorFlag::DoNotGarbageCollect, ActorFlag::CannotCollide},
 					.faction = Faction::PlayerEnemy,
 					.base_stats =
 					{
@@ -141,7 +142,8 @@ namespace game
 					},
 					.skin = ActorSkin::Material_Stone,
 					.palette_colour = {127u, 0u, 0u},
-					.name = "Destructible Wall"
+					.name = "Destructible Wall",
+					.density = 2.0f
 				};
 			break;
 		}

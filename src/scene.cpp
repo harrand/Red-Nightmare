@@ -748,7 +748,7 @@ namespace game
 		QuadRenderer::ElementData& other_quad = this->qrenderer.elements()[b_id];
 
 		const bool wants_to_hurt = (actor.flags.contains(ActorFlag::HazardousToAll) || actor.flags.contains(ActorFlag::HazardousToEnemies) || actor.flags.contains(ActorFlag::Aggressive)) && actor.is_enemy_of(other) && !other.flags.contains(ActorFlag::Unhittable) && !actor.dead() && !other.dead();
-		const bool blocks_colliders = actor.flags.contains(ActorFlag::Collide) && !actor.dead();
+		const bool blocks_colliders = actor.flags.contains(ActorFlag::Collide) && !actor.dead() && !other.dead() && !other.flags.contains(ActorFlag::CannotCollide);
 		const bool wants_touch_player = (actor.flags.contains(ActorFlag::DeadRespawnOnPlayerTouch) || actor.flags.contains(ActorFlag::DeadResurrectOnPlayerTouch) && other.flags.contains(ActorFlag::Player));
 		const bool cares_about_collisions = wants_to_hurt || blocks_colliders || wants_touch_player;
 		if(cares_about_collisions)
@@ -767,7 +767,7 @@ namespace game
 			{
 				tz::Vec2 displacement = quad.position - other_quad.position;
 				// Push back with impulse 150% the distance it would've travelled this frame.
-				other_quad.position -= displacement.normalised() * other.get_current_stats().movement_speed * 1.5f;
+				other_quad.position -= displacement.normalised() * other.get_current_stats().movement_speed * 1.5f * actor.density;
 			}
 			if(wants_touch_player)
 			{
