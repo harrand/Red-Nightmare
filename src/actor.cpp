@@ -18,7 +18,7 @@ namespace game
 					.flags = {ActorFlag::KeyboardControlled},
 					.flags_new =
 					{
-						Flag<FlagID::Player>{FlagParams<FlagID::Player>{}}
+						Flag<FlagID::Player>{{}}
 					},
 					.base_stats =
 					{
@@ -51,7 +51,11 @@ namespace game
 				return
 				{
 					.type = ActorType::PlayerClassic_Orb,
-					.flags = {ActorFlag::SmallSprite, ActorFlag::HazardousToEnemies, ActorFlag::ClickToLaunch, ActorFlag::RespawnOnPlayer, ActorFlag::DieIfOOB, ActorFlag::RespawnOnClick, ActorFlag::SelfHarm, ActorFlag::InvisibleWhileDead, ActorFlag::DoNotGarbageCollect, ActorFlag::Stealth, ActorFlag::Unhittable},
+					.flags = {ActorFlag::HazardousToEnemies, ActorFlag::ClickToLaunch, ActorFlag::RespawnOnPlayer, ActorFlag::DieIfOOB, ActorFlag::RespawnOnClick, ActorFlag::SelfHarm, ActorFlag::InvisibleWhileDead, ActorFlag::DoNotGarbageCollect, ActorFlag::Stealth, ActorFlag::Unhittable},
+					.flags_new =
+					{
+						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}}
+					},
 					.faction = Faction::PlayerFriend,
 					.base_stats =
 					{
@@ -83,7 +87,11 @@ namespace game
 				return
 				{
 					.type = ActorType::FireExplosion,
-					.flags = {ActorFlag::Rot, ActorFlag::BlockingAnimations, ActorFlag::InvisibleWhileDead, ActorFlag::HazardousToEnemies, ActorFlag::LargeSprite, ActorFlag::HighReach, ActorFlag::Stealth, ActorFlag::Unhittable},
+					.flags = {ActorFlag::Rot, ActorFlag::BlockingAnimations, ActorFlag::InvisibleWhileDead, ActorFlag::HazardousToEnemies, ActorFlag::HighReach, ActorFlag::Stealth, ActorFlag::Unhittable},
+					.flags_new =
+					{
+						Flag<FlagID::CustomScale>{{.scale = {1.5f, 1.5f}}}
+					},
 					.base_stats =
 					{
 						.max_health = 0.1f,
@@ -125,7 +133,11 @@ namespace game
 				return
 				{
 					.type = ActorType::Wall,
-					.flags = {ActorFlag::Stealth, ActorFlag::Collide, ActorFlag::Invincible, ActorFlag::SmallSprite, ActorFlag::CannotCollide},
+					.flags = {ActorFlag::Stealth, ActorFlag::Collide, ActorFlag::Invincible, ActorFlag::CannotCollide},
+					.flags_new =
+					{
+						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}}
+					},
 					.faction = Faction::PureEnemy,
 					.skin = ActorSkin::Material_Stone,
 					.palette_colour = {255u, 0u, 0u},
@@ -137,7 +149,11 @@ namespace game
 				return
 				{
 					.type = ActorType::WallDestructible,
-					.flags = {ActorFlag::Stealth, ActorFlag::Collide, ActorFlag::SmallSprite, ActorFlag::DoNotGarbageCollect, ActorFlag::CannotCollide},
+					.flags = {ActorFlag::Stealth, ActorFlag::Collide, ActorFlag::DoNotGarbageCollect, ActorFlag::CannotCollide},
+					.flags_new =
+					{
+						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}}
+					},
 					.faction = Faction::PlayerEnemy,
 					.base_stats =
 					{

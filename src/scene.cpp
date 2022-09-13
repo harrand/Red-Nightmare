@@ -264,13 +264,11 @@ namespace game
 				quad.scale *= 0.0f;
 			}
 		}
-		if(actor.flags.contains(ActorFlag::LargeSprite))
+		if(actor.flags_new.has<FlagID::CustomScale>())
 		{
-			quad.scale *= 1.5f;
-		}
-		if(actor.flags.contains(ActorFlag::SmallSprite))
-		{
-			quad.scale *= 0.65f;
+			auto scale = actor.flags_new.get<FlagID::CustomScale>()->data().scale;
+			quad.scale[0] *= scale[0];
+			quad.scale[1] *= scale[1];
 		}
 
 		// Handle actions.

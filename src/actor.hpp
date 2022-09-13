@@ -12,10 +12,6 @@ namespace game
 	/// Describes immutable characteristics for a specific actor.
 	enum class ActorFlag
 	{
-		/// Actor sprite will be double the normal size.
-		LargeSprite,
-		/// Actor sprite will be half the normal size.
-		SmallSprite,
 		/// Actor has a 50% longer touching radius than other actors.
 		HighReach,
 		/// Actor will attack enemy targets without provocation.
