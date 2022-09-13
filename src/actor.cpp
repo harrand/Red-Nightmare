@@ -51,10 +51,14 @@ namespace game
 				return
 				{
 					.type = ActorType::PlayerClassic_Orb,
-					.flags = {ActorFlag::HazardousToEnemies, ActorFlag::ClickToLaunch, ActorFlag::RespawnOnPlayer, ActorFlag::DieIfOOB, ActorFlag::RespawnOnClick, ActorFlag::SelfHarm, ActorFlag::InvisibleWhileDead, ActorFlag::DoNotGarbageCollect, ActorFlag::Stealth, ActorFlag::Unhittable},
+					.flags = {ActorFlag::HazardousToEnemies, ActorFlag::RespawnOnPlayer, ActorFlag::DieIfOOB, ActorFlag::RespawnOnClick, ActorFlag::SelfHarm, ActorFlag::InvisibleWhileDead, ActorFlag::DoNotGarbageCollect, ActorFlag::Stealth, ActorFlag::Unhittable},
 					.flags_new =
 					{
-						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}}
+						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}},
+						Flag<FlagID::ClickToLaunch>
+						{{
+							.internal_cooldown = 1.0f
+						}}
 					},
 					.faction = Faction::PlayerFriend,
 					.base_stats =
@@ -87,10 +91,11 @@ namespace game
 				return
 				{
 					.type = ActorType::FireExplosion,
-					.flags = {ActorFlag::Rot, ActorFlag::BlockingAnimations, ActorFlag::InvisibleWhileDead, ActorFlag::HazardousToEnemies, ActorFlag::HighReach, ActorFlag::Stealth, ActorFlag::Unhittable},
+					.flags = {ActorFlag::Rot, ActorFlag::BlockingAnimations, ActorFlag::InvisibleWhileDead, ActorFlag::HazardousToEnemies, ActorFlag::Stealth, ActorFlag::Unhittable},
 					.flags_new =
 					{
-						Flag<FlagID::CustomScale>{{.scale = {1.5f, 1.5f}}}
+						Flag<FlagID::CustomScale>{{.scale = {1.5f, 1.5f}}},
+						Flag<FlagID::CustomReach>{{.reach = 1.5f}}
 					},
 					.base_stats =
 					{
@@ -189,13 +194,27 @@ namespace game
 			{
 				this->damage(*this);
 			}
-			if(this->flags.contains(ActorFlag::ClickToLaunch) && is_left_clicked)
+			if(this->flags_new.has<FlagID::ClickToLaunch>() && is_left_clicked)
 			{
-				this->entity.add<ActionID::LaunchToMouse>
-				({
-					.speed_multiplier = 8.0f
-				});
-				this->flags |= {ActorFlag::DieAtRest};
+				auto& flag = this->flags_new.get<FlagID::ClickToLaunch>()->data();
+				float cooldown_milliseconds = flag.internal_cooldown * 1000;
+				auto now = tz::system_time().millis<unsigned long long>();
+				// If cooldown is over, go for it. Otherwise do nothing.
+				const unsigned long long millis_passed = now - flag.launch_time;
+
+				if(millis_passed > cooldown_milliseconds)
+				{
+					flag.launch_time = now;
+
+					this->entity.add<ActionID::LaunchToMouse>
+					({
+						.speed_multiplier = 8.0f
+					});
+					this->flags |= {ActorFlag::DieAtRest};
+				}
+				else
+				{
+				}
 			}
 			if(this->flags.contains(ActorFlag::MouseControlled))
 			{

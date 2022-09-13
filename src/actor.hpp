@@ -12,8 +12,6 @@ namespace game
 	/// Describes immutable characteristics for a specific actor.
 	enum class ActorFlag
 	{
-		/// Actor has a 50% longer touching radius than other actors.
-		HighReach,
 		/// Actor will attack enemy targets without provocation.
 		Aggressive,
 		/// Actor will not be attacked by aggressive enemies, although it can still be harmed if it gets too close.
@@ -48,8 +46,6 @@ namespace game
 		HazardousToAll,
 		/// Attempts to deal damage to any enemies that are nearby.
 		HazardousToEnemies,
-		/// Actor will very quickly charge to the mouse location upon left click. Note: Actors with ClickToLaunch ignore death mechanics.
-		ClickToLaunch,
 		/// If the actor ever stops, it instantly dies.
 		DieAtRest,
 		/// If the actor reaches out-of-bounds, respawn.

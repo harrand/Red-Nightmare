@@ -7,8 +7,10 @@ namespace game
 {
 	enum class FlagID
 	{
+		Player,
 		CustomScale,
-		Player
+		CustomReach,
+		ClickToLaunch,
 	};
 
 	template<FlagID ID>
@@ -38,6 +40,19 @@ namespace game
 	struct FlagParams<FlagID::CustomScale>
 	{
 		tz::Vec2 scale;
+	};
+
+	template<>
+	struct FlagParams<FlagID::CustomReach>
+	{
+		float reach;
+	};
+
+	template<>
+	struct FlagParams<FlagID::ClickToLaunch>
+	{
+		float internal_cooldown = 0.0f;
+		unsigned long long launch_time = 0ull;
 	};
 
 	// Represents something that stores flags.

@@ -224,9 +224,9 @@ namespace game
 				actor.respawn();
 			}
 		}
-		if(actor.flags.contains(ActorFlag::HighReach))
+		if(actor.flags_new.has<FlagID::CustomReach>())
 		{
-			touchdist *= 1.5f;
+			touchdist *= actor.flags_new.get<FlagID::CustomReach>()->data().reach;
 		}
 		if(actor.flags.contains(ActorFlag::Aggressive) && !actor.dead())
 		{
