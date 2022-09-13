@@ -499,7 +499,7 @@ namespace game
 		for(std::size_t i = 0; i < this->size(); i++)
 		{
 			
-			if(this->actors[i].flags.contains(ActorFlag::Player) && !this->actors[i].dead())
+			if(this->actors[i].flags_new.has<FlagID::Player>() && !this->actors[i].dead())
 			{
 				ret.push_back(i);
 			}
@@ -749,7 +749,7 @@ namespace game
 
 		const bool wants_to_hurt = (actor.flags.contains(ActorFlag::HazardousToAll) || actor.flags.contains(ActorFlag::HazardousToEnemies) || actor.flags.contains(ActorFlag::Aggressive)) && actor.is_enemy_of(other) && !other.flags.contains(ActorFlag::Unhittable) && !actor.dead() && !other.dead();
 		const bool blocks_colliders = actor.flags.contains(ActorFlag::Collide) && !actor.dead() && !other.dead() && !other.flags.contains(ActorFlag::CannotCollide);
-		const bool wants_touch_player = (actor.flags.contains(ActorFlag::DeadRespawnOnPlayerTouch) || actor.flags.contains(ActorFlag::DeadResurrectOnPlayerTouch) && other.flags.contains(ActorFlag::Player));
+		const bool wants_touch_player = (actor.flags.contains(ActorFlag::DeadRespawnOnPlayerTouch) || actor.flags.contains(ActorFlag::DeadResurrectOnPlayerTouch) && other.flags_new.has<FlagID::Player>());
 		const bool cares_about_collisions = wants_to_hurt || blocks_colliders || wants_touch_player;
 		if(cares_about_collisions)
 		{

@@ -43,7 +43,7 @@ namespace game
 	// Represents something that stores flags.
 	class FlagEntity : public Entity<FlagID, IFlag, Flag, FlagParams>
 	{
-
+		using Entity<FlagID, IFlag, Flag, FlagParams>::Entity;
 	};
 }
 

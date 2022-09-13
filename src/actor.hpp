@@ -18,8 +18,6 @@ namespace game
 		SmallSprite,
 		/// Actor has a 50% longer touching radius than other actors.
 		HighReach,
-		/// Actor will be targetted by things that target players.
-		Player,
 		/// Actor will attack enemy targets without provocation.
 		Aggressive,
 		/// Actor will not be attacked by aggressive enemies, although it can still be harmed if it gets too close.

@@ -10,11 +10,14 @@ namespace game
 	{
 		{i.get_id()} -> std::same_as<T>;
 	};
+
 	template<typename T, ComponentInterface<T> IComponent, template<T> typename Component, template<T> typename ComponentParams>
 	class Entity
 	{
 	public:
 		Entity() = default;
+		template<typename... C>
+		Entity(C... cs);
 		Entity(const Entity<T, IComponent, Component, ComponentParams>& copy) = delete;
 		Entity(Entity<T, IComponent, Component, ComponentParams>&& move) = default;
 		~Entity() = default;

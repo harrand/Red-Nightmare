@@ -15,7 +15,11 @@ namespace game
 				return
 				{
 					.type = ActorType::PlayerClassic,
-					.flags = {ActorFlag::Player, ActorFlag::KeyboardControlled},
+					.flags = {ActorFlag::KeyboardControlled},
+					.flags_new =
+					{
+						Flag<FlagID::Player>{FlagParams<FlagID::Player>{}}
+					},
 					.base_stats =
 					{
 						.movement_speed = 0.0016f
@@ -239,6 +243,7 @@ namespace game
 
 	void Actor::dbgui()
 	{
+		ImGui::Text("Flags New Count: %zu", this->flags_new.size());
 		ImGui::Text("\"%s\" (HP: %.2f/%.2f, dead: %s)", this->name, this->base_stats.current_health, this->get_current_stats().max_health, this->dead() ? "true" : "false");
 		ImGui::SameLine();
 		if(ImGui::Button("Kill"))
@@ -328,17 +333,17 @@ namespace game
 	bool Actor::is_ally_of(const Actor& actor) const
 	{
 		// Players cannot hurt other players.
-		if(this->flags.contains(ActorFlag::Player) && actor.flags.contains(ActorFlag::Player))
+		if(this->flags_new.has<FlagID::Player>() && actor.flags_new.has<FlagID::Player>())
 		{
 			return true;
 		}
 		// PlayerFriends cannot hurt players.
-		if(this->faction == Faction::PlayerFriend && actor.flags.contains(ActorFlag::Player))
+		if(this->faction == Faction::PlayerFriend && actor.flags_new.has<FlagID::Player>())
 		{
 			return true;
 		}
 		// Players cannot hurt PlayerFriends.
-		if(this->flags.contains(ActorFlag::Player) && actor.faction == Faction::PlayerFriend)
+		if(this->flags_new.has<FlagID::Player>() && actor.faction == Faction::PlayerFriend)
 		{
 			return true;
 		}
@@ -364,12 +369,12 @@ namespace game
 	bool Actor::is_enemy_of(const Actor& actor) const
 	{
 		// Players see PlayerEnemy faction members as enemies... obviously
-		if(this->flags.contains(ActorFlag::Player) && actor.faction == Faction::PlayerEnemy)
+		if(this->flags_new.has<FlagID::Player>() && actor.faction == Faction::PlayerEnemy)
 		{
 			return true;
 		}
 		// PlayerEnemy faction members see Players as enemies.
-		if(this->faction == Faction::PlayerEnemy && actor.flags.contains(ActorFlag::Player))
+		if(this->faction == Faction::PlayerEnemy && actor.flags_new.has<FlagID::Player>())
 		{
 			return true;	
 		}
