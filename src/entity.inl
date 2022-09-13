@@ -1,4 +1,3 @@
-#include "tz/core/algorithms/static.hpp"
 namespace game
 {
 	#define ENTITY_IMPL Entity<T, IComponent, Component, ComponentParams>
