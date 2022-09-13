@@ -5,7 +5,12 @@
 
 namespace game
 {
-	template<typename T, typename IComponent, template<T> typename Component, template<T> typename ComponentParams>
+	template<typename I, typename T>
+	concept ComponentInterface = requires(I i)
+	{
+		{i.get_id()} -> std::same_as<T>;
+	};
+	template<typename T, ComponentInterface<T> IComponent, template<T> typename Component, template<T> typename ComponentParams>
 	class Entity
 	{
 	public:

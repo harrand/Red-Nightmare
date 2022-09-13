@@ -1,7 +1,7 @@
 namespace game
 {
 	#define ENTITY_IMPL Entity<T, IComponent, Component, ComponentParams>
-	#define TEMPLATE_MAGIC template<typename T, typename IComponent, template<T> typename Component, template<T> typename ComponentParams>
+	#define TEMPLATE_MAGIC template<typename T, ComponentInterface<T> IComponent, template<T> typename Component, template<T> typename ComponentParams>
 
 	TEMPLATE_MAGIC
 	template<T t>
