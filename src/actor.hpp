@@ -12,8 +12,6 @@ namespace game
 	/// Describes immutable characteristics for a specific actor.
 	enum class ActorFlag
 	{
-		/// Actor will attack enemy targets without provocation.
-		Aggressive,
 		/// Actor will not be attacked by aggressive enemies, although it can still be harmed if it gets too close.
 		Stealth,
 		/// Actor can be chased but not hurt by aggressive enemies.

@@ -18,7 +18,7 @@ namespace game
 					.flags = {ActorFlag::KeyboardControlled},
 					.flags_new =
 					{
-						Flag<FlagID::Player>{{}}
+						Flag<FlagID::Player>{}
 					},
 					.base_stats =
 					{
@@ -33,7 +33,11 @@ namespace game
 				return
 				{
 					.type = ActorType::PlayerClassic_TestEvil,
-					.flags = {ActorFlag::Aggressive, ActorFlag::Collide},
+					.flags = {ActorFlag::Collide},
+					.flags_new =
+					{
+						Flag<FlagID::Aggressive>{}
+					},
 					.faction = Faction::PlayerEnemy,
 					.base_stats =
 					{
@@ -110,7 +114,11 @@ namespace game
 				return
 				{
 					.type = ActorType::Nightmare,
-					.flags = {ActorFlag::Aggressive, ActorFlag::SelfHarm, ActorFlag::RespawnOnDeath, ActorFlag::RandomRespawnLocation, ActorFlag::BlockingAnimations},
+					.flags = {ActorFlag::SelfHarm, ActorFlag::RespawnOnDeath, ActorFlag::RandomRespawnLocation, ActorFlag::BlockingAnimations},
+					.flags_new =
+					{
+						Flag<FlagID::Aggressive>{}
+					},
 					.faction = Faction::PureEnemy,
 					.base_stats =
 					{

@@ -7,10 +7,16 @@ namespace game
 {
 	enum class FlagID
 	{
+		/// Actor is considered a player.
 		Player,
+		/// Actor has a custom scale.
 		CustomScale,
+		/// Actor has a custom reach distance.
 		CustomReach,
+		/// Actor will launch in a direction towards the mouse cursor.
 		ClickToLaunch,
+		/// Actor will attack nearby enemy targets. At present there is no aggro range - it always chases it and may run into walls doing so.
+		Aggressive,
 	};
 
 	template<FlagID ID>
@@ -26,7 +32,7 @@ namespace game
 	class Flag : public IFlag
 	{
 	public:
-		Flag(FlagParams<ID> params): params(params){}
+		Flag(FlagParams<ID> params = {}): params(params){}
 		virtual constexpr FlagID get_id() const override{return ID;}
 		const FlagParams<ID>& data() const{return this->params;}
 		FlagParams<ID>& data(){return this->params;}
