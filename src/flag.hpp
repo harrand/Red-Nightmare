@@ -17,6 +17,10 @@ namespace game
 		ClickToLaunch,
 		/// Actor will attack nearby enemy targets. At present there is no aggro range - it always chases it and may run into walls doing so.
 		Aggressive,
+		/// Actor will not be chased by aggressive enemies, but it can still be harmed.
+		Stealth,
+		/// Actor cannot be harmed by aggressive enemies.
+		Unhittable,
 	};
 
 	template<FlagID ID>
