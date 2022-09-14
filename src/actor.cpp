@@ -140,10 +140,14 @@ namespace game
 				return
 				{
 					.type = ActorType::EvilPlayer_TestSpawner,
-					.flags = {ActorFlag::RespawnOnDeath, ActorFlag::Rot, ActorFlag::Haunted},
+					.flags = {ActorFlag::RespawnOnDeath, ActorFlag::Rot},
 					.flags_new =
 					{
-						Flag<FlagID::Stealth>{}
+						Flag<FlagID::Stealth>{},
+						Flag<FlagID::SpawnOnDeath>
+						{
+							{.types = {ActorType::PlayerClassic_TestEvil}}
+						}
 					},
 					.skin = ActorSkin::DebugOnlyVisible,
 					.palette_colour = {255u, 64u, 255u},

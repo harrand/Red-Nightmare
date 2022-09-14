@@ -247,12 +247,17 @@ namespace game
 				}
 			}
 		}
-		if(actor.flags.contains(ActorFlag::Haunted) && actor.dead())
+		if(actor.flags_new.has<FlagID::SpawnOnDeath>() && actor.dead())
 		{
-			// Note: Right now this could spam forever.
-			this->add(ActorType::PlayerClassic_TestEvil);
-			// Teleport it to our location.
-			this->qrenderer.elements().back().position = quad.position;
+			auto flag = actor.flags_new.get<FlagID::SpawnOnDeath>()->data();
+			const auto& types = flag.types;
+			for(ActorType t : types)
+			{
+				// Note: Right now this could spam forever.
+				this->add(t);
+				// Teleport it to our location.
+				this->qrenderer.elements().back().position = quad.position;
+			}
 		}
 		// If actor wants to teleport to a random location, do it now.
 

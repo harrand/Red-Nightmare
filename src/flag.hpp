@@ -5,6 +5,7 @@
 
 namespace game
 {
+	enum class ActorType;
 	enum class FlagID
 	{
 		/// Actor is considered a player.
@@ -21,6 +22,8 @@ namespace game
 		Stealth,
 		/// Actor cannot be harmed by aggressive enemies.
 		Unhittable,
+		/// When the actor dies, spawns another actor.
+		SpawnOnDeath,
 	};
 
 	template<FlagID ID>
@@ -63,6 +66,12 @@ namespace game
 	{
 		float internal_cooldown = 0.0f;
 		unsigned long long launch_time = 0ull;
+	};
+
+	template<>
+	struct FlagParams<FlagID::SpawnOnDeath>
+	{
+		tz::EnumField<ActorType> types;
 	};
 
 	// Represents something that stores flags.
