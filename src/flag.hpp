@@ -24,6 +24,10 @@ namespace game
 		Unhittable,
 		/// When the actor dies, spawns another actor.
 		SpawnOnDeath,
+		/// Actor can be manually controlled by the keyboard controls.
+		KeyboardControlled,
+		/// Actor can be manually controlled, it continually chases the mouse cursor.
+		MouseControlled
 	};
 
 	template<FlagID ID>

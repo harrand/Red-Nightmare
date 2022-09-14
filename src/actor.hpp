@@ -12,10 +12,6 @@ namespace game
 	/// Describes immutable characteristics for a specific actor.
 	enum class ActorFlag
 	{
-		/// Move around with WASD.
-		KeyboardControlled,
-		/// Actor will always chase the mouse cursor.
-		MouseControlled,
 		/// Actor is never considered dead, even if its health is zero.
 		Invincible,
 		/// Whenever actor causes damage, also hurts itself.

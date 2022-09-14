@@ -31,6 +31,8 @@ namespace game
 		template<T t>
 		bool has() const;
 		template<T t>
+		bool remove();
+		template<T t>
 		const Component<t>* get() const;
 		template<T t>
 		Component<t>* get();

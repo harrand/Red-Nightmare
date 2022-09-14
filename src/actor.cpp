@@ -15,9 +15,9 @@ namespace game
 				return
 				{
 					.type = ActorType::PlayerClassic,
-					.flags = {ActorFlag::KeyboardControlled},
 					.flags_new =
 					{
+						Flag<FlagID::KeyboardControlled>{},
 						Flag<FlagID::Player>{}
 					},
 					.base_stats =
@@ -238,11 +238,11 @@ namespace game
 				{
 				}
 			}
-			if(this->flags.contains(ActorFlag::MouseControlled))
+			if(this->flags_new.has<FlagID::MouseControlled>())
 			{
 				this->entity.set<ActionID::GotoMouse>();
 			}
-			if(this->flags.contains(ActorFlag::KeyboardControlled))
+			if(this->flags_new.has<FlagID::KeyboardControlled>())
 			{
 				const auto& kb = tz::window().get_keyboard_state();
 				this->motion = {};
@@ -324,17 +324,17 @@ namespace game
 				this->buffs.add(BuffID::Chill);
 			}
 
-			ImGui::Text("Controlled: %s", this->flags.contains(ActorFlag::MouseControlled) ? "true" : "false");
+			ImGui::Text("Controlled: %s", this->flags_new.has<FlagID::MouseControlled>() ? "true" : "false");
 			ImGui::SameLine();
 			if(ImGui::Button("Toggle Controlled"))
 			{
-				if(this->flags.contains(ActorFlag::MouseControlled))
+				if(this->flags_new.has<FlagID::MouseControlled>())
 				{
-					this->flags.remove(ActorFlag::MouseControlled);
+					this->flags_new.remove<FlagID::MouseControlled>();
 				}
 				else
 				{
-					this->flags |= ActorFlag::MouseControlled;
+					this->flags_new.add<FlagID::MouseControlled>();
 				}
 			}
 		}

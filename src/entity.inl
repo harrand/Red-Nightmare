@@ -1,3 +1,4 @@
+#include <algorithm>
 namespace game
 {
 	#define ENTITY_IMPL Entity<T, IComponent, Component, ComponentParams>
@@ -61,6 +62,18 @@ namespace game
 			}
 		}
 		return false;
+	}
+
+	TEMPLATE_MAGIC
+	template<T t>
+	bool ENTITY_IMPL::remove()
+	{
+		auto iter = this->components.erase(std::remove_if(this->components.begin(), this->components.end(),
+		[](const auto& component_ptr)
+		{
+			return component_ptr->get_id() == t;
+		}));
+		return iter != this->components.end();
 	}
 
 	TEMPLATE_MAGIC
