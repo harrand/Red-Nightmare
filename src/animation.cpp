@@ -250,6 +250,64 @@ namespace game
 			.fps = 6,
 			.loop = true
 		},
+		AnimationInfo /*GhostMJZombie_Death*/
+		{
+			.frames = 
+			{
+				TextureID::GhostMJZombie_Death_0,
+				TextureID::GhostMJZombie_Death_1,
+				TextureID::GhostMJZombie_Death_2,
+				TextureID::GhostMJZombie_Death_3
+			},
+			.fps = 14,
+			.loop = false
+		},
+		AnimationInfo /*GhostMJZombie_MoveDown*/
+		{
+			.frames = 
+			{
+				TextureID::GhostMJZombie_Down_0,
+				TextureID::GhostMJZombie_Down_1,
+				TextureID::GhostMJZombie_Down_2,
+				TextureID::GhostMJZombie_Down_3
+			},
+			.fps = 6,
+			.loop = true
+		},
+		AnimationInfo /*GhostMJZombie_Idle*/
+		{
+			.frames = 
+			{
+				TextureID::GhostMJZombie_Idle_0,
+				TextureID::GhostMJZombie_Idle_1
+			},
+			.fps = 2,
+			.loop = true
+		},
+		AnimationInfo /*GhostMJZombie_MoveSide*/
+		{
+			.frames = 
+			{
+				TextureID::GhostMJZombie_Side_0,
+				TextureID::GhostMJZombie_Side_1,
+				TextureID::GhostMJZombie_Side_2,
+				TextureID::GhostMJZombie_Side_3
+			},
+			.fps = 6,
+			.loop = true
+		},
+		AnimationInfo /*GhostMJZombie_MoveUp*/
+		{
+			.frames = 
+			{
+				TextureID::GhostMJZombie_Up_0,
+				TextureID::GhostMJZombie_Up_1,
+				TextureID::GhostMJZombie_Up_2,
+				TextureID::GhostMJZombie_Up_3
+			},
+			.fps = 6,
+			.loop = true
+		},
 		AnimationInfo /*PlayerClassic_DefaultFireball_Idle*/
 		{
 			.frames =

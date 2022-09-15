@@ -62,6 +62,25 @@
 #include ImportedTextHeader(ghost_zombie_up2, png)
 #include ImportedTextHeader(ghost_zombie_up3, png)
 
+#include ImportedTextHeader(mjzombie_death0, png)
+#include ImportedTextHeader(mjzombie_death1, png)
+#include ImportedTextHeader(mjzombie_death2, png)
+#include ImportedTextHeader(mjzombie_death3, png)
+#include ImportedTextHeader(mjzombie_down0, png)
+#include ImportedTextHeader(mjzombie_down1, png)
+#include ImportedTextHeader(mjzombie_down2, png)
+#include ImportedTextHeader(mjzombie_down3, png)
+#include ImportedTextHeader(mjzombie_idle0, png)
+#include ImportedTextHeader(mjzombie_idle1, png)
+#include ImportedTextHeader(mjzombie_side0, png)
+#include ImportedTextHeader(mjzombie_side1, png)
+#include ImportedTextHeader(mjzombie_side2, png)
+#include ImportedTextHeader(mjzombie_side3, png)
+#include ImportedTextHeader(mjzombie_up0, png)
+#include ImportedTextHeader(mjzombie_up1, png)
+#include ImportedTextHeader(mjzombie_up2, png)
+#include ImportedTextHeader(mjzombie_up3, png)
+
 #include ImportedTextHeader(player_classic_default_fireball, png)
 #include ImportedTextHeader(player_classic_default_fireball_particles_0, png)
 #include ImportedTextHeader(player_classic_default_fireball_particles_1, png)
@@ -181,6 +200,25 @@ namespace game
 		ImportedTextData(ghost_zombie_up1, png),
 		ImportedTextData(ghost_zombie_up2, png),
 		ImportedTextData(ghost_zombie_up3, png),
+
+		ImportedTextData(mjzombie_death0, png),
+		ImportedTextData(mjzombie_death1, png),
+		ImportedTextData(mjzombie_death2, png),
+		ImportedTextData(mjzombie_death3, png),
+		ImportedTextData(mjzombie_down0, png),
+		ImportedTextData(mjzombie_down1, png),
+		ImportedTextData(mjzombie_down2, png),
+		ImportedTextData(mjzombie_down3, png),
+		ImportedTextData(mjzombie_idle0, png),
+		ImportedTextData(mjzombie_idle1, png),
+		ImportedTextData(mjzombie_side0, png),
+		ImportedTextData(mjzombie_side1, png),
+		ImportedTextData(mjzombie_side2, png),
+		ImportedTextData(mjzombie_side3, png),
+		ImportedTextData(mjzombie_up0, png),
+		ImportedTextData(mjzombie_up1, png),
+		ImportedTextData(mjzombie_up2, png),
+		ImportedTextData(mjzombie_up3, png),
 
 		ImportedTextData(player_classic_default_fireball, png),
 		ImportedTextData(player_classic_default_fireball_particles_0, png),

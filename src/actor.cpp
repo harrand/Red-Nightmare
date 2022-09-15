@@ -39,7 +39,19 @@ namespace game
 						Flag<FlagID::Aggressive>{},
 						Flag<FlagID::RandomSkin>
 						{{
-							.skins = {ActorSkin::GhostZombie, ActorSkin::Nightmare}		
+							.skins =
+							{
+								ActorSkin::GhostZombie,
+								ActorSkin::GhostZombie,
+								ActorSkin::GhostZombie,
+								ActorSkin::GhostZombie,
+								ActorSkin::GhostZombie,
+								ActorSkin::GhostZombie,
+								ActorSkin::GhostZombie,
+								ActorSkin::GhostZombie,
+								ActorSkin::GhostZombie,
+								ActorSkin::GhostMJZombie
+							}		
 						}}
 					},
 					.faction = Faction::PlayerEnemy,
@@ -595,6 +607,33 @@ namespace game
 				if(this->dead())
 				{
 					ending_animation = AnimationID::GhostZombie_Death;
+				}
+			break;
+			case ActorSkin::GhostMJZombie:
+				if(this->motion.contains(ActorMotion::MoveLeft))
+				{
+					ending_animation = AnimationID::GhostMJZombie_MoveSide;
+				}
+				else if(this->motion.contains(ActorMotion::MoveRight))
+				{
+					ending_animation = AnimationID::GhostMJZombie_MoveSide;
+					this->entity.add<ActionID::HorizontalFlip>();
+				}
+				else if(this->motion.contains(ActorMotion::MoveUp))
+				{
+					ending_animation = AnimationID::GhostMJZombie_MoveUp;
+				}
+				else if(this->motion.contains(ActorMotion::MoveDown))
+				{
+					ending_animation = AnimationID::GhostMJZombie_MoveDown;
+				}
+				else
+				{
+					ending_animation = AnimationID::GhostMJZombie_Idle;
+				}
+				if(this->dead())
+				{
+					ending_animation = AnimationID::GhostMJZombie_Death;
 				}
 			break;
 			case ActorSkin::Nightmare:

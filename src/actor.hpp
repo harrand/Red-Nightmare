@@ -57,6 +57,8 @@ namespace game
 		PlayerClassic_LowPoly,
 		/// Actor looks like a zombified version of Akhara. One of the ghost skins.
 		GhostZombie,
+		/// Actor looks like a zombified Michael Jackson from thriller ;)
+		GhostMJZombie,
 		/// Actor looks like a fiery-smokey particle effect.
 		FireSmoke,
 		/// Actor looks like a fiery explosion particle effect.

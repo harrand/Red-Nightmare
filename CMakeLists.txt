@@ -112,6 +112,25 @@ add_text(
 		res/images/enemies/ghosts/zombie/ghost_zombie_up2.png
 		res/images/enemies/ghosts/zombie/ghost_zombie_up3.png
 
+		res/images/enemies/ghosts/mjzombie/mjzombie_death0.png
+		res/images/enemies/ghosts/mjzombie/mjzombie_death1.png
+		res/images/enemies/ghosts/mjzombie/mjzombie_death2.png
+		res/images/enemies/ghosts/mjzombie/mjzombie_death3.png
+		res/images/enemies/ghosts/mjzombie/mjzombie_down0.png
+		res/images/enemies/ghosts/mjzombie/mjzombie_down1.png
+		res/images/enemies/ghosts/mjzombie/mjzombie_down2.png
+		res/images/enemies/ghosts/mjzombie/mjzombie_down3.png
+		res/images/enemies/ghosts/mjzombie/mjzombie_idle0.png
+		res/images/enemies/ghosts/mjzombie/mjzombie_idle1.png
+		res/images/enemies/ghosts/mjzombie/mjzombie_side0.png
+		res/images/enemies/ghosts/mjzombie/mjzombie_side1.png
+		res/images/enemies/ghosts/mjzombie/mjzombie_side2.png
+		res/images/enemies/ghosts/mjzombie/mjzombie_side3.png
+		res/images/enemies/ghosts/mjzombie/mjzombie_up0.png
+		res/images/enemies/ghosts/mjzombie/mjzombie_up1.png
+		res/images/enemies/ghosts/mjzombie/mjzombie_up2.png
+		res/images/enemies/ghosts/mjzombie/mjzombie_up3.png
+
 		res/images/player/akhara/ability/player_classic_default_fireball.png
 		res/images/player/akhara/ability/player_classic_default_fireball_particles_0.png
 		res/images/player/akhara/ability/player_classic_default_fireball_particles_1.png
