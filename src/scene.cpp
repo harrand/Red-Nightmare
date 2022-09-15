@@ -404,6 +404,12 @@ namespace game
 			this->qrenderer.elements().back().position = quad.position;
 			action->set_is_complete(true);
 		}
+		if(actor.entity.has<ActionID::Respawn>())
+		{
+			auto action = actor.entity.get<ActionID::Respawn>();
+			action->set_is_complete(true);
+			actor.respawn();
+		}
 
 		// It's chasing something, but we don't care about what it's chasing.
 		if(chase_target.has_value())

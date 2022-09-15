@@ -37,18 +37,6 @@ namespace game
 					.flags_new =
 					{
 						Flag<FlagID::Aggressive>{},
-						Flag<FlagID::ActionOnDeath>
-						{{
-							.actions =
-							{
-								Action<ActionID::SpawnActor>
-								{{
-									.actor = ActorType::FireExplosion,
-									.inherit_faction = true
-
-								}}
-							}
-						}}
 					},
 					.faction = Faction::PlayerEnemy,
 					.base_stats =
@@ -166,10 +154,17 @@ namespace game
 						Flag<FlagID::RespawnOnDeath>{},
 						Flag<FlagID::Rot>{},
 						Flag<FlagID::Stealth>{},
-						Flag<FlagID::SpawnOnDeath>
-						{
-							{.types = {ActorType::PlayerClassic_TestEvil}}
-						}
+						Flag<FlagID::ActionOnDeath>
+						{{
+							.actions =
+							{
+								Action<ActionID::SpawnActor>
+								{{
+									.actor = ActorType::PlayerClassic_TestEvil,
+
+								}}
+							}
+						}}
 					},
 					.skin = ActorSkin::DebugOnlyVisible,
 					.palette_colour = {255u, 64u, 255u},
@@ -305,7 +300,7 @@ namespace game
 				// Wait for its death animation to finish.
 				if(this->animation.complete() || this->animation.get_info().loop)
 				{
-					this->respawn();
+					this->entity.add<ActionID::Respawn>();
 					return;
 				}
 			}

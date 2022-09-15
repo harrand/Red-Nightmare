@@ -58,7 +58,9 @@ namespace game
 		/// Flip the actor's sprite vertically.
 		VerticalFlip,
 		/// Spawn an actor as soon as possible once.
-		SpawnActor
+		SpawnActor,
+		/// Respawn the current actor.
+		Respawn
 	};
 
 	template<ActionID ID>
