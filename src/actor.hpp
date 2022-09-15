@@ -12,18 +12,6 @@ namespace game
 	/// Describes immutable characteristics for a specific actor.
 	enum class ActorFlag
 	{
-		/// Actor is never considered dead, even if its health is zero.
-		Invincible,
-		/// Whenever actor causes damage, also hurts itself.
-		SelfHarm,
-		/// Actor constantly damages itself.
-		Rot,
-		/// If the mouse is left-clicked. Respawn.
-		RespawnOnClick,
-		/// Whenever actor dies, respawn in the same position.
-		RespawnOnDeath,
-		/// If the actor dies, a fiery explosion happens (Blessing of Volatile Fire).
-		ExplodeOnDeath,
 		/// Whenever the actor is dead and touched by a player, respawn.
 		DeadRespawnOnPlayerTouch,
 		/// Whenever the actor is dead and touched by a player, resurrect.

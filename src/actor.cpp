@@ -36,7 +36,8 @@ namespace game
 					.flags = {ActorFlag::Collide},
 					.flags_new =
 					{
-						Flag<FlagID::Aggressive>{}
+						Flag<FlagID::Aggressive>{},
+						Flag<FlagID::ExplodeOnDeath>{},
 					},
 					.faction = Faction::PlayerEnemy,
 					.base_stats =
@@ -55,7 +56,7 @@ namespace game
 				return
 				{
 					.type = ActorType::PlayerClassic_Orb,
-					.flags = {ActorFlag::HazardousToEnemies, ActorFlag::RespawnOnPlayer, ActorFlag::DieIfOOB, ActorFlag::RespawnOnClick, ActorFlag::SelfHarm, ActorFlag::InvisibleWhileDead, ActorFlag::DoNotGarbageCollect},
+					.flags = {ActorFlag::HazardousToEnemies, ActorFlag::RespawnOnPlayer, ActorFlag::DieIfOOB, ActorFlag::InvisibleWhileDead, ActorFlag::DoNotGarbageCollect},
 					.flags_new =
 					{
 						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}},
@@ -64,7 +65,9 @@ namespace game
 							.internal_cooldown = 1.0f
 						}},
 						Flag<FlagID::Stealth>{},
-						Flag<FlagID::Unhittable>{}
+						Flag<FlagID::Unhittable>{},
+						Flag<FlagID::SelfRecoil>{},
+						Flag<FlagID::RespawnOnClick>{}
 					},
 					.faction = Faction::PlayerFriend,
 					.base_stats =
@@ -83,7 +86,11 @@ namespace game
 				return
 				{
 					.type = ActorType::FireSmoke,
-					.flags = {ActorFlag::Rot, ActorFlag::BlockingAnimations, ActorFlag::InvisibleWhileDead},
+					.flags = {ActorFlag::BlockingAnimations, ActorFlag::InvisibleWhileDead},
+					.flags_new =
+					{
+						Flag<FlagID::Rot>{}
+					},
 					.base_stats =
 					{
 						.max_health = 0.1f,
@@ -97,9 +104,10 @@ namespace game
 				return
 				{
 					.type = ActorType::FireExplosion,
-					.flags = {ActorFlag::Rot, ActorFlag::BlockingAnimations, ActorFlag::InvisibleWhileDead, ActorFlag::HazardousToEnemies},
+					.flags = {ActorFlag::BlockingAnimations, ActorFlag::InvisibleWhileDead, ActorFlag::HazardousToEnemies},
 					.flags_new =
 					{
+						Flag<FlagID::Rot>{},
 						Flag<FlagID::CustomScale>{{.scale = {1.5f, 1.5f}}},
 						Flag<FlagID::CustomReach>{{.reach = 1.5f}},
 						Flag<FlagID::Stealth>{},
@@ -118,10 +126,12 @@ namespace game
 				return
 				{
 					.type = ActorType::Nightmare,
-					.flags = {ActorFlag::SelfHarm, ActorFlag::RespawnOnDeath, ActorFlag::RandomRespawnLocation, ActorFlag::BlockingAnimations},
+					.flags = {ActorFlag::RandomRespawnLocation, ActorFlag::BlockingAnimations},
 					.flags_new =
 					{
-						Flag<FlagID::Aggressive>{}
+						Flag<FlagID::RespawnOnDeath>{},
+						Flag<FlagID::Aggressive>{},
+						Flag<FlagID::SelfRecoil>{}
 					},
 					.faction = Faction::PureEnemy,
 					.base_stats =
@@ -140,9 +150,10 @@ namespace game
 				return
 				{
 					.type = ActorType::EvilPlayer_TestSpawner,
-					.flags = {ActorFlag::RespawnOnDeath, ActorFlag::Rot},
 					.flags_new =
 					{
+						Flag<FlagID::RespawnOnDeath>{},
+						Flag<FlagID::Rot>{},
 						Flag<FlagID::Stealth>{},
 						Flag<FlagID::SpawnOnDeath>
 						{
@@ -158,9 +169,10 @@ namespace game
 				return
 				{
 					.type = ActorType::Wall,
-					.flags = {ActorFlag::Collide, ActorFlag::Invincible, ActorFlag::CannotCollide},
+					.flags = {ActorFlag::Collide, ActorFlag::CannotCollide},
 					.flags_new =
 					{
+						Flag<FlagID::Invincible>{},
 						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}},
 						Flag<FlagID::Stealth>{}
 					},
@@ -212,7 +224,7 @@ namespace game
 		const bool is_left_clicked = tz::window().get_mouse_button_state().is_mouse_button_down(tz::MouseButton::Left) && !tz::dbgui::claims_mouse();
 		if(!this->dead())
 		{
-			if(this->flags.contains(ActorFlag::Rot))
+			if(this->flags_new.has<FlagID::Rot>())
 			{
 				this->damage(*this);
 			}
@@ -267,21 +279,21 @@ namespace game
 		else
 		{
 			// Actor is dead.
-			if(this->flags.contains(ActorFlag::RespawnOnClick) && is_left_clicked)
+			if(this->flags_new.has<FlagID::RespawnOnClick>() && is_left_clicked)
 			{
 				this->respawn();
 				return;
 			}
-			if(this->flags.contains(ActorFlag::ExplodeOnDeath))
+			if(this->flags_new.has<FlagID::ExplodeOnDeath>())
 			{
 				this->entity.add<ActionID::SpawnActor>
 				({
 					.actor = ActorType::FireExplosion,
 					.inherit_faction = true
 				});
-				this->flags.remove(ActorFlag::ExplodeOnDeath);
+				this->flags_new.remove<FlagID::ExplodeOnDeath>();
 			}
-			if(this->flags.contains(ActorFlag::RespawnOnDeath))
+			if(this->flags_new.has<FlagID::RespawnOnDeath>())
 			{
 				// Wait for its death animation to finish.
 				if(this->animation.complete() || this->animation.get_info().loop)
@@ -295,7 +307,7 @@ namespace game
 
 	bool Actor::dead() const
 	{
-		return !this->flags.contains(ActorFlag::Invincible) && this->base_stats.current_health <= 0.0f;
+		return !this->flags_new.has<FlagID::Invincible>() && this->base_stats.current_health <= 0.0f;
 	}
 
 	void Actor::dbgui()
@@ -348,7 +360,7 @@ namespace game
 			return;
 		}
 		victim.base_stats.current_health -= this->get_current_stats().damage;
-		if(this->flags.contains(ActorFlag::SelfHarm))
+		if(this->flags_new.has<FlagID::SelfRecoil>())
 		{
 			this->base_stats.current_health -= this->get_current_stats().damage;
 		}

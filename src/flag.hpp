@@ -27,7 +27,19 @@ namespace game
 		/// Actor can be manually controlled by the keyboard controls.
 		KeyboardControlled,
 		/// Actor can be manually controlled, it continually chases the mouse cursor.
-		MouseControlled
+		MouseControlled,
+		/// Actor can never die.
+		Invincible,
+		/// Whenever actor damages another, it also damages itself.
+		SelfRecoil,
+		/// Actor damages itself every fixed update.
+		Rot,
+		/// Actor respawns on click.
+		RespawnOnClick,
+		/// Actor respawns as soon as it dies.
+		RespawnOnDeath,
+		/// Actor explodes when it dies.
+		ExplodeOnDeath,
 	};
 
 	template<FlagID ID>
