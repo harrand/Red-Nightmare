@@ -7,6 +7,7 @@
 namespace game
 {
 	enum class ActorType;
+	enum class ActorSkin;
 
 	enum class FlagID
 	{
@@ -41,7 +42,9 @@ namespace game
 		/// Actor performs an action when it dies. Note that some actions require the actor to be alive, which won't work here.
 		ActionOnDeath,
 		/// Actor performs an action when it touches a living player.
-		ActionOnPlayerTouch
+		ActionOnPlayerTouch,
+		/// Actor has one of a set of random skins instead of its default skin.
+		RandomSkin,
 	};
 
 	template<FlagID ID>
@@ -96,6 +99,12 @@ namespace game
 	struct FlagParams<FlagID::ActionOnPlayerTouch>
 	{
 		ActionEntity actions;
+	};
+
+	template<>
+	struct FlagParams<FlagID::RandomSkin>
+	{
+		std::vector<ActorSkin> skins;
 	};
 
 	class FlagEntity : public Entity<FlagID, IFlag, Flag, FlagParams>

@@ -158,6 +158,17 @@ namespace game
 	{
 		this->actors.push_back(game::create_actor(type));
 		this->qrenderer.push();
+		auto& actor = this->actors.back();
+		if(actor.flags_new.has<FlagID::RandomSkin>())
+		{
+			const auto& flag = actor.flags_new.get<FlagID::RandomSkin>()->data();
+			std::size_t skin_count = flag.skins.size();
+			if(skin_count > 0)
+			{
+				std::uniform_int_distribution<std::size_t> dist{0, skin_count - 1};
+				actor.skin = flag.skins[dist(this->rng)];
+			}
+		}
 	}
 	
 	void Scene::pop()

@@ -37,6 +37,10 @@ namespace game
 					.flags_new =
 					{
 						Flag<FlagID::Aggressive>{},
+						Flag<FlagID::RandomSkin>
+						{{
+							.skins = {ActorSkin::GhostZombie, ActorSkin::Nightmare}		
+						}}
 					},
 					.faction = Faction::PlayerEnemy,
 					.base_stats =

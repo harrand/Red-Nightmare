@@ -60,7 +60,7 @@ namespace game
 		/// Spawn an actor as soon as possible once.
 		SpawnActor,
 		/// Respawn the current actor.
-		Respawn
+		Respawn,
 	};
 
 	template<ActionID ID>
