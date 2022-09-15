@@ -39,6 +39,9 @@ namespace game
 
 		std::size_t size() const;
 		bool empty() const;
+		void clear();
+
+		void transfer_components(Entity<T, IComponent, Component, ComponentParams>& other);
 
 		virtual void update(){}
 	protected:

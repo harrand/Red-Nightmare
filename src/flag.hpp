@@ -1,11 +1,13 @@
 #ifndef REDNIGHTMARE_FLAG_HPP
 #define REDNIGHTMARE_FLAG_HPP
 #include "entity.hpp"
+#include "action.hpp"
 #include "tz/core/vector.hpp"
 
 namespace game
 {
 	enum class ActorType;
+
 	enum class FlagID
 	{
 		/// Actor is considered a player.
@@ -38,8 +40,8 @@ namespace game
 		RespawnOnClick,
 		/// Actor respawns as soon as it dies.
 		RespawnOnDeath,
-		/// Actor explodes when it dies.
-		ExplodeOnDeath,
+		/// Actor performs an action when it dies. Note that some actions require the actor to be alive, which won't work here.
+		ActionOnDeath,
 	};
 
 	template<FlagID ID>
@@ -55,7 +57,7 @@ namespace game
 	class Flag : public IFlag
 	{
 	public:
-		Flag(FlagParams<ID> params = {}): params(params){}
+		Flag(FlagParams<ID> params = {}): params(std::move(params)){}
 		virtual constexpr FlagID get_id() const override{return ID;}
 		const FlagParams<ID>& data() const{return this->params;}
 		FlagParams<ID>& data(){return this->params;}
@@ -90,7 +92,13 @@ namespace game
 		tz::EnumField<ActorType> types;
 	};
 
-	// Represents something that stores flags.
+	template<>
+	struct FlagParams<FlagID::ActionOnDeath>
+	{
+		ActionEntity actions;
+	};
+
+
 	class FlagEntity : public Entity<FlagID, IFlag, Flag, FlagParams>
 	{
 		using Entity<FlagID, IFlag, Flag, FlagParams>::Entity;

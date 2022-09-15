@@ -37,7 +37,18 @@ namespace game
 					.flags_new =
 					{
 						Flag<FlagID::Aggressive>{},
-						Flag<FlagID::ExplodeOnDeath>{},
+						Flag<FlagID::ActionOnDeath>
+						{{
+							.actions =
+							{
+								Action<ActionID::SpawnActor>
+								{{
+									.actor = ActorType::FireExplosion,
+									.inherit_faction = true
+
+								}}
+							}
+						}}
 					},
 					.faction = Faction::PlayerEnemy,
 					.base_stats =
@@ -284,14 +295,10 @@ namespace game
 				this->respawn();
 				return;
 			}
-			if(this->flags_new.has<FlagID::ExplodeOnDeath>())
+			if(this->flags_new.has<FlagID::ActionOnDeath>())
 			{
-				this->entity.add<ActionID::SpawnActor>
-				({
-					.actor = ActorType::FireExplosion,
-					.inherit_faction = true
-				});
-				this->flags_new.remove<FlagID::ExplodeOnDeath>();
+				auto& flag = this->flags_new.get<FlagID::ActionOnDeath>()->data();
+				flag.actions.transfer_components(this->entity);
 			}
 			if(this->flags_new.has<FlagID::RespawnOnDeath>())
 			{

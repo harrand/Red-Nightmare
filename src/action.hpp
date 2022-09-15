@@ -131,6 +131,7 @@ namespace game
 	{
 	public:
 		ActionEntity() = default;
+		using Entity<ActionID, IAction, Action, ActionParams>::Entity;
 		virtual void update() override;
 	};
 }

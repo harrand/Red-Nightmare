@@ -9,12 +9,10 @@ namespace game
 	ENTITY_IMPL::Entity(C... cs):
 	components()
 	{
-		auto tup = std::forward_as_tuple(cs...);
-
 		int i = 0;
 		([&]
 		{
-			auto comp_clone = std::make_unique<decltype(cs)>(cs.data());
+			auto comp_clone = std::make_unique<decltype(cs)>(std::move(cs.data()));
 			auto* comp_released = comp_clone.release();
 			this->components.push_back(std::unique_ptr<IComponent>{static_cast<IComponent*>(comp_released)});
 		} (), ...);
@@ -114,5 +112,21 @@ namespace game
 	bool ENTITY_IMPL::empty() const
 	{
 		return this->size() == 0;
+	}
+
+	TEMPLATE_MAGIC
+	void ENTITY_IMPL::clear()
+	{
+		this->components.clear();
+	}
+
+	TEMPLATE_MAGIC
+	void ENTITY_IMPL::transfer_components(Entity<T, IComponent, Component, ComponentParams>& other)
+	{
+		for(auto& comp_ptr : this->components)
+		{
+			other.components.push_back(std::move(comp_ptr));
+		}
+		this->clear();
 	}
 }
