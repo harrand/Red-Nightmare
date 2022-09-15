@@ -12,10 +12,6 @@ namespace game
 	/// Describes immutable characteristics for a specific actor.
 	enum class ActorFlag
 	{
-		/// Whenever the actor is dead and touched by a player, respawn.
-		DeadRespawnOnPlayerTouch,
-		/// Whenever the actor is dead and touched by a player, resurrect.
-		DeadResurrectOnPlayerTouch,
 		/// When respawned, do so in a completely random location.
 		RandomRespawnLocation,
 		/// When respawned, do so at a player's location.

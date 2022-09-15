@@ -24,8 +24,6 @@ namespace game
 		Stealth,
 		/// Actor cannot be harmed by aggressive enemies.
 		Unhittable,
-		/// When the actor dies, spawns another actor.
-		SpawnOnDeath,
 		/// Actor can be manually controlled by the keyboard controls.
 		KeyboardControlled,
 		/// Actor can be manually controlled, it continually chases the mouse cursor.
@@ -42,6 +40,8 @@ namespace game
 		RespawnOnDeath,
 		/// Actor performs an action when it dies. Note that some actions require the actor to be alive, which won't work here.
 		ActionOnDeath,
+		/// Actor performs an action when it touches a living player.
+		ActionOnPlayerTouch
 	};
 
 	template<FlagID ID>
@@ -87,17 +87,16 @@ namespace game
 	};
 
 	template<>
-	struct FlagParams<FlagID::SpawnOnDeath>
-	{
-		tz::EnumField<ActorType> types;
-	};
-
-	template<>
 	struct FlagParams<FlagID::ActionOnDeath>
 	{
 		ActionEntity actions;
 	};
 
+	template<>
+	struct FlagParams<FlagID::ActionOnPlayerTouch>
+	{
+		ActionEntity actions;
+	};
 
 	class FlagEntity : public Entity<FlagID, IFlag, Flag, FlagParams>
 	{

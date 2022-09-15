@@ -247,18 +247,6 @@ namespace game
 				}
 			}
 		}
-		if(actor.flags_new.has<FlagID::SpawnOnDeath>() && actor.dead())
-		{
-			auto flag = actor.flags_new.get<FlagID::SpawnOnDeath>()->data();
-			const auto& types = flag.types;
-			for(ActorType t : types)
-			{
-				// Note: Right now this could spam forever.
-				this->add(t);
-				// Teleport it to our location.
-				this->qrenderer.elements().back().position = quad.position;
-			}
-		}
 		// If actor wants to teleport to a random location, do it now.
 
 		quad.scale = {0.2f, 0.2f};
@@ -758,7 +746,7 @@ namespace game
 
 		const bool wants_to_hurt = (actor.flags.contains(ActorFlag::HazardousToAll) || actor.flags.contains(ActorFlag::HazardousToEnemies) || actor.flags_new.has<FlagID::Aggressive>()) && actor.is_enemy_of(other) && !other.flags_new.has<FlagID::Unhittable>() && !actor.dead() && !other.dead();
 		const bool blocks_colliders = actor.flags.contains(ActorFlag::Collide) && !actor.dead() && !other.dead() && !other.flags.contains(ActorFlag::CannotCollide);
-		const bool wants_touch_player = (actor.flags.contains(ActorFlag::DeadRespawnOnPlayerTouch) || actor.flags.contains(ActorFlag::DeadResurrectOnPlayerTouch) && other.flags_new.has<FlagID::Player>());
+		const bool wants_touch_player = (actor.flags_new.has<FlagID::ActionOnPlayerTouch>() && other.flags_new.has<FlagID::Player>());
 		const bool cares_about_collisions = wants_to_hurt || blocks_colliders || wants_touch_player;
 		if(cares_about_collisions)
 		{
@@ -781,15 +769,9 @@ namespace game
 			if(wants_touch_player)
 			{
 				// Actor is touching a player.
-				if(actor.flags.contains(ActorFlag::DeadResurrectOnPlayerTouch))
-				{
-					actor.base_stats.current_health = actor.get_current_stats().max_health;
-				}
-				if(actor.flags.contains(ActorFlag::DeadRespawnOnPlayerTouch))
-				{
-					actor.respawn();
-				}
-
+				// Carry out its actions.
+				auto& on_touch_flag = actor.flags_new.get<FlagID::ActionOnPlayerTouch>()->data();
+				on_touch_flag.actions.transfer_components(actor.entity);
 			}
 		}
 	}

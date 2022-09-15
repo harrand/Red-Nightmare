@@ -164,7 +164,16 @@ namespace game
 
 								}}
 							}
-						}}
+						}},
+						Flag<FlagID::ActionOnPlayerTouch>
+						{{
+							.actions =
+							{
+								Action<ActionID::RandomTeleport>
+								{{
+								}}
+							}
+						}},
 					},
 					.skin = ActorSkin::DebugOnlyVisible,
 					.palette_colour = {255u, 64u, 255u},
