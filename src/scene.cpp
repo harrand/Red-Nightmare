@@ -409,6 +409,21 @@ namespace game
 			action->set_is_complete(true);
 			actor.respawn();
 		}
+		if(actor.entity.has<ActionID::ApplyBuff>())
+		{
+			auto action = actor.entity.get<ActionID::ApplyBuff>();
+			this->actors[action->data().actor_id].buffs.add(action->data().buff);
+			action->set_is_complete(true);
+		}
+		if(actor.entity.has<ActionID::ApplyBuffToPlayers>())
+		{
+			auto action = actor.entity.get<ActionID::ApplyBuffToPlayers>();
+			for(std::size_t player_id : this->get_living_players())
+			{
+				this->actors[player_id].buffs.add(action->data().buff);
+			}
+			action->set_is_complete(true);
+		}
 
 		// It's chasing something, but we don't care about what it's chasing.
 		if(chase_target.has_value())
@@ -537,9 +552,17 @@ namespace game
 			return {pos - tz::Vec2{small_float, small_float}, pos + tz::Vec2{small_float, small_float}};
 		}
 		*/
+
+		tz::Vec2 scale = quad.scale;
+		// Bounding box should be affected by custom reach.
+		const Actor& actor = this->actors[actor_id];
+		if(actor.flags_new.has<FlagID::CustomReach>())
+		{
+			const auto& flag = actor.flags_new.get<FlagID::CustomReach>()->data();
+			scale *= flag.reach;
+		}
 		tz::Vec2 min{-0.5f, -0.5f};
 		tz::Vec2 max{0.5f, 0.5f};
-		tz::Vec2 scale = quad.scale;
 		scale[0] = std::abs(scale[0]);
 		scale[1] = std::abs(scale[0]);
 		min[0] *= scale[0];

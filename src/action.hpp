@@ -10,6 +10,7 @@ namespace game
 {
 	// Pre-declares.
 	enum class ActorType;
+	enum class BuffID;
 
 	/// Actions cause an actor to do something until the action is considered complete. Some actions occur instantly, but many do not.
 	enum class ActionID
@@ -61,6 +62,10 @@ namespace game
 		SpawnActor,
 		/// Respawn the current actor.
 		Respawn,
+		/// Apply a buff to another actor.
+		ApplyBuff,
+		/// Apply a buff to all living players.
+		ApplyBuffToPlayers
 	};
 
 	template<ActionID ID>
@@ -126,6 +131,19 @@ namespace game
 	{
 		ActorType actor;
 		bool inherit_faction = false;
+	};
+
+	template<>
+	struct ActionParams<ActionID::ApplyBuff>
+	{
+		std::size_t actor_id;
+		BuffID buff;
+	};
+
+	template<>
+	struct ActionParams<ActionID::ApplyBuffToPlayers>
+	{
+		BuffID buff;
 	};
 
 	/// Represents something that can carry out actions.

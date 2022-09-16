@@ -59,6 +59,8 @@ namespace game
 		GhostZombie,
 		/// Actor looks like a zombified Michael Jackson from thriller ;)
 		GhostMJZombie,
+		/// Actor looks like a banshee.
+		GhostBanshee,
 		/// Actor looks like a fiery-smokey particle effect.
 		FireSmoke,
 		/// Actor looks like a fiery explosion particle effect.
@@ -79,6 +81,8 @@ namespace game
 		PlayerClassic,
 		/// A computer-controlled player using the classic skin, but all it does is chase any nearby real players.
 		PlayerClassic_TestEvil,
+		/// A computer-controlled ghost banshee enemy.
+		GhostBanshee,
 		/// An actor which acts as Akhara's passive elemental orb.
 		PlayerClassic_Orb,
 		/// An actor which acts as a fiery particle effect. Dies by itself after a while.

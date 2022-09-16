@@ -52,6 +52,8 @@ namespace game
 		GhostMJZombie_Idle,
 		GhostMJZombie_MoveSide,
 		GhostMJZombie_MoveUp,
+		GhostBanshee_Idle,
+		GhostBanshee_Death,
 		PlayerClassic_DefaultFireball_Idle,
 		PlayerClassic_FireSmoke,
 		BlockBreak,

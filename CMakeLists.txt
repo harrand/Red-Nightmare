@@ -131,6 +131,21 @@ add_text(
 		res/images/enemies/ghosts/mjzombie/mjzombie_up2.png
 		res/images/enemies/ghosts/mjzombie/mjzombie_up3.png
 
+		res/images/enemies/ghosts/banshee/banshee_idle0.png
+		res/images/enemies/ghosts/banshee/banshee_idle1.png
+		res/images/enemies/ghosts/banshee/banshee_death00.png
+		res/images/enemies/ghosts/banshee/banshee_death01.png
+		res/images/enemies/ghosts/banshee/banshee_death02.png
+		res/images/enemies/ghosts/banshee/banshee_death03.png
+		res/images/enemies/ghosts/banshee/banshee_death04.png
+		res/images/enemies/ghosts/banshee/banshee_death05.png
+		res/images/enemies/ghosts/banshee/banshee_death06.png
+		res/images/enemies/ghosts/banshee/banshee_death07.png
+		res/images/enemies/ghosts/banshee/banshee_death08.png
+		res/images/enemies/ghosts/banshee/banshee_death09.png
+		res/images/enemies/ghosts/banshee/banshee_death10.png
+		res/images/enemies/ghosts/banshee/banshee_death11.png
+
 		res/images/player/akhara/ability/player_classic_default_fireball.png
 		res/images/player/akhara/ability/player_classic_default_fireball_particles_0.png
 		res/images/player/akhara/ability/player_classic_default_fireball_particles_1.png

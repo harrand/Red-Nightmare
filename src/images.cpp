@@ -81,6 +81,21 @@
 #include ImportedTextHeader(mjzombie_up2, png)
 #include ImportedTextHeader(mjzombie_up3, png)
 
+#include ImportedTextHeader(banshee_idle0, png)
+#include ImportedTextHeader(banshee_idle1, png)
+#include ImportedTextHeader(banshee_death00, png)
+#include ImportedTextHeader(banshee_death01, png)
+#include ImportedTextHeader(banshee_death02, png)
+#include ImportedTextHeader(banshee_death03, png)
+#include ImportedTextHeader(banshee_death04, png)
+#include ImportedTextHeader(banshee_death05, png)
+#include ImportedTextHeader(banshee_death06, png)
+#include ImportedTextHeader(banshee_death07, png)
+#include ImportedTextHeader(banshee_death08, png)
+#include ImportedTextHeader(banshee_death09, png)
+#include ImportedTextHeader(banshee_death10, png)
+#include ImportedTextHeader(banshee_death11, png)
+
 #include ImportedTextHeader(player_classic_default_fireball, png)
 #include ImportedTextHeader(player_classic_default_fireball_particles_0, png)
 #include ImportedTextHeader(player_classic_default_fireball_particles_1, png)
@@ -219,6 +234,21 @@ namespace game
 		ImportedTextData(mjzombie_up1, png),
 		ImportedTextData(mjzombie_up2, png),
 		ImportedTextData(mjzombie_up3, png),
+
+		ImportedTextData(banshee_idle0, png),
+		ImportedTextData(banshee_idle1, png),
+		ImportedTextData(banshee_death00, png),
+		ImportedTextData(banshee_death01, png),
+		ImportedTextData(banshee_death02, png),
+		ImportedTextData(banshee_death03, png),
+		ImportedTextData(banshee_death04, png),
+		ImportedTextData(banshee_death05, png),
+		ImportedTextData(banshee_death06, png),
+		ImportedTextData(banshee_death07, png),
+		ImportedTextData(banshee_death08, png),
+		ImportedTextData(banshee_death09, png),
+		ImportedTextData(banshee_death10, png),
+		ImportedTextData(banshee_death11, png),
 
 		ImportedTextData(player_classic_default_fireball, png),
 		ImportedTextData(player_classic_default_fireball_particles_0, png),

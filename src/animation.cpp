@@ -308,6 +308,36 @@ namespace game
 			.fps = 6,
 			.loop = true
 		},
+		AnimationInfo /*GhostBanshee_Idle*/
+		{
+			.frames = 
+			{
+				TextureID::GhostBanshee_Idle_0,
+				TextureID::GhostBanshee_Idle_1,
+			},
+			.fps = 2,
+			.loop = true
+		},
+		AnimationInfo /*GhostBanshee_Death*/
+		{
+			.frames = 
+			{
+				TextureID::GhostBanshee_Death_0,
+				TextureID::GhostBanshee_Death_1,
+				TextureID::GhostBanshee_Death_2,
+				TextureID::GhostBanshee_Death_3,
+				TextureID::GhostBanshee_Death_4,
+				TextureID::GhostBanshee_Death_5,
+				TextureID::GhostBanshee_Death_6,
+				TextureID::GhostBanshee_Death_7,
+				TextureID::GhostBanshee_Death_8,
+				TextureID::GhostBanshee_Death_9,
+				TextureID::GhostBanshee_Death_10,
+				TextureID::GhostBanshee_Death_11,
+			},
+			.fps = 14,
+			.loop = false
+		},
 		AnimationInfo /*PlayerClassic_DefaultFireball_Idle*/
 		{
 			.frames =

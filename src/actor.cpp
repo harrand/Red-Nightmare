@@ -67,6 +67,38 @@ namespace game
 					.name = "Ghost Zombie"
 				};
 			break;
+			case ActorType::GhostBanshee:
+				return
+				{
+					.type = ActorType::GhostBanshee,
+					.flags = {ActorFlag::Collide},
+					.flags_new =
+					{
+						Flag<FlagID::Aggressive>{},
+						Flag<FlagID::ActionOnDeath>
+						{{
+							.actions =
+							{
+								Action<ActionID::ApplyBuffToPlayers>
+								{{
+									.buff = BuffID::Chill
+								}}
+							}
+						}}
+					},
+					.faction = Faction::PlayerEnemy,
+					.base_stats =
+					{
+						.movement_speed = 0.0002f,
+						.max_health = 0.01f,
+						.current_health = 0.01f
+					},
+					.skin = ActorSkin::GhostBanshee,
+					.animation = game::play_animation(AnimationID::PlayerClassic_Idle),
+					.palette_colour = {128u, 255u, 255u},
+					.name = "Ghost Zombie"
+				};
+			break;
 			case ActorType::PlayerClassic_Orb:
 				return
 				{
@@ -634,6 +666,16 @@ namespace game
 				if(this->dead())
 				{
 					ending_animation = AnimationID::GhostMJZombie_Death;
+				}
+			break;
+			case ActorSkin::GhostBanshee:
+				if(this->dead())
+				{
+					ending_animation = AnimationID::GhostBanshee_Death;
+				}
+				else
+				{
+					ending_animation = AnimationID::GhostBanshee_Idle;
 				}
 			break;
 			case ActorSkin::Nightmare:
