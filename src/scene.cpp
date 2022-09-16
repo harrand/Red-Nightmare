@@ -6,6 +6,7 @@
 
 #include "tz/core/report.hpp"
 #include <algorithm>
+#include <numeric>
 
 namespace game
 {
@@ -41,7 +42,6 @@ namespace game
 		this->intersections = this->quadtree.find_all_intersections();
 		this->collision_resolution();
 		this->quadtree.clear();
-		//tz_debug_report("Collision Queries: %zu", this->debug_collision_query_count);
 	}
 	
 	void Scene::dbgui()
@@ -214,6 +214,9 @@ namespace game
 	void Scene::erase(std::size_t id)
 	{
 		this->qrenderer.erase(id);
+		auto& this_actor = this->actors[id];
+		this_actor.flags_new.clear();
+		this_actor.entity.clear();
 		std::swap(this->actors[id], this->actors.back());
 		this->actors.pop_back();
 	}
@@ -806,6 +809,7 @@ namespace game
 				// Carry out its actions.
 				auto& on_touch_flag = actor.flags_new.get<FlagID::ActionOnPlayerTouch>()->data();
 				on_touch_flag.actions.transfer_components(actor.entity);
+				actor.flags_new.remove<FlagID::ActionOnPlayerTouch>();
 			}
 		}
 	}

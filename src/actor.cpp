@@ -351,6 +351,7 @@ namespace game
 			{
 				auto& flag = this->flags_new.get<FlagID::ActionOnDeath>()->data();
 				flag.actions.transfer_components(this->entity);
+				this->flags_new.remove<FlagID::ActionOnDeath>();
 			}
 			if(this->flags_new.has<FlagID::RespawnOnDeath>())
 			{
