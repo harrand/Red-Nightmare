@@ -132,6 +132,7 @@ namespace game
 		float density = 1.0f;
 		/// Duration at last update.
 		tz::Duration last_update = tz::system_time();
+		Actor* target = nullptr;
 
 		void update();
 		bool dead() const;

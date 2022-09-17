@@ -430,6 +430,15 @@ namespace game
 			this->actors[action->data().actor_id].buffs.add(action->data().buff);
 			action->set_is_complete(true);
 		}
+		if(actor.entity.has<ActionID::ApplyBuffToTarget>())
+		{
+			auto action = actor.entity.get<ActionID::ApplyBuffToTarget>();
+			if(actor.target != nullptr)
+			{
+				actor.target->buffs.add(action->data().buff);
+			}
+			action->set_is_complete(true);
+		}
 		if(actor.entity.has<ActionID::ApplyBuffToPlayers>())
 		{
 			auto action = actor.entity.get<ActionID::ApplyBuffToPlayers>();
@@ -852,6 +861,7 @@ namespace game
 
 	void Scene::on_actor_hit(ActorHitEvent e)
 	{
+		e.attacker.target = &e.attackee;
 		//tz_report("%s hit %s", e.attacker.name, e.attackee.name);
 		if(e.attacker.flags_new.has<FlagID::ActionOnHit>())
 		{

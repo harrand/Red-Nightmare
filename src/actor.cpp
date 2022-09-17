@@ -79,7 +79,7 @@ namespace game
 						{{
 							.actions =
 							{
-								Action<ActionID::ApplyBuffToPlayers>
+								Action<ActionID::ApplyBuffToTarget>
 								{{
 									.buff = BuffID::Chill
 								}}
@@ -114,7 +114,7 @@ namespace game
 						Flag<FlagID::Stealth>{},
 						Flag<FlagID::Unhittable>{},
 						Flag<FlagID::SelfRecoil>{},
-						Flag<FlagID::RespawnOnClick>{}
+						Flag<FlagID::RespawnOnClick>{},
 					},
 					.faction = Faction::PlayerFriend,
 					.base_stats =
@@ -136,7 +136,7 @@ namespace game
 					.flags = {ActorFlag::BlockingAnimations, ActorFlag::InvisibleWhileDead},
 					.flags_new =
 					{
-						Flag<FlagID::Rot>{}
+						Flag<FlagID::Rot>{},
 					},
 					.base_stats =
 					{
