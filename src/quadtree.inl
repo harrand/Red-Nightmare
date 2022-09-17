@@ -21,11 +21,7 @@ namespace game
 	template<BoxedThing T>
 	void Quadtree<T>::clear()
 	{
-		for(auto& child_ptr : this->root.children)
-		{
-			child_ptr = nullptr;
-		}
-		this->root.values.clear();
+		this->root = {};
 	}
 
 	template<BoxedThing T>
