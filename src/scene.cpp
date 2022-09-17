@@ -853,6 +853,11 @@ namespace game
 	void Scene::on_actor_hit(ActorHitEvent e)
 	{
 		//tz_report("%s hit %s", e.attacker.name, e.attackee.name);
+		if(e.attacker.flags_new.has<FlagID::ActionOnHit>())
+		{
+			auto& flag = e.attacker.flags_new.get<FlagID::ActionOnHit>()->data();
+			flag.actions.copy_components(e.attacker.entity);
+		}
 	}
 
 	void Scene::on_actor_struck(ActorStruckEvent e)
@@ -871,7 +876,7 @@ namespace game
 		if(e.killee.flags_new.has<FlagID::ActionOnDeath>())
 		{
 			auto& flag = e.killee.flags_new.get<FlagID::ActionOnDeath>()->data();
-			flag.actions.transfer_components(e.killee.entity);
+			flag.actions.copy_components(e.killee.entity);
 		}
 		if(e.killee.flags_new.has<FlagID::RespawnOnDeath>())
 		{

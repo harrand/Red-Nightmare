@@ -75,7 +75,7 @@ namespace game
 					.flags_new =
 					{
 						Flag<FlagID::Aggressive>{},
-						Flag<FlagID::ActionOnDeath>
+						Flag<FlagID::ActionOnHit>
 						{{
 							.actions =
 							{

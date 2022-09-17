@@ -3,6 +3,7 @@
 #include "entity.hpp"
 #include "action.hpp"
 #include "tz/core/vector.hpp"
+#include "tz/core/interfaces/cloneable.hpp"
 
 namespace game
 {
@@ -41,6 +42,8 @@ namespace game
 		RespawnOnDeath,
 		/// Actor performs an action when it dies. Note that some actions require the actor to be alive, which won't work here.
 		ActionOnDeath,
+		/// Actor performs an action when it hits something.
+		ActionOnHit,
 		/// Actor performs an action when it touches a living player.
 		ActionOnPlayerTouch,
 		/// Actor has one of a set of random skins instead of its default skin.
@@ -50,7 +53,7 @@ namespace game
 	template<FlagID ID>
 	struct FlagParams{};
 
-	class IFlag
+	class IFlag : public tz::IUniqueCloneable<IFlag>
 	{
 	public:
 		virtual constexpr FlagID get_id() const = 0;
@@ -61,6 +64,10 @@ namespace game
 	{
 	public:
 		Flag(FlagParams<ID> params = {}): params(std::move(params)){}
+		[[nodiscard]] virtual std::unique_ptr<IFlag> unique_clone() const
+		{
+			return static_cast<std::unique_ptr<IFlag>>(std::make_unique<Flag<ID>>(*this));
+		}
 		virtual constexpr FlagID get_id() const override{return ID;}
 		const FlagParams<ID>& data() const{return this->params;}
 		FlagParams<ID>& data(){return this->params;}
@@ -91,6 +98,12 @@ namespace game
 
 	template<>
 	struct FlagParams<FlagID::ActionOnDeath>
+	{
+		ActionEntity actions;
+	};
+
+	template<>
+	struct FlagParams<FlagID::ActionOnHit>
 	{
 		ActionEntity actions;
 	};

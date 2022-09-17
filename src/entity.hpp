@@ -18,10 +18,10 @@ namespace game
 		Entity() = default;
 		template<typename... C>
 		Entity(C... cs);
-		Entity(const Entity<T, IComponent, Component, ComponentParams>& copy) = delete;
+		Entity(const Entity<T, IComponent, Component, ComponentParams>& copy);
 		Entity(Entity<T, IComponent, Component, ComponentParams>&& move) = default;
 		~Entity() = default;
-		Entity& operator=(const Entity<T, IComponent, Component, ComponentParams>& rhs) = delete;
+		Entity& operator=(const Entity<T, IComponent, Component, ComponentParams>& rhs);
 		Entity& operator=(Entity<T, IComponent, Component, ComponentParams>&& rhs) = default;
 
 		template<T t>

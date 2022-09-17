@@ -3,6 +3,7 @@
 #include "entity.hpp"
 #include "tz/core/vector.hpp"
 #include "tz/core/handle.hpp"
+#include "tz/core/interfaces/cloneable.hpp"
 #include <vector>
 #include <memory>
 
@@ -71,7 +72,7 @@ namespace game
 	template<ActionID ID>
 	struct ActionParams{};
 
-	class IAction
+	class IAction : public tz::IUniqueCloneable<IAction>
 	{
 	public:
 		virtual constexpr ActionID get_id() const = 0;
@@ -86,6 +87,10 @@ namespace game
 	{
 	public:
 		Action(ActionParams<ID> params): params(params){}
+		[[nodiscard]] virtual std::unique_ptr<IAction> unique_clone() const
+		{
+			return static_cast<std::unique_ptr<IAction>>(std::make_unique<Action<ID>>(*this));
+		}
 		virtual constexpr ActionID get_id() const override{return ID;}
 		const ActionParams<ID>& data() const{return this->params;}
 		ActionParams<ID>& data(){return this->params;}

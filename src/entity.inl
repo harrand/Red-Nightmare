@@ -19,6 +19,25 @@ namespace game
 	}
 
 	TEMPLATE_MAGIC
+	ENTITY_IMPL::Entity(const ENTITY_IMPL& copy)
+	{
+		for(const auto& comp_ptr : copy.components)
+		{
+			this->components.push_back(comp_ptr->unique_clone());
+		}
+	}
+
+	TEMPLATE_MAGIC
+	ENTITY_IMPL& ENTITY_IMPL::operator=(const ENTITY_IMPL& rhs)
+	{
+		this->clear();
+		for(const auto& comp_ptr : rhs.components)
+		{
+			this->components.push_back(comp_ptr->unique_clone());
+		}
+	}
+
+	TEMPLATE_MAGIC
 	template<T t>
 	bool ENTITY_IMPL::add(ComponentParams<t> params)
 	{
@@ -133,6 +152,9 @@ namespace game
 	TEMPLATE_MAGIC
 	void ENTITY_IMPL::copy_components(Entity<T, IComponent, Component, ComponentParams>& other)
 	{
-		
+		for(const auto& comp_ptr : this->components)
+		{
+			other.components.push_back(comp_ptr->unique_clone());
+		}
 	}
 }
