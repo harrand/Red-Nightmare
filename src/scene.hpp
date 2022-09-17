@@ -63,6 +63,7 @@ namespace game
 		Quadtree<QuadtreeNode>::IntersectionState intersections = {};
 		QuadRenderer qrenderer;
 		std::vector<Actor> actors;
+		Actor world_actor = game::create_actor(ActorType::World);
 		std::default_random_engine rng;
 		std::unordered_map<std::size_t, tz::Delay> despawn_timer;
 		ActorEventHandler events;

@@ -248,7 +248,7 @@ namespace game
 		}
 		if(actor.flags_new.has<FlagID::Rot>())
 		{
-			this->do_actor_hit(id, id);
+			this->do_actor_hit(Actor::NullID, id);
 		}
 		if(actor.flags_new.has<FlagID::CustomReach>())
 		{
@@ -829,9 +829,18 @@ namespace game
 	void Scene::do_actor_hit(std::size_t attacker, std::size_t attackee)
 	{
 		bool alive = !this->actors[attackee].dead();
-		Actor& a = this->actors[attacker];
+		Actor* aptr = nullptr;
+		if(attacker == Actor::NullID)
+		{
+			aptr = &this->world_actor;
+		}
+		else
+		{
+			aptr = &this->actors[attacker];
+		}
+		Actor& a = *aptr;
 		Actor& b = this->actors[attackee];
-		this->actors[attacker].damage(this->actors[attackee]);
+		a.damage(b);
 		this->events.actor_hit({.attacker = a, .attackee = b});
 		this->events.actor_struck({.attackee = b, .attacker = a});
 		if(alive && this->actors[attackee].dead())

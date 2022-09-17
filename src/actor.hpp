@@ -97,6 +97,8 @@ namespace game
 		Wall,
 		/// Just like a wall, but is destructible by the player.
 		WallDestructible,
+		/// Meta-actor. Represents 'the world'. e.g if you take damage from rot, or an environmental effect, the attacker will be the world.
+		World,
 		Count
 	};
 

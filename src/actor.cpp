@@ -268,6 +268,13 @@ namespace game
 					.density = 2.0f
 				};
 			break;
+			case ActorType::World:
+				return
+				{
+					.type = ActorType::World,
+					.name = "World"
+				};
+			break;
 		}
 		return Actor::null();
 	}
@@ -446,6 +453,11 @@ namespace game
 
 	bool Actor::is_ally_of(const Actor& actor) const
 	{
+		// World is neither an ally nor enemy of anyone.
+		if(this->type == ActorType::World || actor.type == ActorType::World)
+		{
+			return false;
+		}
 		// Players cannot hurt other players.
 		if(this->flags_new.has<FlagID::Player>() && actor.flags_new.has<FlagID::Player>())
 		{
@@ -482,6 +494,11 @@ namespace game
 
 	bool Actor::is_enemy_of(const Actor& actor) const
 	{
+		// World is neither an ally nor enemy of anyone.
+		if(this->type == ActorType::World || actor.type == ActorType::World)
+		{
+			return false;
+		}
 		// Players see PlayerEnemy faction members as enemies... obviously
 		if(this->flags_new.has<FlagID::Player>() && actor.faction == Faction::PlayerEnemy)
 		{
