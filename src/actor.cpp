@@ -96,7 +96,7 @@ namespace game
 					.skin = ActorSkin::GhostBanshee,
 					.animation = game::play_animation(AnimationID::PlayerClassic_Idle),
 					.palette_colour = {128u, 255u, 255u},
-					.name = "Ghost Zombie"
+					.name = "Ghost Banshee"
 				};
 			break;
 			case ActorType::PlayerClassic_Orb:
@@ -288,10 +288,6 @@ namespace game
 		const bool is_left_clicked = tz::window().get_mouse_button_state().is_mouse_button_down(tz::MouseButton::Left) && !tz::dbgui::claims_mouse();
 		if(!this->dead())
 		{
-			if(this->flags_new.has<FlagID::Rot>())
-			{
-				this->damage(*this);
-			}
 			if(this->flags_new.has<FlagID::ClickToLaunch>() && is_left_clicked)
 			{
 				auto& flag = this->flags_new.get<FlagID::ClickToLaunch>()->data();
@@ -347,21 +343,6 @@ namespace game
 			{
 				this->respawn();
 				return;
-			}
-			if(this->flags_new.has<FlagID::ActionOnDeath>())
-			{
-				auto& flag = this->flags_new.get<FlagID::ActionOnDeath>()->data();
-				flag.actions.transfer_components(this->entity);
-				this->flags_new.remove<FlagID::ActionOnDeath>();
-			}
-			if(this->flags_new.has<FlagID::RespawnOnDeath>())
-			{
-				// Wait for its death animation to finish.
-				if(this->animation.complete() || this->animation.get_info().loop)
-				{
-					this->entity.add<ActionID::Respawn>();
-					return;
-				}
 			}
 		}
 	}

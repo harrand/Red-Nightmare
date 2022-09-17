@@ -12,6 +12,14 @@ namespace game
 {
 	constexpr float touch_distance = 0.14f;
 
+	Scene::Scene()
+	{
+		this->events.actor_hit.add_callback([this](ActorHitEvent e){this->on_actor_hit(e);});
+		this->events.actor_struck.add_callback([this](ActorStruckEvent e){this->on_actor_struck(e);});
+		this->events.actor_kill.add_callback([this](ActorKillEvent e){this->on_actor_kill(e);});
+		this->events.actor_death.add_callback([this](ActorDeathEvent e){this->on_actor_death(e);});
+	}
+
 	void Scene::render()
 	{
 		TZ_PROFZONE("Scene - Render", TZ_PROFCOL_GREEN);
@@ -237,6 +245,10 @@ namespace game
 			{
 				actor.respawn();
 			}
+		}
+		if(actor.flags_new.has<FlagID::Rot>())
+		{
+			this->do_actor_hit(id, id);
 		}
 		if(actor.flags_new.has<FlagID::CustomReach>())
 		{
@@ -789,7 +801,7 @@ namespace game
 		{
 			if(wants_to_hurt)
 			{
-				actor.damage(other);
+				this->do_actor_hit(a_id, b_id);
 				// TODO: Data-drive this.
 				if(actor.type == ActorType::PlayerClassic_Orb)
 				{
@@ -813,4 +825,49 @@ namespace game
 			}
 		}
 	}
+
+	void Scene::do_actor_hit(std::size_t attacker, std::size_t attackee)
+	{
+		bool alive = !this->actors[attackee].dead();
+		Actor& a = this->actors[attacker];
+		Actor& b = this->actors[attackee];
+		this->actors[attacker].damage(this->actors[attackee]);
+		this->events.actor_hit({.attacker = a, .attackee = b});
+		this->events.actor_struck({.attackee = b, .attacker = a});
+		if(alive && this->actors[attackee].dead())
+		{
+			this->events.actor_kill({.killer = a, .killee = b});
+			this->events.actor_death({.killee = b, .killer = a});
+		}
+	}
+
+	void Scene::on_actor_hit(ActorHitEvent e)
+	{
+		//tz_report("%s hit %s", e.attacker.name, e.attackee.name);
+	}
+
+	void Scene::on_actor_struck(ActorStruckEvent e)
+	{
+		//tz_report("%s struck by %s", e.attackee.name, e.attacker.name);
+	}
+
+	void Scene::on_actor_kill(ActorKillEvent e)
+	{
+		//tz_report("%s killed %s", e.killer.name, e.killee.name);
+	}
+
+	void Scene::on_actor_death(ActorDeathEvent e)
+	{
+		//tz_report("%s killed by %s", e.killee.name, e.killer.name);
+		if(e.killee.flags_new.has<FlagID::ActionOnDeath>())
+		{
+			auto& flag = e.killee.flags_new.get<FlagID::ActionOnDeath>()->data();
+			flag.actions.transfer_components(e.killee.entity);
+		}
+		if(e.killee.flags_new.has<FlagID::RespawnOnDeath>())
+		{
+			e.killee.entity.add<ActionID::Respawn>();
+		}
+	}
 }
+

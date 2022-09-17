@@ -1,5 +1,6 @@
 #ifndef REDNIGHTMARE_SCENE_HPP
 #define REDNIGHTMARE_SCENE_HPP
+#include "event.hpp"
 #include "actor.hpp"
 #include "animation.hpp"
 #include "quad_renderer.hpp"
@@ -14,7 +15,7 @@ namespace game
 	class Scene
 	{
 	public:
-		Scene() = default;
+		Scene();
 		void render();
 		void update();
 		void dbgui();
@@ -42,6 +43,12 @@ namespace game
 		void garbage_collect(std::size_t id);
 		void collision_resolution();
 		void resolve_collision(std::size_t a_id, std::size_t b_id);
+		void do_actor_hit(std::size_t attacker, std::size_t attackee);
+		
+		void on_actor_hit(ActorHitEvent e);
+		void on_actor_struck(ActorStruckEvent e);
+		void on_actor_kill(ActorKillEvent e);
+		void on_actor_death(ActorDeathEvent e);
 
 		struct QuadtreeNode
 		{
@@ -58,6 +65,7 @@ namespace game
 		std::vector<Actor> actors;
 		std::default_random_engine rng;
 		std::unordered_map<std::size_t, tz::Delay> despawn_timer;
+		ActorEventHandler events;
 		mutable std::size_t debug_collision_query_count = 0;
 	};
 }

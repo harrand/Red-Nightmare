@@ -20,6 +20,7 @@ add_app(
 		src/box.hpp
 		src/entity.hpp
 		src/entity.inl
+		src/event.hpp
 		src/faction.hpp
 		src/flag.hpp
 		src/main.cpp

@@ -42,6 +42,7 @@ namespace game
 		void clear();
 
 		void transfer_components(Entity<T, IComponent, Component, ComponentParams>& other);
+		void copy_components(Entity<T, IComponent, Component, ComponentParams>& other);
 
 		virtual void update(){}
 	protected:

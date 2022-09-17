@@ -104,6 +104,7 @@ namespace game
 
 	struct Actor
 	{
+		static constexpr std::size_t NullID = std::numeric_limits<std::size_t>::max();
 		ActorType type = {};
 		/// Describes the characteristics of the actor.
 		ActorFlags flags = {};

@@ -129,4 +129,10 @@ namespace game
 		}
 		this->clear();
 	}
+
+	TEMPLATE_MAGIC
+	void ENTITY_IMPL::copy_components(Entity<T, IComponent, Component, ComponentParams>& other)
+	{
+		
+	}
 }
