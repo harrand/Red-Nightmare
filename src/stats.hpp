@@ -37,7 +37,7 @@ namespace game
 		/// Default buff duration is 2 minutes.
 		float time_remaining_millis = std::numeric_limits<float>::max();
 		unsigned int stacks = 1;
-		const unsigned int max_stacks = 1;
+		unsigned int max_stacks = 1;
 	};
 
 	enum class BuffID
@@ -59,6 +59,7 @@ namespace game
 		void update();
 		void add(BuffID buff);
 		bool contains(BuffID buff) const;
+		void erase(std::size_t id);
 		std::span<const StatBuff> elements() const;
 		std::span<StatBuff> elements();
 	private:

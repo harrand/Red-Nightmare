@@ -129,6 +129,8 @@ namespace game
 		const char* name = "<Unnamed Entity>";
 		/// Affects how much other actors are pushed if this actor has ActorFlag::Collide.
 		float density = 1.0f;
+		/// Duration at last update.
+		tz::Duration last_update = tz::system_time();
 
 		void update();
 		bool dead() const;
@@ -143,6 +145,7 @@ namespace game
 		static Actor null(){return {};}
 		bool operator==(const Actor& rhs) const = default;
 	private:
+		void evaluate_buffs();
 		/// Figure out which animation we should be using using all the actions at the end of the fixed-update.
 		void evaluate_animation();
 		/// Set the animation, but if we're already running that animation don't reset it.

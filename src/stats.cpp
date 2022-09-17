@@ -62,7 +62,8 @@ namespace game
 				return
 				{
 					.multiply_speed_boost = 0.3f,
-					.time_remaining_millis = 5000.0f
+					.time_remaining_millis = 5000.0f,
+					.max_stacks = 3
 				};
 			break;
 		}
@@ -76,12 +77,31 @@ namespace game
 
 	void StatBuffs::add(BuffID buff)
 	{
-		this->buffs.push_back(game::get_buff(buff));
+		if(this->contains(buff))
+		{
+			const auto& initial_buff = game::get_buff(buff);
+			auto iter = std::find(this->buffs.begin(), this->buffs.end(), initial_buff);
+			if(iter->stacks < iter->max_stacks)
+			{
+				iter->stacks++;
+			}
+			iter->time_remaining_millis = initial_buff.time_remaining_millis;
+		}
+		else
+		{
+			this->buffs.push_back(game::get_buff(buff));
+		}
 	}
 
 	bool StatBuffs::contains(BuffID buff) const
 	{
 		return std::find(this->buffs.begin(), this->buffs.end(), game::get_buff(buff)) != this->buffs.end();
+	}
+
+	void StatBuffs::erase(std::size_t id)
+	{
+		this->buffs[id] = this->buffs.back();
+		this->buffs.pop_back();
 	}
 
 	std::span<const StatBuff> StatBuffs::elements() const

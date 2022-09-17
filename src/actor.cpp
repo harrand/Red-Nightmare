@@ -275,6 +275,7 @@ namespace game
 	void Actor::update()
 	{
 		TZ_PROFZONE("Actor - Update", TZ_PROFCOL_GREEN);
+		this->evaluate_buffs();
 		this->entity.update();
 		this->evaluate_animation();
 		if(this->flags.contains(ActorFlag::BlockingAnimations))
@@ -447,14 +448,17 @@ namespace game
 		Stats result = this->base_stats;
 		for(const StatBuff& buff : this->buffs.elements())
 		{
-			result.movement_speed += buff.add_speed_boost;
-			result.movement_speed *= buff.multiply_speed_boost;
-			result.damage += buff.add_damage;
-			result.damage *= buff.multiply_damage;
-			result.defense += buff.add_defense;
-			result.defense *= buff.multiply_defense;
-			result.max_health += buff.add_health;
-			result.max_health *= buff.multiply_health;
+			for(std::size_t i = 0; i < buff.stacks; i++)
+			{
+				result.movement_speed += buff.add_speed_boost;
+				result.movement_speed *= buff.multiply_speed_boost;
+				result.damage += buff.add_damage;
+				result.damage *= buff.multiply_damage;
+				result.defense += buff.add_defense;
+				result.defense *= buff.multiply_defense;
+				result.max_health += buff.add_health;
+				result.max_health *= buff.multiply_health;
+			}
 		}
 		return result;
 	}
@@ -534,6 +538,25 @@ namespace game
 			return false;
 		}
 		return false;
+	}
+
+	void Actor::evaluate_buffs()
+	{
+		auto now = tz::system_time();
+		auto time_since_update = now - last_update;
+		for(int i = 0; i < this->buffs.elements().size(); i++)
+		{
+			auto& buff = this->buffs.elements()[i];
+			if(buff.time_remaining_millis > time_since_update.millis<float>())
+			{
+				buff.time_remaining_millis -= time_since_update.millis<float>();
+			}
+			else
+			{
+				this->buffs.erase(i--);
+			}
+		}
+		last_update = now;
 	}
 
 	void Actor::evaluate_animation()
