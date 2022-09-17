@@ -63,7 +63,6 @@ namespace game
 				{
 					.multiply_speed_boost = 0.3f,
 					.time_remaining_millis = 5000.0f,
-					.max_stacks = 3
 				};
 			break;
 		}
