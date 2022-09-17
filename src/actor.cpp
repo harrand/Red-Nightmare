@@ -29,10 +29,10 @@ namespace game
 					.name = "PlayerClassic"
 				};
 			break;
-			case ActorType::PlayerClassic_TestEvil:
+			case ActorType::GhostZombie:
 				return
 				{
-					.type = ActorType::PlayerClassic_TestEvil,
+					.type = ActorType::GhostZombie,
 					.flags = {ActorFlag::Collide},
 					.flags_new =
 					{
@@ -193,10 +193,10 @@ namespace game
 					.name = "Nightmare Boss"
 				};
 			break;
-			case ActorType::EvilPlayer_TestSpawner:
+			case ActorType::GhostZombie_Spawner:
 				return
 				{
-					.type = ActorType::EvilPlayer_TestSpawner,
+					.type = ActorType::GhostZombie_Spawner,
 					.flags_new =
 					{
 						Flag<FlagID::RespawnOnDeath>{},
@@ -208,7 +208,7 @@ namespace game
 							{
 								Action<ActionID::SpawnActor>
 								{{
-									.actor = ActorType::PlayerClassic_TestEvil,
+									.actor = ActorType::GhostZombie,
 
 								}}
 							}
@@ -580,33 +580,6 @@ namespace game
 			break;
 			case ActorSkin::FireExplosion:
 				ending_animation = AnimationID::PlayerClassic_FireExplosion;
-			break;
-			case ActorSkin::PlayerClassic:
-				if(this->motion.contains(ActorMotion::MoveLeft))
-				{
-					ending_animation = AnimationID::PlayerClassic_MoveSide;
-				}
-				else if(this->motion.contains(ActorMotion::MoveRight))
-				{
-					ending_animation = AnimationID::PlayerClassic_MoveSide;
-					this->entity.add<ActionID::HorizontalFlip>();
-				}
-				else if(this->motion.contains(ActorMotion::MoveUp))
-				{
-					ending_animation = AnimationID::PlayerClassic_MoveUp;
-				}
-				else if(this->motion.contains(ActorMotion::MoveDown))
-				{
-					ending_animation = AnimationID::PlayerClassic_MoveDown;
-				}
-				else
-				{
-					ending_animation = AnimationID::PlayerClassic_Idle;
-				}
-				if(this->dead())
-				{
-					ending_animation = AnimationID::PlayerClassic_Death;
-				}
 			break;
 			case ActorSkin::PlayerClassic_LowPoly:
 				if(this->motion.contains(ActorMotion::MoveLeft))

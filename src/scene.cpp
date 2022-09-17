@@ -78,7 +78,7 @@ namespace game
 					.width = 32,
 					.height = 32,
 					.seed = 32u,
-					.blacklist = {ActorType::Nightmare, ActorType::EvilPlayer_TestSpawner}
+					.blacklist = {ActorType::Nightmare, ActorType::GhostZombie_Spawner}
 				});
 				this->impl_load_level(game::load_level_from_image(res));
 			}
@@ -122,17 +122,17 @@ namespace game
 				this->add(ActorType::PlayerClassic);
 				this->add(ActorType::PlayerClassic_Orb);
 			}
-			if(ImGui::Button("Debug Add Evil Player"))
+			if(ImGui::Button("Debug Add Ghost Zombie"))
 			{
-				this->add(ActorType::PlayerClassic_TestEvil);
+				this->add(ActorType::GhostZombie);
 			}
-			if(ImGui::Button("Debug Add Nightmare Boss"))
+			if(ImGui::Button("Debug Add Ghost Banshee"))
 			{
-				this->add(ActorType::Nightmare);
+				this->add(ActorType::GhostBanshee);
 			}
-			if(ImGui::Button("Debug Add Evil Player Spawner"))
+			if(ImGui::Button("Debug Add Ghost Zombie Spawner"))
 			{
-				this->add(ActorType::EvilPlayer_TestSpawner);
+				this->add(ActorType::GhostZombie_Spawner);
 			}
 			ImGui::Unindent();
 		}

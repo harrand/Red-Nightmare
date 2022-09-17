@@ -51,8 +51,6 @@ namespace game
 	/// Describes the general appearance of the actor. Will be used to automatically select which animations will be suitable for use. This might be refactored into something better.
 	enum class ActorSkin
 	{
-		/// Actor looks like the player from the old incarnations of Red Nightmare.
-		PlayerClassic,
 		/// Actor looks like the redesigned Akhara Ceitus low-resolution sprites.
 		PlayerClassic_LowPoly,
 		/// Actor looks like a zombified version of Akhara. One of the ghost skins.
@@ -79,9 +77,9 @@ namespace game
 	{
 		/// A keyboard-controlled player using the classic skin.
 		PlayerClassic,
-		/// A computer-controlled player using the classic skin, but all it does is chase any nearby real players.
-		PlayerClassic_TestEvil,
-		/// A computer-controlled ghost banshee enemy.
+		/// A computer-controlled ghost zombie enemy.
+		GhostZombie,
+		/// A computer-controlled ghost banshee enemy. It's slower than other zombies, but can chill enemy players, slowing their movement.
 		GhostBanshee,
 		/// An actor which acts as Akhara's passive elemental orb.
 		PlayerClassic_Orb,
@@ -92,7 +90,7 @@ namespace game
 		/// A computer-controlled boss monster, called Nightmare that uses its own skin.
 		Nightmare,
 		/// An uninteractable actor which periodically spawns evil players.
-		EvilPlayer_TestSpawner,
+		GhostZombie_Spawner,
 		/// A visible wall, blocking other actors' paths.
 		Wall,
 		/// Just like a wall, but is destructible by the player.
