@@ -63,8 +63,10 @@ namespace game
 		SpawnActor,
 		/// Respawn the current actor.
 		Respawn,
-		/// Apply a buff to another actor.
+		/// Apply a buff to the current actor.
 		ApplyBuff,
+		/// Apply a buff to another actor.
+		ApplyBuffToActor,
 		/// Apply a buff to the target, if there is one.
 		ApplyBuffToTarget,
 		/// Apply a buff to all living players.
@@ -142,6 +144,12 @@ namespace game
 
 	template<>
 	struct ActionParams<ActionID::ApplyBuff>
+	{
+		BuffID buff;
+	};
+
+	template<>
+	struct ActionParams<ActionID::ApplyBuffToActor>
 	{
 		std::size_t actor_id;
 		BuffID buff;

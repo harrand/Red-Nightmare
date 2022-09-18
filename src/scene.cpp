@@ -450,6 +450,12 @@ namespace game
 		if(actor.entity.has<ActionID::ApplyBuff>())
 		{
 			auto action = actor.entity.get<ActionID::ApplyBuff>();
+			actor.buffs.add(action->data().buff);
+			action->set_is_complete(true);
+		}
+		if(actor.entity.has<ActionID::ApplyBuffToActor>())
+		{
+			auto action = actor.entity.get<ActionID::ApplyBuffToActor>();
 			this->get_actor(action->data().actor_id).buffs.add(action->data().buff);
 			action->set_is_complete(true);
 		}
