@@ -276,6 +276,29 @@ namespace game
 					.density = 2.0f
 				};
 			break;
+			case ActorType::CollectablePowerup_Sprint:
+				return
+				{
+					.type = ActorType::CollectablePowerup_Sprint,
+					.flags = {ActorFlag::CannotCollide},
+					.flags_new =
+					{
+						Flag<FlagID::ActionOnPlayerTouch>
+						{{
+							.actions =
+							{
+								Action<ActionID::ApplyBuffToPlayers>
+								{{
+									.buff = BuffID::Sprint
+								}}
+							}
+						}}
+					},
+					.skin = ActorSkin::Powerup_Sprint,
+					.palette_colour = {255u, 255u, 0u},
+					.name = "Sprint Powerup"
+				};
+			break;
 			case ActorType::World:
 				return
 				{
@@ -578,6 +601,9 @@ namespace game
 				{
 					ending_animation = AnimationID::Material_Stone;
 				}
+			break;
+			case ActorSkin::Powerup_Sprint:
+				ending_animation = AnimationID::Powerup_Sprint;
 			break;
 			case ActorSkin::FireSmoke:
 				ending_animation = AnimationID::PlayerClassic_FireSmoke;

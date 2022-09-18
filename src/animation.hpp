@@ -65,6 +65,7 @@ namespace game
 		Nightmare_MoveUp,
 		Nightmare_MoveSide,
 		Material_Stone,
+		Powerup_Sprint,
 		Count
 	};
 

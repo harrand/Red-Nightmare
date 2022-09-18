@@ -492,6 +492,17 @@ namespace game
 			},
 			.fps = 1,
 			.loop = false
+		},
+		AnimationInfo /*Powerup_Sprint*/
+		{
+			.frames = 
+			{
+				TextureID::Powerup_Sprint_0,
+				TextureID::Powerup_Sprint_1,
+				TextureID::Powerup_Sprint_2
+			},
+			.fps = 5,
+			.loop = true
 		}
 	};
 

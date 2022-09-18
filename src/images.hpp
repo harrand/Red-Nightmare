@@ -150,6 +150,10 @@ namespace game
 
 		Material_Stone,
 
+		Powerup_Sprint_0,
+		Powerup_Sprint_1,
+		Powerup_Sprint_2,
+
 		Count
 	};
 

@@ -69,6 +69,8 @@ namespace game
 		PlayerClassic_DefaultFireball,
 		/// Actor looks like a plain stone texture.
 		Material_Stone,
+		/// Actor looks like a sprint powerup.
+		Powerup_Sprint,
 		/// On debug builds, looks like the missing placeholder texture. On non-debug builds, completely invisible.
 		DebugOnlyVisible,
 	};
@@ -95,6 +97,8 @@ namespace game
 		Wall,
 		/// Just like a wall, but is destructible by the player.
 		WallDestructible,
+		/// A powerup that is gives the player sprint on consumption.
+		CollectablePowerup_Sprint,
 		/// Meta-actor. Represents 'the world'. e.g if you take damage from rot, or an environmental effect, the attacker will be the world.
 		World,
 		Count

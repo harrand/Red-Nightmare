@@ -854,8 +854,7 @@ namespace game
 				// Actor is touching a player.
 				// Carry out its actions.
 				auto& on_touch_flag = actor.flags_new.get<FlagID::ActionOnPlayerTouch>()->data();
-				on_touch_flag.actions.transfer_components(actor.entity);
-				actor.flags_new.remove<FlagID::ActionOnPlayerTouch>();
+				on_touch_flag.actions.copy_components(actor.entity);
 			}
 		}
 	}
