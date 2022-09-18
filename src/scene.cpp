@@ -40,11 +40,12 @@ namespace game
 
 		for(std::size_t i = 0; i < this->size(); i++)
 		{
-			Actor& actor = this->actors[i];
-
-			actor.update();
-			this->actor_post_update(i);
 			this->update_quadtree(i);
+
+			Actor& actor = this->actors[i];
+			actor.update();
+			// Post update could theoretically kill it, so we must do that last.
+			this->actor_post_update(i);
 		}
 		this->update_camera();
 		this->intersections = this->quadtree.find_all_intersections();
