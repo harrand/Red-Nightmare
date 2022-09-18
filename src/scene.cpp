@@ -18,6 +18,7 @@ namespace game
 		this->events.actor_struck.add_callback([this](ActorStruckEvent e){this->on_actor_struck(e);});
 		this->events.actor_kill.add_callback([this](ActorKillEvent e){this->on_actor_kill(e);});
 		this->events.actor_death.add_callback([this](ActorDeathEvent e){this->on_actor_death(e);});
+		this->actors.reserve(QuadRenderer::max_quad_count);
 	}
 
 	void Scene::render()
@@ -26,7 +27,7 @@ namespace game
 		tz_assert(this->actors.size() == this->qrenderer.elements().size(), "Scene actor list and QuadRenderer size no longer match. Logic Error");
 		for(std::size_t i = 0; i < this->qrenderer.elements().size(); i++)
 		{
-			this->qrenderer.elements()[i].texture_id = this->actors[i].animation.get_texture();
+			this->qrenderer.elements()[i].texture_id = this->get_actor(i).animation.get_texture();
 		}
 		this->qrenderer.render();
 	}
@@ -37,20 +38,22 @@ namespace game
 			this->debug_collision_query_count = 0;
 		#endif
 		TZ_PROFZONE("Scene - Update", TZ_PROFCOL_GREEN);
+		this->quadtree.clear();
 
-		for(std::size_t i = 0; i < this->size(); i++)
+		for(std::size_t i = 0; i < this->size();)
 		{
-			this->update_quadtree(i);
 
-			Actor& actor = this->actors[i];
+			Actor& actor = this->get_actor(i);
 			actor.update();
 			// Post update could theoretically kill it, so we must do that last.
-			this->actor_post_update(i);
+			if(!this->actor_post_update(i))
+			{
+				this->update_quadtree(i++);
+			}
 		}
 		this->update_camera();
 		this->intersections = this->quadtree.find_all_intersections();
 		this->collision_resolution();
-		this->quadtree.clear();
 	}
 	
 	void Scene::dbgui()
@@ -142,7 +145,7 @@ namespace game
 			ImGui::Indent();
 			static int actor_id = 0;
 			ImGui::SliderInt("Actor ID", &actor_id, 0, this->size() - 1);
-			this->actors[actor_id].dbgui();
+			this->get_actor(actor_id).dbgui();
 			ImGui::Unindent();
 		}
 		if(ImGui::CollapsingHeader("Quad Renderer"))
@@ -198,6 +201,18 @@ namespace game
 		this->impl_load_level(level);
 	}
 
+	const Actor& Scene::get_actor(std::size_t id) const
+	{
+		tz_assert(id < this->actors.size(), "Index out of range. Idx = %zu, size = %zu", id, this->actors.size());
+		return this->actors[id];
+	}
+
+	Actor& Scene::get_actor(std::size_t id)
+	{
+		tz_assert(id < this->actors.size(), "Index out of range. Idx = %zu, size = %zu", id, this->actors.size());
+		return this->actors[id];
+	}
+
 	void Scene::impl_load_level(const Level& level)
 	{
 		// Firstly remove everything
@@ -223,17 +238,17 @@ namespace game
 	void Scene::erase(std::size_t id)
 	{
 		this->qrenderer.erase(id);
-		auto& this_actor = this->actors[id];
+		auto& this_actor = this->get_actor(id);
 		this_actor.flags_new.clear();
 		this_actor.entity.clear();
-		std::swap(this->actors[id], this->actors.back());
+		std::swap(this_actor, this->actors.back());
 		this->actors.pop_back();
 	}
 
-	void Scene::actor_post_update(std::size_t id)
+	bool Scene::actor_post_update(std::size_t id)
 	{
 		TZ_PROFZONE("Actor - Post Update", TZ_PROFCOL_BROWN);
-		Actor& actor = this->actors[id];
+		Actor& actor = this->get_actor(id);
 		QuadRenderer::ElementData& quad = this->qrenderer.elements()[id];
 		float touchdist = touch_distance;
 		if(!this->is_in_bounds(id))
@@ -263,7 +278,7 @@ namespace game
 				{
 					continue;
 				}
-				Actor& victim = this->actors[i];
+				Actor& victim = this->get_actor(i);
 				if(!victim.dead() && actor.is_enemy_of(victim) && !victim.flags_new.has<FlagID::Stealth>())
 				{
 					actor.entity.set<ActionID::GotoActor>
@@ -435,7 +450,7 @@ namespace game
 		if(actor.entity.has<ActionID::ApplyBuff>())
 		{
 			auto action = actor.entity.get<ActionID::ApplyBuff>();
-			this->actors[action->data().actor_id].buffs.add(action->data().buff);
+			this->get_actor(action->data().actor_id).buffs.add(action->data().buff);
 			action->set_is_complete(true);
 		}
 		if(actor.entity.has<ActionID::ApplyBuffToTarget>())
@@ -452,7 +467,7 @@ namespace game
 			auto action = actor.entity.get<ActionID::ApplyBuffToPlayers>();
 			for(std::size_t player_id : this->get_living_players())
 			{
-				this->actors[player_id].buffs.add(action->data().buff);
+				this->get_actor(player_id).buffs.add(action->data().buff);
 			}
 			action->set_is_complete(true);
 		}
@@ -544,7 +559,7 @@ namespace game
 			quad.position += position_change.normalised() * sp;
 		}
 		this->update_status_events(id);
-		this->garbage_collect(id);
+		return this->garbage_collect(id);
 	}
 
 	std::vector<std::size_t> Scene::get_living_players() const
@@ -554,7 +569,7 @@ namespace game
 		for(std::size_t i = 0; i < this->size(); i++)
 		{
 			
-			if(this->actors[i].flags_new.has<FlagID::Player>() && !this->actors[i].dead())
+			if(this->get_actor(i).flags_new.has<FlagID::Player>() && !this->get_actor(i).dead())
 			{
 				ret.push_back(i);
 			}
@@ -587,7 +602,7 @@ namespace game
 
 		tz::Vec2 scale = quad.scale;
 		// Bounding box should be affected by custom reach.
-		const Actor& actor = this->actors[actor_id];
+		const Actor& actor = this->get_actor(actor_id);
 		if(actor.flags_new.has<FlagID::CustomReach>())
 		{
 			const auto& flag = actor.flags_new.get<FlagID::CustomReach>()->data();
@@ -735,7 +750,7 @@ namespace game
 	void Scene::update_status_events(std::size_t id)
 	{
 		TZ_PROFZONE("Scene - Status Events Update", TZ_PROFCOL_GREEN);
-		const Actor& actor = this->actors[id];
+		const Actor& actor = this->get_actor(id);
 		QuadRenderer::ElementData& quad = this->qrenderer.elements()[id];
 		int status_effect = StatusEffect_None;
 		if(actor.buffs.contains(BuffID::Berserk))
@@ -754,18 +769,18 @@ namespace game
 		this->quadtree.add({.actor_id = actor_id, .bounding_box = this->get_bounding_box(actor_id)});
 	}
 
-	void Scene::garbage_collect(std::size_t id)
+	bool Scene::garbage_collect(std::size_t id)
 	{
 		TZ_PROFZONE("Scene - Garbage Collect", TZ_PROFCOL_GREEN);
 		// Erase means to swap with the last and then pop it back
-		const bool dead = this->actors[id].dead();
+		const bool dead = this->get_actor(id).dead();
 		if(dead)
 		{
 			auto iter = this->despawn_timer.find(id);
 			if(iter != this->despawn_timer.end())
 			{
 				// It has an entry, see if its timed out.
-				if(iter->second.done() && !this->actors[id].flags.contains(ActorFlag::DoNotGarbageCollect))
+				if(iter->second.done() && !this->get_actor(id).flags.contains(ActorFlag::DoNotGarbageCollect))
 				{
 					// Timed out. we purge.
 					// Erase will swap us with the last element and then kill last element (i.e us).
@@ -777,6 +792,7 @@ namespace game
 						this->despawn_timer.erase(last_id);
 					}
 					this->erase(id);
+					return true;
 				}
 			}
 			else
@@ -789,6 +805,7 @@ namespace game
 		{
 			this->despawn_timer.erase(id);
 		}
+		return false;
 	}
 
 	void Scene::collision_resolution()
@@ -805,9 +822,9 @@ namespace game
 
 	void Scene::resolve_collision(std::size_t a_id, std::size_t b_id)
 	{
-		Actor& actor = this->actors[a_id];
+		Actor& actor = this->get_actor(a_id);
 		QuadRenderer::ElementData& quad = this->qrenderer.elements()[a_id];
-		Actor& other = this->actors[b_id];
+		Actor& other = this->get_actor(b_id);
 		QuadRenderer::ElementData& other_quad = this->qrenderer.elements()[b_id];
 
 		const bool wants_to_hurt = (actor.flags.contains(ActorFlag::HazardousToAll) || actor.flags.contains(ActorFlag::HazardousToEnemies) || actor.flags_new.has<FlagID::Aggressive>()) && actor.is_enemy_of(other) && !other.flags_new.has<FlagID::Unhittable>() && !actor.dead() && !other.dead();
@@ -859,10 +876,10 @@ namespace game
 		}
 		else
 		{
-			aptr = &this->actors[attacker];
+			aptr = &this->get_actor(attacker);
 		}
 		Actor& a = *aptr;
-		Actor& b = this->actors[attackee];
+		Actor& b = this->get_actor(attackee);
 		this->do_actor_hit(a, b);
 	}
 

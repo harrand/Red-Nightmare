@@ -27,10 +27,13 @@ namespace game
 		void clear();
 		void load_level(LevelID level_id);
 	private:
+		const Actor& get_actor(std::size_t id) const;
+		Actor& get_actor(std::size_t id);
+
 		void impl_load_level(const Level& level);
 		tz::Vec2 get_mouse_position() const;
 		void erase(std::size_t id);
-		void actor_post_update(std::size_t id);
+		bool actor_post_update(std::size_t id);
 		std::vector<std::size_t> get_living_players() const;
 		std::optional<std::size_t> find_first_player() const;
 		Box get_bounding_box(std::size_t actor_id) const;
@@ -40,7 +43,7 @@ namespace game
 		void update_camera();
 		void update_status_events(std::size_t id);
 		void update_quadtree(std::size_t actor_id);
-		void garbage_collect(std::size_t id);
+		bool garbage_collect(std::size_t id);
 		void collision_resolution();
 		void resolve_collision(std::size_t a_id, std::size_t b_id);
 		void do_actor_hit(std::size_t attacker, std::size_t attackee);

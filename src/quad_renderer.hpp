@@ -36,6 +36,7 @@ namespace game
 		float get_width_multiplier() const;
 		const tz::Vec2& camera_position() const;
 		tz::Vec2& camera_position();
+		static constexpr std::size_t max_quad_count = 2048;
 	private:
 		struct RenderData
 		{
@@ -45,7 +46,6 @@ namespace game
 		tz::gl::Renderer make_renderer();
 		void update_render_data();
 
-		static constexpr std::size_t max_quad_count = 2048;
 		std::size_t quad_count = 0;
 		// Stores element data for quads.
 		tz::gl::ResourceHandle element_buffer_handle;
