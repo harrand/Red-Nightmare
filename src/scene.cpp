@@ -273,6 +273,13 @@ namespace game
 				}
 			}
 		}
+		if(actor.flags_new.has<FlagID::DieOnAnimationFinish>() && !actor.dead())
+		{
+			if(actor.animation.complete())
+			{
+				actor.base_stats.current_health = 0.0f;
+			}
+		}
 		// If actor wants to teleport to a random location, do it now.
 
 		quad.scale = {0.2f, 0.2f};
@@ -811,12 +818,6 @@ namespace game
 			if(wants_to_hurt)
 			{
 				this->do_actor_hit(a_id, b_id);
-				// TODO: Data-drive this.
-				if(actor.type == ActorType::PlayerClassic_Orb)
-				{
-					this->add(ActorType::FireSmoke);
-					this->qrenderer.elements().back().position = quad.position;
-				}
 			}
 			if(blocks_colliders)
 			{
@@ -835,9 +836,21 @@ namespace game
 		}
 	}
 
+	void Scene::do_actor_hit(Actor& a, Actor& b)
+	{
+		bool alive = !b.dead();
+		a.damage(b);
+		this->events.actor_hit({.attacker = a, .attackee = b});
+		this->events.actor_struck({.attackee = b, .attacker = a});
+		if(alive && b.dead())
+		{
+			this->events.actor_kill({.killer = a, .killee = b});
+			this->events.actor_death({.killee = b, .killer = a});
+		}
+	}
+
 	void Scene::do_actor_hit(std::size_t attacker, std::size_t attackee)
 	{
-		bool alive = !this->actors[attackee].dead();
 		Actor* aptr = nullptr;
 		if(attacker == Actor::NullID)
 		{
@@ -849,24 +862,20 @@ namespace game
 		}
 		Actor& a = *aptr;
 		Actor& b = this->actors[attackee];
-		a.damage(b);
-		this->events.actor_hit({.attacker = a, .attackee = b});
-		this->events.actor_struck({.attackee = b, .attacker = a});
-		if(alive && this->actors[attackee].dead())
-		{
-			this->events.actor_kill({.killer = a, .killee = b});
-			this->events.actor_death({.killee = b, .killer = a});
-		}
+		this->do_actor_hit(a, b);
 	}
 
 	void Scene::on_actor_hit(ActorHitEvent e)
 	{
 		e.attacker.target = &e.attackee;
-		//tz_report("%s hit %s", e.attacker.name, e.attackee.name);
 		if(e.attacker.flags_new.has<FlagID::ActionOnHit>())
 		{
 			auto& flag = e.attacker.flags_new.get<FlagID::ActionOnHit>()->data();
 			flag.actions.copy_components(e.attacker.entity);
+		}
+		if(e.attacker.flags_new.has<FlagID::SelfRecoil>())
+		{
+			this->do_actor_hit(this->world_actor, e.attacker);
 		}
 	}
 

@@ -115,6 +115,22 @@ namespace game
 						Flag<FlagID::Unhittable>{},
 						Flag<FlagID::SelfRecoil>{},
 						Flag<FlagID::RespawnOnClick>{},
+						Flag<FlagID::ActionOnDeath>
+						{{
+							.actions =
+							{
+								Action<ActionID::SpawnActor>
+								{{
+									.actor = ActorType::FireExplosion,
+									.inherit_faction = true
+								}},
+								Action<ActionID::SpawnActor>
+								{{
+									.actor = ActorType::FireSmoke,
+									.inherit_faction = true
+								}},
+							}
+						}},
 					},
 					.faction = Faction::PlayerFriend,
 					.base_stats =
@@ -133,15 +149,12 @@ namespace game
 				return
 				{
 					.type = ActorType::FireSmoke,
-					.flags = {ActorFlag::BlockingAnimations, ActorFlag::InvisibleWhileDead},
-					.flags_new =
+					.flags = {ActorFlag::InvisibleWhileDead, ActorFlag::CannotCollide},
+					.flags_new = 
 					{
-						Flag<FlagID::Rot>{},
-					},
-					.base_stats =
-					{
-						.max_health = 0.1f,
-						.current_health = 0.01f
+						Flag<FlagID::DieOnAnimationFinish>{},
+						Flag<FlagID::Stealth>{},
+						Flag<FlagID::Unhittable>{}
 					},
 					.skin = ActorSkin::FireSmoke,
 					.name = "Fire Smoke Effect"
@@ -151,19 +164,13 @@ namespace game
 				return
 				{
 					.type = ActorType::FireExplosion,
-					.flags = {ActorFlag::BlockingAnimations, ActorFlag::InvisibleWhileDead, ActorFlag::HazardousToEnemies},
+					.flags = {ActorFlag::InvisibleWhileDead, ActorFlag::HazardousToEnemies, ActorFlag::CannotCollide},
 					.flags_new =
 					{
-						Flag<FlagID::Rot>{},
 						Flag<FlagID::CustomScale>{{.scale = {1.5f, 1.5f}}},
-						Flag<FlagID::CustomReach>{{.reach = 1.5f}},
 						Flag<FlagID::Stealth>{},
-						Flag<FlagID::Unhittable>{}
-					},
-					.base_stats =
-					{
-						.max_health = 0.1f,
-						.current_health = 0.01f
+						Flag<FlagID::Unhittable>{},
+						Flag<FlagID::DieOnAnimationFinish>{}
 					},
 					.skin = ActorSkin::FireExplosion,
 					.name = "Fire Explosion Hazard"
@@ -197,6 +204,7 @@ namespace game
 				return
 				{
 					.type = ActorType::GhostZombie_Spawner,
+					.flags = {ActorFlag::CannotCollide},
 					.flags_new =
 					{
 						Flag<FlagID::RespawnOnDeath>{},
@@ -409,10 +417,6 @@ namespace game
 			return;
 		}
 		victim.base_stats.current_health -= this->get_current_stats().damage;
-		if(this->flags_new.has<FlagID::SelfRecoil>())
-		{
-			this->base_stats.current_health -= this->get_current_stats().damage;
-		}
 	}
 
 	void Actor::respawn()

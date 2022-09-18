@@ -44,6 +44,7 @@ namespace game
 		void collision_resolution();
 		void resolve_collision(std::size_t a_id, std::size_t b_id);
 		void do_actor_hit(std::size_t attacker, std::size_t attackee);
+		void do_actor_hit(Actor& attacker, Actor& attackee);
 		
 		void on_actor_hit(ActorHitEvent e);
 		void on_actor_struck(ActorStruckEvent e);

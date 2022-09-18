@@ -48,6 +48,8 @@ namespace game
 		ActionOnPlayerTouch,
 		/// Actor has one of a set of random skins instead of its default skin.
 		RandomSkin,
+		/// Actor will die as soon as its current animation ends. Note that this has no effect on looping animations.
+		DieOnAnimationFinish,
 	};
 
 	template<FlagID ID>
