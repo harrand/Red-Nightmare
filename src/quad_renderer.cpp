@@ -63,7 +63,7 @@ namespace game
 	void QuadRenderer::push()
 	{
 		tz_assert(this->quad_count < QuadRenderer::max_quad_count, "Ran out of quad storage in QuadRenderer.");
-		this->elements()[this->quad_count++] = {};
+		this->renderer.get_resource(this->element_buffer_handle)->data_as<QuadRenderer::ElementData>()[this->quad_count++] = {};
 	}
 
 	void QuadRenderer::pop()

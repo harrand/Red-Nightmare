@@ -6,7 +6,7 @@
 namespace game
 {
 	template<typename I, typename T>
-	concept ComponentInterface = requires(I i)
+	concept ComponentInterface = requires(const I& i)
 	{
 		{i.get_id()} -> std::same_as<T>;
 	};

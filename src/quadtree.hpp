@@ -45,7 +45,7 @@ namespace game
 
 			bool is_leaf() const
 			{
-				return this->children[0] == nullptr;
+				return std::all_of(this->children.begin(), this->children.end(), [](const auto& ptr){return ptr == nullptr;});
 			}
 		};
 
