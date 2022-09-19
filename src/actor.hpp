@@ -12,14 +12,10 @@ namespace game
 	/// Describes immutable characteristics for a specific actor.
 	enum class ActorFlag
 	{
-		/// When respawned, do so at a player's location.
-		RespawnOnPlayer,
 		/// Attempts to deal damage to all actors nearby.
 		HazardousToAll,
 		/// Attempts to deal damage to any enemies that are nearby.
 		HazardousToEnemies,
-		/// If the actor ever stops, it instantly dies.
-		DieAtRest,
 		/// If the actor reaches out-of-bounds, respawn.
 		RespawnIfOOB,
 		/// If the actor reaches out-of-bounds, die.

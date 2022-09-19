@@ -486,7 +486,6 @@ namespace game
 			const tz::Vec2 target_pos = chase_target.value();
 			tz::Vec2 dist_to_target = target_pos - quad.position;
 			// Find out which direction we need to go, or if we're already at the target.
-			bool move_horizontal = true, move_vertical = true;
 			// So why can't we use touchdist here?
 			// Let's say x is a ghost, and y is the player
 			//
@@ -512,11 +511,7 @@ namespace game
 				// We need to move left.
 				actor.motion |= ActorMotion::MoveLeft;
 			}
-			else
-			{
-				// We don't need to move horizontally, we're x-aligned with our chase target.
-				move_horizontal = false;
-			}
+
 			if(dist_to_target[1] > sqrt_dist)
 			{
 				// We need to move upwards.
@@ -525,20 +520,6 @@ namespace game
 			else if(dist_to_target[1] < -sqrt_dist)
 			{
 				actor.motion |= ActorMotion::MoveDown;
-			}
-			else
-			{
-				// We don't need to move vertically, we're y-aligned with our chase target.
-				move_vertical = false;
-			}
-			if(!move_vertical && !move_horizontal)
-			{
-				// Something chasing a target has reached it.
-
-				if(actor.flags.contains(ActorFlag::DieAtRest))
-				{
-					actor.base_stats.current_health = 0;
-				}
 			}
 		}
 		// We now know for certain whether the actor wants to move or not. Now we can finally carry out the movement.

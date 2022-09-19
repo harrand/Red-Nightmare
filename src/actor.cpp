@@ -349,7 +349,6 @@ namespace game
 					({
 						.speed_multiplier = 8.0f
 					});
-					this->flags |= {ActorFlag::DieAtRest};
 				}
 				else
 				{
