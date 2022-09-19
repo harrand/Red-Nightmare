@@ -12,8 +12,6 @@ namespace game
 	/// Describes immutable characteristics for a specific actor.
 	enum class ActorFlag
 	{
-		/// When respawned, do so in a completely random location.
-		RandomRespawnLocation,
 		/// When respawned, do so at a player's location.
 		RespawnOnPlayer,
 		/// Attempts to deal damage to all actors nearby.

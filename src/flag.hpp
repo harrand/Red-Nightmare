@@ -46,6 +46,8 @@ namespace game
 		ActionOnHit,
 		/// Actor performs an action when it touches a living player.
 		ActionOnPlayerTouch,
+		/// Actor performs an action when it respawns.
+		ActionOnRespawn,
 		/// Actor has one of a set of random skins instead of its default skin.
 		RandomSkin,
 		/// Actor will die as soon as its current animation ends. Note that this has no effect on looping animations.
@@ -112,6 +114,12 @@ namespace game
 
 	template<>
 	struct FlagParams<FlagID::ActionOnPlayerTouch>
+	{
+		ActionEntity actions;
+	};
+
+	template<>
+	struct FlagParams<FlagID::ActionOnRespawn>
 	{
 		ActionEntity actions;
 	};

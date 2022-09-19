@@ -103,7 +103,7 @@ namespace game
 				return
 				{
 					.type = ActorType::PlayerClassic_Orb,
-					.flags = {ActorFlag::HazardousToEnemies, ActorFlag::RespawnOnPlayer, ActorFlag::DieIfOOB, ActorFlag::InvisibleWhileDead, ActorFlag::DoNotGarbageCollect},
+					.flags = {ActorFlag::HazardousToEnemies, ActorFlag::DieIfOOB, ActorFlag::InvisibleWhileDead, ActorFlag::DoNotGarbageCollect},
 					.flags_new =
 					{
 						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}},
@@ -131,6 +131,13 @@ namespace game
 								}},
 							}
 						}},
+						Flag<FlagID::ActionOnRespawn>
+						{{
+							.actions =
+							{
+								Action<ActionID::TeleportToPlayer>{{}}
+							}
+						}}
 					},
 					.faction = Faction::PlayerFriend,
 					.base_stats =
@@ -180,7 +187,7 @@ namespace game
 				return
 				{
 					.type = ActorType::Nightmare,
-					.flags = {ActorFlag::RandomRespawnLocation, ActorFlag::BlockingAnimations},
+					.flags = {ActorFlag::BlockingAnimations},
 					.flags_new =
 					{
 						Flag<FlagID::RespawnOnDeath>{},
@@ -444,17 +451,12 @@ namespace game
 
 	void Actor::respawn()
 	{
-		bool should_spawn_randomly = this->flags.contains(ActorFlag::RandomRespawnLocation);
-		bool should_spawn_on_player = this->flags.contains(ActorFlag::RespawnOnPlayer);
 		*this = game::create_actor(this->type);
 		this->base_stats.current_health = this->get_current_stats().max_health;
-		if(should_spawn_randomly)
+		if(this->flags_new.has<FlagID::ActionOnRespawn>())
 		{
-			this->entity.add<ActionID::RandomTeleport>();
-		}
-		else if(should_spawn_on_player)
-		{
-			this->entity.add<ActionID::TeleportToPlayer>();
+			auto& flag = this->flags_new.get<FlagID::ActionOnRespawn>()->data();
+			flag.actions.copy_components(this->entity);
 		}
 	}
 
