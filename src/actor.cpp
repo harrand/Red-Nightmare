@@ -103,10 +103,17 @@ namespace game
 				return
 				{
 					.type = ActorType::PlayerClassic_Orb,
-					.flags = {ActorFlag::DieIfOOB, ActorFlag::InvisibleWhileDead, ActorFlag::DoNotGarbageCollect},
+					.flags = {ActorFlag::InvisibleWhileDead, ActorFlag::DoNotGarbageCollect},
 					.flags_new =
 					{
 						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}},
+						Flag<FlagID::ActionOnOOB>
+						{{
+							.actions =
+							{
+								Action<ActionID::Die>{{}}
+							}
+						}},
 						Flag<FlagID::HazardousIf>
 						{{
 							.predicate = [](const Actor& self, const Actor& actor)->bool

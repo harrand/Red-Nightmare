@@ -253,13 +253,10 @@ namespace game
 		float touchdist = touch_distance;
 		if(!this->is_in_bounds(id))
 		{
-			if(actor.flags.contains(ActorFlag::DieIfOOB))
+			if(actor.flags_new.has<FlagID::ActionOnOOB>())
 			{
-				actor.base_stats.current_health = 0;
-			}
-			if(actor.flags.contains(ActorFlag::RespawnIfOOB))
-			{
-				actor.respawn();
+				auto& flag = actor.flags_new.get<FlagID::ActionOnOOB>()->data();
+				flag.actions.copy_components(actor.entity);
 			}
 		}
 		if(actor.flags_new.has<FlagID::Rot>())
@@ -446,6 +443,12 @@ namespace game
 			auto action = actor.entity.get<ActionID::Respawn>();
 			action->set_is_complete(true);
 			actor.respawn();
+		}
+		if(actor.entity.has<ActionID::Die>())
+		{
+			auto action = actor.entity.get<ActionID::Die>();
+			action->set_is_complete(true);
+			actor.base_stats.current_health = 0;
 		}
 		if(actor.entity.has<ActionID::ApplyBuff>())
 		{

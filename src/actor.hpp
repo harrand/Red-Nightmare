@@ -12,10 +12,6 @@ namespace game
 	/// Describes immutable characteristics for a specific actor.
 	enum class ActorFlag
 	{
-		/// If the actor reaches out-of-bounds, respawn.
-		RespawnIfOOB,
-		/// If the actor reaches out-of-bounds, die.
-		DieIfOOB,
 		/// If the actor is dead, it is invisible.
 		InvisibleWhileDead,
 		/// If the actor is doing a non-looping animation, they won't take any action until it is complete.

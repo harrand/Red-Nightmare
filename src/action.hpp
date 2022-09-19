@@ -63,6 +63,8 @@ namespace game
 		SpawnActor,
 		/// Respawn the current actor.
 		Respawn,
+		/// Instantly kill the current actor.
+		Die,
 		/// Apply a buff to the current actor.
 		ApplyBuff,
 		/// Apply a buff to another actor.
