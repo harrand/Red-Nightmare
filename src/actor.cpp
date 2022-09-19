@@ -18,7 +18,18 @@ namespace game
 					.flags_new =
 					{
 						Flag<FlagID::KeyboardControlled>{},
-						Flag<FlagID::Player>{}
+						Flag<FlagID::Player>{},
+						Flag<FlagID::ActionOnStruck>
+						{{
+							.actions =
+							{
+								Action<ActionID::SpawnActor>
+								{{
+									.actor = ActorType::BloodSplatter
+								}}
+							},
+							.icd = 200.0f
+						}}
 					},
 					.base_stats =
 					{
@@ -52,6 +63,17 @@ namespace game
 								ActorSkin::GhostZombie,
 								ActorSkin::GhostMJZombie
 							}		
+						}},
+						Flag<FlagID::ActionOnStruck>
+						{{
+							.actions =
+							{
+								Action<ActionID::SpawnActor>
+								{{
+									.actor = ActorType::BloodSplatter
+								}}
+							},
+							.icd = 200.0f
 						}}
 					},
 					.faction = Faction::PlayerEnemy,
@@ -202,6 +224,21 @@ namespace game
 					},
 					.skin = ActorSkin::FireExplosion,
 					.name = "Fire Explosion Hazard"
+				};
+			break;
+			case ActorType::BloodSplatter:
+				return
+				{
+					.type = ActorType::BloodSplatter,
+					.flags = {ActorFlag::CannotCollide},
+					.flags_new = 
+					{
+						Flag<FlagID::Stealth>{},
+						Flag<FlagID::Unhittable>{},
+						Flag<FlagID::DieOnAnimationFinish>{}
+					},
+					.skin = ActorSkin::BloodSplatter,
+					.name = "Blood Splatter Effect"
 				};
 			break;
 			case ActorType::Nightmare:
@@ -623,6 +660,9 @@ namespace game
 				{
 					ending_animation = AnimationID::Material_Stone;
 				}
+			break;
+			case ActorSkin::BloodSplatter:
+				ending_animation = AnimationID::BloodSplatter;
 			break;
 			case ActorSkin::Powerup_Sprint:
 				ending_animation = AnimationID::Powerup_Sprint;

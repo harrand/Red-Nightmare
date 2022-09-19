@@ -171,6 +171,15 @@ add_text(
 		res/images/effects/block_break/block_break12.png
 		res/images/effects/block_break/block_break13.png
 
+		res/images/effects/blood_splatter/blood_splatter0.png
+		res/images/effects/blood_splatter/blood_splatter1.png
+		res/images/effects/blood_splatter/blood_splatter2.png
+		res/images/effects/blood_splatter/blood_splatter3.png
+		res/images/effects/blood_splatter/blood_splatter4.png
+		res/images/effects/blood_splatter/blood_splatter5.png
+		res/images/effects/blood_splatter/blood_splatter6.png
+		res/images/effects/blood_splatter/blood_splatter7.png
+
 		res/images/effects/fire_explosion/fire_explosion_0.png
 		res/images/effects/fire_explosion/fire_explosion_1.png
 		res/images/effects/fire_explosion/fire_explosion_2.png

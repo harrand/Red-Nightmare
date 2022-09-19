@@ -896,6 +896,19 @@ namespace game
 	void Scene::on_actor_struck(ActorStruckEvent e)
 	{
 		//tz_report("%s struck by %s", e.attackee.name, e.attacker.name);
+		if(e.attackee.flags_new.has<FlagID::ActionOnStruck>())
+		{
+			auto& flag = e.attackee.flags_new.get<FlagID::ActionOnStruck>()->data();
+			if(flag.internal_cooldown > 0.0f)
+			{
+				flag.internal_cooldown -= (tz::system_time() - e.attackee.last_update).millis<float>();
+			}
+			else
+			{
+				flag.internal_cooldown = flag.icd;
+				flag.actions.copy_components(e.attackee.entity);
+			}
+		}
 	}
 
 	void Scene::on_actor_kill(ActorKillEvent e)

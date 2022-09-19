@@ -120,6 +120,15 @@
 #include ImportedTextHeader(block_break12, png)
 #include ImportedTextHeader(block_break13, png)
 
+#include ImportedTextHeader(blood_splatter0, png)
+#include ImportedTextHeader(blood_splatter1, png)
+#include ImportedTextHeader(blood_splatter2, png)
+#include ImportedTextHeader(blood_splatter3, png)
+#include ImportedTextHeader(blood_splatter4, png)
+#include ImportedTextHeader(blood_splatter5, png)
+#include ImportedTextHeader(blood_splatter6, png)
+#include ImportedTextHeader(blood_splatter7, png)
+
 #include ImportedTextHeader(fire_explosion_0, png)
 #include ImportedTextHeader(fire_explosion_1, png)
 #include ImportedTextHeader(fire_explosion_2, png)
@@ -277,6 +286,15 @@ namespace game
 		ImportedTextData(block_break11, png),
 		ImportedTextData(block_break12, png),
 		ImportedTextData(block_break13, png),
+
+		ImportedTextData(blood_splatter0, png),
+		ImportedTextData(blood_splatter1, png),
+		ImportedTextData(blood_splatter2, png),
+		ImportedTextData(blood_splatter3, png),
+		ImportedTextData(blood_splatter4, png),
+		ImportedTextData(blood_splatter5, png),
+		ImportedTextData(blood_splatter6, png),
+		ImportedTextData(blood_splatter7, png),
 
 		ImportedTextData(fire_explosion_0, png),
 		ImportedTextData(fire_explosion_1, png),

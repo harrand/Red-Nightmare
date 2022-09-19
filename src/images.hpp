@@ -103,6 +103,7 @@ namespace game
 		PlayerClassic_Default_Fireball_Particles_4,
 		PlayerClassic_Default_Fireball_Particles_5,
 		PlayerClassic_Default_Fireball_Particles_6,
+
 		BlockBreak_0,
 		BlockBreak_1,
 		BlockBreak_2,
@@ -117,6 +118,16 @@ namespace game
 		BlockBreak_11,
 		BlockBreak_12,
 		BlockBreak_13,
+
+		BloodSplatter_0,
+		BloodSplatter_1,
+		BloodSplatter_2,
+		BloodSplatter_3,
+		BloodSplatter_4,
+		BloodSplatter_5,
+		BloodSplatter_6,
+		BloodSplatter_7,
+
 		FireExplosion_0,
 		FireExplosion_1,
 		FireExplosion_2,

@@ -57,6 +57,7 @@ namespace game
 		PlayerClassic_DefaultFireball_Idle,
 		PlayerClassic_FireSmoke,
 		BlockBreak,
+		BloodSplatter,
 		PlayerClassic_FireExplosion,
 		Nightmare_Spawn,
 		Nightmare_Death,

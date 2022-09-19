@@ -55,6 +55,8 @@ namespace game
 		PlayerClassic_DefaultFireball,
 		/// Actor looks like a plain stone texture.
 		Material_Stone,
+		/// Actor looks like a blood splatter.
+		BloodSplatter,
 		/// Actor looks like a sprint powerup.
 		Powerup_Sprint,
 		/// On debug builds, looks like the missing placeholder texture. On non-debug builds, completely invisible.
@@ -75,6 +77,8 @@ namespace game
 		FireSmoke,
 		/// An actor which acts as a fiery explosion particle effect. Dies by itself after a while, but deals large damage to enemies in its radius.
 		FireExplosion,
+		/// An actor which displays an actor spurting blood after taking damage. Has no other iteration.
+		BloodSplatter,
 		/// A computer-controlled boss monster, called Nightmare that uses its own skin.
 		Nightmare,
 		/// An uninteractable actor which periodically spawns evil players.

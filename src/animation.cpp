@@ -385,6 +385,22 @@ namespace game
 			.fps = 24,
 			.loop = false
 		},
+		AnimationInfo /*BloodSplatter*/
+		{
+			.frames =
+			{
+				TextureID::BloodSplatter_0,
+				TextureID::BloodSplatter_1,
+				TextureID::BloodSplatter_2,
+				TextureID::BloodSplatter_3,
+				TextureID::BloodSplatter_4,
+				TextureID::BloodSplatter_5,
+				TextureID::BloodSplatter_6,
+				TextureID::BloodSplatter_7
+			},
+			.fps = 16,
+			.loop = false
+		},
 		AnimationInfo /*PlayerClassic_FireExplosion*/
 		{
 			.frames =

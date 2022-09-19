@@ -45,6 +45,8 @@ namespace game
 		ActionOnDeath,
 		/// Actor performs an action when it hits something.
 		ActionOnHit,
+		/// Actor performs an action which something else hits it.
+		ActionOnStruck,
 		/// Actor performs an action when it touches a living player.
 		ActionOnPlayerTouch,
 		/// Actor performs an action when it respawns.
@@ -116,6 +118,15 @@ namespace game
 	{
 		ActionEntity actions;
 	};
+
+	template<>
+	struct FlagParams<FlagID::ActionOnStruck>
+	{
+		ActionEntity actions;
+		float icd = 0.0f;
+		float internal_cooldown = 0.0f;
+	};
+
 
 	template<>
 	struct FlagParams<FlagID::ActionOnPlayerTouch>
