@@ -814,7 +814,14 @@ namespace game
 		Actor& other = this->get_actor(b_id);
 		QuadRenderer::ElementData& other_quad = this->qrenderer.elements()[b_id];
 
-		const bool wants_to_hurt = (actor.flags.contains(ActorFlag::HazardousToAll) || actor.flags.contains(ActorFlag::HazardousToEnemies) || actor.flags_new.has<FlagID::Aggressive>()) && actor.is_enemy_of(other) && !other.flags_new.has<FlagID::Unhittable>() && !actor.dead() && !other.dead();
+		bool is_hazardous = actor.flags_new.has<FlagID::HazardousIf>();
+		if(is_hazardous)
+		{
+			const auto& flag = actor.flags_new.get<FlagID::HazardousIf>()->data();
+			is_hazardous = flag.predicate(actor, other);
+		}
+
+		const bool wants_to_hurt = (is_hazardous || actor.flags_new.has<FlagID::Aggressive>()) && actor.is_enemy_of(other) && !other.flags_new.has<FlagID::Unhittable>() && !actor.dead() && !other.dead();
 		const bool blocks_colliders = actor.flags.contains(ActorFlag::Collide) && !actor.dead() && !other.dead() && !other.flags.contains(ActorFlag::CannotCollide);
 		const bool wants_touch_player = (actor.flags_new.has<FlagID::ActionOnPlayerTouch>() && other.flags_new.has<FlagID::Player>());
 		const bool cares_about_collisions = wants_to_hurt || blocks_colliders || wants_touch_player;

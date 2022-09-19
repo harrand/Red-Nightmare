@@ -103,10 +103,17 @@ namespace game
 				return
 				{
 					.type = ActorType::PlayerClassic_Orb,
-					.flags = {ActorFlag::HazardousToEnemies, ActorFlag::DieIfOOB, ActorFlag::InvisibleWhileDead, ActorFlag::DoNotGarbageCollect},
+					.flags = {ActorFlag::DieIfOOB, ActorFlag::InvisibleWhileDead, ActorFlag::DoNotGarbageCollect},
 					.flags_new =
 					{
 						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}},
+						Flag<FlagID::HazardousIf>
+						{{
+							.predicate = [](const Actor& self, const Actor& actor)->bool
+							{
+								return self.is_enemy_of(actor);
+							}
+						}},
 						Flag<FlagID::ClickToLaunch>
 						{{
 							.internal_cooldown = 1.0f
@@ -171,10 +178,17 @@ namespace game
 				return
 				{
 					.type = ActorType::FireExplosion,
-					.flags = {ActorFlag::InvisibleWhileDead, ActorFlag::HazardousToEnemies, ActorFlag::CannotCollide},
+					.flags = {ActorFlag::InvisibleWhileDead, ActorFlag::CannotCollide},
 					.flags_new =
 					{
 						Flag<FlagID::CustomScale>{{.scale = {1.5f, 1.5f}}},
+						Flag<FlagID::HazardousIf>
+						{{
+							.predicate = [](const Actor& self, const Actor& actor)->bool
+							{
+								return self.is_enemy_of(actor);
+							}
+						}},
 						Flag<FlagID::Stealth>{},
 						Flag<FlagID::Unhittable>{},
 						Flag<FlagID::DieOnAnimationFinish>{}

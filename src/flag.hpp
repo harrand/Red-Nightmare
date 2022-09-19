@@ -7,6 +7,7 @@
 
 namespace game
 {
+	struct Actor;
 	enum class ActorType;
 	enum class ActorSkin;
 
@@ -52,6 +53,8 @@ namespace game
 		RandomSkin,
 		/// Actor will die as soon as its current animation ends. Note that this has no effect on looping animations.
 		DieOnAnimationFinish,
+		/// Actor will harm other colliding actors if a predicate is satisfied.
+		HazardousIf,
 	};
 
 	template<FlagID ID>
@@ -128,6 +131,12 @@ namespace game
 	struct FlagParams<FlagID::RandomSkin>
 	{
 		std::vector<ActorSkin> skins;
+	};
+
+	template<>
+	struct FlagParams<FlagID::HazardousIf>
+	{
+		std::function<bool(const Actor&, const Actor&)> predicate;
 	};
 
 	class FlagEntity : public Entity<FlagID, IFlag, Flag, FlagParams>
