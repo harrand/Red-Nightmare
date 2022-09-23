@@ -581,15 +581,6 @@ namespace game
 	Box Scene::get_bounding_box(std::size_t actor_id) const
 	{
 		const QuadRenderer::ElementData& quad = this->qrenderer.elements()[actor_id];
-		/*
-		if(!this->actors[actor_id].flags.contains(ActorFlag::Collide))
-		{
-			tz::Vec2 pos = quad.position;
-			constexpr float small_float = 0.01f;
-			return {pos - tz::Vec2{small_float, small_float}, pos + tz::Vec2{small_float, small_float}};
-		}
-		*/
-
 		tz::Vec2 scale = quad.scale;
 		// Bounding box should be affected by custom reach.
 		const Actor& actor = this->get_actor(actor_id);
@@ -624,55 +615,6 @@ namespace game
 			return (pair.first == a_node && pair.second == b_node)
 			    || (pair.first == b_node && pair.second == a_node);
 		}) != this->intersections.end();
-		//const QuadRenderer::ElementData& a = this->qrenderer.elements()[actor_a];
-		//const QuadRenderer::ElementData& b = this->qrenderer.elements()[actor_b];
-
-		//const bool accurate = this->actors[actor_a].flags.contains(ActorFlag::Collide);
-
-		//if(accurate)
-		//{
-		//	// AABB collision based upon scale.
-		//	struct AABB
-		//	{
-		//		tz::Vec2 min, max;
-		//	};
-		//	auto get_aabb = [this](std::size_t actor_id)
-		//	{
-		//		const QuadRenderer::ElementData& quad = this->qrenderer.elements()[actor_id];
-		//		AABB ret{.min = tz::Vec2{-1.0f, -1.0f}, .max = tz::Vec2{1.0f, 1.0f}};
-		//		tz::Vec2 scale = this->qrenderer.elements()[actor_id].scale;
-		//		ret.min[0] *= scale[0];
-		//		ret.max[0] *= scale[0];
-		//		ret.min[1] *= scale[1];
-		//		ret.max[1] *= scale[1];
-		//		ret.min += quad.position;
-		//		ret.max += quad.position;
-		//		return ret;
-		//	};
-
-		//	AABB a = get_aabb(actor_a);
-		//	/*
-		//		point.x >= box.minX &&
-		//		point.x <= box.maxX &&
-		//		point.y >= box.minY &&
-		//		point.y <= box.maxY;
-		//	 */
-		//	return b.position[0] >= a.min[0] &&
-		//	       b.position[0] <= a.max[0] &&
-		//	       b.position[1] >= a.min[1] &&
-		//	       b.position[1] <= a.max[1];
-		//}
-		//else
-		//{
-		//	// Circle collision based upon reach.
-		//	tz::Vec2 displacement = a.position - b.position;
-		//	float touchdist = touch_distance;
-		//	if(this->actors[actor_a].flags.contains(ActorFlag::HighReach))
-		//	{
-		//		touchdist *= 1.5f;
-		//	}
-		//	return displacement.length() <= touchdist;
-		//}
 	}
 
 	bool Scene::is_in_bounds(std::size_t actor_id) const
@@ -825,7 +767,9 @@ namespace game
 		}
 
 		const bool wants_to_hurt = (is_hazardous || actor.flags_new.has<FlagID::Aggressive>()) && actor.is_enemy_of(other) && !other.flags_new.has<FlagID::Unhittable>() && !actor.dead() && !other.dead();
-		const bool blocks_colliders = actor.flags.contains(ActorFlag::Collide) && !actor.dead() && !other.dead() && !other.flags.contains(ActorFlag::CannotCollide);
+		const bool blocks_colliders = actor.flags_new.has<FlagID::Collide>() &&
+			!actor.dead() && !other.dead() &&
+			(actor.flags_new.get<FlagID::Collide>()->data().collision_filter.contains(other.type) || actor.flags_new.get<FlagID::Collide>()->data().collision_filter.empty());
 		const bool wants_touch_player = (actor.flags_new.has<FlagID::ActionOnPlayerTouch>() && other.flags_new.has<FlagID::Player>());
 		const bool cares_about_collisions = wants_to_hurt || blocks_colliders || wants_touch_player;
 		if(cares_about_collisions)

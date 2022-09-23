@@ -4,6 +4,7 @@
 #include "action.hpp"
 #include "tz/core/vector.hpp"
 #include "tz/core/interfaces/cloneable.hpp"
+#include "tz/core/containers/enum_field.hpp"
 
 namespace game
 {
@@ -59,6 +60,8 @@ namespace game
 		DieOnAnimationFinish,
 		/// Actor will harm other colliding actors if a predicate is satisfied.
 		HazardousIf,
+		/// Actor will collide with certain other actors.
+		Collide,
 	};
 
 	template<FlagID ID>
@@ -156,6 +159,12 @@ namespace game
 	struct FlagParams<FlagID::HazardousIf>
 	{
 		std::function<bool(const Actor&, const Actor&)> predicate;
+	};
+
+	template<>
+	struct FlagParams<FlagID::Collide>
+	{
+		tz::EnumField<ActorType> collision_filter = {};
 	};
 
 	class FlagEntity : public Entity<FlagID, IFlag, Flag, FlagParams>

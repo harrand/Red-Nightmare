@@ -18,10 +18,6 @@ namespace game
 		BlockingAnimations,
 		/// If an actor is dead for a long time, the Scene will automatically delete it. If an actor has this flag, this will never happen.
 		DoNotGarbageCollect,
-		/// Anything colliding with the actor cannot move through it.
-		Collide,
-		/// Unaffected by actors with Collide.
-		CannotCollide,
 	};
 	using ActorFlags = tz::EnumField<ActorFlag>;
 

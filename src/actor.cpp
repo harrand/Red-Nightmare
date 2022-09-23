@@ -44,9 +44,16 @@ namespace game
 				return
 				{
 					.type = ActorType::GhostZombie,
-					.flags = {ActorFlag::Collide},
 					.flags_new =
 					{
+						Flag<FlagID::Collide>
+						{{
+							.collision_filter =
+							{
+								ActorType::GhostZombie,
+								ActorType::GhostBanshee
+							}
+						}},
 						Flag<FlagID::Aggressive>{},
 						Flag<FlagID::RandomSkin>
 						{{
@@ -93,9 +100,16 @@ namespace game
 				return
 				{
 					.type = ActorType::GhostBanshee,
-					.flags = {ActorFlag::Collide},
 					.flags_new =
 					{
+						Flag<FlagID::Collide>
+						{{
+							.collision_filter =
+							{
+								ActorType::GhostZombie,
+								ActorType::GhostBanshee
+							}
+						}},
 						Flag<FlagID::Aggressive>{},
 						Flag<FlagID::ActionOnHit>
 						{{
@@ -192,7 +206,7 @@ namespace game
 				return
 				{
 					.type = ActorType::FireSmoke,
-					.flags = {ActorFlag::InvisibleWhileDead, ActorFlag::CannotCollide},
+					.flags = {ActorFlag::InvisibleWhileDead},
 					.flags_new = 
 					{
 						Flag<FlagID::DieOnAnimationFinish>{},
@@ -207,7 +221,7 @@ namespace game
 				return
 				{
 					.type = ActorType::FireExplosion,
-					.flags = {ActorFlag::InvisibleWhileDead, ActorFlag::CannotCollide},
+					.flags = {ActorFlag::InvisibleWhileDead},
 					.flags_new =
 					{
 						Flag<FlagID::CustomScale>{{.scale = {1.5f, 1.5f}}},
@@ -230,7 +244,6 @@ namespace game
 				return
 				{
 					.type = ActorType::BloodSplatter,
-					.flags = {ActorFlag::CannotCollide},
 					.flags_new = 
 					{
 						Flag<FlagID::Stealth>{},
@@ -269,7 +282,6 @@ namespace game
 				return
 				{
 					.type = ActorType::GhostZombie_Spawner,
-					.flags = {ActorFlag::CannotCollide},
 					.flags_new =
 					{
 						Flag<FlagID::RespawnOnDeath>{},
@@ -305,9 +317,9 @@ namespace game
 				return
 				{
 					.type = ActorType::Wall,
-					.flags = {ActorFlag::Collide, ActorFlag::CannotCollide},
 					.flags_new =
 					{
+						Flag<FlagID::Collide>{},
 						Flag<FlagID::Invincible>{},
 						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}},
 						Flag<FlagID::Stealth>{}
@@ -323,9 +335,10 @@ namespace game
 				return
 				{
 					.type = ActorType::WallDestructible,
-					.flags = {ActorFlag::Collide, ActorFlag::DoNotGarbageCollect, ActorFlag::CannotCollide},
+					.flags = {ActorFlag::DoNotGarbageCollect},
 					.flags_new =
 					{
+						Flag<FlagID::Collide>{},
 						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}},
 						Flag<FlagID::Stealth>{}
 					},
@@ -345,7 +358,6 @@ namespace game
 				return
 				{
 					.type = ActorType::CollectablePowerup_Sprint,
-					.flags = {ActorFlag::CannotCollide},
 					.flags_new =
 					{
 						Flag<FlagID::ActionOnPlayerTouch>
