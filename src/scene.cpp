@@ -376,7 +376,8 @@ namespace game
 			auto action = actor.entity.get<ActionID::GotoActor>();
 			actor.entity.set<ActionID::GotoTarget>
 			({
-				.target_position = this->qrenderer.elements()[action->data().actor_id].position
+				.target_position = this->qrenderer.elements()[action->data().actor_id].position,
+				.timeout = 1000.0f
 			});
 			action->set_is_complete(true);
 		}
@@ -384,12 +385,23 @@ namespace game
 		if(actor.entity.has<ActionID::GotoTarget>() && !actor.dead())
 		{
 			auto action = actor.entity.get<ActionID::GotoTarget>();
-			chase_target = actor.entity.get<ActionID::GotoTarget>()->data().target_position;
-			// If they're within touching distance, this is done.
-			float dist = (action->data().target_position - quad.position).length();
-			if(dist <= touchdist * 2)
+			if(action->data().timeout <= 0.0f)
 			{
 				action->set_is_complete(true);
+			}
+			else
+			{
+				// Get time passed since last update.
+				unsigned long long delta_millis = tz::system_time().millis<unsigned long long>() - actor.last_update.millis<unsigned long long>();
+				action->data().timeout -= delta_millis;
+
+				chase_target = actor.entity.get<ActionID::GotoTarget>()->data().target_position;
+				// If they're within touching distance, this is done.
+				float dist = (action->data().target_position - quad.position).length();
+				if(dist <= touchdist * 2)
+				{
+					action->set_is_complete(true);
+				}
 			}
 		}
 		if(actor.entity.has<ActionID::Launch>())
@@ -525,6 +537,27 @@ namespace game
 				actor.motion |= ActorMotion::MoveDown;
 			}
 		}
+		else
+		{
+			// Actor isn't currently chasing something.
+			if(actor.flags_new.has<FlagID::WanderIfIdle>())
+			{
+				const auto& flag = actor.flags_new.get<FlagID::WanderIfIdle>()->data();
+				std::uniform_real_distribution<float> dist{0.0f, 1.0f};
+				if(dist(this->rng) < flag.wander_chance)
+				{
+					std::uniform_real_distribution<float> dist2(flag.max_wander_range * -0.5f, flag.max_wander_range * 0.5f);
+					// Set an action to wander to a nearby location.
+					tz::Vec2 target_loc = quad.position;
+					target_loc += tz::Vec2{dist2(this->rng), dist2(this->rng)};
+					actor.entity.add<ActionID::GotoTarget>
+					({
+						.target_position = target_loc
+					});
+				}
+				
+			}
+		}
 		// We now know for certain whether the actor wants to move or not. Now we can finally carry out the movement.
 		if(!actor.dead())
 		{
@@ -549,6 +582,7 @@ namespace game
 			quad.position += position_change.normalised() * sp;
 		}
 		this->update_status_events(id);
+		actor.last_update = tz::system_time();
 		return this->garbage_collect(id);
 	}
 

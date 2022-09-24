@@ -81,7 +81,8 @@ namespace game
 								}}
 							},
 							.icd = 200.0f
-						}}
+						}},
+						Flag<FlagID::WanderIfIdle>{}
 					},
 					.faction = Faction::PlayerEnemy,
 					.base_stats =
@@ -494,6 +495,7 @@ namespace game
 			this->base_stats.current_health = 0;
 		}
 		ImGui::Spacing();
+		ImGui::Text("Movement: %.0f%%", this->get_current_stats().movement_speed / this->base_stats.movement_speed * 100.0f);
 		this->get_current_stats().dbgui();
 		if(ImGui::CollapsingHeader("Debug Buffs:"))
 		{
@@ -671,7 +673,6 @@ namespace game
 				this->buffs.erase(i--);
 			}
 		}
-		last_update = now;
 	}
 
 	void Actor::evaluate_animation()

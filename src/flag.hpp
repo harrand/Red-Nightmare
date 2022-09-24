@@ -62,6 +62,8 @@ namespace game
 		HazardousIf,
 		/// Actor will collide with certain other actors.
 		Collide,
+		/// Actor will periodically wander if it has nothing else to do.
+		WanderIfIdle,
 	};
 
 	template<FlagID ID>
@@ -166,6 +168,14 @@ namespace game
 	{
 		tz::EnumField<ActorType> collision_filter = {};
 		tz::EnumField<ActorType> collision_blacklist = {};
+	};
+
+	template<>
+	struct FlagParams<FlagID::WanderIfIdle>
+	{
+		float min_wander_range = 0.2f;
+		float max_wander_range = 0.3f;
+		float wander_chance = 0.001f;
 	};
 
 	class FlagEntity : public Entity<FlagID, IFlag, Flag, FlagParams>

@@ -116,6 +116,7 @@ namespace game
 	struct ActionParams<ActionID::GotoTarget>
 	{
 		tz::Vec2 target_position;
+		float timeout = std::numeric_limits<float>::max();
 	};
 
 	template<>
