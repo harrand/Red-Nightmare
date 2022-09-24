@@ -23,9 +23,13 @@ namespace game
 		const AnimationInfo& get_info() const;
 		TextureID get_texture();
 
+		void set_fps_multiplyer(float mul);
+		float get_fps_multiplyer() const;
+
 		bool operator==(const Animation& rhs) const;
 	private:
 		AnimationInfo info;
+		float fps_multiplier = 1.0f;
 		tz::Duration begin;
 	};
 

@@ -11,7 +11,7 @@ namespace game
 
 	unsigned int Animation::length_millis() const
 	{
-		return this->info.frames.size() * (1000 / this->info.fps);
+		return this->info.frames.size() * (1000 / (this->info.fps * this->fps_multiplier));
 	}
 
 	bool Animation::complete() const
@@ -50,6 +50,16 @@ namespace game
 
 		std::size_t frame_id = std::clamp(elapsed_millis / frame_period_millis, 0ull, this->info.frames.size() - 1);
 		return this->info.frames[frame_id];
+	}
+
+	void Animation::set_fps_multiplyer(float mul)
+	{
+		this->fps_multiplier = mul;
+	}
+
+	float Animation::get_fps_multiplyer() const
+	{
+		return this->fps_multiplier;
 	}
 
 	bool Animation::operator==(const Animation& rhs) const

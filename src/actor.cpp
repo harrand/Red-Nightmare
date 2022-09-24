@@ -841,5 +841,8 @@ namespace game
 		{
 			this->animation = anim;
 		}
+		float speed_ratio = this->get_current_stats().movement_speed / this->base_stats.movement_speed;
+		// We want multiplyer to be half of the % movement speed.
+		this->animation.set_fps_multiplyer((1.0f + speed_ratio) / 2.0f);
 	}
 }
