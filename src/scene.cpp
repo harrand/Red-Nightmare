@@ -769,7 +769,7 @@ namespace game
 		const bool wants_to_hurt = (is_hazardous || actor.flags_new.has<FlagID::Aggressive>()) && actor.is_enemy_of(other) && !other.flags_new.has<FlagID::Unhittable>() && !actor.dead() && !other.dead();
 		const bool blocks_colliders = actor.flags_new.has<FlagID::Collide>() &&
 			!actor.dead() && !other.dead() &&
-			(actor.flags_new.get<FlagID::Collide>()->data().collision_filter.contains(other.type) || actor.flags_new.get<FlagID::Collide>()->data().collision_filter.empty());
+			(actor.flags_new.get<FlagID::Collide>()->data().collision_filter.contains(other.type) || actor.flags_new.get<FlagID::Collide>()->data().collision_filter.empty()) && !actor.flags_new.get<FlagID::Collide>()->data().collision_blacklist.contains(other.type);
 		const bool wants_touch_player = (actor.flags_new.has<FlagID::ActionOnPlayerTouch>() && other.flags_new.has<FlagID::Player>());
 		const bool cares_about_collisions = wants_to_hurt || blocks_colliders || wants_touch_player;
 		if(cares_about_collisions)

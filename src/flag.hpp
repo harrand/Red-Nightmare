@@ -165,6 +165,7 @@ namespace game
 	struct FlagParams<FlagID::Collide>
 	{
 		tz::EnumField<ActorType> collision_filter = {};
+		tz::EnumField<ActorType> collision_blacklist = {};
 	};
 
 	class FlagEntity : public Entity<FlagID, IFlag, Flag, FlagParams>

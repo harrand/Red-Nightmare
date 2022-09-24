@@ -319,7 +319,16 @@ namespace game
 					.type = ActorType::Wall,
 					.flags_new =
 					{
-						Flag<FlagID::Collide>{},
+						Flag<FlagID::Collide>
+						{{
+							.collision_blacklist =
+							{
+								ActorType::FireSmoke,
+								ActorType::FireExplosion,
+								ActorType::BloodSplatter,
+								ActorType::GhostZombie_Spawner,
+							}
+						}},
 						Flag<FlagID::Invincible>{},
 						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}},
 						Flag<FlagID::Stealth>{}
@@ -338,7 +347,16 @@ namespace game
 					.flags = {ActorFlag::DoNotGarbageCollect},
 					.flags_new =
 					{
-						Flag<FlagID::Collide>{},
+						Flag<FlagID::Collide>
+						{{
+							.collision_blacklist =
+							{
+								ActorType::FireSmoke,
+								ActorType::FireExplosion,
+								ActorType::BloodSplatter,
+								ActorType::GhostZombie_Spawner
+							}
+						}},
 						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}},
 						Flag<FlagID::Stealth>{}
 					},
