@@ -1,4 +1,5 @@
 #include <algorithm>
+
 namespace game
 {
 	#define ENTITY_IMPL Entity<T, IComponent, Component, ComponentParams>

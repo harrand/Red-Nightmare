@@ -698,6 +698,7 @@ namespace game
 
 	void Scene::update_quadtree(std::size_t actor_id)
 	{
+		TZ_PROFZONE("Scene - Quadtree Update", TZ_PROFCOL_GREEN);
 		this->quadtree.add({.actor_id = actor_id, .bounding_box = this->get_bounding_box(actor_id)});
 	}
 
@@ -742,6 +743,7 @@ namespace game
 
 	void Scene::collision_resolution()
 	{
+		TZ_PROFZONE("Scene - Collision Resolution", TZ_PROFCOL_GREEN);
 		for(const auto& [node_a, node_b] : this->intersections)
 		{
 			std::size_t a_id = node_a.actor_id;
@@ -754,6 +756,7 @@ namespace game
 
 	void Scene::resolve_collision(std::size_t a_id, std::size_t b_id)
 	{
+		TZ_PROFZONE("Scene - Single Collision Resolution", TZ_PROFCOL_GREEN);
 		Actor& actor = this->get_actor(a_id);
 		QuadRenderer::ElementData& quad = this->qrenderer.elements()[a_id];
 		Actor& other = this->get_actor(b_id);
@@ -825,6 +828,7 @@ namespace game
 
 	void Scene::on_actor_hit(ActorHitEvent e)
 	{
+		TZ_PROFZONE("Scene - On Actor Hit", TZ_PROFCOL_BROWN);
 		e.attacker.target = &e.attackee;
 		if(e.attacker.flags_new.has<FlagID::ActionOnHit>())
 		{
@@ -839,6 +843,7 @@ namespace game
 
 	void Scene::on_actor_struck(ActorStruckEvent e)
 	{
+		TZ_PROFZONE("Scene - On Actor Struck", TZ_PROFCOL_BROWN);
 		//tz_report("%s struck by %s", e.attackee.name, e.attacker.name);
 		if(e.attackee.flags_new.has<FlagID::ActionOnStruck>())
 		{
@@ -857,11 +862,13 @@ namespace game
 
 	void Scene::on_actor_kill(ActorKillEvent e)
 	{
+		TZ_PROFZONE("Scene - On Actor Kill", TZ_PROFCOL_BROWN);
 		//tz_report("%s killed %s", e.killer.name, e.killee.name);
 	}
 
 	void Scene::on_actor_death(ActorDeathEvent e)
 	{
+		TZ_PROFZONE("Scene - On Actor Death", TZ_PROFCOL_BROWN);
 		//tz_report("%s killed by %s", e.killee.name, e.killer.name);
 		if(e.killee.flags_new.has<FlagID::ActionOnDeath>())
 		{

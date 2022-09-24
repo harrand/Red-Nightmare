@@ -656,6 +656,7 @@ namespace game
 
 	void Actor::evaluate_buffs()
 	{
+		TZ_PROFZONE("Actor - Buff Evaluation", TZ_PROFCOL_GREEN);
 		auto now = tz::system_time();
 		auto time_since_update = now - last_update;
 		for(int i = 0; i < this->buffs.elements().size(); i++)
@@ -675,6 +676,7 @@ namespace game
 
 	void Actor::evaluate_animation()
 	{
+		TZ_PROFZONE("Actor - Animation Evaluation", TZ_PROFCOL_GREEN);
 		AnimationID ending_animation = AnimationID::Missing;
 		switch(this->skin)
 		{
