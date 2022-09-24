@@ -303,9 +303,7 @@ namespace game
 						{{
 							.actions =
 							{
-								Action<ActionID::RandomTeleport>
-								{{
-								}}
+								Action<ActionID::RandomTeleport>{}
 							}
 						}},
 					},

@@ -456,6 +456,13 @@ namespace game
 			action->set_is_complete(true);
 			actor.respawn();
 		}
+		if(actor.entity.has<ActionID::RespawnAs>())
+		{
+			auto action = actor.entity.get<ActionID::RespawnAs>();
+			actor.type = action->data().actor;
+			actor.respawn();
+			action->set_is_complete(true);
+		}
 		if(actor.entity.has<ActionID::Die>())
 		{
 			auto action = actor.entity.get<ActionID::Die>();

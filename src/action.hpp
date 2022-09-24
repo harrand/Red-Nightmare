@@ -63,6 +63,8 @@ namespace game
 		SpawnActor,
 		/// Respawn the current actor.
 		Respawn,
+		/// Respawn the current actor, but as a different actor type.
+		RespawnAs,
 		/// Instantly kill the current actor.
 		Die,
 		/// Apply a buff to the current actor.
@@ -92,7 +94,7 @@ namespace game
 	class Action : public IAction
 	{
 	public:
-		Action(ActionParams<ID> params): params(params){}
+		Action(ActionParams<ID> params = {}): params(params){}
 		[[nodiscard]] virtual std::unique_ptr<IAction> unique_clone() const
 		{
 			return static_cast<std::unique_ptr<IAction>>(std::make_unique<Action<ID>>(*this));
@@ -143,6 +145,12 @@ namespace game
 	{
 		ActorType actor;
 		bool inherit_faction = false;
+	};
+
+	template<>
+	struct ActionParams<ActionID::RespawnAs>
+	{
+		ActorType actor;
 	};
 
 	template<>
