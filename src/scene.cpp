@@ -250,6 +250,7 @@ namespace game
 		TZ_PROFZONE("Actor - Post Update", TZ_PROFCOL_BROWN);
 		Actor& actor = this->get_actor(id);
 		QuadRenderer::ElementData& quad = this->qrenderer.elements()[id];
+		quad.layer = static_cast<float>(actor.layer) / std::numeric_limits<unsigned short>::max();
 		float touchdist = touch_distance;
 		if(!this->is_in_bounds(id))
 		{

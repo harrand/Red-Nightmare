@@ -92,6 +92,8 @@ namespace game
 
 	using ActorTypes = tz::EnumField<ActorType>;
 
+	constexpr unsigned short default_layer = std::numeric_limits<unsigned short>::max() / 2;
+
 	struct Actor
 	{
 		static constexpr std::size_t NullID = std::numeric_limits<std::size_t>::max();
@@ -123,6 +125,7 @@ namespace game
 		/// Duration at last update.
 		tz::Duration last_update = tz::system_time();
 		Actor* target = nullptr;
+		unsigned short layer = default_layer;
 
 		void update();
 		bool dead() const;

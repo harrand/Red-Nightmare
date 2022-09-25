@@ -309,7 +309,8 @@ namespace game
 					},
 					.skin = ActorSkin::DebugOnlyVisible,
 					.palette_colour = {255u, 64u, 255u},
-					.name = "Spawner (Ghost Zombie)"
+					.name = "Spawner (Ghost Zombie)",
+					.layer = default_layer + 1
 				};
 			break;
 			case ActorType::Wall:
@@ -336,7 +337,8 @@ namespace game
 					.skin = ActorSkin::Material_Stone,
 					.palette_colour = {255u, 0u, 0u},
 					.name = "Wall",
-					.density = 2.0f
+					.density = 2.0f,
+					.layer = 0
 				};
 			break;
 			case ActorType::WallDestructible:
@@ -368,7 +370,8 @@ namespace game
 					.skin = ActorSkin::Material_Stone,
 					.palette_colour = {127u, 0u, 0u},
 					.name = "Destructible Wall",
-					.density = 2.0f
+					.density = 2.0f,
+					.layer = 0
 				};
 			break;
 			case ActorType::CollectablePowerup_Sprint:

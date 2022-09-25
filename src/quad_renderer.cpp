@@ -47,6 +47,7 @@ namespace game
 			ImGui::Text("Rotation (Radians): %.2f", elem.rotation);
 			ImGui::DragFloat2("Scale", elem.scale.data().data(), 0.01f, -1.0f, 1.0f);
 			ImGui::Text("Texture ID: %u", static_cast<unsigned int>(elem.texture_id));
+			ImGui::DragFloat("Layer", &elem.layer, 0.005f, -2.0f, 2.0f);
 		}
 	}
 
@@ -144,7 +145,7 @@ namespace game
 		data =
 		{
 			.view = tz::view(this->camera_pos.with_more(0.0f), tz::Vec3{0.0f, 0.0f, 0.0f}),
-			.projection = tz::orthographic(-aspect_ratio, aspect_ratio, 1.0f, -1.0f, -0.1f, 0.1f)
+			.projection = tz::orthographic(-aspect_ratio, aspect_ratio, 1.0f, -1.0f, 0.0f, -1.0f)
 		};
 	}
 }

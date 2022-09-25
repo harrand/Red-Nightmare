@@ -23,7 +23,7 @@ namespace game
 			float rotation = 0.0f;
 			TextureID texture_id = static_cast<TextureID>(0);
 			std::uint32_t status_effect_id = StatusEffect_None;
-			float pad0;
+			float layer = 0.0f;
 		};
 
 		std::span<const ElementData> elements() const;
