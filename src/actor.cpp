@@ -55,6 +55,10 @@ namespace game
 							}
 						}},
 						Flag<FlagID::Aggressive>{},
+						Flag<FlagID::HazardousIf>
+						{{
+							.predicate = [](const Actor& self, const Actor& victim){return self.is_enemy_of(victim);}
+						}},
 						Flag<FlagID::RandomSkin>
 						{{
 							.skins =
@@ -112,6 +116,10 @@ namespace game
 							}
 						}},
 						Flag<FlagID::Aggressive>{},
+						Flag<FlagID::HazardousIf>
+						{{
+							.predicate = [](const Actor& self, const Actor& victim){return self.is_enemy_of(victim);}
+						}},
 						Flag<FlagID::ActionOnHit>
 						{{
 							.actions =
@@ -264,6 +272,10 @@ namespace game
 					{
 						Flag<FlagID::RespawnOnDeath>{},
 						Flag<FlagID::Aggressive>{},
+						Flag<FlagID::HazardousIf>
+						{{
+							.predicate = [](const Actor& self, const Actor& victim){return self.is_enemy_of(victim);}
+						}},
 						Flag<FlagID::SelfRecoil>{}
 					},
 					.faction = Faction::PureEnemy,
