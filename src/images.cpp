@@ -346,7 +346,11 @@ namespace game
 		int w, h, channels;
 		stbi_uc* imgdata = stbi_load_from_memory(reinterpret_cast<const stbi_uc*>(img_file_data.data()), img_file_data.size(), &w, &h, &channels, 4);
 		std::span<stbi_uc> imgdata_span{imgdata, static_cast<std::size_t>(w * h * 4)};
-		tz::gl::ImageResource ret = tz::gl::ImageResource::from_memory(tz::gl::ImageFormat::RGBA32, static_cast<tz::Vec2ui>(tz::Vec2i{w, h}), imgdata_span, tz::gl::ResourceAccess::StaticFixed, {});
+		tz::gl::ImageResource ret = tz::gl::ImageResource::from_memory(imgdata_span,
+		{
+			.format = tz::gl::ImageFormat::RGBA32,
+			.dimensions = static_cast<tz::Vec2ui>(tz::Vec2i{w, h})
+		});
 		stbi_image_free(imgdata);
 		return ret;
 	}

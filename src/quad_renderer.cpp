@@ -115,9 +115,15 @@ namespace game
 		// A buffer to store data for each quad (element buffer).
 		std::array<QuadRenderer::ElementData, QuadRenderer::max_quad_count> element_data;
 		std::fill(element_data.begin(), element_data.end(), QuadRenderer::ElementData{});
-		tz::gl::BufferResource element_buffer = tz::gl::BufferResource::from_many(element_data, tz::gl::ResourceAccess::DynamicFixed);
+		tz::gl::BufferResource element_buffer = tz::gl::BufferResource::from_many(element_data,
+		{
+			.access = tz::gl::ResourceAccess::DynamicFixed
+		});
 
-		tz::gl::BufferResource render_buffer = tz::gl::BufferResource::from_one(QuadRenderer::RenderData{}, tz::gl::ResourceAccess::DynamicFixed);
+		tz::gl::BufferResource render_buffer = tz::gl::BufferResource::from_one(QuadRenderer::RenderData{},
+		{
+			.access = tz::gl::ResourceAccess::DynamicFixed
+		});
 		this->element_buffer_handle = rinfo.add_resource(element_buffer);
 		this->render_buffer_handle = rinfo.add_resource(render_buffer);
 

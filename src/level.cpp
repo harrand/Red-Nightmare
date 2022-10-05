@@ -176,7 +176,11 @@ namespace game
 			}
 		}
 
-		tz::gl::ImageResource res = tz::gl::ImageResource::from_memory(tz::gl::ImageFormat::RGBA32, dims, image_data);
+		tz::gl::ImageResource res = tz::gl::ImageResource::from_memory(image_data,
+		{
+			.format = tz::gl::ImageFormat::RGBA32,
+			.dimensions = dims
+		});
 		return res;
 	}
 }
