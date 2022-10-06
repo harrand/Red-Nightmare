@@ -130,14 +130,9 @@ namespace game
 		// Renderer stores all textures in the game.
 		constexpr std::uint32_t tex_count = static_cast<std::uint32_t>(TextureID::Count);
 
-		std::vector<tz::gl::ImageResource> resources;
-		resources.reserve(tex_count);
-
 		for(std::uint32_t i = 0; i < tex_count; i++)
 		{
-			TextureID texid = static_cast<TextureID>(i);
-			resources.push_back(game::load_image(texid));
-			rinfo.add_resource(resources.back());
+			rinfo.add_resource(game::load_image(static_cast<TextureID>(i)));
 		}
 
 		return tz::gl::device().create_renderer(rinfo);
