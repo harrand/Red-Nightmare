@@ -13,7 +13,7 @@ namespace game
 	QuadRenderer::QuadRenderer():
 	element_buffer_handle(tz::nullhand),
 	render_buffer_handle(tz::nullhand),
-	renderer(make_renderer())
+	rendererh(this->make_renderer())
 	{
 		this->update_render_data();
 	}
@@ -23,7 +23,7 @@ namespace game
 		TZ_PROFZONE("QuadRenderer - Render", TZ_PROFCOL_GREEN);
 		this->update_render_data();
 		// 2 triangles per quad.
-		this->renderer.render(this->quad_count * 2);
+		tz::gl::device().get_renderer(this->rendererh).render(this->quad_count * 2);
 	}
 
 	void QuadRenderer::dbgui()
@@ -32,7 +32,7 @@ namespace game
 		static bool wireframe_mode = false;
 		if(ImGui::Checkbox("Wireframe Mode", &wireframe_mode))
 		{
-			this->renderer.edit(tz::gl::RendererEditBuilder{}
+			tz::gl::device().get_renderer(this->rendererh).edit(tz::gl::RendererEditBuilder{}
 			.render_state
 			({
 				.wireframe_mode = wireframe_mode
@@ -53,18 +53,18 @@ namespace game
 
 	std::span<const QuadRenderer::ElementData> QuadRenderer::elements() const
 	{
-		return this->renderer.get_resource(this->element_buffer_handle)->data_as<const QuadRenderer::ElementData>().subspan(0, this->quad_count);
+		return tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<const QuadRenderer::ElementData>().subspan(0, this->quad_count);
 	}
 
 	std::span<QuadRenderer::ElementData> QuadRenderer::elements()
 	{
-		return this->renderer.get_resource(this->element_buffer_handle)->data_as<QuadRenderer::ElementData>().subspan(0, this->quad_count);
+		return tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<QuadRenderer::ElementData>().subspan(0, this->quad_count);
 	}
 
 	void QuadRenderer::push()
 	{
 		tz_assert(this->quad_count < QuadRenderer::max_quad_count, "Ran out of quad storage in QuadRenderer.");
-		this->renderer.get_resource(this->element_buffer_handle)->data_as<QuadRenderer::ElementData>()[this->quad_count++] = {};
+		tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<QuadRenderer::ElementData>()[this->quad_count++] = {};
 	}
 
 	void QuadRenderer::pop()
@@ -104,7 +104,7 @@ namespace game
 		return this->camera_pos;
 	}
 
-	tz::gl::Renderer QuadRenderer::make_renderer()
+	tz::gl::RendererHandle QuadRenderer::make_renderer()
 	{
 		tz::gl::RendererInfo rinfo;
 
@@ -141,7 +141,7 @@ namespace game
 	void QuadRenderer::update_render_data()
 	{
 		TZ_PROFZONE("QuadRenderer - Update Render Data", TZ_PROFCOL_BROWN);
-		RenderData& data = this->renderer.get_resource(this->render_buffer_handle)->data_as<RenderData>().front();
+		RenderData& data = tz::gl::device().get_renderer(this->rendererh).get_resource(this->render_buffer_handle)->data_as<RenderData>().front();
 		const float aspect_ratio = this->get_width_multiplier();
 		data =
 		{

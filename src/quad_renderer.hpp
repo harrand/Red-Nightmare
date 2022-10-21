@@ -43,7 +43,7 @@ namespace game
 			tz::Mat4 view = tz::Mat4::identity();
 			tz::Mat4 projection = tz::Mat4::identity();
 		};
-		tz::gl::Renderer make_renderer();
+		tz::gl::RendererHandle make_renderer();
 		void update_render_data();
 
 		std::size_t quad_count = 0;
@@ -51,7 +51,7 @@ namespace game
 		tz::gl::ResourceHandle element_buffer_handle;
 		// Stores whole scene data, such as MVP matrix components.
 		tz::gl::ResourceHandle render_buffer_handle;
-		tz::gl::Renderer renderer;
+		tz::gl::RendererHandle rendererh;
 		tz::Vec2 camera_pos{0.0f, 0.0f};
 	};
 }
