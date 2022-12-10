@@ -297,7 +297,7 @@ namespace game
 		// If actor wants to teleport to a random location, do it now.
 
 		quad.scale = {0.2f, 0.2f};
-		if(actor.flags.contains(ActorFlag::InvisibleWhileDead))
+		if(actor.flags_new.has<FlagID::InvisibleWhileDead>())
 		{
 			if(actor.dead())
 			{
@@ -755,7 +755,7 @@ namespace game
 			if(iter != this->despawn_timer.end())
 			{
 				// It has an entry, see if its timed out.
-				if(iter->second.done() && !this->get_actor(id).flags.contains(ActorFlag::DoNotGarbageCollect))
+				if(iter->second.done() && !this->get_actor(id).flags_new.has<FlagID::DoNotGarbageCollect>())
 				{
 					// Timed out. we purge.
 					// Erase will swap us with the last element and then kill last element (i.e us).

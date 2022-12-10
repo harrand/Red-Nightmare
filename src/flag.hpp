@@ -14,6 +14,9 @@ namespace game
 
 	enum class FlagID
 	{
+		InvisibleWhileDead,
+		BlockingAnimations,
+		DoNotGarbageCollect,
 		/// Actor is considered a player.
 		Player,
 		/// Actor has a custom scale.

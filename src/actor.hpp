@@ -12,12 +12,6 @@ namespace game
 	/// Describes immutable characteristics for a specific actor.
 	enum class ActorFlag
 	{
-		/// If the actor is dead, it is invisible.
-		InvisibleWhileDead,
-		/// If the actor is doing a non-looping animation, they won't take any action until it is complete.
-		BlockingAnimations,
-		/// If an actor is dead for a long time, the Scene will automatically delete it. If an actor has this flag, this will never happen.
-		DoNotGarbageCollect,
 	};
 	using ActorFlags = tz::EnumField<ActorFlag>;
 

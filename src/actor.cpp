@@ -148,9 +148,10 @@ namespace game
 				return
 				{
 					.type = ActorType::PlayerClassic_Orb,
-					.flags = {ActorFlag::InvisibleWhileDead, ActorFlag::DoNotGarbageCollect},
 					.flags_new =
 					{
+						Flag<FlagID::InvisibleWhileDead>{},
+						Flag<FlagID::DoNotGarbageCollect>{},
 						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}},
 						Flag<FlagID::ActionOnOOB>
 						{{
@@ -215,9 +216,9 @@ namespace game
 				return
 				{
 					.type = ActorType::FireSmoke,
-					.flags = {ActorFlag::InvisibleWhileDead},
 					.flags_new = 
 					{
+						Flag<FlagID::InvisibleWhileDead>{},
 						Flag<FlagID::DieOnAnimationFinish>{},
 						Flag<FlagID::Stealth>{},
 						Flag<FlagID::Unhittable>{}
@@ -230,9 +231,9 @@ namespace game
 				return
 				{
 					.type = ActorType::FireExplosion,
-					.flags = {ActorFlag::InvisibleWhileDead},
 					.flags_new =
 					{
+						Flag<FlagID::InvisibleWhileDead>{},
 						Flag<FlagID::CustomScale>{{.scale = {1.5f, 1.5f}}},
 						Flag<FlagID::HazardousIf>
 						{{
@@ -267,9 +268,9 @@ namespace game
 				return
 				{
 					.type = ActorType::Nightmare,
-					.flags = {ActorFlag::BlockingAnimations},
 					.flags_new =
 					{
+						Flag<FlagID::BlockingAnimations>{},
 						Flag<FlagID::RespawnOnDeath>{},
 						Flag<FlagID::Aggressive>{},
 						Flag<FlagID::HazardousIf>
@@ -350,16 +351,16 @@ namespace game
 					.palette_colour = {255u, 0u, 0u},
 					.name = "Wall",
 					.density = 2.0f,
-					.layer = 0
+					.layer = 255
 				};
 			break;
 			case ActorType::WallDestructible:
 				return
 				{
 					.type = ActorType::WallDestructible,
-					.flags = {ActorFlag::DoNotGarbageCollect},
 					.flags_new =
 					{
+						Flag<FlagID::DoNotGarbageCollect>{},
 						Flag<FlagID::Collide>
 						{{
 							.collision_blacklist =
@@ -383,7 +384,7 @@ namespace game
 					.palette_colour = {127u, 0u, 0u},
 					.name = "Destructible Wall",
 					.density = 2.0f,
-					.layer = 0
+					.layer = 255
 				};
 			break;
 			case ActorType::CollectablePowerup_Sprint:
@@ -425,7 +426,7 @@ namespace game
 		this->evaluate_buffs();
 		this->entity.update();
 		this->evaluate_animation();
-		if(this->flags.contains(ActorFlag::BlockingAnimations))
+		if(this->flags_new.has<FlagID::BlockingAnimations>())
 		{
 			if(!this->animation.get_info().loop && !this->animation.complete())
 			{
