@@ -2,7 +2,7 @@
 #include "util.hpp"
 #include "tz/core/tz.hpp"
 #include "tz/dbgui/dbgui.hpp"
-#include "tz/core/profiling/zone.hpp"
+#include "hdk/profile.hpp"
 
 namespace game
 {
@@ -422,7 +422,7 @@ namespace game
 
 	void Actor::update()
 	{
-		TZ_PROFZONE("Actor - Update", TZ_PROFCOL_GREEN);
+		HDK_PROFZONE("Actor - Update", 0xFF00AA00);
 		this->evaluate_buffs();
 		this->entity.update();
 		this->evaluate_animation();
@@ -672,7 +672,7 @@ namespace game
 
 	void Actor::evaluate_buffs()
 	{
-		TZ_PROFZONE("Actor - Buff Evaluation", TZ_PROFCOL_GREEN);
+		HDK_PROFZONE("Actor - Buff Evaluation", 0xFF00AA00);
 		auto now = tz::system_time();
 		auto time_since_update = now - last_update;
 		for(int i = 0; i < this->buffs.elements().size(); i++)
@@ -691,7 +691,7 @@ namespace game
 
 	void Actor::evaluate_animation()
 	{
-		TZ_PROFZONE("Actor - Animation Evaluation", TZ_PROFCOL_GREEN);
+		HDK_PROFZONE("Actor - Animation Evaluation", 0xFF00AA00);
 		AnimationID ending_animation = AnimationID::Missing;
 		switch(this->skin)
 		{

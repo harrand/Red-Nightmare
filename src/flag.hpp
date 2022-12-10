@@ -2,8 +2,8 @@
 #define REDNIGHTMARE_FLAG_HPP
 #include "entity.hpp"
 #include "action.hpp"
-#include "tz/core/vector.hpp"
-#include "tz/core/interfaces/cloneable.hpp"
+#include "hdk/data/vector.hpp"
+#include "hdk/memory/clone.hpp"
 #include "tz/core/containers/enum_field.hpp"
 
 namespace game
@@ -72,7 +72,7 @@ namespace game
 	template<FlagID ID>
 	struct FlagParams{};
 
-	class IFlag : public tz::IUniqueCloneable<IFlag>
+	class IFlag : public hdk::unique_cloneable<IFlag>
 	{
 	public:
 		virtual constexpr FlagID get_id() const = 0;
@@ -99,7 +99,7 @@ namespace game
 	template<>
 	struct FlagParams<FlagID::CustomScale>
 	{
-		tz::Vec2 scale;
+		hdk::vec2 scale;
 	};
 
 	template<>

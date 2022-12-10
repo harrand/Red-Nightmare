@@ -18,8 +18,8 @@ namespace game
 
 		struct ElementData
 		{
-			tz::Vec2 position = {0.0f, 0.0f};
-			tz::Vec2 scale = {0.2f, 0.2f};
+			hdk::vec2 position = {0.0f, 0.0f};
+			hdk::vec2 scale = {0.2f, 0.2f};
 			float rotation = 0.0f;
 			TextureID texture_id = static_cast<TextureID>(0);
 			std::uint32_t status_effect_id = StatusEffect_None;
@@ -34,8 +34,8 @@ namespace game
 		void clear();
 		void erase(std::size_t elem);
 		float get_width_multiplier() const;
-		const tz::Vec2& camera_position() const;
-		tz::Vec2& camera_position();
+		const hdk::vec2& camera_position() const;
+		hdk::vec2& camera_position();
 		static constexpr std::size_t max_quad_count = 2048;
 	private:
 		struct RenderData
@@ -52,7 +52,7 @@ namespace game
 		// Stores whole scene data, such as MVP matrix components.
 		tz::gl::ResourceHandle render_buffer_handle;
 		tz::gl::RendererHandle rendererh;
-		tz::Vec2 camera_pos{0.0f, 0.0f};
+		hdk::vec2 camera_pos{0.0f, 0.0f};
 	};
 }
 

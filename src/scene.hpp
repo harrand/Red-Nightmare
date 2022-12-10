@@ -31,7 +31,7 @@ namespace game
 		Actor& get_actor(std::size_t id);
 
 		void impl_load_level(const Level& level);
-		tz::Vec2 get_mouse_position() const;
+		hdk::vec2 get_mouse_position() const;
 		void erase(std::size_t id);
 		bool actor_post_update(std::size_t id);
 		std::vector<std::size_t> get_living_players() const;
@@ -39,7 +39,7 @@ namespace game
 		Box get_bounding_box(std::size_t actor_id) const;
 		bool actor_collision_query(std::size_t actor_a, std::size_t actor_b) const;
 		bool is_in_bounds(std::size_t actor_id) const;
-		std::pair<tz::Vec2, tz::Vec2> get_world_boundaries() const;
+		std::pair<hdk::vec2, hdk::vec2> get_world_boundaries() const;
 		void update_camera();
 		void update_status_events(std::size_t id);
 		void update_quadtree(std::size_t actor_id);
@@ -63,7 +63,7 @@ namespace game
 			bool operator==(const QuadtreeNode& rhs) const{return this->actor_id == rhs.actor_id;}
 		};
 
-		Quadtree<QuadtreeNode> quadtree{Box{tz::Vec2{-100.0f, -100.0f}, tz::Vec2{100.0f, 100.0f}}};
+		Quadtree<QuadtreeNode> quadtree{Box{hdk::vec2{-100.0f, -100.0f}, hdk::vec2{100.0f, 100.0f}}};
 		Quadtree<QuadtreeNode>::IntersectionState intersections = {};
 		QuadRenderer qrenderer;
 		std::vector<Actor> actors;

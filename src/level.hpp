@@ -14,8 +14,8 @@ namespace game
 		PlayerSpawn
 	};
 	
-	using ColourActorMapping = std::unordered_map<tz::Vec3ui, ActorType>;
-	using ColourAttributeMapping = std::unordered_map<tz::Vec3ui, LevelAttribute>;
+	using ColourActorMapping = std::unordered_map<hdk::vec3ui, ActorType>;
+	using ColourAttributeMapping = std::unordered_map<hdk::vec3ui, LevelAttribute>;
 
 	struct LevelPalette
 	{
@@ -35,8 +35,8 @@ namespace game
 
 	struct Level
 	{
-		tz::Vec2 player_spawn_location = {0.0f, 0.0f};
-		std::vector<std::pair<tz::Vec2, ActorType>> actor_spawns = {};
+		hdk::vec2 player_spawn_location = {0.0f, 0.0f};
+		std::vector<std::pair<hdk::vec2, ActorType>> actor_spawns = {};
 	};
 
 	struct RandomLevelGenerationOptions

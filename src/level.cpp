@@ -1,8 +1,8 @@
 #include "level.hpp"
 #include "images.hpp"
-#include "tz/core/assert.hpp"
 #include "tz/core/imported_text.hpp"
 #include "tz/core/containers/grid_view.hpp"
+#include "hdk/debug.hpp"
 
 #include ImportedTextHeader(invisible, png)
 #include ImportedTextHeader(dev_level_0, png)
@@ -24,17 +24,17 @@ namespace game
 		{
 			Actor actor = game::create_actor(static_cast<ActorType>(i));
 			const auto col = actor.palette_colour;
-			if(col == tz::Vec3ui{0u, 0u, 0u})
+			if(col == hdk::vec3ui{0u, 0u, 0u})
 			{
 				continue;
 			}
 			const bool exists_already = actor_map.find(col) != actor_map.end();
-			tz_assert(!exists_already, "Detected two actor types with identical palette colours that aren't zero. ActorTypes are %d and %d and the palette colour is {%u, %u, %u}", i, static_cast<int>(actor_map[col]), col[0], col[1], col[2]);
+			hdk::assert(!exists_already, "Detected two actor types with identical palette colours that aren't zero. ActorTypes are %d and %d and the palette colour is {%u, %u, %u}", i, static_cast<int>(actor_map[col]), col[0], col[1], col[2]);
 			actor_map[col] = actor.type;
 		}
 		ColourAttributeMapping attrib_map;
 		{
-			attrib_map[tz::Vec3ui{64u, 255u, 255u}] = LevelAttribute::PlayerSpawn;
+			attrib_map[hdk::vec3ui{64u, 255u, 255u}] = LevelAttribute::PlayerSpawn;
 		}
 		return
 		{
@@ -51,12 +51,12 @@ namespace game
 
 	Level load_level_from_image(const tz::gl::ImageResource& level_image)
 	{
-		constexpr tz::Vec3ui colour_black{0u, 0u, 0u};
+		constexpr hdk::vec3ui colour_black{0u, 0u, 0u};
 		using ImageView = tz::GridView<const std::byte, 4>;
 		ImageView view{level_image.data(), level_image.get_dimensions()};
 
 		// Firstly figure out which colour is meant to be the player spawn point.
-		tz::Vec3ui player_spawn_colour = colour_black;
+		hdk::vec3ui player_spawn_colour = colour_black;
 		LevelPalette palette = get_level_palette();
 		for(const auto& [col, attr] : palette.attribute_palette)
 		{
@@ -65,7 +65,7 @@ namespace game
 				player_spawn_colour = col;
 			}
 		}
-		tz_assert(player_spawn_colour != colour_black, "Player spawn palette colour detected as black. This is not allowed");
+		hdk::assert(player_spawn_colour != colour_black, "Player spawn palette colour detected as black. This is not allowed");
 
 		Level ret;
 
@@ -74,11 +74,11 @@ namespace game
 			for(std::size_t y = 0; y < view.get_dimensions()[1]; y++)
 			{
 				auto rgba = view(x, y);
-				tz::Vec2 pos = {static_cast<float>(x), static_cast<float>(view.get_dimensions()[1] - y)};
+				hdk::vec2 pos = {static_cast<float>(x), static_cast<float>(view.get_dimensions()[1] - y)};
 				// TODO: Not a magic number. How much world space should one pixel in the level use?
 				pos /= 4.0f;
 				pos -= {1.0f, 1.0f};
-				tz::Vec4ui colour4
+				hdk::vec4ui colour4
 				{
 					static_cast<unsigned int>(rgba[0]),
 					static_cast<unsigned int>(rgba[1]),
@@ -100,7 +100,7 @@ namespace game
 				{
 					// It must be an actor.
 					auto iter = palette.actor_palette.find(colour);
-					tz_assert(iter != palette.actor_palette.end(), "Level image contained pixel of colour {%u, %u, %u} which does not match any LevelAttribute nor ActorType. Either the image is malformed, incomplete or meant for a different version of RedNightmare");
+					hdk::assert(iter != palette.actor_palette.end(), "Level image contained pixel of colour {%u, %u, %u} which does not match any LevelAttribute nor ActorType. Either the image is malformed, incomplete or meant for a different version of RedNightmare");
 					ret.actor_spawns.emplace_back(pos, iter->second);
 				}
 
@@ -111,7 +111,7 @@ namespace game
 
 	tz::gl::ImageResource random_level_image(const RandomLevelGenerationOptions& options)
 	{
-		constexpr tz::Vec3ui colour_black{0u, 0u, 0u};
+		constexpr hdk::vec3ui colour_black{0u, 0u, 0u};
 		RandomLevelInfo info
 		{
 			.gen_options = options,
@@ -122,18 +122,18 @@ namespace game
 		std::vector<std::byte> image_data;
 		image_data.resize(4 * info.gen_options.width * info.gen_options.height, std::byte{0});
 
-		tz::Vec2ui dims{info.gen_options.width, info.gen_options.height};
+		hdk::vec2ui dims{info.gen_options.width, info.gen_options.height};
 		using ImageView = tz::GridView<std::byte, 4>;
 		ImageView view{image_data, dims};
 
-		auto colvec_to_bytes = [](std::span<std::byte> bytes, tz::Vec3ui col)
+		auto colvec_to_bytes = [](std::span<std::byte> bytes, hdk::vec3ui col)
 		{
 			bytes[0] = static_cast<std::byte>(col[0]);
 			bytes[1] = static_cast<std::byte>(col[1]);
 			bytes[2] = static_cast<std::byte>(col[2]);
 			bytes[3] = static_cast<std::byte>(1.0f);
 		};
-		std::vector<tz::Vec3ui> actor_pool;
+		std::vector<hdk::vec3ui> actor_pool;
 		// If we have a whitelist, can only be things from the whitelist.
 		if(!info.gen_options.whitelist.empty())
 		{
@@ -170,7 +170,7 @@ namespace game
 					{
 						continue;
 					}
-					tz::Vec3ui desired_colour = actor_pool[dist_actor_colour(info.rng)];
+					hdk::vec3ui desired_colour = actor_pool[dist_actor_colour(info.rng)];
 					colvec_to_bytes(pixel, desired_colour);
 				}
 			}

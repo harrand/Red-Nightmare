@@ -6,9 +6,9 @@ project(RedNightmare
 add_subdirectory(engine)
 add_subdirectory(lib)
 
-add_app(
+tz_add_executable(
 	TARGET rednightmare
-	SOURCE_FILES
+	SOURCES
 		src/action.cpp
 		src/action.hpp
 		src/action.inl
@@ -39,13 +39,15 @@ add_app(
 		src/quad_renderer.hpp
 		src/util.cpp
 		src/util.hpp
-	SHADER_SOURCES
-		src/default.vertex.tzsl
-		src/default.fragment.tzsl
-		src/quad.vertex.tzsl
-		src/quad.fragment.tzsl
-	CUSTOM_ICON
-		${PROJECT_SOURCE_DIR}/rednightmare.ico
+)
+
+add_shader(
+	TARGET rednightmare
+	SHADERS
+	src/default.vertex.tzsl
+	src/default.fragment.tzsl
+	src/quad.vertex.tzsl
+	src/quad.fragment.tzsl
 )
 
 target_link_libraries(rednightmare PRIVATE stb)

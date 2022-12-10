@@ -1,4 +1,4 @@
-#include "tz/core/assert.hpp"
+#include "hdk/debug.hpp"
 namespace game
 {
 	template<BoxedThing T>
@@ -35,8 +35,8 @@ namespace game
 	template<BoxedThing T>
 	void Quadtree<T>::node_add_value(Node* node, std::size_t depth, const Box& box, const T& value)
 	{
-		tz_assert(node != nullptr, "Passed nullptr to node_add_value");
-		tz_assert(box.contains(value.get_box()), "Passed box which cannot contain value's box boundary. Depth = %zu. Value Box Centre = {%.2f, %.2f}, Value Box Dimensions = {%.2f, %.2f} (Top-level node: %d)", depth, value.get_box().get_centre()[0], value.get_box().get_centre()[1], value.get_box().get_dimensions()[0], value.get_box().get_dimensions()[1], box == this->global_boundary);
+		hdk::assert(node != nullptr, "Passed nullptr to node_add_value");
+		hdk::assert(box.contains(value.get_box()), "Passed box which cannot contain value's box boundary. Depth = %zu. Value Box Centre = {%.2f, %.2f}, Value Box Dimensions = {%.2f, %.2f} (Top-level node: %d)", depth, value.get_box().get_centre()[0], value.get_box().get_centre()[1], value.get_box().get_dimensions()[0], value.get_box().get_dimensions()[1], box == this->global_boundary);
 		if(node->is_leaf())
 		{
 			// node: should the first clause be inversed?
@@ -69,8 +69,8 @@ namespace game
 	template<BoxedThing T>
 	void Quadtree<T>::node_split(Node* node, const Box& box)
 	{
-		tz_assert(node != nullptr, "Attempted to split a nullptr node.");
-		tz_assert(node->is_leaf(), "Only leaf-nodes can be split");
+		hdk::assert(node != nullptr, "Attempted to split a nullptr node.");
+		hdk::assert(node->is_leaf(), "Only leaf-nodes can be split");
 		// Create children.
 		for(auto& node_ptr : node->children)
 		{
@@ -95,8 +95,8 @@ namespace game
 	template<BoxedThing T>
 	bool Quadtree<T>::node_remove(Node* node, const Box& box, const T& value)
 	{
-		tz_assert(node != nullptr, "Cannot remove node that's nullptr");
-		tz_assert(box.contains(value.get_box()), "Cannot remove node that doesn't contain the value's bounding box");
+		hdk::assert(node != nullptr, "Cannot remove node that's nullptr");
+		hdk::assert(box.contains(value.get_box()), "Cannot remove node that doesn't contain the value's bounding box");
 		if(node->is_leaf())
 		{
 			remove_value(node, value);
@@ -124,7 +124,7 @@ namespace game
 	void Quadtree<T>::remove_value(Node* node, const T& value)
 	{
 		auto it = std::find(node->values.begin(), node->values.end(), value);
-		tz_assert(it != node->values.end(), "Cannot remove a value from a node if it doesn't already exist in the node.");
+		hdk::assert(it != node->values.end(), "Cannot remove a value from a node if it doesn't already exist in the node.");
 		*it = std::move(node->values.back());
 		node->values.pop_back();
 	}
@@ -132,8 +132,8 @@ namespace game
 	template<BoxedThing T>
 	bool Quadtree<T>::try_merge(Node* node)
 	{
-		tz_assert(node != nullptr, "Cannot merge a nullptr node");
-		tz_assert(!node->is_leaf(), "Leaf nodes cannot be merged.");
+		hdk::assert(node != nullptr, "Cannot merge a nullptr node");
+		hdk::assert(!node->is_leaf(), "Leaf nodes cannot be merged.");
 		std::size_t value_count = node->values.size();
 		for(const auto& child_ptr : node->children)
 		{

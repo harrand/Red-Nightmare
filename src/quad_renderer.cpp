@@ -3,7 +3,7 @@
 #include "tz/gl/imported_shaders.hpp"
 #include "tz/gl/device.hpp"
 #include "tz/dbgui/dbgui.hpp"
-#include "tz/core/profiling/zone.hpp"
+#include "hdk/profile.hpp"
 
 #include ImportedShaderHeader(quad, vertex)
 #include ImportedShaderHeader(quad, fragment)
@@ -11,8 +11,8 @@
 namespace game
 {
 	QuadRenderer::QuadRenderer():
-	element_buffer_handle(tz::nullhand),
-	render_buffer_handle(tz::nullhand),
+	element_buffer_handle(hdk::nullhand),
+	render_buffer_handle(hdk::nullhand),
 	rendererh(this->make_renderer())
 	{
 		this->update_render_data();
@@ -20,7 +20,7 @@ namespace game
 
 	void QuadRenderer::render()
 	{
-		TZ_PROFZONE("QuadRenderer - Render", TZ_PROFCOL_GREEN);
+		HDK_PROFZONE("QuadRenderer - Render", 0xFF00AA00);
 		this->update_render_data();
 		// 2 triangles per quad.
 		tz::gl::device().get_renderer(this->rendererh).render(this->quad_count * 2);
@@ -63,13 +63,13 @@ namespace game
 
 	void QuadRenderer::push()
 	{
-		tz_assert(this->quad_count < QuadRenderer::max_quad_count, "Ran out of quad storage in QuadRenderer.");
+		hdk::assert(this->quad_count < QuadRenderer::max_quad_count, "Ran out of quad storage in QuadRenderer.");
 		tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<QuadRenderer::ElementData>()[this->quad_count++] = {};
 	}
 
 	void QuadRenderer::pop()
 	{
-		tz_assert(this->quad_count > 0, "Cannot pop when there are already no quads");
+		hdk::assert(this->quad_count > 0, "Cannot pop when there are already no quads");
 		this->quad_count--;
 	}
 	
@@ -84,7 +84,7 @@ namespace game
 
 	void QuadRenderer::erase(std::size_t id)
 	{
-		tz_assert(id < this->elements().size(), "Invalid Quad ID");
+		hdk::assert(id < this->elements().size(), "Invalid Quad ID");
 		std::swap(this->elements()[id], this->elements().back());
 		this->pop();
 	}
@@ -94,12 +94,12 @@ namespace game
 		return static_cast<float>(tz::window().get_width()) / tz::window().get_height();
 	}
 
-	const tz::Vec2& QuadRenderer::camera_position() const
+	const hdk::vec2& QuadRenderer::camera_position() const
 	{
 		return this->camera_pos;
 	}
 
-	tz::Vec2& QuadRenderer::camera_position()
+	hdk::vec2& QuadRenderer::camera_position()
 	{
 		return this->camera_pos;
 	}
@@ -110,7 +110,7 @@ namespace game
 
 		rinfo.shader().set_shader(tz::gl::ShaderStage::Vertex, ImportedShaderSource(quad, vertex));
 		rinfo.shader().set_shader(tz::gl::ShaderStage::Fragment, ImportedShaderSource(quad, fragment));
-		rinfo.set_clear_colour({0.3f, 0.3f, 0.3f, 1.0f});
+		rinfo.state().graphics.clear_colour = {0.3f, 0.3f, 0.3f, 1.0f};
 
 		// A buffer to store data for each quad (element buffer).
 		std::array<QuadRenderer::ElementData, QuadRenderer::max_quad_count> element_data;
@@ -140,12 +140,12 @@ namespace game
 
 	void QuadRenderer::update_render_data()
 	{
-		TZ_PROFZONE("QuadRenderer - Update Render Data", TZ_PROFCOL_BROWN);
+		HDK_PROFZONE("QuadRenderer - Update Render Data", 0xFF8B4513);
 		RenderData& data = tz::gl::device().get_renderer(this->rendererh).get_resource(this->render_buffer_handle)->data_as<RenderData>().front();
 		const float aspect_ratio = this->get_width_multiplier();
 		data =
 		{
-			.view = tz::view(this->camera_pos.with_more(0.0f), tz::Vec3{0.0f, 0.0f, 0.0f}),
+			.view = tz::view(this->camera_pos.with_more(0.0f), hdk::vec3{0.0f, 0.0f, 0.0f}),
 			.projection = tz::orthographic(-aspect_ratio, aspect_ratio, 1.0f, -1.0f, 0.0f, -1.0f)
 		};
 	}

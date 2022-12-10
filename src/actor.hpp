@@ -111,7 +111,7 @@ namespace game
 		/// All buffs to stats currently applied on the actor.
 		StatBuffs buffs = {};
 		/// Colour representing the actor in a level image. If this is black, then the actor cannot be represented in a level.
-		tz::Vec3ui palette_colour = {0u, 0u, 0u};
+		hdk::vec3ui palette_colour = {0u, 0u, 0u};
 		/// Name for the entity.
 		const char* name = "<Unnamed Entity>";
 		/// Affects how much other actors are pushed if this actor has ActorFlag::Collide.
