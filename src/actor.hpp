@@ -63,6 +63,8 @@ namespace game
 		GhostBanshee,
 		/// An actor which acts as Akhara's passive elemental orb.
 		PlayerClassic_Orb,
+		/// An actor which acts like a fireball projectile, shooting in a random direction.
+		ChaoticFireball,
 		/// An actor which acts as a fiery particle effect. Dies by itself after a while.
 		FireSmoke,
 		/// An actor which acts as a fiery explosion particle effect. Dies by itself after a while, but deals large damage to enemies in its radius.
@@ -73,6 +75,8 @@ namespace game
 		Nightmare,
 		/// An uninteractable actor which periodically spawns evil players.
 		GhostZombie_Spawner,
+		/// An uninteractable actor which periodically spawns fireballs launching towards a player.
+		Fireball_Spawner,
 		/// A visible wall, blocking other actors' paths.
 		Wall,
 		/// Just like a wall, but is destructible by the player.

@@ -39,6 +39,7 @@ namespace game
 		Box get_bounding_box(std::size_t actor_id) const;
 		bool actor_collision_query(std::size_t actor_a, std::size_t actor_b) const;
 		bool is_in_bounds(std::size_t actor_id) const;
+		bool is_in_level(std::size_t actor_id) const;
 		std::pair<hdk::vec2, hdk::vec2> get_world_boundaries() const;
 		void update_camera();
 		void update_status_events(std::size_t id);
@@ -71,6 +72,7 @@ namespace game
 		std::default_random_engine rng;
 		std::unordered_map<std::size_t, tz::Delay> despawn_timer;
 		ActorEventHandler events;
+		hdk::vec2 level_boundaries = hdk::vec2::zero();
 		mutable std::size_t debug_collision_query_count = 0;
 	};
 }

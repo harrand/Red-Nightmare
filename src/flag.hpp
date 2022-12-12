@@ -55,8 +55,10 @@ namespace game
 		ActionOnPlayerTouch,
 		/// Actor performs an action when it respawns.
 		ActionOnRespawn,
-		/// Actor performs an action when it leaves the game boundaries.
+		/// Actor performs an action when it leaves the game (view) boundaries.
 		ActionOnOOB,
+		/// Actor performs an action when it leaves the level boundaries.
+		ActionOnOOL,
 		/// Actor has one of a set of random skins instead of its default skin.
 		RandomSkin,
 		/// Actor will die as soon as its current animation ends. Note that this has no effect on looping animations.
@@ -150,6 +152,12 @@ namespace game
 
 	template<>
 	struct FlagParams<FlagID::ActionOnOOB>
+	{
+		ActionEntity actions;
+	};
+
+	template<>
+	struct FlagParams<FlagID::ActionOnOOL>
 	{
 		ActionEntity actions;
 	};

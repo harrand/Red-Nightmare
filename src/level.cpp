@@ -10,6 +10,7 @@
 
 namespace game
 {
+	constexpr float world_scale = 4.0f;
 	std::array<std::string_view, static_cast<int>(LevelID::Count)> level_image_data
 	{
 		ImportedTextData(invisible, png),
@@ -68,6 +69,7 @@ namespace game
 		hdk::assert(player_spawn_colour != colour_black, "Player spawn palette colour detected as black. This is not allowed");
 
 		Level ret;
+		ret.max_level_coords = static_cast<hdk::vec2>(level_image.get_dimensions()) / world_scale;
 
 		for(std::size_t x = 0; x < view.get_dimensions()[0]; x++)
 		{
@@ -76,7 +78,7 @@ namespace game
 				auto rgba = view(x, y);
 				hdk::vec2 pos = {static_cast<float>(x), static_cast<float>(view.get_dimensions()[1] - y)};
 				// TODO: Not a magic number. How much world space should one pixel in the level use?
-				pos /= 4.0f;
+				pos /= world_scale;
 				pos -= {1.0f, 1.0f};
 				hdk::vec4ui colour4
 				{

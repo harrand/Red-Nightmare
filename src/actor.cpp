@@ -212,6 +212,68 @@ namespace game
 					.name = "Akhara's Default Orb"
 				};
 			break;
+			case ActorType::ChaoticFireball:
+				return
+				{
+					.type = ActorType::ChaoticFireball,
+					.flags_new =
+					{
+						Flag<FlagID::InvisibleWhileDead>{},
+						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}},
+						Flag<FlagID::HazardousIf>
+						{{
+							.predicate = [](const Actor& self, const Actor& actor)->bool
+							{
+								return self.is_enemy_of(actor);
+							}
+						}},
+						Flag<FlagID::ActionOnOOL>
+						{{
+							.actions =
+							{
+								Action<ActionID::Die>{}
+							}
+						}},
+						Flag<FlagID::Stealth>{},
+						Flag<FlagID::Unhittable>{},
+						Flag<FlagID::SelfRecoil>{},
+						Flag<FlagID::ActionOnDeath>
+						{{
+							.actions =
+							{
+								Action<ActionID::SpawnActor>
+								{{
+									.actor = ActorType::FireExplosion,
+									.inherit_faction = true
+								}},
+								Action<ActionID::SpawnActor>
+								{{
+									.actor = ActorType::FireSmoke,
+									.inherit_faction = true
+								}},
+							}
+						}}
+					},
+					.faction = Faction::PlayerEnemy,
+					.base_stats =
+					{
+						.movement_speed = 0.001f,
+						.damage = default_base_damage * 60.0f * 5.0f,
+						.max_health = 0.0001f,
+						.current_health = 0.0001f
+					},
+					.skin = ActorSkin::PlayerClassic_DefaultFireball,
+					.entity =
+					{
+						Action<ActionID::LaunchToPlayer>
+						{{
+							.speed_multiplier = 8.0f
+						}}
+					},
+					.animation = game::play_animation(AnimationID::PlayerClassic_DefaultFireball_Idle),
+					.name = "Chaotic Fireball"
+				};
+			break;
 			case ActorType::FireSmoke:
 				return
 				{
@@ -323,6 +385,33 @@ namespace game
 					.skin = ActorSkin::DebugOnlyVisible,
 					.palette_colour = {255u, 64u, 255u},
 					.name = "Spawner (Ghost Zombie)",
+					.layer = default_layer + 1
+				};
+			break;
+			case ActorType::Fireball_Spawner:
+				return
+				{
+					.type = ActorType::Fireball_Spawner,
+					.flags_new =
+					{
+						Flag<FlagID::RespawnOnDeath>{},
+						Flag<FlagID::Rot>{},
+						Flag<FlagID::Stealth>{},
+						Flag<FlagID::ActionOnDeath>
+						{{
+							.actions =
+							{
+								Action<ActionID::SpawnActor>
+								{{
+									.actor = ActorType::ChaoticFireball,
+								}}
+							}
+						}},
+					},
+					.faction = Faction::PlayerEnemy,
+					.skin = ActorSkin::DebugOnlyVisible,
+					.palette_colour = {255u, 32u, 255u},
+					.name = "Spawner (Fireball)",
 					.layer = default_layer + 1
 				};
 			break;
@@ -840,7 +929,7 @@ namespace game
 				}
 			break;
 			case ActorSkin::DebugOnlyVisible:
-				#if TZ_DEBUG
+				#if HDK_DEBUG
 					ending_animation = AnimationID::Missing;
 				#else
 					ending_animation = AnimationID::Invisible;

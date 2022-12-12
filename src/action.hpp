@@ -43,6 +43,12 @@ namespace game
 		 */
 		LaunchToMouse,
 		/**
+		 * Launch towards a player with a speed boost.
+		 * - Moves proportionally to base speed.
+		 * - Never completes, unless the actor goes out-of-bounds.
+		 */
+		LaunchToPlayer,
+		/**
 		 * Launch towards the target location with a speed boost.
 		 * - Moves proportionally to base speed.
 		 * - Never completes, unless the actor goes out-of-bounds.
@@ -122,6 +128,12 @@ namespace game
 
 	template<>
 	struct ActionParams<ActionID::LaunchToMouse>
+	{
+		float speed_multiplier = 1.0f;
+	};
+
+	template<>
+	struct ActionParams<ActionID::LaunchToPlayer>
 	{
 		float speed_multiplier = 1.0f;
 	};

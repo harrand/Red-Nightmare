@@ -1,6 +1,7 @@
 #include "scene.hpp"
 #include "util.hpp"
 #include "tz/dbgui/dbgui.hpp"
+#include "hdk/job/job.hpp"
 #include "hdk/debug.hpp"
 #include "hdk/profile.hpp"
 
@@ -38,7 +39,6 @@ namespace game
 		#endif
 		HDK_PROFZONE("Scene - Update", 0xFF00AA00);
 		this->quadtree.clear();
-
 		for(std::size_t i = 0; i < this->size();)
 		{
 
@@ -198,6 +198,7 @@ namespace game
 	{
 		Level level = game::load_level(level_id);
 		this->impl_load_level(level);
+		this->level_boundaries = level.max_level_coords;
 	}
 
 	const Actor& Scene::get_actor(std::size_t id) const
@@ -256,6 +257,14 @@ namespace game
 			if(actor.flags_new.has<FlagID::ActionOnOOB>())
 			{
 				auto& flag = actor.flags_new.get<FlagID::ActionOnOOB>()->data();
+				flag.actions.copy_components(actor.entity);
+			}
+		}
+		if(!this->is_in_level(id))
+		{
+			if(actor.flags_new.has<FlagID::ActionOnOOL>())
+			{
+				auto& flag = actor.flags_new.get<FlagID::ActionOnOOL>()->data();
 				flag.actions.copy_components(actor.entity);
 			}
 		}
@@ -345,6 +354,21 @@ namespace game
 				.direction = to_mouse,
 				.speed_multiplier = action->data().speed_multiplier
 			});
+		}
+		if(actor.entity.has<ActionID::LaunchToPlayer>())
+		{
+			auto maybe_player = this->find_first_player();
+			if(maybe_player.has_value())
+			{
+				auto action = actor.entity.get<ActionID::LaunchToPlayer>();
+				hdk::vec2 target_pos = this->qrenderer.elements()[maybe_player.value()].position;
+				hdk::vec2 to_player = target_pos - quad.position;
+				actor.entity.add<ActionID::Launch>
+				({
+					.direction = to_player,
+					.speed_multiplier = action->data().speed_multiplier
+				});
+			}
 		}
 		if(actor.entity.has<ActionID::TeleportToPlayer>())
 		{
@@ -586,7 +610,8 @@ namespace game
 			{
 				position_change[1] -= 1;
 			}
-			quad.position += position_change.normalised() * sp;
+			unsigned long long delta_millis = tz::system_time().millis<unsigned long long>() - actor.last_update.millis<unsigned long long>();
+			quad.position += position_change.normalised() * sp * static_cast<float>(delta_millis) / 5.0f;
 		}
 		this->update_status_events(id);
 		actor.last_update = tz::system_time();
@@ -666,6 +691,16 @@ namespace game
 		return
 			bounds.first[0] <= pos[0] && pos[0] <= bounds.second[0]
 		     && bounds.first[1] <= pos[1] && pos[1] <= bounds.second[1];
+	}
+
+	bool Scene::is_in_level(std::size_t actor_id) const
+	{
+		HDK_PROFZONE("Scene - Level Bounds Check", 0xFF00AA00);
+		hdk::vec2 pos = this->qrenderer.elements()[actor_id].position;
+		hdk::vec2 level_min = this->level_boundaries * -1.0f;
+		return
+			level_min[0] <= pos[0] && pos[0] <= this->level_boundaries[0]
+		     && level_min[1] <= pos[1] && pos[1] <= this->level_boundaries[1];
 	}
 
 	std::pair<hdk::vec2, hdk::vec2> Scene::get_world_boundaries() const
