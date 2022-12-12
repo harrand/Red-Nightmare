@@ -74,6 +74,10 @@ namespace game
 			{
 				this->load_level(LevelID::DevLevel1);
 			}
+			if(ImGui::Button("DevLevel2"))
+			{
+				this->load_level(LevelID::DevLevel2);
+			}
 			if(ImGui::Button("Procedurally Generated Level"))
 			{
 				tz::gl::ImageResource res = game::random_level_image

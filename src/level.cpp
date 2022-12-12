@@ -7,6 +7,7 @@
 #include ImportedTextHeader(invisible, png)
 #include ImportedTextHeader(dev_level_0, png)
 #include ImportedTextHeader(dev_level_1, png)
+#include ImportedTextHeader(dev_level_2, png)
 
 namespace game
 {
@@ -15,7 +16,8 @@ namespace game
 	{
 		ImportedTextData(invisible, png),
 		ImportedTextData(dev_level_0, png),
-		ImportedTextData(dev_level_1, png)
+		ImportedTextData(dev_level_1, png),
+		ImportedTextData(dev_level_2, png)
 	};
 
 	LevelPalette get_level_palette()
