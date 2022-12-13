@@ -362,22 +362,12 @@ namespace game
 		{
 			if(data.actor().entity.has<ID>())
 			{
-				game::action_invoke<ActionID::GotoMouse>(data, *data.actor().entity.get<ID>());
+				game::action_invoke<ID>(data, *data.actor().entity.get<ID>());
 			}
 		};
 		
 		handle_action.template operator()<ActionID::GotoMouse>();
-		if(actor.entity.has<ActionID::LaunchToMouse>())
-		{
-			auto action = actor.entity.get<ActionID::LaunchToMouse>();
-			hdk::vec2 mouse_pos = this->get_mouse_position();
-			hdk::vec2 to_mouse = mouse_pos - quad.position;
-			actor.entity.add<ActionID::Launch>
-			({
-				.direction = to_mouse,
-				.speed_multiplier = action->data().speed_multiplier
-			});
-		}
+		handle_action.template operator()<ActionID::LaunchToMouse>();
 		if(actor.entity.has<ActionID::LaunchToPlayer>())
 		{
 			auto maybe_player = this->find_first_player();
