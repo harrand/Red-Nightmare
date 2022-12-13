@@ -397,16 +397,7 @@ namespace game
 			actor.entity.get<ActionID::TeleportToPlayer>()->set_is_complete(true);
 		}
 		handle_action.template operator()<ActionID::GotoPlayer>();
-		if(actor.entity.has<ActionID::GotoActor>())
-		{
-			auto action = actor.entity.get<ActionID::GotoActor>();
-			actor.entity.set<ActionID::GotoTarget>
-			({
-				.target_position = this->qrenderer.elements()[action->data().actor_id].position,
-				.timeout = 1000.0f
-			});
-			action->set_is_complete(true);
-		}
+		handle_action.template operator()<ActionID::GotoActor>();
 		// Concrete Entity Actions
 		if(actor.entity.has<ActionID::GotoTarget>() && !actor.dead())
 		{

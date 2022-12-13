@@ -16,7 +16,6 @@ namespace game
 		action.set_is_complete(true);
 	ACTION_IMPL_END(ActionID::GotoMouse)
 //--------------------------------------------------------------------------------------------------
-//--------------------------------------------------------------------------------------------------
 	ACTION_IMPL_BEGIN(ActionID::GotoPlayer)
 		auto players = scene.get_living_players();
 		if(!players.empty())
@@ -28,6 +27,15 @@ namespace game
 			action.set_is_complete(true);
 		}
 	ACTION_IMPL_END(ActionID::GotoPlayer)
+//--------------------------------------------------------------------------------------------------
+	ACTION_IMPL_BEGIN(ActionID::GotoActor)
+		scene.actor().entity.set<ActionID::GotoTarget>
+		({
+			.target_position = scene.get_quad(action.data().actor_id).position,
+			.timeout = 1000.0f
+		});
+		action.set_is_complete(true);
+	ACTION_IMPL_END(ActionID::GotoActor)
 //--------------------------------------------------------------------------------------------------
 	ACTION_IMPL_BEGIN(ActionID::LaunchToMouse)
 		const hdk::vec2 to_mouse = scene.mouse_position - scene.quad().position;
