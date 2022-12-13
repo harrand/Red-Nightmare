@@ -16,19 +16,19 @@ namespace game
 	struct SceneData
 	{
 		const std::size_t this_id;
-		std::span<Actor> actors;
-		std::span<QuadRenderer::ElementData> quads;
-
-		std::optional<hdk::vec2> chase_target = std::nullopt;
 
 		const hdk::vec2 mouse_position;
+		std::optional<hdk::vec2>& chase_target;
+		float& touch_distance;
+		std::default_random_engine& rng;
 		std::function<std::vector<std::size_t>()> get_living_players;
+		std::function<std::pair<hdk::vec2, hdk::vec2>()> get_world_boundaries;
+		std::function<std::size_t(ActorType)> spawn_actor;
+		std::function<Actor&(std::size_t)> get_actor;
+		std::function<QuadRenderer::ElementData&(std::size_t)> get_quad;
 
-		Actor& get_actor(std::size_t aid){return this->actors[aid];}
-		QuadRenderer::ElementData& get_quad(std::size_t aid){return this->quads[aid];}
-
-		Actor& actor(){return get_actor(this_id);}
-		QuadRenderer::ElementData& quad(){return get_quad(this_id);}
+		Actor& actor(){return this->get_actor(this_id);}
+		QuadRenderer::ElementData& quad(){return this->get_quad(this_id);}
 	};
 
 	class Scene

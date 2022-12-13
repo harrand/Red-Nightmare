@@ -338,25 +338,18 @@ namespace game
 		// Entity Actions
 
 		// Recursive Entity Actions (Can add other actions).
-		if(actor.entity.has<ActionID::RandomTeleport>())
-		{
-			auto action = actor.entity.get<ActionID::RandomTeleport>();
-			auto bound_pair = this->get_world_boundaries();
-			std::uniform_real_distribution<float> distx{bound_pair.first[0], bound_pair.second[0]};
-			std::uniform_real_distribution<float> disty{bound_pair.first[1], bound_pair.second[1]};
-			actor.entity.add<ActionID::Teleport>
-			({
-				.position = {distx(this->rng), disty(this->rng)}
-			});
-			action->set_is_complete(true);
-		}
 		SceneData data
 		{
 			.this_id = id,
-			.actors = this->actors,
-			.quads = this->qrenderer.elements(),
 			.mouse_position = this->get_mouse_position(),
-			.get_living_players = [this](){return this->get_living_players();}
+			.chase_target = chase_target,
+			.touch_distance = touchdist,
+			.rng = this->rng,
+			.get_living_players = [this](){return this->get_living_players();},
+			.get_world_boundaries = [this](){return this->get_world_boundaries();},
+			.spawn_actor = [this](ActorType t){this->add(t); return this->actors.size() - 1;},
+			.get_actor = [this](std::size_t t)->Actor&{return this->get_actor(t);},
+			.get_quad = [this](std::size_t t)->QuadRenderer::ElementData&{return this->qrenderer.elements()[t];}
 		};
 
 		auto handle_action = [this, &data]<ActionID ID>()
@@ -367,23 +360,10 @@ namespace game
 			}
 		};
 		
+		handle_action.template operator()<ActionID::RandomTeleport>();
 		handle_action.template operator()<ActionID::GotoMouse>();
 		handle_action.template operator()<ActionID::LaunchToMouse>();
-		if(actor.entity.has<ActionID::LaunchToPlayer>())
-		{
-			auto maybe_player = this->find_first_player();
-			if(maybe_player.has_value())
-			{
-				auto action = actor.entity.get<ActionID::LaunchToPlayer>();
-				hdk::vec2 target_pos = this->qrenderer.elements()[maybe_player.value()].position;
-				hdk::vec2 to_player = target_pos - quad.position;
-				actor.entity.add<ActionID::Launch>
-				({
-					.direction = to_player,
-					.speed_multiplier = action->data().speed_multiplier
-				});
-			}
-		}
+		handle_action.template operator()<ActionID::LaunchToPlayer>();
 		if(actor.entity.has<ActionID::TeleportToPlayer>())
 		{
 			auto maybe_player_id = this->find_first_player();
@@ -399,48 +379,12 @@ namespace game
 		handle_action.template operator()<ActionID::GotoPlayer>();
 		handle_action.template operator()<ActionID::GotoActor>();
 		// Concrete Entity Actions
-		if(actor.entity.has<ActionID::GotoTarget>() && !actor.dead())
-		{
-			auto action = actor.entity.get<ActionID::GotoTarget>();
-			if(action->data().timeout <= 0.0f)
-			{
-				action->set_is_complete(true);
-			}
-			else
-			{
-				// Get time passed since last update.
-				unsigned long long delta_millis = tz::system_time().millis<unsigned long long>() - actor.last_update.millis<unsigned long long>();
-				action->data().timeout -= delta_millis;
-
-				chase_target = actor.entity.get<ActionID::GotoTarget>()->data().target_position;
-				// If they're within touching distance, this is done.
-				float dist = (action->data().target_position - quad.position).length();
-				if(dist <= touchdist * 2)
-				{
-					action->set_is_complete(true);
-				}
-			}
-		}
-		if(actor.entity.has<ActionID::Launch>())
-		{
-			auto action = actor.entity.get<ActionID::Launch>();
-			const float speed = actor.get_current_stats().movement_speed * action->data().speed_multiplier;
-			if(!actor.dead())
-			{
-				quad.position += action->data().direction.normalised() * speed;
-			}
-		}
-		if(actor.entity.has<ActionID::Teleport>())
-		{
-			auto action = actor.entity.get<ActionID::Teleport>();
-			quad.position = action->data().position;
-			action->set_is_complete(true);
-		}
+		handle_action.template operator()<ActionID::GotoTarget>();
+		handle_action.template operator()<ActionID::Launch>();
+		handle_action.template operator()<ActionID::Teleport>();
 		if(actor.entity.has<ActionID::HorizontalFlip>())
 		{
-			auto action = actor.entity.get<ActionID::HorizontalFlip>();
-			quad.scale[0] = -std::abs(quad.scale[0]);
-			action->set_is_complete(true);
+			handle_action.template operator()<ActionID::HorizontalFlip>();
 		}
 		else
 		{
@@ -448,25 +392,13 @@ namespace game
 		}
 		if(actor.entity.has<ActionID::VerticalFlip>())
 		{
-			auto action = actor.entity.get<ActionID::VerticalFlip>();
-			quad.scale[1] = -std::abs(quad.scale[1]);
-			action->set_is_complete(true);
+			handle_action.template operator()<ActionID::VerticalFlip>();
 		}
 		else
 		{
 			quad.scale[1] = std::abs(quad.scale[1]);
 		}
-		if(actor.entity.has<ActionID::SpawnActor>())
-		{
-			auto action = actor.entity.get<ActionID::SpawnActor>();
-			this->add(action->data().actor);
-			if(action->data().inherit_faction)
-			{
-				this->actors.back().faction = actor.faction;
-			}
-			this->qrenderer.elements().back().position = quad.position;
-			action->set_is_complete(true);
-		}
+		handle_action.template operator()<ActionID::SpawnActor>();
 		if(actor.entity.has<ActionID::Respawn>())
 		{
 			auto action = actor.entity.get<ActionID::Respawn>();
