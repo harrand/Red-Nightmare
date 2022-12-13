@@ -243,7 +243,6 @@ namespace game
 							}
 						}},
 						Flag<FlagID::Stealth>{},
-						Flag<FlagID::Unhittable>{},
 						Flag<FlagID::SelfRecoil>{},
 						Flag<FlagID::ActionOnDeath>
 						{{
