@@ -22,6 +22,7 @@ namespace game
 		std::optional<hdk::vec2> chase_target = std::nullopt;
 
 		const hdk::vec2 mouse_position;
+		std::function<std::vector<std::size_t>()> get_living_players;
 
 		Actor& get_actor(std::size_t aid){return this->actors[aid];}
 		QuadRenderer::ElementData& get_quad(std::size_t aid){return this->quads[aid];}

@@ -355,7 +355,8 @@ namespace game
 			.this_id = id,
 			.actors = this->actors,
 			.quads = this->qrenderer.elements(),
-			.mouse_position = this->get_mouse_position()
+			.mouse_position = this->get_mouse_position(),
+			.get_living_players = [this](){return this->get_living_players();}
 		};
 
 		auto handle_action = [this, &data]<ActionID ID>()
@@ -395,19 +396,7 @@ namespace game
 			}
 			actor.entity.get<ActionID::TeleportToPlayer>()->set_is_complete(true);
 		}
-		if(actor.entity.has<ActionID::GotoPlayer>())
-		{
-			auto player_id = this->find_first_player();
-			if(player_id.has_value())
-			{
-				auto action = actor.entity.get<ActionID::GotoPlayer>();
-				actor.entity.set<ActionID::GotoActor>
-				({
-				 	.actor_id = player_id.value()
-				});
-				action->set_is_complete(true);
-			}
-		}
+		handle_action.template operator()<ActionID::GotoPlayer>();
 		if(actor.entity.has<ActionID::GotoActor>())
 		{
 			auto action = actor.entity.get<ActionID::GotoActor>();
