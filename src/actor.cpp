@@ -374,8 +374,9 @@ namespace game
 								}}
 							}
 						}},
-						Flag<FlagID::ActionOnPlayerTouch>
+						Flag<FlagID::ActionOnActorTouch>
 						{{
+							.type = ActorType::PlayerClassic_Orb,
 							.actions =
 							{
 								Action<ActionID::RandomTeleport>{}
@@ -482,8 +483,9 @@ namespace game
 					.type = ActorType::CollectablePowerup_Sprint,
 					.flags_new =
 					{
-						Flag<FlagID::ActionOnPlayerTouch>
+						Flag<FlagID::ActionOnActorTouch>
 						{{
+							.type = ActorType::PlayerClassic,
 							.actions =
 							{
 								Action<ActionID::ApplyBuffToPlayers>

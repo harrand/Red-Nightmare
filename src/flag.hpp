@@ -52,7 +52,7 @@ namespace game
 		/// Actor performs an action which something else hits it.
 		ActionOnStruck,
 		/// Actor performs an action when it touches a living player.
-		ActionOnPlayerTouch,
+		ActionOnActorTouch,
 		/// Actor performs an action when it respawns.
 		ActionOnRespawn,
 		/// Actor performs an action when it leaves the game (view) boundaries.
@@ -139,8 +139,9 @@ namespace game
 
 
 	template<>
-	struct FlagParams<FlagID::ActionOnPlayerTouch>
+	struct FlagParams<FlagID::ActionOnActorTouch>
 	{
+		ActorType type;
 		ActionEntity actions;
 	};
 

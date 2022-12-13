@@ -66,18 +66,26 @@ namespace game
 			{
 				this->load_level(LevelID::Empty);
 			}
+			ImGui::SameLine();
+			ImGui::Text("Nothin");
 			if(ImGui::Button("DevLevel0"))
 			{
 				this->load_level(LevelID::DevLevel0);
 			}
+			ImGui::SameLine();
+			ImGui::Text("An enclosed maze filled with the undead. Difficulty: Medium");
 			if(ImGui::Button("DevLevel1"))
 			{
 				this->load_level(LevelID::DevLevel1);
 			}
+			ImGui::SameLine();
+			ImGui::Text("You are buried in rock. Unfortunately, so are the hungry dead. Difficulty: Low");
 			if(ImGui::Button("DevLevel2"))
 			{
 				this->load_level(LevelID::DevLevel2);
 			}
+			ImGui::SameLine();
+			ImGui::Text("An open arena with little cover. You are constantly barraged by fireballs. You will die. Difficulty: Very High");
 			if(ImGui::Button("Procedurally Generated Level"))
 			{
 				tz::gl::ImageResource res = game::random_level_image
@@ -89,6 +97,8 @@ namespace game
 				});
 				this->impl_load_level(game::load_level_from_image(res));
 			}
+			ImGui::SameLine();
+			ImGui::Text("A chaotic level with completely random spawns. All actors are uniformly likely to be spawned. Difficulty: Between Very Easy and Impossible.");
 			ImGui::Unindent();
 		}
 		if(ImGui::CollapsingHeader("Mass Control"))
@@ -853,8 +863,13 @@ namespace game
 		const bool blocks_colliders = actor.flags_new.has<FlagID::Collide>() &&
 			!actor.dead() && !other.dead() &&
 			(actor.flags_new.get<FlagID::Collide>()->data().collision_filter.contains(other.type) || actor.flags_new.get<FlagID::Collide>()->data().collision_filter.empty()) && !actor.flags_new.get<FlagID::Collide>()->data().collision_blacklist.contains(other.type);
-		const bool wants_touch_player = (actor.flags_new.has<FlagID::ActionOnPlayerTouch>() && other.flags_new.has<FlagID::Player>());
-		const bool cares_about_collisions = wants_to_hurt || blocks_colliders || wants_touch_player;
+		bool wants_touch_other = false;
+		if(actor.flags_new.has<FlagID::ActionOnActorTouch>())
+		{
+			auto flag = actor.flags_new.get<FlagID::ActionOnActorTouch>();
+			wants_touch_other = flag->data().type == other.type;
+		}
+		const bool cares_about_collisions = wants_to_hurt || blocks_colliders || wants_touch_other;
 		if(cares_about_collisions)
 		{
 			if(wants_to_hurt)
@@ -867,11 +882,11 @@ namespace game
 				// Push back with impulse 150% the distance it would've travelled this frame.
 				other_quad.position -= displacement.normalised() * other.get_current_stats().movement_speed * 1.5f * actor.density;
 			}
-			if(wants_touch_player)
+			if(wants_touch_other)
 			{
-				// Actor is touching a player.
+				// Actor is touching the subject, and it wants to.
 				// Carry out its actions.
-				auto& on_touch_flag = actor.flags_new.get<FlagID::ActionOnPlayerTouch>()->data();
+				auto& on_touch_flag = actor.flags_new.get<FlagID::ActionOnActorTouch>()->data();
 				on_touch_flag.actions.copy_components(actor.entity);
 			}
 		}
