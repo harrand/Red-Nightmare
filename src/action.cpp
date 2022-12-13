@@ -143,6 +143,50 @@ namespace game
 		action.set_is_complete(true);
 	ACTION_IMPL_END(ActionID::SpawnActor)
 //--------------------------------------------------------------------------------------------------
+	ACTION_IMPL_BEGIN(ActionID::Respawn)
+		scene.actor().respawn();
+		action.set_is_complete(true);
+	ACTION_IMPL_END(ActionID::Respawn)
+//--------------------------------------------------------------------------------------------------
+	ACTION_IMPL_BEGIN(ActionID::RespawnAs)
+		scene.actor().type = action.data().actor;
+		scene.actor().respawn();
+		action.set_is_complete(true);
+	ACTION_IMPL_END(ActionID::RespawnAs)
+//--------------------------------------------------------------------------------------------------
+	ACTION_IMPL_BEGIN(ActionID::Die)
+		scene.actor().base_stats.current_health = 0;
+		action.set_is_complete(true);
+	ACTION_IMPL_END(ActionID::Die)
+//--------------------------------------------------------------------------------------------------
+	ACTION_IMPL_BEGIN(ActionID::ApplyBuff)
+		scene.actor().buffs.add(action.data().buff);
+		action.set_is_complete(true);
+	ACTION_IMPL_END(ActionID::ApplyBuff)
+//--------------------------------------------------------------------------------------------------
+	ACTION_IMPL_BEGIN(ActionID::ApplyBuffToActor)
+		scene.get_actor(action.data().actor_id).buffs.add(action.data().buff);
+		action.set_is_complete(true);
+	ACTION_IMPL_END(ActionID::ApplyBuffToActor)
+//--------------------------------------------------------------------------------------------------
+	ACTION_IMPL_BEGIN(ActionID::ApplyBuffToTarget)
+		if(scene.actor().target == nullptr)
+		{
+			return;
+		}
+		scene.actor().target->buffs.add(action.data().buff);
+		action.set_is_complete(true);
+	ACTION_IMPL_END(ActionID::ApplyBuffToTarget)
+//--------------------------------------------------------------------------------------------------
+	ACTION_IMPL_BEGIN(ActionID::ApplyBuffToPlayers)
+		auto players = scene.get_living_players();
+		for(auto p : players)
+		{
+			scene.get_actor(p).buffs.add(action.data().buff);
+		}
+		action.set_is_complete(true);
+	ACTION_IMPL_END(ActionID::ApplyBuffToPlayers)
+//--------------------------------------------------------------------------------------------------
 
 	void ActionEntity::update()
 	{

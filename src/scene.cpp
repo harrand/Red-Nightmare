@@ -399,55 +399,13 @@ namespace game
 			quad.scale[1] = std::abs(quad.scale[1]);
 		}
 		handle_action.template operator()<ActionID::SpawnActor>();
-		if(actor.entity.has<ActionID::Respawn>())
-		{
-			auto action = actor.entity.get<ActionID::Respawn>();
-			action->set_is_complete(true);
-			actor.respawn();
-		}
-		if(actor.entity.has<ActionID::RespawnAs>())
-		{
-			auto action = actor.entity.get<ActionID::RespawnAs>();
-			actor.type = action->data().actor;
-			actor.respawn();
-			action->set_is_complete(true);
-		}
-		if(actor.entity.has<ActionID::Die>())
-		{
-			auto action = actor.entity.get<ActionID::Die>();
-			action->set_is_complete(true);
-			actor.base_stats.current_health = 0;
-		}
-		if(actor.entity.has<ActionID::ApplyBuff>())
-		{
-			auto action = actor.entity.get<ActionID::ApplyBuff>();
-			actor.buffs.add(action->data().buff);
-			action->set_is_complete(true);
-		}
-		if(actor.entity.has<ActionID::ApplyBuffToActor>())
-		{
-			auto action = actor.entity.get<ActionID::ApplyBuffToActor>();
-			this->get_actor(action->data().actor_id).buffs.add(action->data().buff);
-			action->set_is_complete(true);
-		}
-		if(actor.entity.has<ActionID::ApplyBuffToTarget>())
-		{
-			auto action = actor.entity.get<ActionID::ApplyBuffToTarget>();
-			if(actor.target != nullptr)
-			{
-				actor.target->buffs.add(action->data().buff);
-			}
-			action->set_is_complete(true);
-		}
-		if(actor.entity.has<ActionID::ApplyBuffToPlayers>())
-		{
-			auto action = actor.entity.get<ActionID::ApplyBuffToPlayers>();
-			for(std::size_t player_id : this->get_living_players())
-			{
-				this->get_actor(player_id).buffs.add(action->data().buff);
-			}
-			action->set_is_complete(true);
-		}
+		handle_action.template operator()<ActionID::Respawn>();
+		handle_action.template operator()<ActionID::RespawnAs>();
+		handle_action.template operator()<ActionID::Die>();
+		handle_action.template operator()<ActionID::ApplyBuff>();
+		handle_action.template operator()<ActionID::ApplyBuffToActor>();
+		handle_action.template operator()<ActionID::ApplyBuffToTarget>();
+		handle_action.template operator()<ActionID::ApplyBuffToPlayers>();
 
 		// It's chasing something, but we don't care about what it's chasing.
 		if(chase_target.has_value())
