@@ -234,14 +234,6 @@ namespace game
 								Action<ActionID::Die>{}
 							}
 						}},
-						Flag<FlagID::ActionOnActorTouch>
-						{{
-							.type = ActorType::PlayerClassic_Orb,
-							.actions =
-							{
-								Action<ActionID::Die>{}
-							}
-						}},
 						Flag<FlagID::Stealth>{},
 						Flag<FlagID::SelfRecoil>{},
 						Flag<FlagID::ActionOnDeath>
