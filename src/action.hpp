@@ -11,6 +11,7 @@ namespace game
 	// Pre-declares.
 	enum class ActorType;
 	enum class BuffID;
+	class SceneData;
 
 	/// Actions cause an actor to do something until the action is considered complete. Some actions occur instantly, but many do not.
 	enum class ActionID
@@ -188,6 +189,9 @@ namespace game
 	{
 		BuffID buff;
 	};
+
+	template<ActionID ID>
+	void action_invoke(SceneData& scene, Action<ID>& action);
 
 	/// Represents something that can carry out actions.
 	class ActionEntity : public Entity<ActionID, IAction, Action, ActionParams>

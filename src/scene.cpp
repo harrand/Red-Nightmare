@@ -350,14 +350,23 @@ namespace game
 			});
 			action->set_is_complete(true);
 		}
-		if(actor.entity.has<ActionID::GotoMouse>())
+		SceneData data
 		{
-			actor.entity.add<ActionID::GotoTarget>
-			({
-				.target_position = this->get_mouse_position()
-			});
-			actor.entity.get<ActionID::GotoMouse>()->set_is_complete(true);
-		}
+			.this_id = id,
+			.actors = this->actors,
+			.quads = this->qrenderer.elements(),
+			.mouse_position = this->get_mouse_position()
+		};
+
+		auto handle_action = [this, &data]<ActionID ID>()
+		{
+			if(data.actor().entity.has<ID>())
+			{
+				game::action_invoke<ActionID::GotoMouse>(data, *data.actor().entity.get<ID>());
+			}
+		};
+		
+		handle_action.template operator()<ActionID::GotoMouse>();
 		if(actor.entity.has<ActionID::LaunchToMouse>())
 		{
 			auto action = actor.entity.get<ActionID::LaunchToMouse>();

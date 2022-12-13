@@ -9,9 +9,27 @@
 #include "tz/core/time.hpp"
 
 #include <random>
+#include <span>
 
 namespace game
 {
+	struct SceneData
+	{
+		const std::size_t this_id;
+		std::span<Actor> actors;
+		std::span<QuadRenderer::ElementData> quads;
+
+		std::optional<hdk::vec2> chase_target = std::nullopt;
+
+		const hdk::vec2 mouse_position;
+
+		Actor& get_actor(std::size_t aid){return this->actors[aid];}
+		QuadRenderer::ElementData& get_quad(std::size_t aid){return this->quads[aid];}
+
+		Actor& actor(){return get_actor(this_id);}
+		QuadRenderer::ElementData& quad(){return get_quad(this_id);}
+	};
+
 	class Scene
 	{
 	public:
