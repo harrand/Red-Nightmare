@@ -631,7 +631,7 @@ namespace game
 		{
 			
 #if 1
-			this->qrenderer.camera_position() += camera_displacement * 0.005f * camera_displacement.length();
+			this->qrenderer.camera_position() += camera_displacement * 0.02f * camera_displacement.length();
 #else
 			this->qrenderer.camera_position() = avg;
 #endif
