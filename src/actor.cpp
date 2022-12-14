@@ -29,6 +29,20 @@ namespace game
 								}}
 							},
 							.icd = 200.0f
+						}},
+						Flag<FlagID::ActionOnDeath>
+						{{
+							.actions =
+							{
+								Action<ActionID::DelayedAction>
+								{{
+									.delay_millis = 2000.0f,
+									.actions =
+									{
+										Action<ActionID::Respawn>{}
+									}
+								}}
+							}
 						}}
 					},
 					.base_stats =
@@ -63,15 +77,7 @@ namespace game
 						{{
 							.skins =
 							{
-								ActorSkin::GhostZombie,
-								ActorSkin::GhostZombie,
-								ActorSkin::GhostZombie,
-								ActorSkin::GhostZombie,
-								ActorSkin::GhostZombie,
-								ActorSkin::GhostZombie,
-								ActorSkin::GhostZombie,
-								ActorSkin::GhostZombie,
-								ActorSkin::GhostZombie,
+								ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie,ActorSkin::GhostZombie,ActorSkin::GhostZombie, ActorSkin::GhostZombie,ActorSkin::GhostZombie,ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, ActorSkin::GhostZombie, 
 								ActorSkin::GhostMJZombie
 							}		
 						}},
@@ -242,13 +248,7 @@ namespace game
 							{
 								Action<ActionID::SpawnActor>
 								{{
-									.actor = ActorType::FireExplosion,
-									.inherit_faction = true
-								}},
-								Action<ActionID::SpawnActor>
-								{{
 									.actor = ActorType::FireSmoke,
-									.inherit_faction = true
 								}},
 							}
 						}}

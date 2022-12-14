@@ -262,35 +262,35 @@ namespace game
 	bool Scene::actor_post_update(std::size_t id)
 	{
 		HDK_PROFZONE("Actor - Post Update", 0xFF8B4513);
-		Actor& actor = this->get_actor(id);
+		auto actor = [this, id]()->Actor&{return this->get_actor(id);};
 		QuadRenderer::ElementData& quad = this->qrenderer.elements()[id];
-		quad.layer = static_cast<float>(actor.layer) / std::numeric_limits<unsigned short>::max();
+		quad.layer = static_cast<float>(actor().layer) / std::numeric_limits<unsigned short>::max();
 		float touchdist = touch_distance;
 		if(!this->is_in_bounds(id))
 		{
-			if(actor.flags_new.has<FlagID::ActionOnOOB>())
+			if(actor().flags_new.has<FlagID::ActionOnOOB>())
 			{
-				auto& flag = actor.flags_new.get<FlagID::ActionOnOOB>()->data();
-				flag.actions.copy_components(actor.entity);
+				auto& flag = actor().flags_new.get<FlagID::ActionOnOOB>()->data();
+				flag.actions.copy_components(actor().entity);
 			}
 		}
 		if(!this->is_in_level(id))
 		{
-			if(actor.flags_new.has<FlagID::ActionOnOOL>())
+			if(actor().flags_new.has<FlagID::ActionOnOOL>())
 			{
-				auto& flag = actor.flags_new.get<FlagID::ActionOnOOL>()->data();
-				flag.actions.copy_components(actor.entity);
+				auto& flag = actor().flags_new.get<FlagID::ActionOnOOL>()->data();
+				flag.actions.copy_components(actor().entity);
 			}
 		}
-		if(actor.flags_new.has<FlagID::Rot>())
+		if(actor().flags_new.has<FlagID::Rot>())
 		{
 			this->do_actor_hit(Actor::NullID, id);
 		}
-		if(actor.flags_new.has<FlagID::CustomReach>())
+		if(actor().flags_new.has<FlagID::CustomReach>())
 		{
-			touchdist *= actor.flags_new.get<FlagID::CustomReach>()->data().reach;
+			touchdist *= actor().flags_new.get<FlagID::CustomReach>()->data().reach;
 		}
-		if(actor.flags_new.has<FlagID::Aggressive>() && !actor.dead())
+		if(actor().flags_new.has<FlagID::Aggressive>() && !actor().dead())
 		{
 			for(std::size_t i = 0; i < this->size(); i++)
 			{
@@ -299,9 +299,9 @@ namespace game
 					continue;
 				}
 				Actor& victim = this->get_actor(i);
-				if(!victim.dead() && actor.is_enemy_of(victim) && !victim.flags_new.has<FlagID::Stealth>())
+				if(!victim.dead() && actor().is_enemy_of(victim) && !victim.flags_new.has<FlagID::Stealth>())
 				{
-					actor.entity.set<ActionID::GotoActor>
+					actor().entity.set<ActionID::GotoActor>
 					({
 						.actor_id = i
 					});
@@ -309,26 +309,26 @@ namespace game
 				}
 			}
 		}
-		if(actor.flags_new.has<FlagID::DieOnAnimationFinish>() && !actor.dead())
+		if(actor().flags_new.has<FlagID::DieOnAnimationFinish>() && !actor().dead())
 		{
-			if(actor.animation.complete())
+			if(actor().animation.complete())
 			{
-				actor.base_stats.current_health = 0.0f;
+				actor().base_stats.current_health = 0.0f;
 			}
 		}
-		// If actor wants to teleport to a random location, do it now.
+		// If actor() wants to teleport to a random location, do it now.
 
 		quad.scale = {0.2f, 0.2f};
-		if(actor.flags_new.has<FlagID::InvisibleWhileDead>())
+		if(actor().flags_new.has<FlagID::InvisibleWhileDead>())
 		{
-			if(actor.dead())
+			if(actor().dead())
 			{
 				quad.scale *= 0.0f;
 			}
 		}
-		if(actor.flags_new.has<FlagID::CustomScale>())
+		if(actor().flags_new.has<FlagID::CustomScale>())
 		{
-			auto scale = actor.flags_new.get<FlagID::CustomScale>()->data().scale;
+			auto scale = actor().flags_new.get<FlagID::CustomScale>()->data().scale;
 			quad.scale[0] *= scale[0];
 			quad.scale[1] *= scale[1];
 		}
@@ -364,17 +364,17 @@ namespace game
 		handle_action.template operator()<ActionID::GotoMouse>();
 		handle_action.template operator()<ActionID::LaunchToMouse>();
 		handle_action.template operator()<ActionID::LaunchToPlayer>();
-		if(actor.entity.has<ActionID::TeleportToPlayer>())
+		if(actor().entity.has<ActionID::TeleportToPlayer>())
 		{
 			auto maybe_player_id = this->find_first_player();
 			if(maybe_player_id.has_value())
 			{
-				actor.entity.add<ActionID::Teleport>
+				actor().entity.add<ActionID::Teleport>
 				({
 					.position = this->qrenderer.elements()[maybe_player_id.value()].position
 				});
 			}
-			actor.entity.get<ActionID::TeleportToPlayer>()->set_is_complete(true);
+			actor().entity.get<ActionID::TeleportToPlayer>()->set_is_complete(true);
 		}
 		handle_action.template operator()<ActionID::GotoPlayer>();
 		handle_action.template operator()<ActionID::GotoActor>();
@@ -382,7 +382,7 @@ namespace game
 		handle_action.template operator()<ActionID::GotoTarget>();
 		handle_action.template operator()<ActionID::Launch>();
 		handle_action.template operator()<ActionID::Teleport>();
-		if(actor.entity.has<ActionID::HorizontalFlip>())
+		if(actor().entity.has<ActionID::HorizontalFlip>())
 		{
 			handle_action.template operator()<ActionID::HorizontalFlip>();
 		}
@@ -390,7 +390,7 @@ namespace game
 		{
 			quad.scale[0] = std::abs(quad.scale[0]);
 		}
-		if(actor.entity.has<ActionID::VerticalFlip>())
+		if(actor().entity.has<ActionID::VerticalFlip>())
 		{
 			handle_action.template operator()<ActionID::VerticalFlip>();
 		}
@@ -406,12 +406,13 @@ namespace game
 		handle_action.template operator()<ActionID::ApplyBuffToActor>();
 		handle_action.template operator()<ActionID::ApplyBuffToTarget>();
 		handle_action.template operator()<ActionID::ApplyBuffToPlayers>();
+		handle_action.template operator()<ActionID::DelayedAction>();
 
 		// It's chasing something, but we don't care about what it's chasing.
 		if(chase_target.has_value())
 		{
-			actor.motion = {};
-			// Get the displacement between the actor and its chase target.
+			actor().motion = {};
+			// Get the displacement between the actor() and its chase target.
 			const hdk::vec2 target_pos = chase_target.value();
 			hdk::vec2 dist_to_target = target_pos - quad.position;
 			// Find out which direction we need to go, or if we're already at the target.
@@ -433,30 +434,30 @@ namespace game
 			if(dist_to_target[0] > sqrt_dist)
 			{
 				// We need to move right.
-				actor.motion |= ActorMotion::MoveRight;
+				actor().motion |= ActorMotion::MoveRight;
 			}
 			else if(dist_to_target[0] < -sqrt_dist)
 			{
 				// We need to move left.
-				actor.motion |= ActorMotion::MoveLeft;
+				actor().motion |= ActorMotion::MoveLeft;
 			}
 
 			if(dist_to_target[1] > sqrt_dist)
 			{
 				// We need to move upwards.
-				actor.motion |= ActorMotion::MoveUp;
+				actor().motion |= ActorMotion::MoveUp;
 			}
 			else if(dist_to_target[1] < -sqrt_dist)
 			{
-				actor.motion |= ActorMotion::MoveDown;
+				actor().motion |= ActorMotion::MoveDown;
 			}
 		}
 		else
 		{
 			// Actor isn't currently chasing something.
-			if(actor.flags_new.has<FlagID::WanderIfIdle>())
+			if(actor().flags_new.has<FlagID::WanderIfIdle>())
 			{
-				const auto& flag = actor.flags_new.get<FlagID::WanderIfIdle>()->data();
+				const auto& flag = actor().flags_new.get<FlagID::WanderIfIdle>()->data();
 				std::uniform_real_distribution<float> dist{0.0f, 1.0f};
 				if(dist(this->rng) < flag.wander_chance)
 				{
@@ -464,7 +465,7 @@ namespace game
 					// Set an action to wander to a nearby location.
 					hdk::vec2 target_loc = quad.position;
 					target_loc += hdk::vec2{dist2(this->rng), dist2(this->rng)};
-					actor.entity.add<ActionID::GotoTarget>
+					actor().entity.add<ActionID::GotoTarget>
 					({
 						.target_position = target_loc
 					});
@@ -472,32 +473,32 @@ namespace game
 				
 			}
 		}
-		// We now know for certain whether the actor wants to move or not. Now we can finally carry out the movement.
-		if(!actor.dead())
+		// We now know for certain whether the actor() wants to move or not. Now we can finally carry out the movement.
+		if(!actor().dead())
 		{
-			float sp = actor.get_current_stats().movement_speed;
+			float sp = actor().get_current_stats().movement_speed;
 			hdk::vec2 position_change{0.0f, 0.0f};
-			if(actor.motion.contains(ActorMotion::MoveLeft))
+			if(actor().motion.contains(ActorMotion::MoveLeft))
 			{
 				position_change[0] -= 1;
 			}
-			if(actor.motion.contains(ActorMotion::MoveRight))
+			if(actor().motion.contains(ActorMotion::MoveRight))
 			{
 				position_change[0] += 1;
 			}
-			if(actor.motion.contains(ActorMotion::MoveUp))
+			if(actor().motion.contains(ActorMotion::MoveUp))
 			{
 				position_change[1] += 1;
 			}
-			if(actor.motion.contains(ActorMotion::MoveDown))
+			if(actor().motion.contains(ActorMotion::MoveDown))
 			{
 				position_change[1] -= 1;
 			}
-			unsigned long long delta_millis = tz::system_time().millis<unsigned long long>() - actor.last_update.millis<unsigned long long>();
+			unsigned long long delta_millis = tz::system_time().millis<unsigned long long>() - actor().last_update.millis<unsigned long long>();
 			quad.position += position_change.normalised() * sp * static_cast<float>(delta_millis) / 5.0f;
 		}
 		this->update_status_events(id);
-		actor.last_update = tz::system_time();
+		actor().last_update = tz::system_time();
 		return this->garbage_collect(id);
 	}
 

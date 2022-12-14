@@ -78,6 +78,7 @@ namespace game
 	{
 	public:
 		virtual constexpr FlagID get_id() const = 0;
+		virtual ~IFlag() = default;
 	};
 
 	template<FlagID ID>

@@ -81,6 +81,8 @@ namespace game
 		ApplyBuffToTarget,
 		/// Apply a buff to all living players.
 		ApplyBuffToPlayers,
+		/// Perform another action after a specified delay.
+		DelayedAction,
 	};
 
 	template<ActionID ID>
@@ -90,6 +92,7 @@ namespace game
 	{
 	public:
 		virtual constexpr ActionID get_id() const = 0;
+		virtual ~IAction() = default;
 		bool get_is_complete() const{return this->is_complete;}
 		void set_is_complete(bool is_complete){this->is_complete = is_complete;}
 	private:
@@ -190,6 +193,7 @@ namespace game
 		BuffID buff;
 	};
 
+
 	template<ActionID ID>
 	void action_invoke(SceneData& scene, Action<ID>& action);
 
@@ -200,6 +204,13 @@ namespace game
 		ActionEntity() = default;
 		using Entity<ActionID, IAction, Action, ActionParams>::Entity;
 		virtual void update() override;
+	};
+
+	template<>
+	struct ActionParams<ActionID::DelayedAction>
+	{
+		float delay_millis;
+		ActionEntity actions;
 	};
 }
 #include "action.inl"

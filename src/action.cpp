@@ -145,13 +145,13 @@ namespace game
 //--------------------------------------------------------------------------------------------------
 	ACTION_IMPL_BEGIN(ActionID::Respawn)
 		scene.actor().respawn();
-		action.set_is_complete(true);
+		// Note: Action is no longer valid, because respawn clears them all!
 	ACTION_IMPL_END(ActionID::Respawn)
 //--------------------------------------------------------------------------------------------------
 	ACTION_IMPL_BEGIN(ActionID::RespawnAs)
 		scene.actor().type = action.data().actor;
 		scene.actor().respawn();
-		action.set_is_complete(true);
+		// Note: Action is no longer valid, because respawn clears them all!
 	ACTION_IMPL_END(ActionID::RespawnAs)
 //--------------------------------------------------------------------------------------------------
 	ACTION_IMPL_BEGIN(ActionID::Die)
@@ -186,6 +186,17 @@ namespace game
 		}
 		action.set_is_complete(true);
 	ACTION_IMPL_END(ActionID::ApplyBuffToPlayers)
+//--------------------------------------------------------------------------------------------------
+	ACTION_IMPL_BEGIN(ActionID::DelayedAction)
+		if(action.data().delay_millis <= 0.0f)
+		{
+			action.data().actions.copy_components(scene.actor().entity);
+			action.set_is_complete(true);
+			return;
+		}
+		unsigned long long delta_millis = tz::system_time().millis<unsigned long long>() - scene.actor().last_update.millis<unsigned long long>();
+		action.data().delay_millis -= delta_millis;
+	ACTION_IMPL_END(ActionID::DelayedAction)
 //--------------------------------------------------------------------------------------------------
 
 	void ActionEntity::update()
