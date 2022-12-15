@@ -71,6 +71,8 @@ namespace game
 		Respawn,
 		/// Respawn the current actor, but as a different actor type.
 		RespawnAs,
+		/// Despawn the current actor as soon as possible.
+		Despawn,
 		/// Instantly kill the current actor.
 		Die,
 		/// Apply a buff to the current actor.

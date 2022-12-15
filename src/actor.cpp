@@ -162,13 +162,13 @@ namespace game
 						}},
 						Flag<FlagID::ActionOnRepeat>
 						{{
-							.period = 5000.0f,
+							.period = 1000.0f,
 							.current_time = 10000.0f,
 							.actions =
 							{
 								Action<ActionID::Cast>
 								{{
-									.cast_time_millis = 1000.0f,
+									.cast_time_millis = 800.0f,
 									.actions =
 									{
 										Action<ActionID::SpawnActor>
@@ -224,7 +224,7 @@ namespace game
 									.actor = ActorType::GhostBanshee
 								}}
 							}
-						}},
+						}}
 					},
 					.faction = Faction::PureFriend,
 					.base_stats =
@@ -468,7 +468,7 @@ namespace game
 							.type = ActorType::PlayerClassic_Orb,
 							.actions =
 							{
-								Action<ActionID::RandomTeleport>{}
+								Action<ActionID::Despawn>{}
 							}
 						}},
 					},
@@ -497,6 +497,14 @@ namespace game
 								}}
 							}
 						}},
+						Flag<FlagID::ActionOnActorTouch>
+						{{
+							.type = ActorType::PlayerClassic_Orb,
+							.actions =
+							{
+								Action<ActionID::Despawn>{}
+							}
+						}}
 					},
 					.faction = Faction::PlayerEnemy,
 					.skin = ActorSkin::DebugOnlyVisible,
@@ -548,7 +556,8 @@ namespace game
 								ActorType::FireSmoke,
 								ActorType::FireExplosion,
 								ActorType::BloodSplatter,
-								ActorType::GhostZombie_Spawner
+								ActorType::GhostZombie_Spawner,
+								ActorType::GhostBanshee_Spirit
 							}
 						}},
 						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}},

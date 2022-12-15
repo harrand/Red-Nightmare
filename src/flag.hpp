@@ -17,6 +17,7 @@ namespace game
 		InvisibleWhileDead,
 		BlockingAnimations,
 		DoNotGarbageCollect,
+		CustomGarbageCollectPeriod,
 		/// Actor is considered a player.
 		Player,
 		/// Actor has a custom scale.
@@ -101,6 +102,12 @@ namespace game
 	};
 	
 	// Flag implementations.
+	template<>
+	struct FlagParams<FlagID::CustomGarbageCollectPeriod>
+	{
+		unsigned long long delay_millis = 75000ull;
+	};
+
 	template<>
 	struct FlagParams<FlagID::CustomScale>
 	{

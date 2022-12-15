@@ -79,7 +79,7 @@ namespace game
 				this->load_level(LevelID::DevLevel1);
 			}
 			ImGui::SameLine();
-			ImGui::Text("You are buried in rock. Unfortunately, so are the hungry dead. Difficulty: Low");
+			ImGui::Text("A Banshee is consuming the souls of the innocent dead. Slay her. Difficulty: Low");
 			if(ImGui::Button("DevLevel2"))
 			{
 				this->load_level(LevelID::DevLevel2);
@@ -417,6 +417,7 @@ namespace game
 		handle_action.template operator()<ActionID::SpawnActor>();
 		handle_action.template operator()<ActionID::Respawn>();
 		handle_action.template operator()<ActionID::RespawnAs>();
+		handle_action.template operator()<ActionID::Despawn>();
 		handle_action.template operator()<ActionID::Die>();
 		handle_action.template operator()<ActionID::ApplyBuff>();
 		handle_action.template operator()<ActionID::ApplyBuffToActor>();
@@ -714,7 +715,16 @@ namespace game
 			else
 			{
 				using namespace tz::literals;
-				this->despawn_timer.emplace(id, 45_s);
+				// Actor either despawns in 45s, or a custom value.
+				if(this->get_actor(id).flags_new.has<FlagID::CustomGarbageCollectPeriod>())
+				{
+					tz::Duration d{this->get_actor(id).flags_new.get<FlagID::CustomGarbageCollectPeriod>()->data().delay_millis};
+					this->despawn_timer.emplace(id, d);
+				}
+				else
+				{
+					this->despawn_timer.emplace(id, 45_s);
+				}
 			}
 		}
 		else

@@ -154,6 +154,11 @@ namespace game
 		// Note: Action is no longer valid, because respawn clears them all!
 	ACTION_IMPL_END(ActionID::RespawnAs)
 //--------------------------------------------------------------------------------------------------
+	ACTION_IMPL_BEGIN(ActionID::Despawn)
+		scene.actor().entity.add<ActionID::Die>();
+		scene.actor().flags_new.add<FlagID::CustomGarbageCollectPeriod>({.delay_millis = 0ull});
+	ACTION_IMPL_END(ActionID::Despawn)
+//--------------------------------------------------------------------------------------------------
 	ACTION_IMPL_BEGIN(ActionID::Die)
 		scene.actor().base_stats.current_health = 0;
 		action.set_is_complete(true);
