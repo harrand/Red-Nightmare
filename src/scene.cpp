@@ -266,6 +266,21 @@ namespace game
 		QuadRenderer::ElementData& quad = this->qrenderer.elements()[id];
 		quad.layer = static_cast<float>(actor().layer) / std::numeric_limits<unsigned short>::max();
 		float touchdist = touch_distance;
+		if(actor().flags_new.has<FlagID::ActionOnRepeat>())
+		{
+			auto& flag = actor().flags_new.get<FlagID::ActionOnRepeat>()->data();
+			if(flag.current_time <= 0.0f)
+			{
+				flag.current_time = flag.period;
+				flag.actions.copy_components(actor().entity);
+			}
+			else
+			{
+				unsigned long long delta_millis = tz::system_time().millis<unsigned long long>() - actor().last_update.millis<unsigned long long>();
+				flag.current_time -= delta_millis;
+			}
+			
+		}
 		if(!this->is_in_bounds(id))
 		{
 			if(actor().flags_new.has<FlagID::ActionOnOOB>())
@@ -407,9 +422,16 @@ namespace game
 		handle_action.template operator()<ActionID::ApplyBuffToTarget>();
 		handle_action.template operator()<ActionID::ApplyBuffToPlayers>();
 		handle_action.template operator()<ActionID::DelayedAction>();
+		handle_action.template operator()<ActionID::Cast>();
 
 		// It's chasing something, but we don't care about what it's chasing.
-		if(chase_target.has_value())
+		// if its not a player, we don't want it to move while it's casting though.
+		const bool npc_is_casting = !actor().flags_new.has<FlagID::Player>() && actor().entity.has<ActionID::Cast>();
+		if(npc_is_casting)
+		{
+			actor().motion = {};
+		}
+		if(chase_target.has_value() && !npc_is_casting)
 		{
 			actor().motion = {};
 			// Get the displacement between the actor() and its chase target.
@@ -834,6 +856,8 @@ namespace game
 	void Scene::on_actor_death(ActorDeathEvent e)
 	{
 		HDK_PROFZONE("Scene - On Actor Death", 0xFF8B4513);
+		// If something dies, it's not moving anymore.
+		e.killee.motion = {};
 		//hdk::report("%s killed by %s", e.killee.name, e.killer.name);
 		if(e.killee.flags_new.has<FlagID::ActionOnDeath>())
 		{

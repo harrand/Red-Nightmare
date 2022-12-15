@@ -83,6 +83,8 @@ namespace game
 		ApplyBuffToPlayers,
 		/// Perform another action after a specified delay.
 		DelayedAction,
+		/// Cast an ability for some amount of time. If the actor stays still until the cast completes, the action will then be invoked. If not, the cast is cancelled and nothing happens.
+		Cast,
 	};
 
 	template<ActionID ID>
@@ -211,6 +213,16 @@ namespace game
 	{
 		float delay_millis;
 		ActionEntity actions;
+	};
+
+	template<>
+	struct ActionParams<ActionID::Cast>
+	{
+		float cast_time_millis;
+		ActionEntity actions;
+		bool cast_while_moving = false;
+		bool cast_while_dead = false;
+		bool player_cancel_cast_escape = false;
 	};
 }
 #include "action.inl"

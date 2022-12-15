@@ -198,6 +198,38 @@ namespace game
 		action.data().delay_millis -= delta_millis;
 	ACTION_IMPL_END(ActionID::DelayedAction)
 //--------------------------------------------------------------------------------------------------
+	ACTION_IMPL_BEGIN(ActionID::Cast)
+		bool should_cancel = false;
+		if(action.data().player_cancel_cast_escape && scene.actor().flags_new.has<FlagID::Player>() && tz::window().get_keyboard_state().is_key_down(tz::KeyCode::Escape))
+		{
+			// The player has pressed escape to cancel their cast.
+			should_cancel = true;
+		}
+		if(!action.data().cast_while_moving && !scene.actor().motion.empty())
+		{
+			// We're moving and this cast does not support that, cancel it.
+			should_cancel = true;
+		}
+		if(!action.data().cast_while_dead && scene.actor().dead())
+		{
+			should_cancel = true;
+		}
+		if(should_cancel)
+		{
+			action.set_is_complete(true);
+			return;
+		}
+		if(action.data().cast_time_millis <= 0.0f)
+		{
+			// Cast complete, do the thing!
+			action.data().actions.copy_components(scene.actor().entity);
+			action.set_is_complete(true);
+			return;
+		}
+		unsigned long long delta_millis = tz::system_time().millis<unsigned long long>() - scene.actor().last_update.millis<unsigned long long>();
+		action.data().cast_time_millis -= delta_millis;
+	ACTION_IMPL_END(ActionID::Cast)
+//--------------------------------------------------------------------------------------------------
 
 	void ActionEntity::update()
 	{

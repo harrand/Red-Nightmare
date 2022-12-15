@@ -69,6 +69,8 @@ namespace game
 		Collide,
 		/// Actor will periodically wander if it has nothing else to do.
 		WanderIfIdle,
+		/// Repeatedly perform a set of actions on a regular timer.
+		ActionOnRepeat,
 	};
 
 	template<FlagID ID>
@@ -189,6 +191,14 @@ namespace game
 		float min_wander_range = 0.2f;
 		float max_wander_range = 0.3f;
 		float wander_chance = 0.001f;
+	};
+
+	template<>
+	struct FlagParams<FlagID::ActionOnRepeat>
+	{
+		float period;
+		float current_time = 1000.0f;
+		ActionEntity actions;
 	};
 
 	class FlagEntity : public Entity<FlagID, IFlag, Flag, FlagParams>

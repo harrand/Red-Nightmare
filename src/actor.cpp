@@ -135,6 +135,27 @@ namespace game
 									.buff = BuffID::Chill
 								}}
 							}
+						}},
+						Flag<FlagID::ActionOnRepeat>
+						{{
+							.period = 5000.0f,
+							.current_time = 10000.0f,
+							.actions =
+							{
+								Action<ActionID::Cast>
+								{{
+									.cast_time_millis = 1000.0f,
+									.actions =
+									{
+										Action<ActionID::SpawnActor>
+										{{
+											.actor = ActorType::ChaoticFireball,
+											.inherit_faction = true
+										}}
+									},
+									.cast_while_moving = true
+								}},
+							}
 						}}
 					},
 					.faction = Faction::PlayerEnemy,
