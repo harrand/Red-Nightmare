@@ -305,8 +305,9 @@ namespace game
 		{
 			touchdist *= actor().flags_new.get<FlagID::CustomReach>()->data().reach;
 		}
-		if(actor().flags_new.has<FlagID::Aggressive>() && !actor().dead())
+		if(actor().flags_new.has<FlagID::AggressiveIf>() && !actor().dead())
 		{
+			auto& flag = actor().flags_new.get<FlagID::AggressiveIf>()->data();
 			for(std::size_t i = 0; i < this->size(); i++)
 			{
 				if(i == id)
@@ -314,7 +315,7 @@ namespace game
 					continue;
 				}
 				Actor& victim = this->get_actor(i);
-				if(!victim.dead() && actor().is_enemy_of(victim) && !victim.flags_new.has<FlagID::Stealth>())
+				if(!victim.dead() && flag.predicate(actor(), victim) && !victim.flags_new.has<FlagID::Stealth>())
 				{
 					actor().entity.set<ActionID::GotoActor>
 					({
@@ -759,7 +760,10 @@ namespace game
 		if(actor.flags_new.has<FlagID::ActionOnActorTouch>())
 		{
 			auto flag = actor.flags_new.get<FlagID::ActionOnActorTouch>();
-			wants_touch_other = flag->data().type == other.type;
+			if(flag->data().allow_dead || !other.dead())
+			{
+				wants_touch_other = flag->data().type == other.type;
+			}
 		}
 		const bool cares_about_collisions = wants_to_hurt || blocks_colliders || wants_touch_other;
 		if(cares_about_collisions)

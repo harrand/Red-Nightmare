@@ -25,8 +25,8 @@ namespace game
 		CustomReach,
 		/// Actor will launch in a direction towards the mouse cursor.
 		ClickToLaunch,
-		/// Actor will attack nearby enemy targets. At present there is no aggro range - it always chases it and may run into walls doing so.
-		Aggressive,
+		/// Actor will attack nearby actors if the predicate is true. At present there is no aggro range - it always chases it and may run into walls doing so.
+		AggressiveIf,
 		/// Actor will not be chased by aggressive enemies, but it can still be harmed.
 		Stealth,
 		/// Actor cannot be harmed by aggressive enemies.
@@ -121,6 +121,12 @@ namespace game
 	};
 
 	template<>
+	struct FlagParams<FlagID::AggressiveIf>
+	{
+		std::function<bool(const Actor&, const Actor&)> predicate;
+	};
+
+	template<>
 	struct FlagParams<FlagID::ActionOnDeath>
 	{
 		ActionEntity actions;
@@ -146,6 +152,7 @@ namespace game
 	{
 		ActorType type;
 		ActionEntity actions;
+		bool allow_dead = false;
 	};
 
 	template<>

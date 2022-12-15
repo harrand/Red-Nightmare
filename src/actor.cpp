@@ -68,7 +68,18 @@ namespace game
 								ActorType::GhostBanshee
 							}
 						}},
-						Flag<FlagID::Aggressive>{},
+						Flag<FlagID::ActionOnActorTouch>
+						{{
+							.type = ActorType::GhostBanshee_Spirit,
+							.actions =
+							{
+								Action<ActionID::Die>{}
+							}
+						}},
+						Flag<FlagID::AggressiveIf>
+						{{
+							.predicate = [](const Actor& self, const Actor& victim){return self.is_enemy_of(victim);}
+						}},
 						Flag<FlagID::HazardousIf>
 						{{
 							.predicate = [](const Actor& self, const Actor& victim){return self.is_enemy_of(victim);}
@@ -121,7 +132,10 @@ namespace game
 								ActorType::GhostBanshee
 							}
 						}},
-						Flag<FlagID::Aggressive>{},
+						Flag<FlagID::AggressiveIf>
+						{{
+							.predicate = [](const Actor& self, const Actor& victim){return self.is_enemy_of(victim);}
+						}},
 						Flag<FlagID::HazardousIf>
 						{{
 							.predicate = [](const Actor& self, const Actor& victim){return self.is_enemy_of(victim);}
@@ -133,6 +147,16 @@ namespace game
 								Action<ActionID::ApplyBuffToTarget>
 								{{
 									.buff = BuffID::Chill
+								}}
+							}
+						}},
+						Flag<FlagID::ActionOnDeath>
+						{{
+							.actions =
+							{
+								Action<ActionID::RespawnAs>
+								{{
+									.actor = ActorType::GhostBanshee_Spirit
 								}}
 							}
 						}},
@@ -171,6 +195,48 @@ namespace game
 					.name = "Ghost Banshee"
 				};
 			break;
+			case ActorType::GhostBanshee_Spirit:
+				return
+				{
+					.type = ActorType::GhostBanshee_Spirit,
+					.flags_new =
+					{
+						Flag<FlagID::Collide>
+						{{
+							.collision_filter =
+							{
+								ActorType::GhostZombie,
+								ActorType::GhostBanshee
+							}
+						}},
+						Flag<FlagID::Rot>{},
+						Flag<FlagID::AggressiveIf>
+						{{
+							.predicate = [](const Actor& self, const Actor& victim){return victim.type == ActorType::GhostZombie;}
+						}},
+						Flag<FlagID::ActionOnActorTouch>
+						{{
+							.type = ActorType::GhostZombie,
+							.actions =
+							{
+								Action<ActionID::RespawnAs>
+								{{
+									.actor = ActorType::GhostBanshee
+								}}
+							}
+						}},
+					},
+					.faction = Faction::PureFriend,
+					.base_stats =
+					{
+						.movement_speed = 0.004f,
+						.max_health = 8.0f,
+						.current_health = 8.0f
+					},
+					.skin = ActorSkin::GhostBanshee,
+					.name = "Ghost Banshee Spirit"
+				};
+			break;
 			case ActorType::PlayerClassic_Orb:
 				return
 				{
@@ -206,11 +272,11 @@ namespace game
 						{{
 							.actions =
 							{
-								Action<ActionID::SpawnActor>
-								{{
-									.actor = ActorType::FireExplosion,
-									.inherit_faction = true
-								}},
+								//Action<ActionID::SpawnActor>
+								//{{
+								//	.actor = ActorType::FireExplosion,
+								//	.inherit_faction = true
+								//}},
 								Action<ActionID::SpawnActor>
 								{{
 									.actor = ActorType::FireSmoke,
@@ -354,7 +420,10 @@ namespace game
 					{
 						Flag<FlagID::BlockingAnimations>{},
 						Flag<FlagID::RespawnOnDeath>{},
-						Flag<FlagID::Aggressive>{},
+						Flag<FlagID::AggressiveIf>
+						{{
+							.predicate = [](const Actor& self, const Actor& victim){return self.is_enemy_of(victim);}
+						}},
 						Flag<FlagID::HazardousIf>
 						{{
 							.predicate = [](const Actor& self, const Actor& victim){return self.is_enemy_of(victim);}
@@ -450,6 +519,7 @@ namespace game
 								ActorType::FireExplosion,
 								ActorType::BloodSplatter,
 								ActorType::GhostZombie_Spawner,
+								ActorType::GhostBanshee_Spirit
 							}
 						}},
 						Flag<FlagID::Invincible>{},

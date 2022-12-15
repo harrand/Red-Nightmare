@@ -61,6 +61,8 @@ namespace game
 		GhostZombie,
 		/// A computer-controlled ghost banshee enemy. It's slower than other zombies, but can chill enemy players, slowing their movement.
 		GhostBanshee,
+		/// When a GhostBanshee dies, it will become a spirit which searches for a nearby zombie to possess. If it does, it turns the zombie into another banshee.
+		GhostBanshee_Spirit,
 		/// An actor which acts as Akhara's passive elemental orb.
 		PlayerClassic_Orb,
 		/// An actor which acts like a fireball projectile, shooting in a random direction.
