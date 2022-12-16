@@ -187,7 +187,7 @@ namespace game
 						}},
 						Flag<FlagID::ActionOnRepeat>
 						{{
-							.period = 1000.0f,
+							.period = 3000.0f,
 							.current_time = 10000.0f,
 							.actions =
 							{
@@ -217,7 +217,7 @@ namespace game
 					.faction = Faction::PlayerEnemy,
 					.base_stats =
 					{
-						.movement_speed = 0.0002f,
+						.movement_speed = 0.0004f,
 						.max_health = 0.01f,
 						.current_health = 0.01f
 					},
@@ -418,7 +418,7 @@ namespace game
 						Flag<FlagID::InvisibleWhileDead>{},
 						Flag<FlagID::ActionOnRepeat>
 						{{
-							.period = 5000.0f,
+							.period = 10000.0f,
 							.predicate = [](const Actor& self){return !self.dead();},
 							.actions =
 							{
