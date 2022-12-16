@@ -301,6 +301,17 @@ namespace game
 						Flag<FlagID::Stealth>{},
 						Flag<FlagID::SelfRecoil>{},
 						Flag<FlagID::Unhittable>{},
+						Flag<FlagID::ActionOnActorTouch>
+						{{
+							.predicate = [](const Actor& self, const Actor& actor)
+							{
+								return self.type == actor.type;
+							},
+							.actions =
+							{
+								Action<ActionID::Die>{}
+							}
+						}},
 						Flag<FlagID::ActionOnDeath>
 						{{
 							.actions =

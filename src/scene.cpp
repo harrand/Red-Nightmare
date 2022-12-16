@@ -424,7 +424,11 @@ namespace game
 		handle_action.template operator()<ActionID::Respawn>();
 		handle_action.template operator()<ActionID::RespawnAs>();
 		handle_action.template operator()<ActionID::Despawn>();
-		handle_action.template operator()<ActionID::Die>();
+		if(actor().entity.has<ActionID::Die>())
+		{
+			handle_action.template operator()<ActionID::Die>();
+			this->on_actor_death({.killee = actor(), .killer = this->world_actor});
+		}
 		handle_action.template operator()<ActionID::ApplyBuff>();
 		handle_action.template operator()<ActionID::ApplyBuffToActor>();
 		handle_action.template operator()<ActionID::ApplyBuffToTarget>();
