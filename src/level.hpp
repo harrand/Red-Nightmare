@@ -39,6 +39,7 @@ namespace game
 		hdk::vec2 player_spawn_location = {0.0f, 0.0f};
 		std::vector<std::pair<hdk::vec2, ActorType>> actor_spawns = {};
 		hdk::vec2 max_level_coords = hdk::vec2::zero();
+		TextureID backdrop;
 	};
 
 	struct RandomLevelGenerationOptions
@@ -61,7 +62,7 @@ namespace game
 	};
 
 	Level load_level(LevelID lid);
-	Level load_level_from_image(const tz::gl::ImageResource& level_image);
+	Level load_level_from_image(const tz::gl::ImageResource& level_image, TextureID backdrop = TextureID::Invisible);
 
 	tz::gl::ImageResource random_level_image(const RandomLevelGenerationOptions& options);
 }

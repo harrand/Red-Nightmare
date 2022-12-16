@@ -222,5 +222,6 @@ add_text(
 
 		res/images/levels/dev_level_0.png
 		res/images/levels/dev_level_1.png
+		res/images/levels/dev_level_1_backdrop.png
 		res/images/levels/dev_level_2.png
 )

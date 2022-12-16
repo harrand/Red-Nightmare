@@ -16,6 +16,7 @@ namespace game
 	rendererh(this->make_renderer())
 	{
 		this->update_render_data();
+		this->push();
 	}
 
 	void QuadRenderer::render()
@@ -28,6 +29,10 @@ namespace game
 
 	void QuadRenderer::dbgui()
 	{
+		if(ImGui::CollapsingHeader("Backdrop"))
+		{
+			ImGui::DragFloat2("Position", this->backdrop().position.data().data(), 0.1f, 0.0f, 64.0f);	
+		}
 		ImGui::Text("Quad Count: %zu", this->quad_count);
 		static bool wireframe_mode = false;
 		if(ImGui::Checkbox("Wireframe Mode", &wireframe_mode))
@@ -51,14 +56,24 @@ namespace game
 		}
 	}
 
+	const QuadRenderer::ElementData& QuadRenderer::backdrop() const
+	{
+		return tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<const QuadRenderer::ElementData>().front();
+	}
+
+	QuadRenderer::ElementData& QuadRenderer::backdrop()
+	{
+		return tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<QuadRenderer::ElementData>().front();
+	}
+
 	std::span<const QuadRenderer::ElementData> QuadRenderer::elements() const
 	{
-		return tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<const QuadRenderer::ElementData>().subspan(0, this->quad_count);
+		return tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<const QuadRenderer::ElementData>().subspan(1, this->quad_count - 1);
 	}
 
 	std::span<QuadRenderer::ElementData> QuadRenderer::elements()
 	{
-		return tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<QuadRenderer::ElementData>().subspan(0, this->quad_count);
+		return tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<QuadRenderer::ElementData>().subspan(1, this->quad_count - 1);
 	}
 
 	void QuadRenderer::push()
@@ -69,7 +84,7 @@ namespace game
 
 	void QuadRenderer::pop()
 	{
-		hdk::assert(this->quad_count > 0, "Cannot pop when there are already no quads");
+		hdk::assert(this->quad_count > 1, "Cannot pop when there are already no quads");
 		this->quad_count--;
 	}
 	
@@ -79,7 +94,7 @@ namespace game
 		{
 			elem = QuadRenderer::ElementData{};
 		}
-		this->quad_count = 0;
+		this->quad_count = 1;
 	}
 
 	void QuadRenderer::erase(std::size_t id)
@@ -110,7 +125,7 @@ namespace game
 
 		rinfo.shader().set_shader(tz::gl::ShaderStage::Vertex, ImportedShaderSource(quad, vertex));
 		rinfo.shader().set_shader(tz::gl::ShaderStage::Fragment, ImportedShaderSource(quad, fragment));
-		rinfo.state().graphics.clear_colour = {0.3f, 0.3f, 0.3f, 1.0f};
+		rinfo.state().graphics.clear_colour = {0.05f, 0.05f, 0.05f, 1.0f};
 
 		// A buffer to store data for each quad (element buffer).
 		std::array<QuadRenderer::ElementData, QuadRenderer::max_quad_count> element_data;

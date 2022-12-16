@@ -26,6 +26,8 @@ namespace game
 			float layer = 0.0f;
 		};
 
+		const ElementData& backdrop() const;
+		ElementData& backdrop();
 		std::span<const ElementData> elements() const;
 		std::span<ElementData> elements();
 

@@ -24,7 +24,7 @@ namespace game
 	void Scene::render()
 	{
 		HDK_PROFZONE("Scene - Render", 0xFF00AA00);
-		hdk::assert(this->actors.size() == this->qrenderer.elements().size(), "Scene actor list and QuadRenderer size no longer match. Logic Error");
+		hdk::assert(this->actors.size() == this->qrenderer.elements().size(), "Scene actor list (%zu) and QuadRenderer size (%zu) no longer match. Logic Error", this->actors.size(), this->qrenderer.elements().size());
 		for(std::size_t i = 0; i < this->qrenderer.elements().size(); i++)
 		{
 			this->qrenderer.elements()[i].texture_id = this->get_actor(i).animation.get_texture();
@@ -213,6 +213,11 @@ namespace game
 		Level level = game::load_level(level_id);
 		this->impl_load_level(level);
 		this->level_boundaries = level.max_level_coords;
+		auto& backdrop_data = this->qrenderer.backdrop();
+		backdrop_data.texture_id = level.backdrop;
+		backdrop_data.position = (this->level_boundaries / 2.0f) - hdk::vec2::filled(1.0f);
+		backdrop_data.scale = ((this->level_boundaries - hdk::vec2::filled(0.25f)) / 2.0f);
+		backdrop_data.layer = 0.999f;
 	}
 
 	const Actor& Scene::get_actor(std::size_t id) const

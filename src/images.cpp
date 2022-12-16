@@ -167,6 +167,8 @@
 #include ImportedTextHeader(sprint1, png)
 #include ImportedTextHeader(sprint2, png)
 
+#include ImportedTextHeader(dev_level_1_backdrop, png)
+
 namespace game
 {
 	std::array<std::string_view, static_cast<int>(TextureID::Count)> texture_data
@@ -332,7 +334,9 @@ namespace game
 
 		ImportedTextData(sprint0, png),
 		ImportedTextData(sprint1, png),
-		ImportedTextData(sprint2, png)
+		ImportedTextData(sprint2, png),
+
+		ImportedTextData(dev_level_1_backdrop, png)
 	};
 
 	tz::gl::ImageResource load_image(TextureID texid)

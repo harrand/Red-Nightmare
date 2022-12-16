@@ -165,6 +165,8 @@ namespace game
 		Powerup_Sprint_1,
 		Powerup_Sprint_2,
 
+		DevLevel1_Backdrop,
+
 		Count
 	};
 

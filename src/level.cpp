@@ -49,10 +49,17 @@ namespace game
 	Level load_level(LevelID lid)
 	{
 		tz::gl::ImageResource level_image = game::load_image_data(level_image_data[static_cast<int>(lid)]);
-		return load_level_from_image(level_image);
+		TextureID backdrop = TextureID::Invisible;
+		switch(lid)
+		{
+			case LevelID::DevLevel1:
+				backdrop = TextureID::DevLevel1_Backdrop;
+			break;
+		}
+		return load_level_from_image(level_image, backdrop);
 	}
 
-	Level load_level_from_image(const tz::gl::ImageResource& level_image)
+	Level load_level_from_image(const tz::gl::ImageResource& level_image, TextureID backdrop)
 	{
 		constexpr hdk::vec3ui colour_black{0u, 0u, 0u};
 		using ImageView = tz::GridView<const std::byte, 4>;
@@ -71,6 +78,7 @@ namespace game
 		hdk::assert(player_spawn_colour != colour_black, "Player spawn palette colour detected as black. This is not allowed");
 
 		Level ret;
+		ret.backdrop = backdrop;
 		ret.max_level_coords = static_cast<hdk::vec2>(level_image.get_dimensions()) / world_scale;
 
 		for(std::size_t x = 0; x < view.get_dimensions()[0]; x++)
