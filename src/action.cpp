@@ -4,6 +4,19 @@
 
 namespace game
 {
+
+//--------------------------------------------------------------------------------------------------
+
+	void ActionEntity::update()
+	{
+		HDK_PROFZONE("ActionEntity - Update", 0xFF00AA00);
+		// Remove all completed actions.
+		this->components.erase(std::remove_if(this->components.begin(), this->components.end(), [](const auto& comp_ptr)
+		{
+			return comp_ptr->get_is_complete();
+		}), this->components.end());
+	}
+
 	#define ACTION_IMPL_BEGIN(T) template<> void action_invoke<T>(SceneData& scene, Action<T>& action){
 	#define ACTION_IMPL_END(T) } template void action_invoke<T>(SceneData& scene, Action<T>&);
 
@@ -140,6 +153,7 @@ namespace game
 			scene.get_actor(id).faction = scene.actor().faction;
 		}
 		scene.get_quad(id).position = scene.quad().position;
+		action.data().actions.copy_components(scene.get_actor(id).entity);
 		action.set_is_complete(true);
 	ACTION_IMPL_END(ActionID::SpawnActor)
 //--------------------------------------------------------------------------------------------------
@@ -234,15 +248,4 @@ namespace game
 		unsigned long long delta_millis = tz::system_time().millis<unsigned long long>() - scene.actor().last_update.millis<unsigned long long>();
 		action.data().cast_time_millis -= delta_millis;
 	ACTION_IMPL_END(ActionID::Cast)
-//--------------------------------------------------------------------------------------------------
-
-	void ActionEntity::update()
-	{
-		HDK_PROFZONE("ActionEntity - Update", 0xFF00AA00);
-		// Remove all completed actions.
-		this->components.erase(std::remove_if(this->components.begin(), this->components.end(), [](const auto& comp_ptr)
-		{
-			return comp_ptr->get_is_complete();
-		}), this->components.end());
-	}
 }

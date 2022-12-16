@@ -63,8 +63,6 @@ namespace game
 		GhostBanshee,
 		/// When a GhostBanshee dies, it will become a spirit which searches for a nearby zombie to possess. If it does, it turns the zombie into another banshee.
 		GhostBanshee_Spirit,
-		/// An actor which acts as Akhara's passive elemental orb.
-		PlayerClassic_Orb,
 		/// An actor which acts like a fireball projectile, shooting in a random direction.
 		ChaoticFireball,
 		/// An actor which acts as a fiery particle effect. Dies by itself after a while.

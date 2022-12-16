@@ -119,6 +119,16 @@ namespace game
 		ActionParams<ID> params;
 	};
 
+	/// Represents something that can carry out actions.
+	class ActionEntity : public Entity<ActionID, IAction, Action, ActionParams>
+	{
+	public:
+		ActionEntity() = default;
+		using Entity<ActionID, IAction, Action, ActionParams>::Entity;
+		virtual void update() override;
+	};
+
+
 	// Action implementations.
 	
 	template<>
@@ -164,6 +174,7 @@ namespace game
 	{
 		ActorType actor;
 		bool inherit_faction = false;
+		ActionEntity actions = {};
 	};
 
 	template<>
@@ -200,15 +211,6 @@ namespace game
 
 	template<ActionID ID>
 	void action_invoke(SceneData& scene, Action<ID>& action);
-
-	/// Represents something that can carry out actions.
-	class ActionEntity : public Entity<ActionID, IAction, Action, ActionParams>
-	{
-	public:
-		ActionEntity() = default;
-		using Entity<ActionID, IAction, Action, ActionParams>::Entity;
-		virtual void update() override;
-	};
 
 	template<>
 	struct ActionParams<ActionID::DelayedAction>

@@ -137,7 +137,6 @@ namespace game
 			if(ImGui::Button("Debug Add Player"))
 			{
 				this->add(ActorType::PlayerClassic);
-				this->add(ActorType::PlayerClassic_Orb);
 			}
 			if(ImGui::Button("Debug Add Ghost Zombie"))
 			{
@@ -240,7 +239,6 @@ namespace game
 		this->add(ActorType::PlayerClassic);
 		hdk::report("Player Spawns at {%.2f, %.2f}", level.player_spawn_location[0], level.player_spawn_location[1]);
 		this->qrenderer.elements().front().position = level.player_spawn_location;
-		this->add(ActorType::PlayerClassic_Orb);
 		// Now add actors from the level.
 		for(const auto& [pos, actor_type] : level.actor_spawns)
 		{
@@ -777,7 +775,7 @@ namespace game
 			auto flag = actor.flags_new.get<FlagID::ActionOnActorTouch>();
 			if(flag->data().allow_dead || !other.dead())
 			{
-				wants_touch_other = flag->data().type == other.type;
+				wants_touch_other = flag->data().predicate(actor, other);
 			}
 		}
 		const bool cares_about_collisions = wants_to_hurt || blocks_colliders || wants_touch_other;

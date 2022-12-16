@@ -4,6 +4,8 @@
 #include "tz/dbgui/dbgui.hpp"
 #include "hdk/profile.hpp"
 
+using namespace tz::literals;
+
 namespace game
 {
 
@@ -43,8 +45,28 @@ namespace game
 									}
 								}}
 							}
+						}},
+						Flag<FlagID::ActionOnClick>
+						{{
+							.actions =
+							{
+								Action<ActionID::SpawnActor>
+								{{
+									.actor = ActorType::ChaoticFireball,
+									.inherit_faction = true,
+									.actions =
+									{
+										Action<ActionID::LaunchToMouse>
+										{{
+											.speed_multiplier = 8.0f
+										}}
+									}
+								}}
+							},
+							.icd = 500_ms
 						}}
 					},
+					.faction = Faction::PlayerFriend,
 					.base_stats =
 					{
 						.movement_speed = 0.0016f
@@ -70,7 +92,10 @@ namespace game
 						}},
 						Flag<FlagID::ActionOnActorTouch>
 						{{
-							.type = ActorType::GhostBanshee_Spirit,
+							.predicate = [](const Actor& self, const Actor& actor)
+							{
+								return actor.type == ActorType::GhostBanshee_Spirit;
+							},
 							.actions =
 							{
 								Action<ActionID::Die>{}
@@ -174,7 +199,14 @@ namespace game
 										Action<ActionID::SpawnActor>
 										{{
 											.actor = ActorType::ChaoticFireball,
-											.inherit_faction = true
+											.inherit_faction = true,
+											.actions =
+											{
+												Action<ActionID::LaunchToPlayer>
+												{{
+													.speed_multiplier = 8.0f
+												}}
+											}
 										}}
 									},
 									.cast_while_moving = true
@@ -216,7 +248,10 @@ namespace game
 						}},
 						Flag<FlagID::ActionOnActorTouch>
 						{{
-							.type = ActorType::GhostZombie,
+							.predicate = [](const Actor& self, const Actor& actor)
+							{
+								return actor.type == ActorType::GhostZombie && self.is_ally_of(actor);
+							},
 							.actions =
 							{
 								Action<ActionID::RespawnAs>
@@ -237,80 +272,16 @@ namespace game
 					.name = "Ghost Banshee Spirit"
 				};
 			break;
-			case ActorType::PlayerClassic_Orb:
-				return
-				{
-					.type = ActorType::PlayerClassic_Orb,
-					.flags_new =
-					{
-						Flag<FlagID::InvisibleWhileDead>{},
-						Flag<FlagID::DoNotGarbageCollect>{},
-						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}},
-						Flag<FlagID::ActionOnOOB>
-						{{
-							.actions =
-							{
-								Action<ActionID::Die>{{}}
-							}
-						}},
-						Flag<FlagID::HazardousIf>
-						{{
-							.predicate = [](const Actor& self, const Actor& actor)->bool
-							{
-								return self.is_enemy_of(actor);
-							}
-						}},
-						Flag<FlagID::ClickToLaunch>
-						{{
-							.internal_cooldown = 1.0f
-						}},
-						Flag<FlagID::Stealth>{},
-						Flag<FlagID::Unhittable>{},
-						Flag<FlagID::SelfRecoil>{},
-						Flag<FlagID::RespawnOnClick>{},
-						Flag<FlagID::ActionOnDeath>
-						{{
-							.actions =
-							{
-								//Action<ActionID::SpawnActor>
-								//{{
-								//	.actor = ActorType::FireExplosion,
-								//	.inherit_faction = true
-								//}},
-								Action<ActionID::SpawnActor>
-								{{
-									.actor = ActorType::FireSmoke,
-									.inherit_faction = true
-								}},
-							}
-						}},
-						Flag<FlagID::ActionOnRespawn>
-						{{
-							.actions =
-							{
-								Action<ActionID::TeleportToPlayer>{{}}
-							}
-						}}
-					},
-					.faction = Faction::PlayerFriend,
-					.base_stats =
-					{
-						.movement_speed = 0.001f,
-						.damage = default_base_damage * 60.0f,
-						.max_health = 0.0001f,
-						.current_health = 0.0f
-					},
-					.skin = ActorSkin::PlayerClassic_DefaultFireball,
-					.animation = game::play_animation(AnimationID::PlayerClassic_DefaultFireball_Idle),
-					.name = "Akhara's Default Orb"
-				};
-			break;
 			case ActorType::ChaoticFireball:
 				return
 				{
 					.type = ActorType::ChaoticFireball,
 					.flags_new =
 					{
+						Flag<FlagID::CustomGarbageCollectPeriod>
+						{{
+							.delay_millis = 500ull
+						}},
 						Flag<FlagID::InvisibleWhileDead>{},
 						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}},
 						Flag<FlagID::HazardousIf>
@@ -349,15 +320,8 @@ namespace game
 						.current_health = 0.0001f
 					},
 					.skin = ActorSkin::PlayerClassic_DefaultFireball,
-					.entity =
-					{
-						Action<ActionID::LaunchToPlayer>
-						{{
-							.speed_multiplier = 8.0f
-						}}
-					},
 					.animation = game::play_animation(AnimationID::PlayerClassic_DefaultFireball_Idle),
-					.name = "Chaotic Fireball"
+					.name = "Fireball"
 				};
 			break;
 			case ActorType::FireSmoke:
@@ -465,13 +429,17 @@ namespace game
 						}},
 						Flag<FlagID::ActionOnActorTouch>
 						{{
-							.type = ActorType::PlayerClassic_Orb,
+							.predicate = [](const Actor& self, const Actor& actor)
+							{
+								return actor.type == ActorType::ChaoticFireball && self.is_enemy_of(actor);
+							},
 							.actions =
 							{
 								Action<ActionID::Despawn>{}
 							}
 						}},
 					},
+					.faction = Faction::PlayerEnemy,
 					.skin = ActorSkin::DebugOnlyVisible,
 					.palette_colour = {255u, 64u, 255u},
 					.name = "Spawner (Ghost Zombie)",
@@ -494,12 +462,23 @@ namespace game
 								Action<ActionID::SpawnActor>
 								{{
 									.actor = ActorType::ChaoticFireball,
+									.inherit_faction = true,
+									.actions =
+									{
+										Action<ActionID::LaunchToPlayer>
+										{{
+											.speed_multiplier = 8.0f
+										}}
+									}
 								}}
 							}
 						}},
 						Flag<FlagID::ActionOnActorTouch>
 						{{
-							.type = ActorType::PlayerClassic_Orb,
+							.predicate = [](const Actor& self, const Actor& actor)
+							{
+								return actor.type == ActorType::ChaoticFireball && self.is_enemy_of(actor);
+							},
 							.actions =
 							{
 								Action<ActionID::Despawn>{}
@@ -584,7 +563,10 @@ namespace game
 					{
 						Flag<FlagID::ActionOnActorTouch>
 						{{
-							.type = ActorType::PlayerClassic,
+							.predicate = [](const Actor& self, const Actor& actor)
+							{
+								return actor.type == ActorType::PlayerClassic;
+							},
 							.actions =
 							{
 								Action<ActionID::ApplyBuffToPlayers>
@@ -650,6 +632,15 @@ namespace game
 			if(this->flags_new.has<FlagID::MouseControlled>())
 			{
 				this->entity.set<ActionID::GotoMouse>();
+			}
+			if(this->flags_new.has<FlagID::ActionOnClick>() && tz::window().get_mouse_button_state().is_mouse_button_down(tz::MouseButton::Left) && !tz::dbgui::claims_mouse())
+			{
+				auto& flag = this->flags_new.get<FlagID::ActionOnClick>()->data();
+				if(flag.icd.done())
+				{
+					flag.actions.copy_components(this->entity);
+					flag.icd.reset();
+				}
 			}
 			if(this->flags_new.has<FlagID::KeyboardControlled>())
 			{

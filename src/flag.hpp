@@ -46,13 +46,15 @@ namespace game
 		RespawnOnClick,
 		/// Actor respawns as soon as it dies.
 		RespawnOnDeath,
+		/// Actor performs an action whenever the user left-clicks their mouse.
+		ActionOnClick,
 		/// Actor performs an action when it dies. Note that some actions require the actor to be alive, which won't work here.
 		ActionOnDeath,
 		/// Actor performs an action when it hits something.
 		ActionOnHit,
 		/// Actor performs an action which something else hits it.
 		ActionOnStruck,
-		/// Actor performs an action when it touches a living player.
+		/// Actor performs an action when it touches an actor that satisfies a predicate.
 		ActionOnActorTouch,
 		/// Actor performs an action when it respawns.
 		ActionOnRespawn,
@@ -134,6 +136,13 @@ namespace game
 	};
 
 	template<>
+	struct FlagParams<FlagID::ActionOnClick>
+	{
+		ActionEntity actions;
+		tz::Delay icd = {0};
+	};
+
+	template<>
 	struct FlagParams<FlagID::ActionOnDeath>
 	{
 		ActionEntity actions;
@@ -157,7 +166,7 @@ namespace game
 	template<>
 	struct FlagParams<FlagID::ActionOnActorTouch>
 	{
-		ActorType type;
+		std::function<bool(const Actor&, const Actor&)> predicate;
 		ActionEntity actions;
 		bool allow_dead = false;
 	};
