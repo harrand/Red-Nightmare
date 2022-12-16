@@ -300,6 +300,7 @@ namespace game
 						}},
 						Flag<FlagID::Stealth>{},
 						Flag<FlagID::SelfRecoil>{},
+						Flag<FlagID::Unhittable>{},
 						Flag<FlagID::ActionOnDeath>
 						{{
 							.actions =
@@ -413,11 +414,12 @@ namespace game
 					.type = ActorType::GhostZombie_Spawner,
 					.flags_new =
 					{
-						Flag<FlagID::RespawnOnDeath>{},
-						Flag<FlagID::Rot>{},
 						Flag<FlagID::Stealth>{},
-						Flag<FlagID::ActionOnDeath>
+						Flag<FlagID::InvisibleWhileDead>{},
+						Flag<FlagID::ActionOnRepeat>
 						{{
+							.period = 5000.0f,
+							.predicate = [](const Actor& self){return !self.dead();},
 							.actions =
 							{
 								Action<ActionID::SpawnActor>
@@ -425,17 +427,6 @@ namespace game
 									.actor = ActorType::GhostZombie,
 
 								}}
-							}
-						}},
-						Flag<FlagID::ActionOnActorTouch>
-						{{
-							.predicate = [](const Actor& self, const Actor& actor)
-							{
-								return actor.type == ActorType::ChaoticFireball && self.is_enemy_of(actor);
-							},
-							.actions =
-							{
-								Action<ActionID::Despawn>{}
 							}
 						}},
 					},
@@ -452,11 +443,12 @@ namespace game
 					.type = ActorType::Fireball_Spawner,
 					.flags_new =
 					{
-						Flag<FlagID::RespawnOnDeath>{},
-						Flag<FlagID::Rot>{},
 						Flag<FlagID::Stealth>{},
-						Flag<FlagID::ActionOnDeath>
+						Flag<FlagID::InvisibleWhileDead>{},
+						Flag<FlagID::ActionOnRepeat>
 						{{
+							.period = 5000.0f,
+							.predicate = [](const Actor& self){return !self.dead();},
 							.actions =
 							{
 								Action<ActionID::SpawnActor>
@@ -473,17 +465,6 @@ namespace game
 								}}
 							}
 						}},
-						Flag<FlagID::ActionOnActorTouch>
-						{{
-							.predicate = [](const Actor& self, const Actor& actor)
-							{
-								return actor.type == ActorType::ChaoticFireball && self.is_enemy_of(actor);
-							},
-							.actions =
-							{
-								Action<ActionID::Despawn>{}
-							}
-						}}
 					},
 					.faction = Faction::PlayerEnemy,
 					.skin = ActorSkin::DebugOnlyVisible,

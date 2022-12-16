@@ -221,6 +221,7 @@ namespace game
 	{
 		float period;
 		float current_time = 1000.0f;
+		std::function<bool(const Actor&)> predicate;
 		ActionEntity actions;
 	};
 

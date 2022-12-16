@@ -274,8 +274,11 @@ namespace game
 			auto& flag = actor().flags_new.get<FlagID::ActionOnRepeat>()->data();
 			if(flag.current_time <= 0.0f)
 			{
-				flag.current_time = flag.period;
-				flag.actions.copy_components(actor().entity);
+				if(flag.predicate == nullptr || (flag.predicate != nullptr && flag.predicate(actor())))
+				{
+					flag.current_time = flag.period;
+					flag.actions.copy_components(actor().entity);
+				}
 			}
 			else
 			{
