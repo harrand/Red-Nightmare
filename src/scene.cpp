@@ -70,6 +70,16 @@ namespace game
 					actor.base_stats.current_health = 0;
 				}
 			}
+			if(ImGui::Button("Kill Non-Players"))
+			{
+				for(auto& actor : this->actors)
+				{
+					if(!actor.flags_new.has<FlagID::Player>())
+					{
+						actor.base_stats.current_health = 0;
+					}
+				}
+			}
 			if(ImGui::Button("Resurrect Everyone"))
 			{
 				for(auto& actor : this->actors)
@@ -160,7 +170,8 @@ namespace game
 		auto maybe_level_img = game::dbgui_generate_random_level_image();
 		if(maybe_level_img.has_value())
 		{
-			this->impl_load_level(load_level_from_image(maybe_level_img.value()));
+			auto& level = maybe_level_img.value();
+			this->impl_load_level(load_level_from_image(level.level_image, level.backdrop));
 		}
 	}
 

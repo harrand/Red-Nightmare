@@ -212,7 +212,7 @@ namespace game
 		return res;
 	}
 
-	std::optional<tz::gl::ImageResource> dbgui_generate_random_level_image()
+	std::optional<RandomLevelData> dbgui_generate_random_level_image()
 	{
 		struct BoolProxy{bool b = false;};
 		static std::vector<BoolProxy> level_layout_flag_values(static_cast<std::size_t>(LevelLayoutFlag::Count));
@@ -241,6 +241,14 @@ namespace game
 		{
 			ImGui::Checkbox(level_layout_flag_names[i], &level_layout_flag_values[i].b);
 		}
+		std::array<TextureID, 2> backdrops{TextureID::Invisible, TextureID::DevLevel1_Backdrop};
+		static int backdrop_id = 0;
+		ImGui::Spacing();
+		ImGui::Text("Backdrops");
+		ImGui::Indent();
+		ImGui::RadioButton("No Backdrop", &backdrop_id, 0);
+		ImGui::RadioButton("DevLevel1 Backdrop", &backdrop_id, 1);
+		ImGui::Unindent();
 		if(ImGui::Button("Generate"))
 		{
 			ActorTypes whitelist;
@@ -261,18 +269,22 @@ namespace game
 					flags |= static_cast<LevelLayoutFlag>(i);
 				}
 			}
-			return random_level_image
-			({
-				.width = 32,
-				.height = 32,
-				.seed = 32u,
-				.whitelist = whitelist,
-				.blacklist = blacklist,
-				.config =
-				{
-					.flags = flags
-				}
-			});
+			return RandomLevelData
+			{
+				.level_image = random_level_image
+				({
+					.width = 32,
+					.height = 32,
+					.seed = 32u,
+					.whitelist = whitelist,
+					.blacklist = blacklist,
+					.config =
+					{
+						.flags = flags
+					}
+				}),
+				.backdrop = backdrops[backdrop_id]
+			};
 		}
 		return {};
 	}

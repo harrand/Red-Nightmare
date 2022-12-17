@@ -89,7 +89,12 @@ namespace game
 	Level load_level_from_image(const tz::gl::ImageResource& level_image, TextureID backdrop = TextureID::Invisible);
 
 	tz::gl::ImageResource random_level_image(const RandomLevelGenerationOptions& options);
-	std::optional<tz::gl::ImageResource> dbgui_generate_random_level_image();
+	struct RandomLevelData
+	{
+		tz::gl::ImageResource level_image;
+		TextureID backdrop = TextureID::Invisible;
+	};
+	std::optional<RandomLevelData> dbgui_generate_random_level_image();
 }
 
 #endif // REDNIGHTMARE_LEVEL_HPP
