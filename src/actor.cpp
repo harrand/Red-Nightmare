@@ -89,6 +89,10 @@ namespace game
 													{{
 														.flags =
 														{
+															Flag<FlagID::CustomScale>
+															{{
+																.scale = {1.0f, 1.0f}
+															}},
 															Flag<FlagID::Player>{},
 															Flag<FlagID::ActionOnDeath>
 															{{
