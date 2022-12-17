@@ -48,22 +48,67 @@ namespace game
 						}},
 						Flag<FlagID::ActionOnClick>
 						{{
-							.actions =
+							.action_map =
 							{
-								Action<ActionID::SpawnActor>
-								{{
-									.actor = ActorType::ChaoticFireball,
-									.inherit_faction = true,
-									.actions =
+								{tz::MouseButton::Left,
 									{
-										Action<ActionID::LaunchToMouse>
-										{{
-											.speed_multiplier = 8.0f
-										}}
+										.actions =
+										{
+											Action<ActionID::SpawnActor>
+											{{
+												.actor = ActorType::ChaoticFireball,
+												.inherit_faction = true,
+												.actions =
+												{
+													Action<ActionID::LaunchToMouse>
+													{{
+														.speed_multiplier = 8.0f
+													}}
+												}
+											}}
+										},
+										.icd = 500_ms
 									}
-								}}
-							},
-							.icd = 500_ms
+								},
+								{tz::MouseButton::Right,
+									{
+										.actions = 
+										{
+											Action<ActionID::Despawn>{},
+											Action<ActionID::SpawnActor>
+											{{
+												.actor = ActorType::ChaoticFireball,
+												.inherit_faction = true,
+												.actions =
+												{
+													Action<ActionID::LaunchToMouse>
+													{{
+														.speed_multiplier = 8.0f
+													}},
+													Action<ActionID::ApplyFlag>
+													{{
+														.flags =
+														{
+															Flag<FlagID::Player>{},
+															Flag<FlagID::ActionOnDeath>
+															{{
+																.actions =
+																{
+																	Action<ActionID::RespawnAs>
+																	{{
+																		.actor = ActorType::PlayerClassic
+																	}}
+																}
+															}}
+														}
+													}}
+												}
+											}}
+										},
+										.icd = 500_ms
+									}
+								}
+							}
 						}}
 					},
 					.faction = Faction::PlayerFriend,
@@ -656,13 +701,16 @@ namespace game
 			{
 				this->entity.set<ActionID::GotoMouse>();
 			}
-			if(this->flags_new.has<FlagID::ActionOnClick>() && tz::window().get_mouse_button_state().is_mouse_button_down(tz::MouseButton::Left) && !tz::dbgui::claims_mouse())
+			if(this->flags_new.has<FlagID::ActionOnClick>() && !tz::dbgui::claims_mouse())
 			{
 				auto& flag = this->flags_new.get<FlagID::ActionOnClick>()->data();
-				if(flag.icd.done())
+				for(auto& [button, data] : flag.action_map)
 				{
-					flag.actions.copy_components(this->entity);
-					flag.icd.reset();
+					if(tz::window().get_mouse_button_state().is_mouse_button_down(button) && data.icd.done())
+					{
+						data.actions.copy_components(this->entity);
+						data.icd.reset();
+					}
 				}
 			}
 			if(this->flags_new.has<FlagID::KeyboardControlled>())

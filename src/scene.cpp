@@ -442,6 +442,7 @@ namespace game
 		handle_action.template operator()<ActionID::ApplyBuffToPlayers>();
 		handle_action.template operator()<ActionID::DelayedAction>();
 		handle_action.template operator()<ActionID::Cast>();
+		handle_action.template operator()<ActionID::ApplyFlag>();
 
 		// It's chasing something, but we don't care about what it's chasing.
 		// if its not a player, we don't want it to move while it's casting though.

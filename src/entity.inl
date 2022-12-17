@@ -145,7 +145,16 @@ namespace game
 	{
 		for(auto& comp_ptr : this->components)
 		{
-			other.components.push_back(std::move(comp_ptr));
+			
+			auto iter = std::find_if(other.components.begin(), other.components.end(), [&comp_ptr](const auto& rhs){return rhs->get_id() == comp_ptr->get_id();});
+			if(iter != other.components.end())
+			{
+				*iter = std::move(comp_ptr);
+			}
+			else
+			{
+				other.components.push_back(std::move(comp_ptr));
+			}
 		}
 		this->clear();
 	}
@@ -155,7 +164,15 @@ namespace game
 	{
 		for(const auto& comp_ptr : this->components)
 		{
-			other.components.push_back(comp_ptr->unique_clone());
+			auto iter = std::find_if(other.components.begin(), other.components.end(), [&comp_ptr](const auto& rhs){return rhs->get_id() == comp_ptr->get_id();});
+			if(iter != other.components.end())
+			{
+				*iter = comp_ptr->unique_clone();
+			}
+			else
+			{
+				other.components.push_back(comp_ptr->unique_clone());
+			}
 		}
 	}
 }

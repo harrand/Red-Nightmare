@@ -5,6 +5,7 @@
 #include "hdk/data/vector.hpp"
 #include "hdk/memory/clone.hpp"
 #include "tz/core/containers/enum_field.hpp"
+#include "tz/core/peripherals/mouse.hpp"
 
 namespace game
 {
@@ -134,12 +135,17 @@ namespace game
 	{
 		std::function<bool(const Actor&, const Actor&)> predicate;
 	};
+	
+	struct ActionClickData
+	{
+		ActionEntity actions;
+		tz::Delay icd;
+	};
 
 	template<>
 	struct FlagParams<FlagID::ActionOnClick>
 	{
-		ActionEntity actions;
-		tz::Delay icd = {0};
+		std::unordered_map<tz::MouseButton, ActionClickData> action_map;
 	};
 
 	template<>
@@ -228,6 +234,12 @@ namespace game
 	class FlagEntity : public Entity<FlagID, IFlag, Flag, FlagParams>
 	{
 		using Entity<FlagID, IFlag, Flag, FlagParams>::Entity;
+	};
+
+	template<>
+	struct ActionParams<ActionID::ApplyFlag>
+	{
+		FlagEntity flags;
 	};
 }
 

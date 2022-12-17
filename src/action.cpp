@@ -248,4 +248,10 @@ namespace game
 		unsigned long long delta_millis = tz::system_time().millis<unsigned long long>() - scene.actor().last_update.millis<unsigned long long>();
 		action.data().cast_time_millis -= delta_millis;
 	ACTION_IMPL_END(ActionID::Cast)
+//--------------------------------------------------------------------------------------------------
+	ACTION_IMPL_BEGIN(ActionID::ApplyFlag)
+		action.data().flags.transfer_components(scene.actor().flags_new);
+		action.set_is_complete(true);
+	ACTION_IMPL_END(ActionID::ApplyFlag)
+//--------------------------------------------------------------------------------------------------
 }

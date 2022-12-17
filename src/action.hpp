@@ -87,6 +87,10 @@ namespace game
 		DelayedAction,
 		/// Cast an ability for some amount of time. If the actor stays still until the cast completes, the action will then be invoked. If not, the cast is cancelled and nothing happens.
 		Cast,
+		/// Apply a flag to an actor.
+		ApplyFlag,
+		/// Remove a flag from an actor, if it exists.
+		RemoveFlag
 	};
 
 	template<ActionID ID>
@@ -228,6 +232,13 @@ namespace game
 		bool cast_while_dead = false;
 		bool player_cancel_cast_escape = false;
 	};
+
+	// Implemented in flag.hpp for impl reasons.
+	//template<>
+	//struct ActionParams<ActionID::ApplyFlag>
+	//{
+	//	FlagEntity flags;
+	//}
 }
 #include "action.inl"
 
