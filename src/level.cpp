@@ -147,12 +147,19 @@ namespace game
 			bytes[3] = static_cast<std::byte>(1.0f);
 		};
 		std::vector<hdk::vec3ui> actor_pool;
+		auto add_to_pool = [&info, &actor_pool](ActorType t)
+		{
+			for(float f = 0; f < info.gen_options.config.actors[t].spawn_coefficient; f += 0.01f)
+			{
+				actor_pool.push_back(game::create_actor(t).palette_colour);			
+			}
+		};
 		// If we have a whitelist, can only be things from the whitelist.
 		if(!info.gen_options.whitelist.empty())
 		{
 			for(ActorType t : info.gen_options.whitelist)
 			{
-				actor_pool.push_back(game::create_actor(t).palette_colour);
+				add_to_pool(t);
 			}
 		}
 		else
@@ -164,7 +171,7 @@ namespace game
 				Actor a = game::create_actor(t);
 				if(a.palette_colour != colour_black && !info.gen_options.blacklist.contains(t))
 				{
-					actor_pool.push_back(a.palette_colour);
+					add_to_pool(t);
 				}
 			}
 		}
@@ -219,6 +226,8 @@ namespace game
 		const LevelPalette palette = get_level_palette();
 		static std::unordered_map<ActorType, bool> whitelist_actors(palette.actor_palette.size());
 		static std::unordered_map<ActorType, bool> blacklist_actors(palette.actor_palette.size());
+		struct SpawnRate{float f = 1.0f;};
+		static std::unordered_map<ActorType, ActorLayoutConfig> actor_spawnrates = {};
 		if(ImGui::CollapsingHeader("Black/White Listing", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			ImGui::BeginTable("Black/White Listing", 3, ImGuiTableFlags_Borders);
@@ -237,11 +246,29 @@ namespace game
 			}
 			ImGui::EndTable();
 		}
+		if(ImGui::CollapsingHeader("Spawn Rates"))
+		{
+			for(const auto&[_, actor] : palette.actor_palette)
+			{
+				// We care about the actor if:
+				// It is white-listed, or not black-listed and the white-list is empty.
+				const bool is_white_listed = whitelist_actors[actor];
+				const bool is_black_listed = blacklist_actors[actor];
+				const bool white_list_empty = std::all_of(whitelist_actors.begin(), whitelist_actors.end(), [](const auto& iter){return !iter.second;});
+				if(is_white_listed || (!is_black_listed && white_list_empty))
+				{
+					ImGui::DragFloat(game::create_actor(actor).name, &actor_spawnrates[actor].spawn_coefficient, 0.01f, 0.0f, 1.0f);
+				}
+			}
+		}
 		for(std::size_t i = 0; i < static_cast<std::size_t>(LevelLayoutFlag::Count); i++)
 		{
 			ImGui::Checkbox(level_layout_flag_names[i], &level_layout_flag_values[i].b);
 		}
 		std::array<TextureID, 2> backdrops{TextureID::Invisible, TextureID::DevLevel1_Backdrop};
+		ImGui::Spacing();
+		static int empty_chance = 50;
+		ImGui::DragInt("Actor Sparseness", &empty_chance, 0.5f, 0, 100);
 		static int backdrop_id = 0;
 		ImGui::Spacing();
 		ImGui::Text("Backdrops");
@@ -249,6 +276,46 @@ namespace game
 		ImGui::RadioButton("No Backdrop", &backdrop_id, 0);
 		ImGui::RadioButton("DevLevel1 Backdrop", &backdrop_id, 1);
 		ImGui::Unindent();
+		if(ImGui::CollapsingHeader("Configure Presets"))
+		{
+			ImGui::Indent();
+			ImGui::Text("Note: This will change all your currently set options. Select a preset and then press 'Generate' to create a level based on that preset.");
+			if(ImGui::Button("Easy Zombie Schmup"))
+			{
+				whitelist_actors.clear();
+				blacklist_actors.clear();
+				whitelist_actors[ActorType::GhostZombie] = true;
+				whitelist_actors[ActorType::Wall] = true;
+				actor_spawnrates[ActorType::GhostZombie] = {.spawn_coefficient = 0.4f};
+				level_layout_flag_values[static_cast<std::size_t>(LevelLayoutFlag::GenerateBorder)].b = true;
+				empty_chance = 94;
+			}
+			if(ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
+			{
+				ImGui::SetTooltip("A very simple arena, sprinkled with a couple of zombies. You should have no trouble here.");
+			}
+			if(ImGui::Button("Death-laden Nightmare Maze"))
+			{
+				whitelist_actors.clear();
+				blacklist_actors.clear();
+				whitelist_actors[ActorType::GhostZombie] = true;
+				whitelist_actors[ActorType::GhostZombie_Spawner] = true;
+				whitelist_actors[ActorType::GhostBanshee] = true;
+				whitelist_actors[ActorType::Wall] = true;
+				whitelist_actors[ActorType::CollectablePowerup_Sprint] = true;
+				actor_spawnrates[ActorType::GhostZombie] = {.spawn_coefficient = 0.4f};
+				actor_spawnrates[ActorType::GhostZombie_Spawner] = {.spawn_coefficient = 0.05f};
+				actor_spawnrates[ActorType::GhostBanshee] = {.spawn_coefficient = 0.01f};
+				actor_spawnrates[ActorType::CollectablePowerup_Sprint] = {.spawn_coefficient = 0.01f};
+				level_layout_flag_values[static_cast<std::size_t>(LevelLayoutFlag::GenerateBorder)].b = true;
+				empty_chance = 50;
+			}
+			if(ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
+			{
+				ImGui::SetTooltip("A claustrophobic labyrinth brimming with zombies. Prepare for instant carnage!");
+			}
+			ImGui::Unindent();
+		}
 		if(ImGui::Button("Generate"))
 		{
 			ActorTypes whitelist;
@@ -276,10 +343,12 @@ namespace game
 					.width = 32,
 					.height = 32,
 					.seed = 32u,
+					.empty_chance = static_cast<unsigned int>(empty_chance),
 					.whitelist = whitelist,
 					.blacklist = blacklist,
 					.config =
 					{
+						.actors = actor_spawnrates,
 						.flags = flags
 					}
 				}),

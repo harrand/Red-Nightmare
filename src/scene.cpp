@@ -150,19 +150,19 @@ namespace game
 			this->load_level(LevelID::DevLevel0);
 		}
 		ImGui::SameLine();
-		ImGui::Text("An enclosed maze filled with the undead. Difficulty: Medium");
+		ImGui::TextWrapped("An enclosed maze filled with the undead. Difficulty: Medium");
 		if(ImGui::Button("DevLevel1"))
 		{
 			this->load_level(LevelID::DevLevel1);
 		}
 		ImGui::SameLine();
-		ImGui::Text("A Banshee is consuming the souls of the innocent dead. Slay her. Difficulty: Low");
+		ImGui::TextWrapped("A Banshee haunts the mausoleum of a graveyard, forcing the dead to rise again. Destroy the graves to deprive her of souls, and then destroy her. Difficulty: High");
 		if(ImGui::Button("DevLevel2"))
 		{
 			this->load_level(LevelID::DevLevel2);
 		}
 		ImGui::SameLine();
-		ImGui::Text("An open arena with little cover. You are constantly barraged by fireballs. You will die. Difficulty: Very High");
+		ImGui::TextWrapped("You are constantly bombarded. Your shelter would do nicely, if it weren't being invaded by the undead... Difficulty: Medium");
 	}
 
 	void Scene::dbgui_procedural_level()
