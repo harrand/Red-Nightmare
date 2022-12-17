@@ -2,6 +2,7 @@
 #include "images.hpp"
 #include "tz/core/imported_text.hpp"
 #include "tz/core/containers/grid_view.hpp"
+#include "tz/dbgui/dbgui.hpp"
 #include "hdk/debug.hpp"
 
 #include ImportedTextHeader(invisible, png)
@@ -209,5 +210,75 @@ namespace game
 			.dimensions = dims
 		});
 		return res;
+	}
+
+	std::optional<tz::gl::ImageResource> dbgui_generate_random_level_image()
+	{
+		struct BoolProxy{bool b = false;};
+		static std::vector<BoolProxy> level_layout_flag_values(static_cast<std::size_t>(LevelLayoutFlag::Count));
+		if(ImGui::CollapsingHeader("Procedurally Generated Level"))
+		{
+			ImGui::Indent();
+			const LevelPalette palette = get_level_palette();
+			static std::unordered_map<ActorType, bool> whitelist_actors(palette.actor_palette.size());
+			static std::unordered_map<ActorType, bool> blacklist_actors(palette.actor_palette.size());
+			if(ImGui::CollapsingHeader("Generation Options", ImGuiTreeNodeFlags_DefaultOpen))
+			{
+				ImGui::BeginTable("Black/White Listing", 3);
+				ImGui::TableNextRow();
+				std::size_t i = 0;
+				for(const auto&[_, actor] : palette.actor_palette)
+				{
+					ImGui::PushID(i++);
+					ImGui::TableNextColumn();
+					ImGui::Text(game::create_actor(actor).name);
+					ImGui::TableNextColumn();
+					ImGui::Checkbox("Whitelist", &whitelist_actors[actor]);
+					ImGui::TableNextColumn();
+					ImGui::Checkbox("Blacklist", &blacklist_actors[actor]);
+					ImGui::PopID();
+				}
+				ImGui::EndTable();
+			}
+			for(std::size_t i = 0; i < static_cast<std::size_t>(LevelLayoutFlag::Count); i++)
+			{
+				ImGui::Checkbox(level_layout_flag_names[i], &level_layout_flag_values[i].b);
+			}
+			if(ImGui::Button("Generate"))
+			{
+				ActorTypes whitelist;
+				ActorTypes blacklist;
+				for(const auto&[actor, b] : whitelist_actors)
+				{
+					if(b){whitelist |= actor;}
+				}
+				for(const auto&[actor, b] : blacklist_actors)
+				{
+					if(b){blacklist |= actor;}
+				}
+				LevelLayoutFlags flags;
+				for(std::size_t i = 0; i < level_layout_flag_values.size(); i++)
+				{
+					if(level_layout_flag_values[i].b)
+					{
+						flags |= static_cast<LevelLayoutFlag>(i);
+					}
+				}
+				return random_level_image
+				({
+					.width = 32,
+					.height = 32,
+					.seed = 32u,
+					.whitelist = whitelist,
+					.blacklist = blacklist,
+					.config =
+					{
+						.flags = flags
+					}
+				});
+			}
+			ImGui::Unindent();
+		}
+		return {};
 	}
 }

@@ -45,9 +45,14 @@ namespace game
 
 	enum class LevelLayoutFlag
 	{
-		GenerateBorder
+		GenerateBorder,
+		Count
 	};
 	using LevelLayoutFlags = tz::EnumField<LevelLayoutFlag>;
+	constexpr std::array<const char*, static_cast<std::size_t>(LevelLayoutFlag::Count)> level_layout_flag_names =
+	{
+		"Generate Border"
+	};
 
 	struct ActorLayoutConfig
 	{
@@ -56,8 +61,8 @@ namespace game
 
 	struct LevelLayoutConfig
 	{
-		std::unordered_map<ActorType, ActorLayoutConfig> actors;
-		LevelLayoutFlags flags = {LevelLayoutFlag::GenerateBorder};
+		std::unordered_map<ActorType, ActorLayoutConfig> actors = {};
+		LevelLayoutFlags flags = {};
 	};
 
 	struct RandomLevelGenerationOptions
@@ -84,6 +89,7 @@ namespace game
 	Level load_level_from_image(const tz::gl::ImageResource& level_image, TextureID backdrop = TextureID::Invisible);
 
 	tz::gl::ImageResource random_level_image(const RandomLevelGenerationOptions& options);
+	std::optional<tz::gl::ImageResource> dbgui_generate_random_level_image();
 }
 
 #endif // REDNIGHTMARE_LEVEL_HPP
