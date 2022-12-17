@@ -51,7 +51,7 @@ namespace game
 	using LevelLayoutFlags = tz::EnumField<LevelLayoutFlag>;
 	constexpr std::array<const char*, static_cast<std::size_t>(LevelLayoutFlag::Count)> level_layout_flag_names =
 	{
-		"Generate Border"
+		"Generate Border",
 	};
 
 	struct ActorLayoutConfig

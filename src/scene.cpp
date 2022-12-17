@@ -56,44 +56,10 @@ namespace game
 		this->collision_resolution();
 	}
 	
-	void Scene::dbgui()
+	void Scene::dbgui_current_scene()
 	{
 		ImGui::Text("Current Scene");
 		ImGui::Spacing();
-		if(ImGui::CollapsingHeader("Dev Levels"))
-		{
-			ImGui::Indent();
-			if(ImGui::Button("Empty Level"))
-			{
-				this->load_level(LevelID::Empty);
-			}
-			ImGui::SameLine();
-			ImGui::Text("Nothin");
-			if(ImGui::Button("DevLevel0"))
-			{
-				this->load_level(LevelID::DevLevel0);
-			}
-			ImGui::SameLine();
-			ImGui::Text("An enclosed maze filled with the undead. Difficulty: Medium");
-			if(ImGui::Button("DevLevel1"))
-			{
-				this->load_level(LevelID::DevLevel1);
-			}
-			ImGui::SameLine();
-			ImGui::Text("A Banshee is consuming the souls of the innocent dead. Slay her. Difficulty: Low");
-			if(ImGui::Button("DevLevel2"))
-			{
-				this->load_level(LevelID::DevLevel2);
-			}
-			ImGui::SameLine();
-			ImGui::Text("An open arena with little cover. You are constantly barraged by fireballs. You will die. Difficulty: Very High");
-			auto maybe_level_img = game::dbgui_generate_random_level_image();
-			if(maybe_level_img.has_value())
-			{
-				this->impl_load_level(load_level_from_image(maybe_level_img.value()));
-			}
-			ImGui::Unindent();
-		}
 		if(ImGui::CollapsingHeader("Mass Control"))
 		{
 			ImGui::Indent();
@@ -158,6 +124,43 @@ namespace game
 			ImGui::Indent();
 			this->qrenderer.dbgui();
 			ImGui::Unindent();
+		}
+	}
+
+	void Scene::dbgui_story_levels()
+	{
+		if(ImGui::Button("Empty Level"))
+		{
+			this->load_level(LevelID::Empty);
+		}
+		ImGui::SameLine();
+		ImGui::Text("Nothin");
+		if(ImGui::Button("DevLevel0"))
+		{
+			this->load_level(LevelID::DevLevel0);
+		}
+		ImGui::SameLine();
+		ImGui::Text("An enclosed maze filled with the undead. Difficulty: Medium");
+		if(ImGui::Button("DevLevel1"))
+		{
+			this->load_level(LevelID::DevLevel1);
+		}
+		ImGui::SameLine();
+		ImGui::Text("A Banshee is consuming the souls of the innocent dead. Slay her. Difficulty: Low");
+		if(ImGui::Button("DevLevel2"))
+		{
+			this->load_level(LevelID::DevLevel2);
+		}
+		ImGui::SameLine();
+		ImGui::Text("An open arena with little cover. You are constantly barraged by fireballs. You will die. Difficulty: Very High");
+	}
+
+	void Scene::dbgui_procedural_level()
+	{
+		auto maybe_level_img = game::dbgui_generate_random_level_image();
+		if(maybe_level_img.has_value())
+		{
+			this->impl_load_level(load_level_from_image(maybe_level_img.value()));
 		}
 	}
 

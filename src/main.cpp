@@ -10,10 +10,17 @@ int main()
 	{
 		game::Scene scene;
 
-		bool show_current_scene = false;
-		tz::dbgui::game_menu().add_callback([&show_current_scene]()
+		struct DbguiData
 		{
-			ImGui::MenuItem("Current Scene", nullptr, &show_current_scene);
+			bool show_current_scene = false;
+			bool show_story_levels = false;
+			bool show_procedural_level = false;
+		} dd;
+		tz::dbgui::game_menu().add_callback([&dd]()
+		{
+			ImGui::MenuItem("Current Scene", nullptr, &dd.show_current_scene);
+			ImGui::MenuItem("Story Levels", nullptr, &dd.show_story_levels);
+			ImGui::MenuItem("Procedural Level", nullptr, &dd.show_procedural_level);
 		});
 
 		scene.load_level(game::LevelID::DevLevel1);
@@ -33,12 +40,24 @@ int main()
 				fixed_update.reset();
 			}
 
-			tz::dbgui::run([&show_current_scene, &scene]()
+			tz::dbgui::run([&dd, &scene]()
 			{
-				if(show_current_scene)
+				if(dd.show_current_scene)
 				{
-					ImGui::Begin("Current Scene", &show_current_scene);
-					scene.dbgui();
+					ImGui::Begin("Current Scene", &dd.show_current_scene);
+					scene.dbgui_current_scene();
+					ImGui::End();
+				}
+				if(dd.show_story_levels)
+				{
+					ImGui::Begin("Story Levels", &dd.show_story_levels);
+					scene.dbgui_story_levels();
+					ImGui::End();
+				}
+				if(dd.show_procedural_level)
+				{
+					ImGui::Begin("Level Generator", &dd.show_procedural_level);
+					scene.dbgui_procedural_level();
 					ImGui::End();
 				}
 			});

@@ -37,7 +37,9 @@ namespace game
 		Scene();
 		void render();
 		void update();
-		void dbgui();
+		void dbgui_current_scene();
+		void dbgui_story_levels();
+		void dbgui_procedural_level();
 		std::size_t size() const;
 		bool empty() const;
 
