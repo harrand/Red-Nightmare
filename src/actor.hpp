@@ -51,6 +51,8 @@ namespace game
 		Powerup_Sprint,
 		/// On debug builds, looks like the missing placeholder texture. On non-debug builds, completely invisible.
 		DebugOnlyVisible,
+		/// Actor is invisible.
+		Invisible,
 	};
 
 	enum class ActorType
@@ -79,6 +81,8 @@ namespace game
 		Fireball_Spawner,
 		/// A visible wall, blocking other actors' paths.
 		Wall,
+		/// An invisible wall, blocking other actor's paths.
+		InvisibleWall,
 		/// Just like a wall, but is destructible by the player.
 		WallDestructible,
 		/// A powerup that is gives the player sprint on consumption.
