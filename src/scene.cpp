@@ -7,6 +7,7 @@
 
 #include <algorithm>
 #include <numeric>
+#include <unordered_map>
 
 namespace game
 {
@@ -86,19 +87,56 @@ namespace game
 			}
 			ImGui::SameLine();
 			ImGui::Text("An open arena with little cover. You are constantly barraged by fireballs. You will die. Difficulty: Very High");
-			if(ImGui::Button("Procedurally Generated Level"))
+			if(ImGui::CollapsingHeader("Procedurally Generated Level"))
 			{
-				tz::gl::ImageResource res = game::random_level_image
-				({
-					.width = 32,
-					.height = 32,
-					.seed = 32u,
-					.blacklist = {ActorType::Nightmare, ActorType::GhostZombie_Spawner}
-				});
-				this->impl_load_level(game::load_level_from_image(res));
+				const LevelPalette palette = get_level_palette();
+				static std::unordered_map<ActorType, bool> whitelist_actors(palette.actor_palette.size());
+				static std::unordered_map<ActorType, bool> blacklist_actors(palette.actor_palette.size());
+				if(ImGui::CollapsingHeader("Generation Options", ImGuiTreeNodeFlags_DefaultOpen))
+				{
+					ImGui::BeginTable("Black/White Listing", 3);
+					ImGui::TableNextRow();
+					std::size_t i = 0;
+					for(const auto&[_, actor] : palette.actor_palette)
+					{
+						ImGui::PushID(i++);
+						ImGui::TableNextColumn();
+						ImGui::Text(game::create_actor(actor).name);
+						ImGui::TableNextColumn();
+						ImGui::Checkbox("Whitelist", &whitelist_actors[actor]);
+						ImGui::TableNextColumn();
+						ImGui::Checkbox("Blacklist", &blacklist_actors[actor]);
+						ImGui::PopID();
+					}
+					ImGui::EndTable();
+				}
+				if(ImGui::Button("Generate"))
+				{
+					ActorTypes whitelist;
+					ActorTypes blacklist;
+					for(const auto&[actor, b] : whitelist_actors)
+					{
+						if(b){whitelist |= actor;}
+					}
+					for(const auto&[actor, b] : blacklist_actors)
+					{
+						if(b){blacklist |= actor;}
+					}
+					tz::gl::ImageResource res = game::random_level_image
+					({
+						.width = 32,
+						.height = 32,
+						.seed = 32u,
+						.whitelist = whitelist,
+						.blacklist = blacklist,
+						.config =
+						{
+
+						}
+					});
+					this->impl_load_level(game::load_level_from_image(res));
+				}
 			}
-			ImGui::SameLine();
-			ImGui::Text("A chaotic level with completely random spawns. All actors are uniformly likely to be spawned. Difficulty: Between Very Easy and Impossible.");
 			ImGui::Unindent();
 		}
 		if(ImGui::CollapsingHeader("Mass Control"))

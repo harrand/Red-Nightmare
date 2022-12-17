@@ -187,6 +187,21 @@ namespace game
 				}
 			}
 		}
+	
+		if(options.config.flags.contains(LevelLayoutFlag::GenerateBorder))
+		{
+			const hdk::vec3 wall_colour = game::create_actor(ActorType::Wall).palette_colour;
+			for(std::size_t x = 0; x < dims[0]; x++)
+			{
+				for(std::size_t y = 0; y < dims[1]; y++)
+				{
+					if((x == 0 || x == (dims[0] - 1)) || (y == 0 || y == (dims[1] - 1)))
+					{
+						colvec_to_bytes(view(x, y), wall_colour);
+					}
+				}
+			}
+		}
 
 		tz::gl::ImageResource res = tz::gl::ImageResource::from_memory(image_data,
 		{

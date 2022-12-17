@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <utility>
 #include <random>
+#include <unordered_map>
 
 namespace game
 {
@@ -42,6 +43,23 @@ namespace game
 		TextureID backdrop;
 	};
 
+	enum class LevelLayoutFlag
+	{
+		GenerateBorder
+	};
+	using LevelLayoutFlags = tz::EnumField<LevelLayoutFlag>;
+
+	struct ActorLayoutConfig
+	{
+		float spawn_coefficient = 1.0f;
+	};
+
+	struct LevelLayoutConfig
+	{
+		std::unordered_map<ActorType, ActorLayoutConfig> actors;
+		LevelLayoutFlags flags = {LevelLayoutFlag::GenerateBorder};
+	};
+
 	struct RandomLevelGenerationOptions
 	{
 		// Number of pixels in each row of the generated level image.
@@ -53,6 +71,7 @@ namespace game
 		unsigned int empty_chance = 50;
 		ActorTypes whitelist = {};
 		ActorTypes blacklist = {};
+		LevelLayoutConfig config = {};
 	};
 
 	struct RandomLevelInfo
