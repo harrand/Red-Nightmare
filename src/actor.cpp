@@ -84,7 +84,7 @@ namespace game
 										{
 											Action<ActionID::Cast>
 											{{
-												.cast_time_millis = 1000.0f,
+												.cast_time_millis = 1500.0f,
 												.actions =
 												{
 													Action<ActionID::Despawn>{},
@@ -107,10 +107,29 @@ namespace game
 																		.scale = {1.0f, 1.0f}
 																	}},
 																	Flag<FlagID::Player>{},
+																	Flag<FlagID::ActionOnRepeat>
+																	{{
+																		.period = 250.0f,
+																		.current_time = 500.0f,
+																		.predicate = [](const Actor&){return true;},
+																		.actions =
+																		{
+																			Action<ActionID::SpawnActor>
+																			{{
+																				.actor = ActorType::FireExplosion,
+																				.inherit_faction = true
+																			}},
+																		}
+																	}},
 																	Flag<FlagID::ActionOnDeath>
 																	{{
 																		.actions =
 																		{
+																			Action<ActionID::SpawnActor>
+																			{{
+																				.actor = ActorType::FireExplosion,
+																				.inherit_faction = true
+																			}},
 																			Action<ActionID::RespawnAs>
 																			{{
 																				.actor = ActorType::PlayerClassic
@@ -370,7 +389,7 @@ namespace game
 						{{
 							.predicate = [](const Actor& self, const Actor& actor)
 							{
-								return self.type == actor.type;
+								return self.type == actor.type && self.is_enemy_of(actor);
 							},
 							.actions =
 							{
