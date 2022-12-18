@@ -29,10 +29,6 @@ namespace game
 
 	void QuadRenderer::dbgui()
 	{
-		if(ImGui::CollapsingHeader("Backdrop"))
-		{
-			ImGui::DragFloat2("Position", this->backdrop().position.data().data(), 0.1f, 0.0f, 64.0f);	
-		}
 		ImGui::Text("Quad Count: %zu", this->quad_count);
 		static bool wireframe_mode = false;
 		if(ImGui::Checkbox("Wireframe Mode", &wireframe_mode))
@@ -56,24 +52,24 @@ namespace game
 		}
 	}
 
-	const QuadRenderer::ElementData& QuadRenderer::backdrop() const
+	const QuadRenderer::ElementData& QuadRenderer::overlay(OverlayID ovlid) const
 	{
-		return tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<const QuadRenderer::ElementData>().front();
+		return tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<const QuadRenderer::ElementData>()[static_cast<std::size_t>(ovlid)];
 	}
 
-	QuadRenderer::ElementData& QuadRenderer::backdrop()
+	QuadRenderer::ElementData& QuadRenderer::overlay(OverlayID ovlid)
 	{
-		return tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<QuadRenderer::ElementData>().front();
+		return tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<QuadRenderer::ElementData>()[static_cast<std::size_t>(ovlid)];
 	}
 
 	std::span<const QuadRenderer::ElementData> QuadRenderer::elements() const
 	{
-		return tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<const QuadRenderer::ElementData>().subspan(1, this->quad_count - 1);
+		return tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<const QuadRenderer::ElementData>().subspan(static_cast<std::size_t>(OverlayID::Count), this->quad_count - 1);
 	}
 
 	std::span<QuadRenderer::ElementData> QuadRenderer::elements()
 	{
-		return tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<QuadRenderer::ElementData>().subspan(1, this->quad_count - 1);
+		return tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<QuadRenderer::ElementData>().subspan(static_cast<std::size_t>(OverlayID::Count), this->quad_count - 1);
 	}
 
 	void QuadRenderer::push()

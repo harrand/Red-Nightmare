@@ -8,6 +8,12 @@
 
 namespace game
 {
+	enum class OverlayID
+	{
+		Backdrop,
+		Count
+	};
+
 	class QuadRenderer
 	{
 	public:
@@ -26,8 +32,8 @@ namespace game
 			float layer = 0.0f;
 		};
 
-		const ElementData& backdrop() const;
-		ElementData& backdrop();
+		const ElementData& overlay(OverlayID ovlid) const;
+		ElementData& overlay(OverlayID ovlid);
 		std::span<const ElementData> elements() const;
 		std::span<ElementData> elements();
 

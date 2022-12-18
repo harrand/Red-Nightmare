@@ -247,7 +247,7 @@ namespace game
 			this->qrenderer.elements().back().position = pos;
 		}
 		this->level_boundaries = level.max_level_coords;
-		auto& backdrop_data = this->qrenderer.backdrop();
+		auto& backdrop_data = this->qrenderer.overlay(OverlayID::Backdrop);
 		backdrop_data.texture_id = level.backdrop;
 		backdrop_data.position = (this->level_boundaries / 2.0f) - hdk::vec2::filled(1.0f);
 		backdrop_data.scale = ((this->level_boundaries - hdk::vec2::filled(0.25f)) / 2.0f);
