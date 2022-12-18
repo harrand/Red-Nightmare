@@ -89,6 +89,18 @@ add_text(
 		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_cast5.png
 		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_cast6.png
 		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_cast7.png
+		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_death00.png
+		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_death01.png
+		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_death02.png
+		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_death03.png
+		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_death04.png
+		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_death05.png
+		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_death06.png
+		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_death07.png
+		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_death08.png
+		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_death09.png
+		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_death10.png
+		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_death11.png
 		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_down0.png
 		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_down1.png
 		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_down2.png

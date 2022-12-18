@@ -173,6 +173,26 @@ namespace game
 			.fps = 7,
 			.loop = true
 		},
+		AnimationInfo /*PlayerClassic_LowPoly_Death*/
+		{
+			.frames = 
+			{
+				TextureID::PlayerClassic_LowPoly_Death00,
+				TextureID::PlayerClassic_LowPoly_Death01,
+				TextureID::PlayerClassic_LowPoly_Death02,
+				TextureID::PlayerClassic_LowPoly_Death03,
+				TextureID::PlayerClassic_LowPoly_Death04,
+				TextureID::PlayerClassic_LowPoly_Death05,
+				TextureID::PlayerClassic_LowPoly_Death06,
+				TextureID::PlayerClassic_LowPoly_Death07,
+				TextureID::PlayerClassic_LowPoly_Death08,
+				TextureID::PlayerClassic_LowPoly_Death09,
+				TextureID::PlayerClassic_LowPoly_Death10,
+				TextureID::PlayerClassic_LowPoly_Death11,
+			},
+			.fps = 14,
+			.loop = false
+		},
 		AnimationInfo /*PlayerClassic_LowPoly_MoveDown*/
 		{
 			.frames = 

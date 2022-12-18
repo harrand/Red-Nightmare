@@ -1036,7 +1036,7 @@ namespace game
 				if(this->dead())
 				{
 					// TODO: Death animation for LowPoly
-					ending_animation = AnimationID::PlayerClassic_Death;
+					ending_animation = AnimationID::PlayerClassic_LowPoly_Death;
 				}
 				if(this->entity.has<ActionID::Cast>())
 				{

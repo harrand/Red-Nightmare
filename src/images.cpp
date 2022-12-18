@@ -36,6 +36,18 @@
 #include ImportedTextHeader(player_classic_lowpoly_cast5, png)
 #include ImportedTextHeader(player_classic_lowpoly_cast6, png)
 #include ImportedTextHeader(player_classic_lowpoly_cast7, png)
+#include ImportedTextHeader(player_classic_lowpoly_death00, png)
+#include ImportedTextHeader(player_classic_lowpoly_death01, png)
+#include ImportedTextHeader(player_classic_lowpoly_death02, png)
+#include ImportedTextHeader(player_classic_lowpoly_death03, png)
+#include ImportedTextHeader(player_classic_lowpoly_death04, png)
+#include ImportedTextHeader(player_classic_lowpoly_death05, png)
+#include ImportedTextHeader(player_classic_lowpoly_death06, png)
+#include ImportedTextHeader(player_classic_lowpoly_death07, png)
+#include ImportedTextHeader(player_classic_lowpoly_death08, png)
+#include ImportedTextHeader(player_classic_lowpoly_death09, png)
+#include ImportedTextHeader(player_classic_lowpoly_death10, png)
+#include ImportedTextHeader(player_classic_lowpoly_death11, png)
 #include ImportedTextHeader(player_classic_lowpoly_down0, png)
 #include ImportedTextHeader(player_classic_lowpoly_down1, png)
 #include ImportedTextHeader(player_classic_lowpoly_down2, png)
@@ -219,6 +231,18 @@ namespace game
 		ImportedTextData(player_classic_lowpoly_cast5, png),
 		ImportedTextData(player_classic_lowpoly_cast6, png),
 		ImportedTextData(player_classic_lowpoly_cast7, png),
+		ImportedTextData(player_classic_lowpoly_death00, png),
+		ImportedTextData(player_classic_lowpoly_death01, png),
+		ImportedTextData(player_classic_lowpoly_death02, png),
+		ImportedTextData(player_classic_lowpoly_death03, png),
+		ImportedTextData(player_classic_lowpoly_death04, png),
+		ImportedTextData(player_classic_lowpoly_death05, png),
+		ImportedTextData(player_classic_lowpoly_death06, png),
+		ImportedTextData(player_classic_lowpoly_death07, png),
+		ImportedTextData(player_classic_lowpoly_death08, png),
+		ImportedTextData(player_classic_lowpoly_death09, png),
+		ImportedTextData(player_classic_lowpoly_death10, png),
+		ImportedTextData(player_classic_lowpoly_death11, png),
 		ImportedTextData(player_classic_lowpoly_down0, png),
 		ImportedTextData(player_classic_lowpoly_down1, png),
 		ImportedTextData(player_classic_lowpoly_down2, png),

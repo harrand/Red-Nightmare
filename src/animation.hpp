@@ -43,6 +43,7 @@ namespace game
 		PlayerClassic_MoveUp,
 		PlayerClassic_MoveSide,
 		PlayerClassic_LowPoly_Cast,
+		PlayerClassic_LowPoly_Death,
 		PlayerClassic_LowPoly_MoveDown,
 		PlayerClassic_LowPoly_EndCast,
 		PlayerClassic_LowPoly_Idle,
