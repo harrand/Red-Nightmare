@@ -157,6 +157,22 @@ namespace game
 			.fps = 6,
 			.loop = true
 		},
+		AnimationInfo /*PlayerClassic_LowPoly_Cast*/
+		{
+			.frames = 
+			{
+				TextureID::PlayerClassic_LowPoly_Cast0,
+				TextureID::PlayerClassic_LowPoly_Cast1,
+				TextureID::PlayerClassic_LowPoly_Cast2,
+				TextureID::PlayerClassic_LowPoly_Cast3,
+				TextureID::PlayerClassic_LowPoly_Cast4,
+				TextureID::PlayerClassic_LowPoly_Cast5,
+				TextureID::PlayerClassic_LowPoly_Cast6,
+				TextureID::PlayerClassic_LowPoly_Cast7,
+			},
+			.fps = 7,
+			.loop = true
+		},
 		AnimationInfo /*PlayerClassic_LowPoly_MoveDown*/
 		{
 			.frames = 

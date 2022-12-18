@@ -54,17 +54,25 @@ namespace game
 									{
 										.actions =
 										{
-											Action<ActionID::SpawnActor>
+											Action<ActionID::Cast>
 											{{
-												.actor = ActorType::ChaoticFireball,
-												.inherit_faction = true,
+												.cast_time_millis = 200.0f,
 												.actions =
 												{
-													Action<ActionID::LaunchToMouse>
+													Action<ActionID::SpawnActor>
 													{{
-														.speed_multiplier = 8.0f
+														.actor = ActorType::ChaoticFireball,
+														.inherit_faction = true,
+														.actions =
+														{
+															Action<ActionID::LaunchToMouse>
+															{{
+																.speed_multiplier = 8.0f
+															}}
+														}
 													}}
-												}
+												},
+												.player_cancel_cast_escape = true
 											}}
 										},
 										.icd = 500_ms
@@ -74,40 +82,48 @@ namespace game
 									{
 										.actions = 
 										{
-											Action<ActionID::Despawn>{},
-											Action<ActionID::SpawnActor>
+											Action<ActionID::Cast>
 											{{
-												.actor = ActorType::ChaoticFireball,
-												.inherit_faction = true,
+												.cast_time_millis = 1000.0f,
 												.actions =
 												{
-													Action<ActionID::LaunchToMouse>
+													Action<ActionID::Despawn>{},
+													Action<ActionID::SpawnActor>
 													{{
-														.speed_multiplier = 8.0f
-													}},
-													Action<ActionID::ApplyFlag>
-													{{
-														.flags =
+														.actor = ActorType::ChaoticFireball,
+														.inherit_faction = true,
+														.actions =
 														{
-															Flag<FlagID::CustomScale>
+															Action<ActionID::LaunchToMouse>
 															{{
-																.scale = {1.0f, 1.0f}
+																.speed_multiplier = 8.0f
 															}},
-															Flag<FlagID::Player>{},
-															Flag<FlagID::ActionOnDeath>
+															Action<ActionID::ApplyFlag>
 															{{
-																.actions =
+																.flags =
 																{
-																	Action<ActionID::RespawnAs>
+																	Flag<FlagID::CustomScale>
 																	{{
-																		.actor = ActorType::PlayerClassic
+																		.scale = {1.0f, 1.0f}
+																	}},
+																	Flag<FlagID::Player>{},
+																	Flag<FlagID::ActionOnDeath>
+																	{{
+																		.actions =
+																		{
+																			Action<ActionID::RespawnAs>
+																			{{
+																				.actor = ActorType::PlayerClassic
+																			}}
+																		}
 																	}}
 																}
 															}}
 														}
 													}}
-												}
-											}}
+												},
+												.player_cancel_cast_escape = true
+											}},
 										},
 										.icd = 500_ms
 									}
@@ -1002,6 +1018,10 @@ namespace game
 				{
 					// TODO: Death animation for LowPoly
 					ending_animation = AnimationID::PlayerClassic_Death;
+				}
+				if(this->entity.has<ActionID::Cast>())
+				{
+					ending_animation = AnimationID::PlayerClassic_LowPoly_Cast;
 				}
 			break;
 			case ActorSkin::GhostZombie:

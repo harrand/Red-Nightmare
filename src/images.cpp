@@ -28,6 +28,14 @@
 #include ImportedTextHeader(player_classic_up2, png)
 #include ImportedTextHeader(player_classic_up3, png)
 
+#include ImportedTextHeader(player_classic_lowpoly_cast0, png)
+#include ImportedTextHeader(player_classic_lowpoly_cast1, png)
+#include ImportedTextHeader(player_classic_lowpoly_cast2, png)
+#include ImportedTextHeader(player_classic_lowpoly_cast3, png)
+#include ImportedTextHeader(player_classic_lowpoly_cast4, png)
+#include ImportedTextHeader(player_classic_lowpoly_cast5, png)
+#include ImportedTextHeader(player_classic_lowpoly_cast6, png)
+#include ImportedTextHeader(player_classic_lowpoly_cast7, png)
 #include ImportedTextHeader(player_classic_lowpoly_down0, png)
 #include ImportedTextHeader(player_classic_lowpoly_down1, png)
 #include ImportedTextHeader(player_classic_lowpoly_down2, png)
@@ -197,6 +205,14 @@ namespace game
 		ImportedTextData(player_classic_up2, png),
 		ImportedTextData(player_classic_up3, png),
 
+		ImportedTextData(player_classic_lowpoly_cast0, png),
+		ImportedTextData(player_classic_lowpoly_cast1, png),
+		ImportedTextData(player_classic_lowpoly_cast2, png),
+		ImportedTextData(player_classic_lowpoly_cast3, png),
+		ImportedTextData(player_classic_lowpoly_cast4, png),
+		ImportedTextData(player_classic_lowpoly_cast5, png),
+		ImportedTextData(player_classic_lowpoly_cast6, png),
+		ImportedTextData(player_classic_lowpoly_cast7, png),
 		ImportedTextData(player_classic_lowpoly_down0, png),
 		ImportedTextData(player_classic_lowpoly_down1, png),
 		ImportedTextData(player_classic_lowpoly_down2, png),
