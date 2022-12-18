@@ -1040,7 +1040,17 @@ namespace game
 				}
 				if(this->entity.has<ActionID::Cast>())
 				{
-					ending_animation = AnimationID::PlayerClassic_LowPoly_Cast;
+					const auto& action = this->entity.get<ActionID::Cast>()->data();
+					const Animation end_cast_anim = game::play_animation(AnimationID::PlayerClassic_LowPoly_EndCast);
+					const int end_cast_anim_time_millis = (static_cast<float>(end_cast_anim.get_info().frames.size()) / end_cast_anim.get_info().fps) * 1000.0f;
+					if(action.cast_time_millis <= end_cast_anim_time_millis)
+					{
+						ending_animation = AnimationID::PlayerClassic_LowPoly_EndCast;
+					}
+					else
+					{
+						ending_animation = AnimationID::PlayerClassic_LowPoly_Cast;
+					}
 				}
 			break;
 			case ActorSkin::GhostZombie:

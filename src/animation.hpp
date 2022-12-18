@@ -44,6 +44,7 @@ namespace game
 		PlayerClassic_MoveSide,
 		PlayerClassic_LowPoly_Cast,
 		PlayerClassic_LowPoly_MoveDown,
+		PlayerClassic_LowPoly_EndCast,
 		PlayerClassic_LowPoly_Idle,
 		PlayerClassic_LowPoly_MoveSide,
 		PlayerClassic_LowPoly_MoveUp,
