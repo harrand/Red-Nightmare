@@ -18,6 +18,8 @@ tz_add_executable(
 		src/animation.hpp
 		src/box.cpp
 		src/box.hpp
+		src/effect.cpp
+		src/effect.hpp
 		src/entity.hpp
 		src/entity.inl
 		src/event.hpp
