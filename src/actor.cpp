@@ -251,9 +251,9 @@ namespace game
 						}},
 						Flag<FlagID::ActionOnHit>
 						{{
-							.actions =
+							.hittee_actions =
 							{
-								Action<ActionID::ApplyBuffToTarget>
+								Action<ActionID::ApplyBuff>
 								{{
 									.buff = BuffID::Chill
 								}}

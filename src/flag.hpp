@@ -158,6 +158,7 @@ namespace game
 	struct FlagParams<FlagID::ActionOnHit>
 	{
 		ActionEntity actions;
+		ActionEntity hittee_actions = {};
 	};
 
 	template<>

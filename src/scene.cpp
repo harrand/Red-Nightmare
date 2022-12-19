@@ -853,6 +853,7 @@ namespace game
 		{
 			auto& flag = e.attacker.flags_new.get<FlagID::ActionOnHit>()->data();
 			flag.actions.copy_components(e.attacker.entity);
+			flag.hittee_actions.copy_components(e.attackee.entity);
 		}
 		if(e.attacker.flags_new.has<FlagID::SelfRecoil>())
 		{
