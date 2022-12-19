@@ -9,11 +9,6 @@
 
 namespace game
 {
-	/// Describes immutable characteristics for a specific actor.
-	enum class ActorFlag
-	{
-	};
-	using ActorFlags = tz::EnumField<ActorFlag>;
 
 	enum class ActorMotion
 	{
@@ -101,9 +96,7 @@ namespace game
 		static constexpr std::size_t NullID = std::numeric_limits<std::size_t>::max();
 		ActorType type = {};
 		/// Describes the characteristics of the actor.
-		ActorFlags flags = {};
-		/// Describes the characteristics of the actor.
-		FlagEntity flags_new = {};
+		FlagEntity flags = {};
 		/// Describes the allegiances of the actor.
 		Faction faction = Faction::Default;
 		/// Current stats of the actor.

@@ -74,7 +74,7 @@ namespace game
 			{
 				for(auto& actor : this->actors)
 				{
-					if(!actor.flags_new.has<FlagID::Player>())
+					if(!actor.flags.has<FlagID::Player>())
 					{
 						actor.base_stats.current_health = 0;
 					}
@@ -190,9 +190,9 @@ namespace game
 		this->actors.push_back(game::create_actor(type));
 		this->qrenderer.push();
 		auto& actor = this->actors.back();
-		if(actor.flags_new.has<FlagID::RandomSkin>())
+		if(actor.flags.has<FlagID::RandomSkin>())
 		{
-			const auto& flag = actor.flags_new.get<FlagID::RandomSkin>()->data();
+			const auto& flag = actor.flags.get<FlagID::RandomSkin>()->data();
 			std::size_t skin_count = flag.skins.size();
 			if(skin_count > 0)
 			{
@@ -263,7 +263,7 @@ namespace game
 	{
 		this->qrenderer.erase(id);
 		auto& this_actor = this->get_actor(id);
-		this_actor.flags_new.clear();
+		this_actor.flags.clear();
 		this_actor.entity.clear();
 		std::swap(this_actor, this->actors.back());
 		this->actors.pop_back();
@@ -276,9 +276,9 @@ namespace game
 		QuadRenderer::ElementData& quad = this->qrenderer.elements()[id];
 		quad.layer = static_cast<float>(actor().layer) / std::numeric_limits<unsigned short>::max();
 		float touchdist = touch_distance;
-		if(actor().flags_new.has<FlagID::ActionOnRepeat>())
+		if(actor().flags.has<FlagID::ActionOnRepeat>())
 		{
-			auto& flag = actor().flags_new.get<FlagID::ActionOnRepeat>()->data();
+			auto& flag = actor().flags.get<FlagID::ActionOnRepeat>()->data();
 			if(flag.current_time <= 0.0f)
 			{
 				if(flag.predicate == nullptr || (flag.predicate != nullptr && flag.predicate(actor())))
@@ -296,31 +296,31 @@ namespace game
 		}
 		if(!this->is_in_bounds(id))
 		{
-			if(actor().flags_new.has<FlagID::ActionOnOOB>())
+			if(actor().flags.has<FlagID::ActionOnOOB>())
 			{
-				auto& flag = actor().flags_new.get<FlagID::ActionOnOOB>()->data();
+				auto& flag = actor().flags.get<FlagID::ActionOnOOB>()->data();
 				flag.actions.copy_components(actor().entity);
 			}
 		}
 		if(!this->is_in_level(id))
 		{
-			if(actor().flags_new.has<FlagID::ActionOnOOL>())
+			if(actor().flags.has<FlagID::ActionOnOOL>())
 			{
-				auto& flag = actor().flags_new.get<FlagID::ActionOnOOL>()->data();
+				auto& flag = actor().flags.get<FlagID::ActionOnOOL>()->data();
 				flag.actions.copy_components(actor().entity);
 			}
 		}
-		if(actor().flags_new.has<FlagID::Rot>())
+		if(actor().flags.has<FlagID::Rot>())
 		{
 			this->do_actor_hit(Actor::NullID, id);
 		}
-		if(actor().flags_new.has<FlagID::CustomReach>())
+		if(actor().flags.has<FlagID::CustomReach>())
 		{
-			touchdist *= actor().flags_new.get<FlagID::CustomReach>()->data().reach;
+			touchdist *= actor().flags.get<FlagID::CustomReach>()->data().reach;
 		}
-		if(actor().flags_new.has<FlagID::AggressiveIf>() && !actor().dead())
+		if(actor().flags.has<FlagID::AggressiveIf>() && !actor().dead())
 		{
-			auto& flag = actor().flags_new.get<FlagID::AggressiveIf>()->data();
+			auto& flag = actor().flags.get<FlagID::AggressiveIf>()->data();
 			for(std::size_t i = 0; i < this->size(); i++)
 			{
 				if(i == id)
@@ -328,7 +328,7 @@ namespace game
 					continue;
 				}
 				Actor& victim = this->get_actor(i);
-				if(!victim.dead() && flag.predicate(actor(), victim) && !victim.flags_new.has<FlagID::Stealth>())
+				if(!victim.dead() && flag.predicate(actor(), victim) && !victim.flags.has<FlagID::Stealth>())
 				{
 					actor().entity.set<ActionID::GotoActor>
 					({
@@ -338,7 +338,7 @@ namespace game
 				}
 			}
 		}
-		if(actor().flags_new.has<FlagID::DieOnAnimationFinish>() && !actor().dead())
+		if(actor().flags.has<FlagID::DieOnAnimationFinish>() && !actor().dead())
 		{
 			if(actor().animation.complete())
 			{
@@ -348,16 +348,16 @@ namespace game
 		// If actor() wants to teleport to a random location, do it now.
 
 		quad.scale = {0.2f, 0.2f};
-		if(actor().flags_new.has<FlagID::InvisibleWhileDead>())
+		if(actor().flags.has<FlagID::InvisibleWhileDead>())
 		{
 			if(actor().dead())
 			{
 				quad.scale *= 0.0f;
 			}
 		}
-		if(actor().flags_new.has<FlagID::CustomScale>())
+		if(actor().flags.has<FlagID::CustomScale>())
 		{
-			auto scale = actor().flags_new.get<FlagID::CustomScale>()->data().scale;
+			auto scale = actor().flags.get<FlagID::CustomScale>()->data().scale;
 			quad.scale[0] *= scale[0];
 			quad.scale[1] *= scale[1];
 		}
@@ -446,7 +446,7 @@ namespace game
 
 		// It's chasing something, but we don't care about what it's chasing.
 		// if its not a player, we don't want it to move while it's casting though.
-		const bool npc_is_casting = !actor().flags_new.has<FlagID::Player>() && actor().entity.has<ActionID::Cast>();
+		const bool npc_is_casting = !actor().flags.has<FlagID::Player>() && actor().entity.has<ActionID::Cast>();
 		if(npc_is_casting)
 		{
 			actor().motion = {};
@@ -497,9 +497,9 @@ namespace game
 		else
 		{
 			// Actor isn't currently chasing something.
-			if(actor().flags_new.has<FlagID::WanderIfIdle>())
+			if(actor().flags.has<FlagID::WanderIfIdle>())
 			{
-				const auto& flag = actor().flags_new.get<FlagID::WanderIfIdle>()->data();
+				const auto& flag = actor().flags.get<FlagID::WanderIfIdle>()->data();
 				std::uniform_real_distribution<float> dist{0.0f, 1.0f};
 				if(dist(this->rng) < flag.wander_chance)
 				{
@@ -551,7 +551,7 @@ namespace game
 		for(std::size_t i = 0; i < this->size(); i++)
 		{
 			
-			if(this->get_actor(i).flags_new.has<FlagID::Player>() && !this->get_actor(i).dead())
+			if(this->get_actor(i).flags.has<FlagID::Player>() && !this->get_actor(i).dead())
 			{
 				ret.push_back(i);
 			}
@@ -576,9 +576,9 @@ namespace game
 		hdk::vec2 scale = quad.scale;
 		// Bounding box should be affected by custom reach.
 		const Actor& actor = this->get_actor(actor_id);
-		if(actor.flags_new.has<FlagID::CustomReach>())
+		if(actor.flags.has<FlagID::CustomReach>())
 		{
-			const auto& flag = actor.flags_new.get<FlagID::CustomReach>()->data();
+			const auto& flag = actor.flags.get<FlagID::CustomReach>()->data();
 			scale *= flag.reach;
 		}
 		hdk::vec2 min{-0.5f, -0.5f};
@@ -715,7 +715,7 @@ namespace game
 			if(iter != this->despawn_timer.end())
 			{
 				// It has an entry, see if its timed out.
-				if(iter->second.done() && !this->get_actor(id).flags_new.has<FlagID::DoNotGarbageCollect>())
+				if(iter->second.done() && !this->get_actor(id).flags.has<FlagID::DoNotGarbageCollect>())
 				{
 					// Timed out. we purge.
 					// Erase will swap us with the last element and then kill last element (i.e us).
@@ -734,9 +734,9 @@ namespace game
 			{
 				using namespace tz::literals;
 				// Actor either despawns in 45s, or a custom value.
-				if(this->get_actor(id).flags_new.has<FlagID::CustomGarbageCollectPeriod>())
+				if(this->get_actor(id).flags.has<FlagID::CustomGarbageCollectPeriod>())
 				{
-					tz::Duration d{this->get_actor(id).flags_new.get<FlagID::CustomGarbageCollectPeriod>()->data().delay_millis};
+					tz::Duration d{this->get_actor(id).flags.get<FlagID::CustomGarbageCollectPeriod>()->data().delay_millis};
 					this->despawn_timer.emplace(id, d);
 				}
 				else
@@ -773,21 +773,21 @@ namespace game
 		Actor& other = this->get_actor(b_id);
 		QuadRenderer::ElementData& other_quad = this->qrenderer.elements()[b_id];
 
-		bool is_hazardous = actor.flags_new.has<FlagID::HazardousIf>();
+		bool is_hazardous = actor.flags.has<FlagID::HazardousIf>();
 		if(is_hazardous)
 		{
-			const auto& flag = actor.flags_new.get<FlagID::HazardousIf>()->data();
+			const auto& flag = actor.flags.get<FlagID::HazardousIf>()->data();
 			is_hazardous = flag.predicate(actor, other);
 		}
 
-		const bool wants_to_hurt = (is_hazardous) && actor.is_enemy_of(other) && !other.flags_new.has<FlagID::Unhittable>() && !actor.dead() && !other.dead();
-		const bool blocks_colliders = actor.flags_new.has<FlagID::Collide>() &&
+		const bool wants_to_hurt = (is_hazardous) && actor.is_enemy_of(other) && !other.flags.has<FlagID::Unhittable>() && !actor.dead() && !other.dead();
+		const bool blocks_colliders = actor.flags.has<FlagID::Collide>() &&
 			!actor.dead() && !other.dead() &&
-			(actor.flags_new.get<FlagID::Collide>()->data().collision_filter.contains(other.type) || actor.flags_new.get<FlagID::Collide>()->data().collision_filter.empty()) && !actor.flags_new.get<FlagID::Collide>()->data().collision_blacklist.contains(other.type);
+			(actor.flags.get<FlagID::Collide>()->data().collision_filter.contains(other.type) || actor.flags.get<FlagID::Collide>()->data().collision_filter.empty()) && !actor.flags.get<FlagID::Collide>()->data().collision_blacklist.contains(other.type);
 		bool wants_touch_other = false;
-		if(actor.flags_new.has<FlagID::ActionOnActorTouch>())
+		if(actor.flags.has<FlagID::ActionOnActorTouch>())
 		{
-			auto flag = actor.flags_new.get<FlagID::ActionOnActorTouch>();
+			auto flag = actor.flags.get<FlagID::ActionOnActorTouch>();
 			if(flag->data().allow_dead || !other.dead())
 			{
 				wants_touch_other = flag->data().predicate(actor, other);
@@ -810,7 +810,7 @@ namespace game
 			{
 				// Actor is touching the subject, and it wants to.
 				// Carry out its actions.
-				auto& on_touch_flag = actor.flags_new.get<FlagID::ActionOnActorTouch>()->data();
+				auto& on_touch_flag = actor.flags.get<FlagID::ActionOnActorTouch>()->data();
 				on_touch_flag.actions.copy_components(actor.entity);
 			}
 		}
@@ -848,13 +848,13 @@ namespace game
 	void Scene::on_actor_hit(ActorHitEvent e)
 	{
 		HDK_PROFZONE("Scene - On Actor Hit", 0xFF8B4513);
-		if(e.attacker.flags_new.has<FlagID::ActionOnHit>())
+		if(e.attacker.flags.has<FlagID::ActionOnHit>())
 		{
-			auto& flag = e.attacker.flags_new.get<FlagID::ActionOnHit>()->data();
+			auto& flag = e.attacker.flags.get<FlagID::ActionOnHit>()->data();
 			flag.actions.copy_components(e.attacker.entity);
 			flag.hittee_actions.copy_components(e.attackee.entity);
 		}
-		if(e.attacker.flags_new.has<FlagID::SelfRecoil>())
+		if(e.attacker.flags.has<FlagID::SelfRecoil>())
 		{
 			this->do_actor_hit(this->world_actor, e.attacker);
 		}
@@ -864,9 +864,9 @@ namespace game
 	{
 		HDK_PROFZONE("Scene - On Actor Struck", 0xFF8B4513);
 		//hdk::report("%s struck by %s", e.attackee.name, e.attacker.name);
-		if(e.attackee.flags_new.has<FlagID::ActionOnStruck>())
+		if(e.attackee.flags.has<FlagID::ActionOnStruck>())
 		{
-			auto& flag = e.attackee.flags_new.get<FlagID::ActionOnStruck>()->data();
+			auto& flag = e.attackee.flags.get<FlagID::ActionOnStruck>()->data();
 			if(flag.internal_cooldown > 0.0f)
 			{
 				flag.internal_cooldown -= (tz::system_time() - e.attackee.last_update).millis<float>();
@@ -891,12 +891,12 @@ namespace game
 		// If something dies, it's not moving anymore.
 		e.killee.motion = {};
 		//hdk::report("%s killed by %s", e.killee.name, e.killer.name);
-		if(e.killee.flags_new.has<FlagID::ActionOnDeath>())
+		if(e.killee.flags.has<FlagID::ActionOnDeath>())
 		{
-			auto& flag = e.killee.flags_new.get<FlagID::ActionOnDeath>()->data();
+			auto& flag = e.killee.flags.get<FlagID::ActionOnDeath>()->data();
 			flag.actions.copy_components(e.killee.entity);
 		}
-		if(e.killee.flags_new.has<FlagID::RespawnOnDeath>())
+		if(e.killee.flags.has<FlagID::RespawnOnDeath>())
 		{
 			e.killee.entity.add<ActionID::Respawn>();
 		}

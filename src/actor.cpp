@@ -17,7 +17,7 @@ namespace game
 				return
 				{
 					.type = ActorType::PlayerClassic,
-					.flags_new =
+					.flags =
 					{
 						Flag<FlagID::KeyboardControlled>{},
 						Flag<FlagID::Player>{},
@@ -164,7 +164,7 @@ namespace game
 				return
 				{
 					.type = ActorType::GhostZombie,
-					.flags_new =
+					.flags =
 					{
 						Flag<FlagID::Collide>
 						{{
@@ -231,7 +231,7 @@ namespace game
 				return
 				{
 					.type = ActorType::GhostBanshee,
-					.flags_new =
+					.flags =
 					{
 						Flag<FlagID::Collide>
 						{{
@@ -315,7 +315,7 @@ namespace game
 				return
 				{
 					.type = ActorType::GhostBanshee_Spirit,
-					.flags_new =
+					.flags =
 					{
 						Flag<FlagID::Collide>
 						{{
@@ -360,7 +360,7 @@ namespace game
 				return
 				{
 					.type = ActorType::ChaoticFireball,
-					.flags_new =
+					.flags =
 					{
 						Flag<FlagID::CustomGarbageCollectPeriod>
 						{{
@@ -424,7 +424,7 @@ namespace game
 				return
 				{
 					.type = ActorType::FireSmoke,
-					.flags_new = 
+					.flags = 
 					{
 						Flag<FlagID::InvisibleWhileDead>{},
 						Flag<FlagID::DieOnAnimationFinish>{},
@@ -439,7 +439,7 @@ namespace game
 				return
 				{
 					.type = ActorType::FireExplosion,
-					.flags_new =
+					.flags =
 					{
 						Flag<FlagID::InvisibleWhileDead>{},
 						Flag<FlagID::CustomScale>{{.scale = {1.5f, 1.5f}}},
@@ -462,7 +462,7 @@ namespace game
 				return
 				{
 					.type = ActorType::BloodSplatter,
-					.flags_new = 
+					.flags = 
 					{
 						Flag<FlagID::Stealth>{},
 						Flag<FlagID::Unhittable>{},
@@ -476,7 +476,7 @@ namespace game
 				return
 				{
 					.type = ActorType::Nightmare,
-					.flags_new =
+					.flags =
 					{
 						Flag<FlagID::BlockingAnimations>{},
 						Flag<FlagID::RespawnOnDeath>{},
@@ -507,7 +507,7 @@ namespace game
 				return
 				{
 					.type = ActorType::GhostZombie_Spawner,
-					.flags_new =
+					.flags =
 					{
 						Flag<FlagID::Stealth>{},
 						Flag<FlagID::InvisibleWhileDead>{},
@@ -536,7 +536,7 @@ namespace game
 				return
 				{
 					.type = ActorType::Fireball_Spawner,
-					.flags_new =
+					.flags =
 					{
 						Flag<FlagID::Stealth>{},
 						Flag<FlagID::InvisibleWhileDead>{},
@@ -572,7 +572,7 @@ namespace game
 				return
 				{
 					.type = ActorType::Wall,
-					.flags_new =
+					.flags =
 					{
 						Flag<FlagID::Collide>
 						{{
@@ -601,7 +601,7 @@ namespace game
 				return
 				{
 					.type = ActorType::InvisibleWall,
-					.flags_new =
+					.flags =
 					{
 						Flag<FlagID::Collide>
 						{{
@@ -632,7 +632,7 @@ namespace game
 				return
 				{
 					.type = ActorType::WallDestructible,
-					.flags_new =
+					.flags =
 					{
 						Flag<FlagID::DoNotGarbageCollect>{},
 						Flag<FlagID::Collide>
@@ -666,7 +666,7 @@ namespace game
 				return
 				{
 					.type = ActorType::CollectablePowerup_Sprint,
-					.flags_new =
+					.flags =
 					{
 						Flag<FlagID::ActionOnActorTouch>
 						{{
@@ -705,7 +705,7 @@ namespace game
 		this->evaluate_buffs();
 		this->entity.update();
 		this->evaluate_animation();
-		if(this->flags_new.has<FlagID::BlockingAnimations>())
+		if(this->flags.has<FlagID::BlockingAnimations>())
 		{
 			if(!this->animation.get_info().loop && !this->animation.complete())
 			{
@@ -715,9 +715,9 @@ namespace game
 		const bool is_left_clicked = tz::window().get_mouse_button_state().is_mouse_button_down(tz::MouseButton::Left) && !tz::dbgui::claims_mouse();
 		if(!this->dead())
 		{
-			if(this->flags_new.has<FlagID::ClickToLaunch>() && is_left_clicked)
+			if(this->flags.has<FlagID::ClickToLaunch>() && is_left_clicked)
 			{
-				auto& flag = this->flags_new.get<FlagID::ClickToLaunch>()->data();
+				auto& flag = this->flags.get<FlagID::ClickToLaunch>()->data();
 				float cooldown_milliseconds = flag.internal_cooldown * 1000;
 				auto now = tz::system_time().millis<unsigned long long>();
 				// If cooldown is over, go for it. Otherwise do nothing.
@@ -736,13 +736,13 @@ namespace game
 				{
 				}
 			}
-			if(this->flags_new.has<FlagID::MouseControlled>())
+			if(this->flags.has<FlagID::MouseControlled>())
 			{
 				this->entity.set<ActionID::GotoMouse>();
 			}
-			if(this->flags_new.has<FlagID::ActionOnClick>() && !tz::dbgui::claims_mouse())
+			if(this->flags.has<FlagID::ActionOnClick>() && !tz::dbgui::claims_mouse())
 			{
-				auto& flag = this->flags_new.get<FlagID::ActionOnClick>()->data();
+				auto& flag = this->flags.get<FlagID::ActionOnClick>()->data();
 				for(auto& [button, data] : flag.action_map)
 				{
 					if(tz::window().get_mouse_button_state().is_mouse_button_down(button) && data.icd.done())
@@ -752,7 +752,7 @@ namespace game
 					}
 				}
 			}
-			if(this->flags_new.has<FlagID::KeyboardControlled>())
+			if(this->flags.has<FlagID::KeyboardControlled>())
 			{
 				const auto& kb = tz::window().get_keyboard_state();
 				this->motion = {};
@@ -777,7 +777,7 @@ namespace game
 		else
 		{
 			// Actor is dead.
-			if(this->flags_new.has<FlagID::RespawnOnClick>() && is_left_clicked)
+			if(this->flags.has<FlagID::RespawnOnClick>() && is_left_clicked)
 			{
 				this->respawn();
 				return;
@@ -787,12 +787,12 @@ namespace game
 
 	bool Actor::dead() const
 	{
-		return !this->flags_new.has<FlagID::Invincible>() && this->base_stats.current_health <= 0.0f;
+		return !this->flags.has<FlagID::Invincible>() && this->base_stats.current_health <= 0.0f;
 	}
 
 	void Actor::dbgui()
 	{
-		ImGui::Text("Flags New Count: %zu", this->flags_new.size());
+		ImGui::Text("Flags New Count: %zu", this->flags.size());
 		ImGui::Text("\"%s\" (HP: %.2f/%.2f, dead: %s)", this->name, this->base_stats.current_health, this->get_current_stats().max_health, this->dead() ? "true" : "false");
 		ImGui::SameLine();
 		if(ImGui::Button("Kill"))
@@ -817,17 +817,17 @@ namespace game
 				this->buffs.add(BuffID::Chill);
 			}
 
-			ImGui::Text("Controlled: %s", this->flags_new.has<FlagID::MouseControlled>() ? "true" : "false");
+			ImGui::Text("Controlled: %s", this->flags.has<FlagID::MouseControlled>() ? "true" : "false");
 			ImGui::SameLine();
 			if(ImGui::Button("Toggle Controlled"))
 			{
-				if(this->flags_new.has<FlagID::MouseControlled>())
+				if(this->flags.has<FlagID::MouseControlled>())
 				{
-					this->flags_new.remove<FlagID::MouseControlled>();
+					this->flags.remove<FlagID::MouseControlled>();
 				}
 				else
 				{
-					this->flags_new.add<FlagID::MouseControlled>();
+					this->flags.add<FlagID::MouseControlled>();
 				}
 			}
 		}
@@ -847,9 +847,9 @@ namespace game
 	{
 		*this = game::create_actor(this->type);
 		this->base_stats.current_health = this->get_current_stats().max_health;
-		if(this->flags_new.has<FlagID::ActionOnRespawn>())
+		if(this->flags.has<FlagID::ActionOnRespawn>())
 		{
-			auto& flag = this->flags_new.get<FlagID::ActionOnRespawn>()->data();
+			auto& flag = this->flags.get<FlagID::ActionOnRespawn>()->data();
 			flag.actions.copy_components(this->entity);
 		}
 	}
@@ -882,17 +882,17 @@ namespace game
 			return false;
 		}
 		// Players cannot hurt other players.
-		if(this->flags_new.has<FlagID::Player>() && actor.flags_new.has<FlagID::Player>())
+		if(this->flags.has<FlagID::Player>() && actor.flags.has<FlagID::Player>())
 		{
 			return true;
 		}
 		// PlayerFriends cannot hurt players.
-		if(this->faction == Faction::PlayerFriend && actor.flags_new.has<FlagID::Player>())
+		if(this->faction == Faction::PlayerFriend && actor.flags.has<FlagID::Player>())
 		{
 			return true;
 		}
 		// Players cannot hurt PlayerFriends.
-		if(this->flags_new.has<FlagID::Player>() && actor.faction == Faction::PlayerFriend)
+		if(this->flags.has<FlagID::Player>() && actor.faction == Faction::PlayerFriend)
 		{
 			return true;
 		}
@@ -923,12 +923,12 @@ namespace game
 			return false;
 		}
 		// Players see PlayerEnemy faction members as enemies... obviously
-		if(this->flags_new.has<FlagID::Player>() && actor.faction == Faction::PlayerEnemy)
+		if(this->flags.has<FlagID::Player>() && actor.faction == Faction::PlayerEnemy)
 		{
 			return true;
 		}
 		// PlayerEnemy faction members see Players as enemies.
-		if(this->faction == Faction::PlayerEnemy && actor.flags_new.has<FlagID::Player>())
+		if(this->faction == Faction::PlayerEnemy && actor.flags.has<FlagID::Player>())
 		{
 			return true;	
 		}

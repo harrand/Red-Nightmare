@@ -170,7 +170,7 @@ namespace game
 //--------------------------------------------------------------------------------------------------
 	ACTION_IMPL_BEGIN(ActionID::Despawn)
 		scene.actor().entity.add<ActionID::Die>();
-		scene.actor().flags_new.add<FlagID::CustomGarbageCollectPeriod>({.delay_millis = 0ull});
+		scene.actor().flags.add<FlagID::CustomGarbageCollectPeriod>({.delay_millis = 0ull});
 	ACTION_IMPL_END(ActionID::Despawn)
 //--------------------------------------------------------------------------------------------------
 	ACTION_IMPL_BEGIN(ActionID::Die)
@@ -219,7 +219,7 @@ namespace game
 //--------------------------------------------------------------------------------------------------
 	ACTION_IMPL_BEGIN(ActionID::Cast)
 		bool should_cancel = false;
-		if(action.data().player_cancel_cast_escape && scene.actor().flags_new.has<FlagID::Player>() && tz::window().get_keyboard_state().is_key_down(tz::KeyCode::Escape))
+		if(action.data().player_cancel_cast_escape && scene.actor().flags.has<FlagID::Player>() && tz::window().get_keyboard_state().is_key_down(tz::KeyCode::Escape))
 		{
 			// The player has pressed escape to cancel their cast.
 			should_cancel = true;
@@ -250,7 +250,7 @@ namespace game
 	ACTION_IMPL_END(ActionID::Cast)
 //--------------------------------------------------------------------------------------------------
 	ACTION_IMPL_BEGIN(ActionID::ApplyFlag)
-		action.data().flags.transfer_components(scene.actor().flags_new);
+		action.data().flags.transfer_components(scene.actor().flags);
 		action.set_is_complete(true);
 	ACTION_IMPL_END(ActionID::ApplyFlag)
 //--------------------------------------------------------------------------------------------------
