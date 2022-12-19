@@ -23,6 +23,8 @@ tz_add_executable(
 		src/event.hpp
 		src/faction.hpp
 		src/flag.hpp
+		src/game.cpp
+		src/game.hpp
 		src/main.cpp
 		src/images.cpp
 		src/images.hpp

@@ -1,12 +1,12 @@
 #include "scene.hpp"
 #include "actor.hpp"
-#include "tz/core/tz.hpp"
+#include "game.hpp"
 #include "tz/core/time.hpp"
 #include "tz/dbgui/dbgui.hpp"
 
 int main()
 {
-	tz::initialise({.name = "Red Nightmare", .version = {2, 1, 0}});
+	game::initialise();
 	{
 		game::Scene scene;
 
@@ -65,5 +65,5 @@ int main()
 			tz::window().end_frame();
 		}
 	}
-	tz::terminate();
+	game::terminate();
 }

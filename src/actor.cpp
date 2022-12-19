@@ -56,7 +56,7 @@ namespace game
 										{
 											Action<ActionID::Cast>
 											{{
-												.cast_time_millis = 200.0f,
+												.cast_time_millis = 500.0f,
 												.actions =
 												{
 													Action<ActionID::SpawnActor>
@@ -75,7 +75,7 @@ namespace game
 												.player_cancel_cast_escape = true
 											}}
 										},
-										.icd = 500_ms
+										.icd = 550_ms
 									}
 								},
 								{tz::MouseButton::Right,
