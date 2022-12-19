@@ -48,6 +48,8 @@ tz_add_executable(
 add_shader(
 	TARGET rednightmare
 	SHADERS
+	src/effects/rain.vertex.tzsl
+	src/effects/rain.fragment.tzsl
 	src/default.vertex.tzsl
 	src/default.fragment.tzsl
 	src/quad.vertex.tzsl
