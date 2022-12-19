@@ -781,9 +781,28 @@ namespace game
 		}
 
 		const bool wants_to_hurt = (is_hazardous) && actor.is_enemy_of(other) && !other.flags.has<FlagID::Unhittable>() && !actor.dead() && !other.dead();
+		bool is_collider_candidate = actor.flags.get<FlagID::Collide>();
+		if(is_collider_candidate)
+		{
+			auto& flag = actor.flags.get<FlagID::Collide>()->data();
+			bool whitelisted = false;
+			if(flag.collision_filter.contains(other.type) || (flag.filter_predicate != nullptr && flag.filter_predicate(other)))
+			{
+				whitelisted = true;
+			}
+			if(!flag.collision_filter.empty() || flag.filter_predicate != nullptr)
+			{
+				is_collider_candidate &= whitelisted;
+			}
+			is_collider_candidate &= !flag.collision_blacklist.contains(other.type);
+			if(flag.blacklist_predicate != nullptr)
+			{
+				is_collider_candidate &= !flag.blacklist_predicate(other);
+			}
+		}
 		const bool blocks_colliders = actor.flags.has<FlagID::Collide>() &&
 			!actor.dead() && !other.dead() &&
-			(actor.flags.get<FlagID::Collide>()->data().collision_filter.contains(other.type) || actor.flags.get<FlagID::Collide>()->data().collision_filter.empty()) && !actor.flags.get<FlagID::Collide>()->data().collision_blacklist.contains(other.type);
+			is_collider_candidate;
 		bool wants_touch_other = false;
 		if(actor.flags.has<FlagID::ActionOnActorTouch>())
 		{

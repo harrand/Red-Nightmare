@@ -21,6 +21,8 @@ namespace game
 		CustomGarbageCollectPeriod,
 		/// Actor is considered a player.
 		Player,
+		/// Actor is considered a projectile.
+		Projectile,
 		/// Actor has a custom scale.
 		CustomScale,
 		/// Actor has a custom reach distance.
@@ -212,7 +214,11 @@ namespace game
 	struct FlagParams<FlagID::Collide>
 	{
 		tz::EnumField<ActorType> collision_filter = {};
+		/// If set, anything that does not satisfy this predicate is excluded, unless whitelisted.
+		std::function<bool(const Actor&)> filter_predicate = nullptr;
 		tz::EnumField<ActorType> collision_blacklist = {};
+		/// If set, anything that satisfies this predicate is excluded, unless whitelisted.
+		std::function<bool(const Actor&)> blacklist_predicate = nullptr;
 	};
 
 	template<>

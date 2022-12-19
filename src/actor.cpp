@@ -362,6 +362,7 @@ namespace game
 					.type = ActorType::ChaoticFireball,
 					.flags =
 					{
+						Flag<FlagID::Projectile>{},
 						Flag<FlagID::CustomGarbageCollectPeriod>
 						{{
 							.delay_millis = 500ull
@@ -611,9 +612,38 @@ namespace game
 								ActorType::FireExplosion,
 								ActorType::BloodSplatter,
 								ActorType::GhostZombie_Spawner,
-								ActorType::GhostBanshee_Spirit,
-								ActorType::ChaoticFireball
-							}
+								ActorType::GhostBanshee_Spirit
+							},
+						}},
+						Flag<FlagID::Invincible>{},
+						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}},
+						Flag<FlagID::Stealth>{}
+					},
+					.faction = Faction::PureEnemy,
+					.skin = ActorSkin::Invisible,
+					.palette_colour = {128u, 128u, 128u},
+					.name = "Invisible Wall",
+					.density = 2.0f,
+					.layer = 255
+				};
+			break;
+			case ActorType::InvisibleWallProjectilePass:
+				return
+				{
+					.type = ActorType::InvisibleWallProjectilePass,
+					.flags =
+					{
+						Flag<FlagID::Collide>
+						{{
+							.collision_blacklist =
+							{
+								ActorType::FireSmoke,
+								ActorType::FireExplosion,
+								ActorType::BloodSplatter,
+								ActorType::GhostZombie_Spawner,
+								ActorType::GhostBanshee_Spirit
+							},
+							.blacklist_predicate = [](const Actor& a){return a.flags.has<FlagID::Projectile>();}
 						}},
 						Flag<FlagID::Invincible>{},
 						Flag<FlagID::Unhittable>{},
@@ -623,7 +653,7 @@ namespace game
 					.faction = Faction::PureEnemy,
 					.skin = ActorSkin::Invisible,
 					.palette_colour = {255u, 255u, 255u},
-					.name = "Invisible Wall",
+					.name = "Invisible Wall (Projectiles Pass)",
 					.density = 2.0f,
 					.layer = 255
 				};

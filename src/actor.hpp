@@ -74,10 +74,14 @@ namespace game
 		GhostZombie_Spawner,
 		/// An uninteractable actor which periodically spawns fireballs launching towards a player.
 		Fireball_Spawner,
+
 		/// A visible wall, blocking other actors' paths.
 		Wall,
-		/// An invisible wall, blocking other actor's paths.
+		/// An invisible wall, blocking other actors' paths.
 		InvisibleWall,
+		/// An invisible wall, blocking other actor's paths. Projectiles, however, can pass through without a problem.
+		InvisibleWallProjectilePass,
+
 		/// Just like a wall, but is destructible by the player.
 		WallDestructible,
 		/// A powerup that is gives the player sprint on consumption.
