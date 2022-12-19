@@ -4,6 +4,7 @@
 #include "tz/gl/resource.hpp"
 #include "tz/core/matrix.hpp"
 #include "images.hpp"
+#include "effect.hpp"
 #include "statuseffect.tzsl"
 
 namespace game
@@ -11,6 +12,7 @@ namespace game
 	enum class OverlayID
 	{
 		Backdrop,
+		Effect,
 		Count
 	};
 
@@ -36,6 +38,8 @@ namespace game
 		ElementData& overlay(OverlayID ovlid);
 		std::span<const ElementData> elements() const;
 		std::span<ElementData> elements();
+		void set_effect(EffectID effect);
+		EffectID get_effect() const;
 
 		void push();
 		void pop();

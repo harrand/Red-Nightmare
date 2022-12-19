@@ -6,6 +6,7 @@
 #include "quad_renderer.hpp"
 #include "level.hpp"
 #include "quadtree.hpp"
+#include "effect.hpp"
 #include "tz/core/time.hpp"
 
 #include <random>

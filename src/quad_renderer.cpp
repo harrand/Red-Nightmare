@@ -16,7 +16,10 @@ namespace game
 	rendererh(this->make_renderer())
 	{
 		this->update_render_data();
-		this->push();
+		for(std::size_t i = 0; i < static_cast<std::size_t>(OverlayID::Count); i++)
+		{
+			this->push();
+		}
 	}
 
 	void QuadRenderer::render()
@@ -64,12 +67,38 @@ namespace game
 
 	std::span<const QuadRenderer::ElementData> QuadRenderer::elements() const
 	{
-		return tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<const QuadRenderer::ElementData>().subspan(static_cast<std::size_t>(OverlayID::Count), this->quad_count - 1);
+		return tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<const QuadRenderer::ElementData>().subspan(static_cast<std::size_t>(OverlayID::Count), this->quad_count - static_cast<std::size_t>(OverlayID::Count));
 	}
 
 	std::span<QuadRenderer::ElementData> QuadRenderer::elements()
 	{
-		return tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<QuadRenderer::ElementData>().subspan(static_cast<std::size_t>(OverlayID::Count), this->quad_count - 1);
+		return tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<QuadRenderer::ElementData>().subspan(static_cast<std::size_t>(OverlayID::Count), this->quad_count - static_cast<std::size_t>(OverlayID::Count));
+	}
+
+	void QuadRenderer::set_effect(EffectID effect)
+	{
+		if(effect == EffectID::None)
+		{
+			this->overlay(OverlayID::Effect).texture_id = TextureID::Invisible;
+		}
+		auto eid = static_cast<std::size_t>(effect);
+		eid += static_cast<std::size_t>(TextureID::Count) - 1;
+		this->overlay(OverlayID::Effect).texture_id = static_cast<TextureID>(eid);
+	}
+
+	EffectID QuadRenderer::get_effect() const
+	{
+		if(this->overlay(OverlayID::Effect).texture_id == TextureID::Invisible)
+		{
+			return EffectID::None;
+		}
+		auto eid = static_cast<std::size_t>(this->overlay(OverlayID::Effect).texture_id);
+		constexpr auto texcount = static_cast<std::size_t>(TextureID::Count);
+		hdk::assert(eid >= texcount);
+		eid -= texcount;
+		eid += 1;
+		hdk::assert(eid < static_cast<std::size_t>(EffectID::Count));
+		return static_cast<EffectID>(eid);
 	}
 
 	void QuadRenderer::push()
@@ -80,7 +109,7 @@ namespace game
 
 	void QuadRenderer::pop()
 	{
-		hdk::assert(this->quad_count > 1, "Cannot pop when there are already no quads");
+		hdk::assert(this->quad_count > static_cast<std::size_t>(OverlayID::Count), "Cannot pop when there are already no quads");
 		this->quad_count--;
 	}
 	
@@ -90,7 +119,7 @@ namespace game
 		{
 			elem = QuadRenderer::ElementData{};
 		}
-		this->quad_count = 1;
+		this->quad_count = static_cast<std::size_t>(OverlayID::Count);
 	}
 
 	void QuadRenderer::erase(std::size_t id)
@@ -144,6 +173,17 @@ namespace game
 		for(std::uint32_t i = 0; i < tex_count; i++)
 		{
 			rinfo.add_resource(game::load_image(static_cast<TextureID>(i)));
+		}
+
+		// Effect images come afterwards.
+		for(std::size_t i = 0; i < static_cast<std::size_t>(EffectID::Count); i++)
+		{
+			auto* comp = game::effects().get_effect_component(static_cast<EffectID>(i));
+			if(comp == nullptr)
+			{
+				continue;
+			}
+			rinfo.ref_resource(comp);
 		}
 
 		return tz::gl::device().create_renderer(rinfo);

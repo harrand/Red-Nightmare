@@ -26,9 +26,11 @@ namespace game
 		void update(EffectIDs ids = {});
 		tz::gl::ImageComponent* get_effect_component(EffectID id);
 	private:
+		tz::gl::RendererHandle make_rain_storage();
 		tz::gl::RendererHandle make_rain_effect();
+		std::vector<tz::gl::RendererHandle> effect_storage_renderers = {};
 		std::vector<tz::gl::RendererHandle> effect_renderers = {};
-		tz::gl::ResourceHandle rain_image = hdk::nullhand;
+		tz::gl::ResourceHandle rain_storage = hdk::nullhand;
 	};
 
 	namespace effects_impl
