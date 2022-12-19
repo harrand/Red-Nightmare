@@ -848,7 +848,6 @@ namespace game
 	void Scene::on_actor_hit(ActorHitEvent e)
 	{
 		HDK_PROFZONE("Scene - On Actor Hit", 0xFF8B4513);
-		e.attacker.target = &e.attackee;
 		if(e.attacker.flags_new.has<FlagID::ActionOnHit>())
 		{
 			auto& flag = e.attacker.flags_new.get<FlagID::ActionOnHit>()->data();
