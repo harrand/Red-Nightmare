@@ -219,6 +219,45 @@ namespace game
 		return res;
 	}
 
+	void impl_enact_blackwhitelists(const ActorTypes& blacklist, const ActorTypes& whitelist, tz::gl::ImageResource& level_image)
+	{
+		using ImageView = tz::GridView<std::byte, 4>;
+		ImageView view{level_image.data(), level_image.get_dimensions()};
+		for(std::size_t x = 0; x < view.get_dimensions()[0]; x++)
+		{
+			for(std::size_t y = 0; y < view.get_dimensions()[1]; y++)
+			{
+				auto rgba = view(x, y);
+				if(std::any_of(blacklist.begin(), blacklist.end(), [&rgba](ActorType t)
+				{
+					hdk::vec3ui rgba_as_vec
+					{
+						static_cast<unsigned int>(rgba[0]),
+						static_cast<unsigned int>(rgba[1]),
+						static_cast<unsigned int>(rgba[2])
+					};
+					return (rgba_as_vec == game::create_actor(t).palette_colour);
+				}) ||
+				(!whitelist.empty() && std::none_of(whitelist.begin(), whitelist.end(), [&rgba](ActorType t)
+				{
+					hdk::vec3ui rgba_as_vec
+					{
+						static_cast<unsigned int>(rgba[0]),
+						static_cast<unsigned int>(rgba[1]),
+						static_cast<unsigned int>(rgba[2])
+					};
+					return (rgba_as_vec == game::create_actor(t).palette_colour);
+				})))
+				{
+					rgba[0] = std::byte{255};
+					rgba[1] = std::byte{0};
+					rgba[2] = std::byte{0};
+					rgba[3] = std::byte{0};
+				}
+			}
+		}
+	}
+
 	std::optional<RandomLevelData> dbgui_generate_random_level_image()
 	{
 		struct BoolProxy{bool b = false;};
@@ -246,7 +285,17 @@ namespace game
 			}
 			ImGui::EndTable();
 		}
-		if(ImGui::CollapsingHeader("Spawn Rates"))
+		ImGui::Text("Based on Level:");
+		ImGui::Indent();
+		static int base_level_id = 0;
+		ImGui::RadioButton("None", &base_level_id, 0);
+		for(std::size_t i = static_cast<std::size_t>(LevelID::Empty) + 1; i < static_cast<std::size_t>(LevelID::Count); i++)
+		{
+			std::string str = "DevLevel" + std::to_string(i - static_cast<std::size_t>(LevelID::DevLevel0));
+			ImGui::RadioButton(str.c_str(), &base_level_id, i);
+		}
+		ImGui::Unindent();
+		if(base_level_id == 0 && ImGui::CollapsingHeader("Spawn Rates"))
 		{
 			for(const auto&[_, actor] : palette.actor_palette)
 			{
@@ -336,9 +385,11 @@ namespace game
 					flags |= static_cast<LevelLayoutFlag>(i);
 				}
 			}
-			return RandomLevelData
+			tz::gl::ImageResource img = tz::gl::ImageResource::null();
+			TextureID backdrop = backdrops[backdrop_id];
+			if(base_level_id == 0)
 			{
-				.level_image = random_level_image
+				img = random_level_image
 				({
 					.width = 32,
 					.height = 32,
@@ -351,8 +402,18 @@ namespace game
 						.actors = actor_spawnrates,
 						.flags = flags
 					}
-				}),
-				.backdrop = backdrops[backdrop_id]
+				});
+			}
+			else
+			{
+				img = game::load_image_data(level_image_data[base_level_id]);
+				backdrop = game::load_level(static_cast<LevelID>(base_level_id)).backdrop;
+				game::impl_enact_blackwhitelists(blacklist, whitelist, img);
+			}
+			return RandomLevelData
+			{
+				.level_image = img,
+				.backdrop = backdrop
 			};
 		}
 		return {};

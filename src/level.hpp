@@ -89,6 +89,7 @@ namespace game
 	Level load_level_from_image(const tz::gl::ImageResource& level_image, TextureID backdrop = TextureID::Invisible);
 
 	tz::gl::ImageResource random_level_image(const RandomLevelGenerationOptions& options);
+	void impl_enact_blackwhitelists(const ActorTypes& blacklist, const ActorTypes& whitelist, tz::gl::ImageResource& level_image);
 	struct RandomLevelData
 	{
 		tz::gl::ImageResource level_image;
