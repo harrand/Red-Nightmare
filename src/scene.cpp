@@ -26,8 +26,6 @@ namespace game
 	{
 		HDK_PROFZONE("Scene - Render", 0xFF00AA00);
 
-		hdk::assert(this->qrenderer.get_effect() == EffectID::Rain, "Effect should always be rain because we hard-coded it that way. Logic error.");
-
 		hdk::assert(this->actors.size() == this->qrenderer.elements().size(), "Scene actor list (%zu) and QuadRenderer size (%zu) no longer match. Logic Error", this->actors.size(), this->qrenderer.elements().size());
 		game::effects().update({this->qrenderer.get_effect()});
 		for(std::size_t i = 0; i < this->qrenderer.elements().size(); i++)
@@ -258,10 +256,11 @@ namespace game
 		backdrop_data.layer = 0.999f;
 		auto& effect_data = this->qrenderer.overlay(OverlayID::Effect);
 		effect_data.position = (this->level_boundaries / 2.0f) - hdk::vec2::filled(1.0f);
-		effect_data.scale = ((this->level_boundaries - hdk::vec2::filled(0.25f)) / 2.0f);
-		//effect_data.layer = 100.0f;
 		
 		this->qrenderer.set_effect(EffectID::Rain);
+		effect_data.scale = (this->qrenderer.get_effect() != EffectID::None)
+			? ((this->level_boundaries - hdk::vec2::filled(0.25f)) / 2.0f)
+			: hdk::vec2::zero();
 	}
 
 	hdk::vec2 Scene::get_mouse_position() const

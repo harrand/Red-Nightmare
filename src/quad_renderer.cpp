@@ -77,6 +77,7 @@ namespace game
 
 	void QuadRenderer::set_effect(EffectID effect)
 	{
+		hdk::assert(effect != EffectID::Count, "Cannot set effect to EffectID::Count");
 		if(effect == EffectID::None)
 		{
 			this->overlay(OverlayID::Effect).texture_id = TextureID::Invisible;
@@ -93,10 +94,10 @@ namespace game
 			return EffectID::None;
 		}
 		auto eid = static_cast<std::size_t>(this->overlay(OverlayID::Effect).texture_id);
+		eid += 1;
 		constexpr auto texcount = static_cast<std::size_t>(TextureID::Count);
 		hdk::assert(eid >= texcount);
 		eid -= texcount;
-		eid += 1;
 		hdk::assert(eid < static_cast<std::size_t>(EffectID::Count));
 		return static_cast<EffectID>(eid);
 	}
