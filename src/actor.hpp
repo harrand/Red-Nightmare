@@ -86,6 +86,8 @@ namespace game
 		WallDestructible,
 		/// A powerup that is gives the player sprint on consumption.
 		CollectablePowerup_Sprint,
+		/// An invisible actor that is designed to sit on a road. The player should receive a speed boost from this actor when on a road.
+		RoadSpeedBoost,
 		/// Meta-actor. Represents 'the world'. e.g if you take damage from rot, or an environmental effect, the attacker will be the world.
 		World,
 		Count

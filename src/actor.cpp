@@ -718,6 +718,32 @@ namespace game
 					.name = "Sprint Powerup"
 				};
 			break;
+			case ActorType::RoadSpeedBoost:
+				return
+				{
+					.type = ActorType::RoadSpeedBoost,
+					.flags =
+					{
+						Flag<FlagID::ActionOnActorTouch>
+						{{
+							.predicate = [](const Actor& self, const Actor& actor)
+							{
+								return actor.type == ActorType::PlayerClassic;
+							},
+							.actions =
+							{
+								Action<ActionID::ApplyBuffToPlayers>
+								{{
+									.buff = BuffID::RoadSpeed
+								}}
+							}
+						}}
+					},
+					.skin = ActorSkin::Invisible,
+					.palette_colour = {64u, 0u, 255u},
+					.name = "Road Speed Boost"
+				};
+			break;
 			case ActorType::World:
 				return
 				{

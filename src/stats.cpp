@@ -65,6 +65,13 @@ namespace game
 					.time_remaining_millis = 5000.0f,
 				};
 			break;
+			case BuffID::RoadSpeed:
+				return
+				{
+					.multiply_speed_boost = 1.5f,
+					.time_remaining_millis = 500.0f
+				};
+			break;
 		}
 		return {};
 	}

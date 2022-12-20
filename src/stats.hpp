@@ -47,7 +47,9 @@ namespace game
 		/// 70% more movement speed for 5 seconds.
 		Sprint,
 		/// 70% less movement speed for 5 seconds.
-		Chill
+		Chill,
+		/// 30% more movement speed for 0.5 seconds.
+		RoadSpeed,
 	};
 
 	StatBuff get_buff(BuffID buff);
