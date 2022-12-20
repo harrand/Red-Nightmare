@@ -170,6 +170,10 @@ namespace game
 //--------------------------------------------------------------------------------------------------
 	ACTION_IMPL_BEGIN(ActionID::Despawn)
 		scene.actor().entity.add<ActionID::Die>();
+		if(scene.actor().flags.has<FlagID::DoNotGarbageCollect>())
+		{
+			scene.actor().flags.remove<FlagID::DoNotGarbageCollect>();
+		}
 		scene.actor().flags.add<FlagID::CustomGarbageCollectPeriod>({.delay_millis = 0ull});
 	ACTION_IMPL_END(ActionID::Despawn)
 //--------------------------------------------------------------------------------------------------

@@ -19,6 +19,7 @@ namespace game
 					.type = ActorType::PlayerClassic,
 					.flags =
 					{
+						Flag<FlagID::DoNotGarbageCollect>{},
 						Flag<FlagID::KeyboardControlled>{},
 						Flag<FlagID::Player>{},
 						Flag<FlagID::ActionOnStruck>
@@ -31,20 +32,6 @@ namespace game
 								}}
 							},
 							.icd = 200.0f
-						}},
-						Flag<FlagID::ActionOnDeath>
-						{{
-							.actions =
-							{
-								Action<ActionID::DelayedAction>
-								{{
-									.delay_millis = 2000.0f,
-									.actions =
-									{
-										Action<ActionID::Respawn>{}
-									}
-								}}
-							}
 						}},
 						Flag<FlagID::ActionOnClick>
 						{{
@@ -521,6 +508,7 @@ namespace game
 								Action<ActionID::SpawnActor>
 								{{
 									.actor = ActorType::GhostZombie,
+									.inherit_faction = true
 
 								}}
 							}
@@ -854,6 +842,24 @@ namespace game
 		if(ImGui::Button("Kill"))
 		{
 			this->base_stats.current_health = 0;
+		}
+		if(ImGui::Button("Toggle Invincibility"))
+		{
+			if(this->flags.has<FlagID::Invincible>())
+			{
+				this->flags.remove<FlagID::Invincible>();
+			}
+			else
+			{
+				this->flags.add<FlagID::Invincible>();
+			}
+		}
+		if(ImGui::Button("Take Control"))
+		{
+			this->faction = Faction::PlayerFriend;
+			this->flags.add<FlagID::Player>();
+			this->flags.add<FlagID::KeyboardControlled>();
+			this->flags.remove<FlagID::AggressiveIf>();
 		}
 		ImGui::Spacing();
 		ImGui::Text("Movement: %.0f%%", this->get_current_stats().movement_speed / this->base_stats.movement_speed * 100.0f);
