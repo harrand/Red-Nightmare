@@ -12,10 +12,9 @@ resource(id = 0) const buffer GlobalEffectBuffer
 
 void main()
 {
-	const vec3 rain_colour = vec3(0.0, 0.235, 0.361);
-	float prand = float(gdata.time % 500) / 5000.0f;
-	vec2 droplet = in::fragment_coord.xy;
-	droplet.y -= prand;
+	const vec3 rain_colour = vec3(0.0, 0.235, 0.361) * 1.5f;
+	float prand = float(gdata.time % 5000) / -5000.0f;
+	vec2 droplet = -in::fragment_coord.xy;
 	float pixel_rand = tz::noise::simplex(droplet * prand);
 	frag_colour = vec4(rain_colour, pixel_rand);
 }
