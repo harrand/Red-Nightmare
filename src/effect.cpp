@@ -12,9 +12,27 @@
 
 namespace game
 {
+	struct GlobalEffectData
+	{
+		std::uint32_t time;
+	};
+
 	EffectManager::EffectManager()
 	{
 		constexpr std::size_t effect_count = static_cast<std::size_t>(EffectID::Count);
+		this->global_storage = [this]()->tz::gl::RendererHandle
+		{
+			tz::gl::RendererInfo rinfo;
+			rinfo.shader().set_shader(tz::gl::ShaderStage::Vertex, ImportedShaderSource(empty, vertex));
+			rinfo.shader().set_shader(tz::gl::ShaderStage::Fragment, ImportedShaderSource(empty, fragment));
+			this->global_buffer = rinfo.add_resource(tz::gl::BufferResource::from_one(GlobalEffectData{},
+			{
+				.access = tz::gl::ResourceAccess::DynamicFixed
+			}));
+			rinfo.debug_name("Global Storage Meta Renderer");
+			
+			return tz::gl::device().create_renderer(rinfo);
+		}();
 		this->effect_storage_renderers.resize(effect_count, hdk::nullhand);
 		this->effect_renderers.resize(effect_count, hdk::nullhand);
 		for(std::size_t i = 0; i < effect_count; i++)
@@ -35,6 +53,7 @@ namespace game
 
 	EffectManager::~EffectManager()
 	{
+
 		for(tz::gl::RendererHandle rh : this->effect_storage_renderers)
 		{
 			if(rh != hdk::nullhand)
@@ -46,6 +65,11 @@ namespace game
 
 	void EffectManager::update(EffectIDs ids)
 	{
+		GlobalEffectData& gdata = tz::gl::device().get_renderer(this->global_storage).get_resource(this->global_buffer)->data_as<GlobalEffectData>().front();
+		tz::gl::device().get_renderer(this->global_storage).render();
+
+		gdata.time = (tz::system_time() - this->creation).millis<std::uint32_t>();
+
 		for(EffectID id : ids)
 		{
 			if(id == EffectID::None)
@@ -103,6 +127,7 @@ namespace game
 		rinfo.shader().set_shader(tz::gl::ShaderStage::Vertex, ImportedShaderSource(rain, vertex));
 		rinfo.shader().set_shader(tz::gl::ShaderStage::Fragment, ImportedShaderSource(rain, fragment));
 		rinfo.set_options({tz::gl::RendererOption::RenderWait, tz::gl::RendererOption::NoDepthTesting});
+		rinfo.ref_resource(this->global_storage, this->global_buffer);
 		auto& storage_renderer = tz::gl::device().get_renderer(this->effect_storage_renderers[static_cast<std::size_t>(EffectID::Rain)]);
 		rinfo.set_output(tz::gl::ImageOutput
 		{{

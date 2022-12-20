@@ -1,5 +1,6 @@
 #ifndef REDNIGHTMARE_EFFECT_HPP
 #define REDNIGHTMARE_EFFECT_HPP
+#include "tz/core/time.hpp"
 #include "tz/gl/resource.hpp"
 #include "tz/gl/component.hpp"
 #include "tz/gl/renderer.hpp"
@@ -28,9 +29,12 @@ namespace game
 	private:
 		tz::gl::RendererHandle make_rain_storage();
 		tz::gl::RendererHandle make_rain_effect();
+		tz::gl::RendererHandle global_storage = hdk::nullhand;
+		tz::gl::ResourceHandle global_buffer = hdk::nullhand;
 		std::vector<tz::gl::RendererHandle> effect_storage_renderers = {};
 		std::vector<tz::gl::RendererHandle> effect_renderers = {};
 		tz::gl::ResourceHandle rain_storage = hdk::nullhand;
+		tz::Duration creation = tz::system_time();
 	};
 
 	namespace effects_impl
