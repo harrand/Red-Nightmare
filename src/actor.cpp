@@ -501,7 +501,7 @@ namespace game
 						Flag<FlagID::InvisibleWhileDead>{},
 						Flag<FlagID::ActionOnRepeat>
 						{{
-							.period = 10000.0f,
+							.period = 25000.0f,
 							.predicate = [](const Actor& self){return !self.dead();},
 							.actions =
 							{
