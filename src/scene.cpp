@@ -107,7 +107,7 @@ namespace game
 			ImGui::Indent();
 			if(ImGui::Button("Debug Add Player"))
 			{
-				this->add(ActorType::PlayerClassic);
+				this->add(ActorType::PlayerAkhara);
 			}
 			if(ImGui::Button("Debug Add Ghost Zombie"))
 			{
@@ -239,7 +239,7 @@ namespace game
 		// Firstly remove everything
 		this->clear();
 		// Add the player and her orb.
-		this->add(ActorType::PlayerClassic);
+		this->add(ActorType::PlayerAkhara);
 		hdk::report("Player Spawns at {%.2f, %.2f}", level.player_spawn_location[0], level.player_spawn_location[1]);
 		this->qrenderer.elements().front().position = level.player_spawn_location;
 		// Now add actors from the level.
@@ -903,6 +903,7 @@ namespace game
 			{
 				flag.internal_cooldown = flag.icd;
 				flag.actions.copy_components(e.attackee.entity);
+				flag.striker_actions.copy_components(e.attacker.entity);
 			}
 		}
 	}

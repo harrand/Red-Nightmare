@@ -23,7 +23,7 @@ namespace game
 	enum class ActorSkin
 	{
 		/// Actor looks like the redesigned Akhara Ceitus low-resolution sprites.
-		PlayerClassic_LowPoly,
+		PlayerAkhara_LowPoly,
 		/// Actor looks like a zombified version of Akhara. One of the ghost skins.
 		GhostZombie,
 		/// Actor looks like a zombified Michael Jackson from thriller ;)
@@ -37,7 +37,7 @@ namespace game
 		/// Actor looks like the Nightmare boss.
 		Nightmare,
 		/// Actor looks like Akhara's default fireball.
-		PlayerClassic_DefaultFireball,
+		PlayerAkhara_DefaultFireball,
 		/// Actor looks like a plain stone texture.
 		Material_Stone,
 		/// Actor looks like a blood splatter.
@@ -53,7 +53,7 @@ namespace game
 	enum class ActorType
 	{
 		/// A keyboard-controlled player using the classic skin.
-		PlayerClassic,
+		PlayerAkhara,
 		/// A computer-controlled ghost zombie enemy.
 		GhostZombie,
 		/// A computer-controlled ghost banshee enemy. It's slower than other zombies, but can chill enemy players, slowing their movement.

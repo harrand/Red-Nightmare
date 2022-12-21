@@ -13,10 +13,10 @@ namespace game
 	{
 		switch(type)
 		{
-			case ActorType::PlayerClassic:
+			case ActorType::PlayerAkhara:
 				return
 				{
-					.type = ActorType::PlayerClassic,
+					.type = ActorType::PlayerAkhara,
 					.flags =
 					{
 						Flag<FlagID::DoNotGarbageCollect>{},
@@ -119,7 +119,7 @@ namespace game
 																			}},
 																			Action<ActionID::RespawnAs>
 																			{{
-																				.actor = ActorType::PlayerClassic
+																				.actor = ActorType::PlayerAkhara
 																			}}
 																		}
 																	}}
@@ -142,9 +142,9 @@ namespace game
 					{
 						.movement_speed = 0.0016f
 					},
-					.skin = ActorSkin::PlayerClassic_LowPoly,
-					.animation = game::play_animation(AnimationID::PlayerClassic_Idle),
-					.name = "PlayerClassic"
+					.skin = ActorSkin::PlayerAkhara_LowPoly,
+					.animation = game::play_animation(AnimationID::PlayerAkhara_Idle),
+					.name = "PlayerAkhara"
 				};
 			break;
 			case ActorType::GhostZombie:
@@ -209,7 +209,7 @@ namespace game
 						.current_health = 0.01f
 					},
 					.skin = ActorSkin::GhostZombie,
-					.animation = game::play_animation(AnimationID::PlayerClassic_Idle),
+					.animation = game::play_animation(AnimationID::PlayerAkhara_Idle),
 					.palette_colour = {0u, 255u, 0u},
 					.name = "Ghost Zombie"
 				};
@@ -293,7 +293,7 @@ namespace game
 						.current_health = 0.01f
 					},
 					.skin = ActorSkin::GhostBanshee,
-					.animation = game::play_animation(AnimationID::PlayerClassic_Idle),
+					.animation = game::play_animation(AnimationID::PlayerAkhara_Idle),
 					.palette_colour = {128u, 255u, 255u},
 					.name = "Ghost Banshee"
 				};
@@ -403,8 +403,8 @@ namespace game
 						.max_health = 0.0001f,
 						.current_health = 0.0001f
 					},
-					.skin = ActorSkin::PlayerClassic_DefaultFireball,
-					.animation = game::play_animation(AnimationID::PlayerClassic_DefaultFireball_Idle),
+					.skin = ActorSkin::PlayerAkhara_DefaultFireball,
+					.animation = game::play_animation(AnimationID::PlayerAkhara_DefaultFireball_Idle),
 					.name = "Fireball"
 				};
 			break;
@@ -690,7 +690,7 @@ namespace game
 						{{
 							.predicate = [](const Actor& self, const Actor& actor)
 							{
-								return actor.type == ActorType::PlayerClassic;
+								return actor.type == ActorType::PlayerAkhara;
 							},
 							.actions =
 							{
@@ -716,7 +716,7 @@ namespace game
 						{{
 							.predicate = [](const Actor& self, const Actor& actor)
 							{
-								return actor.type == ActorType::PlayerClassic;
+								return actor.type == ActorType::PlayerAkhara;
 							},
 							.actions =
 							{
@@ -1048,8 +1048,8 @@ namespace game
 		AnimationID ending_animation = AnimationID::Missing;
 		switch(this->skin)
 		{
-			case ActorSkin::PlayerClassic_DefaultFireball:
-				ending_animation = AnimationID::PlayerClassic_DefaultFireball_Idle;
+			case ActorSkin::PlayerAkhara_DefaultFireball:
+				ending_animation = AnimationID::PlayerAkhara_DefaultFireball_Idle;
 			break;
 			case ActorSkin::Material_Stone:
 				if(this->dead())
@@ -1068,50 +1068,50 @@ namespace game
 				ending_animation = AnimationID::Powerup_Sprint;
 			break;
 			case ActorSkin::FireSmoke:
-				ending_animation = AnimationID::PlayerClassic_FireSmoke;
+				ending_animation = AnimationID::PlayerAkhara_FireSmoke;
 			break;
 			case ActorSkin::FireExplosion:
-				ending_animation = AnimationID::PlayerClassic_FireExplosion;
+				ending_animation = AnimationID::PlayerAkhara_FireExplosion;
 			break;
-			case ActorSkin::PlayerClassic_LowPoly:
+			case ActorSkin::PlayerAkhara_LowPoly:
 				if(this->motion.contains(ActorMotion::MoveLeft))
 				{
-					ending_animation = AnimationID::PlayerClassic_LowPoly_MoveSide;
+					ending_animation = AnimationID::PlayerAkhara_LowPoly_MoveSide;
 				}
 				else if(this->motion.contains(ActorMotion::MoveRight))
 				{
-					ending_animation = AnimationID::PlayerClassic_LowPoly_MoveSide;
+					ending_animation = AnimationID::PlayerAkhara_LowPoly_MoveSide;
 					this->entity.add<ActionID::HorizontalFlip>();
 				}
 				else if(this->motion.contains(ActorMotion::MoveUp))
 				{
-					ending_animation = AnimationID::PlayerClassic_LowPoly_MoveUp;
+					ending_animation = AnimationID::PlayerAkhara_LowPoly_MoveUp;
 				}
 				else if(this->motion.contains(ActorMotion::MoveDown))
 				{
-					ending_animation = AnimationID::PlayerClassic_LowPoly_MoveDown;
+					ending_animation = AnimationID::PlayerAkhara_LowPoly_MoveDown;
 				}
 				else
 				{
-					ending_animation = AnimationID::PlayerClassic_LowPoly_Idle;
+					ending_animation = AnimationID::PlayerAkhara_LowPoly_Idle;
 				}
 				if(this->dead())
 				{
 					// TODO: Death animation for LowPoly
-					ending_animation = AnimationID::PlayerClassic_LowPoly_Death;
+					ending_animation = AnimationID::PlayerAkhara_LowPoly_Death;
 				}
 				if(this->entity.has<ActionID::Cast>())
 				{
 					const auto& action = this->entity.get<ActionID::Cast>()->data();
-					const Animation end_cast_anim = game::play_animation(AnimationID::PlayerClassic_LowPoly_EndCast);
+					const Animation end_cast_anim = game::play_animation(AnimationID::PlayerAkhara_LowPoly_EndCast);
 					const int end_cast_anim_time_millis = (static_cast<float>(end_cast_anim.get_info().frames.size()) / end_cast_anim.get_info().fps) * 1000.0f;
 					if(action.cast_time_millis <= end_cast_anim_time_millis)
 					{
-						ending_animation = AnimationID::PlayerClassic_LowPoly_EndCast;
+						ending_animation = AnimationID::PlayerAkhara_LowPoly_EndCast;
 					}
 					else
 					{
-						ending_animation = AnimationID::PlayerClassic_LowPoly_Cast;
+						ending_animation = AnimationID::PlayerAkhara_LowPoly_Cast;
 					}
 				}
 			break;

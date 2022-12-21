@@ -167,6 +167,7 @@ namespace game
 	struct FlagParams<FlagID::ActionOnStruck>
 	{
 		ActionEntity actions;
+		ActionEntity striker_actions = {};
 		float icd = 0.0f;
 		float internal_cooldown = 0.0f;
 	};

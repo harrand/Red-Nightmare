@@ -87,167 +87,167 @@ namespace game
 			.fps = 1,
 			.loop = false
 		},
-		AnimationInfo /*PlayerClassic_Death*/
+		AnimationInfo /*PlayerAkhara_Death*/
 		{
 			.frames =
 			{
-				TextureID::PlayerClassic_Dying_1,
-				TextureID::PlayerClassic_Dying_2,
-				TextureID::PlayerClassic_Dying_3,
-				TextureID::PlayerClassic_Dying_4,
-				TextureID::PlayerClassic_Dying_5,
-				TextureID::PlayerClassic_Dying_6,
-				TextureID::PlayerClassic_Dying_6,
-				TextureID::PlayerClassic_Dying_6,
-				TextureID::PlayerClassic_Dying_7,
-				TextureID::PlayerClassic_Dying_7,
-				TextureID::PlayerClassic_Dying_7,
-				TextureID::PlayerClassic_Dying_7,
-				TextureID::PlayerClassic_Dying_7,
-				TextureID::PlayerClassic_Dying_7,
-				TextureID::PlayerClassic_Dying_8,
-				TextureID::PlayerClassic_Dead
+				TextureID::PlayerAkhara_Dying_1,
+				TextureID::PlayerAkhara_Dying_2,
+				TextureID::PlayerAkhara_Dying_3,
+				TextureID::PlayerAkhara_Dying_4,
+				TextureID::PlayerAkhara_Dying_5,
+				TextureID::PlayerAkhara_Dying_6,
+				TextureID::PlayerAkhara_Dying_6,
+				TextureID::PlayerAkhara_Dying_6,
+				TextureID::PlayerAkhara_Dying_7,
+				TextureID::PlayerAkhara_Dying_7,
+				TextureID::PlayerAkhara_Dying_7,
+				TextureID::PlayerAkhara_Dying_7,
+				TextureID::PlayerAkhara_Dying_7,
+				TextureID::PlayerAkhara_Dying_7,
+				TextureID::PlayerAkhara_Dying_8,
+				TextureID::PlayerAkhara_Dead
 			},
 			.fps = 8,
 			.loop = false
 		},
-		AnimationInfo /*PlayerClassic_Idle*/
+		AnimationInfo /*PlayerAkhara_Idle*/
 		{
 			.frames =
 			{
-				TextureID::PlayerClassic_Idle_1,
-				TextureID::PlayerClassic_Idle_2
+				TextureID::PlayerAkhara_Idle_1,
+				TextureID::PlayerAkhara_Idle_2
 			},
 			.fps = 2,
 			.loop = true
 		},
-		AnimationInfo /*PlayerClassic_MoveDown*/
+		AnimationInfo /*PlayerAkhara_MoveDown*/
 		{
 			.frames =
 			{
-				TextureID::PlayerClassic_Down_1,
-				TextureID::PlayerClassic_Down_2,
-				TextureID::PlayerClassic_Down_3,
-				TextureID::PlayerClassic_Down_2
+				TextureID::PlayerAkhara_Down_1,
+				TextureID::PlayerAkhara_Down_2,
+				TextureID::PlayerAkhara_Down_3,
+				TextureID::PlayerAkhara_Down_2
 			},
 			.fps = 6,
 			.loop = true
 		},
-		AnimationInfo /*PlayerClassic_MoveUp*/
+		AnimationInfo /*PlayerAkhara_MoveUp*/
 		{
 			.frames = 
 			{
-				TextureID::PlayerClassic_Up_1,
-				TextureID::PlayerClassic_Up_2,
-				TextureID::PlayerClassic_Up_3,
-				TextureID::PlayerClassic_Up_2
+				TextureID::PlayerAkhara_Up_1,
+				TextureID::PlayerAkhara_Up_2,
+				TextureID::PlayerAkhara_Up_3,
+				TextureID::PlayerAkhara_Up_2
 			},
 			.fps = 6,
 			.loop = true
 		},
-		AnimationInfo /*PlayerClassic_MoveSide*/
+		AnimationInfo /*PlayerAkhara_MoveSide*/
 		{
 			.frames = 
 			{
-				TextureID::PlayerClassic_Side_1,
-				TextureID::PlayerClassic_Side_2,
-				TextureID::PlayerClassic_Side_3,
-				TextureID::PlayerClassic_Side_2
+				TextureID::PlayerAkhara_Side_1,
+				TextureID::PlayerAkhara_Side_2,
+				TextureID::PlayerAkhara_Side_3,
+				TextureID::PlayerAkhara_Side_2
 			},
 			.fps = 6,
 			.loop = true
 		},
-		AnimationInfo /*PlayerClassic_LowPoly_Cast*/
+		AnimationInfo /*PlayerAkhara_LowPoly_Cast*/
 		{
 			.frames = 
 			{
-				TextureID::PlayerClassic_LowPoly_Cast0,
-				TextureID::PlayerClassic_LowPoly_Cast1,
-				TextureID::PlayerClassic_LowPoly_Cast2,
-				TextureID::PlayerClassic_LowPoly_Cast3,
-				TextureID::PlayerClassic_LowPoly_Cast4,
-				TextureID::PlayerClassic_LowPoly_Cast5,
-				TextureID::PlayerClassic_LowPoly_Cast6,
-				TextureID::PlayerClassic_LowPoly_Cast7,
+				TextureID::PlayerAkhara_LowPoly_Cast0,
+				TextureID::PlayerAkhara_LowPoly_Cast1,
+				TextureID::PlayerAkhara_LowPoly_Cast2,
+				TextureID::PlayerAkhara_LowPoly_Cast3,
+				TextureID::PlayerAkhara_LowPoly_Cast4,
+				TextureID::PlayerAkhara_LowPoly_Cast5,
+				TextureID::PlayerAkhara_LowPoly_Cast6,
+				TextureID::PlayerAkhara_LowPoly_Cast7,
 			},
 			.fps = 7,
 			.loop = true
 		},
-		AnimationInfo /*PlayerClassic_LowPoly_Death*/
+		AnimationInfo /*PlayerAkhara_LowPoly_Death*/
 		{
 			.frames = 
 			{
-				TextureID::PlayerClassic_LowPoly_Death00,
-				TextureID::PlayerClassic_LowPoly_Death01,
-				TextureID::PlayerClassic_LowPoly_Death02,
-				TextureID::PlayerClassic_LowPoly_Death03,
-				TextureID::PlayerClassic_LowPoly_Death04,
-				TextureID::PlayerClassic_LowPoly_Death05,
-				TextureID::PlayerClassic_LowPoly_Death06,
-				TextureID::PlayerClassic_LowPoly_Death07,
-				TextureID::PlayerClassic_LowPoly_Death08,
-				TextureID::PlayerClassic_LowPoly_Death09,
-				TextureID::PlayerClassic_LowPoly_Death10,
-				TextureID::PlayerClassic_LowPoly_Death11,
+				TextureID::PlayerAkhara_LowPoly_Death00,
+				TextureID::PlayerAkhara_LowPoly_Death01,
+				TextureID::PlayerAkhara_LowPoly_Death02,
+				TextureID::PlayerAkhara_LowPoly_Death03,
+				TextureID::PlayerAkhara_LowPoly_Death04,
+				TextureID::PlayerAkhara_LowPoly_Death05,
+				TextureID::PlayerAkhara_LowPoly_Death06,
+				TextureID::PlayerAkhara_LowPoly_Death07,
+				TextureID::PlayerAkhara_LowPoly_Death08,
+				TextureID::PlayerAkhara_LowPoly_Death09,
+				TextureID::PlayerAkhara_LowPoly_Death10,
+				TextureID::PlayerAkhara_LowPoly_Death11,
 			},
 			.fps = 14,
 			.loop = false
 		},
-		AnimationInfo /*PlayerClassic_LowPoly_MoveDown*/
+		AnimationInfo /*PlayerAkhara_LowPoly_MoveDown*/
 		{
 			.frames = 
 			{
-				TextureID::PlayerClassic_LowPoly_Down0,
-				TextureID::PlayerClassic_LowPoly_Down1,
-				TextureID::PlayerClassic_LowPoly_Down2,
-				TextureID::PlayerClassic_LowPoly_Down3
+				TextureID::PlayerAkhara_LowPoly_Down0,
+				TextureID::PlayerAkhara_LowPoly_Down1,
+				TextureID::PlayerAkhara_LowPoly_Down2,
+				TextureID::PlayerAkhara_LowPoly_Down3
 			},
 			.fps = 6,
 			.loop = true
 		},
-		AnimationInfo /*PlayerClassic_LowPoly_EndCast*/
+		AnimationInfo /*PlayerAkhara_LowPoly_EndCast*/
 		{
 			.frames = 
 			{
-				TextureID::PlayerClassic_LowPoly_EndCast0,
-				TextureID::PlayerClassic_LowPoly_EndCast1,
-				TextureID::PlayerClassic_LowPoly_EndCast2,
-				TextureID::PlayerClassic_LowPoly_EndCast3,
-				TextureID::PlayerClassic_LowPoly_EndCast4
+				TextureID::PlayerAkhara_LowPoly_EndCast0,
+				TextureID::PlayerAkhara_LowPoly_EndCast1,
+				TextureID::PlayerAkhara_LowPoly_EndCast2,
+				TextureID::PlayerAkhara_LowPoly_EndCast3,
+				TextureID::PlayerAkhara_LowPoly_EndCast4
 			},
 			.fps = 12,
 			.loop = false
 		},
-		AnimationInfo /*PlayerClassic_LowPoly_Idle*/
+		AnimationInfo /*PlayerAkhara_LowPoly_Idle*/
 		{
 			.frames = 
 			{
-				TextureID::PlayerClassic_LowPoly_Idle0,
-				TextureID::PlayerClassic_LowPoly_Idle1
+				TextureID::PlayerAkhara_LowPoly_Idle0,
+				TextureID::PlayerAkhara_LowPoly_Idle1
 			},
 			.fps = 2,
 			.loop = true
 		},
-		AnimationInfo /*PlayerClassic_LowPoly_MoveSide*/
+		AnimationInfo /*PlayerAkhara_LowPoly_MoveSide*/
 		{
 			.frames = 
 			{
-				TextureID::PlayerClassic_LowPoly_Side0,
-				TextureID::PlayerClassic_LowPoly_Side1,
-				TextureID::PlayerClassic_LowPoly_Side2,
-				TextureID::PlayerClassic_LowPoly_Side3
+				TextureID::PlayerAkhara_LowPoly_Side0,
+				TextureID::PlayerAkhara_LowPoly_Side1,
+				TextureID::PlayerAkhara_LowPoly_Side2,
+				TextureID::PlayerAkhara_LowPoly_Side3
 			},
 			.fps = 6,
 			.loop = true
 		},
-		AnimationInfo /*PlayerClassic_LowPoly_MoveUp*/
+		AnimationInfo /*PlayerAkhara_LowPoly_MoveUp*/
 		{
 			.frames = 
 			{
-				TextureID::PlayerClassic_LowPoly_Up0,
-				TextureID::PlayerClassic_LowPoly_Up1,
-				TextureID::PlayerClassic_LowPoly_Up2,
-				TextureID::PlayerClassic_LowPoly_Up3
+				TextureID::PlayerAkhara_LowPoly_Up0,
+				TextureID::PlayerAkhara_LowPoly_Up1,
+				TextureID::PlayerAkhara_LowPoly_Up2,
+				TextureID::PlayerAkhara_LowPoly_Up3
 			},
 			.fps = 6,
 			.loop = true
@@ -398,26 +398,26 @@ namespace game
 			.fps = 14,
 			.loop = false
 		},
-		AnimationInfo /*PlayerClassic_DefaultFireball_Idle*/
+		AnimationInfo /*PlayerAkhara_DefaultFireball_Idle*/
 		{
 			.frames =
 			{
-				TextureID::PlayerClassic_Default_Fireball
+				TextureID::PlayerAkhara_Default_Fireball
 			},
 			.fps = 1,
 			.loop = true
 		},
-		AnimationInfo /*PlayerClassic_FireSmoke*/
+		AnimationInfo /*PlayerAkhara_FireSmoke*/
 		{
 			.frames =
 			{
-				TextureID::PlayerClassic_Default_Fireball_Particles_0,
-				TextureID::PlayerClassic_Default_Fireball_Particles_1,
-				TextureID::PlayerClassic_Default_Fireball_Particles_2,
-				TextureID::PlayerClassic_Default_Fireball_Particles_3,
-				TextureID::PlayerClassic_Default_Fireball_Particles_4,
-				TextureID::PlayerClassic_Default_Fireball_Particles_5,
-				TextureID::PlayerClassic_Default_Fireball_Particles_6,
+				TextureID::PlayerAkhara_Default_Fireball_Particles_0,
+				TextureID::PlayerAkhara_Default_Fireball_Particles_1,
+				TextureID::PlayerAkhara_Default_Fireball_Particles_2,
+				TextureID::PlayerAkhara_Default_Fireball_Particles_3,
+				TextureID::PlayerAkhara_Default_Fireball_Particles_4,
+				TextureID::PlayerAkhara_Default_Fireball_Particles_5,
+				TextureID::PlayerAkhara_Default_Fireball_Particles_6,
 			},
 			.fps = 9,
 			.loop = false
@@ -460,7 +460,7 @@ namespace game
 			.fps = 16,
 			.loop = false
 		},
-		AnimationInfo /*PlayerClassic_FireExplosion*/
+		AnimationInfo /*PlayerAkhara_FireExplosion*/
 		{
 			.frames =
 			{
