@@ -173,7 +173,7 @@ namespace game
 		if(maybe_level_img.has_value())
 		{
 			auto& level = maybe_level_img.value();
-			this->impl_load_level(load_level_from_image(level.level_image, level.backdrop));
+			this->impl_load_level(load_level_from_image(level.level_image, level.backdrop, level.weather_effect));
 		}
 	}
 
@@ -257,7 +257,7 @@ namespace game
 		auto& effect_data = this->qrenderer.overlay(OverlayID::Effect);
 		effect_data.position = (this->level_boundaries / 2.0f) - hdk::vec2::filled(1.0f);
 		
-		this->qrenderer.set_effect(EffectID::Rain);
+		this->qrenderer.set_effect(level.weather_effect);
 		effect_data.scale = (this->qrenderer.get_effect() != EffectID::None)
 			? ((this->level_boundaries - hdk::vec2::filled(0.25f)) / 2.0f)
 			: hdk::vec2::zero();

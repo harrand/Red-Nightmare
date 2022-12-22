@@ -51,16 +51,18 @@ namespace game
 	{
 		tz::gl::ImageResource level_image = game::load_image_data(level_image_data[static_cast<int>(lid)]);
 		TextureID backdrop = TextureID::Invisible;
+		EffectID weather_effect = EffectID::None;
 		switch(lid)
 		{
 			case LevelID::DevLevel1:
 				backdrop = TextureID::DevLevel1_Backdrop;
+				weather_effect = EffectID::Rain;
 			break;
 		}
-		return load_level_from_image(level_image, backdrop);
+		return load_level_from_image(level_image, backdrop, weather_effect);
 	}
 
-	Level load_level_from_image(const tz::gl::ImageResource& level_image, TextureID backdrop)
+	Level load_level_from_image(const tz::gl::ImageResource& level_image, TextureID backdrop, EffectID weather_effect)
 	{
 		constexpr hdk::vec3ui colour_black{0u, 0u, 0u};
 		using ImageView = tz::GridView<const std::byte, 4>;
@@ -80,6 +82,7 @@ namespace game
 
 		Level ret;
 		ret.backdrop = backdrop;
+		ret.weather_effect = weather_effect;
 		ret.max_level_coords = static_cast<hdk::vec2>(level_image.get_dimensions()) / world_scale;
 
 		for(std::size_t x = 0; x < view.get_dimensions()[0]; x++)
@@ -387,6 +390,7 @@ namespace game
 			}
 			tz::gl::ImageResource img = tz::gl::ImageResource::null();
 			TextureID backdrop = backdrops[backdrop_id];
+			EffectID weather_effect = EffectID::None;
 			if(base_level_id == 0)
 			{
 				img = random_level_image
@@ -407,13 +411,17 @@ namespace game
 			else
 			{
 				img = game::load_image_data(level_image_data[base_level_id]);
-				backdrop = game::load_level(static_cast<LevelID>(base_level_id)).backdrop;
+				auto temp_level = game::load_level(static_cast<LevelID>(base_level_id));
+
+				backdrop = temp_level.backdrop;
+				weather_effect = temp_level.weather_effect;
 				game::impl_enact_blackwhitelists(blacklist, whitelist, img);
 			}
 			return RandomLevelData
 			{
 				.level_image = img,
-				.backdrop = backdrop
+				.backdrop = backdrop,
+				.weather_effect = weather_effect
 			};
 		}
 		return {};
