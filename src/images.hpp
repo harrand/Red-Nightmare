@@ -193,6 +193,7 @@ namespace game
 
 		DevLevel1_Backdrop,
 		Grass_Generic_Backdrop,
+		Dungeon_Floor_Generic_Backdrop,
 
 		Count
 	};

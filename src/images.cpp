@@ -195,6 +195,7 @@
 
 #include ImportedTextHeader(dev_level_1_backdrop, png)
 #include ImportedTextHeader(grass_backdrop, png)
+#include ImportedTextHeader(dungeon_floor_backdrop, png)
 
 namespace game
 {
@@ -390,7 +391,8 @@ namespace game
 		ImportedTextData(sprint2, png),
 
 		ImportedTextData(dev_level_1_backdrop, png),
-		ImportedTextData(grass_backdrop, png)
+		ImportedTextData(grass_backdrop, png),
+		ImportedTextData(dungeon_floor_backdrop, png),
 	};
 
 	tz::gl::ImageResource load_image(TextureID texid)

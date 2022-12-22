@@ -54,9 +54,15 @@ namespace game
 		EffectID weather_effect = EffectID::None;
 		switch(lid)
 		{
+			case LevelID::DevLevel0:
+				backdrop = TextureID::Dungeon_Floor_Generic_Backdrop;
+			break;
 			case LevelID::DevLevel1:
 				backdrop = TextureID::DevLevel1_Backdrop;
 				weather_effect = EffectID::Rain;
+			break;
+			case LevelID::DevLevel2:
+				backdrop = TextureID::Dungeon_Floor_Generic_Backdrop;
 			break;
 		}
 		return load_level_from_image(level_image, backdrop, weather_effect);
@@ -321,7 +327,7 @@ namespace game
 		{
 			ImGui::Checkbox(level_layout_flag_names[i], &level_layout_flag_values[i].b);
 		}
-		std::array<TextureID, 2> backdrops{TextureID::Invisible, TextureID::Grass_Generic_Backdrop};
+		std::array<TextureID, 3> backdrops{TextureID::Invisible, TextureID::Grass_Generic_Backdrop, TextureID::Dungeon_Floor_Generic_Backdrop};
 		ImGui::Spacing();
 		static int empty_chance = 50;
 		ImGui::DragInt("Actor Sparseness", &empty_chance, 0.5f, 0, 100);
@@ -331,6 +337,7 @@ namespace game
 		ImGui::Indent();
 		ImGui::RadioButton("No Backdrop", &backdrop_id, 0);
 		ImGui::RadioButton("Grassy Field", &backdrop_id, 1);
+		ImGui::RadioButton("Dungeon Floor", &backdrop_id, 2);
 		ImGui::Unindent();
 
 		std::array<EffectID, 2> effects{EffectID::None, EffectID::Rain};
