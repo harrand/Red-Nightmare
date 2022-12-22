@@ -48,7 +48,7 @@ namespace game
 		float get_width_multiplier() const;
 		const hdk::vec2& camera_position() const;
 		hdk::vec2& camera_position();
-		static constexpr std::size_t max_quad_count = 2048;
+		static constexpr std::size_t max_quad_count = 8096;
 	private:
 		struct RenderData
 		{

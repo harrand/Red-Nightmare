@@ -270,6 +270,10 @@ namespace game
 		static std::unordered_map<ActorType, bool> blacklist_actors(palette.actor_palette.size());
 		struct SpawnRate{float f = 1.0f;};
 		static std::unordered_map<ActorType, ActorLayoutConfig> actor_spawnrates = {};
+
+		static hdk::vec2i dims = hdk::vec2i::filled(32);
+		ImGui::DragInt2("Dimensions", dims.data().data(), 1.0f, 3, 64);
+
 		if(ImGui::CollapsingHeader("Black/White Listing", ImGuiTreeNodeFlags_DefaultOpen))
 		{
 			ImGui::BeginTable("Black/White Listing", 3, ImGuiTableFlags_Borders);
@@ -404,8 +408,8 @@ namespace game
 			{
 				img = random_level_image
 				({
-					.width = 32,
-					.height = 32,
+					.width = static_cast<unsigned int>(dims[0]),
+					.height = static_cast<unsigned int>(dims[1]),
 					.seed = 32u,
 					.empty_chance = static_cast<unsigned int>(empty_chance),
 					.whitelist = whitelist,
