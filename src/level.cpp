@@ -328,6 +328,15 @@ namespace game
 		ImGui::RadioButton("No Backdrop", &backdrop_id, 0);
 		ImGui::RadioButton("Grassy Field", &backdrop_id, 1);
 		ImGui::Unindent();
+
+		std::array<EffectID, 2> effects{EffectID::None, EffectID::Rain};
+		static int effect_id = 0;
+		ImGui::Spacing();
+		ImGui::Text("Weather Effect");
+		ImGui::Indent();
+		ImGui::RadioButton("No Weather Effect", &effect_id, 0);
+		ImGui::RadioButton("Rain", &effect_id, 1);
+		ImGui::Unindent();
 		if(ImGui::CollapsingHeader("Configure Presets"))
 		{
 			ImGui::Indent();
@@ -390,7 +399,7 @@ namespace game
 			}
 			tz::gl::ImageResource img = tz::gl::ImageResource::null();
 			TextureID backdrop = backdrops[backdrop_id];
-			EffectID weather_effect = EffectID::None;
+			EffectID weather_effect = effects[effect_id];
 			if(base_level_id == 0)
 			{
 				img = random_level_image
