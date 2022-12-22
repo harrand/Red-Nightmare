@@ -314,7 +314,7 @@ namespace game
 		{
 			ImGui::Checkbox(level_layout_flag_names[i], &level_layout_flag_values[i].b);
 		}
-		std::array<TextureID, 2> backdrops{TextureID::Invisible, TextureID::DevLevel1_Backdrop};
+		std::array<TextureID, 2> backdrops{TextureID::Invisible, TextureID::Grass_Generic_Backdrop};
 		ImGui::Spacing();
 		static int empty_chance = 50;
 		ImGui::DragInt("Actor Sparseness", &empty_chance, 0.5f, 0, 100);
@@ -323,7 +323,7 @@ namespace game
 		ImGui::Text("Backdrops");
 		ImGui::Indent();
 		ImGui::RadioButton("No Backdrop", &backdrop_id, 0);
-		ImGui::RadioButton("DevLevel1 Backdrop", &backdrop_id, 1);
+		ImGui::RadioButton("Grassy Field", &backdrop_id, 1);
 		ImGui::Unindent();
 		if(ImGui::CollapsingHeader("Configure Presets"))
 		{

@@ -192,6 +192,7 @@ namespace game
 		Powerup_Sprint_2,
 
 		DevLevel1_Backdrop,
+		Grass_Generic_Backdrop,
 
 		Count
 	};
