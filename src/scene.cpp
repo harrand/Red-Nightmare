@@ -5,6 +5,7 @@
 #include "hdk/debug.hpp"
 #include "hdk/profile.hpp"
 
+#include <cctype>
 #include <algorithm>
 #include <numeric>
 #include <unordered_map>
@@ -57,11 +58,72 @@ namespace game
 		this->intersections = this->quadtree.find_all_intersections();
 		this->collision_resolution();
 	}
+
+	constexpr auto c_actor_count = static_cast<std::size_t>(ActorType::Count);
+
+	std::array<const char*, c_actor_count> get_actor_names()
+	{
+		std::array<const char*, c_actor_count> ret;
+		for(std::size_t i = 0; i < c_actor_count; i++)
+		{
+			ret[i] = game::create_actor(static_cast<ActorType>(i)).name;
+		}
+		return ret;
+	}
 	
 	void Scene::dbgui_current_scene()
 	{
+		static std::array<const char*, c_actor_count> actor_names = get_actor_names();
 		ImGui::Text("Current Scene");
 		ImGui::Spacing();
+		static bool track_actor = false;
+		ImGui::Checkbox("Track Actor", &track_actor);
+		if(track_actor)
+		{
+			static std::array<char, 128> name_search_buf = {'\0'};
+			std::optional<ActorType> find_match = std::nullopt;
+			ImGui::InputText("Search by name", name_search_buf.data(), name_search_buf.size());
+			{
+				std::string lhs{name_search_buf.data()};
+				std::transform(lhs.begin(), lhs.end(), lhs.begin(), ::toupper);
+				for(std::size_t i = 0; i < actor_names.size(); i++)
+				{
+					std::string rhs{actor_names[i]};
+					std::transform(rhs.begin(), rhs.end(), rhs.begin(), ::toupper);
+					if(lhs == rhs)
+					{
+						find_match = static_cast<ActorType>(i);
+						break;
+					}
+				}
+			}
+			static int tracked_uuid;
+			ImGui::DragInt("Actor UUID", &tracked_uuid, 0.5f, 0, Actor::uuid_count);
+			Actor* a = this->get_actor_from_uuid(tracked_uuid);
+			ImGui::Indent();
+			if(a != nullptr)
+			{
+				a->dbgui();
+			}
+			else
+			{
+				ImGui::Text("Actor by UUID %d cannot be found.", tracked_uuid);
+			}
+			ImGui::Unindent();
+			if(find_match.has_value())
+			{
+				if(ImGui::Button("Find First Match -->"))
+				{
+					for(const Actor& a : this->actors)
+					{
+						if(a.type == find_match.value())
+						{
+							tracked_uuid = a.uuid;
+						}
+					}
+				}
+			}
+		}
 		if(ImGui::CollapsingHeader("Mass Control"))
 		{
 			ImGui::Indent();
@@ -616,6 +678,18 @@ namespace game
 			return (pair.first == a_node && pair.second == b_node)
 			    || (pair.first == b_node && pair.second == a_node);
 		}) != this->intersections.end();
+	}
+
+	Actor* Scene::get_actor_from_uuid(std::size_t uuid)
+	{
+		auto iter = std::find_if(this->actors.begin(), this->actors.end(), [uuid](const Actor& a){return a.uuid == uuid;});
+		return iter != this->actors.end() ? &*iter : nullptr;
+	}
+
+	const Actor* Scene::get_actor_from_uuid(std::size_t uuid) const
+	{
+		auto iter = std::find_if(this->actors.begin(), this->actors.end(), [uuid](const Actor& a){return a.uuid == uuid;});
+		return iter != this->actors.end() ? &*iter : nullptr;
 	}
 
 	bool Scene::is_in_bounds(std::size_t actor_id) const

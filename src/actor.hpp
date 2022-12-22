@@ -99,6 +99,7 @@ namespace game
 
 	struct Actor
 	{
+		static std::size_t uuid_count;
 		static constexpr std::size_t NullID = std::numeric_limits<std::size_t>::max();
 		ActorType type = {};
 		/// Describes the characteristics of the actor.
@@ -127,6 +128,7 @@ namespace game
 		tz::Duration last_update = tz::system_time();
 		Actor* target = nullptr;
 		unsigned short layer = default_layer;
+		std::size_t uuid = uuid_count++;
 
 		void update();
 		bool dead() const;

@@ -8,6 +8,7 @@ using namespace tz::literals;
 
 namespace game
 {
+	std::size_t Actor::uuid_count = 0;
 
 	Actor create_actor(ActorType type)
 	{
@@ -144,7 +145,7 @@ namespace game
 					},
 					.skin = ActorSkin::PlayerAkhara_LowPoly,
 					.animation = game::play_animation(AnimationID::PlayerAkhara_Idle),
-					.name = "PlayerAkhara"
+					.name = "Player Akhara"
 				};
 			break;
 			case ActorType::GhostZombie:
@@ -517,7 +518,7 @@ namespace game
 					.faction = Faction::PlayerEnemy,
 					.skin = ActorSkin::DebugOnlyVisible,
 					.palette_colour = {255u, 64u, 255u},
-					.name = "Spawner (Ghost Zombie)",
+					.name = "Spawner Ghost Zombie",
 					.layer = default_layer + 1
 				};
 			break;
@@ -553,7 +554,7 @@ namespace game
 					.faction = Faction::PlayerEnemy,
 					.skin = ActorSkin::DebugOnlyVisible,
 					.palette_colour = {255u, 32u, 255u},
-					.name = "Spawner (Fireball)",
+					.name = "Spawner Fireball",
 					.layer = default_layer + 1
 				};
 			break;
@@ -641,7 +642,7 @@ namespace game
 					.faction = Faction::PureEnemy,
 					.skin = ActorSkin::Invisible,
 					.palette_colour = {255u, 255u, 255u},
-					.name = "Invisible Wall (Projectiles Pass)",
+					.name = "Invisible Wall Projectiles Pass",
 					.density = 2.0f,
 					.layer = 255
 				};
@@ -836,6 +837,7 @@ namespace game
 
 	void Actor::dbgui()
 	{
+		ImGui::Text("UUID: %zu", this->uuid);
 		ImGui::Text("Flags New Count: %zu", this->flags.size());
 		ImGui::Text("\"%s\" (HP: %.2f/%.2f, dead: %s)", this->name, this->base_stats.current_health, this->get_current_stats().max_health, this->dead() ? "true" : "false");
 		ImGui::SameLine();

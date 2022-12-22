@@ -60,6 +60,9 @@ namespace game
 		std::optional<std::size_t> find_first_player() const;
 		Box get_bounding_box(std::size_t actor_id) const;
 		bool actor_collision_query(std::size_t actor_a, std::size_t actor_b) const;
+		Actor* get_actor_from_uuid(std::size_t uuid);
+		const Actor* get_actor_from_uuid(std::size_t uuid) const;
+
 		bool is_in_bounds(std::size_t actor_id) const;
 		bool is_in_level(std::size_t actor_id) const;
 		std::pair<hdk::vec2, hdk::vec2> get_world_boundaries() const;
