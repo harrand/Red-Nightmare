@@ -11,6 +11,7 @@ namespace game
 	{
 		None,
 		Rain,
+		Snow,
 		Count
 	};
 
@@ -29,11 +30,14 @@ namespace game
 	private:
 		tz::gl::RendererHandle make_rain_storage();
 		tz::gl::RendererHandle make_rain_effect();
+		tz::gl::RendererHandle make_snow_storage();
+		tz::gl::RendererHandle make_snow_effect();
 		tz::gl::RendererHandle global_storage = hdk::nullhand;
 		tz::gl::ResourceHandle global_buffer = hdk::nullhand;
 		std::vector<tz::gl::RendererHandle> effect_storage_renderers = {};
 		std::vector<tz::gl::RendererHandle> effect_renderers = {};
 		tz::gl::ResourceHandle rain_storage = hdk::nullhand;
+		tz::gl::ResourceHandle snow_storage = hdk::nullhand;
 		tz::Duration creation = tz::system_time();
 	};
 

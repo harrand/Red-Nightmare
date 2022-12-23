@@ -340,13 +340,14 @@ namespace game
 		ImGui::RadioButton("Dungeon Floor", &backdrop_id, 2);
 		ImGui::Unindent();
 
-		std::array<EffectID, 2> effects{EffectID::None, EffectID::Rain};
+		std::array<EffectID, 3> effects{EffectID::None, EffectID::Rain, EffectID::Snow};
 		static int effect_id = 0;
 		ImGui::Spacing();
 		ImGui::Text("Weather Effect");
 		ImGui::Indent();
 		ImGui::RadioButton("No Weather Effect", &effect_id, 0);
 		ImGui::RadioButton("Rain", &effect_id, 1);
+		ImGui::RadioButton("Snow", &effect_id, 2);
 		ImGui::Unindent();
 		if(ImGui::CollapsingHeader("Configure Presets"))
 		{

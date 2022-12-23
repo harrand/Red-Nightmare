@@ -9,6 +9,8 @@
 #include ImportedShaderHeader(empty, fragment)
 #include ImportedShaderHeader(rain, vertex)
 #include ImportedShaderHeader(rain, fragment)
+#include ImportedShaderHeader(snow, vertex)
+#include ImportedShaderHeader(snow, fragment)
 
 namespace game
 {
@@ -43,6 +45,10 @@ namespace game
 				case EffectID::Rain:
 					this->effect_storage_renderers[i] = this->make_rain_storage();
 					this->effect_renderers[i] = this->make_rain_effect();
+				break;
+				case EffectID::Snow:
+					this->effect_storage_renderers[i] = this->make_snow_storage();
+					this->effect_renderers[i] = this->make_snow_effect();
 				break;
 				default:
 					hdk::error("Unrecognised EffectID %zu", i);
@@ -97,6 +103,9 @@ namespace game
 				case EffectID::Rain:
 					return this->rain_storage;
 				break;
+				case EffectID::Snow:
+					return this->snow_storage;
+				break;
 				default:
 					hdk::error("Could not locate effect ImageComponent for EffectID %zu", static_cast<std::size_t>(id));
 					return hdk::nullhand;
@@ -132,6 +141,37 @@ namespace game
 		rinfo.set_output(tz::gl::ImageOutput
 		{{
 			.colours = {storage_renderer.get_component(this->rain_storage)}
+		}});
+		return tz::gl::device().create_renderer(rinfo);
+	}
+
+	tz::gl::RendererHandle EffectManager::make_snow_storage()
+	{
+		tz::gl::RendererInfo rinfo;
+		rinfo.debug_name("Snow Effect Storage");
+		this->snow_storage = rinfo.add_resource(tz::gl::ImageResource::from_uninitialised
+		({
+			.format = tz::gl::ImageFormat::BGRA32,
+			.dimensions = static_cast<hdk::vec2ui>(hdk::vec2{tz::window().get_width(), tz::window().get_height()}),
+			.flags = {tz::gl::ResourceFlag::RendererOutput}
+		}));
+		rinfo.shader().set_shader(tz::gl::ShaderStage::Vertex, ImportedShaderSource(empty, vertex));
+		rinfo.shader().set_shader(tz::gl::ShaderStage::Fragment, ImportedShaderSource(empty, fragment));
+		return tz::gl::device().create_renderer(rinfo);
+	}
+
+	tz::gl::RendererHandle EffectManager::make_snow_effect()
+	{
+		tz::gl::RendererInfo rinfo;
+		rinfo.debug_name("Snow Effect Renderer");
+		rinfo.shader().set_shader(tz::gl::ShaderStage::Vertex, ImportedShaderSource(snow, vertex));
+		rinfo.shader().set_shader(tz::gl::ShaderStage::Fragment, ImportedShaderSource(snow, fragment));
+		rinfo.set_options({tz::gl::RendererOption::RenderWait, tz::gl::RendererOption::NoDepthTesting});
+		rinfo.ref_resource(this->global_storage, this->global_buffer);
+		auto& storage_renderer = tz::gl::device().get_renderer(this->effect_storage_renderers[static_cast<std::size_t>(EffectID::Snow)]);
+		rinfo.set_output(tz::gl::ImageOutput
+		{{
+			.colours = {storage_renderer.get_component(this->snow_storage)}
 		}});
 		return tz::gl::device().create_renderer(rinfo);
 	}
