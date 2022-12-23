@@ -261,5 +261,6 @@ add_text(
 		res/images/levels/dev_level_1_backdrop.png
 		res/images/levels/dev_level_2.png
 		res/images/levels/generic/grass_backdrop.png
+		res/images/levels/generic/snow_backdrop.png
 		res/images/levels/generic/dungeon_floor_backdrop.png
 )

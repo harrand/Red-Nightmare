@@ -195,6 +195,7 @@
 
 #include ImportedTextHeader(dev_level_1_backdrop, png)
 #include ImportedTextHeader(grass_backdrop, png)
+#include ImportedTextHeader(snow_backdrop, png)
 #include ImportedTextHeader(dungeon_floor_backdrop, png)
 
 namespace game
@@ -392,6 +393,7 @@ namespace game
 
 		ImportedTextData(dev_level_1_backdrop, png),
 		ImportedTextData(grass_backdrop, png),
+		ImportedTextData(snow_backdrop, png),
 		ImportedTextData(dungeon_floor_backdrop, png),
 	};
 

@@ -62,7 +62,8 @@ namespace game
 				weather_effect = EffectID::Rain;
 			break;
 			case LevelID::DevLevel2:
-				backdrop = TextureID::Dungeon_Floor_Generic_Backdrop;
+				backdrop = TextureID::Snow_Generic_Backdrop;
+				weather_effect = EffectID::Snow;
 			break;
 		}
 		return load_level_from_image(level_image, backdrop, weather_effect);
