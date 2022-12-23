@@ -19,24 +19,25 @@ const uint noise_layers = 3;
 
 float rain(vec2 uv)
 {
-	return tz::noise::simplex(uv);
+	float rand = tz::noise::gold(vec2(uv.x) / rain_scale);
+	return tz::noise::simplex(uv + vec2(rand, 0.0));
 }
 
 void main()
 {
 	const vec3 rain_colour = vec3(0.0, 0.235, 0.361) * 1.5f;
 	vec2 real_rain_dir = vec2(-rain_direction.x, rain_direction.y);
-	vec2 coord = in::fragment_coord.xy + real_rain_dir * gdata.time * rain_speed;
-	coord *= rain_scale;
-	float rand = tz::noise::gold(vec2(coord.x) / rain_scale);
+
+	vec2 uv = in::fragment_coord.xy + real_rain_dir * gdata.time * rain_speed;
+	uv *= rain_scale;
 
 	float alpha = 0.0f;
-	alpha += rain(coord + vec2(rand, 0.0));
+	alpha += rain(uv);
 	// Add another layer of noise so its a bit more, er, noisey.
 	for(uint i = 0; i < noise_layers; i++)
 	{
 		float n = float(noise_layers) * layer_strength;
-		alpha += rain(coord + vec2(rand, 0.0) * float(noise_layers) * n) * n;
+		alpha += rain(uv * float(noise_layers) * n) * n;
 	}
 	frag_colour = vec4(rain_colour, alpha * rain_density);
 }
