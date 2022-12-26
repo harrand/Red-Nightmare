@@ -11,7 +11,8 @@ namespace game
 {
 	enum class OverlayID
 	{
-		Backdrop,
+		Backdrop_Background,
+		Backdrop_Foreground,
 		Effect,
 		Count
 	};

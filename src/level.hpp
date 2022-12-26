@@ -2,6 +2,7 @@
 #define REDNIGHTMARE_LEVEL_HPP
 #include "actor.hpp"
 #include "effect.hpp"
+#include "backdrop.hpp"
 #include "tz/gl/resource.hpp"
 #include <unordered_map>
 #include <utility>
@@ -41,7 +42,7 @@ namespace game
 		hdk::vec2 player_spawn_location = {0.0f, 0.0f};
 		std::vector<std::pair<hdk::vec2, ActorType>> actor_spawns = {};
 		hdk::vec2 max_level_coords = hdk::vec2::zero();
-		TextureID backdrop;
+		Backdrop backdrop;
 		EffectID weather_effect = EffectID::None;
 	};
 
@@ -88,14 +89,14 @@ namespace game
 	};
 
 	Level load_level(LevelID lid);
-	Level load_level_from_image(const tz::gl::ImageResource& level_image, TextureID backdrop = TextureID::Invisible, EffectID weather_effect = EffectID::None);
+	Level load_level_from_image(const tz::gl::ImageResource& level_image, Backdrop backdrop = {}, EffectID weather_effect = EffectID::None);
 
 	tz::gl::ImageResource random_level_image(const RandomLevelGenerationOptions& options);
 	void impl_enact_blackwhitelists(const ActorTypes& blacklist, const ActorTypes& whitelist, tz::gl::ImageResource& level_image);
 	struct RandomLevelData
 	{
 		tz::gl::ImageResource level_image;
-		TextureID backdrop = TextureID::Invisible;
+		Backdrop backdrop = {};
 		EffectID weather_effect = EffectID::None;
 	};
 	std::optional<RandomLevelData> dbgui_generate_random_level_image();

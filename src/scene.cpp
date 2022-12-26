@@ -310,12 +310,25 @@ namespace game
 			this->add(actor_type);
 			this->qrenderer.elements().back().position = pos;
 		}
+
+
 		this->level_boundaries = level.max_level_coords;
-		auto& backdrop_data = this->qrenderer.overlay(OverlayID::Backdrop);
-		backdrop_data.texture_id = level.backdrop;
-		backdrop_data.position = (this->level_boundaries / 2.0f) - hdk::vec2::filled(1.0f);
-		backdrop_data.scale = ((this->level_boundaries - hdk::vec2::filled(0.25f)) / 2.0f);
-		backdrop_data.layer = 0.999f;
+
+		const hdk::vec2 backdrop_position = (this->level_boundaries / 2.0f) - hdk::vec2::filled(1.0f);
+		const hdk::vec2 backdrop_scale = ((this->level_boundaries - hdk::vec2::filled(0.25f)) / 2.0f);
+
+		auto& background_data = this->qrenderer.overlay(OverlayID::Backdrop_Background);
+		background_data.texture_id = level.backdrop.background;
+		background_data.position = backdrop_position;
+		background_data.scale = backdrop_scale;
+		background_data.layer = 0.990f;
+
+		auto& foreground_data = this->qrenderer.overlay(OverlayID::Backdrop_Foreground);
+		foreground_data.texture_id = level.backdrop.foreground;
+		foreground_data.position = backdrop_position;
+		foreground_data.scale = backdrop_scale;
+		foreground_data.layer = 0.95f;
+
 		auto& effect_data = this->qrenderer.overlay(OverlayID::Effect);
 		effect_data.position = (this->level_boundaries / 2.0f) - hdk::vec2::filled(1.0f);
 		
