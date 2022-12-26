@@ -9,6 +9,7 @@
 #include ImportedTextHeader(dev_level_0, png)
 #include ImportedTextHeader(dev_level_1, png)
 #include ImportedTextHeader(dev_level_2, png)
+#include ImportedTextHeader(dev_level_3, png)
 
 namespace game
 {
@@ -18,7 +19,8 @@ namespace game
 		ImportedTextData(invisible, png),
 		ImportedTextData(dev_level_0, png),
 		ImportedTextData(dev_level_1, png),
-		ImportedTextData(dev_level_2, png)
+		ImportedTextData(dev_level_2, png),
+		ImportedTextData(dev_level_3, png),
 	};
 
 	LevelPalette get_level_palette()
@@ -62,6 +64,11 @@ namespace game
 			break;
 			case LevelID::DevLevel2:
 				backdrop.background = TextureID::Snow_Generic_Backdrop;
+				weather_effect = EffectID::Snow;
+			break;
+			case LevelID::DevLevel3:
+				backdrop.background = TextureID::Snow_Generic_Backdrop;
+				backdrop.foreground = TextureID::DevLevel1_Backdrop;
 				weather_effect = EffectID::Snow;
 			break;
 		}

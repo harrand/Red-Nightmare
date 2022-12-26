@@ -34,6 +34,7 @@ namespace game
 		DevLevel0,
 		DevLevel1,
 		DevLevel2,
+		DevLevel3,
 		Count
 	};
 

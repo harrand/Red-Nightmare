@@ -220,13 +220,19 @@ namespace game
 			this->load_level(LevelID::DevLevel1);
 		}
 		ImGui::SameLine();
-		ImGui::TextWrapped("A Banshee haunts the mausoleum of a graveyard, forcing the dead to rise again. Destroy the graves to deprive her of souls, and then destroy her. Difficulty: High");
+		ImGui::TextWrapped("A Banshee haunts the mausoleum of Blanchfield Graveyard, forcing the dead to rise again. Destroy the graves to deprive her of souls, and then destroy her. Difficulty: High");
 		if(ImGui::Button("DevLevel2"))
 		{
 			this->load_level(LevelID::DevLevel2);
 		}
 		ImGui::SameLine();
 		ImGui::TextWrapped("You are constantly bombarded. Your shelter would do nicely, if it weren't being invaded by the undead... Difficulty: Medium");
+		if(ImGui::Button("DevLevel3"))
+		{
+			this->load_level(LevelID::DevLevel3);
+		}
+		ImGui::SameLine();
+		ImGui::TextWrapped("Return to Blanchfield Graveyard during the winter.");
 	}
 
 	void Scene::dbgui_procedural_level()
