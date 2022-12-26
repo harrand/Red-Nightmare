@@ -6,8 +6,8 @@ project(RedNightmare
 add_subdirectory(engine)
 add_subdirectory(lib)
 
-tz_add_executable(
-	TARGET rednightmare
+tz_add_library(
+	TARGET rednightmare_gamelib
 	SOURCES
 		src/action.cpp
 		src/action.hpp
@@ -27,7 +27,6 @@ tz_add_executable(
 		src/flag.hpp
 		src/game.cpp
 		src/game.hpp
-		src/main.cpp
 		src/images.cpp
 		src/images.hpp
 		src/level.cpp
@@ -43,10 +42,11 @@ tz_add_executable(
 		src/quad_renderer.hpp
 		src/util.cpp
 		src/util.hpp
+
 )
 
 add_shader(
-	TARGET rednightmare
+	TARGET rednightmare_gamelib
 	SHADERS
 	src/effects/empty.vertex.tzsl
 	src/effects/empty.fragment.tzsl
@@ -60,10 +60,19 @@ add_shader(
 	src/quad.fragment.tzsl
 )
 
-target_link_libraries(rednightmare PRIVATE stb)
+target_link_libraries(rednightmare_gamelib PUBLIC stb)
+
+tz_add_executable(
+	TARGET rednightmare
+	SOURCES
+		src/main.cpp
+)
+
+
+target_link_libraries(rednightmare PRIVATE rednightmare_gamelib stb)
 
 add_text(
-	TARGET rednightmare
+	TARGET rednightmare_gamelib
 	INPUT_DIR ${PROJECT_SOURCE_DIR}
 	OUTPUT_DIR ${PROJECT_BINARY_DIR}
 	TEXT_FILES
