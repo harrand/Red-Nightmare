@@ -939,18 +939,17 @@ namespace game
 				Box a_box = this->get_bounding_box(b_id);
 				float overlap_x = calculate_overlap(b_box.get_left(), b_box.get_right(), a_box.get_left(), a_box.get_right());
 				float overlap_y = calculate_overlap(b_box.get_bottom(), b_box.get_top(), a_box.get_bottom(), a_box.get_top());
-				// We don't want to instantly solve the collision this update, because that means things could get very jerky. Assuming a hard-coded 60tps, it should be pretty safe to do this over 4 frames.
-				constexpr float smooth_constant = 1.05f;
+				float correction = std::min(overlap_x, overlap_y) * actor.density;
 				if(overlap_x < overlap_y)
 				{
 					// Solve based on x
 					if(b_box.get_centre()[0] < a_box.get_centre()[0])
 					{
-						other_quad.position[0] = a_box.get_right() - b_box.get_dimensions()[0] * 0.5f / smooth_constant;
+						other_quad.position[0] += correction;
 					}
 					else
 					{
-						other_quad.position[0] = a_box.get_left() + b_box.get_dimensions()[0] * 0.5f / smooth_constant;
+						other_quad.position[0] -= correction;
 					}
 				}
 				else
@@ -958,11 +957,11 @@ namespace game
 					// Solve based on y
 					if(b_box.get_centre()[1] < a_box.get_centre()[1])
 					{
-						other_quad.position[1] = a_box.get_top() - b_box.get_dimensions()[1] * 0.5f / smooth_constant;
+						other_quad.position[1] += correction;
 					}
 					else
 					{
-						other_quad.position[1] = a_box.get_bottom() + b_box.get_dimensions()[1] * 0.5f / smooth_constant;
+						other_quad.position[1] -= correction;
 					}
 				}
 

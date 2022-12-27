@@ -212,7 +212,8 @@ namespace game
 					.skin = ActorSkin::GhostZombie,
 					.animation = game::play_animation(AnimationID::PlayerAkhara_Idle),
 					.palette_colour = {0u, 255u, 0u},
-					.name = "Ghost Zombie"
+					.name = "Ghost Zombie",
+					.density = 0.1f
 				};
 			break;
 			case ActorType::GhostBanshee:
@@ -296,7 +297,8 @@ namespace game
 					.skin = ActorSkin::GhostBanshee,
 					.animation = game::play_animation(AnimationID::PlayerAkhara_Idle),
 					.palette_colour = {128u, 255u, 255u},
-					.name = "Ghost Banshee"
+					.name = "Ghost Banshee",
+					.density = 0.1f
 				};
 			break;
 			case ActorType::GhostBanshee_Spirit:
@@ -583,7 +585,6 @@ namespace game
 					.skin = ActorSkin::Material_Stone,
 					.palette_colour = {255u, 0u, 0u},
 					.name = "Wall",
-					.density = 2.0f,
 					.layer = 255
 				};
 			break;
@@ -612,7 +613,6 @@ namespace game
 					.skin = ActorSkin::Invisible,
 					.palette_colour = {128u, 128u, 128u},
 					.name = "Invisible Wall",
-					.density = 2.0f,
 					.layer = 255
 				};
 			break;
@@ -643,7 +643,6 @@ namespace game
 					.skin = ActorSkin::Invisible,
 					.palette_colour = {255u, 255u, 255u},
 					.name = "Invisible Wall Projectiles Pass",
-					.density = 2.0f,
 					.layer = 255
 				};
 			break;
@@ -677,7 +676,6 @@ namespace game
 					.skin = ActorSkin::Material_Stone,
 					.palette_colour = {127u, 0u, 0u},
 					.name = "Destructible Wall",
-					.density = 2.0f,
 					.layer = 255
 				};
 			break;
