@@ -104,9 +104,10 @@ namespace game
 			{
 				auto rgba = view(x, y);
 				hdk::vec2 pos = {static_cast<float>(x), static_cast<float>(view.get_dimensions()[1] - y)};
-				// TODO: Not a magic number. How much world space should one pixel in the level use?
+				// Remember: (0, 0) is the middle of the actor, but the corner of the pixel. So we take away (0.5, 0.5) so the actor pos lines up with the pixel (note that y is inverted). Maybe. Perhaps
+				pos += hdk::vec2{0.5f, -0.5f};
+				// Convert to arbitrary world scale (this is probably pointless)
 				pos /= world_scale;
-				//pos -= {1.0f, 1.0f};
 				hdk::vec4ui colour4
 				{
 					static_cast<unsigned int>(rgba[0]),
