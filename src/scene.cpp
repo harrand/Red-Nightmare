@@ -923,9 +923,49 @@ namespace game
 			}
 			if(blocks_colliders)
 			{
-				hdk::vec2 displacement = quad.position - other_quad.position;
-				// Push back with impulse 150% the distance it would've travelled this frame.
-				other_quad.position -= displacement.normalised() * other.get_current_stats().movement_speed * 1.5f * actor.density;
+				auto calculate_overlap = [](float min1, float max1, float min2, float max2)
+				{
+					if(max1 <= min2 || max2 <= min1)
+					{
+						return 0.0f;
+					}
+					else
+					{
+						return std::min(max1, max2) - std::max(min1, min2);
+					}
+				};
+				// Get boxes.
+				Box b_box = this->get_bounding_box(a_id);
+				Box a_box = this->get_bounding_box(b_id);
+				float overlap_x = calculate_overlap(b_box.get_left(), b_box.get_right(), a_box.get_left(), a_box.get_right());
+				float overlap_y = calculate_overlap(b_box.get_bottom(), b_box.get_top(), a_box.get_bottom(), a_box.get_top());
+				// We don't want to instantly solve the collision this update, because that means things could get very jerky. Assuming a hard-coded 60tps, it should be pretty safe to do this over 4 frames.
+				constexpr float smooth_constant = 1.05f;
+				if(overlap_x < overlap_y)
+				{
+					// Solve based on x
+					if(b_box.get_centre()[0] < a_box.get_centre()[0])
+					{
+						other_quad.position[0] = a_box.get_right() - b_box.get_dimensions()[0] * 0.5f / smooth_constant;
+					}
+					else
+					{
+						other_quad.position[0] = a_box.get_left() + b_box.get_dimensions()[0] * 0.5f / smooth_constant;
+					}
+				}
+				else
+				{
+					// Solve based on y
+					if(b_box.get_centre()[1] < a_box.get_centre()[1])
+					{
+						other_quad.position[1] = a_box.get_top() - b_box.get_dimensions()[1] * 0.5f / smooth_constant;
+					}
+					else
+					{
+						other_quad.position[1] = a_box.get_bottom() + b_box.get_dimensions()[1] * 0.5f / smooth_constant;
+					}
+				}
+
 			}
 			if(wants_touch_other)
 			{
