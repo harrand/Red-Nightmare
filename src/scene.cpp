@@ -320,8 +320,8 @@ namespace game
 
 		this->level_boundaries = level.max_level_coords;
 
-		const hdk::vec2 backdrop_position = (this->level_boundaries / 2.0f) - hdk::vec2::filled(1.0f);
-		const hdk::vec2 backdrop_scale = ((this->level_boundaries - hdk::vec2::filled(0.25f)) / 2.0f);
+		const hdk::vec2 backdrop_position = this->level_boundaries / 2.0f;
+		const hdk::vec2 backdrop_scale = (this->level_boundaries) / 2.0f;
 
 		auto& background_data = this->qrenderer.overlay(OverlayID::Backdrop_Background);
 		background_data.texture_id = level.backdrop.background;

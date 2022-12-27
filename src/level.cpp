@@ -106,7 +106,7 @@ namespace game
 				hdk::vec2 pos = {static_cast<float>(x), static_cast<float>(view.get_dimensions()[1] - y)};
 				// TODO: Not a magic number. How much world space should one pixel in the level use?
 				pos /= world_scale;
-				pos -= {1.0f, 1.0f};
+				//pos -= {1.0f, 1.0f};
 				hdk::vec4ui colour4
 				{
 					static_cast<unsigned int>(rgba[0]),
