@@ -336,11 +336,11 @@ namespace game
 		foreground_data.layer = 0.95f;
 
 		auto& effect_data = this->qrenderer.overlay(OverlayID::Effect);
-		effect_data.position = (this->level_boundaries / 2.0f) - hdk::vec2::filled(1.0f);
+		effect_data.position = backdrop_position;
 		
 		this->qrenderer.set_effect(level.weather_effect);
 		effect_data.scale = (this->qrenderer.get_effect() != EffectID::None)
-			? ((this->level_boundaries - hdk::vec2::filled(0.25f)) / 2.0f)
+			? backdrop_scale
 			: hdk::vec2::zero();
 	}
 
