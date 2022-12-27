@@ -420,6 +420,7 @@ namespace game
 			}
 			tz::gl::ImageResource img = tz::gl::ImageResource::null();
 			TextureID backdrop = backdrops[backdrop_id];
+			TextureID foreground = TextureID::Invisible;
 			EffectID weather_effect = effects[effect_id];
 			if(base_level_id == 0)
 			{
@@ -444,13 +445,13 @@ namespace game
 				auto temp_level = game::load_level(static_cast<LevelID>(base_level_id));
 
 				backdrop = temp_level.backdrop.background;
-				weather_effect = temp_level.weather_effect;
+				foreground = temp_level.backdrop.foreground;
 				game::impl_enact_blackwhitelists(blacklist, whitelist, img);
 			}
 			return RandomLevelData
 			{
 				.level_image = img,
-				.backdrop = {.background = backdrop},
+				.backdrop = {.foreground = foreground, .background = backdrop},
 				.weather_effect = weather_effect
 			};
 		}
