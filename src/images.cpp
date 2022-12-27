@@ -188,6 +188,7 @@
 #include ImportedTextHeader(nightmare_up3, png)
 
 #include ImportedTextHeader(material_stone, png)
+#include ImportedTextHeader(healthbar_empty, png)
 
 #include ImportedTextHeader(sprint0, png)
 #include ImportedTextHeader(sprint1, png)
@@ -386,6 +387,7 @@ namespace game
 		ImportedTextData(nightmare_up3, png),
 
 		ImportedTextData(material_stone, png),
+		ImportedTextData(healthbar_empty, png),
 
 		ImportedTextData(sprint0, png),
 		ImportedTextData(sprint1, png),

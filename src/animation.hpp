@@ -73,6 +73,7 @@ namespace game
 		Nightmare_MoveUp,
 		Nightmare_MoveSide,
 		Material_Stone,
+		Gui_Healthbar_Empty,
 		Powerup_Sprint,
 		Count
 	};

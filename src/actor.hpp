@@ -40,6 +40,8 @@ namespace game
 		PlayerAkhara_DefaultFireball,
 		/// Actor looks like a plain stone texture.
 		Material_Stone,
+		/// Actor looks like a health bar.
+		Gui_Healthbar,
 		/// Actor looks like a blood splatter.
 		BloodSplatter,
 		/// Actor looks like a sprint powerup.

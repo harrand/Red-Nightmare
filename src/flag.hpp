@@ -77,6 +77,8 @@ namespace game
 		WanderIfIdle,
 		/// Repeatedly perform a set of actions on a regular timer.
 		ActionOnRepeat,
+		/// Actor position is permanently attached to that of another, by UUID. If the target actor dies, the flag disappears.	
+		AttachedToActor,
 	};
 
 	template<FlagID ID>
@@ -237,6 +239,12 @@ namespace game
 		float current_time = 1000.0f;
 		std::function<bool(const Actor&)> predicate;
 		ActionEntity actions;
+	};
+
+	template<>
+	struct FlagParams<FlagID::AttachedToActor>
+	{
+		std::size_t actor_uuid;
 	};
 
 	class FlagEntity : public Entity<FlagID, IFlag, Flag, FlagParams>

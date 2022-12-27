@@ -222,6 +222,7 @@ namespace game
 					.type = ActorType::GhostBanshee,
 					.flags =
 					{
+						Flag<FlagID::Projectile>{},
 						Flag<FlagID::Collide>
 						{{
 							.collision_filter =
@@ -1060,6 +1061,9 @@ namespace game
 				{
 					ending_animation = AnimationID::Material_Stone;
 				}
+			break;
+			case ActorSkin::Gui_Healthbar:
+				ending_animation = AnimationID::Gui_Healthbar_Empty;
 			break;
 			case ActorSkin::BloodSplatter:
 				ending_animation = AnimationID::BloodSplatter;

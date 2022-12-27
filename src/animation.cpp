@@ -568,6 +568,15 @@ namespace game
 			.fps = 1,
 			.loop = false
 		},
+		AnimationInfo /*Gui_Healthbar_Empty*/
+		{
+			.frames = 
+			{
+				TextureID::Gui_Healthbar_Empty,
+			},
+			.fps = 1,
+			.loop = false
+		},
 		AnimationInfo /*Powerup_Sprint*/
 		{
 			.frames = 
