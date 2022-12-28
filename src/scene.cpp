@@ -242,6 +242,7 @@ namespace game
 		{
 			auto& level = maybe_level_img.value();
 			this->impl_load_level(load_level_from_image(level.level_image, level.backdrop, level.weather_effect));
+			this->qrenderer.elements().front().position = this->level_boundaries / 2.0f;
 		}
 	}
 

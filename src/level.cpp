@@ -371,6 +371,7 @@ namespace game
 				actor_spawnrates[ActorType::GhostZombie] = {.spawn_coefficient = 0.4f};
 				level_layout_flag_values[static_cast<std::size_t>(LevelLayoutFlag::GenerateBorder)].b = true;
 				empty_chance = 94;
+				backdrop_id = backdrops.size() - 1;
 			}
 			if(ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
 			{
@@ -391,6 +392,7 @@ namespace game
 				actor_spawnrates[ActorType::CollectablePowerup_Sprint] = {.spawn_coefficient = 0.01f};
 				level_layout_flag_values[static_cast<std::size_t>(LevelLayoutFlag::GenerateBorder)].b = true;
 				empty_chance = 50;
+				backdrop_id = backdrops.size() - 1;
 			}
 			if(ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
 			{
