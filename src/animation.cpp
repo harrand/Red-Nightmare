@@ -595,6 +595,15 @@ namespace game
 			.fps = 1,
 			.loop = false
 		},
+		AnimationInfo /*Interactable_Stone_Stairs_Down_PY*/
+		{
+			.frames = 
+			{
+				TextureID::Interactable_Stone_Stairs_Down_PY,
+			},
+			.fps = 1,
+			.loop = false
+		},
 		AnimationInfo /*Powerup_Sprint*/
 		{
 			.frames = 

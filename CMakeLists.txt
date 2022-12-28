@@ -265,6 +265,8 @@ add_text(
 		res/images/scenery/gravestone_0.png
 		res/images/scenery/gravestone_1.png
 
+		res/images/interactables/level_change/stone_stairs_down_py.png
+
 		res/images/powerups/sprint/sprint0.png
 		res/images/powerups/sprint/sprint1.png
 		res/images/powerups/sprint/sprint2.png

@@ -731,6 +731,54 @@ namespace game
 					.layer = 255
 				};
 			break;
+			case ActorType::Interactable_Stone_Stairs_Down_PY:
+				return
+				{
+					.type = ActorType::Interactable_Stone_Stairs_Down_PY,
+					.flags =
+					{
+						Flag<FlagID::Collide>
+						{{
+							.collision_blacklist =
+							{
+								ActorType::FireSmoke,
+								ActorType::FireExplosion,
+								ActorType::BloodSplatter,
+								ActorType::GhostZombie_Spawner,
+								ActorType::GhostBanshee_Spirit
+							},
+							.blacklist_predicate = [](const Actor& a){return a.flags.has<FlagID::Player>();}
+						}},
+						Flag<FlagID::Invincible>{},
+						Flag<FlagID::Unhittable>{},
+						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}},
+						Flag<FlagID::Stealth>{},
+						Flag<FlagID::ActionOnActorTouch>
+						{{
+							.predicate = [](const Actor& self, const Actor& other){return other.flags.has<FlagID::Player>();},
+							.touchee_actions =
+							{
+								Action<ActionID::ApplyFlag>
+								{{
+									.flags =
+									{
+										Flag<FlagID::SuppressedControl>{}
+									}
+								}},
+								Action<ActionID::MoveRelative>
+								{{
+									.displacement = hdk::vec2{0.0f, 1.0f},
+									.timeout = 1000.0f
+								}}
+							}
+						}}
+					},
+					.faction = Faction::PureFriend,
+					.skin = ActorSkin::Interactable_Stone_Stairs_Down_PY,
+					.palette_colour = {200u, 200u, 0u},
+					.name = "Stone Stairs (Down, PY)"
+				};
+			break;
 			case ActorType::CollectablePowerup_Sprint:
 				return
 				{
@@ -847,7 +895,7 @@ namespace game
 					}
 				}
 			}
-			if(this->flags.has<FlagID::KeyboardControlled>())
+			if(this->flags.has<FlagID::KeyboardControlled>() && !this->flags.has<FlagID::SuppressedControl>())
 			{
 				const auto& kb = tz::window().get_keyboard_state();
 				this->motion = {};
@@ -1135,6 +1183,9 @@ namespace game
 				{
 					ending_animation = AnimationID::Scenery_Gravestone_1;
 				}
+			break;
+			case ActorSkin::Interactable_Stone_Stairs_Down_PY:
+				ending_animation = AnimationID::Interactable_Stone_Stairs_Down_PY;
 			break;
 			case ActorSkin::BloodSplatter:
 				ending_animation = AnimationID::BloodSplatter;

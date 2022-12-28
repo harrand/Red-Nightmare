@@ -76,6 +76,7 @@ namespace game
 		Gui_Healthbar_Empty,
 		Scenery_Gravestone_0,
 		Scenery_Gravestone_1,
+		Interactable_Stone_Stairs_Down_PY,
 		Powerup_Sprint,
 		Count
 	};

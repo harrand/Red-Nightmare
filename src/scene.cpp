@@ -978,6 +978,7 @@ namespace game
 				// Carry out its actions.
 				auto& on_touch_flag = actor.flags.get<FlagID::ActionOnActorTouch>()->data();
 				on_touch_flag.actions.copy_components(actor.entity);
+				on_touch_flag.touchee_actions.copy_components(other.entity);
 			}
 		}
 	}

@@ -46,6 +46,8 @@ namespace game
 		Scenery_Gravestone_0,
 		/// Actor looks like a gravestone (type 1, block).
 		Scenery_Gravestone_1,
+		/// Actor looks like some stone stairs going downwards, facing the positive-y direction.
+		Interactable_Stone_Stairs_Down_PY,
 		/// Actor looks like a blood splatter.
 		BloodSplatter,
 		/// Actor looks like a sprint powerup.
@@ -92,6 +94,8 @@ namespace game
 		WallDestructible,
 		/// A breakable gravestone, good for single-use cover.
 		Scenery_Gravestone,
+		/// Some stone stairs going downwards, facing the positive-y direction. Player will transfer zoneid by -1 upon going down it (NYI).
+		Interactable_Stone_Stairs_Down_PY,
 		/// A powerup that is gives the player sprint on consumption.
 		CollectablePowerup_Sprint,
 		/// An invisible actor that is designed to sit on a road. The player should receive a speed boost from this actor when on a road.

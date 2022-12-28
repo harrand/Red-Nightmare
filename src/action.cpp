@@ -73,6 +73,15 @@ namespace game
 		}
 	ACTION_IMPL_END(ActionID::GotoTarget)
 //--------------------------------------------------------------------------------------------------
+	ACTION_IMPL_BEGIN(ActionID::MoveRelative)
+		scene.actor().entity.set<ActionID::GotoTarget>
+		({
+			.target_position = scene.quad().position + action.data().displacement,
+			.timeout = action.data().timeout
+		});
+		action.set_is_complete(true);
+	ACTION_IMPL_END(ActionID::MoveRelative)
+//--------------------------------------------------------------------------------------------------
 	ACTION_IMPL_BEGIN(ActionID::LaunchToMouse)
 		const hdk::vec2 to_mouse = scene.mouse_position - scene.quad().position;
 		scene.actor().entity.add<ActionID::Launch>

@@ -19,6 +19,8 @@ namespace game
 		BlockingAnimations,
 		DoNotGarbageCollect,
 		CustomGarbageCollectPeriod,
+		/// Actor control is suppressed temporarily, no mouse/keyboard controls work for the time being.
+		SuppressedControl,
 		/// Actor is considered a player.
 		Player,
 		/// Actor is considered an obstacle.
@@ -182,6 +184,7 @@ namespace game
 	{
 		std::function<bool(const Actor&, const Actor&)> predicate;
 		ActionEntity actions;
+		ActionEntity touchee_actions;
 		bool allow_dead = false;
 	};
 

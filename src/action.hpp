@@ -38,6 +38,11 @@ namespace game
 		 */
 		GotoTarget,
 		/**
+		 * Move to a location relative to the actor.
+		 * - Completes instantly. Spawns a GotoTarget action in its stead.
+		 */
+		MoveRelative,
+		/**
 		 * Launch towards the mouse cursor with a speed boost.
 		 * - Moves proportionally to base speed.
 		 * - Never completes, unless the actor goes out-of-bounds.
@@ -145,6 +150,13 @@ namespace game
 	struct ActionParams<ActionID::GotoTarget>
 	{
 		hdk::vec2 target_position;
+		float timeout = std::numeric_limits<float>::max();
+	};
+
+	template<>
+	struct ActionParams<ActionID::MoveRelative>
+	{
+		hdk::vec2 displacement;
 		float timeout = std::numeric_limits<float>::max();
 	};
 
