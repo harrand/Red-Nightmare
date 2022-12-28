@@ -699,7 +699,17 @@ namespace game
 							}
 						}},
 						Flag<FlagID::Stealth>{},
-						Flag<FlagID::Obstacle>{}
+						Flag<FlagID::Obstacle>{},
+						Flag<FlagID::ActionOnDeath>
+						{{
+							.actions =
+							{
+								Action<ActionID::SpawnActor>
+								{{
+									.actor = ActorType::GhostZombie,
+								}}
+							}
+						}}
 					},
 					.faction = Faction::PureEnemy,
 					.base_stats =
