@@ -122,7 +122,7 @@ namespace game
 		({
 			.format = tz::gl::ImageFormat::BGRA32,
 			.dimensions = static_cast<hdk::vec2ui>(hdk::vec2{tz::window().get_width(), tz::window().get_height()}),
-			.flags = {tz::gl::ResourceFlag::RendererOutput}
+			.flags = {tz::gl::ResourceFlag::RendererOutput, tz::gl::ResourceFlag::ImageWrapRepeat}
 		}));
 		rinfo.shader().set_shader(tz::gl::ShaderStage::Vertex, ImportedShaderSource(empty, vertex));
 		rinfo.shader().set_shader(tz::gl::ShaderStage::Fragment, ImportedShaderSource(empty, fragment));
@@ -153,7 +153,7 @@ namespace game
 		({
 			.format = tz::gl::ImageFormat::BGRA32,
 			.dimensions = static_cast<hdk::vec2ui>(hdk::vec2{tz::window().get_width(), tz::window().get_height()}),
-			.flags = {tz::gl::ResourceFlag::RendererOutput}
+			.flags = {tz::gl::ResourceFlag::RendererOutput, tz::gl::ResourceFlag::ImageWrapRepeat}
 		}));
 		rinfo.shader().set_shader(tz::gl::ShaderStage::Vertex, ImportedShaderSource(empty, vertex));
 		rinfo.shader().set_shader(tz::gl::ShaderStage::Fragment, ImportedShaderSource(empty, fragment));

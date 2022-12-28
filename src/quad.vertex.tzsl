@@ -28,6 +28,7 @@ struct ElementData
 	uint texture_id;
 	uint status_effect_id;
 	float layer;
+	vec2 texcoord_scale;
 };
 
 resource(id = 0) const buffer ElementBuffer
@@ -58,6 +59,6 @@ void main()
 	vec2 pos = elem.position + quad_positions[in::vertex_id % 6] * elem.scale;
 	out::position = render.data.projection * render.data.view * vec4(pos, -elem.layer, 1.0);
 	out_texture_id = elem.texture_id;
-	out_texcoord = quad_texcoords[in::vertex_id % 6];
+	out_texcoord = quad_texcoords[in::vertex_id % 6] * elem.texcoord_scale;
 	out_colour_offset = status_effect_colours[elem.status_effect_id];
 }

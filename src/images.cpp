@@ -413,7 +413,8 @@ namespace game
 		tz::gl::ImageResource ret = tz::gl::ImageResource::from_memory(imgdata_span,
 		{
 			.format = tz::gl::ImageFormat::RGBA32,
-			.dimensions = static_cast<hdk::vec2ui>(hdk::vec2i{w, h})
+			.dimensions = static_cast<hdk::vec2ui>(hdk::vec2i{w, h}),
+			.flags = {tz::gl::ResourceFlag::ImageWrapRepeat}
 		});
 		stbi_image_free(imgdata);
 		return ret;

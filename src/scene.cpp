@@ -328,7 +328,11 @@ namespace game
 		background_data.position = backdrop_position;
 		background_data.scale = backdrop_scale;
 		background_data.layer = 0.990f;
+		// boundaries are proportional to the level image dimensions.
+		// the background texcoord scale should be lower if the level image is really big.
+		const hdk::vec2 texcoord_scale = hdk::vec2{tz::window().get_width() / this->level_boundaries[0], tz::window().get_height() / this->level_boundaries[1]} * 0.1f;
 
+		background_data.texcoord_scale = texcoord_scale;
 		auto& foreground_data = this->qrenderer.overlay(OverlayID::Backdrop_Foreground);
 		foreground_data.texture_id = level.backdrop.foreground;
 		foreground_data.position = backdrop_position;
@@ -342,6 +346,7 @@ namespace game
 		effect_data.scale = (this->qrenderer.get_effect() != EffectID::None)
 			? backdrop_scale
 			: hdk::vec2::zero();
+		effect_data.texcoord_scale = texcoord_scale;
 	}
 
 	hdk::vec2 Scene::get_mouse_position() const
