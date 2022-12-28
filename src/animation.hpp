@@ -75,6 +75,7 @@ namespace game
 		Material_Stone,
 		Gui_Healthbar_Empty,
 		Scenery_Gravestone_0,
+		Scenery_Gravestone_1,
 		Powerup_Sprint,
 		Count
 	};

@@ -44,6 +44,8 @@ namespace game
 		Gui_Healthbar,
 		/// Actor looks like a gravestone (type 0, cross).
 		Scenery_Gravestone_0,
+		/// Actor looks like a gravestone (type 1, block).
+		Scenery_Gravestone_1,
 		/// Actor looks like a blood splatter.
 		BloodSplatter,
 		/// Actor looks like a sprint powerup.

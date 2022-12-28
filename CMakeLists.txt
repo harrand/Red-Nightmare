@@ -263,6 +263,7 @@ add_text(
 
 		res/images/gui/healthbar_empty.png
 		res/images/scenery/gravestone_0.png
+		res/images/scenery/gravestone_1.png
 
 		res/images/powerups/sprint/sprint0.png
 		res/images/powerups/sprint/sprint1.png

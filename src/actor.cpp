@@ -709,6 +709,14 @@ namespace game
 									.actor = ActorType::GhostZombie,
 								}}
 							}
+						}},
+						Flag<FlagID::RandomSkin>
+						{{
+							.skins =
+							{
+								ActorSkin::Scenery_Gravestone_0,
+								ActorSkin::Scenery_Gravestone_1
+							}
 						}}
 					},
 					.faction = Faction::PureEnemy,
@@ -1116,6 +1124,16 @@ namespace game
 				else
 				{
 					ending_animation = AnimationID::Scenery_Gravestone_0;
+				}
+			break;
+			case ActorSkin::Scenery_Gravestone_1:
+				if(this->dead())
+				{
+					ending_animation = AnimationID::BlockBreak;
+				}
+				else
+				{
+					ending_animation = AnimationID::Scenery_Gravestone_1;
 				}
 			break;
 			case ActorSkin::BloodSplatter:
