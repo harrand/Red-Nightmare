@@ -188,6 +188,7 @@ namespace game
 		Material_Stone,
 
 		Gui_Healthbar_Empty,
+		Scenery_Gravestone_0,
 
 		Powerup_Sprint_0,
 		Powerup_Sprint_1,

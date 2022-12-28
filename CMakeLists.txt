@@ -262,6 +262,7 @@ add_text(
 		res/images/materials/material_stone.png
 
 		res/images/gui/healthbar_empty.png
+		res/images/scenery/gravestone_0.png
 
 		res/images/powerups/sprint/sprint0.png
 		res/images/powerups/sprint/sprint1.png

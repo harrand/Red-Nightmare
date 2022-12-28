@@ -74,6 +74,7 @@ namespace game
 		Nightmare_MoveSide,
 		Material_Stone,
 		Gui_Healthbar_Empty,
+		Scenery_Gravestone_0,
 		Powerup_Sprint,
 		Count
 	};

@@ -42,6 +42,8 @@ namespace game
 		Material_Stone,
 		/// Actor looks like a health bar.
 		Gui_Healthbar,
+		/// Actor looks like a gravestone (type 0, cross).
+		Scenery_Gravestone_0,
 		/// Actor looks like a blood splatter.
 		BloodSplatter,
 		/// Actor looks like a sprint powerup.
@@ -86,6 +88,8 @@ namespace game
 
 		/// Just like a wall, but is destructible by the player.
 		WallDestructible,
+		/// A breakable gravestone, good for single-use cover.
+		Scenery_Gravestone,
 		/// A powerup that is gives the player sprint on consumption.
 		CollectablePowerup_Sprint,
 		/// An invisible actor that is designed to sit on a road. The player should receive a speed boost from this actor when on a road.

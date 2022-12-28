@@ -175,11 +175,11 @@ namespace game
 						}},
 						Flag<FlagID::AggressiveIf>
 						{{
-							.predicate = [](const Actor& self, const Actor& victim){return self.is_enemy_of(victim);}
+							.predicate = [](const Actor& self, const Actor& victim){return self.is_enemy_of(victim) && !victim.flags.has<FlagID::Obstacle>();}
 						}},
 						Flag<FlagID::HazardousIf>
 						{{
-							.predicate = [](const Actor& self, const Actor& victim){return self.is_enemy_of(victim);}
+							.predicate = [](const Actor& self, const Actor& victim){return self.is_enemy_of(victim) && !victim.flags.has<FlagID::Obstacle>();}
 						}},
 						Flag<FlagID::RandomSkin>
 						{{
@@ -680,6 +680,39 @@ namespace game
 					.layer = 255
 				};
 			break;
+			case ActorType::Scenery_Gravestone:
+				return
+				{
+					.type = ActorType::Scenery_Gravestone,
+					.flags =
+					{
+						Flag<FlagID::DoNotGarbageCollect>{},
+						Flag<FlagID::Collide>
+						{{
+							.collision_blacklist =
+							{
+								ActorType::FireSmoke,
+								ActorType::FireExplosion,
+								ActorType::BloodSplatter,
+								ActorType::GhostZombie_Spawner,
+								ActorType::GhostBanshee_Spirit
+							}
+						}},
+						Flag<FlagID::Stealth>{},
+						Flag<FlagID::Obstacle>{}
+					},
+					.faction = Faction::PureEnemy,
+					.base_stats =
+					{
+						.max_health = 1.0f,
+						.current_health = 1.0f
+					},
+					.skin = ActorSkin::Scenery_Gravestone_0,
+					.palette_colour = {48u, 48u, 48u},
+					.name = "Gravestone",
+					.layer = 255
+				};
+			break;
 			case ActorType::CollectablePowerup_Sprint:
 				return
 				{
@@ -1064,6 +1097,16 @@ namespace game
 			break;
 			case ActorSkin::Gui_Healthbar:
 				ending_animation = AnimationID::Gui_Healthbar_Empty;
+			break;
+			case ActorSkin::Scenery_Gravestone_0:
+				if(this->dead())
+				{
+					ending_animation = AnimationID::BlockBreak;
+				}
+				else
+				{
+					ending_animation = AnimationID::Scenery_Gravestone_0;
+				}
 			break;
 			case ActorSkin::BloodSplatter:
 				ending_animation = AnimationID::BloodSplatter;

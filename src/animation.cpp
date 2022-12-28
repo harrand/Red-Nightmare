@@ -577,6 +577,15 @@ namespace game
 			.fps = 1,
 			.loop = false
 		},
+		AnimationInfo /*Scenery_Gravestone_0*/
+		{
+			.frames = 
+			{
+				TextureID::Scenery_Gravestone_0,
+			},
+			.fps = 1,
+			.loop = false
+		},
 		AnimationInfo /*Powerup_Sprint*/
 		{
 			.frames = 

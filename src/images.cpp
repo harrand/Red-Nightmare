@@ -189,6 +189,7 @@
 
 #include ImportedTextHeader(material_stone, png)
 #include ImportedTextHeader(healthbar_empty, png)
+#include ImportedTextHeader(gravestone_0, png)
 
 #include ImportedTextHeader(sprint0, png)
 #include ImportedTextHeader(sprint1, png)
@@ -388,6 +389,7 @@ namespace game
 
 		ImportedTextData(material_stone, png),
 		ImportedTextData(healthbar_empty, png),
+		ImportedTextData(gravestone_0, png),
 
 		ImportedTextData(sprint0, png),
 		ImportedTextData(sprint1, png),

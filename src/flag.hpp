@@ -21,6 +21,8 @@ namespace game
 		CustomGarbageCollectPeriod,
 		/// Actor is considered a player.
 		Player,
+		/// Actor is considered an obstacle.
+		Obstacle,
 		/// Actor is considered a projectile.
 		Projectile,
 		/// Actor has a custom scale.
