@@ -540,6 +540,7 @@ namespace game
 		handle_action.template operator()<ActionID::GotoActor>();
 		// Concrete Entity Actions
 		handle_action.template operator()<ActionID::GotoTarget>();
+		handle_action.template operator()<ActionID::MoveRelative>();
 		handle_action.template operator()<ActionID::Launch>();
 		handle_action.template operator()<ActionID::Teleport>();
 		if(actor().entity.has<ActionID::HorizontalFlip>())
