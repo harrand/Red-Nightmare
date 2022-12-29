@@ -19,6 +19,10 @@ namespace game
 		BlockingAnimations,
 		DoNotGarbageCollect,
 		CustomGarbageCollectPeriod,
+		/// Actor represents some way of going 'down' into the next level.
+		GoesDownALevel,
+		/// Actor represents some way of going 'up' into an upper level.
+		GoesUpALevel,
 		/// Actor control is suppressed temporarily, no mouse/keyboard controls work for the time being.
 		SuppressedControl,
 		/// Actor is considered a player.

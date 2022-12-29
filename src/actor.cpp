@@ -162,17 +162,6 @@ namespace game
 								ActorType::GhostBanshee
 							}
 						}},
-						Flag<FlagID::ActionOnActorTouch>
-						{{
-							.predicate = [](const Actor& self, const Actor& actor)
-							{
-								return actor.type == ActorType::GhostBanshee_Spirit;
-							},
-							.actions =
-							{
-								Action<ActionID::Die>{}
-							}
-						}},
 						Flag<FlagID::AggressiveIf>
 						{{
 							.predicate = [](const Actor& self, const Actor& victim){return self.is_enemy_of(victim) && !victim.flags.has<FlagID::Obstacle>();}
@@ -319,20 +308,17 @@ namespace game
 						Flag<FlagID::Rot>{},
 						Flag<FlagID::AggressiveIf>
 						{{
-							.predicate = [](const Actor& self, const Actor& victim){return victim.type == ActorType::GhostZombie;}
+							.predicate = [](const Actor& self, const Actor& victim){return victim.flags.has<FlagID::GoesDownALevel>();}
 						}},
 						Flag<FlagID::ActionOnActorTouch>
 						{{
 							.predicate = [](const Actor& self, const Actor& actor)
 							{
-								return actor.type == ActorType::GhostZombie && self.is_ally_of(actor);
+								return actor.flags.has<FlagID::GoesDownALevel>();
 							},
 							.actions =
 							{
-								Action<ActionID::RespawnAs>
-								{{
-									.actor = ActorType::GhostBanshee
-								}}
+								Action<ActionID::Despawn>{}
 							}
 						}}
 					},
@@ -340,8 +326,8 @@ namespace game
 					.base_stats =
 					{
 						.movement_speed = 0.004f,
-						.max_health = 8.0f,
-						.current_health = 8.0f
+						.max_health = 80.0f,
+						.current_health = 80.0f
 					},
 					.skin = ActorSkin::GhostBanshee,
 					.name = "Ghost Banshee Spirit"
@@ -737,6 +723,7 @@ namespace game
 					.type = ActorType::Interactable_Stone_Stairs_Down_PY,
 					.flags =
 					{
+						Flag<FlagID::GoesDownALevel>{},
 						Flag<FlagID::Collide>
 						{{
 							.collision_blacklist =
@@ -752,7 +739,6 @@ namespace game
 						Flag<FlagID::Invincible>{},
 						Flag<FlagID::Unhittable>{},
 						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}},
-						Flag<FlagID::Stealth>{},
 						Flag<FlagID::ActionOnActorTouch>
 						{{
 							.predicate = [](const Actor& self, const Actor& other){return other.flags.has<FlagID::Player>() && !other.flags.has<FlagID::SuppressedControl>();},
@@ -793,6 +779,7 @@ namespace game
 					.type = ActorType::Interactable_Stone_Stairs_Up_PY,
 					.flags =
 					{
+						Flag<FlagID::GoesUpALevel>{},
 						Flag<FlagID::Collide>
 						{{
 							.collision_blacklist =
@@ -808,7 +795,6 @@ namespace game
 						Flag<FlagID::Invincible>{},
 						Flag<FlagID::Unhittable>{},
 						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}},
-						Flag<FlagID::Stealth>{},
 						Flag<FlagID::ActionOnActorTouch>
 						{{
 							.predicate = [](const Actor& self, const Actor& other){return other.flags.has<FlagID::Player>() && !other.flags.has<FlagID::SuppressedControl>();},
