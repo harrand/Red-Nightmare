@@ -88,7 +88,7 @@ namespace game
 	{
 		struct BoolProxy{bool b = false;};
 		// Static data.
-		static int level_count = 3;
+		static int level_count = 4;
 		static hdk::vec2i dims = hdk::vec2i::filled(32);
 		static int sparsity = 75;
 

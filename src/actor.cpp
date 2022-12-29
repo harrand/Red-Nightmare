@@ -665,13 +665,13 @@ namespace game
 								ActorType::FireExplosion,
 								ActorType::BloodSplatter,
 								ActorType::GhostZombie_Spawner,
-								ActorType::GhostBanshee_Spirit
+								ActorType::GhostBanshee_Spirit,
 							}
 						}},
 						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}},
 						Flag<FlagID::Stealth>{}
 					},
-					.faction = Faction::PlayerEnemy,
+					.faction = Faction::PureEnemy,
 					.base_stats =
 					{
 						.max_health = 1.0f,
