@@ -244,6 +244,12 @@ namespace game
 
 	void Scene::dbgui_story_levels()
 	{
+		ImGui::Text("Story Levels (Zones)");
+		if(ImGui::Button("Story Level 1: Blanchfield Banshee"))
+		{
+			this->load_zone(StoryZone::BlanchfieldGraveyard);
+		}
+		ImGui::Text("Legacy Standalone Levels (Deprecated)");
 		if(ImGui::Button("Empty Level"))
 		{
 			this->load_level(LevelID::Empty);

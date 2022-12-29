@@ -106,7 +106,9 @@ namespace game
 		static std::unordered_map<ActorType, bool> blacklist;
 		static std::unordered_map<ActorType, float> spawn_coefficients =
 		{
+			{ActorType::GhostZombie, 0.4f},
 			{ActorType::GhostBanshee, 0.04f},
+			{ActorType::Scenery_Gravestone, 0.3f},
 			{ActorType::Interactable_Stone_Stairs_Down_NX, 0.04f},
 			{ActorType::Interactable_Stone_Stairs_Up_NX, 0.02f},
 		};
