@@ -278,11 +278,10 @@ namespace game
 
 	void Scene::dbgui_procedural_level()
 	{
-		auto maybe_level_img = game::dbgui_generate_random_level_image();
-		if(maybe_level_img.has_value())
+		auto maybe_level_info = game::dbgui_procedural_zones();
+		if(maybe_level_info.has_value())
 		{
-			auto& level = maybe_level_img.value();
-			this->impl_load_level(load_level_from_image(level.level_image, level.backdrop, level.weather_effect));
+			this->impl_load_zone(game::get_procedural_zone(maybe_level_info.value()));
 			this->qrenderer.elements().front().position = this->level_boundaries / 2.0f;
 		}
 	}
@@ -328,15 +327,7 @@ namespace game
 
 	void Scene::load_zone(StoryZone zone)
 	{
-		this->zone = game::get_story_zone(zone);
-		hdk::assert(!this->zone.levels.empty(), "Current zone has no levels.");
-		hdk::assert(this->zone.level_cursor < this->zone.levels.size(), "Current zone level cursor (%zu) is not valid for the number of levels of the zone (%zu).", this->zone.level_cursor, this->zone.levels.size());
-		this->impl_load_level(this->zone.levels[this->zone.level_cursor]);
-		// Each level has a spawn point for the player. However, we have a special case if the level is the initial level, where the level might have a specific spawn point for the first time play. In this case, we use that.
-		if(this->zone.initial_load)
-		{
-			this->qrenderer.elements().front().position = this->zone.initial_spawn;
-		}
+		this->impl_load_zone(game::get_story_zone(zone));
 	}
 
 	void Scene::load_level(LevelID level_id)
@@ -355,6 +346,19 @@ namespace game
 	{
 		hdk::assert(id < this->actors.size(), "Index out of range. Idx = %zu, size = %zu", id, this->actors.size());
 		return this->actors[id];
+	}
+
+	void Scene::impl_load_zone(Zone z)
+	{
+		this->zone = z;
+		hdk::assert(!this->zone.levels.empty(), "Current zone has no levels.");
+		hdk::assert(this->zone.level_cursor < this->zone.levels.size(), "Current zone level cursor (%zu) is not valid for the number of levels of the zone (%zu).", this->zone.level_cursor, this->zone.levels.size());
+		this->impl_load_level(this->zone.levels[this->zone.level_cursor]);
+		// Each level has a spawn point for the player. However, we have a special case if the level is the initial level, where the level might have a specific spawn point for the first time play. In this case, we use that.
+		if(this->zone.initial_load)
+		{
+			this->qrenderer.elements().front().position = this->zone.initial_spawn;
+		}
 	}
 
 	void Scene::impl_load_level(const Level& level)
@@ -407,12 +411,14 @@ namespace game
 	void Scene::impl_next_level()
 	{
 		this->zone.initial_load = false;
+		hdk::assert(this->zone.level_cursor + 1 < this->zone.levels.size(), "No next level exists.");
 		this->impl_load_level(this->zone.levels[++this->zone.level_cursor]);
 	}
 
 	void Scene::impl_prev_level()
 	{
 		this->zone.initial_load = false;
+		hdk::assert(this->zone.level_cursor > 0, "No previous level exists.");
 		this->impl_load_level(this->zone.levels[--this->zone.level_cursor]);
 	}
 

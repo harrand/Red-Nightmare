@@ -40,7 +40,7 @@ namespace game
 
 	struct Level
 	{
-		hdk::vec2 player_spawn_location = {0.0f, 0.0f};
+		hdk::vec2 player_spawn_location = {2.0f, 2.0f};
 		std::vector<std::pair<hdk::vec2, ActorType>> actor_spawns = {};
 		hdk::vec2 max_level_coords = hdk::vec2::zero();
 		Backdrop backdrop;

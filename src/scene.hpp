@@ -70,6 +70,7 @@ namespace game
 		const Actor& get_actor(std::size_t id) const;
 		Actor& get_actor(std::size_t id);
 
+		void impl_load_zone(Zone zone);
 		void impl_load_level(const Level& level);
 		void impl_next_level();
 		void impl_prev_level();

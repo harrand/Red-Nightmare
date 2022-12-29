@@ -18,7 +18,21 @@ namespace game
 		const char* name = "Unknown";
 	};
 
+	struct ProceduralZoneInfo
+	{
+		std::size_t seed = 0u;
+		std::size_t level_count;
+		unsigned int level_width;
+		unsigned int level_height;
+		unsigned int sparsity = 50;
+		ActorTypes whitelist = {};
+		ActorTypes blacklist = {};
+		std::unordered_map<ActorType, float> actor_spawn_coefficients = {};
+	};
+
 	Zone get_story_zone(StoryZone zone);
+	Zone get_procedural_zone(ProceduralZoneInfo pinfo);
+	std::optional<ProceduralZoneInfo> dbgui_procedural_zones();
 }
 
 #endif // REDNIGHTMARE_SRC_ZONE_HPP
