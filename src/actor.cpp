@@ -772,7 +772,7 @@ namespace game
 								}},
 								Action<ActionID::DelayedAction>
 								{{
-									.delay_millis = 2500.0f,
+									.delay_millis = 2000.0f,
 									.actions =
 									{
 										Action<ActionID::NextLevel>{}
@@ -785,6 +785,62 @@ namespace game
 					.skin = ActorSkin::Interactable_Stone_Stairs_Down_PY,
 					.palette_colour = {200u, 200u, 0u},
 					.name = "Stone Stairs (Down, PY)"
+				};
+			break;
+			case ActorType::Interactable_Stone_Stairs_Up_PY:
+				return
+				{
+					.type = ActorType::Interactable_Stone_Stairs_Up_PY,
+					.flags =
+					{
+						Flag<FlagID::Collide>
+						{{
+							.collision_blacklist =
+							{
+								ActorType::FireSmoke,
+								ActorType::FireExplosion,
+								ActorType::BloodSplatter,
+								ActorType::GhostZombie_Spawner,
+								ActorType::GhostBanshee_Spirit
+							},
+							.blacklist_predicate = [](const Actor& a){return a.flags.has<FlagID::Player>();}
+						}},
+						Flag<FlagID::Invincible>{},
+						Flag<FlagID::Unhittable>{},
+						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}},
+						Flag<FlagID::Stealth>{},
+						Flag<FlagID::ActionOnActorTouch>
+						{{
+							.predicate = [](const Actor& self, const Actor& other){return other.flags.has<FlagID::Player>() && !other.flags.has<FlagID::SuppressedControl>();},
+							.touchee_actions =
+							{
+								Action<ActionID::ApplyFlag>
+								{{
+									.flags =
+									{
+										Flag<FlagID::SuppressedControl>{}
+									}
+								}},
+								Action<ActionID::MoveRelative>
+								{{
+									.displacement = hdk::vec2{0.0f, 1.0f},
+									.timeout = 1000.0f
+								}},
+								Action<ActionID::DelayedAction>
+								{{
+									.delay_millis = 2000.0f,
+									.actions =
+									{
+										Action<ActionID::PreviousLevel>{}
+									}
+								}}
+							}
+						}}
+					},
+					.faction = Faction::PureFriend,
+					.skin = ActorSkin::Interactable_Stone_Stairs_Up_PY,
+					.palette_colour = {200u, 200u, 255u},
+					.name = "Stone Stairs (Up, PY)"
 				};
 			break;
 			case ActorType::CollectablePowerup_Sprint:
@@ -1194,6 +1250,9 @@ namespace game
 			break;
 			case ActorSkin::Interactable_Stone_Stairs_Down_PY:
 				ending_animation = AnimationID::Interactable_Stone_Stairs_Down_PY;
+			break;
+			case ActorSkin::Interactable_Stone_Stairs_Up_PY:
+				ending_animation = AnimationID::Interactable_Stone_Stairs_Up_PY;
 			break;
 			case ActorSkin::BloodSplatter:
 				ending_animation = AnimationID::BloodSplatter;

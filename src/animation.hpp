@@ -77,6 +77,7 @@ namespace game
 		Scenery_Gravestone_0,
 		Scenery_Gravestone_1,
 		Interactable_Stone_Stairs_Down_PY,
+		Interactable_Stone_Stairs_Up_PY,
 		Powerup_Sprint,
 		Count
 	};
