@@ -978,11 +978,11 @@ namespace game
 						{{
 							.predicate = [](const Actor& self, const Actor& actor)
 							{
-								return actor.type == ActorType::PlayerAkhara;
+								return !actor.flags.has<FlagID::Projectile>();
 							},
-							.actions =
+							.touchee_actions =
 							{
-								Action<ActionID::ApplyBuffToPlayers>
+								Action<ActionID::ApplyBuff>
 								{{
 									.buff = BuffID::Sprint
 								}}
