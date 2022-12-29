@@ -9,7 +9,7 @@ using namespace tz::literals;
 namespace game
 {
 	std::size_t Actor::uuid_count = 0;
-	constexpr float level_transition_length = 1500.0f;
+	constexpr float level_transition_length = 1000.0f;
 
 	Actor create_actor(ActorType type)
 	{

@@ -1,6 +1,7 @@
 #ifndef REDNIGHTMARE_SRC_ZONE_HPP
 #define REDNIGHTMARE_SRC_ZONE_HPP
 #include "level.hpp"
+#include <optional>
 
 namespace game
 {
@@ -18,6 +19,19 @@ namespace game
 		const char* name = "Unknown";
 	};
 
+	enum class ZoneBiome
+	{
+		Grassy,
+		Snowy,
+		Dungeon,
+		Count
+	};
+
+	struct ProceduralZoneIntroLevel
+	{
+		ZoneBiome biome;
+	};
+
 	struct ProceduralZoneInfo
 	{
 		std::size_t seed = 0u;
@@ -27,6 +41,7 @@ namespace game
 		unsigned int sparsity = 50;
 		ActorTypes whitelist = {};
 		ActorTypes blacklist = {};
+		std::optional<ProceduralZoneIntroLevel> intro_level = std::nullopt;
 		std::unordered_map<ActorType, float> actor_spawn_coefficients = {};
 	};
 

@@ -31,6 +31,7 @@ namespace game
 	enum class LevelID
 	{
 		Empty,
+		ProceduralIntro,
 		DevLevel0,
 		DevLevel1,
 		DevLevel2,

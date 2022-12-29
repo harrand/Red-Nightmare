@@ -276,6 +276,7 @@ add_text(
 		res/images/powerups/sprint/sprint1.png
 		res/images/powerups/sprint/sprint2.png
 
+		res/images/levels/procedural_intro.png
 		res/images/levels/dev_level_0.png
 		res/images/levels/dev_level_1.png
 		res/images/levels/dev_level_1_backdrop.png

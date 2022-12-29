@@ -51,6 +51,31 @@ namespace game
 		};
 		for(std::size_t l = 0; l < pinfo.level_count; l++)
 		{
+			if(l == 0 && pinfo.intro_level.has_value())
+			{
+				// We make this the intro level.
+				Level intro = game::load_level(LevelID::ProceduralIntro);
+				const auto& intro_info = pinfo.intro_level.value();
+				switch(intro_info.biome)
+				{
+					case ZoneBiome::Grassy:
+						intro.backdrop = {.background = TextureID::Grass_Generic_Backdrop};
+						intro.weather_effect = EffectID::Rain;
+					break;
+					case ZoneBiome::Snowy:
+						intro.backdrop = {.background = TextureID::Snow_Generic_Backdrop};
+						intro.weather_effect = EffectID::Snow;
+					break;
+					case ZoneBiome::Dungeon:
+						intro.backdrop = {.background = TextureID::Dungeon_Floor_Generic_Backdrop};
+					break;
+					default:
+						hdk::error("Unsupported biome");
+					break;
+				}
+				z.levels[l] = intro;
+				continue;
+			}
 			auto cur_options = options;
 			cur_options.seed = pinfo.seed + l;
 			// Note: We want to amend the options for various settings. Namely, we don't want to spawn upwards stairs on the first level, and no downwards stairs on the last one either, etc... We do that now.
@@ -91,6 +116,8 @@ namespace game
 		static int level_count = 4;
 		static hdk::vec2i dims = hdk::vec2i::filled(32);
 		static int sparsity = 75;
+		static bool intro_level_enabled = true;
+		static ProceduralZoneIntroLevel intro_level{.biome = ZoneBiome::Grassy};
 
 		const LevelPalette palette = game::get_level_palette();
 		static std::unordered_map<ActorType, bool> whitelist =
@@ -134,6 +161,16 @@ namespace game
 			}
 			ImGui::EndTable();
 		}
+		ImGui::Checkbox("Has Intro Level", &intro_level_enabled);
+		if(intro_level_enabled)
+		{
+			ImGui::Indent();
+			ImGui::Text("Intro Level Biome");
+			ImGui::RadioButton("Grassy", reinterpret_cast<int*>(&intro_level.biome), static_cast<int>(ZoneBiome::Grassy));
+			ImGui::RadioButton("Snowy", reinterpret_cast<int*>(&intro_level.biome), static_cast<int>(ZoneBiome::Snowy));
+			ImGui::RadioButton("Dungeon", reinterpret_cast<int*>(&intro_level.biome), static_cast<int>(ZoneBiome::Dungeon));
+			ImGui::Unindent();
+		}
 
 		if(ImGui::Button("Load Zone"))
 		{
@@ -146,6 +183,11 @@ namespace game
 				}
 				return ret;
 			};
+			std::optional<ProceduralZoneIntroLevel> maybe_intro_level = std::nullopt;
+			if(intro_level_enabled)
+			{
+				maybe_intro_level = intro_level;
+			}
 			return ProceduralZoneInfo
 			{
 				.seed = 0u,
@@ -155,6 +197,7 @@ namespace game
 				.sparsity = static_cast<unsigned int>(sparsity),
 				.whitelist = to_enum_field(whitelist),
 				.blacklist = to_enum_field(blacklist),
+				.intro_level = maybe_intro_level,
 				.actor_spawn_coefficients = spawn_coefficients
 			};
 		}

@@ -6,6 +6,7 @@
 #include "hdk/debug.hpp"
 
 #include ImportedTextHeader(invisible, png)
+#include ImportedTextHeader(procedural_intro, png)
 #include ImportedTextHeader(dev_level_0, png)
 #include ImportedTextHeader(dev_level_1, png)
 #include ImportedTextHeader(dev_level_2, png)
@@ -17,6 +18,7 @@ namespace game
 	std::array<std::string_view, static_cast<int>(LevelID::Count)> level_image_data
 	{
 		ImportedTextData(invisible, png),
+		ImportedTextData(procedural_intro, png),
 		ImportedTextData(dev_level_0, png),
 		ImportedTextData(dev_level_1, png),
 		ImportedTextData(dev_level_2, png),
