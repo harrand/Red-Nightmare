@@ -5,6 +5,7 @@
 #include "animation.hpp"
 #include "quad_renderer.hpp"
 #include "level.hpp"
+#include "zone.hpp"
 #include "quadtree.hpp"
 #include "effect.hpp"
 #include "tz/core/time.hpp"
@@ -27,9 +28,18 @@ namespace game
 		std::function<std::size_t(ActorType)> spawn_actor;
 		std::function<Actor&(std::size_t)> get_actor;
 		std::function<QuadRenderer::ElementData&(std::size_t)> get_quad;
+		std::function<void()> next_level;
+		std::function<void()> previous_level;
 
 		Actor& actor(){return this->get_actor(this_id);}
 		QuadRenderer::ElementData& quad(){return this->get_quad(this_id);}
+	};
+
+	enum class ActorPostUpdateResult
+	{
+		Typical,
+		ActorDeleted,
+		LevelDeleted
 	};
 
 	class Scene
@@ -47,15 +57,18 @@ namespace game
 		void add(ActorType type);
 		void pop();
 		void clear();
+		void load_zone(StoryZone zone);
 		void load_level(LevelID level_id);
 	private:
 		const Actor& get_actor(std::size_t id) const;
 		Actor& get_actor(std::size_t id);
 
 		void impl_load_level(const Level& level);
+		void impl_next_level();
+		void impl_prev_level();
 		hdk::vec2 get_mouse_position() const;
 		void erase(std::size_t id);
-		bool actor_post_update(std::size_t id);
+		ActorPostUpdateResult actor_post_update(std::size_t id);
 		std::vector<std::size_t> get_living_players() const;
 		std::optional<std::size_t> find_first_player() const;
 		Box get_bounding_box(std::size_t actor_id) const;
@@ -99,6 +112,7 @@ namespace game
 		ActorEventHandler events;
 		hdk::vec2 level_boundaries = hdk::vec2::zero();
 		mutable std::size_t debug_collision_query_count = 0;
+		Zone zone = {};
 	};
 }
 

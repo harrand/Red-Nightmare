@@ -775,8 +775,7 @@ namespace game
 									.delay_millis = 2500.0f,
 									.actions =
 									{
-										Action<ActionID::RandomTeleport>{},
-										Action<ActionID::Respawn>{},
+										Action<ActionID::NextLevel>{}
 									}
 								}}
 							}

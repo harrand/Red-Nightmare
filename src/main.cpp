@@ -23,7 +23,7 @@ int main()
 			ImGui::MenuItem("Procedural Level", nullptr, &dd.show_procedural_level);
 		});
 
-		scene.load_level(game::LevelID::DevLevel1);
+		scene.load_zone(game::StoryZone::BlanchfieldGraveyard);
 
 		using namespace tz::literals;
 		tz::Delay fixed_update = 1667_us;

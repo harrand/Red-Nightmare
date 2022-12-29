@@ -267,4 +267,12 @@ namespace game
 		action.set_is_complete(true);
 	ACTION_IMPL_END(ActionID::ApplyFlag)
 //--------------------------------------------------------------------------------------------------
+	ACTION_IMPL_BEGIN(ActionID::NextLevel)
+		scene.next_level();
+	ACTION_IMPL_END(ActionID::NextLevel)
+//--------------------------------------------------------------------------------------------------
+	ACTION_IMPL_BEGIN(ActionID::PreviousLevel)
+		scene.previous_level();
+	ACTION_IMPL_END(ActionID::PreviousLevel)
+//--------------------------------------------------------------------------------------------------
 }

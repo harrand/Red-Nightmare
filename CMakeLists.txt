@@ -42,7 +42,8 @@ tz_add_library(
 		src/quad_renderer.hpp
 		src/util.cpp
 		src/util.hpp
-
+		src/zone.cpp
+		src/zone.hpp
 )
 
 add_shader(

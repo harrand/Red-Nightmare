@@ -94,8 +94,10 @@ namespace game
 		Cast,
 		/// Apply a flag to an actor.
 		ApplyFlag,
-		/// Remove a flag from an actor, if it exists.
-		RemoveFlag
+		/// Request to load the next level.
+		NextLevel,
+		/// Request to load the previous level.
+		PreviousLevel,
 	};
 
 	template<ActionID ID>

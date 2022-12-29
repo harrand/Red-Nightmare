@@ -49,9 +49,17 @@ namespace game
 			Actor& actor = this->get_actor(i);
 			actor.update();
 			// Post update could theoretically kill it, so we must do that last.
-			if(!this->actor_post_update(i))
+			auto res = this->actor_post_update(i);
+			switch(res)
 			{
-				this->update_quadtree(i++);
+				case ActorPostUpdateResult::Typical:
+					this->update_quadtree(i++);
+				break;
+				case ActorPostUpdateResult::ActorDeleted:
+				break;
+				case ActorPostUpdateResult::LevelDeleted:
+					return;
+				break;
 			}
 		}
 		this->update_camera();
@@ -285,6 +293,14 @@ namespace game
 		this->actors.clear();
 	}
 
+	void Scene::load_zone(StoryZone zone)
+	{
+		this->zone = game::get_story_zone(zone);
+		hdk::assert(!this->zone.levels.empty(), "Current zone has no levels.");
+		hdk::assert(this->zone.level_cursor < this->zone.levels.size(), "Current zone level cursor (%zu) is not valid for the number of levels of the zone (%zu).", this->zone.level_cursor, this->zone.levels.size());
+		this->impl_load_level(this->zone.levels[this->zone.level_cursor]);
+	}
+
 	void Scene::load_level(LevelID level_id)
 	{
 		Level level = game::load_level(level_id);
@@ -350,6 +366,16 @@ namespace game
 		effect_data.texcoord_scale = texcoord_scale;
 	}
 
+	void Scene::impl_next_level()
+	{
+		this->impl_load_level(this->zone.levels[++this->zone.level_cursor]);
+	}
+
+	void Scene::impl_prev_level()
+	{
+		this->impl_load_level(this->zone.levels[--this->zone.level_cursor]);
+	}
+
 	hdk::vec2 Scene::get_mouse_position() const
 	{
 		return util::get_mouse_world_location() + this->qrenderer.camera_position();
@@ -365,7 +391,7 @@ namespace game
 		this->actors.pop_back();
 	}
 
-	bool Scene::actor_post_update(std::size_t id)
+	ActorPostUpdateResult Scene::actor_post_update(std::size_t id)
 	{
 		HDK_PROFZONE("Actor - Post Update", 0xFF8B4513);
 		auto actor = [this, id]()->Actor&{return this->get_actor(id);};
@@ -474,7 +500,9 @@ namespace game
 			.get_world_boundaries = [this](){return this->get_world_boundaries();},
 			.spawn_actor = [this](ActorType t){this->add(t); return this->actors.size() - 1;},
 			.get_actor = [this](std::size_t t)->Actor&{return this->get_actor(t);},
-			.get_quad = [this](std::size_t t)->QuadRenderer::ElementData&{return this->qrenderer.elements()[t];}
+			.get_quad = [this](std::size_t t)->QuadRenderer::ElementData&{return this->qrenderer.elements()[t];},
+			.next_level = [this](){this->impl_next_level();},
+			.previous_level = [this](){this->impl_prev_level();},
 		};
 
 		auto handle_action = [this, &data]<ActionID ID>()
@@ -539,6 +567,16 @@ namespace game
 		handle_action.template operator()<ActionID::DelayedAction>();
 		handle_action.template operator()<ActionID::Cast>();
 		handle_action.template operator()<ActionID::ApplyFlag>();
+		if(actor().entity.has<ActionID::NextLevel>())
+		{
+			handle_action.template operator()<ActionID::NextLevel>();
+			return ActorPostUpdateResult::LevelDeleted;
+		}
+		if(actor().entity.has<ActionID::PreviousLevel>())
+		{
+			handle_action.template operator()<ActionID::PreviousLevel>();
+			return ActorPostUpdateResult::LevelDeleted;
+		}
 
 		// It's chasing something, but we don't care about what it's chasing.
 		// if its not a player, we don't want it to move while it's casting though.
@@ -637,7 +675,7 @@ namespace game
 		}
 		this->update_status_events(id);
 		actor().last_update = tz::system_time();
-		return this->garbage_collect(id);
+		return this->garbage_collect(id) ? ActorPostUpdateResult::ActorDeleted : ActorPostUpdateResult::Typical;
 	}
 
 	std::vector<std::size_t> Scene::get_living_players() const
