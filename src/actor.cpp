@@ -755,7 +755,7 @@ namespace game
 						Flag<FlagID::Stealth>{},
 						Flag<FlagID::ActionOnActorTouch>
 						{{
-							.predicate = [](const Actor& self, const Actor& other){return other.flags.has<FlagID::Player>();},
+							.predicate = [](const Actor& self, const Actor& other){return other.flags.has<FlagID::Player>() && !other.flags.has<FlagID::SuppressedControl>();},
 							.touchee_actions =
 							{
 								Action<ActionID::ApplyFlag>
@@ -769,6 +769,15 @@ namespace game
 								{{
 									.displacement = hdk::vec2{0.0f, 1.0f},
 									.timeout = 1000.0f
+								}},
+								Action<ActionID::DelayedAction>
+								{{
+									.delay_millis = 2500.0f,
+									.actions =
+									{
+										Action<ActionID::RandomTeleport>{},
+										Action<ActionID::Respawn>{},
+									}
 								}}
 							}
 						}}
