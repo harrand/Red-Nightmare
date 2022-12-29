@@ -15,6 +15,7 @@ namespace game
 						game::load_level(LevelID::DevLevel1),
 						game::load_level(LevelID::DevLevel0)
 					},
+					.name = "Blanchfield Graveyard"
 				};
 			break;
 		}

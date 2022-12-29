@@ -22,6 +22,7 @@ namespace game
 					.flags =
 					{
 						Flag<FlagID::DoNotGarbageCollect>{},
+						Flag<FlagID::StatTracked>{},
 						Flag<FlagID::KeyboardControlled>{},
 						Flag<FlagID::Player>{},
 						Flag<FlagID::ActionOnStruck>
@@ -155,6 +156,7 @@ namespace game
 					.type = ActorType::GhostZombie,
 					.flags =
 					{
+						Flag<FlagID::StatTracked>{},
 						Flag<FlagID::Collide>
 						{{
 							.collision_filter =
@@ -213,6 +215,7 @@ namespace game
 					.flags =
 					{
 						Flag<FlagID::Projectile>{},
+						Flag<FlagID::StatTracked>{},
 						Flag<FlagID::Collide>
 						{{
 							.collision_filter =
@@ -298,6 +301,7 @@ namespace game
 					.type = ActorType::GhostBanshee_Spirit,
 					.flags =
 					{
+						Flag<FlagID::StatTracked>{},
 						Flag<FlagID::Collide>
 						{{
 							.collision_filter =
@@ -468,6 +472,7 @@ namespace game
 					.type = ActorType::Nightmare,
 					.flags =
 					{
+						Flag<FlagID::StatTracked>{},
 						Flag<FlagID::BlockingAnimations>{},
 						Flag<FlagID::RespawnOnDeath>{},
 						Flag<FlagID::AggressiveIf>

@@ -15,6 +15,7 @@ namespace game
 		bool initial_load = true;
 		hdk::vec2 initial_spawn = hdk::vec2::zero();
 		std::vector<Level> levels = {};
+		const char* name = "Unknown";
 	};
 
 	Zone get_story_zone(StoryZone zone);

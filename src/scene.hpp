@@ -9,6 +9,7 @@
 #include "quadtree.hpp"
 #include "effect.hpp"
 #include "tz/core/time.hpp"
+#include "tz/dbgui/dbgui.hpp"
 
 #include <random>
 #include <span>
@@ -46,6 +47,12 @@ namespace game
 	{
 	public:
 		Scene();
+		Scene(const Scene& copy) = delete;
+		Scene(Scene&& move) = delete;
+		~Scene();
+		Scene& operator=(const Scene& rhs) = delete;
+		Scene& operator=(Scene&& rhs) = delete;
+
 		void render();
 		void update();
 		void dbgui_current_scene();
@@ -113,6 +120,7 @@ namespace game
 		hdk::vec2 level_boundaries = hdk::vec2::zero();
 		mutable std::size_t debug_collision_query_count = 0;
 		Zone zone = {};
+		tz::CallbackHandle game_bar_dbgui_callback = hdk::nullhand;
 	};
 }
 

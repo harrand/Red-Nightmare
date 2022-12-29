@@ -19,6 +19,8 @@ namespace game
 		BlockingAnimations,
 		DoNotGarbageCollect,
 		CustomGarbageCollectPeriod,
+		/// Actor should be tracked in runtime stats.
+		StatTracked,
 		/// Actor represents some way of going 'down' into the next level.
 		GoesDownALevel,
 		/// Actor represents some way of going 'up' into an upper level.

@@ -1,6 +1,5 @@
 #include "scene.hpp"
 #include "util.hpp"
-#include "tz/dbgui/dbgui.hpp"
 #include "hdk/job/job.hpp"
 #include "hdk/debug.hpp"
 #include "hdk/profile.hpp"
@@ -21,6 +20,40 @@ namespace game
 		this->events.actor_kill.add_callback([this](ActorKillEvent e){this->on_actor_kill(e);});
 		this->events.actor_death.add_callback([this](ActorDeathEvent e){this->on_actor_death(e);});
 		this->actors.reserve(QuadRenderer::max_quad_count);
+
+		#if HDK_DEBUG
+			this->game_bar_dbgui_callback = tz::dbgui::game_bar().add_callback([this]()
+			{
+				ImGui::Text("%s Z%zu |", this->zone.name, this->zone.level_cursor);
+				ImGui::SameLine();
+				auto fact_count = [this](Faction f)
+				{
+					return std::count_if(this->actors.begin(), this->actors.end(), [f](const Actor& a)
+					{
+						return a.faction == f && !a.dead() && a.flags.has<FlagID::StatTracked>();
+					});
+				};
+				const std::size_t total_count = std::count_if(this->actors.begin(), this->actors.end(), [](const Actor& a){return !a.dead() && a.flags.has<FlagID::StatTracked>();});
+				const std::size_t total_actor_count = this->actors.size();
+				ImGui::Text("Factions: D:%zu, PF:%zu, PE:%zu, F:%zu, E:%zu, Tot:%zu, AC:%zu |",
+				fact_count(Faction::Default),
+				fact_count(Faction::PlayerFriend),
+				fact_count(Faction::PlayerEnemy),
+				fact_count(Faction::PureFriend),
+				fact_count(Faction::PureEnemy),
+				total_count,
+				total_actor_count
+				);
+			});
+		#endif // HDK_DEBUG
+	}
+
+	Scene::~Scene()
+	{
+		#if HDK_DEBUG
+			tz::dbgui::game_bar().remove_callback(this->game_bar_dbgui_callback);
+			this->game_bar_dbgui_callback = hdk::nullhand;
+		#endif // HDK_DEBUG
 	}
 
 	void Scene::render()
