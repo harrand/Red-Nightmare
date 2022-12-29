@@ -191,6 +191,9 @@
 #include ImportedTextHeader(healthbar_empty, png)
 #include ImportedTextHeader(gravestone_0, png)
 #include ImportedTextHeader(gravestone_1, png)
+#include ImportedTextHeader(downwards_trapdoor, png)
+#include ImportedTextHeader(stone_stairs_down_nx, png)
+#include ImportedTextHeader(stone_stairs_up_nx, png)
 #include ImportedTextHeader(stone_stairs_down_py, png)
 #include ImportedTextHeader(stone_stairs_up_py, png)
 
@@ -394,6 +397,9 @@ namespace game
 		ImportedTextData(healthbar_empty, png),
 		ImportedTextData(gravestone_0, png),
 		ImportedTextData(gravestone_1, png),
+		ImportedTextData(downwards_trapdoor, png),
+		ImportedTextData(stone_stairs_down_nx, png),
+		ImportedTextData(stone_stairs_up_nx, png),
 		ImportedTextData(stone_stairs_down_py, png),
 		ImportedTextData(stone_stairs_up_py, png),
 

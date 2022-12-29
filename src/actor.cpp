@@ -9,6 +9,7 @@ using namespace tz::literals;
 namespace game
 {
 	std::size_t Actor::uuid_count = 0;
+	constexpr float level_transition_length = 1500.0f;
 
 	Actor create_actor(ActorType type)
 	{
@@ -164,7 +165,7 @@ namespace game
 						}},
 						Flag<FlagID::AggressiveIf>
 						{{
-							.predicate = [](const Actor& self, const Actor& victim){return self.is_enemy_of(victim) && !victim.flags.has<FlagID::Obstacle>();}
+							.predicate = [](const Actor& self, const Actor& victim){return self.is_enemy_of(victim) && !victim.flags.has<FlagID::Obstacle>() && !victim.dead();}
 						}},
 						Flag<FlagID::HazardousIf>
 						{{
@@ -222,7 +223,7 @@ namespace game
 						}},
 						Flag<FlagID::AggressiveIf>
 						{{
-							.predicate = [](const Actor& self, const Actor& victim){return self.is_enemy_of(victim);}
+							.predicate = [](const Actor& self, const Actor& victim){return self.is_enemy_of(victim) && !victim.dead();}
 						}},
 						Flag<FlagID::HazardousIf>
 						{{
@@ -319,7 +320,18 @@ namespace game
 							.actions =
 							{
 								Action<ActionID::Despawn>{}
-							}
+							},
+							.touchee_actions =
+							{
+								Action<ActionID::ApplyFlag>
+								{{
+									.flags =
+									{
+										Flag<FlagID::Invincible>{}
+									}
+								}}
+							},
+							.allow_dead = true
 						}}
 					},
 					.faction = Faction::PureFriend,
@@ -460,7 +472,7 @@ namespace game
 						Flag<FlagID::RespawnOnDeath>{},
 						Flag<FlagID::AggressiveIf>
 						{{
-							.predicate = [](const Actor& self, const Actor& victim){return self.is_enemy_of(victim);}
+							.predicate = [](const Actor& self, const Actor& victim){return self.is_enemy_of(victim) && !victim.dead();}
 						}},
 						Flag<FlagID::HazardousIf>
 						{{
@@ -717,13 +729,74 @@ namespace game
 					.layer = 255
 				};
 			break;
-			case ActorType::Interactable_Stone_Stairs_Down_PY:
+			case ActorType::Interactable_Stone_Stairs_Down_NX:
 				return
 				{
-					.type = ActorType::Interactable_Stone_Stairs_Down_PY,
+					.type = ActorType::Interactable_Stone_Stairs_Down_NX,
 					.flags =
 					{
 						Flag<FlagID::GoesDownALevel>{},
+						Flag<FlagID::DoNotGarbageCollect>{},
+						Flag<FlagID::Collide>
+						{{
+							.collision_blacklist =
+							{
+								ActorType::FireSmoke,
+								ActorType::FireExplosion,
+								ActorType::BloodSplatter,
+								ActorType::GhostZombie_Spawner,
+								ActorType::GhostBanshee_Spirit
+							},
+							.blacklist_predicate = [](const Actor& a){return a.flags.has<FlagID::Player>();}
+						}},
+						Flag<FlagID::Unhittable>{},
+						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}},
+						Flag<FlagID::ActionOnActorTouch>
+						{{
+							.predicate = [](const Actor& self, const Actor& other){return other.flags.has<FlagID::Player>() && !other.flags.has<FlagID::SuppressedControl>() && !self.dead();},
+							.touchee_actions =
+							{
+								Action<ActionID::ApplyFlag>
+								{{
+									.flags =
+									{
+										Flag<FlagID::SuppressedControl>{}
+									}
+								}},
+								Action<ActionID::MoveRelative>
+								{{
+									.displacement = hdk::vec2{-1.0f, 0.0f},
+									.timeout = 1000.0f
+								}},
+								Action<ActionID::DelayedAction>
+								{{
+									.delay_millis = level_transition_length,
+									.actions =
+									{
+										Action<ActionID::NextLevel>{}
+									}
+								}}
+							}
+						}}
+					},
+					.faction = Faction::PureFriend,
+					.base_stats =
+					{
+						.current_health = 0
+					},
+					.skin = ActorSkin::Interactable_Stone_Stairs_Down_NX,
+					.palette_colour = {200u, 201u, 0u},
+					.name = "Stone Stairs (Down, NX)"
+				};
+			break;
+			case ActorType::Interactable_Stone_Stairs_Up_NX:
+				return
+				{
+					.type = ActorType::Interactable_Stone_Stairs_Up_NX,
+					.flags =
+					{
+						Flag<FlagID::GoesUpALevel>{},
+						Flag<FlagID::DoNotGarbageCollect>{},
 						Flag<FlagID::Collide>
 						{{
 							.collision_blacklist =
@@ -753,12 +826,68 @@ namespace game
 								}},
 								Action<ActionID::MoveRelative>
 								{{
+									.displacement = hdk::vec2{-1.0f, 0.0f},
+									.timeout = 1000.0f
+								}},
+								Action<ActionID::DelayedAction>
+								{{
+									.delay_millis = level_transition_length,
+									.actions =
+									{
+										Action<ActionID::PreviousLevel>{}
+									}
+								}}
+							}
+						}}
+					},
+					.faction = Faction::PureFriend,
+					.skin = ActorSkin::Interactable_Stone_Stairs_Up_NX,
+					.palette_colour = {200u, 201u, 255u},
+					.name = "Stone Stairs (Up, NX)"
+				};
+			break;
+			case ActorType::Interactable_Stone_Stairs_Down_PY:
+				return
+				{
+					.type = ActorType::Interactable_Stone_Stairs_Down_PY,
+					.flags =
+					{
+						Flag<FlagID::GoesDownALevel>{},
+						Flag<FlagID::DoNotGarbageCollect>{},
+						Flag<FlagID::Collide>
+						{{
+							.collision_blacklist =
+							{
+								ActorType::FireSmoke,
+								ActorType::FireExplosion,
+								ActorType::BloodSplatter,
+								ActorType::GhostZombie_Spawner,
+								ActorType::GhostBanshee_Spirit
+							},
+							.blacklist_predicate = [](const Actor& a){return a.flags.has<FlagID::Player>();}
+						}},
+						Flag<FlagID::Unhittable>{},
+						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}},
+						Flag<FlagID::ActionOnActorTouch>
+						{{
+							.predicate = [](const Actor& self, const Actor& other){return other.flags.has<FlagID::Player>() && !other.flags.has<FlagID::SuppressedControl>() && !self.dead();},
+							.touchee_actions =
+							{
+								Action<ActionID::ApplyFlag>
+								{{
+									.flags =
+									{
+										Flag<FlagID::SuppressedControl>{}
+									}
+								}},
+								Action<ActionID::MoveRelative>
+								{{
 									.displacement = hdk::vec2{0.0f, 1.0f},
 									.timeout = 1000.0f
 								}},
 								Action<ActionID::DelayedAction>
 								{{
-									.delay_millis = 2000.0f,
+									.delay_millis = level_transition_length,
 									.actions =
 									{
 										Action<ActionID::NextLevel>{}
@@ -768,6 +897,10 @@ namespace game
 						}}
 					},
 					.faction = Faction::PureFriend,
+					.base_stats =
+					{
+						.current_health = 0
+					},
 					.skin = ActorSkin::Interactable_Stone_Stairs_Down_PY,
 					.palette_colour = {200u, 200u, 0u},
 					.name = "Stone Stairs (Down, PY)"
@@ -780,6 +913,7 @@ namespace game
 					.flags =
 					{
 						Flag<FlagID::GoesUpALevel>{},
+						Flag<FlagID::DoNotGarbageCollect>{},
 						Flag<FlagID::Collide>
 						{{
 							.collision_blacklist =
@@ -814,7 +948,7 @@ namespace game
 								}},
 								Action<ActionID::DelayedAction>
 								{{
-									.delay_millis = 2000.0f,
+									.delay_millis = level_transition_length,
 									.actions =
 									{
 										Action<ActionID::PreviousLevel>{}
@@ -1234,8 +1368,28 @@ namespace game
 					ending_animation = AnimationID::Scenery_Gravestone_1;
 				}
 			break;
+			case ActorSkin::Interactable_Stone_Stairs_Down_NX:
+				if(this->dead())
+				{
+					ending_animation = AnimationID::Downwards_Trapdoor;
+				}
+				else
+				{
+					ending_animation = AnimationID::Interactable_Stone_Stairs_Down_NX;
+				}
+			break;
+			case ActorSkin::Interactable_Stone_Stairs_Up_NX:
+				ending_animation = AnimationID::Interactable_Stone_Stairs_Up_NX;
+			break;
 			case ActorSkin::Interactable_Stone_Stairs_Down_PY:
-				ending_animation = AnimationID::Interactable_Stone_Stairs_Down_PY;
+				if(this->dead())
+				{
+					ending_animation = AnimationID::Downwards_Trapdoor;
+				}
+				else
+				{
+					ending_animation = AnimationID::Interactable_Stone_Stairs_Down_PY;
+				}
 			break;
 			case ActorSkin::Interactable_Stone_Stairs_Up_PY:
 				ending_animation = AnimationID::Interactable_Stone_Stairs_Up_PY;

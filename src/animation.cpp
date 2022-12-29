@@ -595,6 +595,33 @@ namespace game
 			.fps = 1,
 			.loop = false
 		},
+		AnimationInfo /*Downwards_Trapdoor*/
+		{
+			.frames = 
+			{
+				TextureID::Downwards_Trapdoor,
+			},
+			.fps = 1,
+			.loop = false
+		},
+		AnimationInfo /*Interactable_Stone_Stairs_Down_NX*/
+		{
+			.frames = 
+			{
+				TextureID::Interactable_Stone_Stairs_Down_NX,
+			},
+			.fps = 1,
+			.loop = false
+		},
+		AnimationInfo /*Interactable_Stone_Stairs_Up_NX*/
+		{
+			.frames = 
+			{
+				TextureID::Interactable_Stone_Stairs_Up_NX,
+			},
+			.fps = 1,
+			.loop = false
+		},
 		AnimationInfo /*Interactable_Stone_Stairs_Down_PY*/
 		{
 			.frames = 

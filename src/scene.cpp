@@ -457,7 +457,7 @@ namespace game
 					continue;
 				}
 				Actor& victim = this->get_actor(i);
-				if(!victim.dead() && flag.predicate(actor(), victim) && !victim.flags.has<FlagID::Stealth>())
+				if(flag.predicate(actor(), victim) && !victim.flags.has<FlagID::Stealth>())
 				{
 					actor().entity.set<ActionID::GotoActor>
 					({
