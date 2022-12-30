@@ -395,7 +395,7 @@ namespace game
 		background_data.layer = 0.990f;
 		// boundaries are proportional to the level image dimensions.
 		// the background texcoord scale should be lower if the level image is really big.
-		const hdk::vec2 texcoord_scale = hdk::vec2{tz::window().get_width() / this->level_boundaries[0], tz::window().get_height() / this->level_boundaries[1]} * 0.1f;
+		const hdk::vec2 texcoord_scale{std::cbrt(this->level_boundaries[0]), std::cbrt(this->level_boundaries[1])};
 
 		background_data.texcoord_scale = texcoord_scale;
 		auto& foreground_data = this->qrenderer.overlay(OverlayID::Backdrop_Foreground);
