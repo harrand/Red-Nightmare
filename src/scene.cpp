@@ -74,7 +74,7 @@ namespace game
 		HDK_PROFZONE("Scene - Render", 0xFF00AA00);
 
 		hdk::assert(this->actors.size() == this->qrenderer.elements().size(), "Scene actor list (%zu) and QuadRenderer size (%zu) no longer match. Logic Error", this->actors.size(), this->qrenderer.elements().size());
-		game::effects().update({this->qrenderer.get_effect()});
+		game::effects().update({this->qrenderer.get_effect(0), this->qrenderer.get_effect(1)});
 		for(std::size_t i = 0; i < this->qrenderer.elements().size(); i++)
 		{
 			this->qrenderer.elements()[i].texture_id = this->get_actor(i).animation.get_texture();
@@ -417,14 +417,28 @@ namespace game
 		foreground_data.scale = backdrop_scale;
 		foreground_data.layer = 0.95f;
 
-		auto& effect_data = this->qrenderer.overlay(OverlayID::Effect);
-		effect_data.position = backdrop_position;
-		
-		this->qrenderer.set_effect(level.weather_effect);
-		effect_data.scale = (this->qrenderer.get_effect() != EffectID::None)
-			? backdrop_scale
-			: hdk::vec2::zero();
-		effect_data.texcoord_scale = texcoord_scale;
+		auto handle_effect = [this, backdrop_position, backdrop_scale, texcoord_scale](EffectID id, std::size_t effect_number)
+		{
+			auto oid = static_cast<OverlayID>(static_cast<int>(OverlayID::Effect) + effect_number);
+			auto& effect_data = this->qrenderer.overlay(oid);
+			effect_data.position = backdrop_position;
+			effect_data.layer = 0.0f + (effect_number * 0.01f);
+			
+			this->qrenderer.set_effect(id, effect_number);
+			effect_data.scale = (id != EffectID::None)
+				? backdrop_scale
+				: hdk::vec2::zero();
+			if(id == EffectID::LightLayer)
+			{
+				effect_data.texcoord_scale = this->level_boundaries / this->level_boundaries[0];
+			}
+			else
+			{
+				effect_data.texcoord_scale = texcoord_scale;
+			}
+		};
+		handle_effect(level.weather_effect, 0);
+		handle_effect(EffectID::LightLayer, 1);
 	}
 
 	void Scene::impl_next_level()

@@ -14,6 +14,7 @@ namespace game
 		Backdrop_Background,
 		Backdrop_Foreground,
 		Effect,
+		Effect1,
 		Count
 	};
 
@@ -40,8 +41,8 @@ namespace game
 		ElementData& overlay(OverlayID ovlid);
 		std::span<const ElementData> elements() const;
 		std::span<ElementData> elements();
-		void set_effect(EffectID effect);
-		EffectID get_effect() const;
+		void set_effect(EffectID effect, std::size_t effect_number = 0);
+		EffectID get_effect(std::size_t effect_number = 0) const;
 
 		void push();
 		void pop();

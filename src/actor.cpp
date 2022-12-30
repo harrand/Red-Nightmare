@@ -589,7 +589,7 @@ namespace game
 					.skin = ActorSkin::Material_Stone,
 					.palette_colour = {255u, 0u, 0u},
 					.name = "Wall",
-					.layer = 255
+					.layer = default_layer + 2
 				};
 			break;
 			case ActorType::InvisibleWall:
@@ -617,7 +617,7 @@ namespace game
 					.skin = ActorSkin::Invisible,
 					.palette_colour = {128u, 128u, 128u},
 					.name = "Invisible Wall",
-					.layer = 255
+					.layer = default_layer + 2
 				};
 			break;
 			case ActorType::InvisibleWallProjectilePass:
@@ -647,7 +647,7 @@ namespace game
 					.skin = ActorSkin::Invisible,
 					.palette_colour = {255u, 255u, 255u},
 					.name = "Invisible Wall Projectiles Pass",
-					.layer = 255
+					.layer = default_layer + 2
 				};
 			break;
 			case ActorType::WallDestructible:
@@ -680,7 +680,7 @@ namespace game
 					.skin = ActorSkin::Material_Stone,
 					.palette_colour = {127u, 0u, 0u},
 					.name = "Destructible Wall",
-					.layer = 255
+					.layer = default_layer + 2
 				};
 			break;
 			case ActorType::Scenery_Gravestone:
@@ -731,7 +731,7 @@ namespace game
 					.skin = ActorSkin::Scenery_Gravestone_0,
 					.palette_colour = {48u, 48u, 48u},
 					.name = "Gravestone",
-					.layer = 255
+					.layer = default_layer + 2
 				};
 			break;
 			case ActorType::Interactable_Stone_Stairs_Down_NX:

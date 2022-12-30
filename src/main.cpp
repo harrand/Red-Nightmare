@@ -15,12 +15,14 @@ int main()
 			bool show_current_scene = false;
 			bool show_story_levels = false;
 			bool show_procedural_level = false;
+			bool show_lights = false;
 		} dd;
 		tz::dbgui::game_menu().add_callback([&dd]()
 		{
 			ImGui::MenuItem("Current Scene", nullptr, &dd.show_current_scene);
 			ImGui::MenuItem("Story Levels", nullptr, &dd.show_story_levels);
 			ImGui::MenuItem("Procedural Level", nullptr, &dd.show_procedural_level);
+			ImGui::MenuItem("Point Lights", nullptr, &dd.show_lights);
 		});
 
 		scene.load_zone(game::StoryZone::BlanchfieldGraveyard);
@@ -58,6 +60,12 @@ int main()
 				{
 					ImGui::Begin("Level Generator", &dd.show_procedural_level);
 					scene.dbgui_procedural_level();
+					ImGui::End();
+				}
+				if(dd.show_lights)
+				{
+					ImGui::Begin("Light Manipulation", &dd.show_lights);
+					game::effects().dbgui_lights();
 					ImGui::End();
 				}
 			});

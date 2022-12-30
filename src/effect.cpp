@@ -1,4 +1,5 @@
 #include "effect.hpp"
+#include "tz/core/peripherals/monitor.hpp"
 #include "tz/gl/imported_shaders.hpp"
 #include "tz/gl/device.hpp"
 #include "tz/gl/output.hpp"
@@ -11,6 +12,8 @@
 #include ImportedShaderHeader(rain, fragment)
 #include ImportedShaderHeader(snow, vertex)
 #include ImportedShaderHeader(snow, fragment)
+#include ImportedShaderHeader(light, vertex)
+#include ImportedShaderHeader(light, fragment)
 
 namespace game
 {
@@ -49,6 +52,10 @@ namespace game
 				case EffectID::Snow:
 					this->effect_storage_renderers[i] = this->make_snow_storage();
 					this->effect_renderers[i] = this->make_snow_effect();
+				break;
+				case EffectID::LightLayer:
+					this->effect_storage_renderers[i] = this->make_light_layer_storage();
+					this->effect_renderers[i] = this->make_light_layer_effect();
 				break;
 				default:
 					hdk::error("Unrecognised EffectID %zu", i);
@@ -106,12 +113,43 @@ namespace game
 				case EffectID::Snow:
 					return this->snow_storage;
 				break;
+				case EffectID::LightLayer:
+					return this->light_layer_storage;
+				break;
 				default:
 					hdk::error("Could not locate effect ImageComponent for EffectID %zu", static_cast<std::size_t>(id));
 					return hdk::nullhand;
 				break;
 			}
 		}(id)));
+	}
+	
+	std::span<const PointLight> EffectManager::point_lights() const
+	{
+		const auto& renderer = tz::gl::device().get_renderer(this->effect_renderers[static_cast<std::size_t>(EffectID::LightLayer)]);
+		return renderer.get_resource(this->point_light_buffer)->data_as<const PointLight>();
+	}
+
+	std::span<PointLight> EffectManager::point_lights()
+	{
+		auto& renderer = tz::gl::device().get_renderer(this->effect_renderers[static_cast<std::size_t>(EffectID::LightLayer)]);
+		return renderer.get_resource(this->point_light_buffer)->data_as<PointLight>();
+	}
+
+	void EffectManager::dbgui_lights()
+	{
+		auto lights = this->point_lights();
+		static int light_cursor = 0;
+		ImGui::SliderInt("Light ID", &light_cursor, 0, lights.size());
+		ImGui::Spacing();
+		{
+			ImGui::Indent();
+			auto& l = lights[light_cursor];
+			ImGui::SliderFloat2("Position", l.position.data().data(), 0.0f, 128.0f);
+			ImGui::ColorEdit3("Colour", l.colour.data().data());
+			ImGui::SliderFloat("Power", &l.power, 0.0f, 64.0f);
+			ImGui::Unindent();
+		}
 	}
 
 	tz::gl::RendererHandle EffectManager::make_rain_storage()
@@ -172,6 +210,50 @@ namespace game
 		rinfo.set_output(tz::gl::ImageOutput
 		{{
 			.colours = {storage_renderer.get_component(this->snow_storage)}
+		}});
+		return tz::gl::device().create_renderer(rinfo);
+	}
+
+	tz::gl::RendererHandle EffectManager::make_light_layer_storage()
+	{
+		tz::gl::RendererInfo rinfo;
+		rinfo.debug_name("Light Layer Storage");
+		hdk::vec2ui mondims = tz::get_default_monitor().screen_dimensions;
+		auto monsize = (mondims[0] + mondims[1]) / 2;
+		mondims[0] = monsize;
+		mondims[1] = monsize;
+		this->light_layer_storage = rinfo.add_resource(tz::gl::ImageResource::from_uninitialised
+		({
+			.format = tz::gl::ImageFormat::BGRA32,
+			.dimensions = mondims * 2,
+			.flags = {tz::gl::ResourceFlag::RendererOutput, tz::gl::ResourceFlag::ImageWrapRepeat}
+		}));
+		rinfo.shader().set_shader(tz::gl::ShaderStage::Vertex, ImportedShaderSource(empty, vertex));
+		rinfo.shader().set_shader(tz::gl::ShaderStage::Fragment, ImportedShaderSource(empty, fragment));
+		return tz::gl::device().create_renderer(rinfo);
+	}
+
+	tz::gl::RendererHandle EffectManager::make_light_layer_effect()
+	{
+		tz::gl::RendererInfo rinfo;
+		rinfo.debug_name("Light Layer Effect");
+		rinfo.shader().set_shader(tz::gl::ShaderStage::Vertex, ImportedShaderSource(light, vertex));
+		rinfo.shader().set_shader(tz::gl::ShaderStage::Fragment, ImportedShaderSource(light, fragment));
+		rinfo.set_options({tz::gl::RendererOption::RenderWait, tz::gl::RendererOption::NoDepthTesting});
+		rinfo.ref_resource(this->global_storage, this->global_buffer);
+		std::array<PointLight, 64> data;
+		std::fill(data.begin(), data.end(), PointLight{});
+		data[0].position = hdk::vec2(15.0f, 7.0f);
+		data[0].colour = hdk::vec3(1.0f, 0.0f, 0.0f);
+		data[0].power = 5.0f;
+		this->point_light_buffer = rinfo.add_resource(tz::gl::BufferResource::from_many(data,
+		{
+			.access = tz::gl::ResourceAccess::DynamicFixed
+		}));
+		auto& storage_renderer = tz::gl::device().get_renderer(this->effect_storage_renderers[static_cast<std::size_t>(EffectID::LightLayer)]);
+		rinfo.set_output(tz::gl::ImageOutput
+		{{
+			.colours = {storage_renderer.get_component(this->light_layer_storage)}
 		}});
 		return tz::gl::device().create_renderer(rinfo);
 	}

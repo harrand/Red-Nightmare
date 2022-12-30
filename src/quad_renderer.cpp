@@ -75,25 +75,27 @@ namespace game
 		return tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<QuadRenderer::ElementData>().subspan(static_cast<std::size_t>(OverlayID::Count), this->quad_count - static_cast<std::size_t>(OverlayID::Count));
 	}
 
-	void QuadRenderer::set_effect(EffectID effect)
+	void QuadRenderer::set_effect(EffectID effect, std::size_t effect_number)
 	{
 		hdk::assert(effect != EffectID::Count, "Cannot set effect to EffectID::Count");
+		auto oid = static_cast<OverlayID>(static_cast<int>(OverlayID::Effect) + effect_number);
 		if(effect == EffectID::None)
 		{
-			this->overlay(OverlayID::Effect).texture_id = TextureID::Invisible;
+			this->overlay(oid).texture_id = TextureID::Invisible;
 		}
 		auto eid = static_cast<std::size_t>(effect);
 		eid += static_cast<std::size_t>(TextureID::Count) - 1;
-		this->overlay(OverlayID::Effect).texture_id = static_cast<TextureID>(eid);
+		this->overlay(oid).texture_id = static_cast<TextureID>(eid);
 	}
 
-	EffectID QuadRenderer::get_effect() const
+	EffectID QuadRenderer::get_effect(std::size_t effect_number) const
 	{
-		if(this->overlay(OverlayID::Effect).texture_id == TextureID::Invisible)
+		auto oid = static_cast<OverlayID>(static_cast<int>(OverlayID::Effect) + effect_number);
+		if(this->overlay(oid).texture_id == TextureID::Invisible)
 		{
 			return EffectID::None;
 		}
-		auto eid = static_cast<std::size_t>(this->overlay(OverlayID::Effect).texture_id);
+		auto eid = static_cast<std::size_t>(this->overlay(oid).texture_id);
 		eid += 1;
 		constexpr auto texcount = static_cast<std::size_t>(TextureID::Count);
 		hdk::assert(eid >= texcount);

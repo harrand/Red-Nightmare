@@ -1,0 +1,86 @@
+shader(type = fragment);
+
+import <math>
+
+output(id = 0) vec4 frag_colour;
+
+struct PointLight
+{
+	vec2 position;
+	vec3 colour;
+	float power;
+};
+
+resource(id = 0) const buffer GlobalEffectBuffer
+{
+	uint time;
+} gdata;
+
+const uint light_count = 64;
+resource(id = 1) const buffer LightBuffer
+{
+	PointLight point_lights[light_count];
+} light;
+
+// Phong Shading
+float diffuse(vec2 vpos, PointLight l)
+{
+	vec2 lightDir = l.position - vpos;
+	float distance = length(lightDir);
+	lightDir = normalize(lightDir);
+
+	// Calculate the diffuse lighting component using the Phong diffuse lighting model
+	float diffuse = max(dot(lightDir, lightDir), 0.0);
+	diffuse = l.power * diffuse / tz::math::pow(distance, 2.0f);
+	return diffuse;
+}
+
+void main()
+{
+	vec2 vpos = in::fragment_coord.xy;
+	// Fragment coord goes from {0, 0} to {imgdims}, which we don't want. Our light positions are going to be in world space. Meaning we need to know the world scale. For now that is hardcoded.
+	const float world_scale = 48.0f;
+	// 2048 / 64 = 32
+	vpos /= world_scale;
+	// image is 2x bigger than window dims so divide again.
+	vpos /= 2.0f;
+	vec3 col = vec3(0.0);
+	for(uint i = 0; i < light_count; i++)
+	{
+		PointLight l = light.point_lights[i];
+		col += l.colour * diffuse(vpos, l);
+		//tz::debug::printf("lpos: %v2f, vpos: %v2f", l.position, vpos);
+	}
+
+	const vec3 norm = vec3(0.2126, 0.7152, 0.0722);
+	const float threshold = 0.5;
+	if(dot(col, norm) < threshold)
+	{
+		frag_colour = vec4(0.0f);
+	}
+	else
+	{
+		const vec2 spos = in::fragment_coord.xy;
+		// Dither the output color using the 4x4 matrix of indices
+		const int indexMatrix8x8[64] = int[](0, 32,  8, 40,  2, 34, 10, 42,
+											48, 16, 56, 24, 50, 18, 58, 26,
+											12, 44,  4, 36, 14, 46,  6, 38,
+											60, 28, 52, 20, 62, 30, 54, 22,
+											 3, 35, 11, 43,  1, 33,  9, 41,
+											51, 19, 59, 27, 49, 17, 57, 25,
+											15, 47,  7, 39, 13, 45,  5, 37,
+											63, 31, 55, 23, 61, 29, 53, 21);
+		int index = indexMatrix8x8[int(mod(spos.x, 8.0)) + int(mod(spos.y, 8.0)) * 8];
+		float ditherThreshold = float(index) / 63.0;
+		const float dither_scale = 16.0f;
+		ditherThreshold *= dither_scale;
+		if (min(dot(col, norm), length(threshold) + 4.0f) < threshold + ditherThreshold)
+		{
+			frag_colour = vec4(0.0);
+		}
+		else
+		{
+			frag_colour = vec4(col, 1.0f);
+		}
+	}
+}

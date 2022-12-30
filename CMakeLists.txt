@@ -51,6 +51,8 @@ add_shader(
 	SHADERS
 	src/effects/empty.vertex.tzsl
 	src/effects/empty.fragment.tzsl
+	src/effects/light.vertex.tzsl
+	src/effects/light.fragment.tzsl
 	src/effects/rain.vertex.tzsl
 	src/effects/rain.fragment.tzsl
 	src/effects/snow.vertex.tzsl
