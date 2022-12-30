@@ -120,6 +120,7 @@ namespace game
 		ActorEventHandler events;
 		hdk::vec2 level_boundaries = hdk::vec2::zero();
 		mutable std::size_t debug_collision_query_count = 0;
+		std::size_t impl_light_actor_count = 0;
 		Zone zone = {};
 		tz::CallbackHandle game_bar_dbgui_callback = hdk::nullhand;
 	};

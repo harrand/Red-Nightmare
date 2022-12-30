@@ -2,6 +2,7 @@
 #define REDNIGHTMARE_FLAG_HPP
 #include "entity.hpp"
 #include "action.hpp"
+#include "light.hpp"
 #include "hdk/data/vector.hpp"
 #include "hdk/memory/clone.hpp"
 #include "tz/core/containers/enum_field.hpp"
@@ -15,6 +16,7 @@ namespace game
 
 	enum class FlagID
 	{
+		Light,
 		InvisibleWhileDead,
 		BlockingAnimations,
 		DoNotGarbageCollect,
@@ -119,6 +121,12 @@ namespace game
 	};
 	
 	// Flag implementations.
+	template<>
+	struct FlagParams<FlagID::Light>
+	{
+		PointLight light;
+	};
+
 	template<>
 	struct FlagParams<FlagID::CustomGarbageCollectPeriod>
 	{

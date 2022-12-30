@@ -269,9 +269,6 @@ namespace game
 		}));
 		std::array<PointLight, 64> data;
 		std::fill(data.begin(), data.end(), PointLight{});
-		data[0].position = hdk::vec2(15.0f, 7.0f);
-		data[0].colour = hdk::vec3(1.0f, 0.0f, 0.0f);
-		data[0].power = 5.0f;
 		this->point_light_buffer = rinfo.add_resource(tz::gl::BufferResource::from_many(data,
 		{
 			.access = tz::gl::ResourceAccess::DynamicFixed

@@ -89,6 +89,11 @@ namespace game
 		#endif
 		HDK_PROFZONE("Scene - Update", 0xFF00AA00);
 		this->quadtree.clear();
+		this->impl_light_actor_count = 0;
+		for(std::size_t i = 0; i < 64; i++)
+		{
+			game::effects().point_lights()[i] = {};
+		}
 		for(std::size_t i = 0; i < this->size();)
 		{
 
@@ -562,6 +567,18 @@ namespace game
 			auto scale = actor().flags.get<FlagID::CustomScale>()->data().scale;
 			quad.scale[0] *= scale[0];
 			quad.scale[1] *= scale[1];
+		}
+		
+		if(actor().flags.has<FlagID::Light>())
+		{
+			auto& flag = actor().flags.get<FlagID::Light>()->data();
+			auto l = flag.light;
+			l.position = quad.position;
+			if(actor().flags.has<FlagID::CustomScale>())
+			{
+				l.power *= actor().flags.get<FlagID::CustomScale>()->data().scale.length();
+			}
+			game::effects().point_lights()[++this->impl_light_actor_count] = l;
 		}
 
 		// Handle actions.

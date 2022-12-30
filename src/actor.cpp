@@ -355,6 +355,14 @@ namespace game
 					.type = ActorType::ChaoticFireball,
 					.flags =
 					{
+						Flag<FlagID::Light>
+						{{
+							.light =
+							{
+								.colour = {1.0f, 0.2f, 0.2f},
+								.power = 0.005f
+							}
+						}},
 						Flag<FlagID::Projectile>{},
 						Flag<FlagID::CustomGarbageCollectPeriod>
 						{{
@@ -409,7 +417,7 @@ namespace game
 						.max_health = 0.0001f,
 						.current_health = 0.0001f
 					},
-					.skin = ActorSkin::PlayerAkhara_DefaultFireball,
+					.skin = ActorSkin::Invisible,
 					.animation = game::play_animation(AnimationID::PlayerAkhara_DefaultFireball_Idle),
 					.name = "Fireball"
 				};
