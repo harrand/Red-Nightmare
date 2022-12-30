@@ -8,6 +8,18 @@ output(id = 0) vec4 frag_colour;
 
 import <math>
 
+struct RenderData
+{
+	mat4 view;
+	mat4 projection;
+	float ambient_lighting;
+};
+
+resource(id = 1) const buffer RenderDataBuffer
+{
+	RenderData data;
+} render;
+
 struct PointLight
 {
 	vec2 position;
@@ -43,6 +55,7 @@ void main()
 	frag_colour.g = tz::math::min(frag_colour.g, colour_offset.g * 2.0f);
 	frag_colour.b = tz::math::min(frag_colour.b, colour_offset.b * 2.0f);
 	frag_colour.xyz += (colour_offset - vec3(0.5f));
+	frag_colour.xyz *= render.data.ambient_lighting;
 	if(frag_colour.a < 0.9f)
 	{
 		discard;

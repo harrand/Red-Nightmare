@@ -46,6 +46,7 @@ namespace game
 		hdk::vec2 max_level_coords = hdk::vec2::zero();
 		Backdrop backdrop;
 		EffectID weather_effect = EffectID::None;
+		float ambient_lighting = 1.0f;
 	};
 
 	enum class LevelLayoutFlag
@@ -91,7 +92,7 @@ namespace game
 	};
 
 	Level load_level(LevelID lid);
-	Level load_level_from_image(const tz::gl::ImageResource& level_image, Backdrop backdrop = {}, EffectID weather_effect = EffectID::None);
+	Level load_level_from_image(const tz::gl::ImageResource& level_image, Backdrop backdrop = {}, EffectID weather_effect = EffectID::None, float ambient_lighting = 1.0f);
 
 	tz::gl::ImageResource random_level_image(const RandomLevelGenerationOptions& options);
 	void impl_enact_blackwhitelists(const ActorTypes& blacklist, const ActorTypes& whitelist, tz::gl::ImageResource& level_image);

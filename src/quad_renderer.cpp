@@ -103,6 +103,16 @@ namespace game
 		hdk::assert(eid < static_cast<std::size_t>(EffectID::Count));
 		return static_cast<EffectID>(eid);
 	}
+	
+	float QuadRenderer::get_ambient_lighting() const
+	{
+		return this->ambient_lighting;
+	}
+
+	void QuadRenderer::set_ambient_lighting(float lighting)
+	{
+		this->ambient_lighting = lighting;
+	}
 
 	void QuadRenderer::push()
 	{
@@ -201,7 +211,8 @@ namespace game
 		data =
 		{
 			.view = tz::view(this->camera_pos.with_more(0.0f), hdk::vec3{0.0f, 0.0f, 0.0f}),
-			.projection = tz::orthographic(-aspect_ratio, aspect_ratio, 1.0f, -1.0f, 0.0f, -1.0f)
+			.projection = tz::orthographic(-aspect_ratio, aspect_ratio, 1.0f, -1.0f, 0.0f, -1.0f),
+			.ambient_lighting = this->ambient_lighting
 		};
 	}
 }

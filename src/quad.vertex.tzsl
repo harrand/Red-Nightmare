@@ -40,6 +40,7 @@ struct RenderData
 {
 	mat4 view;
 	mat4 projection;
+	float ambient_lighting;
 };
 
 resource(id = 1) const buffer RenderDataBuffer

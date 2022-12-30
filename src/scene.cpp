@@ -393,6 +393,7 @@ namespace game
 		this->add(ActorType::PlayerAkhara);
 		hdk::report("Player Spawns at {%.2f, %.2f}", level.player_spawn_location[0], level.player_spawn_location[1]);
 		this->qrenderer.elements().front().position = level.player_spawn_location;
+		this->qrenderer.set_ambient_lighting(level.ambient_lighting);
 		// Now add actors from the level.
 		for(const auto& [pos, actor_type] : level.actor_spawns)
 		{
@@ -573,10 +574,16 @@ namespace game
 		{
 			auto& flag = actor().flags.get<FlagID::Light>()->data();
 			auto l = flag.light;
-			l.position = quad.position;
+			l.position = quad.position + flag.offset;
 			if(actor().flags.has<FlagID::CustomScale>())
 			{
-				l.power *= actor().flags.get<FlagID::CustomScale>()->data().scale.length();
+				auto scale = actor().flags.get<FlagID::CustomScale>()->data().scale;
+				float diff = (((scale[0] + scale[1]) * 0.5f - 0.5f) * 12.0f);
+				if(diff <= 0.0f)
+				{
+					diff = 1.0f;
+				}
+				l.power *= diff;
 			}
 			game::effects().point_lights()[++this->impl_light_actor_count] = l;
 		}

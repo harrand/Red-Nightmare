@@ -56,8 +56,11 @@ namespace game
 		tz::gl::ImageResource level_image = game::load_image_data(level_image_data[static_cast<int>(lid)]);
 		Backdrop backdrop;
 		EffectID weather_effect = EffectID::None;
+		float ambient_lighting = 1.0f;
 		switch(lid)
 		{
+			case LevelID::DevLevel0:
+				ambient_lighting = 0.4f;
 			break;
 			case LevelID::DevLevel1:
 				backdrop.background = TextureID::Grass_Generic_Backdrop;
@@ -74,10 +77,10 @@ namespace game
 				weather_effect = EffectID::Snow;
 			break;
 		}
-		return load_level_from_image(level_image, backdrop, weather_effect);
+		return load_level_from_image(level_image, backdrop, weather_effect, ambient_lighting);
 	}
 
-	Level load_level_from_image(const tz::gl::ImageResource& level_image, Backdrop backdrop, EffectID weather_effect)
+	Level load_level_from_image(const tz::gl::ImageResource& level_image, Backdrop backdrop, EffectID weather_effect, float ambient_lighting)
 	{
 		constexpr hdk::vec3ui colour_black{0u, 0u, 0u};
 		using ImageView = tz::GridView<const std::byte, 4>;
@@ -98,6 +101,7 @@ namespace game
 		Level ret;
 		ret.backdrop = backdrop;
 		ret.weather_effect = weather_effect;
+		ret.ambient_lighting = ambient_lighting;
 		ret.max_level_coords = static_cast<hdk::vec2>(level_image.get_dimensions()) / world_scale;
 
 		for(std::size_t x = 0; x < view.get_dimensions()[0]; x++)

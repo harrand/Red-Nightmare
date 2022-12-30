@@ -125,6 +125,7 @@ namespace game
 	struct FlagParams<FlagID::Light>
 	{
 		PointLight light;
+		hdk::vec2 offset = hdk::vec2::zero();
 	};
 
 	template<>

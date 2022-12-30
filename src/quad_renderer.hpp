@@ -43,6 +43,8 @@ namespace game
 		std::span<ElementData> elements();
 		void set_effect(EffectID effect, std::size_t effect_number = 0);
 		EffectID get_effect(std::size_t effect_number = 0) const;
+		float get_ambient_lighting() const;
+		void set_ambient_lighting(float lighting);
 
 		void push();
 		void pop();
@@ -57,6 +59,7 @@ namespace game
 		{
 			tz::Mat4 view = tz::Mat4::identity();
 			tz::Mat4 projection = tz::Mat4::identity();
+			float ambient_lighting = 1.0f;
 		};
 		tz::gl::RendererHandle make_renderer();
 		void update_render_data();
@@ -68,6 +71,7 @@ namespace game
 		tz::gl::ResourceHandle render_buffer_handle;
 		tz::gl::RendererHandle rendererh;
 		hdk::vec2 camera_pos{0.0f, 0.0f};
+		float ambient_lighting = 1.0f;
 	};
 }
 

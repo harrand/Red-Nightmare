@@ -359,7 +359,7 @@ namespace game
 						{{
 							.light =
 							{
-								.colour = {1.0f, 0.2f, 0.2f},
+								.colour = {1.0f, 0.1f, 0.02f},
 								.power = 0.005f
 							}
 						}},
