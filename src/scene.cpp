@@ -33,16 +33,29 @@ namespace game
 						return a.faction == f && !a.dead() && a.flags.has<FlagID::StatTracked>();
 					});
 				};
+				auto flag_count = [this]<FlagID ID>(bool want_alive)
+				{
+					return std::count_if(this->actors.begin(), this->actors.end(), [want_alive](const Actor& a)
+					{
+						bool ret = a.flags.has<ID>();
+						if(want_alive) ret &= !a.dead();
+						return ret;
+					});
+				};
+
 				const std::size_t total_count = std::count_if(this->actors.begin(), this->actors.end(), [](const Actor& a){return !a.dead() && a.flags.has<FlagID::StatTracked>();});
 				const std::size_t total_actor_count = this->actors.size();
-				ImGui::Text("Factions: D:%zu, PF:%zu, PE:%zu, F:%zu, E:%zu, Tot:%zu, AC:%zu |",
+				ImGui::Text("Factions: D:%zu, PF:%zu, PE:%zu, F:%zu, E:%zu, Tot:%zu, AC:%zu | Up:%zu, Down:%zu/%zu |",
 				fact_count(Faction::Default),
 				fact_count(Faction::PlayerFriend),
 				fact_count(Faction::PlayerEnemy),
 				fact_count(Faction::PureFriend),
 				fact_count(Faction::PureEnemy),
 				total_count,
-				total_actor_count
+				total_actor_count,
+				flag_count.operator()<FlagID::GoesUpALevel>(false),
+				flag_count.operator()<FlagID::GoesDownALevel>(true),
+				flag_count.operator()<FlagID::GoesDownALevel>(false)
 				);
 			});
 		#endif // HDK_DEBUG
