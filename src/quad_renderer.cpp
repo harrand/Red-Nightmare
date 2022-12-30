@@ -169,6 +169,7 @@ namespace game
 		});
 		this->element_buffer_handle = rinfo.add_resource(element_buffer);
 		this->render_buffer_handle = rinfo.add_resource(render_buffer);
+		rinfo.ref_resource(game::effects().get_point_light_buffer());
 
 		// Renderer stores all textures in the game.
 		constexpr std::uint32_t tex_count = static_cast<std::uint32_t>(TextureID::Count);

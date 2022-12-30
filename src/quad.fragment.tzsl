@@ -3,11 +3,38 @@ shader(type = fragment);
 input(id = 0, flat) uint in_texture_id;
 input(id = 1) vec2 in_texcoord;
 input(id = 2) vec3 colour_offset;
+input(id = 3) vec2 position;
 output(id = 0) vec4 frag_colour;
 
 import <math>
 
-resource(id = 2) const texture images[];
+struct PointLight
+{
+	vec2 position;
+	vec3 colour;
+	float power;
+};
+
+const uint light_count = 64;
+resource(id = 2) const buffer LightBuffer
+{
+	PointLight point_lights[light_count];
+} light;
+
+resource(id = 3) const texture images[];
+
+// Phong Shading
+float diffuse(PointLight l)
+{
+	vec2 lightDir = l.position - position;
+	float distance = length(lightDir);
+	lightDir = normalize(lightDir);
+
+	// Calculate the diffuse lighting component using the Phong diffuse lighting model
+	float diffuse = max(dot(lightDir, lightDir), 0.0);
+	diffuse = l.power * 0.5f * diffuse / tz::math::pow(distance, 2.0f);
+	return diffuse;
+}
 
 void main()
 {
@@ -19,5 +46,9 @@ void main()
 	if(frag_colour.a < 0.9f)
 	{
 		discard;
+	}
+	for(uint i = 0; i < light_count; i++)
+	{
+		frag_colour += vec4(light.point_lights[i].colour * diffuse(light.point_lights[i]), 0.0f);
 	}
 }

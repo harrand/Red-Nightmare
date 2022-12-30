@@ -20,6 +20,14 @@ namespace game
 	struct GlobalEffectData
 	{
 		std::uint32_t time;
+		float pad0[1];
+		hdk::vec2 monitor_dimensions;
+		hdk::vec2 window_dimensions;
+	};
+
+	struct LightLayerImplData
+	{
+		hdk::vec2 level_dimensions = hdk::vec2::zero();
 	};
 
 	EffectManager::EffectManager()
@@ -76,12 +84,20 @@ namespace game
 		}
 	}
 
+	void EffectManager::notify_level_dimensions(hdk::vec2 level_dimensions)
+	{
+		LightLayerImplData& ld = tz::gl::device().get_renderer(this->effect_renderers[static_cast<int>(EffectID::LightLayer)]).get_resource(this->light_layer_impl_buffer)->data_as<LightLayerImplData>().front();
+		ld.level_dimensions = level_dimensions;
+	}
+
 	void EffectManager::update(EffectIDs ids)
 	{
 		GlobalEffectData& gdata = tz::gl::device().get_renderer(this->global_storage).get_resource(this->global_buffer)->data_as<GlobalEffectData>().front();
 		tz::gl::device().get_renderer(this->global_storage).render();
 
 		gdata.time = (tz::system_time() - this->creation).millis<std::uint32_t>();
+		gdata.monitor_dimensions = static_cast<hdk::vec2>(tz::get_default_monitor().screen_dimensions);
+		gdata.window_dimensions = hdk::vec2(tz::window().get_width(), tz::window().get_height());
 
 		for(EffectID id : ids)
 		{
@@ -123,7 +139,13 @@ namespace game
 			}
 		}(id)));
 	}
-	
+
+	tz::gl::BufferComponent* EffectManager::get_point_light_buffer()
+	{
+		auto& renderer = tz::gl::device().get_renderer(this->effect_renderers[static_cast<std::size_t>(EffectID::LightLayer)]);
+		return static_cast<tz::gl::BufferComponent*>(renderer.get_component(this->point_light_buffer));
+	}
+
 	std::span<const PointLight> EffectManager::point_lights() const
 	{
 		const auto& renderer = tz::gl::device().get_renderer(this->effect_renderers[static_cast<std::size_t>(EffectID::LightLayer)]);
@@ -145,7 +167,7 @@ namespace game
 		{
 			ImGui::Indent();
 			auto& l = lights[light_cursor];
-			ImGui::SliderFloat2("Position", l.position.data().data(), 0.0f, 128.0f);
+			ImGui::DragFloat2("Position", l.position.data().data(), 0.01f, 0.0f, 128.0f);
 			ImGui::ColorEdit3("Colour", l.colour.data().data());
 			ImGui::SliderFloat("Power", &l.power, 0.0f, 64.0f);
 			ImGui::Unindent();
@@ -241,6 +263,10 @@ namespace game
 		rinfo.shader().set_shader(tz::gl::ShaderStage::Fragment, ImportedShaderSource(light, fragment));
 		rinfo.set_options({tz::gl::RendererOption::RenderWait, tz::gl::RendererOption::NoDepthTesting});
 		rinfo.ref_resource(this->global_storage, this->global_buffer);
+		this->light_layer_impl_buffer = rinfo.add_resource(tz::gl::BufferResource::from_one(LightLayerImplData{},
+		{
+			.access = tz::gl::ResourceAccess::DynamicFixed
+		}));
 		std::array<PointLight, 64> data;
 		std::fill(data.begin(), data.end(), PointLight{});
 		data[0].position = hdk::vec2(15.0f, 7.0f);

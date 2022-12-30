@@ -439,6 +439,7 @@ namespace game
 		};
 		handle_effect(level.weather_effect, 0);
 		handle_effect(EffectID::LightLayer, 1);
+		game::effects().notify_level_dimensions(this->level_boundaries);
 	}
 
 	void Scene::impl_next_level()

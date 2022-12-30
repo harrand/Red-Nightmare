@@ -14,10 +14,17 @@ struct PointLight
 resource(id = 0) const buffer GlobalEffectBuffer
 {
 	uint time;
+	vec2 monitor_dimensions;
+	vec2 window_dimensions;
 } gdata;
 
+resource(id = 1) const buffer LightLayerImplData
+{
+	vec2 level_dimensions;
+} impl;
+
 const uint light_count = 64;
-resource(id = 1) const buffer LightBuffer
+resource(id = 2) const buffer LightBuffer
 {
 	PointLight point_lights[light_count];
 } light;
@@ -38,12 +45,13 @@ float diffuse(vec2 vpos, PointLight l)
 void main()
 {
 	vec2 vpos = in::fragment_coord.xy;
-	// Fragment coord goes from {0, 0} to {imgdims}, which we don't want. Our light positions are going to be in world space. Meaning we need to know the world scale. For now that is hardcoded.
-	const float world_scale = 48.0f;
-	// 2048 / 64 = 32
-	vpos /= world_scale;
-	// image is 2x bigger than window dims so divide again.
-	vpos /= 2.0f;
+	// Image dimensions are MxM, where M is the average of the monitor width and height.
+	float monmean = (gdata.monitor_dimensions.x + gdata.monitor_dimensions.y) / 2.0f;
+	vpos /= (monmean * 2.0f);
+	vpos.y = 1.0 - vpos.y;
+	vpos *= impl.level_dimensions;
+	
+
 	vec3 col = vec3(0.0);
 	for(uint i = 0; i < light_count; i++)
 	{
@@ -72,7 +80,7 @@ void main()
 											63, 31, 55, 23, 61, 29, 53, 21);
 		int index = indexMatrix8x8[int(mod(spos.x, 8.0)) + int(mod(spos.y, 8.0)) * 8];
 		float ditherThreshold = float(index) / 63.0;
-		const float dither_scale = 16.0f;
+		const float dither_scale = 8.0f;
 		ditherThreshold *= dither_scale;
 		if (min(dot(col, norm), length(threshold) + 4.0f) < threshold + ditherThreshold)
 		{
@@ -81,6 +89,7 @@ void main()
 		else
 		{
 			frag_colour = vec4(col, 1.0f);
+			//tz::debug::printf("light pixel at %v2f", vpos);
 		}
 	}
 }

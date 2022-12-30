@@ -27,8 +27,10 @@ namespace game
 		EffectManager(const EffectManager& copy) = delete;
 		EffectManager(EffectManager&& move) = delete;
 
+		void notify_level_dimensions(hdk::vec2 level_dimensions);
 		void update(EffectIDs ids = {});
 		tz::gl::ImageComponent* get_effect_component(EffectID id);
+		tz::gl::BufferComponent* get_point_light_buffer();
 		std::span<const PointLight> point_lights() const;
 		std::span<PointLight> point_lights();
 
@@ -48,6 +50,7 @@ namespace game
 		tz::gl::ResourceHandle snow_storage = hdk::nullhand;
 		tz::gl::ResourceHandle light_layer_storage = hdk::nullhand;
 		tz::gl::ResourceHandle point_light_buffer = hdk::nullhand;
+		tz::gl::ResourceHandle light_layer_impl_buffer = hdk::nullhand;
 		tz::Duration creation = tz::system_time();
 	};
 
