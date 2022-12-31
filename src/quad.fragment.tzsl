@@ -1,9 +1,10 @@
 shader(type = fragment);
 
 input(id = 0, flat) uint in_texture_id;
-input(id = 1) vec2 in_texcoord;
-input(id = 2) vec3 colour_offset;
-input(id = 3) vec2 position;
+input(id = 1, flat) uint in_normal_map_id;
+input(id = 2) vec2 in_texcoord;
+input(id = 3) vec3 colour_offset;
+input(id = 4) vec2 position;
 output(id = 0) vec4 frag_colour;
 
 import <math>
@@ -36,21 +37,34 @@ resource(id = 2) const buffer LightBuffer
 resource(id = 3) const texture images[];
 
 // Phong Shading
-float diffuse(PointLight l)
+float diffuse(PointLight l, vec3 normal)
 {
 	vec2 lightDir = l.position - position;
 	float distance = length(lightDir);
 	lightDir = normalize(lightDir);
 
 	// Calculate the diffuse lighting component using the Phong diffuse lighting model
-	float diffuse = max(dot(lightDir, lightDir), 0.0);
+	float diffuse = max(dot(vec3(0.0f, 0.0f, 1.0f), normal), 0.0);
 	diffuse = l.power * 0.5f * diffuse / tz::math::pow(distance, 2.0f);
 	return diffuse;
+}
+
+float specular(PointLight l, vec3 normal)
+{
+	const vec3 view_dir = vec3(0.0f, 0.0f, 1.0f);
+	vec2 light_dir = l.position - position;
+	float distance = length(light_dir);
+	light_dir = normalize(light_dir);
+
+	float specular = pow(max(dot(normal, vec3(0.0f, 0.0f, 1.0f)), 0.0), 8);
+	specular = l.power * specular / tz::math::pow(distance, 2.0f);
+	return specular;
 }
 
 void main()
 {
 	frag_colour = texture(images[in_texture_id], in_texcoord);
+	vec3 normal = (255.0f/128.0f * texture(images[in_normal_map_id], in_texcoord).rgb) - 1;
 	frag_colour.r = tz::math::min(frag_colour.r, colour_offset.r * 2.0f);
 	frag_colour.g = tz::math::min(frag_colour.g, colour_offset.g * 2.0f);
 	frag_colour.b = tz::math::min(frag_colour.b, colour_offset.b * 2.0f);
@@ -62,6 +76,6 @@ void main()
 	}
 	for(uint i = 0; i < light_count; i++)
 	{
-		frag_colour += vec4(light.point_lights[i].colour * diffuse(light.point_lights[i]), 0.0f);
+		frag_colour += vec4(light.point_lights[i].colour * diffuse(light.point_lights[i], normal) * specular(light.point_lights[i], normal), 0.0f);
 	}
 }

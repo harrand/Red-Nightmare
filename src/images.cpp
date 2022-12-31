@@ -6,6 +6,7 @@
 // Note: When adding a new image, add a new entry here and in game::texture_data below.
 #include ImportedTextHeader(missing, png)
 #include ImportedTextHeader(invisible, png)
+#include ImportedTextHeader(smooth_normals, png)
 #include ImportedTextHeader(player_classic_dead, png)
 #include ImportedTextHeader(player_classic_down1, png)
 #include ImportedTextHeader(player_classic_down2, png)
@@ -188,6 +189,7 @@
 #include ImportedTextHeader(nightmare_up3, png)
 
 #include ImportedTextHeader(material_stone, png)
+#include ImportedTextHeader(material_stone_normal, png)
 #include ImportedTextHeader(healthbar_empty, png)
 #include ImportedTextHeader(gravestone_0, png)
 #include ImportedTextHeader(gravestone_1, png)
@@ -205,6 +207,7 @@
 #include ImportedTextHeader(grass_backdrop, png)
 #include ImportedTextHeader(snow_backdrop, png)
 #include ImportedTextHeader(dungeon_floor_backdrop, png)
+#include ImportedTextHeader(dungeon_floor_backdrop_normal, png)
 
 namespace game
 {
@@ -212,6 +215,7 @@ namespace game
 	{
 		ImportedTextData(missing, png),
 		ImportedTextData(invisible, png),
+		ImportedTextData(smooth_normals, png),
 		ImportedTextData(player_classic_dead, png),
 		ImportedTextData(player_classic_down1, png),
 		ImportedTextData(player_classic_down2, png),
@@ -394,6 +398,7 @@ namespace game
 		ImportedTextData(nightmare_up3, png),
 
 		ImportedTextData(material_stone, png),
+		ImportedTextData(material_stone_normal, png),
 		ImportedTextData(healthbar_empty, png),
 		ImportedTextData(gravestone_0, png),
 		ImportedTextData(gravestone_1, png),
@@ -411,6 +416,7 @@ namespace game
 		ImportedTextData(grass_backdrop, png),
 		ImportedTextData(snow_backdrop, png),
 		ImportedTextData(dungeon_floor_backdrop, png),
+		ImportedTextData(dungeon_floor_backdrop_normal, png),
 	};
 
 	tz::gl::ImageResource load_image(TextureID texid)
@@ -432,5 +438,19 @@ namespace game
 		});
 		stbi_image_free(imgdata);
 		return ret;
+	}
+
+	TextureID get_normal_map_for(TextureID tex)
+	{
+		switch(tex)
+		{
+			case TextureID::Material_Stone:
+				return TextureID::Material_Stone_Normal;
+			break;
+			case TextureID::Dungeon_Floor_Generic_Backdrop:
+				return TextureID::Dungeon_Floor_Generic_Backdrop_Normal;
+			break;
+		}
+		return TextureID::Smooth_Normals;
 	}
 }

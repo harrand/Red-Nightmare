@@ -77,7 +77,9 @@ namespace game
 		game::effects().update({this->qrenderer.get_effect(0), this->qrenderer.get_effect(1)});
 		for(std::size_t i = 0; i < this->qrenderer.elements().size(); i++)
 		{
-			this->qrenderer.elements()[i].texture_id = this->get_actor(i).animation.get_texture();
+			TextureID tex = this->get_actor(i).animation.get_texture();
+			this->qrenderer.elements()[i].texture_id = tex;
+			this->qrenderer.elements()[i].normal_map_id = game::get_normal_map_for(tex);
 		}
 		this->qrenderer.render();
 	}
@@ -409,6 +411,7 @@ namespace game
 
 		auto& background_data = this->qrenderer.overlay(OverlayID::Backdrop_Background);
 		background_data.texture_id = level.backdrop.background;
+		background_data.normal_map_id = game::get_normal_map_for(background_data.texture_id);
 		background_data.position = backdrop_position;
 		background_data.scale = backdrop_scale;
 		background_data.layer = 0.990f;
@@ -419,6 +422,7 @@ namespace game
 		background_data.texcoord_scale = texcoord_scale;
 		auto& foreground_data = this->qrenderer.overlay(OverlayID::Backdrop_Foreground);
 		foreground_data.texture_id = level.backdrop.foreground;
+		foreground_data.normal_map_id = game::get_normal_map_for(foreground_data.texture_id);
 		foreground_data.position = backdrop_position;
 		foreground_data.scale = backdrop_scale;
 		foreground_data.layer = 0.95f;

@@ -81,6 +81,7 @@ add_text(
 	TEXT_FILES
 		res/images/missing.png
 		res/images/invisible.png
+		res/images/smooth_normals.png
 		res/images/player/akhara/skins/classic/player_classic_dead.png
 		res/images/player/akhara/skins/classic/player_classic_down1.png
 		res/images/player/akhara/skins/classic/player_classic_down2.png
@@ -263,6 +264,7 @@ add_text(
 		res/images/enemies/nightmare/nightmare_up3.png
 
 		res/images/materials/material_stone.png
+		res/images/materials/material_stone_normal.png
 
 		res/images/gui/healthbar_empty.png
 		res/images/scenery/gravestone_0.png
@@ -287,4 +289,5 @@ add_text(
 		res/images/levels/backdrops/generic/grass_backdrop.png
 		res/images/levels/backdrops/generic/snow_backdrop.png
 		res/images/levels/backdrops/generic/dungeon_floor_backdrop.png
+		res/images/levels/backdrops/generic/dungeon_floor_backdrop_normal.png
 )

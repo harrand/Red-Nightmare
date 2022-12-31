@@ -30,8 +30,8 @@ namespace game
 		{
 			hdk::vec2 position = {0.0f, 0.0f};
 			hdk::vec2 scale = {0.2f, 0.2f};
-			float rotation = 0.0f;
 			TextureID texture_id = static_cast<TextureID>(0);
+			TextureID normal_map_id = TextureID::Smooth_Normals;
 			std::uint32_t status_effect_id = StatusEffect_None;
 			float layer = 0.0f;
 			hdk::vec2 texcoord_scale = {1.0f, 1.0f};

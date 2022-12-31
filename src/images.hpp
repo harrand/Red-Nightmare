@@ -9,6 +9,7 @@ namespace game
 	{
 		Missing,
 		Invisible,
+		Smooth_Normals,
 		PlayerAkhara_Dead,
 		PlayerAkhara_Down_1,
 		PlayerAkhara_Down_2,
@@ -186,6 +187,7 @@ namespace game
 		Nightmare_Up_3,
 
 		Material_Stone,
+		Material_Stone_Normal,
 
 		Gui_Healthbar_Empty,
 		Scenery_Gravestone_0,
@@ -204,12 +206,14 @@ namespace game
 		Grass_Generic_Backdrop,
 		Snow_Generic_Backdrop,
 		Dungeon_Floor_Generic_Backdrop,
+		Dungeon_Floor_Generic_Backdrop_Normal,
 
 		Count
 	};
 
 	tz::gl::ImageResource load_image(TextureID texid);
 	tz::gl::ImageResource load_image_data(std::string_view img_file_data);
+	TextureID get_normal_map_for(TextureID tex);
 }
 
 #endif // REDNIGHTMARE_IMAGES_HPP

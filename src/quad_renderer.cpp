@@ -48,7 +48,7 @@ namespace game
 			ImGui::SliderInt("Quad Id", &quad_id, 0, this->quad_count - 1);
 			QuadRenderer::ElementData& elem = this->elements()[quad_id];
 			ImGui::DragFloat2("Position", elem.position.data().data(), 0.01f, -1.0f, 1.0f);
-			ImGui::Text("Rotation (Radians): %.2f", elem.rotation);
+			//ImGui::Text("Rotation (Radians): %.2f", elem.rotation);
 			ImGui::DragFloat2("Scale", elem.scale.data().data(), 0.01f, -1.0f, 1.0f);
 			ImGui::Text("Texture ID: %u", static_cast<unsigned int>(elem.texture_id));
 			ImGui::DragFloat("Layer", &elem.layer, 0.005f, -2.0f, 2.0f);
