@@ -265,7 +265,7 @@ namespace game
 									{
 										Action<ActionID::SpawnActor>
 										{{
-											.actor = ActorType::ChaoticFireball,
+											.actor = ActorType::Frostbolt,
 											.inherit_faction = true,
 											.actions =
 											{
@@ -391,9 +391,13 @@ namespace game
 						{{
 							.predicate = [](const Actor& self, const Actor& actor)
 							{
-								return self.type == actor.type && self.is_enemy_of(actor);
+								return actor.flags.has<FlagID::Projectile>() && self.is_enemy_of(actor);
 							},
 							.actions =
+							{
+								Action<ActionID::Die>{}
+							},
+							.touchee_actions =
 							{
 								Action<ActionID::Die>{}
 							}
@@ -420,6 +424,68 @@ namespace game
 					.skin = ActorSkin::Invisible,
 					.animation = game::play_animation(AnimationID::PlayerAkhara_DefaultFireball_Idle),
 					.name = "Fireball"
+				};
+			break;
+			case ActorType::Frostbolt:
+				return
+				{
+					.type = ActorType::Frostbolt,
+					.flags =
+					{
+						Flag<FlagID::Light>
+						{{
+							.light =
+							{
+								.colour = {0.01f, 0.1f, 1.0f},
+								.power = 0.005f
+							}
+						}},
+						Flag<FlagID::Projectile>{},
+						Flag<FlagID::CustomGarbageCollectPeriod>
+						{{
+							.delay_millis = 500ull
+						}},
+						Flag<FlagID::InvisibleWhileDead>{},
+						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}},
+						Flag<FlagID::HazardousIf>
+						{{
+							.predicate = [](const Actor& self, const Actor& actor)->bool
+							{
+								return self.is_enemy_of(actor);
+							}
+						}},
+						Flag<FlagID::ActionOnOOL>
+						{{
+							.actions =
+							{
+								Action<ActionID::Die>{}
+							}
+						}},
+						Flag<FlagID::Stealth>{},
+						Flag<FlagID::SelfRecoil>{},
+						Flag<FlagID::Unhittable>{},
+						Flag<FlagID::ActionOnHit>
+						{{
+							.hittee_actions
+							{
+								Action<ActionID::ApplyBuff>
+								{{
+									.buff = BuffID::Chill
+								}},
+							},
+						}}
+					},
+					.faction = Faction::PlayerEnemy,
+					.base_stats =
+					{
+						.movement_speed = 0.001f,
+						.damage = default_base_damage * 60.0f * 5.0f,
+						.max_health = 0.0001f,
+						.current_health = 0.0001f
+					},
+					.skin = ActorSkin::Invisible,
+					.animation = game::play_animation(AnimationID::PlayerAkhara_DefaultFireball_Idle),
+					.name = "Frostbolt"
 				};
 			break;
 			case ActorType::FireSmoke:

@@ -76,6 +76,8 @@ namespace game
 		GhostBanshee_Spirit,
 		/// An actor which acts like a fireball projectile, shooting in a random direction.
 		ChaoticFireball,
+		/// Like a fireball, but it is a pale blue and applies the Chill effect to anything it hurts.
+		Frostbolt,
 		/// An actor which acts as a fiery particle effect. Dies by itself after a while.
 		FireSmoke,
 		/// An actor which acts as a fiery explosion particle effect. Dies by itself after a while, but deals large damage to enemies in its radius.

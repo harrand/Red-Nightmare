@@ -68,6 +68,7 @@ namespace game
 					break;
 					case ZoneBiome::Dungeon:
 						intro.backdrop = {.background = TextureID::Dungeon_Floor_Generic_Backdrop};
+						intro.ambient_lighting = 0.4f;
 					break;
 					default:
 						hdk::error("Unsupported biome");
@@ -104,7 +105,7 @@ namespace game
 				}
 			}
 			// Now simply fill in the level.
-			z.levels[l] = game::load_level_from_image(game::random_level_image(cur_options), {.background = TextureID::Dungeon_Floor_Generic_Backdrop}, EffectID::None);
+			z.levels[l] = game::load_level_from_image(game::random_level_image(cur_options), {.background = TextureID::Dungeon_Floor_Generic_Backdrop}, EffectID::None, pinfo.ambient_lighting);
 		}
 		return z;
 	}
@@ -118,6 +119,7 @@ namespace game
 		static int sparsity = 75;
 		static bool intro_level_enabled = true;
 		static ProceduralZoneIntroLevel intro_level{.biome = ZoneBiome::Grassy};
+		static float ambient_lighting = 0.4f;
 
 		const LevelPalette palette = game::get_level_palette();
 		static std::unordered_map<ActorType, bool> whitelist =
@@ -143,6 +145,7 @@ namespace game
 		ImGui::SliderInt("Level Count", &level_count, 1, 64);
 		ImGui::SliderInt2("Dimensions", dims.data().data(), 4, 64);
 		ImGui::SliderInt("Sparsity %", &sparsity, 0, 100);
+		ImGui::SliderFloat("Ambient Lighting", &ambient_lighting, 0.1f, 1.0f);
 		if(ImGui::CollapsingHeader("Black/Whitelist"))
 		{
 			ImGui::BeginTable("Actor Availability", 3, ImGuiTableFlags_Borders);
@@ -195,6 +198,7 @@ namespace game
 				.level_width = static_cast<unsigned int>(dims[0]),
 				.level_height = static_cast<unsigned int>(dims[1]),
 				.sparsity = static_cast<unsigned int>(sparsity),
+				.ambient_lighting = ambient_lighting,
 				.whitelist = to_enum_field(whitelist),
 				.blacklist = to_enum_field(blacklist),
 				.intro_level = maybe_intro_level,

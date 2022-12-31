@@ -61,7 +61,7 @@ namespace game
 			case BuffID::Chill:
 				return
 				{
-					.multiply_speed_boost = 0.3f,
+					.multiply_speed_boost = 0.7f,
 					.time_remaining_millis = 5000.0f,
 				};
 			break;

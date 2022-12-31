@@ -39,6 +39,7 @@ namespace game
 		unsigned int level_width;
 		unsigned int level_height;
 		unsigned int sparsity = 50;
+		float ambient_lighting = 1.0f;
 		ActorTypes whitelist = {};
 		ActorTypes blacklist = {};
 		std::optional<ProceduralZoneIntroLevel> intro_level = std::nullopt;
