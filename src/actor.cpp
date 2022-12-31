@@ -588,6 +588,17 @@ namespace game
 					{
 						Flag<FlagID::Stealth>{},
 						Flag<FlagID::InvisibleWhileDead>{},
+						Flag<FlagID::Light>
+						{{
+							.light =
+							{
+								.colour = {0.05f, 1.0f, 0.02f},
+								.power = 0.01f
+							},
+							.power_variance = 0.01f,
+							.variance_rate = 0.08f,
+							.min_variance_pct = 0.05f
+						}},
 						Flag<FlagID::ActionOnRepeat>
 						{{
 							.period = 25000.0f,
@@ -604,7 +615,7 @@ namespace game
 						}},
 					},
 					.faction = Faction::PlayerEnemy,
-					.skin = ActorSkin::DebugOnlyVisible,
+					.skin = ActorSkin::Invisible,
 					.palette_colour = {255u, 64u, 255u},
 					.name = "Spawner Ghost Zombie",
 					.layer = default_layer + 1
@@ -618,6 +629,17 @@ namespace game
 					{
 						Flag<FlagID::Stealth>{},
 						Flag<FlagID::InvisibleWhileDead>{},
+						Flag<FlagID::Light>
+						{{
+							.light =
+							{
+								.colour = {1.0f, 0.01f, 0.005f},
+								.power = 0.01f
+							},
+							.power_variance = 0.01f,
+							.variance_rate = 0.4f,
+							.min_variance_pct = 0.05f
+						}},
 						Flag<FlagID::ActionOnRepeat>
 						{{
 							.period = 5000.0f,
@@ -640,7 +662,7 @@ namespace game
 						}},
 					},
 					.faction = Faction::PlayerEnemy,
-					.skin = ActorSkin::DebugOnlyVisible,
+					.skin = ActorSkin::Invisible,
 					.palette_colour = {255u, 32u, 255u},
 					.name = "Spawner Fireball",
 					.layer = default_layer + 1
