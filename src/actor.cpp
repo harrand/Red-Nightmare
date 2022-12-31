@@ -510,6 +510,14 @@ namespace game
 					.flags =
 					{
 						Flag<FlagID::InvisibleWhileDead>{},
+						Flag<FlagID::Light>
+						{{
+							.light =
+							{
+								.colour = {1.0f, 0.1f, 0.02f},
+								.power = 0.00025f
+							}
+						}},
 						Flag<FlagID::CustomScale>{{.scale = {1.5f, 1.5f}}},
 						Flag<FlagID::HazardousIf>
 						{{

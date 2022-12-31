@@ -573,19 +573,22 @@ namespace game
 		if(actor().flags.has<FlagID::Light>())
 		{
 			auto& flag = actor().flags.get<FlagID::Light>()->data();
-			auto l = flag.light;
-			l.position = quad.position + flag.offset;
-			if(actor().flags.has<FlagID::CustomScale>())
+			if(!actor().dead() || !actor().flags.has<FlagID::InvisibleWhileDead>())
 			{
-				auto scale = actor().flags.get<FlagID::CustomScale>()->data().scale;
-				float diff = (((scale[0] + scale[1]) * 0.5f - 0.5f) * 12.0f);
-				if(diff <= 0.0f)
+				auto l = flag.light;
+				l.position = quad.position + flag.offset;
+				if(actor().flags.has<FlagID::CustomScale>())
 				{
-					diff = 1.0f;
+					auto scale = actor().flags.get<FlagID::CustomScale>()->data().scale;
+					float diff = (((scale[0] + scale[1]) * 0.5f - 0.5f) * 12.0f);
+					if(diff <= 0.0f)
+					{
+						diff = 1.0f;
+					}
+					l.power *= diff;
 				}
-				l.power *= diff;
+				game::effects().point_lights()[++this->impl_light_actor_count] = l;
 			}
-			game::effects().point_lights()[++this->impl_light_actor_count] = l;
 		}
 
 		// Handle actions.
