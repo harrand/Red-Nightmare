@@ -204,7 +204,9 @@
 #include ImportedTextHeader(sprint2, png)
 
 #include ImportedTextHeader(dev_level_1_backdrop, png)
+#include ImportedTextHeader(dev_level_1_backdrop_normal, png)
 #include ImportedTextHeader(grass_backdrop, png)
+#include ImportedTextHeader(grass_backdrop_normal, png)
 #include ImportedTextHeader(snow_backdrop, png)
 #include ImportedTextHeader(dungeon_floor_backdrop, png)
 #include ImportedTextHeader(dungeon_floor_backdrop_normal, png)
@@ -413,7 +415,9 @@ namespace game
 		ImportedTextData(sprint2, png),
 
 		ImportedTextData(dev_level_1_backdrop, png),
+		ImportedTextData(dev_level_1_backdrop_normal, png),
 		ImportedTextData(grass_backdrop, png),
+		ImportedTextData(grass_backdrop_normal, png),
 		ImportedTextData(snow_backdrop, png),
 		ImportedTextData(dungeon_floor_backdrop, png),
 		ImportedTextData(dungeon_floor_backdrop_normal, png),
@@ -447,8 +451,14 @@ namespace game
 			case TextureID::Material_Stone:
 				return TextureID::Material_Stone_Normal;
 			break;
+			case TextureID::Grass_Generic_Backdrop:
+				return TextureID::Grass_Generic_Backdrop_Normal;
+			break;
 			case TextureID::Dungeon_Floor_Generic_Backdrop:
 				return TextureID::Dungeon_Floor_Generic_Backdrop_Normal;
+			break;
+			case TextureID::DevLevel1_Backdrop:
+				return TextureID::DevLevel1_Backdrop_Normal;
 			break;
 		}
 		return TextureID::Smooth_Normals;

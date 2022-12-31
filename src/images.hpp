@@ -203,7 +203,9 @@ namespace game
 		Powerup_Sprint_2,
 
 		DevLevel1_Backdrop,
+		DevLevel1_Backdrop_Normal,
 		Grass_Generic_Backdrop,
+		Grass_Generic_Backdrop_Normal,
 		Snow_Generic_Backdrop,
 		Dungeon_Floor_Generic_Backdrop,
 		Dungeon_Floor_Generic_Backdrop_Normal,
