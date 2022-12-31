@@ -202,11 +202,12 @@ namespace game
 	ACTION_IMPL_END(ActionID::ApplyBuffToActor)
 //--------------------------------------------------------------------------------------------------
 	ACTION_IMPL_BEGIN(ActionID::ApplyBuffToTarget)
-		if(scene.actor().target == nullptr)
+		if(scene.actor().target == Actor::NullID)
 		{
 			return;
 		}
-		scene.actor().target->buffs.add(action.data().buff);
+		
+		scene.get_actor(scene.get_actor_from_uuid(scene.actor().target)).buffs.add(action.data().buff);
 		action.set_is_complete(true);
 	ACTION_IMPL_END(ActionID::ApplyBuffToTarget)
 //--------------------------------------------------------------------------------------------------

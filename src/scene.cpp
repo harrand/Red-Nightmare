@@ -161,7 +161,12 @@ namespace game
 			}
 			static int tracked_uuid;
 			ImGui::DragInt("Actor UUID", &tracked_uuid, 0.5f, 0, Actor::uuid_count);
-			Actor* a = this->get_actor_from_uuid(tracked_uuid);
+			std::size_t aid = this->get_actor_from_uuid(tracked_uuid);
+			Actor* a = nullptr;
+			if(aid != Actor::NullID)
+			{
+				a = &this->get_actor(aid);
+			}
 			ImGui::Indent();
 			if(a != nullptr)
 			{
@@ -616,6 +621,7 @@ namespace game
 			.spawn_actor = [this](ActorType t){this->add(t); return this->actors.size() - 1;},
 			.get_actor = [this](std::size_t t)->Actor&{return this->get_actor(t);},
 			.get_quad = [this](std::size_t t)->QuadRenderer::ElementData&{return this->qrenderer.elements()[t];},
+			.get_actor_from_uuid = [this](std::size_t uuid){return this->get_actor_from_uuid(uuid);},
 			.next_level = [this](){this->impl_next_level();},
 			.previous_level = [this](){this->impl_prev_level();},
 		};
@@ -859,16 +865,10 @@ namespace game
 		}) != this->intersections.end();
 	}
 
-	Actor* Scene::get_actor_from_uuid(std::size_t uuid)
+	std::size_t Scene::get_actor_from_uuid(std::size_t uuid) const
 	{
 		auto iter = std::find_if(this->actors.begin(), this->actors.end(), [uuid](const Actor& a){return a.uuid == uuid;});
-		return iter != this->actors.end() ? &*iter : nullptr;
-	}
-
-	const Actor* Scene::get_actor_from_uuid(std::size_t uuid) const
-	{
-		auto iter = std::find_if(this->actors.begin(), this->actors.end(), [uuid](const Actor& a){return a.uuid == uuid;});
-		return iter != this->actors.end() ? &*iter : nullptr;
+		return iter != this->actors.end() ? std::distance(this->actors.begin(), iter) : Actor::NullID;
 	}
 
 	bool Scene::is_in_bounds(std::size_t actor_id) const
