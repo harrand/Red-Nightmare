@@ -138,29 +138,50 @@ namespace game
 		static std::array<const char*, c_actor_count> actor_names = get_actor_names();
 		ImGui::Text("Current Scene");
 		ImGui::Spacing();
-		static bool track_actor = false;
-		ImGui::Checkbox("Track Actor", &track_actor);
-		if(track_actor)
+		if(ImGui::CollapsingHeader("Track Actor"))
 		{
 			static std::array<char, 128> name_search_buf = {'\0'};
+			static std::size_t tracked_uuid;
+
+			auto name_match = [](const char* lhs, const char* rhs)->bool
+			{
+				std::string lhs_s{lhs};
+				std::string rhs_s{rhs};
+				std::transform(lhs_s.begin(), lhs_s.end(), lhs_s.begin(), ::toupper);
+				std::transform(rhs_s.begin(), rhs_s.end(), rhs_s.begin(), ::toupper);
+				return lhs_s == rhs_s;
+			};
+
 			std::optional<ActorType> find_match = std::nullopt;
 			ImGui::InputText("Search by name", name_search_buf.data(), name_search_buf.size());
+			if(ImGui::BeginCombo("Or search by type", "Actor Type Name..."))
+			{
+				tracked_uuid = Actor::NullID;
+				for(int i = 0; i < actor_names.size(); i++)
+				{
+					bool is_selected = name_match(name_search_buf.data(), actor_names[i]);	
+					if(ImGui::Selectable(actor_names[i], is_selected))
+					{
+						std::strcpy(name_search_buf.data(), actor_names[i]);
+					}
+					if(is_selected)
+					{
+						ImGui::SetItemDefaultFocus();
+					}
+				}
+				ImGui::EndCombo();
+			}
 			{
 				std::string lhs{name_search_buf.data()};
-				std::transform(lhs.begin(), lhs.end(), lhs.begin(), ::toupper);
 				for(std::size_t i = 0; i < actor_names.size(); i++)
 				{
-					std::string rhs{actor_names[i]};
-					std::transform(rhs.begin(), rhs.end(), rhs.begin(), ::toupper);
-					if(lhs == rhs)
+					if(name_match(name_search_buf.data(), actor_names[i]))
 					{
 						find_match = static_cast<ActorType>(i);
 						break;
 					}
 				}
 			}
-			static int tracked_uuid;
-			ImGui::DragInt("Actor UUID", &tracked_uuid, 0.5f, 0, Actor::uuid_count);
 			std::size_t aid = this->get_actor_from_uuid(tracked_uuid);
 			Actor* a = nullptr;
 			if(aid != Actor::NullID)
@@ -179,16 +200,18 @@ namespace game
 			ImGui::Unindent();
 			if(find_match.has_value())
 			{
-				if(ImGui::Button("Find First Match -->"))
+				for(const Actor& a : this->actors)
 				{
-					for(const Actor& a : this->actors)
+					if(a.type == find_match.value())
 					{
-						if(a.type == find_match.value())
-						{
-							tracked_uuid = a.uuid;
-						}
+						tracked_uuid = a.uuid;
 					}
 				}
+			}
+			else
+			{
+				ImGui::Text("No actor name matching \"%s\"", name_search_buf.data());
+				tracked_uuid = Actor::NullID;
 			}
 		}
 		if(ImGui::CollapsingHeader("Mass Control"))
@@ -600,6 +623,11 @@ namespace game
 					l.power *= diff;
 				}
 				l.power += std::clamp(std::sin(flag.time * 0.001f * flag.variance_rate), flag.min_variance_pct, flag.max_variance_pct) * flag.power_variance;
+				if(flag.power_scale_with_health_pct)
+				{
+					auto stats = actor().get_current_stats();
+					l.power *= stats.current_health / stats.max_health;
+				}
 				game::effects().point_lights()[++this->impl_light_actor_count] = l;
 			}
 		}

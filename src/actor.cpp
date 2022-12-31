@@ -592,12 +592,13 @@ namespace game
 						{{
 							.light =
 							{
-								.colour = {0.05f, 1.0f, 0.02f},
-								.power = 0.01f
+								.colour = {-1.0f, -0.01f, -1.0f},
+								.power = 0.1f
 							},
 							.power_variance = 0.01f,
 							.variance_rate = 0.08f,
-							.min_variance_pct = 0.05f
+							.min_variance_pct = 0.05f,
+							.power_scale_with_health_pct = true
 						}},
 						Flag<FlagID::ActionOnRepeat>
 						{{
@@ -633,12 +634,13 @@ namespace game
 						{{
 							.light =
 							{
-								.colour = {1.0f, 0.01f, 0.005f},
-								.power = 0.01f
+								.colour = {-0.01f, -1.0f, -1.0f},
+								.power = 0.1f
 							},
 							.power_variance = 0.01f,
 							.variance_rate = 0.4f,
-							.min_variance_pct = 0.05f
+							.min_variance_pct = 0.05f,
+							.power_scale_with_health_pct = true
 						}},
 						Flag<FlagID::ActionOnRepeat>
 						{{
