@@ -577,6 +577,8 @@ namespace game
 		if(actor().flags.has<FlagID::Light>())
 		{
 			auto& flag = actor().flags.get<FlagID::Light>()->data();
+			unsigned long long delta_millis = tz::system_time().millis<unsigned long long>() - actor().last_update.millis<unsigned long long>();
+			flag.time += delta_millis;
 			if(!actor().dead() || !actor().flags.has<FlagID::InvisibleWhileDead>())
 			{
 				auto l = flag.light;
@@ -591,6 +593,7 @@ namespace game
 					}
 					l.power *= diff;
 				}
+				l.power += std::clamp(std::sin(flag.time * 0.001f * flag.variance_rate), flag.min_variance_pct, flag.max_variance_pct) * flag.power_variance;
 				game::effects().point_lights()[++this->impl_light_actor_count] = l;
 			}
 		}

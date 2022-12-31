@@ -270,6 +270,7 @@ add_text(
 		res/images/scenery/gravestone_0.png
 		res/images/scenery/gravestone_1.png
 
+		res/images/interactables/light/torch_off.png
 		res/images/interactables/level_change/downwards_trapdoor.png
 		res/images/interactables/level_change/stone_stairs_down_nx.png
 		res/images/interactables/level_change/stone_stairs_up_nx.png

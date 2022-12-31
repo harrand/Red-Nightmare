@@ -76,6 +76,7 @@ namespace game
 		Gui_Healthbar_Empty,
 		Scenery_Gravestone_0,
 		Scenery_Gravestone_1,
+		Interactable_Torch_Off,
 		Downwards_Trapdoor,
 		Interactable_Stone_Stairs_Down_NX,
 		Interactable_Stone_Stairs_Up_NX,

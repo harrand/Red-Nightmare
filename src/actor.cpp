@@ -816,6 +816,33 @@ namespace game
 					.layer = default_layer + 2
 				};
 			break;
+			case ActorType::Interactable_Torch:
+				return
+				{
+					.type = ActorType::Interactable_Torch,
+					.flags =
+					{
+						Flag<FlagID::Invincible>{},
+						Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}},
+						Flag<FlagID::Stealth>{},
+						Flag<FlagID::Light>
+						{{
+							.light =
+							{
+								.colour = {1.0f, 0.1f, 0.02f},
+								.power = 0.001f
+							},
+							.offset = {-0.095f, 0.035f},
+							.power_variance = 0.002f,
+							.variance_rate = 15.0f
+						}}
+					},
+					.faction = Faction::PureFriend,
+					.skin = ActorSkin::Interactable_Torch,
+					.palette_colour = {64u, 4u, 0u},
+					.name = "Torch",
+				};
+			break;
 			case ActorType::Interactable_Stone_Stairs_Down_NX:
 				return
 				{
@@ -1454,6 +1481,9 @@ namespace game
 				{
 					ending_animation = AnimationID::Scenery_Gravestone_1;
 				}
+			break;
+			case ActorSkin::Interactable_Torch:
+				ending_animation = AnimationID::Interactable_Torch_Off;
 			break;
 			case ActorSkin::Interactable_Stone_Stairs_Down_NX:
 				if(this->dead())

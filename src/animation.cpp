@@ -595,6 +595,15 @@ namespace game
 			.fps = 1,
 			.loop = false
 		},
+		AnimationInfo /*Interactable_Torch_Off*/
+		{
+			.frames = 
+			{
+				TextureID::Interactable_Torch_Off,
+			},
+			.fps = 1,
+			.loop = false
+		},
 		AnimationInfo /*Downwards_Trapdoor*/
 		{
 			.frames = 

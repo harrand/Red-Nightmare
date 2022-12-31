@@ -46,6 +46,8 @@ namespace game
 		Scenery_Gravestone_0,
 		/// Actor looks like a gravestone (type 1, block).
 		Scenery_Gravestone_1,
+		/// Actor looks like a torch.
+		Interactable_Torch,
 		/// Actor looks like some stone stairs going downwards, facing the negative-x direction.
 		Interactable_Stone_Stairs_Down_NX,
 		/// Actor looks like some stone stairs going upwards, facing the negative-x direction.
@@ -102,6 +104,8 @@ namespace game
 		WallDestructible,
 		/// A breakable gravestone, good for single-use cover.
 		Scenery_Gravestone,
+		/// A torch that lights up the surrounding area.
+		Interactable_Torch,
 		/// Some stone stairs going downwards, facing the negative-x direction. Player will go to the next level by going down them.
 		Interactable_Stone_Stairs_Down_NX,
 		/// Some stone stairs going upwards, facing the negative-x direction. Player will go to the previous level by going up them.

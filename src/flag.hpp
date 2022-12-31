@@ -126,6 +126,16 @@ namespace game
 	{
 		PointLight light;
 		hdk::vec2 offset = hdk::vec2::zero();
+		// How much should the power of the light change sinusoidally over time?
+		float power_variance = 0.0f;
+		// How quickly should the variance occur (1.0f means sin(time in seconds))
+		float variance_rate = 1.0f;
+		// What is the minimum % of original power that should be possible during variance?
+		float min_variance_pct = 0.3f;
+		// What is the maximum % of original power that should be possible during variance?
+		float max_variance_pct = 1.5f;
+		// Impl detail. Don't touch this.
+		float time = 0.0f;
 	};
 
 	template<>
