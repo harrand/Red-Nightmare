@@ -1,6 +1,7 @@
 shader(type = fragment);
 
 import <math>
+import "light"
 
 output(id = 0) vec4 frag_colour;
 
@@ -23,10 +24,9 @@ resource(id = 1) const buffer LightLayerImplData
 	vec2 level_dimensions;
 } impl;
 
-const uint light_count = 64;
 resource(id = 2) const buffer LightBuffer
 {
-	PointLight point_lights[light_count];
+	PointLight point_lights[max_light_count];
 } light;
 
 // Phong Shading
@@ -53,7 +53,7 @@ void main()
 	
 
 	vec3 col = vec3(0.0);
-	for(uint i = 0; i < light_count; i++)
+	for(uint i = 0; i < max_light_count; i++)
 	{
 		PointLight l = light.point_lights[i];
 		col += l.colour * diffuse(vpos, l);

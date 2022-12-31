@@ -1,5 +1,6 @@
 #include "scene.hpp"
 #include "util.hpp"
+#include "effects/light.tzsl"
 #include "hdk/job/job.hpp"
 #include "hdk/debug.hpp"
 #include "hdk/profile.hpp"
@@ -92,7 +93,7 @@ namespace game
 		HDK_PROFZONE("Scene - Update", 0xFF00AA00);
 		this->quadtree.clear();
 		this->impl_light_actor_count = 0;
-		for(std::size_t i = 0; i < 64; i++)
+		for(std::size_t i = 0; i < max_light_count; i++)
 		{
 			game::effects().point_lights()[i] = {};
 		}

@@ -8,6 +8,7 @@ input(id = 4) vec2 position;
 output(id = 0) vec4 frag_colour;
 
 import <math>
+import "effects/light"
 
 struct RenderData
 {
@@ -28,10 +29,9 @@ struct PointLight
 	float power;
 };
 
-const uint light_count = 64;
 resource(id = 2) const buffer LightBuffer
 {
-	PointLight point_lights[light_count];
+	PointLight point_lights[max_light_count];
 } light;
 
 resource(id = 3) const texture images[];
@@ -74,7 +74,7 @@ void main()
 	{
 		discard;
 	}
-	for(uint i = 0; i < light_count; i++)
+	for(uint i = 0; i < max_light_count; i++)
 	{
 		frag_colour += vec4(light.point_lights[i].colour * diffuse(light.point_lights[i], normal) * specular(light.point_lights[i], normal), 0.0f);
 	}

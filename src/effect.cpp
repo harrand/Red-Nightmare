@@ -1,4 +1,5 @@
 #include "effect.hpp"
+#include "effects/light.tzsl"
 #include "tz/core/peripherals/monitor.hpp"
 #include "tz/gl/imported_shaders.hpp"
 #include "tz/gl/device.hpp"
@@ -162,7 +163,7 @@ namespace game
 	{
 		auto lights = this->point_lights();
 		static int light_cursor = 0;
-		ImGui::SliderInt("Light ID", &light_cursor, 0, lights.size());
+		ImGui::SliderInt("Light ID", &light_cursor, 0, lights.size() - 1);
 		ImGui::Spacing();
 		{
 			ImGui::Indent();
@@ -267,7 +268,7 @@ namespace game
 		{
 			.access = tz::gl::ResourceAccess::DynamicFixed
 		}));
-		std::array<PointLight, 64> data;
+		std::array<PointLight, max_light_count> data;
 		std::fill(data.begin(), data.end(), PointLight{});
 		this->point_light_buffer = rinfo.add_resource(tz::gl::BufferResource::from_many(data,
 		{
