@@ -666,6 +666,7 @@ namespace game
 		handle_action.template operator()<ActionID::GotoMouse>();
 		handle_action.template operator()<ActionID::LaunchToMouse>();
 		handle_action.template operator()<ActionID::LaunchToPlayer>();
+		handle_action.template operator()<ActionID::LaunchRandomDirection>();
 		if(actor().entity.has<ActionID::TeleportToPlayer>())
 		{
 			auto maybe_player_id = this->find_first_player();

@@ -55,6 +55,12 @@ namespace game
 		 */
 		LaunchToPlayer,
 		/**
+		 * Launch in a random direction with a speed boost.
+		 * - Moves proportionally to base speed.
+		 * - Never completes, unless the actor goes out-of-bounds.
+		 */
+		LaunchRandomDirection,
+		/**
 		 * Launch towards the target location with a speed boost.
 		 * - Moves proportionally to base speed.
 		 * - Never completes, unless the actor goes out-of-bounds.
@@ -170,6 +176,12 @@ namespace game
 
 	template<>
 	struct ActionParams<ActionID::LaunchToPlayer>
+	{
+		float speed_multiplier = 1.0f;
+	};
+
+	template<>
+	struct ActionParams<ActionID::LaunchRandomDirection>
 	{
 		float speed_multiplier = 1.0f;
 	};

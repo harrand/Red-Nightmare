@@ -80,6 +80,8 @@ namespace game
 		ChaoticFireball,
 		/// Like a fireball, but it is a pale blue and applies the Chill effect to anything it hurts.
 		Frostbolt,
+		/// A large ball of frozen death. The orb frequently launches additional frostbolts during its trajectory.
+		FrozenOrb,
 		/// An actor which acts as a fiery particle effect. Dies by itself after a while.
 		FireSmoke,
 		/// An actor which acts as a fiery explosion particle effect. Dies by itself after a while, but deals large damage to enemies in its radius.

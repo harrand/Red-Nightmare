@@ -106,6 +106,15 @@ namespace game
 		});
 	ACTION_IMPL_END(ActionID::LaunchToPlayer)
 //--------------------------------------------------------------------------------------------------
+	ACTION_IMPL_BEGIN(ActionID::LaunchRandomDirection)
+		std::uniform_real_distribution<float> dist{-1.0f, 1.0f};
+		scene.actor().entity.add<ActionID::Launch>
+		({
+			.direction = hdk::vec2{dist(scene.rng), dist(scene.rng)},
+			.speed_multiplier = action.data().speed_multiplier
+		});
+	ACTION_IMPL_END(ActionID::LaunchRandomDirection)
+//--------------------------------------------------------------------------------------------------
 	ACTION_IMPL_BEGIN(ActionID::Launch)
 		if(scene.actor().dead())
 		{
