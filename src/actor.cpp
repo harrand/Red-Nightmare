@@ -51,7 +51,7 @@ namespace game
 												{
 													Action<ActionID::SpawnActor>
 													{{
-														.actor = ActorType::FrozenOrb,
+														.actor = ActorType::ChaoticFireball,
 														.inherit_faction = true,
 														.actions =
 														{
