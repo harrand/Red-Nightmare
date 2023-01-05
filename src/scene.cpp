@@ -433,7 +433,9 @@ namespace game
 			this->add(actor_type);
 			this->qrenderer.elements().back().position = pos;
 		}
-
+		// Quadtree boundary is equal to level boundary with an extra 1/8th border.
+		hdk::vec2 quadtree_boundary = level.max_level_coords * 1.125f;
+		this->quadtree = Quadtree<QuadtreeNode>{Box{quadtree_boundary * -1.0f, quadtree_boundary}};
 
 		this->level_boundaries = level.max_level_coords;
 
