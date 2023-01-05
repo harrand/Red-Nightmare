@@ -420,6 +420,8 @@ namespace game
 	{
 		// Firstly remove everything
 		this->clear();
+		// Reset zoom.
+		this->qrenderer.set_camera_zoom(1.0f);
 		// Add the player and her orb.
 		this->add(ActorType::PlayerAkhara);
 		hdk::report("Player Spawns at {%.2f, %.2f}", level.player_spawn_location[0], level.player_spawn_location[1]);
@@ -497,7 +499,7 @@ namespace game
 
 	hdk::vec2 Scene::get_mouse_position() const
 	{
-		return util::get_mouse_world_location() + this->qrenderer.camera_position();
+		return (util::get_mouse_world_location() * this->qrenderer.get_camera_zoom()) + this->qrenderer.camera_position();
 	}
 
 	void Scene::erase(std::size_t id)
@@ -605,30 +607,33 @@ namespace game
 		
 		if(actor().flags.has<FlagID::Light>())
 		{
-			auto& flag = actor().flags.get<FlagID::Light>()->data();
-			unsigned long long delta_millis = tz::system_time().millis<unsigned long long>() - actor().last_update.millis<unsigned long long>();
-			flag.time += delta_millis;
-			if(!actor().dead() || !actor().flags.has<FlagID::InvisibleWhileDead>())
+			if(this->impl_light_actor_count < game::effects().point_lights().size() - 1)
 			{
-				auto l = flag.light;
-				l.position = quad.position + flag.offset;
-				if(actor().flags.has<FlagID::CustomScale>())
+				auto& flag = actor().flags.get<FlagID::Light>()->data();
+				unsigned long long delta_millis = tz::system_time().millis<unsigned long long>() - actor().last_update.millis<unsigned long long>();
+				flag.time += delta_millis;
+				if(!actor().dead() || !actor().flags.has<FlagID::InvisibleWhileDead>())
 				{
-					auto scale = actor().flags.get<FlagID::CustomScale>()->data().scale;
-					float diff = (((scale[0] + scale[1]) * 0.5f - 0.5f) * 12.0f);
-					if(diff <= 0.0f)
+					auto l = flag.light;
+					l.position = quad.position + flag.offset;
+					if(actor().flags.has<FlagID::CustomScale>())
 					{
-						diff = 1.0f;
+						auto scale = actor().flags.get<FlagID::CustomScale>()->data().scale;
+						float diff = (((scale[0] + scale[1]) * 0.5f - 0.5f) * 12.0f);
+						if(diff <= 0.0f)
+						{
+							diff = 1.0f;
+						}
+						l.power *= diff;
 					}
-					l.power *= diff;
+					l.power += std::clamp(std::sin(flag.time * 0.001f * flag.variance_rate), flag.min_variance_pct, flag.max_variance_pct) * flag.power_variance;
+					if(flag.power_scale_with_health_pct)
+					{
+						auto stats = actor().get_current_stats();
+						l.power *= stats.current_health / stats.max_health;
+					}
+					game::effects().point_lights()[++this->impl_light_actor_count] = l;
 				}
-				l.power += std::clamp(std::sin(flag.time * 0.001f * flag.variance_rate), flag.min_variance_pct, flag.max_variance_pct) * flag.power_variance;
-				if(flag.power_scale_with_health_pct)
-				{
-					auto stats = actor().get_current_stats();
-					l.power *= stats.current_health / stats.max_health;
-				}
-				game::effects().point_lights()[++this->impl_light_actor_count] = l;
 			}
 		}
 
@@ -933,6 +938,25 @@ namespace game
 	void Scene::update_camera()
 	{
 		HDK_PROFZONE("Scene - Camera Update", 0xFF00AA00);
+
+		// Firstly check zoom.
+		float ybefore = this->mouse_scroll_data;	
+		float ynow = tz::window().get_mouse_button_state().get_scroll_offset()[1];
+		const float zoom = this->qrenderer.get_camera_zoom();
+		this->mouse_scroll_data = ynow;
+		if(ynow > ybefore)
+		{
+			// scrolled up.
+			this->qrenderer.set_camera_zoom(zoom - 0.1f);
+		}
+		else if(ynow < ybefore)
+		{
+			// scrolled down.
+			this->qrenderer.set_camera_zoom(zoom + 0.1f);
+		}
+
+		// Then, move camera to cover all players.
+
 		auto player_ids = this->get_living_players();
 		std::vector<std::size_t> actors_to_view;
 		if(player_ids.empty())
@@ -961,11 +985,11 @@ namespace game
 		avg /= static_cast<float>(actors_to_view.size());
 		// We want to view 'avg'. If it's far enough from the camera by some constant we will start to move towards it.
 		const hdk::vec2 camera_displacement = avg - this->qrenderer.camera_position();
-		if(camera_displacement.length() > 0.5f)
+		if(camera_displacement.length() > (0.5f * this->qrenderer.get_camera_zoom()))
 		{
 			
 #if 1
-			this->qrenderer.camera_position() += camera_displacement * 0.02f * camera_displacement.length();
+			this->qrenderer.camera_position() += camera_displacement * 0.02f * camera_displacement.length() / this->qrenderer.get_camera_zoom();
 #else
 			this->qrenderer.camera_position() = avg;
 #endif

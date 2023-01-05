@@ -53,6 +53,8 @@ namespace game
 		float get_width_multiplier() const;
 		const hdk::vec2& camera_position() const;
 		hdk::vec2& camera_position();
+		float get_camera_zoom() const;
+		void set_camera_zoom(float zoom);
 		static constexpr std::size_t max_quad_count = 8096;
 	private:
 		struct RenderData
@@ -72,6 +74,7 @@ namespace game
 		tz::gl::RendererHandle rendererh;
 		hdk::vec2 camera_pos{0.0f, 0.0f};
 		float ambient_lighting = 1.0f;
+		float camera_zoom = 1.0f;
 	};
 }
 

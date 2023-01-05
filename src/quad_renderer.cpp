@@ -157,6 +157,16 @@ namespace game
 		return this->camera_pos;
 	}
 
+	float QuadRenderer::get_camera_zoom() const
+	{
+		return this->camera_zoom;
+	}
+	
+	void QuadRenderer::set_camera_zoom(float zoom)
+	{
+		this->camera_zoom = zoom;
+	}
+
 	tz::gl::RendererHandle QuadRenderer::make_renderer()
 	{
 		tz::gl::RendererInfo rinfo;
@@ -208,10 +218,11 @@ namespace game
 		HDK_PROFZONE("QuadRenderer - Update Render Data", 0xFF8B4513);
 		RenderData& data = tz::gl::device().get_renderer(this->rendererh).get_resource(this->render_buffer_handle)->data_as<RenderData>().front();
 		const float aspect_ratio = this->get_width_multiplier();
+		const float cam_mult = this->camera_zoom;
 		data =
 		{
 			.view = tz::view(this->camera_pos.with_more(0.0f), hdk::vec3{0.0f, 0.0f, 0.0f}),
-			.projection = tz::orthographic(-aspect_ratio, aspect_ratio, 1.0f, -1.0f, 0.0f, -1.0f),
+			.projection = tz::orthographic(-aspect_ratio * cam_mult, aspect_ratio * cam_mult, 1.0f * cam_mult, -1.0f * cam_mult, 0.0f, -1.0f),
 			.ambient_lighting = this->ambient_lighting
 		};
 	}

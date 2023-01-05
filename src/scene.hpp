@@ -116,6 +116,7 @@ namespace game
 		std::vector<Actor> actors;
 		Actor world_actor = game::create_actor(ActorType::World);
 		std::default_random_engine rng;
+		float mouse_scroll_data = 0.0f;
 		std::unordered_map<std::size_t, tz::Delay> despawn_timer;
 		ActorEventHandler events;
 		hdk::vec2 level_boundaries = hdk::vec2::zero();
