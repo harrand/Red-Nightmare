@@ -32,6 +32,11 @@ namespace game
 
 	void QuadRenderer::dbgui()
 	{
+		float amb_lighting = this->get_ambient_lighting();;
+		if(ImGui::SliderFloat("Ambient Lighting", &amb_lighting, 0.0f, 1.0f))
+		{
+			this->set_ambient_lighting(amb_lighting);
+		}
 		ImGui::Text("Quad Count: %zu", this->quad_count);
 		static bool wireframe_mode = false;
 		if(ImGui::Checkbox("Wireframe Mode", &wireframe_mode))
