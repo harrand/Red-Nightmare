@@ -6,7 +6,7 @@
 #include "hdk/data/vector.hpp"
 #include "hdk/memory/clone.hpp"
 #include "tz/core/containers/enum_field.hpp"
-#include "tz/core/peripherals/mouse.hpp"
+#include "tz/wsi/mouse.hpp"
 
 namespace game
 {
@@ -180,7 +180,7 @@ namespace game
 	template<>
 	struct FlagParams<FlagID::ActionOnClick>
 	{
-		std::unordered_map<tz::MouseButton, ActionClickData> action_map;
+		std::unordered_map<tz::wsi::mouse_button, ActionClickData> action_map;
 	};
 
 	template<>

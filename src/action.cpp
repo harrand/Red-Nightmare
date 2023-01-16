@@ -1,6 +1,7 @@
 #include "action.hpp"
 #include "scene.hpp"
 #include "hdk/profile.hpp"
+#include "tz/wsi/keyboard.hpp"
 
 namespace game
 {
@@ -242,7 +243,7 @@ namespace game
 //--------------------------------------------------------------------------------------------------
 	ACTION_IMPL_BEGIN(ActionID::Cast)
 		bool should_cancel = false;
-		if(action.data().player_cancel_cast_escape && scene.actor().flags.has<FlagID::Player>() && tz::window().get_keyboard_state().is_key_down(tz::KeyCode::Escape))
+		if(action.data().player_cancel_cast_escape && scene.actor().flags.has<FlagID::Player>() && tz::wsi::is_key_down(tz::window().get_keyboard_state(), tz::wsi::key::esc))
 		{
 			// The player has pressed escape to cancel their cast.
 			should_cancel = true;

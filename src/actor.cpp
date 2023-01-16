@@ -2,6 +2,7 @@
 #include "util.hpp"
 #include "tz/core/tz.hpp"
 #include "tz/dbgui/dbgui.hpp"
+#include "tz/wsi/keyboard.hpp"
 #include "hdk/profile.hpp"
 
 using namespace tz::literals;
@@ -40,7 +41,7 @@ namespace game
 						{{
 							.action_map =
 							{
-								{tz::MouseButton::Left,
+								{tz::wsi::mouse_button::left,
 									{
 										.actions =
 										{
@@ -68,7 +69,7 @@ namespace game
 										.icd = 550_ms
 									}
 								},
-								{tz::MouseButton::Right,
+								{tz::wsi::mouse_button::right,
 									{
 										.actions = 
 										{
@@ -1260,7 +1261,7 @@ namespace game
 				return;
 			}
 		}
-		const bool is_left_clicked = tz::window().get_mouse_button_state().is_mouse_button_down(tz::MouseButton::Left) && !tz::dbgui::claims_mouse();
+		const bool is_left_clicked = tz::wsi::is_mouse_button_down(tz::window().get_mouse_state(), tz::wsi::mouse_button::left) && !tz::dbgui::claims_mouse();
 		if(!this->dead())
 		{
 			if(this->flags.has<FlagID::ClickToLaunch>() && is_left_clicked)
@@ -1293,7 +1294,7 @@ namespace game
 				auto& flag = this->flags.get<FlagID::ActionOnClick>()->data();
 				for(auto& [button, data] : flag.action_map)
 				{
-					if(tz::window().get_mouse_button_state().is_mouse_button_down(button) && data.icd.done())
+					if(tz::wsi::is_mouse_button_down(tz::window().get_mouse_state(), button) && data.icd.done())
 					{
 						data.actions.copy_components(this->entity);
 						data.icd.reset();
@@ -1304,19 +1305,19 @@ namespace game
 			{
 				const auto& kb = tz::window().get_keyboard_state();
 				this->motion = {};
-				if(kb.is_key_down(tz::KeyCode::W))
+				if(tz::wsi::is_key_down(kb, tz::wsi::key::w))
 				{
 					this->motion |= ActorMotion::MoveUp;
 				}
-				if(kb.is_key_down(tz::KeyCode::A))
+				if(tz::wsi::is_key_down(kb, tz::wsi::key::a))
 				{
 					this->motion |= ActorMotion::MoveLeft;
 				}
-				if(kb.is_key_down(tz::KeyCode::S))
+				if(tz::wsi::is_key_down(kb, tz::wsi::key::s))
 				{
 					this->motion |= ActorMotion::MoveDown;
 				}
-				if(kb.is_key_down(tz::KeyCode::D))
+				if(tz::wsi::is_key_down(kb, tz::wsi::key::d))
 				{
 					this->motion |= ActorMotion::MoveRight;
 				}

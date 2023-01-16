@@ -6,7 +6,8 @@ namespace game
 {
 	void initialise()
 	{
-		tz::initialise({.name = "Red Nightmare", .version = {2, 1, 0}});
+		tz::initialise({.name = "Red Nightmare", .version = {2, 1, 0},
+			.flags = {tz::ApplicationFlag::TransparentWindow}});
 		effects_impl::initialise();
 	}
 

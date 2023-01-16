@@ -1,6 +1,6 @@
 #include "effect.hpp"
 #include "effects/light.tzsl"
-#include "tz/core/peripherals/monitor.hpp"
+#include "tz/wsi/monitor.hpp"
 #include "tz/gl/imported_shaders.hpp"
 #include "tz/gl/device.hpp"
 #include "tz/gl/output.hpp"
@@ -97,8 +97,8 @@ namespace game
 		tz::gl::device().get_renderer(this->global_storage).render();
 
 		gdata.time = (tz::system_time() - this->creation).millis<std::uint32_t>();
-		gdata.monitor_dimensions = static_cast<hdk::vec2>(tz::get_default_monitor().screen_dimensions);
-		gdata.window_dimensions = hdk::vec2(tz::window().get_width(), tz::window().get_height());
+		gdata.monitor_dimensions = static_cast<hdk::vec2>(tz::wsi::get_monitors().front().dimensions);
+		gdata.window_dimensions = static_cast<hdk::vec2>(tz::window().get_dimensions());
 
 		for(EffectID id : ids)
 		{
@@ -182,7 +182,7 @@ namespace game
 		this->rain_storage = rinfo.add_resource(tz::gl::ImageResource::from_uninitialised
 		({
 			.format = tz::gl::ImageFormat::BGRA32,
-			.dimensions = static_cast<hdk::vec2ui>(hdk::vec2{tz::window().get_width(), tz::window().get_height()}),
+			.dimensions = tz::window().get_dimensions(),
 			.flags = {tz::gl::ResourceFlag::RendererOutput, tz::gl::ResourceFlag::ImageWrapRepeat}
 		}));
 		rinfo.shader().set_shader(tz::gl::ShaderStage::Vertex, ImportedShaderSource(empty, vertex));
@@ -213,7 +213,7 @@ namespace game
 		this->snow_storage = rinfo.add_resource(tz::gl::ImageResource::from_uninitialised
 		({
 			.format = tz::gl::ImageFormat::BGRA32,
-			.dimensions = static_cast<hdk::vec2ui>(hdk::vec2{tz::window().get_width(), tz::window().get_height()}),
+			.dimensions = tz::window().get_dimensions(),
 			.flags = {tz::gl::ResourceFlag::RendererOutput, tz::gl::ResourceFlag::ImageWrapRepeat}
 		}));
 		rinfo.shader().set_shader(tz::gl::ShaderStage::Vertex, ImportedShaderSource(empty, vertex));
@@ -241,7 +241,7 @@ namespace game
 	{
 		tz::gl::RendererInfo rinfo;
 		rinfo.debug_name("Light Layer Storage");
-		hdk::vec2ui mondims = tz::get_default_monitor().screen_dimensions;
+		hdk::vec2ui mondims = tz::wsi::get_monitors().front().dimensions;
 		auto monsize = (mondims[0] + mondims[1]) / 2;
 		mondims[0] = monsize;
 		mondims[1] = monsize;

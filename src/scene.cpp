@@ -942,8 +942,8 @@ namespace game
 		HDK_PROFZONE("Scene - Camera Update", 0xFF00AA00);
 
 		// Firstly check zoom.
-		float ybefore = this->mouse_scroll_data;	
-		float ynow = tz::window().get_mouse_button_state().get_scroll_offset()[1];
+		int ybefore = this->mouse_scroll_data;	
+		int ynow = tz::window().get_mouse_state().wheel_position;
 		const float zoom = this->qrenderer.get_camera_zoom();
 		this->mouse_scroll_data = ynow;
 		if(ynow > ybefore)

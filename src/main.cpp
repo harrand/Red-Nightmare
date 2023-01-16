@@ -32,7 +32,7 @@ int main()
 
 		while(!tz::window().is_close_requested())
 		{
-			tz::window().begin_frame();
+			tz::begin_frame();
 			scene.render();
 
 			// Fixed update. 60fps.
@@ -70,7 +70,7 @@ int main()
 				}
 			});
 
-			tz::window().end_frame();
+			tz::end_frame();
 		}
 	}
 	game::terminate();

@@ -149,7 +149,8 @@ namespace game
 
 	float QuadRenderer::get_width_multiplier() const
 	{
-		return static_cast<float>(tz::window().get_width()) / tz::window().get_height();
+		auto dims = static_cast<hdk::vec2>(tz::window().get_dimensions());
+		return dims[0] / dims[1];
 	}
 
 	const hdk::vec2& QuadRenderer::camera_position() const
@@ -178,7 +179,6 @@ namespace game
 
 		rinfo.shader().set_shader(tz::gl::ShaderStage::Vertex, ImportedShaderSource(quad, vertex));
 		rinfo.shader().set_shader(tz::gl::ShaderStage::Fragment, ImportedShaderSource(quad, fragment));
-		rinfo.state().graphics.clear_colour = {0.0f, 0.0f, 0.0f, 1.0f};
 
 		// A buffer to store data for each quad (element buffer).
 		std::array<QuadRenderer::ElementData, QuadRenderer::max_quad_count> element_data;
