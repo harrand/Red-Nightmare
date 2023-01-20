@@ -1,9 +1,9 @@
 #include "scene.hpp"
 #include "util.hpp"
 #include "effects/light.tzsl"
-#include "hdk/job/job.hpp"
-#include "hdk/debug.hpp"
-#include "hdk/profile.hpp"
+#include "tz/core/job/job.hpp"
+#include "tz/core/debug.hpp"
+#include "tz/core/profile.hpp"
 
 #include <cctype>
 #include <algorithm>
@@ -22,7 +22,7 @@ namespace game
 		this->events.actor_death.add_callback([this](ActorDeathEvent e){this->on_actor_death(e);});
 		this->actors.reserve(QuadRenderer::max_quad_count);
 
-		#if HDK_DEBUG
+		#if TZ_DEBUG
 			this->game_bar_dbgui_callback = tz::dbgui::game_bar().add_callback([this]()
 			{
 				ImGui::Text("%s Z%zu |", this->zone.name, this->zone.level_cursor);
@@ -59,22 +59,22 @@ namespace game
 				flag_count.operator()<FlagID::GoesDownALevel>(false)
 				);
 			});
-		#endif // HDK_DEBUG
+		#endif // TZ_DEBUG
 	}
 
 	Scene::~Scene()
 	{
-		#if HDK_DEBUG
+		#if TZ_DEBUG
 			tz::dbgui::game_bar().remove_callback(this->game_bar_dbgui_callback);
-			this->game_bar_dbgui_callback = hdk::nullhand;
-		#endif // HDK_DEBUG
+			this->game_bar_dbgui_callback = tz::nullhand;
+		#endif // TZ_DEBUG
 	}
 
 	void Scene::render()
 	{
-		HDK_PROFZONE("Scene - Render", 0xFF00AA00);
+		TZ_PROFZONE("Scene - Render", 0xFF00AA00);
 
-		hdk::assert(this->actors.size() == this->qrenderer.elements().size(), "Scene actor list (%zu) and QuadRenderer size (%zu) no longer match. Logic Error", this->actors.size(), this->qrenderer.elements().size());
+		tz::assert(this->actors.size() == this->qrenderer.elements().size(), "Scene actor list (%zu) and QuadRenderer size (%zu) no longer match. Logic Error", this->actors.size(), this->qrenderer.elements().size());
 		game::effects().update({this->qrenderer.get_effect(0), this->qrenderer.get_effect(1)});
 		for(std::size_t i = 0; i < this->qrenderer.elements().size(); i++)
 		{
@@ -90,7 +90,7 @@ namespace game
 		#if TZ_DEBUG
 			this->debug_collision_query_count = 0;
 		#endif
-		HDK_PROFZONE("Scene - Update", 0xFF00AA00);
+		TZ_PROFZONE("Scene - Update", 0xFF00AA00);
 		this->quadtree.clear();
 		this->impl_light_actor_count = 0;
 		for(std::size_t i = 0; i < max_light_count; i++)
@@ -393,21 +393,21 @@ namespace game
 
 	const Actor& Scene::get_actor(std::size_t id) const
 	{
-		hdk::assert(id < this->actors.size(), "Index out of range. Idx = %zu, size = %zu", id, this->actors.size());
+		tz::assert(id < this->actors.size(), "Index out of range. Idx = %zu, size = %zu", id, this->actors.size());
 		return this->actors[id];
 	}
 
 	Actor& Scene::get_actor(std::size_t id)
 	{
-		hdk::assert(id < this->actors.size(), "Index out of range. Idx = %zu, size = %zu", id, this->actors.size());
+		tz::assert(id < this->actors.size(), "Index out of range. Idx = %zu, size = %zu", id, this->actors.size());
 		return this->actors[id];
 	}
 
 	void Scene::impl_load_zone(Zone z)
 	{
 		this->zone = z;
-		hdk::assert(!this->zone.levels.empty(), "Current zone has no levels.");
-		hdk::assert(this->zone.level_cursor < this->zone.levels.size(), "Current zone level cursor (%zu) is not valid for the number of levels of the zone (%zu).", this->zone.level_cursor, this->zone.levels.size());
+		tz::assert(!this->zone.levels.empty(), "Current zone has no levels.");
+		tz::assert(this->zone.level_cursor < this->zone.levels.size(), "Current zone level cursor (%zu) is not valid for the number of levels of the zone (%zu).", this->zone.level_cursor, this->zone.levels.size());
 		this->impl_load_level(this->zone.levels[this->zone.level_cursor]);
 		// Each level has a spawn point for the player. However, we have a special case if the level is the initial level, where the level might have a specific spawn point for the first time play. In this case, we use that.
 		if(this->zone.initial_load)
@@ -424,7 +424,7 @@ namespace game
 		this->qrenderer.set_camera_zoom(1.0f);
 		// Add the player and her orb.
 		this->add(ActorType::PlayerAkhara);
-		hdk::report("Player Spawns at {%.2f, %.2f}", level.player_spawn_location[0], level.player_spawn_location[1]);
+		tz::report("Player Spawns at {%.2f, %.2f}", level.player_spawn_location[0], level.player_spawn_location[1]);
 		this->qrenderer.elements().front().position = level.player_spawn_location;
 		this->qrenderer.set_ambient_lighting(level.ambient_lighting);
 		// Now add actors from the level.
@@ -434,13 +434,13 @@ namespace game
 			this->qrenderer.elements().back().position = pos;
 		}
 		// Quadtree boundary is equal to level boundary with an extra 1/8th border.
-		hdk::vec2 quadtree_boundary = level.max_level_coords * 1.125f;
+		tz::vec2 quadtree_boundary = level.max_level_coords * 1.125f;
 		this->quadtree = Quadtree<QuadtreeNode>{Box{quadtree_boundary * -1.0f, quadtree_boundary}};
 
 		this->level_boundaries = level.max_level_coords;
 
-		const hdk::vec2 backdrop_position = this->level_boundaries / 2.0f;
-		const hdk::vec2 backdrop_scale = (this->level_boundaries) / 2.0f;
+		const tz::vec2 backdrop_position = this->level_boundaries / 2.0f;
+		const tz::vec2 backdrop_scale = (this->level_boundaries) / 2.0f;
 
 		auto& background_data = this->qrenderer.overlay(OverlayID::Backdrop_Background);
 		background_data.texture_id = level.backdrop.background;
@@ -450,7 +450,7 @@ namespace game
 		background_data.layer = 0.990f;
 		// boundaries are proportional to the level image dimensions.
 		// the background texcoord scale should be lower if the level image is really big.
-		const hdk::vec2 texcoord_scale{std::cbrt(this->level_boundaries[0]), std::cbrt(this->level_boundaries[1])};
+		const tz::vec2 texcoord_scale{std::cbrt(this->level_boundaries[0]), std::cbrt(this->level_boundaries[1])};
 
 		background_data.texcoord_scale = texcoord_scale;
 		auto& foreground_data = this->qrenderer.overlay(OverlayID::Backdrop_Foreground);
@@ -470,7 +470,7 @@ namespace game
 			this->qrenderer.set_effect(id, effect_number);
 			effect_data.scale = (id != EffectID::None)
 				? backdrop_scale
-				: hdk::vec2::zero();
+				: tz::vec2::zero();
 			if(id == EffectID::LightLayer)
 			{
 				effect_data.texcoord_scale = this->level_boundaries / this->level_boundaries[0];
@@ -488,18 +488,18 @@ namespace game
 	void Scene::impl_next_level()
 	{
 		this->zone.initial_load = false;
-		hdk::assert(this->zone.level_cursor + 1 < this->zone.levels.size(), "No next level exists.");
+		tz::assert(this->zone.level_cursor + 1 < this->zone.levels.size(), "No next level exists.");
 		this->impl_load_level(this->zone.levels[++this->zone.level_cursor]);
 	}
 
 	void Scene::impl_prev_level()
 	{
 		this->zone.initial_load = false;
-		hdk::assert(this->zone.level_cursor > 0, "No previous level exists.");
+		tz::assert(this->zone.level_cursor > 0, "No previous level exists.");
 		this->impl_load_level(this->zone.levels[--this->zone.level_cursor]);
 	}
 
-	hdk::vec2 Scene::get_mouse_position() const
+	tz::vec2 Scene::get_mouse_position() const
 	{
 		return (util::get_mouse_world_location() * this->qrenderer.get_camera_zoom()) + this->qrenderer.camera_position();
 	}
@@ -516,7 +516,7 @@ namespace game
 
 	ActorPostUpdateResult Scene::actor_post_update(std::size_t id)
 	{
-		HDK_PROFZONE("Actor - Post Update", 0xFF8B4513);
+		TZ_PROFZONE("Actor - Post Update", 0xFF8B4513);
 		auto actor = [this, id]()->Actor&{return this->get_actor(id);};
 		QuadRenderer::ElementData& quad = this->qrenderer.elements()[id];
 		quad.layer = static_cast<float>(actor().layer) / std::numeric_limits<unsigned short>::max();
@@ -640,7 +640,7 @@ namespace game
 		}
 
 		// Handle actions.
-		std::optional<hdk::vec2> chase_target = std::nullopt;
+		std::optional<tz::vec2> chase_target = std::nullopt;
 		// Entity Actions
 
 		// Recursive Entity Actions (Can add other actions).
@@ -747,8 +747,8 @@ namespace game
 		{
 			actor().motion = {};
 			// Get the displacement between the actor() and its chase target.
-			const hdk::vec2 target_pos = chase_target.value();
-			hdk::vec2 dist_to_target = target_pos - quad.position;
+			const tz::vec2 target_pos = chase_target.value();
+			tz::vec2 dist_to_target = target_pos - quad.position;
 			// Find out which direction we need to go, or if we're already at the target.
 			// So why can't we use touchdist here?
 			// Let's say x is a ghost, and y is the player
@@ -797,8 +797,8 @@ namespace game
 				{
 					std::uniform_real_distribution<float> dist2(flag.max_wander_range * -0.5f, flag.max_wander_range * 0.5f);
 					// Set an action to wander to a nearby location.
-					hdk::vec2 target_loc = quad.position;
-					target_loc += hdk::vec2{dist2(this->rng), dist2(this->rng)};
+					tz::vec2 target_loc = quad.position;
+					target_loc += tz::vec2{dist2(this->rng), dist2(this->rng)};
 					actor().entity.add<ActionID::GotoTarget>
 					({
 						.target_position = target_loc
@@ -811,7 +811,7 @@ namespace game
 		if(!actor().dead())
 		{
 			float sp = actor().get_current_stats().movement_speed;
-			hdk::vec2 position_change{0.0f, 0.0f};
+			tz::vec2 position_change{0.0f, 0.0f};
 			if(actor().motion.contains(ActorMotion::MoveLeft))
 			{
 				position_change[0] -= 1;
@@ -838,7 +838,7 @@ namespace game
 
 	std::vector<std::size_t> Scene::get_living_players() const
 	{
-		HDK_PROFZONE("Scene - Query Living Players", 0xFF00AA00);
+		TZ_PROFZONE("Scene - Query Living Players", 0xFF00AA00);
 		std::vector<std::size_t> ret;
 		for(std::size_t i = 0; i < this->size(); i++)
 		{
@@ -853,7 +853,7 @@ namespace game
 
 	std::optional<std::size_t> Scene::find_first_player() const
 	{
-		HDK_PROFZONE("Scene - Find First Player", 0xFF00AA00);
+		TZ_PROFZONE("Scene - Find First Player", 0xFF00AA00);
 		auto players = this->get_living_players();
 		if(!players.empty())
 		{
@@ -865,7 +865,7 @@ namespace game
 	Box Scene::get_bounding_box(std::size_t actor_id) const
 	{
 		const QuadRenderer::ElementData& quad = this->qrenderer.elements()[actor_id];
-		hdk::vec2 scale = quad.scale;
+		tz::vec2 scale = quad.scale;
 		// Bounding box should be affected by custom reach.
 		const Actor& actor = this->get_actor(actor_id);
 		if(actor.flags.has<FlagID::CustomReach>())
@@ -873,8 +873,8 @@ namespace game
 			const auto& flag = actor.flags.get<FlagID::CustomReach>()->data();
 			scale *= flag.reach;
 		}
-		hdk::vec2 min{-0.5f, -0.5f};
-		hdk::vec2 max{0.5f, 0.5f};
+		tz::vec2 min{-0.5f, -0.5f};
+		tz::vec2 max{0.5f, 0.5f};
 		scale[0] = std::abs(scale[0]);
 		scale[1] = std::abs(scale[0]);
 		min[0] *= scale[0];
@@ -891,7 +891,7 @@ namespace game
 		#if TZ_DEBUG
 			this->debug_collision_query_count++;
 		#endif
-		HDK_PROFZONE("Scene - Collision Query", 0xFF00AA00);
+		TZ_PROFZONE("Scene - Collision Query", 0xFF00AA00);
 		QuadtreeNode a_node{.actor_id = actor_a};
 		QuadtreeNode b_node{.actor_id = actor_b};
 		return std::find_if(this->intersections.begin(), this->intersections.end(), [&a_node, b_node](const auto& pair)
@@ -909,8 +909,8 @@ namespace game
 
 	bool Scene::is_in_bounds(std::size_t actor_id) const
 	{
-		HDK_PROFZONE("Scene - Bounds Check", 0xFF00AA00);
-		hdk::vec2 pos = this->qrenderer.elements()[actor_id].position;
+		TZ_PROFZONE("Scene - Bounds Check", 0xFF00AA00);
+		tz::vec2 pos = this->qrenderer.elements()[actor_id].position;
 		auto bounds = this->get_world_boundaries();
 		return
 			bounds.first[0] <= pos[0] && pos[0] <= bounds.second[0]
@@ -919,27 +919,27 @@ namespace game
 
 	bool Scene::is_in_level(std::size_t actor_id) const
 	{
-		HDK_PROFZONE("Scene - Level Bounds Check", 0xFF00AA00);
-		hdk::vec2 pos = this->qrenderer.elements()[actor_id].position;
-		hdk::vec2 level_min = this->level_boundaries * -1.0f;
+		TZ_PROFZONE("Scene - Level Bounds Check", 0xFF00AA00);
+		tz::vec2 pos = this->qrenderer.elements()[actor_id].position;
+		tz::vec2 level_min = this->level_boundaries * -1.0f;
 		return
 			level_min[0] <= pos[0] && pos[0] <= this->level_boundaries[0]
 		     && level_min[1] <= pos[1] && pos[1] <= this->level_boundaries[1];
 	}
 
-	std::pair<hdk::vec2, hdk::vec2> Scene::get_world_boundaries() const
+	std::pair<tz::vec2, tz::vec2> Scene::get_world_boundaries() const
 	{
 		const float width_mod = this->qrenderer.get_width_multiplier();
-		const hdk::vec2 camera_pos = this->qrenderer.camera_position();
+		const tz::vec2 camera_pos = this->qrenderer.camera_position();
 		return
 		{
-			hdk::vec2{-width_mod, -1.0f} + camera_pos, hdk::vec2{width_mod, 1.0f} + camera_pos
+			tz::vec2{-width_mod, -1.0f} + camera_pos, tz::vec2{width_mod, 1.0f} + camera_pos
 		};
 	}
 
 	void Scene::update_camera()
 	{
-		HDK_PROFZONE("Scene - Camera Update", 0xFF00AA00);
+		TZ_PROFZONE("Scene - Camera Update", 0xFF00AA00);
 
 		// Firstly check zoom.
 		int ybefore = this->mouse_scroll_data;	
@@ -973,10 +973,10 @@ namespace game
 
 		constexpr float fmax = std::numeric_limits<float>::max();
 		constexpr float fmin = std::numeric_limits<float>::min();
-		hdk::vec2 min{fmax, fmax}, max{fmin, fmin}, avg{0.0f, 0.0f};
+		tz::vec2 min{fmax, fmax}, max{fmin, fmin}, avg{0.0f, 0.0f};
 		for(std::size_t actor_id : actors_to_view)
 		{
-			hdk::vec2 pos = this->qrenderer.elements()[actor_id].position;
+			tz::vec2 pos = this->qrenderer.elements()[actor_id].position;
 			min[0] = std::min(min[0], pos[0]);
 			min[1] = std::min(min[1], pos[1]);
 			max[0] = std::max(max[0], pos[0]);
@@ -986,7 +986,7 @@ namespace game
 		}
 		avg /= static_cast<float>(actors_to_view.size());
 		// We want to view 'avg'. If it's far enough from the camera by some constant we will start to move towards it.
-		const hdk::vec2 camera_displacement = avg - this->qrenderer.camera_position();
+		const tz::vec2 camera_displacement = avg - this->qrenderer.camera_position();
 		if(camera_displacement.length() > (0.5f * this->qrenderer.get_camera_zoom()))
 		{
 			
@@ -1000,7 +1000,7 @@ namespace game
 
 	void Scene::update_status_events(std::size_t id)
 	{
-		HDK_PROFZONE("Scene - Status Events Update", 0xFF00AA00);
+		TZ_PROFZONE("Scene - Status Events Update", 0xFF00AA00);
 		const Actor& actor = this->get_actor(id);
 		QuadRenderer::ElementData& quad = this->qrenderer.elements()[id];
 		int status_effect = StatusEffect_None;
@@ -1017,13 +1017,13 @@ namespace game
 
 	void Scene::update_quadtree(std::size_t actor_id)
 	{
-		HDK_PROFZONE("Scene - Quadtree Update", 0xFF00AA00);
+		TZ_PROFZONE("Scene - Quadtree Update", 0xFF00AA00);
 		this->quadtree.add({.actor_id = actor_id, .bounding_box = this->get_bounding_box(actor_id)});
 	}
 
 	bool Scene::garbage_collect(std::size_t id)
 	{
-		HDK_PROFZONE("Scene - Garbage Collect", 0xFF00AA00);
+		TZ_PROFZONE("Scene - Garbage Collect", 0xFF00AA00);
 		// Erase means to swap with the last and then pop it back
 		const bool dead = this->get_actor(id).dead();
 		if(dead)
@@ -1053,7 +1053,7 @@ namespace game
 				// Actor either despawns in 45s, or a custom value.
 				if(this->get_actor(id).flags.has<FlagID::CustomGarbageCollectPeriod>())
 				{
-					tz::Duration d{this->get_actor(id).flags.get<FlagID::CustomGarbageCollectPeriod>()->data().delay_millis};
+					tz::duration d{this->get_actor(id).flags.get<FlagID::CustomGarbageCollectPeriod>()->data().delay_millis};
 					this->despawn_timer.emplace(id, d);
 				}
 				else
@@ -1071,7 +1071,7 @@ namespace game
 
 	void Scene::collision_resolution()
 	{
-		HDK_PROFZONE("Scene - Collision Resolution", 0xFF00AA00);
+		TZ_PROFZONE("Scene - Collision Resolution", 0xFF00AA00);
 		for(const auto& [node_a, node_b] : this->intersections)
 		{
 			std::size_t a_id = node_a.actor_id;
@@ -1084,7 +1084,7 @@ namespace game
 
 	void Scene::resolve_collision(std::size_t a_id, std::size_t b_id)
 	{
-		HDK_PROFZONE("Scene - Single Collision Resolution", 0xFF00AA00);
+		TZ_PROFZONE("Scene - Single Collision Resolution", 0xFF00AA00);
 		Actor& actor = this->get_actor(a_id);
 		QuadRenderer::ElementData& quad = this->qrenderer.elements()[a_id];
 		Actor& other = this->get_actor(b_id);
@@ -1223,7 +1223,7 @@ namespace game
 
 	void Scene::on_actor_hit(ActorHitEvent e)
 	{
-		HDK_PROFZONE("Scene - On Actor Hit", 0xFF8B4513);
+		TZ_PROFZONE("Scene - On Actor Hit", 0xFF8B4513);
 		if(e.attacker.flags.has<FlagID::ActionOnHit>())
 		{
 			auto& flag = e.attacker.flags.get<FlagID::ActionOnHit>()->data();
@@ -1238,8 +1238,8 @@ namespace game
 
 	void Scene::on_actor_struck(ActorStruckEvent e)
 	{
-		HDK_PROFZONE("Scene - On Actor Struck", 0xFF8B4513);
-		//hdk::report("%s struck by %s", e.attackee.name, e.attacker.name);
+		TZ_PROFZONE("Scene - On Actor Struck", 0xFF8B4513);
+		//tz::report("%s struck by %s", e.attackee.name, e.attacker.name);
 		if(e.attackee.flags.has<FlagID::ActionOnStruck>())
 		{
 			auto& flag = e.attackee.flags.get<FlagID::ActionOnStruck>()->data();
@@ -1258,16 +1258,16 @@ namespace game
 
 	void Scene::on_actor_kill(ActorKillEvent e)
 	{
-		HDK_PROFZONE("Scene - On Actor Kill", 0xFF8B4513);
-		//hdk::report("%s killed %s", e.killer.name, e.killee.name);
+		TZ_PROFZONE("Scene - On Actor Kill", 0xFF8B4513);
+		//tz::report("%s killed %s", e.killer.name, e.killee.name);
 	}
 
 	void Scene::on_actor_death(ActorDeathEvent e)
 	{
-		HDK_PROFZONE("Scene - On Actor Death", 0xFF8B4513);
+		TZ_PROFZONE("Scene - On Actor Death", 0xFF8B4513);
 		// If something dies, it's not moving anymore.
 		e.killee.motion = {};
-		//hdk::report("%s killed by %s", e.killee.name, e.killer.name);
+		//tz::report("%s killed by %s", e.killee.name, e.killer.name);
 		if(e.killee.flags.has<FlagID::ActionOnDeath>())
 		{
 			auto& flag = e.killee.flags.get<FlagID::ActionOnDeath>()->data();

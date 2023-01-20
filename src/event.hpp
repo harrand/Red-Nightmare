@@ -34,10 +34,10 @@ namespace game
 	public:
 		ActorEventHandler() = default;
 
-		tz::Callback<ActorHitEvent> actor_hit;
-		tz::Callback<ActorStruckEvent> actor_struck;
-		tz::Callback<ActorKillEvent> actor_kill;
-		tz::Callback<ActorDeathEvent> actor_death;
+		tz::callback<ActorHitEvent> actor_hit;
+		tz::callback<ActorStruckEvent> actor_struck;
+		tz::callback<ActorKillEvent> actor_kill;
+		tz::callback<ActorDeathEvent> actor_death;
 	};
 }
 

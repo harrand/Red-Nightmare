@@ -71,7 +71,6 @@ tz_add_executable(
 		src/main.cpp
 )
 
-
 target_link_libraries(rednightmare PRIVATE rednightmare_gamelib stb)
 
 add_text(

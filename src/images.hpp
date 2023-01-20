@@ -4,7 +4,7 @@
 
 namespace game
 {
-	// See top of images.cpp for implementation of TextureIDs. Each textureid corresponds to a compile-time loaded png blob which is converted into an ImageResource at runtime.
+	// See top of images.cpp for implementation of TextureIDs. Each textureid corresponds to a compile-time loaded png blob which is converted into an image_resource at runtime.
 	enum class TextureID : std::uint32_t
 	{
 		Missing,
@@ -214,8 +214,8 @@ namespace game
 		Count
 	};
 
-	tz::gl::ImageResource load_image(TextureID texid);
-	tz::gl::ImageResource load_image_data(std::string_view img_file_data);
+	tz::gl::image_resource load_image(TextureID texid);
+	tz::gl::image_resource load_image_data(std::string_view img_file_data);
 	TextureID get_normal_map_for(TextureID tex);
 }
 

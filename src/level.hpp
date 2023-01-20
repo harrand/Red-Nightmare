@@ -17,8 +17,8 @@ namespace game
 		PlayerSpawn
 	};
 	
-	using ColourActorMapping = std::unordered_map<hdk::vec3ui, ActorType>;
-	using ColourAttributeMapping = std::unordered_map<hdk::vec3ui, LevelAttribute>;
+	using ColourActorMapping = std::unordered_map<tz::vec3ui, ActorType>;
+	using ColourAttributeMapping = std::unordered_map<tz::vec3ui, LevelAttribute>;
 
 	struct LevelPalette
 	{
@@ -41,9 +41,9 @@ namespace game
 
 	struct Level
 	{
-		hdk::vec2 player_spawn_location = {2.0f, 2.0f};
-		std::vector<std::pair<hdk::vec2, ActorType>> actor_spawns = {};
-		hdk::vec2 max_level_coords = hdk::vec2::zero();
+		tz::vec2 player_spawn_location = {2.0f, 2.0f};
+		std::vector<std::pair<tz::vec2, ActorType>> actor_spawns = {};
+		tz::vec2 max_level_coords = tz::vec2::zero();
 		Backdrop backdrop;
 		EffectID weather_effect = EffectID::None;
 		float ambient_lighting = 1.0f;
@@ -54,7 +54,7 @@ namespace game
 		GenerateBorder,
 		Count
 	};
-	using LevelLayoutFlags = tz::EnumField<LevelLayoutFlag>;
+	using LevelLayoutFlags = tz::enum_field<LevelLayoutFlag>;
 	constexpr std::array<const char*, static_cast<std::size_t>(LevelLayoutFlag::Count)> level_layout_flag_names =
 	{
 		"Generate Border",
@@ -92,13 +92,13 @@ namespace game
 	};
 
 	Level load_level(LevelID lid);
-	Level load_level_from_image(const tz::gl::ImageResource& level_image, Backdrop backdrop = {}, EffectID weather_effect = EffectID::None, float ambient_lighting = 1.0f);
+	Level load_level_from_image(const tz::gl::image_resource& level_image, Backdrop backdrop = {}, EffectID weather_effect = EffectID::None, float ambient_lighting = 1.0f);
 
-	tz::gl::ImageResource random_level_image(const RandomLevelGenerationOptions& options);
-	void impl_enact_blackwhitelists(const ActorTypes& blacklist, const ActorTypes& whitelist, tz::gl::ImageResource& level_image);
+	tz::gl::image_resource random_level_image(const RandomLevelGenerationOptions& options);
+	void impl_enact_blackwhitelists(const ActorTypes& blacklist, const ActorTypes& whitelist, tz::gl::image_resource& level_image);
 	struct RandomLevelData
 	{
-		tz::gl::ImageResource level_image;
+		tz::gl::image_resource level_image;
 		Backdrop backdrop = {};
 		EffectID weather_effect = EffectID::None;
 	};

@@ -9,7 +9,7 @@ namespace game
 			case StoryZone::BlanchfieldGraveyard:
 				return
 				{
-					.initial_spawn = hdk::vec2{15.88f, 7.38f},
+					.initial_spawn = tz::vec2{15.88f, 7.38f},
 					.levels =
 					{
 						game::load_level(LevelID::DevLevel1),
@@ -19,7 +19,7 @@ namespace game
 				};
 			break;
 		}
-		hdk::error("Unimplemented story zone");
+		tz::error("Unimplemented story zone");
 		return {};
 	}
 	
@@ -71,7 +71,7 @@ namespace game
 						intro.ambient_lighting = 0.4f;
 					break;
 					default:
-						hdk::error("Unsupported biome");
+						tz::error("Unsupported biome");
 					break;
 				}
 				z.levels[l] = intro;
@@ -115,7 +115,7 @@ namespace game
 		struct BoolProxy{bool b = false;};
 		// Static data.
 		static int level_count = 4;
-		static hdk::vec2i dims = hdk::vec2i::filled(32);
+		static tz::vec2i dims = tz::vec2i::filled(32);
 		static int sparsity = 75;
 		static bool intro_level_enabled = true;
 		static ProceduralZoneIntroLevel intro_level{.biome = ZoneBiome::Grassy};

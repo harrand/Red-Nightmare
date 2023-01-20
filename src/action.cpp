@@ -1,6 +1,6 @@
 #include "action.hpp"
 #include "scene.hpp"
-#include "hdk/profile.hpp"
+#include "tz/core/profile.hpp"
 #include "tz/wsi/keyboard.hpp"
 
 namespace game
@@ -10,7 +10,7 @@ namespace game
 
 	void ActionEntity::update()
 	{
-		HDK_PROFZONE("ActionEntity - Update", 0xFF00AA00);
+		TZ_PROFZONE("ActionEntity - Update", 0xFF00AA00);
 		// Remove all completed actions.
 		this->components.erase(std::remove_if(this->components.begin(), this->components.end(), [](const auto& comp_ptr)
 		{
@@ -84,7 +84,7 @@ namespace game
 	ACTION_IMPL_END(ActionID::MoveRelative)
 //--------------------------------------------------------------------------------------------------
 	ACTION_IMPL_BEGIN(ActionID::LaunchToMouse)
-		const hdk::vec2 to_mouse = scene.mouse_position - scene.quad().position;
+		const tz::vec2 to_mouse = scene.mouse_position - scene.quad().position;
 		scene.actor().entity.add<ActionID::Launch>
 		({
 			.direction = scene.mouse_position - scene.quad().position,
@@ -98,8 +98,8 @@ namespace game
 		{
 			return;
 		}
-		hdk::vec2 target_pos = scene.get_quad(players.front()).position;
-		hdk::vec2 to_target = target_pos - scene.quad().position;
+		tz::vec2 target_pos = scene.get_quad(players.front()).position;
+		tz::vec2 to_target = target_pos - scene.quad().position;
 		scene.actor().entity.add<ActionID::Launch>
 		({
 			.direction = to_target,
@@ -111,7 +111,7 @@ namespace game
 		std::uniform_real_distribution<float> dist{-1.0f, 1.0f};
 		scene.actor().entity.add<ActionID::Launch>
 		({
-			.direction = hdk::vec2{dist(scene.rng), dist(scene.rng)},
+			.direction = tz::vec2{dist(scene.rng), dist(scene.rng)},
 			.speed_multiplier = action.data().speed_multiplier
 		});
 	ACTION_IMPL_END(ActionID::LaunchRandomDirection)

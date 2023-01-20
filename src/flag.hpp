@@ -3,9 +3,9 @@
 #include "entity.hpp"
 #include "action.hpp"
 #include "light.hpp"
-#include "hdk/data/vector.hpp"
-#include "hdk/memory/clone.hpp"
-#include "tz/core/containers/enum_field.hpp"
+#include "tz/core/data/vector.hpp"
+#include "tz/core/memory/clone.hpp"
+#include "tz/core/data/enum_field.hpp"
 #include "tz/wsi/mouse.hpp"
 
 namespace game
@@ -96,7 +96,7 @@ namespace game
 	template<FlagID ID>
 	struct FlagParams{};
 
-	class IFlag : public hdk::unique_cloneable<IFlag>
+	class IFlag : public tz::unique_cloneable<IFlag>
 	{
 	public:
 		virtual constexpr FlagID get_id() const = 0;
@@ -125,7 +125,7 @@ namespace game
 	struct FlagParams<FlagID::Light>
 	{
 		PointLight light;
-		hdk::vec2 offset = hdk::vec2::zero();
+		tz::vec2 offset = tz::vec2::zero();
 		// How much should the power of the light change sinusoidally over time?
 		float power_variance = 0.0f;
 		// How quickly should the variance occur (1.0f means sin(time in seconds))
@@ -149,7 +149,7 @@ namespace game
 	template<>
 	struct FlagParams<FlagID::CustomScale>
 	{
-		hdk::vec2 scale;
+		tz::vec2 scale;
 	};
 
 	template<>
@@ -174,7 +174,7 @@ namespace game
 	struct ActionClickData
 	{
 		ActionEntity actions;
-		tz::Delay icd;
+		tz::delay icd;
 	};
 
 	template<>
@@ -248,10 +248,10 @@ namespace game
 	template<>
 	struct FlagParams<FlagID::Collide>
 	{
-		tz::EnumField<ActorType> collision_filter = {};
+		tz::enum_field<ActorType> collision_filter = {};
 		/// If set, anything that does not satisfy this predicate is excluded, unless whitelisted.
 		std::function<bool(const Actor&)> filter_predicate = nullptr;
-		tz::EnumField<ActorType> collision_blacklist = {};
+		tz::enum_field<ActorType> collision_blacklist = {};
 		/// If set, anything that satisfies this predicate is excluded, unless whitelisted.
 		std::function<bool(const Actor&)> blacklist_predicate = nullptr;
 	};

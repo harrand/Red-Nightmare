@@ -20,12 +20,12 @@ namespace game
 	{
 		const std::size_t this_id;
 
-		const hdk::vec2 mouse_position;
-		std::optional<hdk::vec2>& chase_target;
+		const tz::vec2 mouse_position;
+		std::optional<tz::vec2>& chase_target;
 		float& touch_distance;
 		std::default_random_engine& rng;
 		std::function<std::vector<std::size_t>()> get_living_players;
-		std::function<std::pair<hdk::vec2, hdk::vec2>()> get_world_boundaries;
+		std::function<std::pair<tz::vec2, tz::vec2>()> get_world_boundaries;
 		std::function<std::size_t(ActorType)> spawn_actor;
 		std::function<Actor&(std::size_t)> get_actor;
 		std::function<QuadRenderer::ElementData&(std::size_t)> get_quad;
@@ -75,7 +75,7 @@ namespace game
 		void impl_load_level(const Level& level);
 		void impl_next_level();
 		void impl_prev_level();
-		hdk::vec2 get_mouse_position() const;
+		tz::vec2 get_mouse_position() const;
 		void erase(std::size_t id);
 		ActorPostUpdateResult actor_post_update(std::size_t id);
 		std::vector<std::size_t> get_living_players() const;
@@ -86,7 +86,7 @@ namespace game
 
 		bool is_in_bounds(std::size_t actor_id) const;
 		bool is_in_level(std::size_t actor_id) const;
-		std::pair<hdk::vec2, hdk::vec2> get_world_boundaries() const;
+		std::pair<tz::vec2, tz::vec2> get_world_boundaries() const;
 		void update_camera();
 		void update_status_events(std::size_t id);
 		void update_quadtree(std::size_t actor_id);
@@ -110,20 +110,20 @@ namespace game
 			bool operator==(const QuadtreeNode& rhs) const{return this->actor_id == rhs.actor_id;}
 		};
 
-		Quadtree<QuadtreeNode> quadtree{Box{hdk::vec2{-100.0f, -100.0f}, hdk::vec2{100.0f, 100.0f}}};
+		Quadtree<QuadtreeNode> quadtree{Box{tz::vec2{-100.0f, -100.0f}, tz::vec2{100.0f, 100.0f}}};
 		Quadtree<QuadtreeNode>::IntersectionState intersections = {};
 		QuadRenderer qrenderer;
 		std::vector<Actor> actors;
 		Actor world_actor = game::create_actor(ActorType::World);
 		std::default_random_engine rng;
 		int mouse_scroll_data = 0;
-		std::unordered_map<std::size_t, tz::Delay> despawn_timer;
+		std::unordered_map<std::size_t, tz::delay> despawn_timer;
 		ActorEventHandler events;
-		hdk::vec2 level_boundaries = hdk::vec2::zero();
+		tz::vec2 level_boundaries = tz::vec2::zero();
 		mutable std::size_t debug_collision_query_count = 0;
 		std::size_t impl_light_actor_count = 0;
 		Zone zone = {};
-		tz::CallbackHandle game_bar_dbgui_callback = hdk::nullhand;
+		tz::callback_handle game_bar_dbgui_callback = tz::nullhand;
 	};
 }
 

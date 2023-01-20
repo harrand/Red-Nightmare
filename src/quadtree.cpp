@@ -6,8 +6,8 @@ namespace game
 	{
 		Box QuadtreeHelper::compute_quadrant_box(const Box& parent_box, std::size_t quadrant_id)
 		{
-			hdk::vec2 min = {parent_box.get_left(), parent_box.get_bottom()};
-			hdk::vec2 child_dimensions = parent_box.get_dimensions() / 2.0f;
+			tz::vec2 min = {parent_box.get_left(), parent_box.get_bottom()};
+			tz::vec2 child_dimensions = parent_box.get_dimensions() / 2.0f;
 			switch(quadrant_id)
 			{
 				/*
@@ -28,14 +28,14 @@ namespace game
 				case 3:
 				{
 					// south east
-					hdk::vec2 cmin = {min[0] + child_dimensions[0], min[1]};
+					tz::vec2 cmin = {min[0] + child_dimensions[0], min[1]};
 					return {cmin, cmin + child_dimensions};
 				}
 				break;
 				case 0:
 				{
 					// north west
-					hdk::vec2 cmin = {min[0], min[1] + child_dimensions[1]};
+					tz::vec2 cmin = {min[0], min[1] + child_dimensions[1]};
 					return {cmin, cmin + child_dimensions};
 				}
 				break;
@@ -44,7 +44,7 @@ namespace game
 					return {min + child_dimensions, min + child_dimensions + child_dimensions};
 				break;
 				default:
-					hdk::error("Invalid quadrant id %zu. Must be 0-3", quadrant_id);
+					tz::error("Invalid quadrant id %zu. Must be 0-3", quadrant_id);
 					return {{}, {}};
 				break;
 			}

@@ -2,7 +2,7 @@
 
 namespace game
 {
-	Box::Box(hdk::vec2 min, hdk::vec2 max):
+	Box::Box(tz::vec2 min, tz::vec2 max):
 	bottom_left(min),
 	length(max - min){}
 
@@ -26,12 +26,12 @@ namespace game
 		return this->bottom_left[1];
 	}
 
-	hdk::vec2 Box::get_centre() const
+	tz::vec2 Box::get_centre() const
 	{
 		return {this->get_left() + (length[0] * 0.5f), this->get_bottom() + (length[1] * 0.5f)};
 	}
 
-	hdk::vec2 Box::get_dimensions() const
+	tz::vec2 Box::get_dimensions() const
 	{
 		return this->length;
 	}

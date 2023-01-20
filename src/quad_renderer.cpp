@@ -3,7 +3,7 @@
 #include "tz/gl/imported_shaders.hpp"
 #include "tz/gl/device.hpp"
 #include "tz/dbgui/dbgui.hpp"
-#include "hdk/profile.hpp"
+#include "tz/core/profile.hpp"
 
 #include ImportedShaderHeader(quad, vertex)
 #include ImportedShaderHeader(quad, fragment)
@@ -11,8 +11,8 @@
 namespace game
 {
 	QuadRenderer::QuadRenderer():
-	element_buffer_handle(hdk::nullhand),
-	render_buffer_handle(hdk::nullhand),
+	element_buffer_handle(tz::nullhand),
+	render_buffer_handle(tz::nullhand),
 	rendererh(this->make_renderer())
 	{
 		this->update_render_data();
@@ -24,10 +24,10 @@ namespace game
 
 	void QuadRenderer::render()
 	{
-		HDK_PROFZONE("QuadRenderer - Render", 0xFF00AA00);
+		TZ_PROFZONE("QuadRenderer - Render", 0xFF00AA00);
 		this->update_render_data();
 		// 2 triangles per quad.
-		tz::gl::device().get_renderer(this->rendererh).render(this->quad_count * 2);
+		tz::gl::get_device().get_renderer(this->rendererh).render(this->quad_count * 2);
 	}
 
 	void QuadRenderer::dbgui()
@@ -41,7 +41,7 @@ namespace game
 		static bool wireframe_mode = false;
 		if(ImGui::Checkbox("Wireframe Mode", &wireframe_mode))
 		{
-			tz::gl::device().get_renderer(this->rendererh).edit(tz::gl::RendererEditBuilder{}
+			tz::gl::get_device().get_renderer(this->rendererh).edit(tz::gl::RendererEditBuilder{}
 			.render_state
 			({
 				.wireframe_mode = wireframe_mode
@@ -62,27 +62,27 @@ namespace game
 
 	const QuadRenderer::ElementData& QuadRenderer::overlay(OverlayID ovlid) const
 	{
-		return tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<const QuadRenderer::ElementData>()[static_cast<std::size_t>(ovlid)];
+		return tz::gl::get_device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<const QuadRenderer::ElementData>()[static_cast<std::size_t>(ovlid)];
 	}
 
 	QuadRenderer::ElementData& QuadRenderer::overlay(OverlayID ovlid)
 	{
-		return tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<QuadRenderer::ElementData>()[static_cast<std::size_t>(ovlid)];
+		return tz::gl::get_device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<QuadRenderer::ElementData>()[static_cast<std::size_t>(ovlid)];
 	}
 
 	std::span<const QuadRenderer::ElementData> QuadRenderer::elements() const
 	{
-		return tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<const QuadRenderer::ElementData>().subspan(static_cast<std::size_t>(OverlayID::Count), this->quad_count - static_cast<std::size_t>(OverlayID::Count));
+		return tz::gl::get_device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<const QuadRenderer::ElementData>().subspan(static_cast<std::size_t>(OverlayID::Count), this->quad_count - static_cast<std::size_t>(OverlayID::Count));
 	}
 
 	std::span<QuadRenderer::ElementData> QuadRenderer::elements()
 	{
-		return tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<QuadRenderer::ElementData>().subspan(static_cast<std::size_t>(OverlayID::Count), this->quad_count - static_cast<std::size_t>(OverlayID::Count));
+		return tz::gl::get_device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<QuadRenderer::ElementData>().subspan(static_cast<std::size_t>(OverlayID::Count), this->quad_count - static_cast<std::size_t>(OverlayID::Count));
 	}
 
 	void QuadRenderer::set_effect(EffectID effect, std::size_t effect_number)
 	{
-		hdk::assert(effect != EffectID::Count, "Cannot set effect to EffectID::Count");
+		tz::assert(effect != EffectID::Count, "Cannot set effect to EffectID::Count");
 		auto oid = static_cast<OverlayID>(static_cast<int>(OverlayID::Effect) + effect_number);
 		if(effect == EffectID::None)
 		{
@@ -103,9 +103,9 @@ namespace game
 		auto eid = static_cast<std::size_t>(this->overlay(oid).texture_id);
 		eid += 1;
 		constexpr auto texcount = static_cast<std::size_t>(TextureID::Count);
-		hdk::assert(eid >= texcount);
+		tz::assert(eid >= texcount);
 		eid -= texcount;
-		hdk::assert(eid < static_cast<std::size_t>(EffectID::Count));
+		tz::assert(eid < static_cast<std::size_t>(EffectID::Count));
 		return static_cast<EffectID>(eid);
 	}
 	
@@ -121,13 +121,13 @@ namespace game
 
 	void QuadRenderer::push()
 	{
-		hdk::assert(this->quad_count < QuadRenderer::max_quad_count, "Ran out of quad storage in QuadRenderer.");
-		tz::gl::device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<QuadRenderer::ElementData>()[this->quad_count++] = {};
+		tz::assert(this->quad_count < QuadRenderer::max_quad_count, "Ran out of quad storage in QuadRenderer.");
+		tz::gl::get_device().get_renderer(this->rendererh).get_resource(this->element_buffer_handle)->data_as<QuadRenderer::ElementData>()[this->quad_count++] = {};
 	}
 
 	void QuadRenderer::pop()
 	{
-		hdk::assert(this->quad_count > static_cast<std::size_t>(OverlayID::Count), "Cannot pop when there are already no quads");
+		tz::assert(this->quad_count > static_cast<std::size_t>(OverlayID::Count), "Cannot pop when there are already no quads");
 		this->quad_count--;
 	}
 	
@@ -142,23 +142,23 @@ namespace game
 
 	void QuadRenderer::erase(std::size_t id)
 	{
-		hdk::assert(id < this->elements().size(), "Invalid Quad ID");
+		tz::assert(id < this->elements().size(), "Invalid Quad ID");
 		std::swap(this->elements()[id], this->elements().back());
 		this->pop();
 	}
 
 	float QuadRenderer::get_width_multiplier() const
 	{
-		auto dims = static_cast<hdk::vec2>(tz::window().get_dimensions());
+		auto dims = static_cast<tz::vec2>(tz::window().get_dimensions());
 		return dims[0] / dims[1];
 	}
 
-	const hdk::vec2& QuadRenderer::camera_position() const
+	const tz::vec2& QuadRenderer::camera_position() const
 	{
 		return this->camera_pos;
 	}
 
-	hdk::vec2& QuadRenderer::camera_position()
+	tz::vec2& QuadRenderer::camera_position()
 	{
 		return this->camera_pos;
 	}
@@ -173,24 +173,24 @@ namespace game
 		this->camera_zoom = zoom;
 	}
 
-	tz::gl::RendererHandle QuadRenderer::make_renderer()
+	tz::gl::renderer_handle QuadRenderer::make_renderer()
 	{
-		tz::gl::RendererInfo rinfo;
+		tz::gl::renderer_info rinfo;
 
-		rinfo.shader().set_shader(tz::gl::ShaderStage::Vertex, ImportedShaderSource(quad, vertex));
-		rinfo.shader().set_shader(tz::gl::ShaderStage::Fragment, ImportedShaderSource(quad, fragment));
+		rinfo.shader().set_shader(tz::gl::shader_stage::vertex, ImportedShaderSource(quad, vertex));
+		rinfo.shader().set_shader(tz::gl::shader_stage::fragment, ImportedShaderSource(quad, fragment));
 
 		// A buffer to store data for each quad (element buffer).
 		std::array<QuadRenderer::ElementData, QuadRenderer::max_quad_count> element_data;
 		std::fill(element_data.begin(), element_data.end(), QuadRenderer::ElementData{});
-		tz::gl::BufferResource element_buffer = tz::gl::BufferResource::from_many(element_data,
+		tz::gl::buffer_resource element_buffer = tz::gl::buffer_resource::from_many(element_data,
 		{
-			.access = tz::gl::ResourceAccess::DynamicFixed
+			.access = tz::gl::resource_access::dynamic_fixed
 		});
 
-		tz::gl::BufferResource render_buffer = tz::gl::BufferResource::from_one(QuadRenderer::RenderData{},
+		tz::gl::buffer_resource render_buffer = tz::gl::buffer_resource::from_one(QuadRenderer::RenderData{},
 		{
-			.access = tz::gl::ResourceAccess::DynamicFixed
+			.access = tz::gl::resource_access::dynamic_fixed
 		});
 		this->element_buffer_handle = rinfo.add_resource(element_buffer);
 		this->render_buffer_handle = rinfo.add_resource(render_buffer);
@@ -215,18 +215,18 @@ namespace game
 			rinfo.ref_resource(comp);
 		}
 
-		return tz::gl::device().create_renderer(rinfo);
+		return tz::gl::get_device().create_renderer(rinfo);
 	}
 
 	void QuadRenderer::update_render_data()
 	{
-		HDK_PROFZONE("QuadRenderer - Update Render Data", 0xFF8B4513);
-		RenderData& data = tz::gl::device().get_renderer(this->rendererh).get_resource(this->render_buffer_handle)->data_as<RenderData>().front();
+		TZ_PROFZONE("QuadRenderer - Update Render Data", 0xFF8B4513);
+		RenderData& data = tz::gl::get_device().get_renderer(this->rendererh).get_resource(this->render_buffer_handle)->data_as<RenderData>().front();
 		const float aspect_ratio = this->get_width_multiplier();
 		const float cam_mult = this->camera_zoom;
 		data =
 		{
-			.view = tz::view(this->camera_pos.with_more(0.0f), hdk::vec3{0.0f, 0.0f, 0.0f}),
+			.view = tz::view(this->camera_pos.with_more(0.0f), tz::vec3{0.0f, 0.0f, 0.0f}),
 			.projection = tz::orthographic(-aspect_ratio * cam_mult, aspect_ratio * cam_mult, 1.0f * cam_mult, -1.0f * cam_mult, 0.0f, -1.0f),
 			.ambient_lighting = this->ambient_lighting
 		};

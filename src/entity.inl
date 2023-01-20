@@ -2,8 +2,8 @@
 
 namespace game
 {
-	#define ENTITY_IMPL Entity<T, IComponent, Component, ComponentParams>
-	#define TEMPLATE_MAGIC template<typename T, ComponentInterface<T> IComponent, template<T> typename Component, template<T> typename ComponentParams>
+	#define ENTITY_IMPL Entity<T, icomponent, Component, ComponentParams>
+	#define TEMPLATE_MAGIC template<typename T, ComponentInterface<T> icomponent, template<T> typename Component, template<T> typename ComponentParams>
 
 	TEMPLATE_MAGIC
 	template<typename... C>
@@ -15,7 +15,7 @@ namespace game
 		{
 			auto comp_clone = std::make_unique<decltype(cs)>(std::move(cs.data()));
 			auto* comp_released = comp_clone.release();
-			this->components.push_back(std::unique_ptr<IComponent>{static_cast<IComponent*>(comp_released)});
+			this->components.push_back(std::unique_ptr<icomponent>{static_cast<icomponent*>(comp_released)});
 		} (), ...);
 	}
 
@@ -48,7 +48,7 @@ namespace game
 		}
 		auto derived_ptr = std::make_unique<Component<t>>(params);
 		Component<t>* derived_owner = derived_ptr.release();
-		this->components.push_back(std::unique_ptr<IComponent>(static_cast<IComponent*>(derived_owner)));
+		this->components.push_back(std::unique_ptr<icomponent>(static_cast<icomponent*>(derived_owner)));
 		return true;
 	}
 
@@ -141,7 +141,7 @@ namespace game
 	}
 
 	TEMPLATE_MAGIC
-	void ENTITY_IMPL::transfer_components(Entity<T, IComponent, Component, ComponentParams>& other)
+	void ENTITY_IMPL::transfer_components(Entity<T, icomponent, Component, ComponentParams>& other)
 	{
 		for(auto& comp_ptr : this->components)
 		{
@@ -160,7 +160,7 @@ namespace game
 	}
 
 	TEMPLATE_MAGIC
-	void ENTITY_IMPL::copy_components(Entity<T, IComponent, Component, ComponentParams>& other)
+	void ENTITY_IMPL::copy_components(Entity<T, icomponent, Component, ComponentParams>& other)
 	{
 		for(const auto& comp_ptr : this->components)
 		{

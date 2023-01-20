@@ -28,7 +28,7 @@ namespace game
 
 	TextureID Animation::get_texture()
 	{
-		hdk::assert(!this->info.frames.empty(), "No frames in animation");
+		tz::assert(!this->info.frames.empty(), "No frames in animation");
 		auto now = tz::system_time().millis<unsigned long long>();
 		auto begin_millis = this->begin.millis<unsigned long long>();
 		auto elapsed_millis = now - begin_millis;

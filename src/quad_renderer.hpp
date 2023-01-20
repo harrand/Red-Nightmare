@@ -28,13 +28,13 @@ namespace game
 
 		struct ElementData
 		{
-			hdk::vec2 position = {0.0f, 0.0f};
-			hdk::vec2 scale = {0.2f, 0.2f};
+			tz::vec2 position = {0.0f, 0.0f};
+			tz::vec2 scale = {0.2f, 0.2f};
 			TextureID texture_id = static_cast<TextureID>(0);
 			TextureID normal_map_id = TextureID::Smooth_Normals;
 			std::uint32_t status_effect_id = StatusEffect_None;
 			float layer = 0.0f;
-			hdk::vec2 texcoord_scale = {1.0f, 1.0f};
+			tz::vec2 texcoord_scale = {1.0f, 1.0f};
 		};
 
 		const ElementData& overlay(OverlayID ovlid) const;
@@ -51,28 +51,28 @@ namespace game
 		void clear();
 		void erase(std::size_t elem);
 		float get_width_multiplier() const;
-		const hdk::vec2& camera_position() const;
-		hdk::vec2& camera_position();
+		const tz::vec2& camera_position() const;
+		tz::vec2& camera_position();
 		float get_camera_zoom() const;
 		void set_camera_zoom(float zoom);
 		static constexpr std::size_t max_quad_count = 8096;
 	private:
 		struct RenderData
 		{
-			tz::Mat4 view = tz::Mat4::identity();
-			tz::Mat4 projection = tz::Mat4::identity();
+			tz::mat4 view = tz::mat4::identity();
+			tz::mat4 projection = tz::mat4::identity();
 			float ambient_lighting = 1.0f;
 		};
-		tz::gl::RendererHandle make_renderer();
+		tz::gl::renderer_handle make_renderer();
 		void update_render_data();
 
 		std::size_t quad_count = 0;
 		// Stores element data for quads.
-		tz::gl::ResourceHandle element_buffer_handle;
+		tz::gl::resource_handle element_buffer_handle;
 		// Stores whole scene data, such as MVP matrix components.
-		tz::gl::ResourceHandle render_buffer_handle;
-		tz::gl::RendererHandle rendererh;
-		hdk::vec2 camera_pos{0.0f, 0.0f};
+		tz::gl::resource_handle render_buffer_handle;
+		tz::gl::renderer_handle rendererh;
+		tz::vec2 camera_pos{0.0f, 0.0f};
 		float ambient_lighting = 1.0f;
 		float camera_zoom = 1.0f;
 	};

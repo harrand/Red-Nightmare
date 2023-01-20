@@ -17,7 +17,7 @@ namespace game
 		Count
 	};
 
-	using EffectIDs = tz::EnumField<EffectID>;
+	using EffectIDs = tz::enum_field<EffectID>;
 
 	class EffectManager
 	{
@@ -27,31 +27,31 @@ namespace game
 		EffectManager(const EffectManager& copy) = delete;
 		EffectManager(EffectManager&& move) = delete;
 
-		void notify_level_dimensions(hdk::vec2 level_dimensions);
+		void notify_level_dimensions(tz::vec2 level_dimensions);
 		void update(EffectIDs ids = {});
-		tz::gl::ImageComponent* get_effect_component(EffectID id);
-		tz::gl::BufferComponent* get_point_light_buffer();
+		tz::gl::image_component* get_effect_component(EffectID id);
+		tz::gl::buffer_component* get_point_light_buffer();
 		std::span<const PointLight> point_lights() const;
 		std::span<PointLight> point_lights();
 
 		void dbgui_lights();
 	private:
-		tz::gl::RendererHandle make_rain_storage();
-		tz::gl::RendererHandle make_rain_effect();
-		tz::gl::RendererHandle make_snow_storage();
-		tz::gl::RendererHandle make_snow_effect();
-		tz::gl::RendererHandle make_light_layer_storage();
-		tz::gl::RendererHandle make_light_layer_effect();
-		tz::gl::RendererHandle global_storage = hdk::nullhand;
-		tz::gl::ResourceHandle global_buffer = hdk::nullhand;
-		std::vector<tz::gl::RendererHandle> effect_storage_renderers = {};
-		std::vector<tz::gl::RendererHandle> effect_renderers = {};
-		tz::gl::ResourceHandle rain_storage = hdk::nullhand;
-		tz::gl::ResourceHandle snow_storage = hdk::nullhand;
-		tz::gl::ResourceHandle light_layer_storage = hdk::nullhand;
-		tz::gl::ResourceHandle point_light_buffer = hdk::nullhand;
-		tz::gl::ResourceHandle light_layer_impl_buffer = hdk::nullhand;
-		tz::Duration creation = tz::system_time();
+		tz::gl::renderer_handle make_rain_storage();
+		tz::gl::renderer_handle make_rain_effect();
+		tz::gl::renderer_handle make_snow_storage();
+		tz::gl::renderer_handle make_snow_effect();
+		tz::gl::renderer_handle make_light_layer_storage();
+		tz::gl::renderer_handle make_light_layer_effect();
+		tz::gl::renderer_handle global_storage = tz::nullhand;
+		tz::gl::resource_handle global_buffer = tz::nullhand;
+		std::vector<tz::gl::renderer_handle> effect_storage_renderers = {};
+		std::vector<tz::gl::renderer_handle> effect_renderers = {};
+		tz::gl::resource_handle rain_storage = tz::nullhand;
+		tz::gl::resource_handle snow_storage = tz::nullhand;
+		tz::gl::resource_handle light_layer_storage = tz::nullhand;
+		tz::gl::resource_handle point_light_buffer = tz::nullhand;
+		tz::gl::resource_handle light_layer_impl_buffer = tz::nullhand;
+		tz::duration creation = tz::system_time();
 	};
 
 	namespace effects_impl

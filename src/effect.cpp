@@ -4,7 +4,7 @@
 #include "tz/gl/imported_shaders.hpp"
 #include "tz/gl/device.hpp"
 #include "tz/gl/output.hpp"
-#include "hdk/debug.hpp"
+#include "tz/core/debug.hpp"
 #include <memory>
 
 #include ImportedShaderHeader(empty, vertex)
@@ -22,33 +22,33 @@ namespace game
 	{
 		std::uint32_t time;
 		float pad0[1];
-		hdk::vec2 monitor_dimensions;
-		hdk::vec2 window_dimensions;
+		tz::vec2 monitor_dimensions;
+		tz::vec2 window_dimensions;
 	};
 
 	struct LightLayerImplData
 	{
-		hdk::vec2 level_dimensions = hdk::vec2::zero();
+		tz::vec2 level_dimensions = tz::vec2::zero();
 	};
 
 	EffectManager::EffectManager()
 	{
 		constexpr std::size_t effect_count = static_cast<std::size_t>(EffectID::Count);
-		this->global_storage = [this]()->tz::gl::RendererHandle
+		this->global_storage = [this]()->tz::gl::renderer_handle
 		{
-			tz::gl::RendererInfo rinfo;
-			rinfo.shader().set_shader(tz::gl::ShaderStage::Vertex, ImportedShaderSource(empty, vertex));
-			rinfo.shader().set_shader(tz::gl::ShaderStage::Fragment, ImportedShaderSource(empty, fragment));
-			this->global_buffer = rinfo.add_resource(tz::gl::BufferResource::from_one(GlobalEffectData{},
+			tz::gl::renderer_info rinfo;
+			rinfo.shader().set_shader(tz::gl::shader_stage::vertex, ImportedShaderSource(empty, vertex));
+			rinfo.shader().set_shader(tz::gl::shader_stage::fragment, ImportedShaderSource(empty, fragment));
+			this->global_buffer = rinfo.add_resource(tz::gl::buffer_resource::from_one(GlobalEffectData{},
 			{
-				.access = tz::gl::ResourceAccess::DynamicFixed
+				.access = tz::gl::resource_access::dynamic_fixed
 			}));
 			rinfo.debug_name("Global Storage Meta Renderer");
 			
-			return tz::gl::device().create_renderer(rinfo);
+			return tz::gl::get_device().create_renderer(rinfo);
 		}();
-		this->effect_storage_renderers.resize(effect_count, hdk::nullhand);
-		this->effect_renderers.resize(effect_count, hdk::nullhand);
+		this->effect_storage_renderers.resize(effect_count, tz::nullhand);
+		this->effect_renderers.resize(effect_count, tz::nullhand);
 		for(std::size_t i = 0; i < effect_count; i++)
 		{
 			switch(static_cast<EffectID>(i))
@@ -67,7 +67,7 @@ namespace game
 					this->effect_renderers[i] = this->make_light_layer_effect();
 				break;
 				default:
-					hdk::error("Unrecognised EffectID %zu", i);
+					tz::error("Unrecognised EffectID %zu", i);
 				break;
 			}
 		}
@@ -76,29 +76,29 @@ namespace game
 	EffectManager::~EffectManager()
 	{
 
-		for(tz::gl::RendererHandle rh : this->effect_storage_renderers)
+		for(tz::gl::renderer_handle rh : this->effect_storage_renderers)
 		{
-			if(rh != hdk::nullhand)
+			if(rh != tz::nullhand)
 			{
-				tz::gl::device().destroy_renderer(rh);
+				tz::gl::get_device().destroy_renderer(rh);
 			}
 		}
 	}
 
-	void EffectManager::notify_level_dimensions(hdk::vec2 level_dimensions)
+	void EffectManager::notify_level_dimensions(tz::vec2 level_dimensions)
 	{
-		LightLayerImplData& ld = tz::gl::device().get_renderer(this->effect_renderers[static_cast<int>(EffectID::LightLayer)]).get_resource(this->light_layer_impl_buffer)->data_as<LightLayerImplData>().front();
+		LightLayerImplData& ld = tz::gl::get_device().get_renderer(this->effect_renderers[static_cast<int>(EffectID::LightLayer)]).get_resource(this->light_layer_impl_buffer)->data_as<LightLayerImplData>().front();
 		ld.level_dimensions = level_dimensions;
 	}
 
 	void EffectManager::update(EffectIDs ids)
 	{
-		GlobalEffectData& gdata = tz::gl::device().get_renderer(this->global_storage).get_resource(this->global_buffer)->data_as<GlobalEffectData>().front();
-		tz::gl::device().get_renderer(this->global_storage).render();
+		GlobalEffectData& gdata = tz::gl::get_device().get_renderer(this->global_storage).get_resource(this->global_buffer)->data_as<GlobalEffectData>().front();
+		tz::gl::get_device().get_renderer(this->global_storage).render();
 
 		gdata.time = (tz::system_time() - this->creation).millis<std::uint32_t>();
-		gdata.monitor_dimensions = static_cast<hdk::vec2>(tz::wsi::get_monitors().front().dimensions);
-		gdata.window_dimensions = static_cast<hdk::vec2>(tz::window().get_dimensions());
+		gdata.monitor_dimensions = static_cast<tz::vec2>(tz::wsi::get_monitors().front().dimensions);
+		gdata.window_dimensions = static_cast<tz::vec2>(tz::window().get_dimensions());
 
 		for(EffectID id : ids)
 		{
@@ -107,20 +107,20 @@ namespace game
 				continue;
 			}
 			auto h = this->effect_renderers[static_cast<std::size_t>(id)];
-			tz::gl::device().get_renderer(h).render(1);
+			tz::gl::get_device().get_renderer(h).render(1);
 		}
 	}
 
-	tz::gl::ImageComponent* EffectManager::get_effect_component(EffectID id)
+	tz::gl::image_component* EffectManager::get_effect_component(EffectID id)
 	{
 		auto h = this->effect_storage_renderers[static_cast<std::size_t>(id)];
-		if(h == hdk::nullhand)
+		if(h == tz::nullhand)
 		{
-			hdk::assert(id == EffectID::None, "Detected nullhand RendererHandle for non-null effect id %zu", static_cast<std::size_t>(id));
+			tz::assert(id == EffectID::None, "Detected nullhand renderer_handle for non-null effect id %zu", static_cast<std::size_t>(id));
 			return nullptr;
 		}
-		tz::gl::Renderer& renderer = tz::gl::device().get_renderer(h);
-		return static_cast<tz::gl::ImageComponent*>(renderer.get_component([this](EffectID id)->tz::gl::ResourceHandle
+		tz::gl::renderer& renderer = tz::gl::get_device().get_renderer(h);
+		return static_cast<tz::gl::image_component*>(renderer.get_component([this](EffectID id)->tz::gl::resource_handle
 		{
 			switch(id)
 			{
@@ -134,28 +134,28 @@ namespace game
 					return this->light_layer_storage;
 				break;
 				default:
-					hdk::error("Could not locate effect ImageComponent for EffectID %zu", static_cast<std::size_t>(id));
-					return hdk::nullhand;
+					tz::error("Could not locate effect image_component for EffectID %zu", static_cast<std::size_t>(id));
+					return tz::nullhand;
 				break;
 			}
 		}(id)));
 	}
 
-	tz::gl::BufferComponent* EffectManager::get_point_light_buffer()
+	tz::gl::buffer_component* EffectManager::get_point_light_buffer()
 	{
-		auto& renderer = tz::gl::device().get_renderer(this->effect_renderers[static_cast<std::size_t>(EffectID::LightLayer)]);
-		return static_cast<tz::gl::BufferComponent*>(renderer.get_component(this->point_light_buffer));
+		auto& renderer = tz::gl::get_device().get_renderer(this->effect_renderers[static_cast<std::size_t>(EffectID::LightLayer)]);
+		return static_cast<tz::gl::buffer_component*>(renderer.get_component(this->point_light_buffer));
 	}
 
 	std::span<const PointLight> EffectManager::point_lights() const
 	{
-		const auto& renderer = tz::gl::device().get_renderer(this->effect_renderers[static_cast<std::size_t>(EffectID::LightLayer)]);
+		const auto& renderer = tz::gl::get_device().get_renderer(this->effect_renderers[static_cast<std::size_t>(EffectID::LightLayer)]);
 		return renderer.get_resource(this->point_light_buffer)->data_as<const PointLight>();
 	}
 
 	std::span<PointLight> EffectManager::point_lights()
 	{
-		auto& renderer = tz::gl::device().get_renderer(this->effect_renderers[static_cast<std::size_t>(EffectID::LightLayer)]);
+		auto& renderer = tz::gl::get_device().get_renderer(this->effect_renderers[static_cast<std::size_t>(EffectID::LightLayer)]);
 		return renderer.get_resource(this->point_light_buffer)->data_as<PointLight>();
 	}
 
@@ -175,111 +175,111 @@ namespace game
 		}
 	}
 
-	tz::gl::RendererHandle EffectManager::make_rain_storage()
+	tz::gl::renderer_handle EffectManager::make_rain_storage()
 	{
-		tz::gl::RendererInfo rinfo;
+		tz::gl::renderer_info rinfo;
 		rinfo.debug_name("Rain Effect Storage");
-		this->rain_storage = rinfo.add_resource(tz::gl::ImageResource::from_uninitialised
+		this->rain_storage = rinfo.add_resource(tz::gl::image_resource::from_uninitialised
 		({
-			.format = tz::gl::ImageFormat::BGRA32,
+			.format = tz::gl::image_format::BGRA32,
 			.dimensions = tz::window().get_dimensions(),
-			.flags = {tz::gl::ResourceFlag::RendererOutput, tz::gl::ResourceFlag::ImageWrapRepeat}
+			.flags = {tz::gl::resource_flag::renderer_output, tz::gl::resource_flag::image_wrap_repeat}
 		}));
-		rinfo.shader().set_shader(tz::gl::ShaderStage::Vertex, ImportedShaderSource(empty, vertex));
-		rinfo.shader().set_shader(tz::gl::ShaderStage::Fragment, ImportedShaderSource(empty, fragment));
-		return tz::gl::device().create_renderer(rinfo);
+		rinfo.shader().set_shader(tz::gl::shader_stage::vertex, ImportedShaderSource(empty, vertex));
+		rinfo.shader().set_shader(tz::gl::shader_stage::fragment, ImportedShaderSource(empty, fragment));
+		return tz::gl::get_device().create_renderer(rinfo);
 	}
 
-	tz::gl::RendererHandle EffectManager::make_rain_effect()
+	tz::gl::renderer_handle EffectManager::make_rain_effect()
 	{
-		tz::gl::RendererInfo rinfo;
+		tz::gl::renderer_info rinfo;
 		rinfo.debug_name("Rain Effect Renderer");
-		rinfo.shader().set_shader(tz::gl::ShaderStage::Vertex, ImportedShaderSource(rain, vertex));
-		rinfo.shader().set_shader(tz::gl::ShaderStage::Fragment, ImportedShaderSource(rain, fragment));
-		rinfo.set_options({tz::gl::RendererOption::RenderWait, tz::gl::RendererOption::NoDepthTesting});
+		rinfo.shader().set_shader(tz::gl::shader_stage::vertex, ImportedShaderSource(rain, vertex));
+		rinfo.shader().set_shader(tz::gl::shader_stage::fragment, ImportedShaderSource(rain, fragment));
+		rinfo.set_options({tz::gl::renderer_option::render_wait, tz::gl::renderer_option::no_depth_testing});
 		rinfo.ref_resource(this->global_storage, this->global_buffer);
-		auto& storage_renderer = tz::gl::device().get_renderer(this->effect_storage_renderers[static_cast<std::size_t>(EffectID::Rain)]);
-		rinfo.set_output(tz::gl::ImageOutput
+		auto& storage_renderer = tz::gl::get_device().get_renderer(this->effect_storage_renderers[static_cast<std::size_t>(EffectID::Rain)]);
+		rinfo.set_output(tz::gl::image_output
 		{{
 			.colours = {storage_renderer.get_component(this->rain_storage)}
 		}});
-		return tz::gl::device().create_renderer(rinfo);
+		return tz::gl::get_device().create_renderer(rinfo);
 	}
 
-	tz::gl::RendererHandle EffectManager::make_snow_storage()
+	tz::gl::renderer_handle EffectManager::make_snow_storage()
 	{
-		tz::gl::RendererInfo rinfo;
+		tz::gl::renderer_info rinfo;
 		rinfo.debug_name("Snow Effect Storage");
-		this->snow_storage = rinfo.add_resource(tz::gl::ImageResource::from_uninitialised
+		this->snow_storage = rinfo.add_resource(tz::gl::image_resource::from_uninitialised
 		({
-			.format = tz::gl::ImageFormat::BGRA32,
+			.format = tz::gl::image_format::BGRA32,
 			.dimensions = tz::window().get_dimensions(),
-			.flags = {tz::gl::ResourceFlag::RendererOutput, tz::gl::ResourceFlag::ImageWrapRepeat}
+			.flags = {tz::gl::resource_flag::renderer_output, tz::gl::resource_flag::image_wrap_repeat}
 		}));
-		rinfo.shader().set_shader(tz::gl::ShaderStage::Vertex, ImportedShaderSource(empty, vertex));
-		rinfo.shader().set_shader(tz::gl::ShaderStage::Fragment, ImportedShaderSource(empty, fragment));
-		return tz::gl::device().create_renderer(rinfo);
+		rinfo.shader().set_shader(tz::gl::shader_stage::vertex, ImportedShaderSource(empty, vertex));
+		rinfo.shader().set_shader(tz::gl::shader_stage::fragment, ImportedShaderSource(empty, fragment));
+		return tz::gl::get_device().create_renderer(rinfo);
 	}
 
-	tz::gl::RendererHandle EffectManager::make_snow_effect()
+	tz::gl::renderer_handle EffectManager::make_snow_effect()
 	{
-		tz::gl::RendererInfo rinfo;
+		tz::gl::renderer_info rinfo;
 		rinfo.debug_name("Snow Effect Renderer");
-		rinfo.shader().set_shader(tz::gl::ShaderStage::Vertex, ImportedShaderSource(snow, vertex));
-		rinfo.shader().set_shader(tz::gl::ShaderStage::Fragment, ImportedShaderSource(snow, fragment));
-		rinfo.set_options({tz::gl::RendererOption::RenderWait, tz::gl::RendererOption::NoDepthTesting});
+		rinfo.shader().set_shader(tz::gl::shader_stage::vertex, ImportedShaderSource(snow, vertex));
+		rinfo.shader().set_shader(tz::gl::shader_stage::fragment, ImportedShaderSource(snow, fragment));
+		rinfo.set_options({tz::gl::renderer_option::render_wait, tz::gl::renderer_option::no_depth_testing});
 		rinfo.ref_resource(this->global_storage, this->global_buffer);
-		auto& storage_renderer = tz::gl::device().get_renderer(this->effect_storage_renderers[static_cast<std::size_t>(EffectID::Snow)]);
-		rinfo.set_output(tz::gl::ImageOutput
+		auto& storage_renderer = tz::gl::get_device().get_renderer(this->effect_storage_renderers[static_cast<std::size_t>(EffectID::Snow)]);
+		rinfo.set_output(tz::gl::image_output
 		{{
 			.colours = {storage_renderer.get_component(this->snow_storage)}
 		}});
-		return tz::gl::device().create_renderer(rinfo);
+		return tz::gl::get_device().create_renderer(rinfo);
 	}
 
-	tz::gl::RendererHandle EffectManager::make_light_layer_storage()
+	tz::gl::renderer_handle EffectManager::make_light_layer_storage()
 	{
-		tz::gl::RendererInfo rinfo;
+		tz::gl::renderer_info rinfo;
 		rinfo.debug_name("Light Layer Storage");
-		hdk::vec2ui mondims = tz::wsi::get_monitors().front().dimensions;
+		tz::vec2ui mondims = tz::wsi::get_monitors().front().dimensions;
 		auto monsize = (mondims[0] + mondims[1]) / 2;
 		mondims[0] = monsize;
 		mondims[1] = monsize;
-		this->light_layer_storage = rinfo.add_resource(tz::gl::ImageResource::from_uninitialised
+		this->light_layer_storage = rinfo.add_resource(tz::gl::image_resource::from_uninitialised
 		({
-			.format = tz::gl::ImageFormat::BGRA32,
+			.format = tz::gl::image_format::BGRA32,
 			.dimensions = mondims * 2,
-			.flags = {tz::gl::ResourceFlag::RendererOutput, tz::gl::ResourceFlag::ImageWrapRepeat}
+			.flags = {tz::gl::resource_flag::renderer_output, tz::gl::resource_flag::image_wrap_repeat}
 		}));
-		rinfo.shader().set_shader(tz::gl::ShaderStage::Vertex, ImportedShaderSource(empty, vertex));
-		rinfo.shader().set_shader(tz::gl::ShaderStage::Fragment, ImportedShaderSource(empty, fragment));
-		return tz::gl::device().create_renderer(rinfo);
+		rinfo.shader().set_shader(tz::gl::shader_stage::vertex, ImportedShaderSource(empty, vertex));
+		rinfo.shader().set_shader(tz::gl::shader_stage::fragment, ImportedShaderSource(empty, fragment));
+		return tz::gl::get_device().create_renderer(rinfo);
 	}
 
-	tz::gl::RendererHandle EffectManager::make_light_layer_effect()
+	tz::gl::renderer_handle EffectManager::make_light_layer_effect()
 	{
-		tz::gl::RendererInfo rinfo;
+		tz::gl::renderer_info rinfo;
 		rinfo.debug_name("Light Layer Effect");
-		rinfo.shader().set_shader(tz::gl::ShaderStage::Vertex, ImportedShaderSource(light, vertex));
-		rinfo.shader().set_shader(tz::gl::ShaderStage::Fragment, ImportedShaderSource(light, fragment));
-		rinfo.set_options({tz::gl::RendererOption::RenderWait, tz::gl::RendererOption::NoDepthTesting});
+		rinfo.shader().set_shader(tz::gl::shader_stage::vertex, ImportedShaderSource(light, vertex));
+		rinfo.shader().set_shader(tz::gl::shader_stage::fragment, ImportedShaderSource(light, fragment));
+		rinfo.set_options({tz::gl::renderer_option::render_wait, tz::gl::renderer_option::no_depth_testing});
 		rinfo.ref_resource(this->global_storage, this->global_buffer);
-		this->light_layer_impl_buffer = rinfo.add_resource(tz::gl::BufferResource::from_one(LightLayerImplData{},
+		this->light_layer_impl_buffer = rinfo.add_resource(tz::gl::buffer_resource::from_one(LightLayerImplData{},
 		{
-			.access = tz::gl::ResourceAccess::DynamicFixed
+			.access = tz::gl::resource_access::dynamic_fixed
 		}));
 		std::array<PointLight, max_light_count> data;
 		std::fill(data.begin(), data.end(), PointLight{});
-		this->point_light_buffer = rinfo.add_resource(tz::gl::BufferResource::from_many(data,
+		this->point_light_buffer = rinfo.add_resource(tz::gl::buffer_resource::from_many(data,
 		{
-			.access = tz::gl::ResourceAccess::DynamicFixed
+			.access = tz::gl::resource_access::dynamic_fixed
 		}));
-		auto& storage_renderer = tz::gl::device().get_renderer(this->effect_storage_renderers[static_cast<std::size_t>(EffectID::LightLayer)]);
-		rinfo.set_output(tz::gl::ImageOutput
+		auto& storage_renderer = tz::gl::get_device().get_renderer(this->effect_storage_renderers[static_cast<std::size_t>(EffectID::LightLayer)]);
+		rinfo.set_output(tz::gl::image_output
 		{{
 			.colours = {storage_renderer.get_component(this->light_layer_storage)}
 		}});
-		return tz::gl::device().create_renderer(rinfo);
+		return tz::gl::get_device().create_renderer(rinfo);
 	}
 
 //--------------------------------------------------------------------------------------------------
@@ -290,20 +290,20 @@ namespace game
 	{
 		void initialise()
 		{
-			hdk::assert(emgr == nullptr, "Initialise: Double initialise detected");
+			tz::assert(emgr == nullptr, "Initialise: Double initialise detected");
 			emgr = std::make_unique<EffectManager>();
 		}
 
 		void terminate()
 		{
-			hdk::assert(emgr != nullptr, "Terminate: Double terminate, or no initialise detected");
+			tz::assert(emgr != nullptr, "Terminate: Double terminate, or no initialise detected");
 			emgr = nullptr;
 		}
 	}
 
 	EffectManager& effects()
 	{
-		hdk::assert(emgr != nullptr, "game::effects(): No initialise detected");
+		tz::assert(emgr != nullptr, "game::effects(): No initialise detected");
 		return *emgr;
 	}
 }

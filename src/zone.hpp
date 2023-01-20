@@ -14,7 +14,7 @@ namespace game
 	{
 		std::size_t level_cursor = 0;
 		bool initial_load = true;
-		hdk::vec2 initial_spawn = hdk::vec2::zero();
+		tz::vec2 initial_spawn = tz::vec2::zero();
 		std::vector<Level> levels = {};
 		const char* name = "Unknown";
 	};

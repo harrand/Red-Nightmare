@@ -11,18 +11,18 @@ namespace game
 		{i.get_id()} -> std::same_as<T>;
 	};
 
-	template<typename T, ComponentInterface<T> IComponent, template<T> typename Component, template<T> typename ComponentParams>
+	template<typename T, ComponentInterface<T> icomponent, template<T> typename Component, template<T> typename ComponentParams>
 	class Entity
 	{
 	public:
 		Entity() = default;
 		template<typename... C>
 		Entity(C... cs);
-		Entity(const Entity<T, IComponent, Component, ComponentParams>& copy);
-		Entity(Entity<T, IComponent, Component, ComponentParams>&& move) = default;
+		Entity(const Entity<T, icomponent, Component, ComponentParams>& copy);
+		Entity(Entity<T, icomponent, Component, ComponentParams>&& move) = default;
 		~Entity() = default;
-		Entity& operator=(const Entity<T, IComponent, Component, ComponentParams>& rhs);
-		Entity& operator=(Entity<T, IComponent, Component, ComponentParams>&& rhs) = default;
+		Entity& operator=(const Entity<T, icomponent, Component, ComponentParams>& rhs);
+		Entity& operator=(Entity<T, icomponent, Component, ComponentParams>&& rhs) = default;
 
 		template<T t>
 		bool add(ComponentParams<t> params = {});
@@ -41,12 +41,12 @@ namespace game
 		bool empty() const;
 		void clear();
 
-		void transfer_components(Entity<T, IComponent, Component, ComponentParams>& other);
-		void copy_components(Entity<T, IComponent, Component, ComponentParams>& other);
+		void transfer_components(Entity<T, icomponent, Component, ComponentParams>& other);
+		void copy_components(Entity<T, icomponent, Component, ComponentParams>& other);
 
 		virtual void update(){}
 	protected:
-		std::vector<std::unique_ptr<IComponent>> components;
+		std::vector<std::unique_ptr<icomponent>> components;
 	};
 }
 #include "entity.inl"

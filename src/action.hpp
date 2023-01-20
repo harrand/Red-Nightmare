@@ -1,8 +1,8 @@
 #ifndef REDNIGHTMARE_ACTION_HPP
 #define REDNIGHTMARE_ACTION_HPP
 #include "entity.hpp"
-#include "hdk/data/vector.hpp"
-#include "hdk/memory/clone.hpp"
+#include "tz/core/data/vector.hpp"
+#include "tz/core/memory/clone.hpp"
 #include <vector>
 #include <memory>
 
@@ -109,7 +109,7 @@ namespace game
 	template<ActionID ID>
 	struct ActionParams{};
 
-	class IAction : public hdk::unique_cloneable<IAction>
+	class IAction : public tz::unique_cloneable<IAction>
 	{
 	public:
 		virtual constexpr ActionID get_id() const = 0;
@@ -157,14 +157,14 @@ namespace game
 	template<>
 	struct ActionParams<ActionID::GotoTarget>
 	{
-		hdk::vec2 target_position;
+		tz::vec2 target_position;
 		float timeout = std::numeric_limits<float>::max();
 	};
 
 	template<>
 	struct ActionParams<ActionID::MoveRelative>
 	{
-		hdk::vec2 displacement;
+		tz::vec2 displacement;
 		float timeout = std::numeric_limits<float>::max();
 	};
 
@@ -189,14 +189,14 @@ namespace game
 	template<>
 	struct ActionParams<ActionID::Launch>
 	{
-		hdk::vec2 direction;
+		tz::vec2 direction;
 		float speed_multiplier = 1.0f;
 	};
 
 	template<>
 	struct ActionParams<ActionID::Teleport>
 	{
-		hdk::vec2 position;
+		tz::vec2 position;
 	};
 
 	template<>

@@ -1,9 +1,8 @@
 #include "actor.hpp"
 #include "util.hpp"
-#include "tz/core/tz.hpp"
 #include "tz/dbgui/dbgui.hpp"
 #include "tz/wsi/keyboard.hpp"
-#include "hdk/profile.hpp"
+#include "tz/core/profile.hpp"
 
 using namespace tz::literals;
 
@@ -987,7 +986,7 @@ namespace game
 								}},
 								Action<ActionID::MoveRelative>
 								{{
-									.displacement = hdk::vec2{-1.0f, 0.0f},
+									.displacement = tz::vec2{-1.0f, 0.0f},
 									.timeout = 1000.0f
 								}},
 								Action<ActionID::DelayedAction>
@@ -1048,7 +1047,7 @@ namespace game
 								}},
 								Action<ActionID::MoveRelative>
 								{{
-									.displacement = hdk::vec2{-1.0f, 0.0f},
+									.displacement = tz::vec2{-1.0f, 0.0f},
 									.timeout = 1000.0f
 								}},
 								Action<ActionID::DelayedAction>
@@ -1104,7 +1103,7 @@ namespace game
 								}},
 								Action<ActionID::MoveRelative>
 								{{
-									.displacement = hdk::vec2{0.0f, 1.0f},
+									.displacement = tz::vec2{0.0f, 1.0f},
 									.timeout = 1000.0f
 								}},
 								Action<ActionID::DelayedAction>
@@ -1165,7 +1164,7 @@ namespace game
 								}},
 								Action<ActionID::MoveRelative>
 								{{
-									.displacement = hdk::vec2{0.0f, 1.0f},
+									.displacement = tz::vec2{0.0f, 1.0f},
 									.timeout = 1000.0f
 								}},
 								Action<ActionID::DelayedAction>
@@ -1250,7 +1249,7 @@ namespace game
 
 	void Actor::update()
 	{
-		HDK_PROFZONE("Actor - Update", 0xFF00AA00);
+		TZ_PROFZONE("Actor - Update", 0xFF00AA00);
 		this->evaluate_buffs();
 		this->entity.update();
 		this->evaluate_animation();
@@ -1531,7 +1530,7 @@ namespace game
 
 	void Actor::evaluate_buffs()
 	{
-		HDK_PROFZONE("Actor - Buff Evaluation", 0xFF00AA00);
+		TZ_PROFZONE("Actor - Buff Evaluation", 0xFF00AA00);
 		auto now = tz::system_time();
 		auto time_since_update = now - last_update;
 		for(int i = 0; i < this->buffs.elements().size(); i++)
@@ -1550,7 +1549,7 @@ namespace game
 
 	void Actor::evaluate_animation()
 	{
-		HDK_PROFZONE("Actor - Animation Evaluation", 0xFF00AA00);
+		TZ_PROFZONE("Actor - Animation Evaluation", 0xFF00AA00);
 		AnimationID ending_animation = AnimationID::Missing;
 		switch(this->skin)
 		{
@@ -1765,7 +1764,7 @@ namespace game
 				}
 			break;
 			case ActorSkin::DebugOnlyVisible:
-				#if HDK_DEBUG
+				#if TZ_DEBUG
 					ending_animation = AnimationID::Missing;
 				#else
 					ending_animation = AnimationID::Invisible;

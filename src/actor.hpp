@@ -5,7 +5,7 @@
 #include "flag.hpp"
 #include "action.hpp"
 #include "stats.hpp"
-#include "tz/core/containers/enum_field.hpp"
+#include "tz/core/data/enum_field.hpp"
 
 namespace game
 {
@@ -17,7 +17,7 @@ namespace game
 		MoveUp,
 		MoveDown
 	};
-	using ActorMotions = tz::EnumField<ActorMotion>;
+	using ActorMotions = tz::enum_field<ActorMotion>;
 
 	/// Describes the general appearance of the actor. Will be used to automatically select which animations will be suitable for use. This might be refactored into something better.
 	enum class ActorSkin
@@ -125,7 +125,7 @@ namespace game
 		Count
 	};
 
-	using ActorTypes = tz::EnumField<ActorType>;
+	using ActorTypes = tz::enum_field<ActorType>;
 
 	constexpr unsigned short default_layer = std::numeric_limits<unsigned short>::max() / 2;
 
@@ -151,13 +151,13 @@ namespace game
 		/// All buffs to stats currently applied on the actor.
 		StatBuffs buffs = {};
 		/// Colour representing the actor in a level image. If this is black, then the actor cannot be represented in a level.
-		hdk::vec3ui palette_colour = {0u, 0u, 0u};
+		tz::vec3ui palette_colour = {0u, 0u, 0u};
 		/// Name for the entity.
 		const char* name = "<Unnamed Entity>";
 		/// Affects how much other actors are pushed if this actor has ActorFlag::Collide.
 		float density = 1.0f;
 		/// Duration at last update.
-		tz::Duration last_update = tz::system_time();
+		tz::duration last_update = tz::system_time();
 		std::size_t target = NullID;
 		unsigned short layer = default_layer;
 		std::size_t uuid = uuid_count++;

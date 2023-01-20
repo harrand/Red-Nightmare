@@ -30,7 +30,7 @@ namespace game
 	private:
 		AnimationInfo info;
 		float fps_multiplier = 1.0f;
-		tz::Duration begin;
+		tz::duration begin;
 	};
 
 	enum class AnimationID

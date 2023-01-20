@@ -28,7 +28,7 @@ int main()
 		scene.load_zone(game::StoryZone::BlanchfieldGraveyard);
 
 		using namespace tz::literals;
-		tz::Delay fixed_update = 1667_us;
+		tz::delay fixed_update = 1667_us;
 
 		while(!tz::window().is_close_requested())
 		{
