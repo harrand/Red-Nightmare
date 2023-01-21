@@ -1,0 +1,46 @@
+return
+{
+	.type = ActorType::Fireball_Spawner,
+	.flags =
+	{
+		Flag<FlagID::Stealth>{},
+		Flag<FlagID::InvisibleWhileDead>{},
+		Flag<FlagID::Light>
+		{{
+			.light =
+			{
+				.colour = {-0.01f, -1.0f, -1.0f},
+				.power = 0.1f
+			},
+			.power_variance = 0.01f,
+			.variance_rate = 0.4f,
+			.min_variance_pct = 0.05f,
+			.power_scale_with_health_pct = true
+		}},
+		Flag<FlagID::ActionOnRepeat>
+		{{
+			.period = 5000.0f,
+			.predicate = [](const Actor& self){return !self.dead();},
+			.actions =
+			{
+				Action<ActionID::SpawnActor>
+				{{
+					.actor = ActorType::ChaoticFireball,
+					.inherit_faction = true,
+					.actions =
+					{
+						Action<ActionID::LaunchToPlayer>
+						{{
+							.speed_multiplier = 8.0f
+						}}
+					}
+				}}
+			}
+		}},
+	},
+	.faction = Faction::PlayerEnemy,
+	.skin = ActorSkin::Invisible,
+	.palette_colour = {255u, 32u, 255u},
+	.name = "Spawner Fireball",
+	.layer = default_layer + 1
+};

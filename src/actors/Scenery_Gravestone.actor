@@ -1,0 +1,49 @@
+return
+{
+	.type = ActorType::Scenery_Gravestone,
+	.flags =
+	{
+		Flag<FlagID::DoNotGarbageCollect>{},
+		Flag<FlagID::Collide>
+		{{
+			.collision_blacklist =
+			{
+				ActorType::FireSmoke,
+				ActorType::FireExplosion,
+				ActorType::BloodSplatter,
+				ActorType::GhostZombie_Spawner,
+				ActorType::GhostBanshee_Spirit
+			}
+		}},
+		Flag<FlagID::Stealth>{},
+		Flag<FlagID::Obstacle>{},
+		Flag<FlagID::ActionOnDeath>
+		{{
+			.actions =
+			{
+				Action<ActionID::SpawnActor>
+				{{
+					.actor = ActorType::GhostZombie,
+				}}
+			}
+		}},
+		Flag<FlagID::RandomSkin>
+		{{
+			.skins =
+			{
+				ActorSkin::Scenery_Gravestone_0,
+				ActorSkin::Scenery_Gravestone_1
+			}
+		}}
+	},
+	.faction = Faction::PureEnemy,
+	.base_stats =
+	{
+		.max_health = 1.0f,
+		.current_health = 1.0f
+	},
+	.skin = ActorSkin::Scenery_Gravestone_0,
+	.palette_colour = {48u, 48u, 48u},
+	.name = "Gravestone",
+	.layer = default_layer + 2
+};

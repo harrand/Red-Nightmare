@@ -1,0 +1,26 @@
+return
+{
+	.type = ActorType::Wall,
+	.flags =
+	{
+		Flag<FlagID::Collide>
+		{{
+			.collision_blacklist =
+			{
+				ActorType::FireSmoke,
+				ActorType::FireExplosion,
+				ActorType::BloodSplatter,
+				ActorType::GhostZombie_Spawner,
+				ActorType::GhostBanshee_Spirit
+			}
+		}},
+		Flag<FlagID::Invincible>{},
+		Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}},
+		Flag<FlagID::Stealth>{}
+	},
+	.faction = Faction::PureEnemy,
+	.skin = ActorSkin::Material_Stone,
+	.palette_colour = {255u, 0u, 0u},
+	.name = "Wall",
+	.layer = default_layer + 2
+};

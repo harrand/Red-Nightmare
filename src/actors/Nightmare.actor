@@ -1,0 +1,30 @@
+return
+{
+	.type = ActorType::Nightmare,
+	.flags =
+	{
+		Flag<FlagID::StatTracked>{},
+		Flag<FlagID::BlockingAnimations>{},
+		Flag<FlagID::RespawnOnDeath>{},
+		Flag<FlagID::AggressiveIf>
+		{{
+			.predicate = [](const Actor& self, const Actor& victim){return self.is_enemy_of(victim) && !victim.dead();}
+		}},
+		Flag<FlagID::HazardousIf>
+		{{
+			.predicate = [](const Actor& self, const Actor& victim){return self.is_enemy_of(victim);}
+		}},
+		Flag<FlagID::SelfRecoil>{}
+	},
+	.faction = Faction::PureEnemy,
+	.base_stats =
+	{
+		.movement_speed = 0.0014f,
+		.damage = 1.0f,
+		.max_health = 0.001f,
+		.current_health = 0.001f
+	},
+	.skin = ActorSkin::Nightmare,
+	.palette_colour = {64u, 32u, 8u},
+	.name = "Nightmare Boss"
+};

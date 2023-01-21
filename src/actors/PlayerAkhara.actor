@@ -1,0 +1,133 @@
+return
+{
+	.type = ActorType::PlayerAkhara,
+	.flags =
+	{
+		Flag<FlagID::DoNotGarbageCollect>{},
+		Flag<FlagID::StatTracked>{},
+		Flag<FlagID::KeyboardControlled>{},
+		Flag<FlagID::Player>{},
+		Flag<FlagID::ActionOnStruck>
+		{{
+			.actions =
+			{
+				Action<ActionID::SpawnActor>
+				{{
+					.actor = ActorType::BloodSplatter
+				}}
+			},
+			.icd = 200.0f
+		}},
+		Flag<FlagID::ActionOnClick>
+		{{
+			.action_map =
+			{
+				{tz::wsi::mouse_button::left,
+					{
+						.actions =
+						{
+							Action<ActionID::Cast>
+							{{
+								.cast_time_millis = 500.0f,
+								.actions =
+								{
+									Action<ActionID::SpawnActor>
+									{{
+										.actor = ActorType::ChaoticFireball,
+										.inherit_faction = true,
+										.actions =
+										{
+											Action<ActionID::LaunchToMouse>
+											{{
+												.speed_multiplier = 8.0f
+											}}
+										}
+									}}
+								},
+								.player_cancel_cast_escape = true
+							}}
+						},
+						.icd = 550_ms
+					}
+				},
+				{tz::wsi::mouse_button::right,
+					{
+						.actions = 
+						{
+							Action<ActionID::Cast>
+							{{
+								.cast_time_millis = 1500.0f,
+								.actions =
+								{
+									Action<ActionID::Despawn>{},
+									Action<ActionID::SpawnActor>
+									{{
+										.actor = ActorType::ChaoticFireball,
+										.inherit_faction = true,
+										.actions =
+										{
+											Action<ActionID::LaunchToMouse>
+											{{
+												.speed_multiplier = 8.0f
+											}},
+											Action<ActionID::ApplyFlag>
+											{{
+												.flags =
+												{
+													Flag<FlagID::CustomScale>
+													{{
+														.scale = {1.0f, 1.0f}
+													}},
+													Flag<FlagID::Player>{},
+													Flag<FlagID::ActionOnRepeat>
+													{{
+														.period = 250.0f,
+														.current_time = 500.0f,
+														.predicate = [](const Actor&){return true;},
+														.actions =
+														{
+															Action<ActionID::SpawnActor>
+															{{
+																.actor = ActorType::FireExplosion,
+																.inherit_faction = true
+															}},
+														}
+													}},
+													Flag<FlagID::ActionOnDeath>
+													{{
+														.actions =
+														{
+															Action<ActionID::SpawnActor>
+															{{
+																.actor = ActorType::FireExplosion,
+																.inherit_faction = true
+															}},
+															Action<ActionID::RespawnAs>
+															{{
+																.actor = ActorType::PlayerAkhara
+															}}
+														}
+													}}
+												}
+											}}
+										}
+									}}
+								},
+								.player_cancel_cast_escape = true
+							}},
+						},
+						.icd = 500_ms
+					}
+				}
+			}
+		}}
+	},
+	.faction = Faction::PlayerFriend,
+	.base_stats =
+	{
+		.movement_speed = 0.0016f
+	},
+	.skin = ActorSkin::PlayerAkhara_LowPoly,
+	.animation = game::play_animation(AnimationID::PlayerAkhara_Idle),
+	.name = "Player Akhara"
+};

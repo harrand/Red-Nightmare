@@ -1,0 +1,55 @@
+return
+{
+	.type = ActorType::Interactable_Stone_Stairs_Up_PY,
+	.flags =
+	{
+		Flag<FlagID::GoesUpALevel>{},
+		Flag<FlagID::DoNotGarbageCollect>{},
+		Flag<FlagID::Collide>
+		{{
+			.collision_blacklist =
+			{
+				ActorType::FireSmoke,
+				ActorType::FireExplosion,
+				ActorType::BloodSplatter,
+				ActorType::GhostZombie_Spawner,
+				ActorType::GhostBanshee_Spirit
+			},
+			.blacklist_predicate = [](const Actor& a){return a.flags.has<FlagID::Player>();}
+		}},
+		Flag<FlagID::Invincible>{},
+		Flag<FlagID::Unhittable>{},
+		Flag<FlagID::CustomScale>{{.scale = {0.65f, 0.65f}}},
+		Flag<FlagID::ActionOnActorTouch>
+		{{
+			.predicate = [](const Actor& self, const Actor& other){return other.flags.has<FlagID::Player>() && !other.flags.has<FlagID::SuppressedControl>();},
+			.touchee_actions =
+			{
+				Action<ActionID::ApplyFlag>
+				{{
+					.flags =
+					{
+						Flag<FlagID::SuppressedControl>{}
+					}
+				}},
+				Action<ActionID::MoveRelative>
+				{{
+					.displacement = tz::vec2{0.0f, 1.0f},
+					.timeout = 1000.0f
+				}},
+				Action<ActionID::DelayedAction>
+				{{
+					.delay_millis = level_transition_length,
+					.actions =
+					{
+						Action<ActionID::PreviousLevel>{}
+					}
+				}}
+			}
+		}}
+	},
+	.faction = Faction::PureFriend,
+	.skin = ActorSkin::Interactable_Stone_Stairs_Up_PY,
+	.palette_colour = {200u, 200u, 255u},
+	.name = "Stone Stairs (Up, PY)"
+};

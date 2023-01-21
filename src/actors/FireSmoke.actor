@@ -1,0 +1,13 @@
+return
+{
+	.type = ActorType::FireSmoke,
+	.flags = 
+	{
+		Flag<FlagID::InvisibleWhileDead>{},
+		Flag<FlagID::DieOnAnimationFinish>{},
+		Flag<FlagID::Stealth>{},
+		Flag<FlagID::Unhittable>{}
+	},
+	.skin = ActorSkin::FireSmoke,
+	.name = "Fire Smoke Effect"
+};

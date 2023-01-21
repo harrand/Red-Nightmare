@@ -1,0 +1,24 @@
+return
+{
+	.type = ActorType::RoadSpeedBoost,
+	.flags =
+	{
+		Flag<FlagID::ActionOnActorTouch>
+		{{
+			.predicate = [](const Actor& self, const Actor& actor)
+			{
+				return actor.type == ActorType::PlayerAkhara;
+			},
+			.actions =
+			{
+				Action<ActionID::ApplyBuffToPlayers>
+				{{
+					.buff = BuffID::RoadSpeed
+				}}
+			}
+		}}
+	},
+	.skin = ActorSkin::Invisible,
+	.palette_colour = {64u, 0u, 255u},
+	.name = "Road Speed Boost"
+};
