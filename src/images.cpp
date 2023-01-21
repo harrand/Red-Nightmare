@@ -7,68 +7,46 @@
 #include ImportedTextHeader(missing, png)
 #include ImportedTextHeader(invisible, png)
 #include ImportedTextHeader(smooth_normals, png)
-#include ImportedTextHeader(player_classic_dead, png)
+#include ImportedTextHeader(player_classic_cast0, png)
+#include ImportedTextHeader(player_classic_cast1, png)
+#include ImportedTextHeader(player_classic_cast2, png)
+#include ImportedTextHeader(player_classic_cast3, png)
+#include ImportedTextHeader(player_classic_cast4, png)
+#include ImportedTextHeader(player_classic_cast5, png)
+#include ImportedTextHeader(player_classic_cast6, png)
+#include ImportedTextHeader(player_classic_cast7, png)
+#include ImportedTextHeader(player_classic_death00, png)
+#include ImportedTextHeader(player_classic_death01, png)
+#include ImportedTextHeader(player_classic_death02, png)
+#include ImportedTextHeader(player_classic_death03, png)
+#include ImportedTextHeader(player_classic_death04, png)
+#include ImportedTextHeader(player_classic_death05, png)
+#include ImportedTextHeader(player_classic_death06, png)
+#include ImportedTextHeader(player_classic_death07, png)
+#include ImportedTextHeader(player_classic_death08, png)
+#include ImportedTextHeader(player_classic_death09, png)
+#include ImportedTextHeader(player_classic_death10, png)
+#include ImportedTextHeader(player_classic_death11, png)
+#include ImportedTextHeader(player_classic_down0, png)
 #include ImportedTextHeader(player_classic_down1, png)
 #include ImportedTextHeader(player_classic_down2, png)
 #include ImportedTextHeader(player_classic_down3, png)
-#include ImportedTextHeader(player_classic_dying1, png)
-#include ImportedTextHeader(player_classic_dying2, png)
-#include ImportedTextHeader(player_classic_dying3, png)
-#include ImportedTextHeader(player_classic_dying4, png)
-#include ImportedTextHeader(player_classic_dying5, png)
-#include ImportedTextHeader(player_classic_dying6, png)
-#include ImportedTextHeader(player_classic_dying7, png)
-#include ImportedTextHeader(player_classic_dying8, png)
+#include ImportedTextHeader(player_classic_endcast0, png)
+#include ImportedTextHeader(player_classic_endcast1, png)
+#include ImportedTextHeader(player_classic_endcast2, png)
+#include ImportedTextHeader(player_classic_endcast3, png)
+#include ImportedTextHeader(player_classic_endcast4, png)
+#include ImportedTextHeader(player_classic_endcast5, png)
+#include ImportedTextHeader(player_classic_idle0, png)
 #include ImportedTextHeader(player_classic_idle1, png)
-#include ImportedTextHeader(player_classic_idle2, png)
+#include ImportedTextHeader(player_classic_side0, png)
 #include ImportedTextHeader(player_classic_side1, png)
 #include ImportedTextHeader(player_classic_side2, png)
 #include ImportedTextHeader(player_classic_side3, png)
-#include ImportedTextHeader(player_classic_special, png)
+#include ImportedTextHeader(player_classic_up0, png)
 #include ImportedTextHeader(player_classic_up1, png)
 #include ImportedTextHeader(player_classic_up2, png)
 #include ImportedTextHeader(player_classic_up3, png)
-
-#include ImportedTextHeader(player_classic_lowpoly_cast0, png)
-#include ImportedTextHeader(player_classic_lowpoly_cast1, png)
-#include ImportedTextHeader(player_classic_lowpoly_cast2, png)
-#include ImportedTextHeader(player_classic_lowpoly_cast3, png)
-#include ImportedTextHeader(player_classic_lowpoly_cast4, png)
-#include ImportedTextHeader(player_classic_lowpoly_cast5, png)
-#include ImportedTextHeader(player_classic_lowpoly_cast6, png)
-#include ImportedTextHeader(player_classic_lowpoly_cast7, png)
-#include ImportedTextHeader(player_classic_lowpoly_death00, png)
-#include ImportedTextHeader(player_classic_lowpoly_death01, png)
-#include ImportedTextHeader(player_classic_lowpoly_death02, png)
-#include ImportedTextHeader(player_classic_lowpoly_death03, png)
-#include ImportedTextHeader(player_classic_lowpoly_death04, png)
-#include ImportedTextHeader(player_classic_lowpoly_death05, png)
-#include ImportedTextHeader(player_classic_lowpoly_death06, png)
-#include ImportedTextHeader(player_classic_lowpoly_death07, png)
-#include ImportedTextHeader(player_classic_lowpoly_death08, png)
-#include ImportedTextHeader(player_classic_lowpoly_death09, png)
-#include ImportedTextHeader(player_classic_lowpoly_death10, png)
-#include ImportedTextHeader(player_classic_lowpoly_death11, png)
-#include ImportedTextHeader(player_classic_lowpoly_down0, png)
-#include ImportedTextHeader(player_classic_lowpoly_down1, png)
-#include ImportedTextHeader(player_classic_lowpoly_down2, png)
-#include ImportedTextHeader(player_classic_lowpoly_down3, png)
-#include ImportedTextHeader(player_classic_lowpoly_endcast0, png)
-#include ImportedTextHeader(player_classic_lowpoly_endcast1, png)
-#include ImportedTextHeader(player_classic_lowpoly_endcast2, png)
-#include ImportedTextHeader(player_classic_lowpoly_endcast3, png)
-#include ImportedTextHeader(player_classic_lowpoly_endcast4, png)
-#include ImportedTextHeader(player_classic_lowpoly_endcast5, png)
-#include ImportedTextHeader(player_classic_lowpoly_idle0, png)
-#include ImportedTextHeader(player_classic_lowpoly_idle1, png)
-#include ImportedTextHeader(player_classic_lowpoly_side0, png)
-#include ImportedTextHeader(player_classic_lowpoly_side1, png)
-#include ImportedTextHeader(player_classic_lowpoly_side2, png)
-#include ImportedTextHeader(player_classic_lowpoly_side3, png)
-#include ImportedTextHeader(player_classic_lowpoly_up0, png)
-#include ImportedTextHeader(player_classic_lowpoly_up1, png)
-#include ImportedTextHeader(player_classic_lowpoly_up2, png)
-#include ImportedTextHeader(player_classic_lowpoly_up3, png)
 
 #include ImportedTextHeader(ghost_zombie_death0, png)
 #include ImportedTextHeader(ghost_zombie_death1, png)
@@ -219,68 +197,46 @@ namespace game
 		ImportedTextData(missing, png),
 		ImportedTextData(invisible, png),
 		ImportedTextData(smooth_normals, png),
-		ImportedTextData(player_classic_dead, png),
+		ImportedTextData(player_classic_cast0, png),
+		ImportedTextData(player_classic_cast1, png),
+		ImportedTextData(player_classic_cast2, png),
+		ImportedTextData(player_classic_cast3, png),
+		ImportedTextData(player_classic_cast4, png),
+		ImportedTextData(player_classic_cast5, png),
+		ImportedTextData(player_classic_cast6, png),
+		ImportedTextData(player_classic_cast7, png),
+		ImportedTextData(player_classic_death00, png),
+		ImportedTextData(player_classic_death01, png),
+		ImportedTextData(player_classic_death02, png),
+		ImportedTextData(player_classic_death03, png),
+		ImportedTextData(player_classic_death04, png),
+		ImportedTextData(player_classic_death05, png),
+		ImportedTextData(player_classic_death06, png),
+		ImportedTextData(player_classic_death07, png),
+		ImportedTextData(player_classic_death08, png),
+		ImportedTextData(player_classic_death09, png),
+		ImportedTextData(player_classic_death10, png),
+		ImportedTextData(player_classic_death11, png),
+		ImportedTextData(player_classic_down0, png),
 		ImportedTextData(player_classic_down1, png),
 		ImportedTextData(player_classic_down2, png),
 		ImportedTextData(player_classic_down3, png),
-		ImportedTextData(player_classic_dying1, png),
-		ImportedTextData(player_classic_dying2, png),
-		ImportedTextData(player_classic_dying3, png),
-		ImportedTextData(player_classic_dying4, png),
-		ImportedTextData(player_classic_dying5, png),
-		ImportedTextData(player_classic_dying6, png),
-		ImportedTextData(player_classic_dying7, png),
-		ImportedTextData(player_classic_dying8, png),
+		ImportedTextData(player_classic_endcast0, png),
+		ImportedTextData(player_classic_endcast1, png),
+		ImportedTextData(player_classic_endcast2, png),
+		ImportedTextData(player_classic_endcast3, png),
+		ImportedTextData(player_classic_endcast4, png),
+		ImportedTextData(player_classic_endcast5, png),
+		ImportedTextData(player_classic_idle0, png),
 		ImportedTextData(player_classic_idle1, png),
-		ImportedTextData(player_classic_idle2, png),
+		ImportedTextData(player_classic_side0, png),
 		ImportedTextData(player_classic_side1, png),
 		ImportedTextData(player_classic_side2, png),
 		ImportedTextData(player_classic_side3, png),
-		ImportedTextData(player_classic_special, png),
+		ImportedTextData(player_classic_up0, png),
 		ImportedTextData(player_classic_up1, png),
 		ImportedTextData(player_classic_up2, png),
 		ImportedTextData(player_classic_up3, png),
-
-		ImportedTextData(player_classic_lowpoly_cast0, png),
-		ImportedTextData(player_classic_lowpoly_cast1, png),
-		ImportedTextData(player_classic_lowpoly_cast2, png),
-		ImportedTextData(player_classic_lowpoly_cast3, png),
-		ImportedTextData(player_classic_lowpoly_cast4, png),
-		ImportedTextData(player_classic_lowpoly_cast5, png),
-		ImportedTextData(player_classic_lowpoly_cast6, png),
-		ImportedTextData(player_classic_lowpoly_cast7, png),
-		ImportedTextData(player_classic_lowpoly_death00, png),
-		ImportedTextData(player_classic_lowpoly_death01, png),
-		ImportedTextData(player_classic_lowpoly_death02, png),
-		ImportedTextData(player_classic_lowpoly_death03, png),
-		ImportedTextData(player_classic_lowpoly_death04, png),
-		ImportedTextData(player_classic_lowpoly_death05, png),
-		ImportedTextData(player_classic_lowpoly_death06, png),
-		ImportedTextData(player_classic_lowpoly_death07, png),
-		ImportedTextData(player_classic_lowpoly_death08, png),
-		ImportedTextData(player_classic_lowpoly_death09, png),
-		ImportedTextData(player_classic_lowpoly_death10, png),
-		ImportedTextData(player_classic_lowpoly_death11, png),
-		ImportedTextData(player_classic_lowpoly_down0, png),
-		ImportedTextData(player_classic_lowpoly_down1, png),
-		ImportedTextData(player_classic_lowpoly_down2, png),
-		ImportedTextData(player_classic_lowpoly_down3, png),
-		ImportedTextData(player_classic_lowpoly_endcast0, png),
-		ImportedTextData(player_classic_lowpoly_endcast1, png),
-		ImportedTextData(player_classic_lowpoly_endcast2, png),
-		ImportedTextData(player_classic_lowpoly_endcast3, png),
-		ImportedTextData(player_classic_lowpoly_endcast4, png),
-		ImportedTextData(player_classic_lowpoly_endcast5, png),
-		ImportedTextData(player_classic_lowpoly_idle0, png),
-		ImportedTextData(player_classic_lowpoly_idle1, png),
-		ImportedTextData(player_classic_lowpoly_side0, png),
-		ImportedTextData(player_classic_lowpoly_side1, png),
-		ImportedTextData(player_classic_lowpoly_side2, png),
-		ImportedTextData(player_classic_lowpoly_side3, png),
-		ImportedTextData(player_classic_lowpoly_up0, png),
-		ImportedTextData(player_classic_lowpoly_up1, png),
-		ImportedTextData(player_classic_lowpoly_up2, png),
-		ImportedTextData(player_classic_lowpoly_up3, png),
 
 		ImportedTextData(ghost_zombie_death0, png),
 		ImportedTextData(ghost_zombie_death1, png),

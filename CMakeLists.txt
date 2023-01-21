@@ -81,68 +81,47 @@ add_text(
 		res/images/missing.png
 		res/images/invisible.png
 		res/images/smooth_normals.png
-		res/images/player/akhara/skins/classic/player_classic_dead.png
+
+		res/images/player/akhara/skins/classic/player_classic_cast0.png
+		res/images/player/akhara/skins/classic/player_classic_cast1.png
+		res/images/player/akhara/skins/classic/player_classic_cast2.png
+		res/images/player/akhara/skins/classic/player_classic_cast3.png
+		res/images/player/akhara/skins/classic/player_classic_cast4.png
+		res/images/player/akhara/skins/classic/player_classic_cast5.png
+		res/images/player/akhara/skins/classic/player_classic_cast6.png
+		res/images/player/akhara/skins/classic/player_classic_cast7.png
+		res/images/player/akhara/skins/classic/player_classic_death00.png
+		res/images/player/akhara/skins/classic/player_classic_death01.png
+		res/images/player/akhara/skins/classic/player_classic_death02.png
+		res/images/player/akhara/skins/classic/player_classic_death03.png
+		res/images/player/akhara/skins/classic/player_classic_death04.png
+		res/images/player/akhara/skins/classic/player_classic_death05.png
+		res/images/player/akhara/skins/classic/player_classic_death06.png
+		res/images/player/akhara/skins/classic/player_classic_death07.png
+		res/images/player/akhara/skins/classic/player_classic_death08.png
+		res/images/player/akhara/skins/classic/player_classic_death09.png
+		res/images/player/akhara/skins/classic/player_classic_death10.png
+		res/images/player/akhara/skins/classic/player_classic_death11.png
+		res/images/player/akhara/skins/classic/player_classic_down0.png
 		res/images/player/akhara/skins/classic/player_classic_down1.png
 		res/images/player/akhara/skins/classic/player_classic_down2.png
 		res/images/player/akhara/skins/classic/player_classic_down3.png
-		res/images/player/akhara/skins/classic/player_classic_dying1.png
-		res/images/player/akhara/skins/classic/player_classic_dying2.png
-		res/images/player/akhara/skins/classic/player_classic_dying3.png
-		res/images/player/akhara/skins/classic/player_classic_dying4.png
-		res/images/player/akhara/skins/classic/player_classic_dying5.png
-		res/images/player/akhara/skins/classic/player_classic_dying6.png
-		res/images/player/akhara/skins/classic/player_classic_dying7.png
-		res/images/player/akhara/skins/classic/player_classic_dying8.png
+		res/images/player/akhara/skins/classic/player_classic_endcast0.png
+		res/images/player/akhara/skins/classic/player_classic_endcast1.png
+		res/images/player/akhara/skins/classic/player_classic_endcast2.png
+		res/images/player/akhara/skins/classic/player_classic_endcast3.png
+		res/images/player/akhara/skins/classic/player_classic_endcast4.png
+		res/images/player/akhara/skins/classic/player_classic_endcast5.png
+		res/images/player/akhara/skins/classic/player_classic_idle0.png
 		res/images/player/akhara/skins/classic/player_classic_idle1.png
-		res/images/player/akhara/skins/classic/player_classic_idle2.png
+		res/images/player/akhara/skins/classic/player_classic_side0.png
 		res/images/player/akhara/skins/classic/player_classic_side1.png
 		res/images/player/akhara/skins/classic/player_classic_side2.png
 		res/images/player/akhara/skins/classic/player_classic_side3.png
-		res/images/player/akhara/skins/classic/player_classic_special.png
+		res/images/player/akhara/skins/classic/player_classic_up0.png
 		res/images/player/akhara/skins/classic/player_classic_up1.png
 		res/images/player/akhara/skins/classic/player_classic_up2.png
 		res/images/player/akhara/skins/classic/player_classic_up3.png
-
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_cast0.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_cast1.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_cast2.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_cast3.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_cast4.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_cast5.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_cast6.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_cast7.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_death00.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_death01.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_death02.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_death03.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_death04.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_death05.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_death06.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_death07.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_death08.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_death09.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_death10.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_death11.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_down0.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_down1.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_down2.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_down3.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_endcast0.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_endcast1.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_endcast2.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_endcast3.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_endcast4.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_endcast5.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_idle0.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_idle1.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_side0.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_side1.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_side2.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_side3.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_up0.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_up1.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_up2.png
-		res/images/player/akhara/skins/classic_lowpoly/player_classic_lowpoly_up3.png
 
 		res/images/enemies/ghosts/zombie/ghost_zombie_death0.png
 		res/images/enemies/ghosts/zombie/ghost_zombie_death1.png

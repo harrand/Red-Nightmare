@@ -78,7 +78,7 @@ return
 		.current_health = 0.01f
 	},
 	.skin = ActorSkin::GhostBanshee,
-	.animation = game::play_animation(AnimationID::PlayerAkhara_Idle),
+	.animation = game::play_animation(AnimationID::GhostBanshee_Idle),
 	.palette_colour = {128u, 255u, 255u},
 	.name = "Ghost Banshee",
 	.density = 0.1f

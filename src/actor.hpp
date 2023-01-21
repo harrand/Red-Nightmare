@@ -23,7 +23,7 @@ namespace game
 	enum class ActorSkin
 	{
 		/// Actor looks like the redesigned Akhara Ceitus low-resolution sprites.
-		PlayerAkhara_LowPoly,
+		PlayerAkhara,
 		/// Actor looks like a zombified version of Akhara. One of the ghost skins.
 		GhostZombie,
 		/// Actor looks like a zombified Michael Jackson from thriller ;)

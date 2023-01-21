@@ -484,45 +484,44 @@ namespace game
 			case ActorSkin::FireExplosion:
 				ending_animation = AnimationID::PlayerAkhara_FireExplosion;
 			break;
-			case ActorSkin::PlayerAkhara_LowPoly:
+			case ActorSkin::PlayerAkhara:
 				if(this->motion.contains(ActorMotion::MoveLeft))
 				{
-					ending_animation = AnimationID::PlayerAkhara_LowPoly_MoveSide;
+					ending_animation = AnimationID::PlayerAkhara_MoveSide;
 				}
 				else if(this->motion.contains(ActorMotion::MoveRight))
 				{
-					ending_animation = AnimationID::PlayerAkhara_LowPoly_MoveSide;
+					ending_animation = AnimationID::PlayerAkhara_MoveSide;
 					this->entity.add<ActionID::HorizontalFlip>();
 				}
 				else if(this->motion.contains(ActorMotion::MoveUp))
 				{
-					ending_animation = AnimationID::PlayerAkhara_LowPoly_MoveUp;
+					ending_animation = AnimationID::PlayerAkhara_MoveUp;
 				}
 				else if(this->motion.contains(ActorMotion::MoveDown))
 				{
-					ending_animation = AnimationID::PlayerAkhara_LowPoly_MoveDown;
+					ending_animation = AnimationID::PlayerAkhara_MoveDown;
 				}
 				else
 				{
-					ending_animation = AnimationID::PlayerAkhara_LowPoly_Idle;
+					ending_animation = AnimationID::PlayerAkhara_Idle;
 				}
 				if(this->dead())
 				{
-					// TODO: Death animation for LowPoly
-					ending_animation = AnimationID::PlayerAkhara_LowPoly_Death;
+					ending_animation = AnimationID::PlayerAkhara_Death;
 				}
 				if(this->entity.has<ActionID::Cast>())
 				{
 					const auto& action = this->entity.get<ActionID::Cast>()->data();
-					const Animation end_cast_anim = game::play_animation(AnimationID::PlayerAkhara_LowPoly_EndCast);
+					const Animation end_cast_anim = game::play_animation(AnimationID::PlayerAkhara_EndCast);
 					const int end_cast_anim_time_millis = (static_cast<float>(end_cast_anim.get_info().frames.size()) / end_cast_anim.get_info().fps) * 1000.0f;
 					if(action.cast_time_millis <= end_cast_anim_time_millis)
 					{
-						ending_animation = AnimationID::PlayerAkhara_LowPoly_EndCast;
+						ending_animation = AnimationID::PlayerAkhara_EndCast;
 					}
 					else
 					{
-						ending_animation = AnimationID::PlayerAkhara_LowPoly_Cast;
+						ending_animation = AnimationID::PlayerAkhara_Cast;
 					}
 				}
 			break;

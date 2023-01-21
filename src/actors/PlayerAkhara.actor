@@ -127,7 +127,7 @@ return
 	{
 		.movement_speed = 0.0016f
 	},
-	.skin = ActorSkin::PlayerAkhara_LowPoly,
+	.skin = ActorSkin::PlayerAkhara,
 	.animation = game::play_animation(AnimationID::PlayerAkhara_Idle),
 	.name = "Player Akhara"
 };
