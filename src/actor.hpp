@@ -34,8 +34,6 @@ namespace game
 		FireSmoke,
 		/// Actor looks like a fiery explosion particle effect.
 		FireExplosion,
-		/// Actor looks like the Nightmare boss.
-		Nightmare,
 		/// Actor looks like Akhara's default fireball.
 		PlayerAkhara_DefaultFireball,
 		/// Actor looks like a plain stone texture.
@@ -88,8 +86,6 @@ namespace game
 		FireExplosion,
 		/// An actor which displays an actor spurting blood after taking damage. Has no other iteration.
 		BloodSplatter,
-		/// A computer-controlled boss monster, called Nightmare that uses its own skin.
-		Nightmare,
 		/// An uninteractable actor which periodically spawns evil players.
 		GhostZombie_Spawner,
 		/// An uninteractable actor which periodically spawns fireballs launching towards a player.

@@ -217,30 +217,6 @@ add_text(
 		res/images/effects/fire_explosion/fire_explosion_5.png
 		res/images/effects/fire_explosion/fire_explosion_6.png
 
-		res/images/enemies/nightmare/nightmare_dead.png
-		res/images/enemies/nightmare/nightmare_down1.png
-		res/images/enemies/nightmare/nightmare_down2.png
-		res/images/enemies/nightmare/nightmare_down3.png
-		res/images/enemies/nightmare/nightmare_dying1.png
-		res/images/enemies/nightmare/nightmare_dying2.png
-		res/images/enemies/nightmare/nightmare_dying3.png
-		res/images/enemies/nightmare/nightmare_dying4.png
-		res/images/enemies/nightmare/nightmare_dying5.png
-		res/images/enemies/nightmare/nightmare_dying6.png
-		res/images/enemies/nightmare/nightmare_dying7.png
-		res/images/enemies/nightmare/nightmare_dying8.png
-		res/images/enemies/nightmare/nightmare_dying9.png
-		res/images/enemies/nightmare/nightmare_dying10.png
-		res/images/enemies/nightmare/nightmare_idle1.png
-		res/images/enemies/nightmare/nightmare_idle2.png
-		res/images/enemies/nightmare/nightmare_side1.png
-		res/images/enemies/nightmare/nightmare_side2.png
-		res/images/enemies/nightmare/nightmare_side3.png
-		res/images/enemies/nightmare/nightmare_special.png
-		res/images/enemies/nightmare/nightmare_up1.png
-		res/images/enemies/nightmare/nightmare_up2.png
-		res/images/enemies/nightmare/nightmare_up3.png
-
 		res/images/materials/material_stone.png
 		res/images/materials/material_stone_normal.png
 

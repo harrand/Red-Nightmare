@@ -142,30 +142,6 @@
 #include ImportedTextHeader(fire_explosion_5, png)
 #include ImportedTextHeader(fire_explosion_6, png)
 
-#include ImportedTextHeader(nightmare_dead, png)
-#include ImportedTextHeader(nightmare_down1, png)
-#include ImportedTextHeader(nightmare_down2, png)
-#include ImportedTextHeader(nightmare_down3, png)
-#include ImportedTextHeader(nightmare_dying1, png)
-#include ImportedTextHeader(nightmare_dying2, png)
-#include ImportedTextHeader(nightmare_dying3, png)
-#include ImportedTextHeader(nightmare_dying4, png)
-#include ImportedTextHeader(nightmare_dying5, png)
-#include ImportedTextHeader(nightmare_dying6, png)
-#include ImportedTextHeader(nightmare_dying7, png)
-#include ImportedTextHeader(nightmare_dying8, png)
-#include ImportedTextHeader(nightmare_dying9, png)
-#include ImportedTextHeader(nightmare_dying10, png)
-#include ImportedTextHeader(nightmare_idle1, png)
-#include ImportedTextHeader(nightmare_idle2, png)
-#include ImportedTextHeader(nightmare_side1, png)
-#include ImportedTextHeader(nightmare_side2, png)
-#include ImportedTextHeader(nightmare_side3, png)
-#include ImportedTextHeader(nightmare_special, png)
-#include ImportedTextHeader(nightmare_up1, png)
-#include ImportedTextHeader(nightmare_up2, png)
-#include ImportedTextHeader(nightmare_up3, png)
-
 #include ImportedTextHeader(material_stone, png)
 #include ImportedTextHeader(material_stone_normal, png)
 #include ImportedTextHeader(healthbar_empty, png)
@@ -331,30 +307,6 @@ namespace game
 		ImportedTextData(fire_explosion_4, png),
 		ImportedTextData(fire_explosion_5, png),
 		ImportedTextData(fire_explosion_6, png),
-
-		ImportedTextData(nightmare_dead, png),
-		ImportedTextData(nightmare_down1, png),
-		ImportedTextData(nightmare_down2, png),
-		ImportedTextData(nightmare_down3, png),
-		ImportedTextData(nightmare_dying1, png),
-		ImportedTextData(nightmare_dying2, png),
-		ImportedTextData(nightmare_dying3, png),
-		ImportedTextData(nightmare_dying4, png),
-		ImportedTextData(nightmare_dying5, png),
-		ImportedTextData(nightmare_dying6, png),
-		ImportedTextData(nightmare_dying7, png),
-		ImportedTextData(nightmare_dying8, png),
-		ImportedTextData(nightmare_dying9, png),
-		ImportedTextData(nightmare_dying10, png),
-		ImportedTextData(nightmare_idle1, png),
-		ImportedTextData(nightmare_idle2, png),
-		ImportedTextData(nightmare_side1, png),
-		ImportedTextData(nightmare_side2, png),
-		ImportedTextData(nightmare_side3, png),
-		ImportedTextData(nightmare_special, png),
-		ImportedTextData(nightmare_up1, png),
-		ImportedTextData(nightmare_up2, png),
-		ImportedTextData(nightmare_up3, png),
 
 		ImportedTextData(material_stone, png),
 		ImportedTextData(material_stone_normal, png),

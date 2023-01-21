@@ -45,9 +45,6 @@ namespace game
 			case ActorType::BloodSplatter:
 				#include "actors/BloodSplatter.actor"
 			break;
-			case ActorType::Nightmare:
-				#include "actors/Nightmare.actor"
-			break;
 			case ActorType::GhostZombie_Spawner:
 				#include "actors/GhostZombie_Spawner.actor"
 			break;
@@ -587,33 +584,6 @@ namespace game
 				else
 				{
 					ending_animation = AnimationID::GhostBanshee_Idle;
-				}
-			break;
-			case ActorSkin::Nightmare:
-				if(this->motion.contains(ActorMotion::MoveLeft))
-				{
-					ending_animation = AnimationID::Nightmare_MoveSide;
-				}
-				else if(this->motion.contains(ActorMotion::MoveRight))
-				{
-					ending_animation = AnimationID::Nightmare_MoveSide;
-					this->entity.add<ActionID::HorizontalFlip>();
-				}
-				else if(this->motion.contains(ActorMotion::MoveUp))
-				{
-					ending_animation = AnimationID::Nightmare_MoveUp;
-				}
-				else if(this->motion.contains(ActorMotion::MoveDown))
-				{
-					ending_animation = AnimationID::Nightmare_MoveDown;
-				}
-				else
-				{
-					ending_animation = AnimationID::Nightmare_Idle;
-				}
-				if(this->dead())
-				{
-					ending_animation = AnimationID::Nightmare_Death;
 				}
 			break;
 			case ActorSkin::DebugOnlyVisible:
