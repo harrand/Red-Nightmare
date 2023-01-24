@@ -32,8 +32,8 @@ return
 		}},
 		Flag<FlagID::ActionOnRepeat>
 		{{
-			.period = 3000.0f,
-			.current_time = 10000.0f,
+			.period = 1500.0f,
+			.current_time = 1000.0f,
 			.actions =
 			{
 				Action<ActionID::Cast>

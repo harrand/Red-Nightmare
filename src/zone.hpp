@@ -43,6 +43,7 @@ namespace game
 		ActorTypes whitelist = {};
 		ActorTypes blacklist = {};
 		std::optional<ProceduralZoneIntroLevel> intro_level = std::nullopt;
+		bool boss_battle = false;
 		std::unordered_map<ActorType, float> actor_spawn_coefficients = {};
 	};
 

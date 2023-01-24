@@ -78,6 +78,11 @@ namespace game
 				z.levels[l] = intro;
 				continue;
 			}
+			if(l == (pinfo.level_count - 1) && pinfo.boss_battle)
+			{
+				z.levels[l] = load_level(LevelID::BansheeBossBattleRoom);
+				continue;
+			}
 			auto cur_options = options;
 			cur_options.seed = pinfo.seed + l;
 			// Note: We want to amend the options for various settings. Namely, we don't want to spawn upwards stairs on the first level, and no downwards stairs on the last one either, etc... We do that now.
@@ -119,6 +124,7 @@ namespace game
 		static tz::vec2i dims = tz::vec2i::filled(32);
 		static int sparsity = 75;
 		static bool intro_level_enabled = true;
+		static bool boss_level_enabled = true;
 		static ProceduralZoneIntroLevel intro_level{.biome = ZoneBiome::Grassy};
 		static float ambient_lighting = 0.4f;
 
@@ -166,6 +172,7 @@ namespace game
 			ImGui::EndTable();
 		}
 		ImGui::Checkbox("Has Intro Level", &intro_level_enabled);
+		ImGui::Checkbox("Has Boss Battle", &boss_level_enabled);
 		if(intro_level_enabled)
 		{
 			ImGui::Indent();
@@ -203,6 +210,7 @@ namespace game
 				.whitelist = to_enum_field(whitelist),
 				.blacklist = to_enum_field(blacklist),
 				.intro_level = maybe_intro_level,
+				.boss_battle = boss_level_enabled,
 				.actor_spawn_coefficients = spawn_coefficients
 			};
 		}

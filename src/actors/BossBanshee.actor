@@ -4,20 +4,15 @@ return
 	.flags =
 	{
 		Flag<FlagID::StatTracked>{},
-		Flag<FlagID::CustomScale>
-		{{
-			.scale = {2.0f, 2.0f}
-		}},
 		Flag<FlagID::Light>
 		{{
 			.light =
 			{
-				.colour = {-1.0f, -1.0f, -0.01f},
-				.power = 0.01f
+				.colour = {0.06f, 0.4f, 1.0f},
+				.power = 0.04f
 			},
-			.power_variance = 0.01f,
-			.variance_rate = 0.4f,
-			.min_variance_pct = 0.05f,
+			.power_variance = 0.2f,
+			.variance_rate = 6.0f,
 			.power_scale_with_health_pct = true
 		}},
 		Flag<FlagID::Collide>
@@ -63,7 +58,7 @@ return
 		Flag<FlagID::ActionOnRepeat>
 		{{
 			.period = 1000.0f,
-			.current_time = 10000.0f,
+			.current_time = 1000.0f,
 			.actions =
 			{
 				Action<ActionID::Cast>
@@ -79,7 +74,7 @@ return
 							{
 								Action<ActionID::LaunchRandomDirection>
 								{{
-									.speed_multiplier = 4.0f
+									.speed_multiplier = 6.0f
 								}}
 							}
 						}}
