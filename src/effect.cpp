@@ -94,7 +94,6 @@ namespace game
 	void EffectManager::update(EffectIDs ids)
 	{
 		GlobalEffectData& gdata = tz::gl::get_device().get_renderer(this->global_storage).get_resource(this->global_buffer)->data_as<GlobalEffectData>().front();
-		tz::gl::get_device().get_renderer(this->global_storage).render();
 
 		gdata.time = (tz::system_time() - this->creation).millis<std::uint32_t>();
 		gdata.monitor_dimensions = static_cast<tz::vec2>(tz::wsi::get_monitors().front().dimensions);
