@@ -106,6 +106,8 @@ namespace game
 		Scenery_Gravestone,
 		/// A torch that lights up the surrounding area.
 		Interactable_Torch,
+		/// A torch that gives off cold light.
+		Interactable_Frost_Torch,
 		/// Some stone stairs going downwards, facing the negative-x direction. Player will go to the next level by going down them.
 		Interactable_Stone_Stairs_Down_NX,
 		/// Some stone stairs going upwards, facing the negative-x direction. Player will go to the previous level by going up them.

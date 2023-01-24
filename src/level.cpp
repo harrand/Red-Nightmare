@@ -80,6 +80,7 @@ namespace game
 			break;
 			case LevelID::BansheeBossBattleRoom:
 				backdrop.background = TextureID::Dungeon_Floor_Generic_Backdrop;
+				backdrop.foreground = TextureID::Banshee_Boss_Battle_Room_Backdrop;
 				ambient_lighting = 0.4f;
 			break;
 		}

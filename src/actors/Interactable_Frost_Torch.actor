@@ -1,6 +1,6 @@
 return
 {
-	.type = ActorType::Interactable_Torch,
+	.type = ActorType::Interactable_Frost_Torch,
 	.flags =
 	{
 		Flag<FlagID::Invincible>{},
@@ -10,13 +10,13 @@ return
 		{{
 			.predicate = [](const Actor& self, const Actor& other)
 			{
-				return other.type == ActorType::Frostbolt && !other.dead();
+				return other.type == ActorType::ChaoticFireball && !other.dead();
 			},
 			.actions =
 			{
 				Action<ActionID::RespawnAs>
 				{{
-					.actor = ActorType::Interactable_Frost_Torch
+					.actor = ActorType::Interactable_Torch
 				}}
 			}
 		}},
@@ -24,7 +24,7 @@ return
 		{{
 			.light =
 			{
-				.colour = {1.0f, 0.1f, 0.02f},
+				.colour = {0.02f, 0.1f, 1.0f},
 				.power = 0.001f
 			},
 			.offset = {-0.095f, 0.035f},
@@ -34,6 +34,6 @@ return
 	},
 	.faction = Faction::PureFriend,
 	.skin = ActorSkin::Interactable_Torch,
-	.palette_colour = {64u, 4u, 0u},
+	.palette_colour = {0u, 4u, 64u},
 	.name = "Torch",
 };

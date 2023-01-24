@@ -165,6 +165,7 @@
 #include ImportedTextHeader(snow_backdrop, png)
 #include ImportedTextHeader(dungeon_floor_backdrop, png)
 #include ImportedTextHeader(dungeon_floor_backdrop_normal, png)
+#include ImportedTextHeader(banshee_boss_battle_room_backdrop, png)
 
 namespace game
 {
@@ -331,6 +332,7 @@ namespace game
 		ImportedTextData(snow_backdrop, png),
 		ImportedTextData(dungeon_floor_backdrop, png),
 		ImportedTextData(dungeon_floor_backdrop_normal, png),
+		ImportedTextData(banshee_boss_battle_room_backdrop, png)
 	};
 
 	tz::gl::image_resource load_image(TextureID texid)

@@ -166,6 +166,7 @@ namespace game
 		Snow_Generic_Backdrop,
 		Dungeon_Floor_Generic_Backdrop,
 		Dungeon_Floor_Generic_Backdrop_Normal,
+		Banshee_Boss_Battle_Room_Backdrop,
 
 		Count
 	};

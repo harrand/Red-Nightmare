@@ -75,6 +75,9 @@ namespace game
 			case ActorType::Interactable_Torch:
 				#include "actors/Interactable_Torch.actor"
 			break;
+			case ActorType::Interactable_Frost_Torch:
+				#include "actors/Interactable_Frost_Torch.actor"
+			break;
 			case ActorType::Interactable_Stone_Stairs_Down_NX:
 				#include "actors/Interactable_Stone_Stairs_Down_NX.actor"
 			break;
