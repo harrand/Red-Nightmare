@@ -267,7 +267,7 @@ namespace game
 			}
 			if(ImGui::Button("Debug Add Ghost Banshee"))
 			{
-				this->add(ActorType::GhostBanshee);
+				this->add(ActorType::GhostBanshee_Skittish);
 			}
 			if(ImGui::Button("Debug Add Ghost Zombie Spawner"))
 			{
@@ -293,6 +293,10 @@ namespace game
 
 	void Scene::dbgui_story_levels()
 	{
+		if(ImGui::Button("Next Level"))
+		{
+			this->impl_next_level();
+		}
 		ImGui::Text("Story Levels (Zones)");
 		if(ImGui::Button("Story Level 1: Blanchfield Banshee"))
 		{

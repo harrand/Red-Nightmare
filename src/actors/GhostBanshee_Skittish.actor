@@ -1,6 +1,6 @@
 return
 {
-	.type = ActorType::GhostBanshee,
+	.type = ActorType::GhostBanshee_Skittish,
 	.flags =
 	{
 		Flag<FlagID::StatTracked>{},
@@ -9,7 +9,7 @@ return
 			.collision_filter =
 			{
 				ActorType::GhostZombie,
-				ActorType::GhostBanshee
+				ActorType::GhostBanshee_Skittish
 			}
 		}},
 		Flag<FlagID::AggressiveIf>
@@ -27,6 +27,16 @@ return
 				Action<ActionID::ApplyBuff>
 				{{
 					.buff = BuffID::Chill
+				}}
+			}
+		}},
+		Flag<FlagID::ActionOnDeath>
+		{{
+			.actions =
+			{
+				Action<ActionID::RespawnAs>
+				{{
+					.actor = ActorType::GhostBanshee_Spirit
 				}}
 			}
 		}},
@@ -62,12 +72,13 @@ return
 	.faction = Faction::PlayerEnemy,
 	.base_stats =
 	{
-		.movement_speed = 0.002f,
-		.max_health = 10.0f,
-		.current_health = 10.0f
+		.movement_speed = 0.0004f,
+		.max_health = 0.01f,
+		.current_health = 0.01f
 	},
 	.skin = ActorSkin::GhostBanshee,
 	.animation = game::play_animation(AnimationID::GhostBanshee_Idle),
+	.palette_colour = {128u, 255u, 255u},
 	.name = "Ghost Banshee",
 	.density = 0.1f
 };

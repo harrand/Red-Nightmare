@@ -9,7 +9,7 @@ return
 			.collision_filter =
 			{
 				ActorType::GhostZombie,
-				ActorType::GhostBanshee
+				ActorType::GhostBanshee_Skittish
 			}
 		}},
 		Flag<FlagID::AggressiveIf>

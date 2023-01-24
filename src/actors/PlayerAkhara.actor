@@ -66,6 +66,10 @@ return
 										.inherit_faction = true,
 										.actions =
 										{
+											Action<ActionID::ApplyBuff>
+											{{
+												.buff = BuffID::Berserk
+											}},
 											Action<ActionID::LaunchToMouse>
 											{{
 												.speed_multiplier = 8.0f

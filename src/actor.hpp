@@ -70,8 +70,9 @@ namespace game
 		PlayerAkhara,
 		/// A computer-controlled ghost zombie enemy.
 		GhostZombie,
-		/// A computer-controlled ghost banshee enemy. It's slower than other zombies, but can chill enemy players, slowing their movement.
 		GhostBanshee,
+		/// A computer-controlled ghost banshee enemy. It's slower than other zombies, but can chill enemy players, slowing their movement. When defeated, it will flee to the next level.
+		GhostBanshee_Skittish,
 		BossBanshee,
 		/// When a GhostBanshee dies, it will become a spirit which searches for a nearby zombie to possess. If it does, it turns the zombie into another banshee.
 		GhostBanshee_Spirit,

@@ -3,18 +3,29 @@ return
 	.type = ActorType::BossBanshee,
 	.flags =
 	{
-		Flag<FlagID::Projectile>{},
 		Flag<FlagID::StatTracked>{},
 		Flag<FlagID::CustomScale>
 		{{
 			.scale = {2.0f, 2.0f}
+		}},
+		Flag<FlagID::Light>
+		{{
+			.light =
+			{
+				.colour = {-1.0f, -1.0f, -0.01f},
+				.power = 0.01f
+			},
+			.power_variance = 0.01f,
+			.variance_rate = 0.4f,
+			.min_variance_pct = 0.05f,
+			.power_scale_with_health_pct = true
 		}},
 		Flag<FlagID::Collide>
 		{{
 			.collision_filter =
 			{
 				ActorType::GhostZombie,
-				ActorType::GhostBanshee
+				ActorType::GhostBanshee_Skittish
 			}
 		}},
 		Flag<FlagID::AggressiveIf>
@@ -35,9 +46,23 @@ return
 				}}
 			}
 		}},
+		Flag<FlagID::ActionOnDeath>
+		{{
+			.actions =
+			{
+				Action<ActionID::RespawnAs>
+				{{
+					.actor = ActorType::GhostBanshee
+				}},
+				Action<ActionID::ApplyBuff>
+				{{
+					.buff = BuffID::Sprint
+				}}
+			}
+		}},
 		Flag<FlagID::ActionOnRepeat>
 		{{
-			.period = 6000.0f,
+			.period = 1000.0f,
 			.current_time = 10000.0f,
 			.actions =
 			{
@@ -52,7 +77,7 @@ return
 							.inherit_faction = true,
 							.actions =
 							{
-								Action<ActionID::LaunchToPlayer>
+								Action<ActionID::LaunchRandomDirection>
 								{{
 									.speed_multiplier = 4.0f
 								}}
@@ -68,8 +93,8 @@ return
 	.base_stats =
 	{
 		.movement_speed = 0.0f,
-		.max_health = 10000.0f,
-		.current_health = 10000.0f
+		.max_health = 50.0f,
+		.current_health = 50.0f
 	},
 	.skin = ActorSkin::GhostBanshee,
 	.animation = game::play_animation(AnimationID::GhostBanshee_Idle),

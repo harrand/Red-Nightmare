@@ -24,6 +24,9 @@ namespace game
 			case ActorType::GhostBanshee:
 				#include "actors/GhostBanshee.actor"
 			break;
+			case ActorType::GhostBanshee_Skittish:
+				#include "actors/GhostBanshee_Skittish.actor"
+			break;
 			case ActorType::BossBanshee:
 				#include "actors/BossBanshee.actor"
 			break;
