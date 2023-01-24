@@ -38,7 +38,7 @@ return
 			{
 				Action<ActionID::Cast>
 				{{
-					.cast_time_millis = 800.0f,
+					.cast_time_millis = 0.0f,
 					.actions =
 					{
 						Action<ActionID::SpawnActor>

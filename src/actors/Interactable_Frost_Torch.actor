@@ -18,6 +18,10 @@ return
 				{{
 					.actor = ActorType::Interactable_Torch
 				}}
+			},
+			.touchee_actions =
+			{
+				Action<ActionID::Die>{}
 			}
 		}},
 		Flag<FlagID::Light>

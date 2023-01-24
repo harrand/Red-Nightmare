@@ -61,6 +61,16 @@ return
 						Action<ActionID::LaunchRandomDirection>
 						{{
 							.speed_multiplier = 8.0f
+						}},
+						Action<ActionID::ApplyFlag>
+						{{
+							.flags =
+							{
+								Flag<FlagID::CustomScale>
+								{{
+									.scale = {0.1f, 0.1f}
+								}}
+							}
 						}}
 					}
 				}}
