@@ -11,6 +11,7 @@
 #include ImportedTextHeader(dev_level_1, png)
 #include ImportedTextHeader(dev_level_2, png)
 #include ImportedTextHeader(dev_level_3, png)
+#include ImportedTextHeader(banshee_boss_battle_room, png)
 
 namespace game
 {
@@ -23,6 +24,7 @@ namespace game
 		ImportedTextData(dev_level_1, png),
 		ImportedTextData(dev_level_2, png),
 		ImportedTextData(dev_level_3, png),
+		ImportedTextData(banshee_boss_battle_room, png),
 	};
 
 	LevelPalette get_level_palette()
@@ -75,6 +77,9 @@ namespace game
 				backdrop.background = TextureID::Snow_Generic_Backdrop;
 				backdrop.foreground = TextureID::DevLevel1_Backdrop;
 				weather_effect = EffectID::Snow;
+			break;
+			case LevelID::BansheeBossBattleRoom:
+				backdrop.background = TextureID::Dungeon_Floor_Generic_Backdrop;
 			break;
 		}
 		return load_level_from_image(level_image, backdrop, weather_effect, ambient_lighting);

@@ -36,6 +36,7 @@ namespace game
 		DevLevel1,
 		DevLevel2,
 		DevLevel3,
+		BansheeBossBattleRoom,
 		Count
 	};
 

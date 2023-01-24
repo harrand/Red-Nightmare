@@ -242,6 +242,7 @@ add_text(
 		res/images/levels/dev_level_1_backdrop_normal.png
 		res/images/levels/dev_level_2.png
 		res/images/levels/dev_level_3.png
+		res/images/levels/banshee_boss_battle_room.png
 		res/images/levels/backdrops/generic/grass_backdrop.png
 		res/images/levels/backdrops/generic/grass_backdrop_normal.png
 		res/images/levels/backdrops/generic/snow_backdrop.png

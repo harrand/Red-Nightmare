@@ -1,0 +1,79 @@
+return
+{
+	.type = ActorType::BossBanshee,
+	.flags =
+	{
+		Flag<FlagID::Projectile>{},
+		Flag<FlagID::StatTracked>{},
+		Flag<FlagID::CustomScale>
+		{{
+			.scale = {2.0f, 2.0f}
+		}},
+		Flag<FlagID::Collide>
+		{{
+			.collision_filter =
+			{
+				ActorType::GhostZombie,
+				ActorType::GhostBanshee
+			}
+		}},
+		Flag<FlagID::AggressiveIf>
+		{{
+			.predicate = [](const Actor& self, const Actor& victim){return self.is_enemy_of(victim) && !victim.dead();}
+		}},
+		Flag<FlagID::HazardousIf>
+		{{
+			.predicate = [](const Actor& self, const Actor& victim){return self.is_enemy_of(victim);}
+		}},
+		Flag<FlagID::ActionOnHit>
+		{{
+			.hittee_actions =
+			{
+				Action<ActionID::ApplyBuff>
+				{{
+					.buff = BuffID::Chill
+				}}
+			}
+		}},
+		Flag<FlagID::ActionOnRepeat>
+		{{
+			.period = 6000.0f,
+			.current_time = 10000.0f,
+			.actions =
+			{
+				Action<ActionID::Cast>
+				{{
+					.cast_time_millis = 500.0f,
+					.actions =
+					{
+						Action<ActionID::SpawnActor>
+						{{
+							.actor = ActorType::FrozenOrb,
+							.inherit_faction = true,
+							.actions =
+							{
+								Action<ActionID::LaunchToPlayer>
+								{{
+									.speed_multiplier = 4.0f
+								}}
+							}
+						}}
+					},
+					.cast_while_moving = true
+				}},
+			}
+		}}
+	},
+	.faction = Faction::PlayerEnemy,
+	.base_stats =
+	{
+		.movement_speed = 0.0f,
+		.max_health = 10000.0f,
+		.current_health = 10000.0f
+	},
+	.skin = ActorSkin::GhostBanshee,
+	.animation = game::play_animation(AnimationID::GhostBanshee_Idle),
+	.palette_colour = {0u, 12u, 255u},
+	.name = "Banshee (Boss)",
+	.density = 0.1f
+};

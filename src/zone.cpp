@@ -13,7 +13,8 @@ namespace game
 					.levels =
 					{
 						game::load_level(LevelID::DevLevel1),
-						game::load_level(LevelID::DevLevel0)
+						game::load_level(LevelID::DevLevel0),
+						game::load_level(LevelID::BansheeBossBattleRoom)
 					},
 					.name = "Blanchfield Graveyard"
 				};

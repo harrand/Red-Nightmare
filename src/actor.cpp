@@ -24,6 +24,9 @@ namespace game
 			case ActorType::GhostBanshee:
 				#include "actors/GhostBanshee.actor"
 			break;
+			case ActorType::BossBanshee:
+				#include "actors/BossBanshee.actor"
+			break;
 			case ActorType::GhostBanshee_Spirit:
 				#include "actors/GhostBanshee_Spirit.actor"
 			break;
@@ -606,6 +609,10 @@ namespace game
 		if(this->animation != anim)
 		{
 			this->animation = anim;
+		}
+		if(this->base_stats.movement_speed == 0.0f)
+		{
+			return;
 		}
 		float speed_ratio = this->get_current_stats().movement_speed / this->base_stats.movement_speed;
 		// We want multiplyer to be half of the % movement speed.
