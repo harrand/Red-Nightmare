@@ -6,7 +6,9 @@ namespace game
 {
 	void initialise()
 	{
-		tz::initialise({.name = "Red Nightmare", .version = {2, 1, 0},
+		tz::initialise({
+			.name = "Red Nightmare",
+			.version = game::get_version(),
 			.flags = {tz::application_flag::window_transparent}});
 		effects_impl::initialise();
 	}
@@ -15,5 +17,10 @@ namespace game
 	{
 		effects_impl::terminate();
 		tz::terminate();
+	}
+
+	tz::version get_version()
+	{
+		return tz::version::from_binary_string(GAME_VERSION);
 	}
 }

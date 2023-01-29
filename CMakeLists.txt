@@ -1,7 +1,13 @@
 cmake_minimum_required(VERSION 3.9)
+
+configure_file(version.txt version_txt_dummy.xml)
+file(READ version.txt GAME_VERSION_TXT)
+string(REGEX MATCH "[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+" GAME_VERSION ${GAME_VERSION_TXT})
+
 project(RedNightmare
-	DESCRIPTION "2D Power Fantasy Game"
-	LANGUAGES CXX)
+	DESCRIPTION "2D Action Roguelike"
+	LANGUAGES CXX
+	VERSION ${GAME_VERSION})
 
 add_subdirectory(engine)
 add_subdirectory(lib)
@@ -64,6 +70,7 @@ add_shader(
 )
 
 target_link_libraries(rednightmare_gamelib PUBLIC stb)
+target_compile_definitions(rednightmare_gamelib PUBLIC -DGAME_VERSION=0x${PROJECT_VERSION_MAJOR}${PROJECT_VERSION_MINOR}${PROJECT_VERSION_PATCH}${PROJECT_VERSION_TWEAK})
 
 tz_add_executable(
 	TARGET rednightmare
