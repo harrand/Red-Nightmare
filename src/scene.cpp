@@ -743,9 +743,23 @@ namespace game
 		// It's chasing something, but we don't care about what it's chasing.
 		// if its not a player, we don't want it to move while it's casting though.
 		const bool npc_is_casting = !actor().flags.has<FlagID::Player>() && actor().entity.has<ActionID::Cast>();
-		if(npc_is_casting)
+		const bool is_attached = actor().flags.has<FlagID::AttachedToActor>();
+		if(npc_is_casting || is_attached)
 		{
 			actor().motion = {};
+		}
+		if(is_attached)
+		{
+			std::size_t parent_uuid = actor().flags.get<FlagID::AttachedToActor>()->data().actor_uuid;
+			std::size_t parent = this->get_actor_from_uuid(parent_uuid);
+			if(parent == Actor::NullID)
+			{
+				actor().flags.remove<FlagID::AttachedToActor>();
+			}
+			else
+			{
+			quad.position = this->qrenderer.elements()[parent].position;
+			}
 		}
 		if(chase_target.has_value() && !npc_is_casting)
 		{

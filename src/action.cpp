@@ -171,6 +171,13 @@ namespace game
 		{
 			scene.get_actor(id).faction = scene.actor().faction;
 		}
+		if(action.data().is_child)
+		{
+			scene.get_actor(id).flags.set<FlagID::AttachedToActor>
+			({
+				.actor_uuid = scene.actor().uuid
+			});
+		}
 		scene.get_quad(id).position = scene.quad().position;
 		action.data().actions.copy_components(scene.get_actor(id).entity);
 		action.set_is_complete(true);

@@ -203,6 +203,7 @@ namespace game
 	struct ActionParams<ActionID::SpawnActor>
 	{
 		ActorType actor;
+		bool is_child = false;
 		bool inherit_faction = false;
 		ActionEntity actions = {};
 	};
