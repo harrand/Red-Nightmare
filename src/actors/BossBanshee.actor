@@ -6,14 +6,19 @@ return
 		Flag<FlagID::StatTracked>{},
 		Flag<FlagID::Light>
 		{{
-			.light =
+			.lights =
 			{
-				.colour = {0.06f, 0.4f, 1.0f},
-				.power = 0.04f
-			},
-			.power_variance = 0.2f,
-			.variance_rate = 6.0f,
-			.power_scale_with_health_pct = true
+				{
+					.light =
+					{
+						.colour = {0.06f, 0.4f, 1.0f},
+						.power = 0.04f
+					},
+					.power_variance = 0.2f,
+					.variance_rate = 6.0f,
+					.power_scale_with_health_pct = true
+				}
+			}
 		}},
 		Flag<FlagID::Collide>
 		{{

@@ -9,14 +9,19 @@ return
 		Flag<FlagID::Unhittable>{},
 		Flag<FlagID::Light>
 		{{
-			.light =
+			.lights =
 			{
-				.colour = {1.0f, 0.1f, 0.02f},
-				.power = 0.0f
-			},
-			.power_variance = 0.001f,
-			.variance_rate = 7.0f,
-			.min_variance_pct = 0.0f
+				{
+					.light =
+					{
+						.colour = {1.0f, 0.1f, 0.02f},
+						.power = 0.0f
+					},
+				.power_variance = 0.001f,
+				.variance_rate = 7.0f,
+				.min_variance_pct = 0.0f
+				}
+			}
 		}},
 	},
 	.skin = ActorSkin::FireSmoke,

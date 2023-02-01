@@ -613,32 +613,35 @@ namespace game
 		
 		if(actor().flags.has<FlagID::Light>())
 		{
-			if(this->impl_light_actor_count < game::effects().point_lights().size() - 1)
+			auto& flag = actor().flags.get<FlagID::Light>()->data();
+			if(this->impl_light_actor_count < game::effects().point_lights().size() - flag.lights.size())
 			{
-				auto& flag = actor().flags.get<FlagID::Light>()->data();
 				unsigned long long delta_millis = tz::system_time().millis<unsigned long long>() - actor().last_update.millis<unsigned long long>();
 				flag.time += delta_millis;
 				if(!actor().dead() || !actor().flags.has<FlagID::InvisibleWhileDead>())
 				{
-					auto l = flag.light;
-					l.position = quad.position + flag.offset;
-					if(actor().flags.has<FlagID::CustomScale>())
+					for(auto li : flag.lights)
 					{
-						auto scale = actor().flags.get<FlagID::CustomScale>()->data().scale;
-						float diff = (((scale[0] + scale[1]) * 0.5f - 0.5f) * 12.0f);
-						if(diff <= 0.0f)
+						auto l = li.light;
+						l.position = quad.position + li.offset;
+						if(actor().flags.has<FlagID::CustomScale>())
 						{
-							diff = 1.0f;
+							auto scale = actor().flags.get<FlagID::CustomScale>()->data().scale;
+							float diff = (((scale[0] + scale[1]) * 0.5f - 0.5f) * 12.0f);
+							if(diff <= 0.0f)
+							{
+								diff = 1.0f;
+							}
+							l.power *= diff;
 						}
-						l.power *= diff;
+						l.power += std::clamp(std::sin(li.time * 0.001f * li.variance_rate), li.min_variance_pct, li.max_variance_pct) * li.power_variance;
+						if(li.power_scale_with_health_pct)
+						{
+							auto stats = actor().get_current_stats();
+							l.power *= stats.current_health / stats.max_health;
+						}
+						game::effects().point_lights()[++this->impl_light_actor_count] = l;
 					}
-					l.power += std::clamp(std::sin(flag.time * 0.001f * flag.variance_rate), flag.min_variance_pct, flag.max_variance_pct) * flag.power_variance;
-					if(flag.power_scale_with_health_pct)
-					{
-						auto stats = actor().get_current_stats();
-						l.power *= stats.current_health / stats.max_health;
-					}
-					game::effects().point_lights()[++this->impl_light_actor_count] = l;
 				}
 			}
 		}

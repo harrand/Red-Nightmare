@@ -195,6 +195,7 @@ namespace game
 	ACTION_IMPL_END(ActionID::RespawnAs)
 //--------------------------------------------------------------------------------------------------
 	ACTION_IMPL_BEGIN(ActionID::Despawn)
+		scene.actor().flags.remove<FlagID::Invincible>();
 		scene.actor().entity.add<ActionID::Die>();
 		if(scene.actor().flags.has<FlagID::DoNotGarbageCollect>())
 		{

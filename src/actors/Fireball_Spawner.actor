@@ -7,15 +7,20 @@ return
 		Flag<FlagID::InvisibleWhileDead>{},
 		Flag<FlagID::Light>
 		{{
-			.light =
+			.lights =
 			{
-				.colour = {-0.01f, -1.0f, -1.0f},
-				.power = 0.1f
-			},
-			.power_variance = 0.01f,
-			.variance_rate = 0.4f,
-			.min_variance_pct = 0.05f,
-			.power_scale_with_health_pct = true
+				{
+					.light =
+					{
+						.colour = {-0.01f, -1.0f, -1.0f},
+						.power = 0.1f
+					},
+					.power_variance = 0.01f,
+					.variance_rate = 0.4f,
+					.min_variance_pct = 0.05f,
+					.power_scale_with_health_pct = true
+				}
+			}
 		}},
 		Flag<FlagID::ActionOnRepeat>
 		{{

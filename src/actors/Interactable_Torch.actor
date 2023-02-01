@@ -26,14 +26,19 @@ return
 		}},
 		Flag<FlagID::Light>
 		{{
-			.light =
+			.lights =
 			{
-				.colour = {1.0f, 0.1f, 0.02f},
-				.power = 0.001f
-			},
-			.offset = {-0.095f, 0.035f},
-			.power_variance = 0.002f,
-			.variance_rate = 15.0f
+				{
+					.light =
+					{
+						.colour = {1.0f, 0.1f, 0.02f},
+						.power = 0.001f
+					},
+					.offset = {-0.095f, 0.035f},
+					.power_variance = 0.002f,
+					.variance_rate = 15.0f
+				}
+			}
 		}}
 	},
 	.faction = Faction::PureFriend,

@@ -8,6 +8,8 @@ output(id = 0) vec4 frag_colour;
 struct PointLight
 {
 	vec2 position;
+	bool emits_pixels;
+	bool emits_light;
 	vec3 colour;
 	float power;
 };
@@ -56,7 +58,10 @@ void main()
 	for(uint i = 0; i < max_light_count; i++)
 	{
 		PointLight l = light.point_lights[i];
-		col += l.colour * diffuse(vpos, l);
+		if(l.emits_pixels)
+		{
+			col += l.colour * diffuse(vpos, l);
+		}
 		//tz::debug::printf("lpos: %v2f, vpos: %v2f", l.position, vpos);
 	}
 

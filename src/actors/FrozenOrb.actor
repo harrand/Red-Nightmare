@@ -5,10 +5,15 @@ return
 	{
 		Flag<FlagID::Light>
 		{{
-			.light =
+			.lights =
 			{
-				.colour = {0.01f, 0.1f, 1.0f},
-				.power = 0.015f
+				{
+					.light =
+					{
+						.colour = {0.01f, 0.1f, 1.0f},
+						.power = 0.015f
+					}
+				}
 			}
 		}},
 		Flag<FlagID::Projectile>{},

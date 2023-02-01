@@ -26,6 +26,8 @@ resource(id = 1) const buffer RenderDataBuffer
 struct PointLight
 {
 	vec2 position;
+	bool emits_pixels;
+	bool emits_light;
 	vec3 colour;
 	float power;
 };
@@ -78,7 +80,10 @@ void main()
 	}
 	for(uint i = 0; i < max_light_count; i++)
 	{
-		frag_colour += vec4(light.point_lights[i].colour * diffuse(light.point_lights[i], normal) * specular(light.point_lights[i], normal), 0.0f);
+		if(light.point_lights[i].emits_light)
+		{
+			frag_colour += vec4(light.point_lights[i].colour * diffuse(light.point_lights[i], normal) * specular(light.point_lights[i], normal), 0.0f);
+		}
 	}
 	//frag_colour = vec4(vec3(out::fragment_depth), 1.0f);
 }
