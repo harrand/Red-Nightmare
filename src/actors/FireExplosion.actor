@@ -9,8 +9,11 @@ return
 			.light =
 			{
 				.colour = {1.0f, 0.1f, 0.02f},
-				.power = 0.00025f
-			}
+				.power = 0.0f
+			},
+			.power_variance = 0.01f,
+			.variance_rate = 7.0f,
+			.min_variance_pct = 0.0f
 		}},
 		Flag<FlagID::CustomScale>{{.scale = {1.5f, 1.5f}}},
 		Flag<FlagID::HazardousIf>

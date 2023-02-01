@@ -451,7 +451,7 @@ namespace game
 		background_data.normal_map_id = game::get_normal_map_for(background_data.texture_id);
 		background_data.position = backdrop_position;
 		background_data.scale = backdrop_scale;
-		background_data.layer = 0.990f;
+		background_data.layer = -1.0f;
 		// boundaries are proportional to the level image dimensions.
 		// the background texcoord scale should be lower if the level image is really big.
 		const tz::vec2 texcoord_scale{std::cbrt(this->level_boundaries[0]), std::cbrt(this->level_boundaries[1])};
@@ -462,7 +462,7 @@ namespace game
 		foreground_data.normal_map_id = game::get_normal_map_for(foreground_data.texture_id);
 		foreground_data.position = backdrop_position;
 		foreground_data.scale = backdrop_scale;
-		foreground_data.layer = 0.95f;
+		foreground_data.layer = -0.9f;
 
 		auto handle_effect = [this, backdrop_position, backdrop_scale, texcoord_scale](EffectID id, std::size_t effect_number)
 		{

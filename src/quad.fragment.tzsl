@@ -5,6 +5,7 @@ input(id = 1, flat) uint in_normal_map_id;
 input(id = 2) vec2 in_texcoord;
 input(id = 3) vec3 colour_offset;
 input(id = 4) vec2 position;
+input(id = 5, flat) uint autolayer;
 output(id = 0) vec4 frag_colour;
 
 import <math>
@@ -63,6 +64,7 @@ float specular(PointLight l, vec3 normal)
 
 void main()
 {
+	out::fragment_depth = float(autolayer) / 10000.0f;
 	frag_colour = texture(images[in_texture_id], in_texcoord);
 	vec3 normal = (255.0f/128.0f * texture(images[in_normal_map_id], in_texcoord).rgb) - 1;
 	frag_colour.r = tz::math::min(frag_colour.r, colour_offset.r * 2.0f);
@@ -78,4 +80,5 @@ void main()
 	{
 		frag_colour += vec4(light.point_lights[i].colour * diffuse(light.point_lights[i], normal) * specular(light.point_lights[i], normal), 0.0f);
 	}
+	//frag_colour = vec4(vec3(out::fragment_depth), 1.0f);
 }

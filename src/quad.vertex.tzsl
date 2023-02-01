@@ -53,6 +53,7 @@ output(id = 1) uint out_normal_map_id;
 output(id = 2) vec2 out_texcoord;
 output(id = 3) vec3 out_colour_offset;
 output(id = 4) vec2 out_position;
+output(id = 5) uint out_autolayer;
 
 void main()
 {
@@ -60,9 +61,17 @@ void main()
 	ElementData elem = element.data[quad_id];
 
 	out_position = elem.position + quad_positions[in::vertex_id % 6] * elem.scale;
-	out::position = render.data.projection * render.data.view * vec4(out_position, -elem.layer, 1.0);
+	out::position = render.data.projection * render.data.view * vec4(out_position, 0.0f, 1.0);
 	out_texture_id = elem.texture_id;
 	out_normal_map_id = elem.normal_map_id;
 	out_texcoord = quad_texcoords[in::vertex_id % 6] * elem.texcoord_scale;
 	out_colour_offset = status_effect_colours[elem.status_effect_id];
+	if(elem.layer < 0.0f)
+	{
+		out_autolayer = uint(1024.0f - elem.layer);
+	}
+	else
+	{
+		out_autolayer = uint((out_position.y * 50.0f) + elem.layer);
+	}
 }
