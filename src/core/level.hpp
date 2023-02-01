@@ -1,8 +1,8 @@
 #ifndef REDNIGHTMARE_LEVEL_HPP
 #define REDNIGHTMARE_LEVEL_HPP
-#include "actor.hpp"
-#include "effect.hpp"
-#include "backdrop.hpp"
+#include "core/actor.hpp"
+#include "gfx/effect.hpp"
+#include "gfx/backdrop.hpp"
 #include "tz/gl/resource.hpp"
 #include <unordered_map>
 #include <utility>

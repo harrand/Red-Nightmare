@@ -1,4 +1,4 @@
-#include "quadtree.hpp"
+#include "core/quadtree.hpp"
 
 namespace game
 {

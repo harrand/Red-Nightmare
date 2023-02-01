@@ -1,5 +1,5 @@
-#include "level.hpp"
-#include "images.hpp"
+#include "core/level.hpp"
+#include "gfx/images.hpp"
 #include "tz/core/imported_text.hpp"
 #include "tz/core/data/grid_view.hpp"
 #include "tz/dbgui/dbgui.hpp"

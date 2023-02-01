@@ -1,5 +1,5 @@
-#include "scene.hpp"
-#include "actor.hpp"
+#include "core/scene.hpp"
+#include "core/actor.hpp"
 #include "game.hpp"
 #include "tz/core/time.hpp"
 #include "tz/dbgui/dbgui.hpp"

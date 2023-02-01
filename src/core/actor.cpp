@@ -1,5 +1,5 @@
-#include "actor.hpp"
-#include "util.hpp"
+#include "core/actor.hpp"
+#include "core/util.hpp"
 #include "tz/dbgui/dbgui.hpp"
 #include "tz/wsi/keyboard.hpp"
 #include "tz/core/profile.hpp"
@@ -16,85 +16,85 @@ namespace game
 		switch(type)
 		{
 			case ActorType::PlayerAkhara:
-				#include "actors/PlayerAkhara.actor"
+				#include "gameplay/actors/PlayerAkhara.actor"
 			break;
 			case ActorType::GhostZombie:
-				#include "actors/GhostZombie.actor"
+				#include "gameplay/actors/GhostZombie.actor"
 			break;
 			case ActorType::GhostBanshee:
-				#include "actors/GhostBanshee.actor"
+				#include "gameplay/actors/GhostBanshee.actor"
 			break;
 			case ActorType::GhostBanshee_Skittish:
-				#include "actors/GhostBanshee_Skittish.actor"
+				#include "gameplay/actors/GhostBanshee_Skittish.actor"
 			break;
 			case ActorType::BossBanshee:
-				#include "actors/BossBanshee.actor"
+				#include "gameplay/actors/BossBanshee.actor"
 			break;
 			case ActorType::GhostBanshee_Spirit:
-				#include "actors/GhostBanshee_Spirit.actor"
+				#include "gameplay/actors/GhostBanshee_Spirit.actor"
 			break;
 			case ActorType::ChaoticFireball:
-				#include "actors/ChaoticFireball.actor"
+				#include "gameplay/actors/ChaoticFireball.actor"
 			break;
 			case ActorType::Frostbolt:
-				#include "actors/Frostbolt.actor"
+				#include "gameplay/actors/Frostbolt.actor"
 			break;
 			case ActorType::FrozenOrb:
-				#include "actors/FrozenOrb.actor"
+				#include "gameplay/actors/FrozenOrb.actor"
 			break;
 			case ActorType::FireSmoke:
-				#include "actors/FireSmoke.actor"
+				#include "gameplay/actors/FireSmoke.actor"
 			break;
 			case ActorType::FireExplosion:
-				#include "actors/FireExplosion.actor"
+				#include "gameplay/actors/FireExplosion.actor"
 			break;
 			case ActorType::BloodSplatter:
-				#include "actors/BloodSplatter.actor"
+				#include "gameplay/actors/BloodSplatter.actor"
 			break;
 			case ActorType::GhostZombie_Spawner:
-				#include "actors/GhostZombie_Spawner.actor"
+				#include "gameplay/actors/GhostZombie_Spawner.actor"
 			break;
 			case ActorType::Fireball_Spawner:
-				#include "actors/Fireball_Spawner.actor"
+				#include "gameplay/actors/Fireball_Spawner.actor"
 			break;
 			case ActorType::Wall:
-				#include "actors/Wall.actor"
+				#include "gameplay/actors/Wall.actor"
 			break;
 			case ActorType::InvisibleWall:
-				#include "actors/InvisibleWall.actor"
+				#include "gameplay/actors/InvisibleWall.actor"
 			break;
 			case ActorType::InvisibleWallProjectilePass:
-				#include "actors/InvisibleWallProjectilePass.actor"
+				#include "gameplay/actors/InvisibleWallProjectilePass.actor"
 			break;
 			case ActorType::WallDestructible:
-				#include "actors/WallDestructible.actor"
+				#include "gameplay/actors/WallDestructible.actor"
 			break;
 			case ActorType::Scenery_Gravestone:
-				#include "actors/Scenery_Gravestone.actor"
+				#include "gameplay/actors/Scenery_Gravestone.actor"
 			break;
 			case ActorType::Interactable_Torch:
-				#include "actors/Interactable_Torch.actor"
+				#include "gameplay/actors/Interactable_Torch.actor"
 			break;
 			case ActorType::Interactable_Frost_Torch:
-				#include "actors/Interactable_Frost_Torch.actor"
+				#include "gameplay/actors/Interactable_Frost_Torch.actor"
 			break;
 			case ActorType::Interactable_Stone_Stairs_Down_NX:
-				#include "actors/Interactable_Stone_Stairs_Down_NX.actor"
+				#include "gameplay/actors/Interactable_Stone_Stairs_Down_NX.actor"
 			break;
 			case ActorType::Interactable_Stone_Stairs_Up_NX:
-				#include "actors/Interactable_Stone_Stairs_Up_NX.actor"
+				#include "gameplay/actors/Interactable_Stone_Stairs_Up_NX.actor"
 			break;
 			case ActorType::Interactable_Stone_Stairs_Down_PY:
-				#include "actors/Interactable_Stone_Stairs_Down_PY.actor"
+				#include "gameplay/actors/Interactable_Stone_Stairs_Down_PY.actor"
 			break;
 			case ActorType::Interactable_Stone_Stairs_Up_PY:
-				#include "actors/Interactable_Stone_Stairs_Up_PY.actor"
+				#include "gameplay/actors/Interactable_Stone_Stairs_Up_PY.actor"
 			break;
 			case ActorType::CollectablePowerup_Sprint:
-				#include "actors/CollectablePowerup_Sprint.actor"
+				#include "gameplay/actors/CollectablePowerup_Sprint.actor"
 			break;
 			case ActorType::RoadSpeedBoost:
-				#include "actors/RoadSpeedBoost.actor"
+				#include "gameplay/actors/RoadSpeedBoost.actor"
 			break;
 			case ActorType::World:
 				return

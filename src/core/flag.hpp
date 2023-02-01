@@ -1,8 +1,8 @@
 #ifndef REDNIGHTMARE_FLAG_HPP
 #define REDNIGHTMARE_FLAG_HPP
-#include "entity.hpp"
-#include "action.hpp"
-#include "light.hpp"
+#include "core/entity.hpp"
+#include "core/action.hpp"
+#include "gfx/light.hpp"
 #include "tz/core/data/vector.hpp"
 #include "tz/core/memory/clone.hpp"
 #include "tz/core/data/enum_field.hpp"

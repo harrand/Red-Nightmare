@@ -1,5 +1,5 @@
 #include "game.hpp"
-#include "effect.hpp"
+#include "gfx/effect.hpp"
 #include "tz/tz.hpp"
 
 namespace game

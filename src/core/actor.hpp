@@ -1,9 +1,9 @@
 #ifndef REDNIGHTMARE_ACTOR_HPP
 #define REDNIGHTMARE_ACTOR_HPP
-#include "animation.hpp"
-#include "faction.hpp"
-#include "flag.hpp"
-#include "action.hpp"
+#include "gfx/animation.hpp"
+#include "core/faction.hpp"
+#include "core/flag.hpp"
+#include "core/action.hpp"
 #include "stats.hpp"
 #include "tz/core/data/enum_field.hpp"
 

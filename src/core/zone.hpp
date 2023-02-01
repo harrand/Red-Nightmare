@@ -1,6 +1,6 @@
 #ifndef REDNIGHTMARE_SRC_ZONE_HPP
 #define REDNIGHTMARE_SRC_ZONE_HPP
-#include "level.hpp"
+#include "core/level.hpp"
 #include <optional>
 
 namespace game

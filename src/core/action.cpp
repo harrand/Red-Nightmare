@@ -1,5 +1,5 @@
-#include "action.hpp"
-#include "scene.hpp"
+#include "core/action.hpp"
+#include "core/scene.hpp"
 #include "tz/core/profile.hpp"
 #include "tz/wsi/keyboard.hpp"
 

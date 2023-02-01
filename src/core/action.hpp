@@ -1,6 +1,6 @@
 #ifndef REDNIGHTMARE_ACTION_HPP
 #define REDNIGHTMARE_ACTION_HPP
-#include "entity.hpp"
+#include "core/entity.hpp"
 #include "tz/core/data/vector.hpp"
 #include "tz/core/memory/clone.hpp"
 #include <vector>

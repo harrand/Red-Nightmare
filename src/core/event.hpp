@@ -1,7 +1,7 @@
 #ifndef REDNIGHTMARE_EVENT_HPP
 #define REDNIGHTMARE_EVENT_HPP
 #include "tz/core/callback.hpp"
-#include "actor.hpp"
+#include "core/actor.hpp"
 
 namespace game
 {

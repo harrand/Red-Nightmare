@@ -1,6 +1,6 @@
 #ifndef REDNIGHTMARE_QUADTREE_HPP
 #define REDNIGHTMARE_QUADTREE_HPP
-#include "box.hpp"
+#include "core/box.hpp"
 #include <array>
 #include <memory>
 #include <vector>

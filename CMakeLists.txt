@@ -15,58 +15,61 @@ add_subdirectory(lib)
 tz_add_library(
 	TARGET rednightmare_gamelib
 	SOURCES
-		src/action.cpp
-		src/action.hpp
-		src/action.inl
-		src/actor.cpp
-		src/actor.hpp
-		src/animation.cpp
-		src/animation.hpp
-		src/box.cpp
-		src/box.hpp
-		src/effect.cpp
-		src/effect.hpp
-		src/entity.hpp
-		src/entity.inl
-		src/event.hpp
-		src/faction.hpp
-		src/flag.hpp
+		src/core/action.cpp
+		src/core/action.hpp
+		src/core/action.inl
+		src/core/actor.cpp
+		src/core/actor.hpp
+		src/core/box.cpp
+		src/core/box.hpp
+		src/core/entity.hpp
+		src/core/entity.inl
+		src/core/event.hpp
+		src/core/faction.hpp
+		src/core/flag.hpp
+		src/core/level.cpp
+		src/core/level.hpp
+		src/core/quadtree.cpp
+		src/core/quadtree.hpp
+		src/core/quadtree.inl
+		src/core/scene.cpp
+		src/core/scene.hpp
+		src/core/util.cpp
+		src/core/util.hpp
+		src/core/zone.cpp
+		src/core/zone.hpp
+
+		src/gfx/animation.cpp
+		src/gfx/animation.hpp
+		src/gfx/effect.cpp
+		src/gfx/effect.hpp
+		src/gfx/images.cpp
+		src/gfx/images.hpp
+		src/gfx/quad_renderer.cpp
+		src/gfx/quad_renderer.hpp
+
 		src/game.cpp
 		src/game.hpp
-		src/images.cpp
-		src/images.hpp
-		src/level.cpp
-		src/level.hpp
-		src/scene.cpp
-		src/scene.hpp
 		src/stats.cpp
 		src/stats.hpp
-		src/quadtree.cpp
-		src/quadtree.hpp
-		src/quadtree.inl
-		src/quad_renderer.cpp
-		src/quad_renderer.hpp
-		src/util.cpp
-		src/util.hpp
-		src/zone.cpp
-		src/zone.hpp
 )
+target_include_directories(rednightmare_gamelib PUBLIC ${PROJECT_SOURCE_DIR}/src)
 
 add_shader(
 	TARGET rednightmare_gamelib
 	SHADERS
-	src/effects/empty.vertex.tzsl
-	src/effects/empty.fragment.tzsl
-	src/effects/light.vertex.tzsl
-	src/effects/light.fragment.tzsl
-	src/effects/rain.vertex.tzsl
-	src/effects/rain.fragment.tzsl
-	src/effects/snow.vertex.tzsl
-	src/effects/snow.fragment.tzsl
-	src/default.vertex.tzsl
-	src/default.fragment.tzsl
-	src/quad.vertex.tzsl
-	src/quad.fragment.tzsl
+	src/gfx/effects/empty.vertex.tzsl
+	src/gfx/effects/empty.fragment.tzsl
+	src/gfx/effects/light.vertex.tzsl
+	src/gfx/effects/light.fragment.tzsl
+	src/gfx/effects/rain.vertex.tzsl
+	src/gfx/effects/rain.fragment.tzsl
+	src/gfx/effects/snow.vertex.tzsl
+	src/gfx/effects/snow.fragment.tzsl
+	src/gfx/default.vertex.tzsl
+	src/gfx/default.fragment.tzsl
+	src/gfx/quad.vertex.tzsl
+	src/gfx/quad.fragment.tzsl
 )
 
 target_link_libraries(rednightmare_gamelib PUBLIC stb)

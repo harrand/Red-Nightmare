@@ -1,4 +1,4 @@
-#include "box.hpp"
+#include "core/box.hpp"
 
 namespace game
 {

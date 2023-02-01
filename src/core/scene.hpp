@@ -1,13 +1,13 @@
 #ifndef REDNIGHTMARE_SCENE_HPP
 #define REDNIGHTMARE_SCENE_HPP
-#include "event.hpp"
-#include "actor.hpp"
-#include "animation.hpp"
-#include "quad_renderer.hpp"
-#include "level.hpp"
-#include "zone.hpp"
-#include "quadtree.hpp"
-#include "effect.hpp"
+#include "core/event.hpp"
+#include "core/actor.hpp"
+#include "gfx/animation.hpp"
+#include "gfx/quad_renderer.hpp"
+#include "core/level.hpp"
+#include "core/zone.hpp"
+#include "core/quadtree.hpp"
+#include "gfx/effect.hpp"
 #include "tz/core/time.hpp"
 #include "tz/dbgui/dbgui.hpp"
 
