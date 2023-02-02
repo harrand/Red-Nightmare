@@ -91,6 +91,8 @@ namespace game
 		ActionOnRepeat,
 		/// Actor position is permanently attached to that of another, by UUID. If the target actor dies, the flag disappears.	
 		AttachedToActor,
+		/// Actor is expected to be attached to another. If the attachment fades, either through direct action, or the parent despawns, an action should occur.
+		ActionOnDetach,
 	};
 
 	template<FlagID ID>
@@ -266,6 +268,12 @@ namespace game
 	struct FlagParams<FlagID::AttachedToActor>
 	{
 		std::size_t actor_uuid;
+	};
+
+	template<>
+	struct FlagParams<FlagID::ActionOnDetach>
+	{
+		ActionEntity actions;
 	};
 
 	class FlagEntity : public Entity<FlagID, IFlag, Flag, FlagParams>

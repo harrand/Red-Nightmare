@@ -758,6 +758,10 @@ namespace game
 			if(parent == Actor::NullID)
 			{
 				actor().flags.remove<FlagID::AttachedToActor>();
+				if(actor().flags.has<FlagID::ActionOnDetach>())
+				{
+					actor().flags.get<FlagID::ActionOnDetach>()->data().actions.copy_components(actor().entity);
+				}
 			}
 			else
 			{
