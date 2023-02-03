@@ -19,6 +19,7 @@ namespace rnlib
 
 		// draw all them quads.
 		void render();
+		void dbgui();
 
 		// shader data for each quad.
 		struct quad_data
@@ -38,6 +39,7 @@ namespace rnlib
 
 		tz::gl::resource_handle quad_bh = tz::nullhand;
 		tz::gl::renderer_handle rh;
+		std::size_t quad_cursor = 0;
 	};
 }
 

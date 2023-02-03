@@ -31,7 +31,35 @@ namespace rnlib
 	void quad_renderer::render()
 	{
 		TZ_PROFZONE("quad_renderer - render", 0xffee0077);
+		tz::assert(this->rh != tz::nullhand, "quad_renderer renderer handle is nullhand. initialisation failed in some weird way. submit a bug report.");
 		tz::gl::get_device().get_renderer(this->rh).render(0);
+	}
+
+	void quad_renderer::dbgui()
+	{
+		if(this->quads().empty())
+		{
+			ImGui::Text("nothing being rendered.");
+			return;
+		}
+		static int qpos = 0;
+		ImGui::SliderInt("quad id", &qpos, 0, this->quads().size());
+		quad_renderer::quad_data& quad = this->quads()[qpos];
+		
+		ImGui::Indent();
+		ImGui::InputFloat2("position", quad.pos.data().data());
+		ImGui::InputFloat2("scale", quad.scale.data().data());
+		ImGui::Unindent();
+	}
+
+	std::span<quad_renderer::quad_data> quad_renderer::quads()
+	{
+		return this->quad_buffer().data_as<quad_renderer::quad_data>().subspan(0, this->quad_cursor);
+	}
+
+	std::span<const quad_renderer::quad_data> quad_renderer::quads() const
+	{
+		return this->quad_buffer().data_as<const quad_renderer::quad_data>().subspan(0, this->quad_cursor);
 	}
 
 	tz::gl::buffer_resource& quad_renderer::quad_buffer()
