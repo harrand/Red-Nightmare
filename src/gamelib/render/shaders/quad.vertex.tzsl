@@ -1,0 +1,18 @@
+shader(type = vertex);
+
+struct quad_data
+{
+	vec2 pos;
+	vec2 ascale;
+	uint texid;
+};
+
+resource(id = 0) const buffer quad_data_buffer
+{
+	quad_data data[];
+} quads;
+
+void main()
+{
+
+}

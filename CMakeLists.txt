@@ -30,6 +30,8 @@ add_shader(
 	SHADERS
 	src/gamelib/render/shaders/empty.vertex.tzsl
 	src/gamelib/render/shaders/empty.fragment.tzsl
+	src/gamelib/render/shaders/quad.vertex.tzsl
+	src/gamelib/render/shaders/quad.fragment.tzsl
 )
 
 target_link_libraries(librn PUBLIC stb)

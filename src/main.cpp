@@ -6,7 +6,7 @@
 
 int main()
 {
-	tz::initialise({.version = rnlib::get_version()});
+	tz::initialise({.name = "Red Nightmare", .version = rnlib::get_version()});
 	rnlib::initialise();
 	{
 		using namespace tz::literals;
