@@ -1,0 +1,29 @@
+#include "tz/tz.hpp"
+#include "tz/core/time.hpp"
+#include "gamelib/game.hpp"
+#include "gamelib/version.hpp"
+#include "gamelib/render/quad_renderer.hpp"
+
+int main()
+{
+	tz::initialise({.version = rnlib::get_version()});
+	rnlib::initialise();
+	{
+		using namespace tz::literals;
+		tz::delay fixed_update = 1667_us;
+		while(!tz::window().is_close_requested())
+		{
+			tz::begin_frame();
+			if(fixed_update.done())
+			{
+				rnlib::update(fixed_update.elapsed().millis<float>());
+				fixed_update.reset();
+			}
+			rnlib::render();
+			rnlib::dbgui();
+			tz::end_frame();
+		}
+	}
+	rnlib::terminate();
+	tz::terminate();
+}
