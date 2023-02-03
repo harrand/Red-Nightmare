@@ -18,6 +18,11 @@ tz_add_library(
 		src/gamelib/core/entity.cpp
 		src/gamelib/core/entity.hpp
 		src/gamelib/core/entity.inl
+		src/gamelib/core/transform.cpp
+		src/gamelib/core/transform.hpp
+
+		src/gamelib/gameplay/actor.cpp
+		src/gamelib/gameplay/actor.hpp
 
 		src/gamelib/render/quad_renderer.cpp
 		src/gamelib/render/quad_renderer.hpp

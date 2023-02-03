@@ -9,7 +9,7 @@ namespace rnlib
 	template<typename I, typename T>
 	concept component_interface = requires(const I& i)
 	{
-		{i.get_component_id()} -> std::same_as<T>;
+		{i.get_id()} -> std::same_as<T>;
 	};
 
 	template<typename T, component_interface<T> icomponent, template<T> typename component, template<T> typename component_params>
