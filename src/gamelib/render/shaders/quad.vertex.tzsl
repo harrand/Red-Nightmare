@@ -3,9 +3,19 @@ shader(type = vertex);
 struct quad_data
 {
 	vec2 pos;
-	vec2 ascale;
+	vec2 scale;
 	uint texid;
 };
+
+vec2 quad_positions[6] = vec2[](
+	vec2(-1.0, -1.0), vec2(1.0, 1.0), vec2(1.0, -1.0),
+	vec2(-1.0, -1.0), vec2(-1.0, 1.0), vec2(1.0, 1.0)
+);
+
+vec2 quad_texcoords[6] = vec2[](
+	vec2(0.0, 1.0), vec2(1.0, 0.0), vec2(1.0, 1.0),
+	vec2(0.0, 1.0), vec2(0.0, 0.0), vec2(1.0, 0.0)
+);
 
 resource(id = 0) const buffer quad_data_buffer
 {
@@ -14,5 +24,7 @@ resource(id = 0) const buffer quad_data_buffer
 
 void main()
 {
-
+	const uint quad_id = in::vertex_id / 6;
+	quad_data q = quads.data[quad_id];
+	out::position = vec4(q.pos + quad_positions[in::vertex_id % 6] * q.scale, 0.0f, 1.0f);
 }

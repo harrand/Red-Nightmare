@@ -32,18 +32,34 @@ namespace rnlib
 	{
 		TZ_PROFZONE("quad_renderer - render", 0xffee0077);
 		tz::assert(this->rh != tz::nullhand, "quad_renderer renderer handle is nullhand. initialisation failed in some weird way. submit a bug report.");
-		tz::gl::get_device().get_renderer(this->rh).render(0);
+		const std::size_t tri_count = this->quad_cursor * 6;
+		tz::gl::get_device().get_renderer(this->rh).render(tri_count);
 	}
 
 	void quad_renderer::dbgui()
 	{
+		if(ImGui::CollapsingHeader("Debug Operations"))
+		{
+			if(ImGui::Button("Debug Push"))
+			{
+				this->emplace_back();
+			}
+			if(ImGui::Button("Debug Pop"))
+			{
+				this->pop_back();
+			}
+			if(ImGui::Button("Debug Clear"))
+			{
+				this->clear();
+			}
+		}
 		if(this->quads().empty())
 		{
 			ImGui::Text("nothing being rendered.");
 			return;
 		}
 		static int qpos = 0;
-		ImGui::SliderInt("quad id", &qpos, 0, this->quads().size());
+		ImGui::SliderInt("quad id", &qpos, 0, this->quads().size() - 1);
 		quad_renderer::quad_data& quad = this->quads()[qpos];
 		
 		ImGui::Indent();
@@ -60,6 +76,26 @@ namespace rnlib
 	std::span<const quad_renderer::quad_data> quad_renderer::quads() const
 	{
 		return this->quad_buffer().data_as<const quad_renderer::quad_data>().subspan(0, this->quad_cursor);
+	}
+
+	quad_renderer::quad_data& quad_renderer::emplace_back()
+	{
+		this->quad_cursor++;
+		return this->quads().back() = quad_data{};
+	}
+
+	void quad_renderer::pop_back()
+	{
+		if(this->quad_cursor == 0)
+		{
+			return;
+		}
+		this->quad_cursor--;
+	}
+
+	void quad_renderer::clear()
+	{
+		this->quad_cursor = 0;
 	}
 
 	tz::gl::buffer_resource& quad_renderer::quad_buffer()

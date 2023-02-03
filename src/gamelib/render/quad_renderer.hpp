@@ -32,6 +32,9 @@ namespace rnlib
 		// access data that shader sees.
 		std::span<quad_data> quads();
 		std::span<const quad_data> quads() const;
+		quad_data& emplace_back();
+		void pop_back();
+		void clear();
 	private:
 		// get the quad data gpu buffer.
 		tz::gl::buffer_resource& quad_buffer();
