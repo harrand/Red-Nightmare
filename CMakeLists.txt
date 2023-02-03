@@ -15,13 +15,17 @@ add_subdirectory(lib)
 tz_add_library(
 	TARGET librn
 	SOURCES
+		src/gamelib/core/entity.cpp
+		src/gamelib/core/entity.hpp
+		src/gamelib/core/entity.inl
+
+		src/gamelib/render/quad_renderer.cpp
+		src/gamelib/render/quad_renderer.hpp
+
 		src/gamelib/game.cpp
 		src/gamelib/game.hpp
 		src/gamelib/version.cpp
 		src/gamelib/version.hpp
-
-		src/gamelib/render/quad_renderer.cpp
-		src/gamelib/render/quad_renderer.hpp
 )
 target_include_directories(librn PUBLIC ${PROJECT_SOURCE_DIR}/src)
 
