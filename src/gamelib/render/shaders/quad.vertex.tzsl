@@ -1,9 +1,12 @@
 shader(type = vertex);
 
+import <math>
+
 struct quad_data
 {
 	vec2 pos;
 	vec2 scale;
+	float rotation;
 	uint texid;
 };
 
@@ -26,5 +29,6 @@ void main()
 {
 	const uint quad_id = in::vertex_id / 6;
 	quad_data q = quads.data[quad_id];
-	out::position = vec4(q.pos + quad_positions[in::vertex_id % 6] * q.scale, 0.0f, 1.0f);
+	mat2 rotation_matrix = mat2(cos(q.rotation), -sin(q.rotation), sin(q.rotation), cos(q.rotation));
+	out::position = vec4(q.pos + (rotation_matrix * quad_positions[in::vertex_id % 6] * q.scale), 0.0f, 1.0f);
 }

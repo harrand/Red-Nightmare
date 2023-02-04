@@ -12,7 +12,7 @@ int main()
 	{
 
 		using namespace tz::literals;
-		tz::delay fixed_update = 1667_us;
+		tz::delay fixed_update = 16670_us;
 		while(!tz::window().is_close_requested())
 		{
 			tz::begin_frame();

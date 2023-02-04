@@ -65,6 +65,7 @@ namespace rnlib
 		ImGui::Indent();
 		ImGui::InputFloat2("position", quad.pos.data().data());
 		ImGui::InputFloat2("scale", quad.scale.data().data());
+		ImGui::DragFloat("rotation", &quad.rotation, 0.01f, -3.14159f, 3.14159f);
 		ImGui::Unindent();
 	}
 

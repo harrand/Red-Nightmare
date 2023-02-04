@@ -6,11 +6,16 @@
 
 namespace rnlib
 {
+	// all traits (ECS components) that an actor could possibly have.
 	enum class actor_component_id
 	{
-
+		_count
 	};
 
+	// each trait above must have a corresponding name string in the following array (or enjoy a cryptic crash)
+	constexpr std::array<const char*, static_cast<int>(actor_component_id::_count)> actor_component_id_name{};
+
+	// ECS boilerplate begin.
 	template<actor_component_id ID>
 	struct actor_component_params{};
 
@@ -42,6 +47,7 @@ namespace rnlib
 	{
 		using rnlib::entity<actor_component_id, iactor_component, actor_component, actor_component_params>::entity;
 	};
+	// ecs boilerplate end.
 
 	struct actor
 	{
