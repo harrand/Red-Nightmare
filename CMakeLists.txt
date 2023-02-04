@@ -24,6 +24,8 @@ tz_add_library(
 		src/gamelib/gameplay/actor.cpp
 		src/gamelib/gameplay/actor.hpp
 
+		src/gamelib/render/image.cpp
+		src/gamelib/render/image.hpp
 		src/gamelib/render/quad_renderer.cpp
 		src/gamelib/render/quad_renderer.hpp
 
