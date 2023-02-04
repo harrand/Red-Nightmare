@@ -32,7 +32,7 @@ namespace rnlib
 	{
 		TZ_PROFZONE("quad_renderer - render", 0xffee0077);
 		tz::assert(this->rh != tz::nullhand, "quad_renderer renderer handle is nullhand. initialisation failed in some weird way. submit a bug report.");
-		const std::size_t tri_count = this->quad_cursor * 6;
+		const std::size_t tri_count = this->quad_cursor * 2;
 		tz::gl::get_device().get_renderer(this->rh).render(tri_count);
 	}
 

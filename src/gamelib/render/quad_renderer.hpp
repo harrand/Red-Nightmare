@@ -28,7 +28,6 @@ namespace rnlib
 			tz::vec2 scale = tz::vec2::zero();
 			float rotation = 0.0f;
 			std::uint32_t texid = 0u;
-			float pad[2];
 		};
 		// access data that shader sees.
 		std::span<quad_data> quads();
