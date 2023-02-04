@@ -2,7 +2,9 @@
 #define RNLIB_GAMEPLAY_ACTOR_HPP
 #include "gamelib/core/entity.hpp"
 #include "gamelib/core/transform.hpp"
+#include "gamelib/render/quad_renderer.hpp"
 #include "tz/core/memory/clone.hpp"
+#include <limits>
 
 namespace rnlib
 {
@@ -45,14 +47,23 @@ namespace rnlib
 
 	class actor_entity : public rnlib::entity<actor_component_id, iactor_component, actor_component, actor_component_params>
 	{
+	public:
 		using rnlib::entity<actor_component_id, iactor_component, actor_component, actor_component_params>::entity;
+		void dbgui();
 	};
 	// ecs boilerplate end.
 
 	struct actor
 	{
+		static std::size_t uuid_count;
+		static constexpr std::size_t nullid = std::numeric_limits<std::size_t>::max();
+		void dbgui();
+		void mount(quad_renderer::quad_data& quad) const;
+
 		actor_entity entity = {};
 		transform_t transform = {};
+		const char* name = "Untitled";
+		std::size_t uuid = uuid_count++;
 	};
 }
 

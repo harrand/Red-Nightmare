@@ -9,9 +9,13 @@ namespace rnlib
 		transform_t* parent = nullptr;
 		tz::vec2 local_position = tz::vec2::zero();
 		tz::vec2 local_scale = tz::vec2::filled(1.0f);
+		float local_rotation = 0.0f;
 
 		tz::vec2 get_position() const;
 		tz::vec2 get_scale() const;
+		float get_rotation() const;
+
+		void dbgui();
 	};
 }
 
