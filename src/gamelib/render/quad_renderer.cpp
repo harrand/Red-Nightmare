@@ -42,11 +42,11 @@ namespace rnlib
 		{
 			if(ImGui::Button("Debug Push"))
 			{
-				this->emplace_back();
+				this->reserve(1);
 			}
 			if(ImGui::Button("Debug Pop"))
 			{
-				this->pop_back();
+				this->pop(1);
 			}
 			if(ImGui::Button("Debug Clear"))
 			{
@@ -79,25 +79,28 @@ namespace rnlib
 		return this->quad_buffer().data_as<const quad_renderer::quad_data>().subspan(0, this->quad_cursor);
 	}
 
+	std::size_t quad_renderer::size() const
+	{
+		return this->quad_cursor;
+	}
+
 	void quad_renderer::clear_quads()
 	{
 		auto qs = this->quads();
 		std::fill(qs.begin(), qs.end(), quad_renderer::quad_data{});
 	}
 
-	quad_renderer::quad_data& quad_renderer::emplace_back()
+	void quad_renderer::reserve(std::size_t count)
 	{
-		this->quad_cursor++;
-		return this->quads().back() = quad_data{};
+		tz::assert(this->quad_cursor + count < max_quads, "quad_renderer reserve of %zu quads would go over the maximum of %zu (cursor = %zu). Resizing is not yet implemented.", count, max_quads, this->quad_cursor);
+		this->quad_cursor += count;
 	}
 
-	void quad_renderer::pop_back()
+
+	void quad_renderer::pop(std::size_t count)
 	{
-		if(this->quad_cursor == 0)
-		{
-			return;
-		}
-		this->quad_cursor--;
+		tz::assert(this->quad_cursor >= count, "quad_renderer pop of %zu quads is invalid because there are only %zu quads reserved.", count, this->quad_cursor);
+		this->quad_cursor -= count;
 	}
 
 	void quad_renderer::clear()

@@ -25,6 +25,7 @@ namespace rnlib
 	{
 		TZ_PROFZONE("rnlib - initialise", 0xff0077ee);
 		sys = std::make_unique<system>();
+		sys->qrenderer.reserve(1024);
 		tz::dbgui::game_menu().add_callback([]()
 		{
 			ImGui::MenuItem("Quad Renderer", nullptr, &dbgui_data.show_quad_renderer);

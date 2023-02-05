@@ -32,9 +32,11 @@ namespace rnlib
 		// access data that shader sees.
 		std::span<quad_data> quads();
 		std::span<const quad_data> quads() const;
+		std::size_t size() const;
 		void clear_quads();
-		quad_data& emplace_back();
-		void pop_back();
+		// reserve additional quads. any remaining quads are the same. quads() size will increase by `count`
+		void reserve(std::size_t count);
+		void pop(std::size_t count);
 		void clear();
 	private:
 		// get the quad data gpu buffer.
