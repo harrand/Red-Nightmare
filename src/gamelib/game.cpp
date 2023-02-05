@@ -1,5 +1,4 @@
 #include "gamelib/game.hpp"
-#include "gamelib/gameplay/actor.hpp"
 #include "gamelib/render/quad_renderer.hpp"
 #include "tz/core/profile.hpp"
 #include "tz/dbgui/dbgui.hpp"

@@ -1,4 +1,4 @@
-#include "gamelib/gameplay/actor.hpp"
+#include "gamelib/gameplay/actor/entity.hpp"
 #include "tz/dbgui/dbgui.hpp"
 
 namespace rnlib
@@ -44,7 +44,7 @@ namespace rnlib
 			switch(t)
 			{
 				case actor_type::player_akhara:
-				#include "gamelib/gameplay/actors/player_akhara.actor"
+				#include "gamelib/gameplay/actor/types/player_akhara.actor"
 			}
 			return {};
 		}(type);

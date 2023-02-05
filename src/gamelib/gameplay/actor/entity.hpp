@@ -56,7 +56,7 @@ namespace rnlib
 	// ecs - system impls:
 	template<actor_component_id ID>
 	inline void actor_component_mount(const actor_component<ID>& component, quad_renderer::quad_data& quad){}
-	#include "gamelib/gameplay/components/actor/sprite.hpp"
+	#include "gamelib/gameplay/actor/components/sprite.hpp"
 	// ecs boilerplate end.
 
 	enum class actor_type

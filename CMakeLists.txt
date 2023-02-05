@@ -21,9 +21,11 @@ tz_add_library(
 		src/gamelib/core/transform.cpp
 		src/gamelib/core/transform.hpp
 
-		src/gamelib/gameplay/components/actor/sprite.hpp
-		src/gamelib/gameplay/actor.cpp
-		src/gamelib/gameplay/actor.hpp
+		src/gamelib/gameplay/actor/components/sprite.hpp
+		src/gamelib/gameplay/actor/entity.cpp
+		src/gamelib/gameplay/actor/entity.hpp
+		src/gamelib/gameplay/actor/system.cpp
+		src/gamelib/gameplay/actor/system.hpp
 
 		src/gamelib/render/image.cpp
 		src/gamelib/render/image.hpp
