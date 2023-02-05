@@ -8,7 +8,7 @@
 
 namespace rnlib
 {
-	constexpr std::size_t max_quads = 8096;
+	constexpr std::size_t initial_capacity = 512;
 
 	quad_renderer::quad_renderer():
 	rh([this]()
@@ -17,10 +17,10 @@ namespace rnlib
 		tz::gl::renderer_info rinfo;
 		rinfo.shader().set_shader(tz::gl::shader_stage::vertex, ImportedShaderSource(quad, vertex));
 		rinfo.shader().set_shader(tz::gl::shader_stage::fragment, ImportedShaderSource(quad, fragment));
-		std::array<quad_data, max_quads> initial_quads;
+		std::array<quad_data, initial_capacity> initial_quads;
 		this->quad_bh = rinfo.add_resource(tz::gl::buffer_resource::from_many(initial_quads,
 		{
-			.access = tz::gl::resource_access::dynamic_fixed
+			.access = tz::gl::resource_access::dynamic_variable
 		}));
 		return tz::gl::get_device().create_renderer(rinfo);
 	}())
@@ -32,7 +32,7 @@ namespace rnlib
 	{
 		TZ_PROFZONE("quad_renderer - render", 0xffee0077);
 		tz::assert(this->rh != tz::nullhand, "quad_renderer renderer handle is nullhand. initialisation failed in some weird way. submit a bug report.");
-		const std::size_t tri_count = this->quad_cursor * 2;
+		const std::size_t tri_count = this->quads().size() * 2;
 		tz::gl::get_device().get_renderer(this->rh).render(tri_count);
 	}
 
@@ -40,17 +40,9 @@ namespace rnlib
 	{
 		if(ImGui::CollapsingHeader("Debug Operations"))
 		{
-			if(ImGui::Button("Debug Push"))
+			if(ImGui::Button("Debug Clean"))
 			{
-				this->reserve(1);
-			}
-			if(ImGui::Button("Debug Pop"))
-			{
-				this->pop(1);
-			}
-			if(ImGui::Button("Debug Clear"))
-			{
-				this->clear();
+				this->clean();
 			}
 		}
 		if(this->quads().empty())
@@ -71,41 +63,32 @@ namespace rnlib
 
 	std::span<quad_renderer::quad_data> quad_renderer::quads()
 	{
-		return this->quad_buffer().data_as<quad_renderer::quad_data>().subspan(0, this->quad_cursor);
+		return this->quad_buffer().data_as<quad_renderer::quad_data>();
 	}
 
 	std::span<const quad_renderer::quad_data> quad_renderer::quads() const
 	{
-		return this->quad_buffer().data_as<const quad_renderer::quad_data>().subspan(0, this->quad_cursor);
+		return this->quad_buffer().data_as<const quad_renderer::quad_data>();
 	}
 
-	std::size_t quad_renderer::size() const
-	{
-		return this->quad_cursor;
-	}
-
-	void quad_renderer::clear_quads()
+	void quad_renderer::clean()
 	{
 		auto qs = this->quads();
-		std::fill(qs.begin(), qs.end(), quad_renderer::quad_data{});
+		std::fill(qs.begin(), qs.end(), quad_data{});
 	}
 
-	void quad_renderer::reserve(std::size_t count)
+	void quad_renderer::reserve(std::size_t quad_count)
 	{
-		tz::assert(this->quad_cursor + count < max_quads, "quad_renderer reserve of %zu quads would go over the maximum of %zu (cursor = %zu). Resizing is not yet implemented.", count, max_quads, this->quad_cursor);
-		this->quad_cursor += count;
-	}
-
-
-	void quad_renderer::pop(std::size_t count)
-	{
-		tz::assert(this->quad_cursor >= count, "quad_renderer pop of %zu quads is invalid because there are only %zu quads reserved.", count, this->quad_cursor);
-		this->quad_cursor -= count;
-	}
-
-	void quad_renderer::clear()
-	{
-		this->quad_cursor = 0;
+		if(this->quads().size() < quad_count)
+		{
+			// need to resize the buffer.
+			tz::gl::get_device().get_renderer(this->rh).edit
+			(
+				tz::gl::RendererEditBuilder{}
+				.buffer_resize({.buffer_handle = this->quad_bh, .size = sizeof(quad_renderer::quad_data) * quad_count})
+				.build()
+			);
+		}
 	}
 
 	tz::gl::buffer_resource& quad_renderer::quad_buffer()

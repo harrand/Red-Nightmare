@@ -25,7 +25,9 @@ namespace rnlib
 	{
 		TZ_PROFZONE("rnlib - initialise", 0xff0077ee);
 		sys = std::make_unique<system>();
+		tz::assert(sys->qrenderer.quads().size() == 512);
 		sys->qrenderer.reserve(1024);
+		tz::assert(sys->qrenderer.quads().size() == 1024);
 		tz::dbgui::game_menu().add_callback([]()
 		{
 			ImGui::MenuItem("Quad Renderer", nullptr, &dbgui_data.show_quad_renderer);
@@ -43,7 +45,7 @@ namespace rnlib
 	{
 		TZ_PROFZONE("rnlib - render", 0xff0077ee);
 		tz::assert(sys != nullptr, "rnlib never initialised. please submit a bug report.");
-		sys->qrenderer.clear_quads();
+		sys->qrenderer.clean();
 		sys->actors.mount(sys->qrenderer.quads());
 		sys->qrenderer.render();
 	}

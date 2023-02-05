@@ -32,12 +32,9 @@ namespace rnlib
 		// access data that shader sees.
 		std::span<quad_data> quads();
 		std::span<const quad_data> quads() const;
-		std::size_t size() const;
-		void clear_quads();
-		// reserve additional quads. any remaining quads are the same. quads() size will increase by `count`
-		void reserve(std::size_t count);
-		void pop(std::size_t count);
-		void clear();
+		// set all quads to default, aka clear screen.
+		void clean();
+		void reserve(std::size_t quad_count);
 	private:
 		// get the quad data gpu buffer.
 		tz::gl::buffer_resource& quad_buffer();
@@ -45,7 +42,6 @@ namespace rnlib
 
 		tz::gl::resource_handle quad_bh = tz::nullhand;
 		tz::gl::renderer_handle rh;
-		std::size_t quad_cursor = 0;
 	};
 }
 
