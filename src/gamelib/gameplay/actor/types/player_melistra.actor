@@ -23,6 +23,10 @@ return
 				}}
 			}
 		}},
+		actor_component<actor_component_id::motion>
+		{{
+			.speed = 0.3f
+		}},
 		actor_component<actor_component_id::keyboard_control>{}
 	},
 	.name = "Melistra",

@@ -9,6 +9,8 @@
 #include "tz/wsi/keyboard.hpp"
 #include <optional>
 #include <limits>
+#include <bit> // actor_component_id::motion
+#include <unordered_map> // actor_component_id::keyboard_control
 
 namespace rnlib
 {
@@ -19,13 +21,15 @@ namespace rnlib
 		sprite,
 		// actor has an animation, which means its sprite texture changes over time. requires `sprite`
 		animation,
-		// actor is controlled by a keyboard. right now this is just movement.
+		// actor has the concept of proper movement.
+		motion,
+		// actor is controlled by a keyboard. requires `motion`
 		keyboard_control,
 		_count
 	};
 
 	// each trait above must have a corresponding name string in the following array (or enjoy a cryptic crash)
-	constexpr std::array<const char*, static_cast<int>(actor_component_id::_count)> actor_component_id_name{"Sprite", "Animation", "Keyboard Control"};
+	constexpr std::array<const char*, static_cast<int>(actor_component_id::_count)> actor_component_id_name{"Sprite", "Animation", "Keyboard Control", "Motion"};
 
 	// ECS boilerplate begin.
 	template<actor_component_id ID>
@@ -80,7 +84,7 @@ namespace rnlib
 	inline void actor_component_update(actor_component<ID>& component, float dt, actor& actor){}
 
 	template<actor_component_id ID>
-	inline void actor_component_dbgui(actor_component<ID>& component){ImGui::Text("<no dbgui>");}
+	inline void actor_component_dbgui(actor_component<ID>& component){}
 
 	
 	template<actor_component_id ID>
@@ -130,6 +134,7 @@ namespace rnlib
 	// component implementations begin.
 	#include "gamelib/gameplay/actor/components/sprite.hpp"
 	#include "gamelib/gameplay/actor/components/animation.hpp"
+	#include "gamelib/gameplay/actor/components/motion.hpp"
 	#include "gamelib/gameplay/actor/components/keyboard_control.hpp"
 	// component implementations end.
 }
