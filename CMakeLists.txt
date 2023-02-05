@@ -13,7 +13,7 @@ add_subdirectory(engine)
 add_subdirectory(lib)
 
 tz_add_library(
-	TARGET librn
+	TARGET rnlib
 	SOURCES
 		src/gamelib/core/entity.cpp
 		src/gamelib/core/entity.hpp
@@ -28,6 +28,8 @@ tz_add_library(
 		src/gamelib/gameplay/actor/system.cpp
 		src/gamelib/gameplay/actor/system.hpp
 
+		src/gamelib/render/camera.cpp
+		src/gamelib/render/camera.hpp
 		src/gamelib/render/image.cpp
 		src/gamelib/render/image.hpp
 		src/gamelib/render/quad_renderer.cpp
@@ -38,10 +40,10 @@ tz_add_library(
 		src/gamelib/version.cpp
 		src/gamelib/version.hpp
 )
-target_include_directories(librn PUBLIC ${PROJECT_SOURCE_DIR}/src)
+target_include_directories(rnlib PUBLIC ${PROJECT_SOURCE_DIR}/src)
 
 add_shader(
-	TARGET librn
+	TARGET rnlib
 	SHADERS
 	src/gamelib/render/shaders/empty.vertex.tzsl
 	src/gamelib/render/shaders/empty.fragment.tzsl
@@ -49,8 +51,8 @@ add_shader(
 	src/gamelib/render/shaders/quad.fragment.tzsl
 )
 
-target_link_libraries(librn PUBLIC stb)
-target_compile_definitions(librn PUBLIC -DGAME_VERSION=0x${PROJECT_VERSION_MAJOR}${PROJECT_VERSION_MINOR}${PROJECT_VERSION_PATCH}${PROJECT_VERSION_TWEAK})
+target_link_libraries(rnlib PUBLIC stb)
+target_compile_definitions(rnlib PUBLIC -DGAME_VERSION=0x${PROJECT_VERSION_MAJOR}${PROJECT_VERSION_MINOR}${PROJECT_VERSION_PATCH}${PROJECT_VERSION_TWEAK})
 
 tz_add_executable(
 	TARGET rn
@@ -58,10 +60,10 @@ tz_add_executable(
 		src/main.cpp
 )
 
-target_link_libraries(rn PRIVATE librn stb)
+target_link_libraries(rn PRIVATE rnlib stb)
 
 #add_text(
-#	TARGET librn
+#	TARGET rnlib
 #	INPUT_DIR ${PROJECT_SOURCE_DIR}
 #	OUTPUT_DIR ${PROJECT_BINARY_DIR}
 #	TEXT_FILES
