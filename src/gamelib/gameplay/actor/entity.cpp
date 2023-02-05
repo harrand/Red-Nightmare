@@ -15,11 +15,11 @@ namespace rnlib
 		return res;
 	}
 
-	void actor_entity::update(float dt)
+	void actor_entity::update(float dt, actor& actor)
 	{
 		for(auto& component_ptr : this->components)
 		{
-			component_ptr->update(dt, *this);
+			component_ptr->update(dt, actor);
 		}
 	}
 
@@ -48,7 +48,7 @@ namespace rnlib
 
 	void actor::update(float dt)
 	{
-		this->entity.update(dt);
+		this->entity.update(dt, *this);
 	}
 
 	mount_result actor::mount(std::span<quad_renderer::quad_data> quads) const

@@ -6,6 +6,7 @@
 #include "gamelib/render/animation.hpp"
 #include "gamelib/render/quad_renderer.hpp"
 #include "tz/core/memory/clone.hpp"
+#include "tz/wsi/keyboard.hpp"
 #include <optional>
 #include <limits>
 
@@ -18,17 +19,19 @@ namespace rnlib
 		sprite,
 		// actor has an animation, which means its sprite texture changes over time. requires `sprite`
 		animation,
+		// actor is controlled by a keyboard. right now this is just movement.
+		keyboard_control,
 		_count
 	};
 
 	// each trait above must have a corresponding name string in the following array (or enjoy a cryptic crash)
-	constexpr std::array<const char*, static_cast<int>(actor_component_id::_count)> actor_component_id_name{"Sprite", "Animation"};
+	constexpr std::array<const char*, static_cast<int>(actor_component_id::_count)> actor_component_id_name{"Sprite", "Animation", "Keyboard Control"};
 
 	// ECS boilerplate begin.
 	template<actor_component_id ID>
 	struct actor_component_params{};
 
-	class actor_entity;
+	struct actor;
 
 	class iactor_component : public tz::unique_cloneable<iactor_component>
 	{
@@ -36,7 +39,7 @@ namespace rnlib
 		virtual constexpr actor_component_id get_id() const = 0;
 		virtual ~iactor_component() = default;
 		virtual mount_result mount(std::span<quad_renderer::quad_data> quads) = 0;
-		virtual void update(float dt, actor_entity& entity) = 0;
+		virtual void update(float dt, actor& actor) = 0;
 		virtual void dbgui() = 0;
 	private:
 	};
@@ -52,7 +55,7 @@ namespace rnlib
 		}
 		virtual constexpr actor_component_id get_id() const override{return ID;}
 		virtual mount_result mount(std::span<quad_renderer::quad_data> quads) override;
-		virtual void update(float dt, actor_entity& entity) override;
+		virtual void update(float dt, actor& actor) override;
 		virtual void dbgui() override;
 		const actor_component_params<ID>& data() const{return this->params;}
 		actor_component_params<ID>& data() {return this->params;}
@@ -65,7 +68,7 @@ namespace rnlib
 	public:
 		using rnlib::entity<actor_component_id, iactor_component, actor_component, actor_component_params>::entity;
 		mount_result mount(std::span<quad_renderer::quad_data> quads) const;
-		void update(float dt);
+		void update(float dt, actor& actor);
 		void dbgui();
 	};
 
@@ -74,7 +77,7 @@ namespace rnlib
 	inline mount_result actor_component_mount(const actor_component<ID>& component, std::span<quad_renderer::quad_data> quads){return {};}
 
 	template<actor_component_id ID>
-	inline void actor_component_update(actor_component<ID>& component, float dt, actor_entity& entity){}
+	inline void actor_component_update(actor_component<ID>& component, float dt, actor& actor){}
 
 	template<actor_component_id ID>
 	inline void actor_component_dbgui(actor_component<ID>& component){ImGui::Text("<no dbgui>");}
@@ -87,9 +90,9 @@ namespace rnlib
 	}
 
 	template<actor_component_id ID>
-	void actor_component<ID>::update(float dt, actor_entity& entity)
+	void actor_component<ID>::update(float dt, actor& actor)
 	{
-		actor_component_update<ID>(*this, dt, entity);
+		actor_component_update<ID>(*this, dt, actor);
 	}
 
 	template<actor_component_id ID>
@@ -98,10 +101,6 @@ namespace rnlib
 		ImGui::Text("== %s ==", actor_component_id_name[static_cast<int>(ID)]);
 		actor_component_dbgui<ID>(*this);
 	}
-
-
-	#include "gamelib/gameplay/actor/components/sprite.hpp"
-	#include "gamelib/gameplay/actor/components/animation.hpp"
 	// ecs boilerplate end.
 
 	enum class actor_type
@@ -127,6 +126,12 @@ namespace rnlib
 	};
 
 	actor create_actor(actor_type type);
+
+	// component implementations begin.
+	#include "gamelib/gameplay/actor/components/sprite.hpp"
+	#include "gamelib/gameplay/actor/components/animation.hpp"
+	#include "gamelib/gameplay/actor/components/keyboard_control.hpp"
+	// component implementations end.
 }
 
 #endif // RNLIB_GAMEPLAY_ACTOR_HPP
