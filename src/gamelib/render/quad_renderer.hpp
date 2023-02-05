@@ -32,6 +32,7 @@ namespace rnlib
 		// access data that shader sees.
 		std::span<quad_data> quads();
 		std::span<const quad_data> quads() const;
+		void clear_quads();
 		quad_data& emplace_back();
 		void pop_back();
 		void clear();

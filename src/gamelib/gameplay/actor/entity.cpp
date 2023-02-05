@@ -20,21 +20,26 @@ namespace rnlib
 	}
 
 	template<actor_component_id ID>
-	void mount_impl(const actor_entity& ent, quad_renderer::quad_data& quad)
+	std::size_t mount_impl(const actor_entity& ent, std::span<quad_renderer::quad_data> quads)
 	{
 		if(ent.has_component<ID>())
 		{
-			actor_component_mount<ID>(*ent.get_component<ID>(), quad);
+			return actor_component_mount<ID>(*ent.get_component<ID>(), quads);
 		}
+		return 0;
 	}
 
-	void actor::mount(quad_renderer::quad_data& quad) const
+	std::size_t actor::mount(std::span<quad_renderer::quad_data> quads) const
 	{
-		quad.pos = this->transform.get_position();
-		quad.scale = this->transform.get_scale();
-		quad.rotation = this->transform.get_rotation();
-
-		mount_impl<actor_component_id::sprite>(this->entity, quad);
+		std::size_t mounted_count = 0;
+		mounted_count += mount_impl<actor_component_id::sprite>(this->entity, quads);
+		for(std::size_t i = 0; i < mounted_count; i++)
+		{
+			quads[i].pos += this->transform.get_position();
+			quads[i].scale = this->transform.get_scale();
+			quads[i].rotation = this->transform.get_rotation();
+		}
+		return mounted_count;
 	}
 
 	actor create_actor(actor_type type)

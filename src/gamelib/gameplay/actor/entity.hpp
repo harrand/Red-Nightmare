@@ -55,14 +55,15 @@ namespace rnlib
 
 	// ecs - system impls:
 	template<actor_component_id ID>
-	inline void actor_component_mount(const actor_component<ID>& component, quad_renderer::quad_data& quad){}
+	inline std::size_t actor_component_mount(const actor_component<ID>& component, std::span<quad_renderer::quad_data> quads){return false;}
 	#include "gamelib/gameplay/actor/components/sprite.hpp"
 	// ecs boilerplate end.
 
 	enum class actor_type
 	{
 		undefined,
-		player_akhara
+		player_akhara,
+		_count
 	};
 
 	struct actor
@@ -70,7 +71,7 @@ namespace rnlib
 		static std::size_t uuid_count;
 		static constexpr std::size_t nullid = std::numeric_limits<std::size_t>::max();
 		void dbgui();
-		void mount(quad_renderer::quad_data& quad) const;
+		std::size_t mount(std::span<quad_renderer::quad_data> quads) const;
 
 		actor_entity entity = {};
 		transform_t transform = {};

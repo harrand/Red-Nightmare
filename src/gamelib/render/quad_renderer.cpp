@@ -79,6 +79,12 @@ namespace rnlib
 		return this->quad_buffer().data_as<const quad_renderer::quad_data>().subspan(0, this->quad_cursor);
 	}
 
+	void quad_renderer::clear_quads()
+	{
+		auto qs = this->quads();
+		std::fill(qs.begin(), qs.end(), quad_renderer::quad_data{});
+	}
+
 	quad_renderer::quad_data& quad_renderer::emplace_back()
 	{
 		this->quad_cursor++;
