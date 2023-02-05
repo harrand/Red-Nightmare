@@ -11,11 +11,12 @@ namespace rnlib
 	// all traits (ECS components) that an actor could possibly have.
 	enum class actor_component_id
 	{
+		sprite,
 		_count
 	};
 
 	// each trait above must have a corresponding name string in the following array (or enjoy a cryptic crash)
-	constexpr std::array<const char*, static_cast<int>(actor_component_id::_count)> actor_component_id_name{};
+	constexpr std::array<const char*, static_cast<int>(actor_component_id::_count)> actor_component_id_name{"Sprite"};
 
 	// ECS boilerplate begin.
 	template<actor_component_id ID>
@@ -51,7 +52,18 @@ namespace rnlib
 		using rnlib::entity<actor_component_id, iactor_component, actor_component, actor_component_params>::entity;
 		void dbgui();
 	};
+
+	// ecs - system impls:
+	template<actor_component_id ID>
+	inline void actor_component_mount(const actor_component<ID>& component, quad_renderer::quad_data& quad){}
+	#include "gamelib/gameplay/components/actor/sprite.hpp"
 	// ecs boilerplate end.
+
+	enum class actor_type
+	{
+		undefined,
+		player_akhara
+	};
 
 	struct actor
 	{
@@ -64,7 +76,10 @@ namespace rnlib
 		transform_t transform = {};
 		const char* name = "Untitled";
 		std::size_t uuid = uuid_count++;
+		actor_type type = actor_type::undefined;
 	};
+
+	actor create_actor(actor_type type);
 }
 
 #endif // RNLIB_GAMEPLAY_ACTOR_HPP

@@ -1,0 +1,11 @@
+return
+{
+	.entity =
+	{
+		actor_component<actor_component_id::sprite>
+		{{
+			.texture_id = 12
+		}}
+	},
+	.name = "Player Akhara",
+};

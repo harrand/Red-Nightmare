@@ -21,6 +21,7 @@ tz_add_library(
 		src/gamelib/core/transform.cpp
 		src/gamelib/core/transform.hpp
 
+		src/gamelib/gameplay/components/actor/sprite.hpp
 		src/gamelib/gameplay/actor.cpp
 		src/gamelib/gameplay/actor.hpp
 

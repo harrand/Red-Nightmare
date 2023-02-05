@@ -1,4 +1,5 @@
 #include "gamelib/game.hpp"
+#include "gamelib/gameplay/actor.hpp"
 #include "gamelib/render/quad_renderer.hpp"
 #include "tz/core/profile.hpp"
 #include "tz/dbgui/dbgui.hpp"
@@ -38,6 +39,7 @@ namespace rnlib
 	{
 		TZ_PROFZONE("rnlib - render", 0xff0077ee);
 		tz::assert(sys != nullptr, "rnlib never initialised. please submit a bug report.");
+
 		sys->qrenderer.render();
 	}
 

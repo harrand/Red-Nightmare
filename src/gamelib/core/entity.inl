@@ -74,7 +74,7 @@ namespace rnlib
 	{
 		for(const auto& comp_ptr : this->components)
 		{
-			if(comp_ptr->get_component_id() == t)
+			if(comp_ptr->get_id() == t)
 			{
 				return true;
 			}
@@ -89,7 +89,7 @@ namespace rnlib
 		auto iter = this->components.erase(std::remove_if(this->components.begin(), this->components.end(),
 		[](const auto& component_ptr)
 		{
-			return component_ptr->get_component_id() == t;
+			return component_ptr->get_id() == t;
 		}));
 		return iter != this->components.end();
 	}
@@ -100,9 +100,9 @@ namespace rnlib
 	{
 		for(const auto& comp_ptr : this->components)
 		{
-			if(comp_ptr->get_component_id() == t)
+			if(comp_ptr->get_id() == t)
 			{
-				return static_cast<const component<t>*>(comp_ptr.get_component());
+				return static_cast<const component<t>*>(comp_ptr.get());
 			}
 		}
 		return nullptr;
@@ -114,7 +114,7 @@ namespace rnlib
 	{
 		for(auto& comp_ptr : this->components)
 		{
-			if(comp_ptr->get_component_id() == t)
+			if(comp_ptr->get_id() == t)
 			{
 				return static_cast<component<t>*>(comp_ptr.get_component());
 			}
@@ -146,7 +146,7 @@ namespace rnlib
 		for(auto& comp_ptr : this->components)
 		{
 			
-			auto iter = std::find_if(other.components.begin(), other.components.end(), [&comp_ptr](const auto& rhs){return rhs->get_component_id() == comp_ptr->get_component_id();});
+			auto iter = std::find_if(other.components.begin(), other.components.end(), [&comp_ptr](const auto& rhs){return rhs->get_id() == comp_ptr->get_id();});
 			if(iter != other.components.end())
 			{
 				*iter = std::move(comp_ptr);
@@ -164,7 +164,7 @@ namespace rnlib
 	{
 		for(const auto& comp_ptr : this->components)
 		{
-			auto iter = std::find_if(other.components.begin(), other.components.end(), [&comp_ptr](const auto& rhs){return rhs->get_component_id() == comp_ptr->get_component_id();});
+			auto iter = std::find_if(other.components.begin(), other.components.end(), [&comp_ptr](const auto& rhs){return rhs->get_id() == comp_ptr->get_id();});
 			if(iter != other.components.end())
 			{
 				*iter = comp_ptr->unique_clone();
