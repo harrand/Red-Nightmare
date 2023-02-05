@@ -11,6 +11,7 @@ namespace rnlib
 		float zoom = 1.0f;
 
 		tz::mat4 view() const;
+		tz::mat4 projection() const;
 		bool operator==(const camera& rhs) const = default;
 	};
 }

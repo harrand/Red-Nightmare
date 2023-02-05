@@ -107,7 +107,7 @@ namespace rnlib
 	enum class actor_type
 	{
 		undefined,
-		player_akhara,
+		player_melistra,
 		_count
 	};
 

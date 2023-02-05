@@ -22,6 +22,10 @@ namespace rnlib
 		{
 			.access = tz::gl::resource_access::dynamic_variable
 		}));
+		this->data_bh = rinfo.add_resource(tz::gl::buffer_resource::from_one(render_data{},
+		{
+			.access = tz::gl::resource_access::dynamic_fixed
+		}));
 		return tz::gl::get_device().create_renderer(rinfo);
 	}())
 	{
@@ -91,6 +95,11 @@ namespace rnlib
 		}
 	}
 
+	void quad_renderer::set_render_data(render_data data)
+	{
+		this->render_buffer().data_as<render_data>().front() = data;
+	}
+
 	tz::gl::buffer_resource& quad_renderer::quad_buffer()
 	{
 		return *static_cast<tz::gl::buffer_resource*>(tz::gl::get_device().get_renderer(this->rh).get_resource(this->quad_bh));
@@ -99,5 +108,15 @@ namespace rnlib
 	const tz::gl::buffer_resource& quad_renderer::quad_buffer() const
 	{
 		return *static_cast<const tz::gl::buffer_resource*>(tz::gl::get_device().get_renderer(this->rh).get_resource(this->quad_bh));
+	}
+
+	tz::gl::buffer_resource& quad_renderer::render_buffer()
+	{
+		return *static_cast<tz::gl::buffer_resource*>(tz::gl::get_device().get_renderer(this->rh).get_resource(this->data_bh));
+	}
+
+	const tz::gl::buffer_resource& quad_renderer::render_buffer() const
+	{
+		return *static_cast<const tz::gl::buffer_resource*>(tz::gl::get_device().get_renderer(this->rh).get_resource(this->data_bh));
 	}
 }

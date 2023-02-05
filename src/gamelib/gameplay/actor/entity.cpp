@@ -69,8 +69,8 @@ namespace rnlib
 		{
 			switch(t)
 			{
-				case actor_type::player_akhara:
-				#include "gamelib/gameplay/actor/types/player_akhara.actor"
+				case actor_type::player_melistra:
+				#include "gamelib/gameplay/actor/types/player_melistra.actor"
 			}
 			return {};
 		}(type);

@@ -10,6 +10,12 @@ struct quad_data
 	uint texid;
 };
 
+struct render_data
+{
+	mat4 view;
+	mat4 projection;
+};
+
 vec2 quad_positions[6] = vec2[](
 	vec2(-1.0, -1.0), vec2(1.0, 1.0), vec2(1.0, -1.0),
 	vec2(-1.0, -1.0), vec2(-1.0, 1.0), vec2(1.0, 1.0)
@@ -25,10 +31,15 @@ resource(id = 0) const buffer quad_data_buffer
 	quad_data data[];
 } quads;
 
+resource(id = 1) const buffer render_data_buffer
+{
+	render_data render;
+};
+
 void main()
 {
 	const uint quad_id = in::vertex_id / 6;
 	quad_data q = quads.data[quad_id];
 	mat2 rotation_matrix = mat2(cos(q.rotation), -sin(q.rotation), sin(q.rotation), cos(q.rotation));
-	out::position = vec4(q.pos + (rotation_matrix * quad_positions[in::vertex_id % 6] * q.scale), 0.0f, 1.0f);
+	out::position = (render.projection * render.view) * vec4(q.pos + (rotation_matrix * quad_positions[in::vertex_id % 6] * q.scale), 0.0f, 1.0f);
 }

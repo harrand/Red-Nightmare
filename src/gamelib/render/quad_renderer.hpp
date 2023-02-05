@@ -1,6 +1,7 @@
 #ifndef RNLIB_QUAD_RENDERER_HPP
 #define RNLIB_QUAD_RENDERER_HPP
 #include "tz/core/data/vector.hpp"
+#include "tz/core/matrix.hpp"
 #include "tz/gl/renderer.hpp"
 #include "tz/gl/resource.hpp"
 
@@ -29,18 +30,28 @@ namespace rnlib
 			float rotation = 0.0f;
 			std::uint32_t texid = 0u;
 		};
+
+		struct render_data
+		{
+			tz::mat4 view = tz::mat4::identity();
+			tz::mat4 projection = tz::mat4::identity();
+		};
 		// access data that shader sees.
 		std::span<quad_data> quads();
 		std::span<const quad_data> quads() const;
 		// set all quads to default, aka clear screen.
 		void clean();
 		void reserve(std::size_t quad_count);
+		void set_render_data(render_data data);
 	private:
 		// get the quad data gpu buffer.
 		tz::gl::buffer_resource& quad_buffer();
 		const tz::gl::buffer_resource& quad_buffer() const;
+		tz::gl::buffer_resource& render_buffer();
+		const tz::gl::buffer_resource& render_buffer() const;
 
 		tz::gl::resource_handle quad_bh = tz::nullhand;
+		tz::gl::resource_handle data_bh = tz::nullhand;
 		tz::gl::renderer_handle rh;
 	};
 }

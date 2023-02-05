@@ -1,5 +1,6 @@
 #include "gamelib/game.hpp"
 #include "gamelib/render/quad_renderer.hpp"
+#include "gamelib/render/camera.hpp"
 #include "gamelib/gameplay/actor/system.hpp"
 #include "tz/core/profile.hpp"
 #include "tz/dbgui/dbgui.hpp"
@@ -11,6 +12,7 @@ namespace rnlib
 	{
 		quad_renderer qrenderer;
 		actor_system actors;
+		camera cam;
 	};
 
 	std::unique_ptr<system> sys = nullptr;
@@ -46,6 +48,11 @@ namespace rnlib
 		TZ_PROFZONE("rnlib - render", 0xff0077ee);
 		tz::assert(sys != nullptr, "rnlib never initialised. please submit a bug report.");
 		sys->qrenderer.clean();
+		sys->qrenderer.set_render_data
+		({
+			.view = sys->cam.view(),
+			.projection = sys->cam.projection()
+		});
 		sys->actors.mount(sys->qrenderer.quads());
 		sys->qrenderer.render();
 	}
@@ -67,10 +74,34 @@ namespace rnlib
 			ImGui::End();
 		}
 	}
+
+	void handle_camera_zoom();
+
 	void update(float dt)
 	{
 		TZ_PROFZONE("rnlib - update", 0xff0077ee);
 		tz::assert(sys != nullptr, "rnlib never initialised. please submit a bug report.");
 		sys->actors.update(dt);
+		handle_camera_zoom();
+	}
+
+	void handle_camera_zoom()
+	{
+		static int scroll_cache = tz::window().get_mouse_state().wheel_position;
+		int scroll = tz::window().get_mouse_state().wheel_position;
+		if(tz::dbgui::claims_mouse())
+		{
+			scroll_cache = scroll;
+			return;
+		}
+		if(scroll > scroll_cache)
+		{
+			sys->cam.zoom -= 0.1f;
+		}
+		else if(scroll < scroll_cache)
+		{
+			sys->cam.zoom += 0.1f;
+		}
+		scroll_cache = scroll;
 	}
 }
