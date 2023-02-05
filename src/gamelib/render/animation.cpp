@@ -9,7 +9,7 @@ namespace rnlib
 	std::uint32_t animation::get_image() const
 	{
 		const auto frame_count = static_cast<unsigned int>(this->data.frame_textures.size());
-		const float frame_period = static_cast<float>(frame_count) / this->data.fps;
+		const float frame_period = 1.0f / this->data.fps;
 
 		float true_elapsed = this->elapsed * this->time_multiplier;
 		unsigned int frame_number = true_elapsed / frame_period;

@@ -17,7 +17,7 @@ return
 			{
 				animation
 				{{
-					.frame_textures = {12u, 24u},
+					.frame_textures = {1u, 2u, 3u, 4u, 5u, 6u, 7u, 8u},
 					.fps = 1,
 					.loop = true
 				}}
