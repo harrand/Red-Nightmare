@@ -29,7 +29,7 @@ namespace rnlib
 	};
 
 	// each trait above must have a corresponding name string in the following array (or enjoy a cryptic crash)
-	constexpr std::array<const char*, static_cast<int>(actor_component_id::_count)> actor_component_id_name{"Sprite", "Animation", "Keyboard Control", "Motion"};
+	constexpr std::array<const char*, static_cast<int>(actor_component_id::_count)> actor_component_id_name{"Sprite", "Animation", "Motion", "Keyboard Control"};
 
 	// ECS boilerplate begin.
 	template<actor_component_id ID>

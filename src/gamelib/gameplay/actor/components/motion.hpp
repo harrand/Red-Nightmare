@@ -46,4 +46,26 @@ template<>
 inline void actor_component_dbgui(actor_component<actor_component_id::motion>& component)
 {
 	ImGui::SliderFloat("Speed", &component.data().speed, 0.0f, 1.0f);
+	ImGui::Text("Direction:  %s", [](move_direction_t dir)
+	{
+		std::string str = "";
+		if(dir & move_direction::right)
+		{
+			str += 'r';
+		}
+		if(dir & move_direction::left)
+		{
+			str += 'l';
+		}
+		if(dir & move_direction::up)
+		{
+			str += 'u';
+		}
+		if(dir & move_direction::down)
+		{
+			str += 'd';
+		}
+		if(str.empty()) str = "none";
+		return str;
+	}(component.data().direction).c_str());
 }
