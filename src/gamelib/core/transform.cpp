@@ -41,11 +41,14 @@ namespace rnlib
 		ImGui::InputFloat2("Local Scale", this->local_scale.data().data());
 		ImGui::SliderFloat("Local Rotation", &this->local_rotation, -3.14159f, 3.14159f);
 
-		auto position = this->get_position();
-		ImGui::Text("Position = {%.3f, %.3f}", position[0], position[1]);
-		auto scale = this->get_scale();
-		ImGui::Text("Scale = {%.3f, %.3f}", scale[0], scale[1]);
-		auto rotation = this->get_rotation();
-		ImGui::Text("Rotation = %.3f", rotation);
+		if(this->parent != nullptr)
+		{
+			auto position = this->get_position();
+			ImGui::Text("Global Position = {%.3f, %.3f}", position[0], position[1]);
+			auto scale = this->get_scale();
+			ImGui::Text("Global Scale = {%.3f, %.3f}", scale[0], scale[1]);
+			auto rotation = this->get_rotation();
+			ImGui::Text("Global Rotation = %.3f", rotation);
+		}
 	}
 }
