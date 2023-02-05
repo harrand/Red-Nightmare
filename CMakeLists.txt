@@ -28,6 +28,8 @@ tz_add_library(
 		src/gamelib/gameplay/actor/system.cpp
 		src/gamelib/gameplay/actor/system.hpp
 
+		src/gamelib/render/animation.cpp
+		src/gamelib/render/animation.hpp
 		src/gamelib/render/camera.cpp
 		src/gamelib/render/camera.hpp
 		src/gamelib/render/image.cpp
@@ -54,14 +56,6 @@ add_shader(
 target_link_libraries(rnlib PUBLIC stb)
 target_compile_definitions(rnlib PUBLIC -DGAME_VERSION=0x${PROJECT_VERSION_MAJOR}${PROJECT_VERSION_MINOR}${PROJECT_VERSION_PATCH}${PROJECT_VERSION_TWEAK})
 
-tz_add_executable(
-	TARGET rn
-	SOURCES
-		src/main.cpp
-)
-
-target_link_libraries(rn PRIVATE rnlib stb)
-
 #add_text(
 #	TARGET rnlib
 #	INPUT_DIR ${PROJECT_SOURCE_DIR}
@@ -69,3 +63,11 @@ target_link_libraries(rn PRIVATE rnlib stb)
 #	TEXT_FILES
 #		res/images/levels/backdrops/generic/dungeon_floor_backdrop_normal.png
 #)
+
+tz_add_executable(
+	TARGET rn
+	SOURCES
+		src/main.cpp
+)
+
+target_link_libraries(rn PRIVATE rnlib stb)
