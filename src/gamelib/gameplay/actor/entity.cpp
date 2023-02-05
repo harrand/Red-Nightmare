@@ -5,9 +5,36 @@ namespace rnlib
 {
 	std::size_t actor::uuid_count = 0;
 
+	mount_result actor_entity::mount(std::span<quad_renderer::quad_data> quads) const
+	{
+		mount_result res;
+		for(auto& component_ptr : this->components)
+		{
+			res << component_ptr->mount(quads);
+		}
+		return res;
+	}
+
+	void actor_entity::update(float dt)
+	{
+		for(auto& component_ptr : this->components)
+		{
+			component_ptr->update(dt, *this);
+		}
+	}
+
 	void actor_entity::dbgui()
 	{
-
+		if(ImGui::CollapsingHeader("Components"))
+		{
+			ImGui::Indent();
+			for(auto& component_ptr : this->components)
+			{
+				component_ptr->dbgui();
+				ImGui::Separator();
+			}
+			ImGui::Unindent();
+		}
 	}
 
 	void actor::dbgui()
@@ -19,20 +46,14 @@ namespace rnlib
 		ImGui::Unindent();
 	}
 
-	template<actor_component_id ID>
-	mount_result mount_impl(const actor_entity& ent, std::span<quad_renderer::quad_data> quads)
+	void actor::update(float dt)
 	{
-		if(ent.has_component<ID>())
-		{
-			return actor_component_mount<ID>(*ent.get_component<ID>(), quads);
-		}
-		return {};
+		this->entity.update(dt);
 	}
 
 	mount_result actor::mount(std::span<quad_renderer::quad_data> quads) const
 	{
-		mount_result res;
-		res << mount_impl<actor_component_id::sprite>(this->entity, quads);
+		mount_result res = this->entity.mount(quads);
 		for(std::size_t i = 0; i < res.count; i++)
 		{
 			quads[i].pos += this->transform.get_position();

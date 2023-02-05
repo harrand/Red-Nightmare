@@ -30,3 +30,20 @@ inline mount_result actor_component_mount<actor_component_id::sprite>
 	}
 	return {.count = tex_count};
 }
+
+template<>
+inline void actor_component_dbgui(actor_component<actor_component_id::sprite>& component)
+{
+	static int texture_index = 0;
+	if(component.data().textures.empty())
+	{
+		ImGui::Text("No textures attached to this sprite!");
+		return;
+	}
+	ImGui::SliderInt("Texture Index", &texture_index, 0, component.data().textures.size() - 1);
+	ImGui::Indent();
+	auto tex = component.data().textures[texture_index];
+	ImGui::Text("Texture ID: %zu", tex.id);
+	ImGui::Text("Offset: {%.3f, %.3f}", tex.offset[0], tex.offset[1]);
+	ImGui::Unindent();
+}

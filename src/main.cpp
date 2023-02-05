@@ -13,13 +13,15 @@ int main()
 
 		using namespace tz::literals;
 		tz::delay fixed_update = 16670_us;
+		tz::duration update_timer = tz::system_time();
 		while(!tz::window().is_close_requested())
 		{
 			tz::begin_frame();
 			if(fixed_update.done())
 			{
-				rnlib::update(fixed_update.elapsed().millis<float>());
+				rnlib::update((tz::system_time() - update_timer).millis<float>());
 				fixed_update.reset();
+				update_timer = tz::system_time();
 			}
 			rnlib::render();
 			tz::dbgui::run([]()

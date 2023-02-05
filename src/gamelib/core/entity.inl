@@ -116,7 +116,7 @@ namespace rnlib
 		{
 			if(comp_ptr->get_id() == t)
 			{
-				return static_cast<component<t>*>(comp_ptr.get_component());
+				return static_cast<component<t>*>(comp_ptr.get());
 			}
 		}
 		return nullptr;

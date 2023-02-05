@@ -10,6 +10,18 @@ return
 					.id = 12
 				}
 			}
+		}},
+		actor_component<actor_component_id::animation>
+		{{
+			.animations =
+			{
+				animation
+				{{
+					.frame_textures = {12u, 24u},
+					.fps = 1,
+					.loop = true
+				}}
+			}
 		}}
 	},
 	.name = "Player Akhara",

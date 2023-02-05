@@ -41,6 +41,14 @@ namespace rnlib
 		return res;
 	}
 
+	void actor_system::update(float dt)
+	{
+		for(actor& entity : this->entities)
+		{
+			entity.update(dt);
+		}
+	}
+
 	void actor_system::dbgui()
 	{
 		if(ImGui::BeginTabBar("Actor"))
