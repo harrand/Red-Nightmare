@@ -3,14 +3,14 @@
 
 namespace rnlib
 {
-	std::size_t actor_system::mount(std::span<quad_renderer::quad_data> quads)
+	mount_result actor_system::mount(std::span<quad_renderer::quad_data> quads)
 	{
-		std::size_t count = 0;
+		mount_result res;
 		for(const actor& entity : this->entities)
 		{
-			count += entity.mount(quads.subspan(count));
+			res << entity.mount(quads.subspan(res.count));
 		}
-		return count;
+		return res;
 	}
 
 	void actor_system::dbgui()

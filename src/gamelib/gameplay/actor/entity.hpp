@@ -1,6 +1,7 @@
 #ifndef RNLIB_GAMEPLAY_ACTOR_HPP
 #define RNLIB_GAMEPLAY_ACTOR_HPP
 #include "gamelib/core/entity.hpp"
+#include "gamelib/core/mount.hpp"
 #include "gamelib/core/transform.hpp"
 #include "gamelib/render/quad_renderer.hpp"
 #include "tz/core/memory/clone.hpp"
@@ -55,7 +56,7 @@ namespace rnlib
 
 	// ecs - system impls:
 	template<actor_component_id ID>
-	inline std::size_t actor_component_mount(const actor_component<ID>& component, std::span<quad_renderer::quad_data> quads){return false;}
+	inline mount_result actor_component_mount(const actor_component<ID>& component, std::span<quad_renderer::quad_data> quads){return {};}
 	#include "gamelib/gameplay/actor/components/sprite.hpp"
 	// ecs boilerplate end.
 
@@ -71,7 +72,7 @@ namespace rnlib
 		static std::size_t uuid_count;
 		static constexpr std::size_t nullid = std::numeric_limits<std::size_t>::max();
 		void dbgui();
-		std::size_t mount(std::span<quad_renderer::quad_data> quads) const;
+		mount_result mount(std::span<quad_renderer::quad_data> quads) const;
 
 		actor_entity entity = {};
 		transform_t transform = {};

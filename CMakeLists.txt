@@ -18,6 +18,7 @@ tz_add_library(
 		src/gamelib/core/entity.cpp
 		src/gamelib/core/entity.hpp
 		src/gamelib/core/entity.inl
+		src/gamelib/core/mount.hpp
 		src/gamelib/core/transform.cpp
 		src/gamelib/core/transform.hpp
 
