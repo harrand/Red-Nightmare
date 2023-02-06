@@ -27,9 +27,6 @@ namespace rnlib
 	{
 		TZ_PROFZONE("rnlib - initialise", 0xff0077ee);
 		sys = std::make_unique<system>();
-		tz::assert(sys->qrenderer.quads().size() == 512);
-		sys->qrenderer.reserve(1024);
-		tz::assert(sys->qrenderer.quads().size() == 1024);
 		tz::dbgui::game_menu().add_callback([]()
 		{
 			ImGui::MenuItem("Quad Renderer", nullptr, &dbgui_data.show_quad_renderer);
@@ -53,7 +50,14 @@ namespace rnlib
 			.view = sys->cam.view(),
 			.projection = sys->cam.projection()
 		});
-		sys->actors.mount(sys->qrenderer.quads());
+		mount_result mres;
+		while(mres = sys->actors.mount(sys->qrenderer.quads()), mres.error == mount_error::ooq)
+		{
+			// if mounting fails due to not enough quads, double the number of quads (a la std::vector)
+			const std::size_t quad_count = sys->qrenderer.quads().size();
+			sys->qrenderer.reserve(quad_count * 2);
+			tz::report("ran out of quads. increasing %zu->%zu", quad_count, quad_count * 2);
+		}
 		sys->qrenderer.render();
 	}
 

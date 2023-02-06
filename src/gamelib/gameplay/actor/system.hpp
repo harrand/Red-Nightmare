@@ -10,12 +10,17 @@ namespace rnlib
 	{
 	public:
 		actor_system() = default;
+
+		actor& add(actor_type t);
+
 		const actor* find(std::size_t uuid) const;
 		actor* find(std::size_t uuid);
 		mount_result mount(std::span<quad_renderer::quad_data> quads);
 		void update(float dt);
 		void dbgui();
 	private:
+		void update_one(std::size_t eid, float dt);
+		void update_n(std::size_t eid_begin, std::size_t n, float dt);
 		std::vector<actor> entities = {};
 	};
 }

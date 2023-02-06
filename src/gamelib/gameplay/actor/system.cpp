@@ -1,8 +1,15 @@
 #include "gamelib/gameplay/actor/system.hpp"
 #include "tz/dbgui/dbgui.hpp"
+#include "tz/core/job/job.hpp"
 
 namespace rnlib
 {
+	actor& actor_system::add(actor_type t)
+	{
+		this->entities.push_back(rnlib::create_actor(t));
+		return this->entities.back();
+	}
+
 	const actor* actor_system::find(std::size_t uuid) const
 	{
 		auto iter = std::find_if(this->entities.begin(), this->entities.end(),
@@ -43,9 +50,28 @@ namespace rnlib
 
 	void actor_system::update(float dt)
 	{
-		for(actor& entity : this->entities)
+		constexpr std::size_t arbitrary_serial_update_max = 500;
+		if(this->entities.size() < arbitrary_serial_update_max)
 		{
-			entity.update(dt);
+			// if we dont have that many entities, do them all now.
+			for(auto& entity : this->entities)
+			{
+				entity.update(dt);		
+			}
+			return;
+		}
+		// otherwise, do a multi-threaded approach.
+		const std::size_t ecount = this->entities.size();
+		const std::size_t job_count = std::thread::hardware_concurrency();
+		std::size_t job_batch_size = ecount / job_count;
+		std::vector<tz::job_handle> jobs(job_count);
+		for(std::size_t i = 0; i < job_count; i++)
+		{
+			jobs[i] = tz::job_system().execute([this, i, dt, job_batch_size](){this->update_n(i, job_batch_size, dt);});
+		}
+		for(tz::job_handle jh : jobs)
+		{
+			tz::job_system().block(jh);
 		}
 	}
 
@@ -117,6 +143,20 @@ namespace rnlib
 				ImGui::EndTabItem();
 			}
 			ImGui::EndTabBar();
+		}
+	}
+
+	void actor_system::update_one(std::size_t eid, float dt)
+	{
+		this->entities[eid].update(dt);
+	}
+
+	void actor_system::update_n(std::size_t eid_begin, std::size_t n, float dt)
+	{
+		for(std::size_t i = eid_begin; i < (eid_begin + n); i++)
+		{
+			tz::assert(i < this->entities.size());
+			this->update_one(i, dt);
 		}
 	}
 }
