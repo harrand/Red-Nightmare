@@ -36,10 +36,13 @@ resource(id = 1) const buffer render_data_buffer
 	render_data render;
 };
 
+output(id = 0) uint out_texid;
+
 void main()
 {
 	const uint quad_id = in::vertex_id / 6;
 	quad_data q = quads.data[quad_id];
 	mat2 rotation_matrix = mat2(cos(q.rotation), -sin(q.rotation), sin(q.rotation), cos(q.rotation));
 	out::position = (render.projection * render.view) * vec4(q.pos + (rotation_matrix * quad_positions[in::vertex_id % 6] * q.scale), 0.0f, 1.0f);
+	out_texid = q.texid;
 }
