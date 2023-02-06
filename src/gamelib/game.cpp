@@ -58,6 +58,7 @@ namespace rnlib
 			sys->qrenderer.reserve(quad_count * 2);
 			tz::report("ran out of quads. increasing %zu->%zu", quad_count, quad_count * 2);
 		}
+		tz::assert(mres.error == mount_error::no_error, "unhandled mount_error. please submit a bug report.");
 		sys->qrenderer.render();
 	}
 
