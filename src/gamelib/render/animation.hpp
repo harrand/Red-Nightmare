@@ -18,6 +18,7 @@ namespace rnlib
 		animation(animation_data data);
 		std::uint32_t get_image() const;
 		void update(float dt);
+		void dbgui();
 	private:
 		animation_data data;
 		float time_multiplier = 1.0f;

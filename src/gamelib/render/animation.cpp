@@ -1,4 +1,5 @@
 #include "gamelib/render/animation.hpp"
+#include "tz/dbgui/dbgui.hpp"
 #include <algorithm>
 
 namespace rnlib
@@ -28,5 +29,34 @@ namespace rnlib
 	{
 		// assume dt is in millis.
 		this->elapsed += (dt / 1000.0f);
+	}
+
+	void animation::dbgui()
+	{
+		ImGui::InputFloat("Time Multiplier", &this->time_multiplier);
+		if(this->data.frame_textures.size())
+		{
+			ImGui::Text("Frames (%zu): {", this->data.frame_textures.size());
+			ImGui::SameLine();
+			const char* selected;
+			for(std::uint32_t f : this->data.frame_textures)
+			{
+				if(f == this->get_image())
+				{
+					selected = "*";
+				}
+				else
+				{
+					selected = "";
+				}
+				ImGui::Text("%s%zu%s", selected, static_cast<std::size_t>(f), selected);
+				ImGui::SameLine();
+			}
+			ImGui::Text("}");
+		}
+		if(ImGui::Button("Restart"))
+		{
+			this->elapsed = 0.0f;
+		}
 	}
 }

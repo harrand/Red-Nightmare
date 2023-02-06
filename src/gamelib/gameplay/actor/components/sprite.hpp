@@ -44,6 +44,6 @@ inline void actor_component_dbgui(actor_component<actor_component_id::sprite>& c
 	ImGui::Indent();
 	auto tex = component.data().textures[texture_index];
 	ImGui::Text("Texture ID: %zu", tex.id);
-	ImGui::Text("Offset: {%.3f, %.3f}", tex.offset[0], tex.offset[1]);
+	ImGui::InputFloat2("Offset", tex.offset.data().data());
 	ImGui::Unindent();
 }

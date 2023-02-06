@@ -29,3 +29,24 @@ inline void actor_component_update<actor_component_id::animation>
 		sprite.id = animation->get_image();
 	}
 }
+
+template<>
+inline void actor_component_dbgui(actor_component<actor_component_id::animation>& component)
+{
+	if(component.data().animations.empty())
+	{
+		return;
+	}
+	static int anim_id = 0;
+	ImGui::SliderInt("Animation ID", &anim_id, 0, component.data().animations.size() - 1);
+	ImGui::Indent();
+	if(!component.data().animations[anim_id].has_value())
+	{
+		ImGui::Text("<no data>");
+	}
+	else
+	{
+		component.data().animations[anim_id]->dbgui();
+	}
+	ImGui::Unindent();
+}
