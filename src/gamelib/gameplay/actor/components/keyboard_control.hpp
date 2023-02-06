@@ -8,6 +8,7 @@ struct actor_component_params<actor_component_id::keyboard_control>
 		{move_direction::up, tz::wsi::key::w},
 		{move_direction::down, tz::wsi::key::s}
 	};
+	bool enabled = true;
 };
 
 template<>
@@ -24,7 +25,7 @@ inline void actor_component_update<actor_component_id::keyboard_control>
 	const auto& state = tz::window().get_keyboard_state();
 	auto key_down = [state, &component](move_direction_t dir)
 	{
-		return tz::wsi::is_key_down(state, component.data().movement_keys[dir]);
+		return component.data().enabled && tz::wsi::is_key_down(state, component.data().movement_keys[dir]);
 	};
 	if(key_down(move_direction::right))
 	{
@@ -42,4 +43,10 @@ inline void actor_component_update<actor_component_id::keyboard_control>
 	{
 		motion.direction |= move_direction::down;
 	}
+}
+
+template<>
+inline void actor_component_dbgui(actor_component<actor_component_id::keyboard_control>& component)
+{
+	ImGui::Checkbox("Enabled", &component.data().enabled);
 }
