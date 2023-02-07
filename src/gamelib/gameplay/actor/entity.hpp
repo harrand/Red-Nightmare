@@ -127,6 +127,7 @@ namespace rnlib
 		const char* name = "Untitled";
 		std::size_t uuid = uuid_count++;
 		actor_type type = actor_type::undefined;
+		unsigned int layer = 0;
 	};
 
 	actor create_actor(actor_type type);

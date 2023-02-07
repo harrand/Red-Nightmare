@@ -59,6 +59,7 @@ namespace rnlib
 			quads[i].pos += this->transform.get_position();
 			quads[i].scale = this->transform.get_scale();
 			quads[i].rotation = this->transform.get_rotation();
+			quads[i].layer += this->layer;
 		}
 		return res;
 	}

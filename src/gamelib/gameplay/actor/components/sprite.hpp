@@ -2,6 +2,7 @@ struct sprite_texture_info
 {
 	std::uint32_t id = 0;
 	tz::vec2 offset = tz::vec2::zero();
+	unsigned int layer_offset = 0;
 };
 
 template<>
@@ -27,6 +28,7 @@ inline mount_result actor_component_mount<actor_component_id::sprite>
 		const sprite_texture_info& texture = component.data().textures[i];
 		quads[i].pos = texture.offset;
 		quads[i].texid = texture.id;
+		quads[i].layer = texture.layer_offset;
 	}
 	return {.count = tex_count};
 }
@@ -42,8 +44,10 @@ inline void actor_component_dbgui(actor_component<actor_component_id::sprite>& c
 	}
 	ImGui::SliderInt("Texture Index", &texture_index, 0, component.data().textures.size() - 1);
 	ImGui::Indent();
-	auto tex = component.data().textures[texture_index];
+	auto& tex = component.data().textures[texture_index];
 	ImGui::Text("Texture ID: %zu", tex.id);
 	ImGui::InputFloat2("Offset", tex.offset.data().data());
+	// todo: no magic number.
+	ImGui::SliderInt("Layer Offset", reinterpret_cast<int*>(&tex.layer_offset), 0, 1000, "%u");
 	ImGui::Unindent();
 }
