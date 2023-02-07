@@ -53,14 +53,22 @@ void main()
 	// depth handling.
 	// q.layer should always be between 0.0 and 1000.0.
 	// unlike traditional depth, higher means closer. this might want to be changed, but that's the way it was in rn2 and how it is now.
-	out_depth = q.layer;
 	const float max_y_coord = 1000.0f;
-	const float min_y_coord = -max_y_coord;
+	out_depth = (q.layer / max_y_coord) * 0.5f;
 	// out_depth should ultimately be between 0.0f-1.0f to work for both opengl and vulkan.
 	// as we take q.layer into account, the layer accounts for half the value, and the y-coordinate for the other half. hence why we multiply by 0.5 here.
 	// this means that:
 	// q.layer must be between 0 and 500 to be valid.
 	// q.pos.y must be between -1000 and 1000 to be valid.
 	out_depth += ((max_y_coord + q.pos.y) * 0.5f / max_y_coord) * 0.5f;
-	tz::debug::assert(out_depth >= 0.0f && out_depth <= 1.0f, "badz/%.3f", out_depth);
+#if TZ_DEBUG
+	if(q.pos.y > max_y_coord || q.pos.y < -max_y_coord)
+	{
+		tz::debug::assert(0);		
+	}
+	if(out_depth < 0.0f || out_depth > 1.0f)
+	{
+		tz::debug::assert(0);
+	}
+#endif
 }
