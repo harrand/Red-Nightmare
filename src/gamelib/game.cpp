@@ -44,7 +44,6 @@ namespace rnlib
 	{
 		TZ_PROFZONE("rnlib - render", 0xff0077ee);
 		tz::assert(sys != nullptr, "rnlib never initialised. please submit a bug report.");
-		sys->qrenderer.clean();
 		sys->qrenderer.set_render_data
 		({
 			.view = sys->cam.view(),

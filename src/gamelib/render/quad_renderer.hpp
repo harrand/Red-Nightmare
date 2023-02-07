@@ -29,6 +29,8 @@ namespace rnlib
 			tz::vec2 scale = tz::vec2::zero();
 			float rotation = 0.0f;
 			std::uint32_t texid = 0u;
+			std::int32_t layer = 0;
+			float pad1[1];
 		};
 
 		struct render_data

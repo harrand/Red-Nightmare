@@ -1,11 +1,13 @@
 shader(type = fragment);
 input(id = 0, flat) uint texid;
+input(id = 1) float depth;
 output(id = 0) vec4 out_col;
 
 import <noise>
 
 void main()
 {
+	out::fragment_depth = 1.0f - depth;
 	float x = tz::noise::simplex(vec2(texid));
 	float y = tz::noise::simplex(vec2(texid * x, texid));
 	out_col = vec4(x, y, 1.0f - x, 1.0f);

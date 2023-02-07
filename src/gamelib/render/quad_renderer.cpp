@@ -62,6 +62,8 @@ namespace rnlib
 		ImGui::InputFloat2("position", quad.pos.data().data());
 		ImGui::InputFloat2("scale", quad.scale.data().data());
 		ImGui::DragFloat("rotation", &quad.rotation, 0.01f, -3.14159f, 3.14159f);
+		ImGui::Text("texture id: %u", static_cast<unsigned int>(quad.texid));
+		ImGui::DragInt("layer", reinterpret_cast<int*>(&quad.layer), 0.25f, 0, 500, "%zu");
 		ImGui::Unindent();
 	}
 
