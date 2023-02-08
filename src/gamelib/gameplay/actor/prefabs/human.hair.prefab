@@ -1,0 +1,46 @@
+namespace human_art
+{
+	enum class hair_style
+	{
+		long_hair
+	};
+
+	std::optional<animation> get_hair(hair_style style, humanoid_skeleton_animation anim_type)
+	{
+		switch(style)
+		{
+			case hair_style::long_hair:
+				switch(anim_type)
+				{
+					case humanoid_skeleton_animation::idle:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_hair_long_idle0,
+								image_id::race_human_hair_long_idle1
+							},
+							.fps = 2,
+							.loop = true
+						}};
+					break;
+					case humanoid_skeleton_animation::move_side:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_hair_long_side0,
+								image_id::race_human_hair_long_side1,
+								image_id::race_human_hair_long_side2,
+								image_id::race_human_hair_long_side3
+							},
+							.fps = 6,
+							.loop = true
+						}};
+					break;
+				}
+			break;
+		}
+		return std::nullopt;
+	}
+}

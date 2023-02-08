@@ -67,6 +67,7 @@ namespace rnlib
 	// prefab implementations.
 	namespace prefab
 	{
+		#include "gamelib/gameplay/actor/prefabs/human.hair.prefab"
 		#include "gamelib/gameplay/actor/prefabs/human.actor.prefab"
 	}
 

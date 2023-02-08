@@ -1,12 +1,14 @@
 struct human_prefab_info
 {
 	tz::vec3 skin_colour = {1.0f, 0.875f, 0.679f};
+	human_art::hair_style hair_style = human_art::hair_style::long_hair;
 	tz::vec3 hair_colour = {0.8f, 0.0f, 0.0f};
 	tz::vec3 eye_colour = tz::vec3::zero();
 	tz::vec3 feet_equipment_colour = tz::vec3::filled(1.0f);
 	float movement_speed = 1.0f;
 	actor data;
 };
+
 actor human(human_prefab_info info = {})
 {
 	actor ret = info.data;
@@ -47,12 +49,7 @@ actor human(human_prefab_info info = {})
 					// idle
 					.animations =
 					{
-						animation
-						{{
-							.frame_textures = {image_id::race_human_hair_long_idle0, image_id::race_human_hair_long_idle1},
-							.fps = 2,
-							.loop = true
-						}},
+						human_art::get_hair(info.hair_style, humanoid_skeleton_animation::idle),
 						animation
 						{{
 							.frame_textures = {image_id::race_human_eyes_dot_idle0, image_id::race_human_eyes_dot_idle1},
@@ -79,18 +76,7 @@ actor human(human_prefab_info info = {})
 					// move_side
 					.animations =
 					{
-						animation
-						{{
-							.frame_textures =
-							{
-								image_id::race_human_hair_long_side0,
-								image_id::race_human_hair_long_side1,
-								image_id::race_human_hair_long_side2,
-								image_id::race_human_hair_long_side3,
-							},
-							.fps = 6,
-							.loop = true
-						}},
+						human_art::get_hair(info.hair_style, humanoid_skeleton_animation::move_side),
 						animation
 						{{
 							.frame_textures =
