@@ -8,12 +8,14 @@ return
 			{
 				{
 					// base
-					.id = image_id::undefined
+					.id = image_id::undefined,
+					.colour_tint = {1.0f, 0.875f, 0.679f}
 				},
 				{
 					// hair
 					.id = image_id::undefined,
-					.layer_offset = 1
+					.colour_tint = {0.8f, 0.0f, 0.0f},
+					.layer_offset = 1,
 				}
 			}
 		}},

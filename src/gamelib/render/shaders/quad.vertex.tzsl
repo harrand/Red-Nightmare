@@ -7,6 +7,7 @@ struct quad_data
 {
 	vec2 pos;
 	vec2 scale;
+	vec3 colour_tint;
 	float rotation;
 	uint texid;
 	int layer;
@@ -41,6 +42,7 @@ resource(id = 1) const buffer render_data_buffer
 output(id = 0) uint out_texid;
 output(id = 1) float out_depth;
 output(id = 2) vec2 out_texcoord;
+output(id = 3) vec3 out_colour_tint;
 
 void main()
 {
@@ -64,6 +66,7 @@ void main()
 	out_depth += ((max_y_coord + q.pos.y) * 0.5f / max_y_coord) * 0.5f;
 	
 	out_texcoord = quad_texcoords[in::vertex_id % 6];
+	out_colour_tint = q.colour_tint;
 
 #if TZ_DEBUG
 	if(q.pos.y > max_y_coord || q.pos.y < -max_y_coord)

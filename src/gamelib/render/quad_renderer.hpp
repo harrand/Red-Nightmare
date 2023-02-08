@@ -27,10 +27,11 @@ namespace rnlib
 		{
 			tz::vec2 pos = tz::vec2::zero();
 			tz::vec2 scale = tz::vec2::zero();
+			tz::vec3 colour_tint = tz::vec3::filled(1.0f);
 			float rotation = 0.0f;
 			std::uint32_t texid = 0;
 			std::int32_t layer = 0;
-			float pad1[1];
+			float pad1[2];
 		};
 
 		struct render_data
