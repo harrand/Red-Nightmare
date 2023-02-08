@@ -67,11 +67,27 @@ add_text(
 		images/meta/invisible.png
 		images/races/human/base/human_base_idle0.png
 		images/races/human/base/human_base_idle1.png
+		images/races/human/base/human_base_side0.png
+		images/races/human/base/human_base_side1.png
+		images/races/human/base/human_base_side2.png
+		images/races/human/base/human_base_side3.png
 		images/races/human/hair/long/human_hair_long_idle0.png
 		images/races/human/hair/long/human_hair_long_idle1.png
+		images/races/human/hair/long/human_hair_long_side0.png
+		images/races/human/hair/long/human_hair_long_side1.png
+		images/races/human/hair/long/human_hair_long_side2.png
+		images/races/human/hair/long/human_hair_long_side3.png
 		images/races/human/eyes/dot/human_eyes_dot_idle0.png
 		images/races/human/eyes/dot/human_eyes_dot_idle1.png
+		images/races/human/eyes/dot/human_eyes_dot_side0.png
+		images/races/human/eyes/dot/human_eyes_dot_side1.png
+		images/races/human/eyes/dot/human_eyes_dot_side2.png
+		images/races/human/eyes/dot/human_eyes_dot_side3.png
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_idle0.png
+		images/races/human/equipment/feet/dot/human_equipment_feet_dot_side0.png
+		images/races/human/equipment/feet/dot/human_equipment_feet_dot_side1.png
+		images/races/human/equipment/feet/dot/human_equipment_feet_dot_side2.png
+		images/races/human/equipment/feet/dot/human_equipment_feet_dot_side3.png
 )
 
 tz_add_executable(

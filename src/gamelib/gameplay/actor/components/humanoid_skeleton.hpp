@@ -47,12 +47,12 @@ inline void actor_component_update<actor_component_id::humanoid_skeleton>
 	if(dir & move_direction::right)
 	{
 		animation.data() = get_pose(humanoid_skeleton_animation::move_side);
-		actor.transform.local_scale[0] = std::abs(actor.transform.local_scale[0]);
+		actor.transform.local_scale[0] = -std::abs(actor.transform.local_scale[0]);
 	}
 	else if(dir & move_direction::left)
 	{
 		animation.data() = get_pose(humanoid_skeleton_animation::move_side);
-		actor.transform.local_scale[0] = -std::abs(actor.transform.local_scale[0]);
+		actor.transform.local_scale[0] = std::abs(actor.transform.local_scale[0]);
 	}
 	else if(dir & move_direction::up)
 	{

@@ -27,11 +27,27 @@ namespace rnlib
 #include ImportedTextHeader(undefined, png)
 #include ImportedTextHeader(human_base_idle0, png)
 #include ImportedTextHeader(human_base_idle1, png)
+#include ImportedTextHeader(human_base_side0, png)
+#include ImportedTextHeader(human_base_side1, png)
+#include ImportedTextHeader(human_base_side2, png)
+#include ImportedTextHeader(human_base_side3, png)
 #include ImportedTextHeader(human_hair_long_idle0, png)
 #include ImportedTextHeader(human_hair_long_idle1, png)
+#include ImportedTextHeader(human_hair_long_side0, png)
+#include ImportedTextHeader(human_hair_long_side1, png)
+#include ImportedTextHeader(human_hair_long_side2, png)
+#include ImportedTextHeader(human_hair_long_side3, png)
 #include ImportedTextHeader(human_eyes_dot_idle0, png)
 #include ImportedTextHeader(human_eyes_dot_idle1, png)
+#include ImportedTextHeader(human_eyes_dot_side0, png)
+#include ImportedTextHeader(human_eyes_dot_side1, png)
+#include ImportedTextHeader(human_eyes_dot_side2, png)
+#include ImportedTextHeader(human_eyes_dot_side3, png)
 #include ImportedTextHeader(human_equipment_feet_dot_idle0, png)
+#include ImportedTextHeader(human_equipment_feet_dot_side0, png)
+#include ImportedTextHeader(human_equipment_feet_dot_side1, png)
+#include ImportedTextHeader(human_equipment_feet_dot_side2, png)
+#include ImportedTextHeader(human_equipment_feet_dot_side3, png)
 
 namespace rnlib
 {
@@ -41,11 +57,27 @@ namespace rnlib
 		ImportedTextData(invisible, png),
 		ImportedTextData(human_base_idle0, png),
 		ImportedTextData(human_base_idle1, png),
+		ImportedTextData(human_base_side0, png),
+		ImportedTextData(human_base_side1, png),
+		ImportedTextData(human_base_side2, png),
+		ImportedTextData(human_base_side3, png),
 		ImportedTextData(human_hair_long_idle0, png),
 		ImportedTextData(human_hair_long_idle1, png),
+		ImportedTextData(human_hair_long_side0, png),
+		ImportedTextData(human_hair_long_side1, png),
+		ImportedTextData(human_hair_long_side2, png),
+		ImportedTextData(human_hair_long_side3, png),
 		ImportedTextData(human_eyes_dot_idle0, png),
 		ImportedTextData(human_eyes_dot_idle1, png),
-		ImportedTextData(human_equipment_feet_dot_idle0, png)
+		ImportedTextData(human_eyes_dot_side0, png),
+		ImportedTextData(human_eyes_dot_side1, png),
+		ImportedTextData(human_eyes_dot_side2, png),
+		ImportedTextData(human_eyes_dot_side3, png),
+		ImportedTextData(human_equipment_feet_dot_idle0, png),
+		ImportedTextData(human_equipment_feet_dot_side0, png),
+		ImportedTextData(human_equipment_feet_dot_side1, png),
+		ImportedTextData(human_equipment_feet_dot_side2, png),
+		ImportedTextData(human_equipment_feet_dot_side3, png),
 	};
 
 	tz::gl::image_resource create_image(image_id_t iid)

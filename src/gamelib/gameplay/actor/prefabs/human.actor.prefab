@@ -38,16 +38,6 @@ actor human(human_prefab_info info = {})
 				}
 			}
 		}},
-		actor_component<actor_component_id::animation>
-		{{
-			.animations =
-			{
-				std::nullopt,
-				std::nullopt,
-				std::nullopt,
-				std::nullopt
-			}
-		}},
 		actor_component<actor_component_id::humanoid_skeleton>
 		{{
 			.poses =
@@ -89,10 +79,54 @@ actor human(human_prefab_info info = {})
 					// move_side
 					.animations =
 					{
-						std::nullopt,
-						std::nullopt,
-						std::nullopt,
-						std::nullopt
+						animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_hair_long_side0,
+								image_id::race_human_hair_long_side1,
+								image_id::race_human_hair_long_side2,
+								image_id::race_human_hair_long_side3,
+							},
+							.fps = 6,
+							.loop = true
+						}},
+						animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_eyes_dot_side0,
+								image_id::race_human_eyes_dot_side1,
+								image_id::race_human_eyes_dot_side2,
+								image_id::race_human_eyes_dot_side3,
+							},
+							.fps = 6,
+							.loop = true
+						}},
+						animation
+						{{
+							.frame_textures = 
+							{
+								image_id::race_human_equipment_feet_dot_side0,
+								image_id::race_human_equipment_feet_dot_side1,
+								image_id::race_human_equipment_feet_dot_side2,
+								image_id::race_human_equipment_feet_dot_side3
+							},
+							.fps = 6,
+							.loop = true
+						}},
+						animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_base_side0,
+								image_id::race_human_base_side1,
+								image_id::race_human_base_side2,
+								image_id::race_human_base_side3
+							},
+							.fps = 6,
+							.loop = true
+						}},
 					}
 				},
 
@@ -124,6 +158,16 @@ actor human(human_prefab_info info = {})
 		actor_component<actor_component_id::motion>
 		{{
 			.speed = info.movement_speed
+		}},
+		actor_component<actor_component_id::animation>
+		{{
+			.animations =
+			{
+				std::nullopt,
+				std::nullopt,
+				std::nullopt,
+				std::nullopt
+			}
 		}},
 	};
 	entity.transfer_components(ret.entity);
