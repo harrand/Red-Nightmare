@@ -1,5 +1,7 @@
 return prefab::human
 ({
+	.skin_colour = {0.2f, 0.2f, 0.2f},
+	.hair_colour = {0.3f, 0.7f, 1.0f},
 	.data =
 	{
 		.entity =
