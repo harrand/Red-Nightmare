@@ -33,6 +33,8 @@ namespace rnlib
 			race_human_eyes_dot_side1,
 			race_human_eyes_dot_side2,
 			race_human_eyes_dot_side3,
+			race_human_equipment_chest_elementalrobes_idle0,
+			race_human_equipment_chest_elementalrobes_idle1,
 			race_human_equipment_feet_dot_idle0,
 			race_human_equipment_feet_dot_side0,
 			race_human_equipment_feet_dot_side1,

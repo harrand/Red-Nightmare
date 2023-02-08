@@ -1,0 +1,32 @@
+namespace human_art
+{
+	enum class chest_type
+	{
+		elemental_robes
+	};
+
+	std::optional<animation> get_chest(chest_type type, humanoid_skeleton_animation anim_type)
+	{
+		switch(type)
+		{
+			case chest_type::elemental_robes:
+				switch(anim_type)
+				{
+					case humanoid_skeleton_animation::idle:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_equipment_chest_elementalrobes_idle0,
+								image_id::race_human_equipment_chest_elementalrobes_idle1,
+							},
+							.fps = 2,
+							.loop = true
+						}};
+					break;
+				}
+			break;
+		}
+		return std::nullopt;
+	}
+}

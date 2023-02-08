@@ -83,6 +83,8 @@ add_text(
 		images/races/human/eyes/dot/human_eyes_dot_side1.png
 		images/races/human/eyes/dot/human_eyes_dot_side2.png
 		images/races/human/eyes/dot/human_eyes_dot_side3.png
+		images/races/human/equipment/chest/elementalrobes/human_equipment_chest_elementalrobes_idle0.png
+		images/races/human/equipment/chest/elementalrobes/human_equipment_chest_elementalrobes_idle1.png
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_idle0.png
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_side0.png
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_side1.png

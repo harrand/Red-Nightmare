@@ -43,6 +43,8 @@ namespace rnlib
 #include ImportedTextHeader(human_eyes_dot_side1, png)
 #include ImportedTextHeader(human_eyes_dot_side2, png)
 #include ImportedTextHeader(human_eyes_dot_side3, png)
+#include ImportedTextHeader(human_equipment_chest_elementalrobes_idle0, png)
+#include ImportedTextHeader(human_equipment_chest_elementalrobes_idle1, png)
 #include ImportedTextHeader(human_equipment_feet_dot_idle0, png)
 #include ImportedTextHeader(human_equipment_feet_dot_side0, png)
 #include ImportedTextHeader(human_equipment_feet_dot_side1, png)
@@ -73,6 +75,8 @@ namespace rnlib
 		ImportedTextData(human_eyes_dot_side1, png),
 		ImportedTextData(human_eyes_dot_side2, png),
 		ImportedTextData(human_eyes_dot_side3, png),
+		ImportedTextData(human_equipment_chest_elementalrobes_idle0, png),
+		ImportedTextData(human_equipment_chest_elementalrobes_idle1, png),
 		ImportedTextData(human_equipment_feet_dot_idle0, png),
 		ImportedTextData(human_equipment_feet_dot_side0, png),
 		ImportedTextData(human_equipment_feet_dot_side1, png),

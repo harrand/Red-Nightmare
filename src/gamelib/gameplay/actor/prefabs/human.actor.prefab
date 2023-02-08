@@ -5,6 +5,8 @@ struct human_prefab_info
 	tz::vec3 hair_colour = {0.8f, 0.0f, 0.0f};
 	human_art::eye_type eye_type = human_art::eye_type::dots;
 	tz::vec3 eye_colour = tz::vec3::zero();
+	human_art::chest_type chest_type = human_art::chest_type::elemental_robes;
+	tz::vec3 chest_colour = tz::vec3::filled(1.0f);
 	human_art::feet_type feet_type = human_art::feet_type::dots;
 	tz::vec3 feet_colour = tz::vec3::filled(1.0f);
 	float movement_speed = 1.0f;
@@ -31,6 +33,11 @@ actor human(human_prefab_info info = {})
 					.colour_tint = info.eye_colour
 				},
 				{
+					// chest equipment
+					.id = image_id::undefined,
+					.colour_tint = info.chest_colour
+				},
+				{
 					// feet equipment
 					.id = image_id::undefined,
 					.colour_tint = info.feet_colour
@@ -53,6 +60,7 @@ actor human(human_prefab_info info = {})
 					{
 						human_art::get_hair(info.hair_style, humanoid_skeleton_animation::idle),
 						human_art::get_eyes(info.eye_type, humanoid_skeleton_animation::idle),
+						human_art::get_chest(info.chest_type, humanoid_skeleton_animation::idle),
 						human_art::get_feet(info.feet_type, humanoid_skeleton_animation::idle),
 						animation
 						{{
@@ -70,6 +78,7 @@ actor human(human_prefab_info info = {})
 					{
 						human_art::get_hair(info.hair_style, humanoid_skeleton_animation::move_side),
 						human_art::get_eyes(info.eye_type, humanoid_skeleton_animation::move_side),
+						human_art::get_chest(info.chest_type, humanoid_skeleton_animation::move_side),
 						human_art::get_feet(info.feet_type, humanoid_skeleton_animation::move_side),
 						animation
 						{{
@@ -94,6 +103,7 @@ actor human(human_prefab_info info = {})
 						std::nullopt,
 						std::nullopt,
 						std::nullopt,
+						std::nullopt,
 						std::nullopt
 					}
 				},
@@ -103,6 +113,7 @@ actor human(human_prefab_info info = {})
 					// move_down
 					.animations =
 					{
+						std::nullopt,
 						std::nullopt,
 						std::nullopt,
 						std::nullopt,
@@ -119,6 +130,7 @@ actor human(human_prefab_info info = {})
 		{{
 			.animations =
 			{
+				std::nullopt,
 				std::nullopt,
 				std::nullopt,
 				std::nullopt,
