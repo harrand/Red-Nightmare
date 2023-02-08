@@ -64,11 +64,13 @@ namespace rnlib
 		const std::size_t ecount = this->entities.size();
 		const std::size_t job_count = std::thread::hardware_concurrency();
 		std::size_t job_batch_size = ecount / job_count;
+		std::size_t remainder_jobs = ecount % job_count;
 		std::vector<tz::job_handle> jobs(job_count);
 		for(std::size_t i = 0; i < job_count; i++)
 		{
-			jobs[i] = tz::job_system().execute([this, i, dt, job_batch_size](){this->update_n(i, job_batch_size, dt);});
+			jobs[i] = tz::job_system().execute([this, i, dt, job_batch_size](){this->update_n(i * job_batch_size, job_batch_size, dt);});
 		}
+		this->update_n(ecount - remainder_jobs, remainder_jobs, dt);
 		for(tz::job_handle jh : jobs)
 		{
 			tz::job_system().block(jh);
