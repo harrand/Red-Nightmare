@@ -7,7 +7,7 @@ return
 			.textures =
 			{
 				{
-					.id = 12
+					.id = image_id::undefined
 				}
 			}
 		}},
@@ -17,7 +17,7 @@ return
 			{
 				animation
 				{{
-					.frame_textures = {1u, 2u, 3u, 4u, 5u, 6u, 7u, 8u},
+					.frame_textures = {image_id::invisible, image_id::undefined},
 					.fps = 1,
 					.loop = true
 				}}

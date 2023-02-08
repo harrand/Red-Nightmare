@@ -58,13 +58,14 @@ add_shader(
 target_link_libraries(rnlib PUBLIC stb)
 target_compile_definitions(rnlib PUBLIC -DGAME_VERSION=0x${PROJECT_VERSION_MAJOR}${PROJECT_VERSION_MINOR}${PROJECT_VERSION_PATCH}${PROJECT_VERSION_TWEAK})
 
-#add_text(
-#	TARGET rnlib
-#	INPUT_DIR ${PROJECT_SOURCE_DIR}
-#	OUTPUT_DIR ${PROJECT_BINARY_DIR}
-#	TEXT_FILES
-#		res/images/levels/backdrops/generic/dungeon_floor_backdrop_normal.png
-#)
+add_text(
+	TARGET rnlib
+	INPUT_DIR ${PROJECT_SOURCE_DIR}/res/assets/
+	OUTPUT_DIR ${PROJECT_BINARY_DIR}/res/assets/
+	TEXT_FILES
+		images/meta/undefined.png
+		images/meta/invisible.png
+)
 
 tz_add_executable(
 	TARGET rn

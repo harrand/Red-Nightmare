@@ -1,4 +1,5 @@
 #include "gamelib/render/quad_renderer.hpp"
+#include "gamelib/render/image.hpp"
 #include "tz/core/profile.hpp"
 #include "tz/gl/device.hpp"
 #include "tz/gl/imported_shaders.hpp"
@@ -17,15 +18,22 @@ namespace rnlib
 		tz::gl::renderer_info rinfo;
 		rinfo.shader().set_shader(tz::gl::shader_stage::vertex, ImportedShaderSource(quad, vertex));
 		rinfo.shader().set_shader(tz::gl::shader_stage::fragment, ImportedShaderSource(quad, fragment));
+		// quad buffer
 		std::array<quad_data, initial_capacity> initial_quads;
 		this->quad_bh = rinfo.add_resource(tz::gl::buffer_resource::from_many(initial_quads,
 		{
 			.access = tz::gl::resource_access::dynamic_variable
 		}));
+		// data buffer (e.g camera)
 		this->data_bh = rinfo.add_resource(tz::gl::buffer_resource::from_one(render_data{},
 		{
 			.access = tz::gl::resource_access::dynamic_fixed
 		}));
+		// all images
+		for(image_id_t i = 0; i < image_id::_count; i++)
+		{
+			rinfo.add_resource(rnlib::create_image(i));
+		}
 		return tz::gl::get_device().create_renderer(rinfo);
 	}())
 	{

@@ -1,7 +1,10 @@
 shader(type = fragment);
 input(id = 0, flat) uint texid;
 input(id = 1) float depth;
+input(id = 2) vec2 texcoord;
 output(id = 0) vec4 out_col;
+
+resource(id = 2) const texture images[];
 
 import <noise>
 
@@ -11,4 +14,5 @@ void main()
 	float x = tz::noise::simplex(vec2(texid));
 	float y = tz::noise::simplex(vec2(texid * x, texid));
 	out_col = vec4(x, y, 1.0f - x, 1.0f);
+	out_col = texture(images[texid], texcoord);
 }

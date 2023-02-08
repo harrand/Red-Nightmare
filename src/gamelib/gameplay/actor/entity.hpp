@@ -5,6 +5,7 @@
 #include "gamelib/core/transform.hpp"
 #include "gamelib/render/animation.hpp"
 #include "gamelib/render/quad_renderer.hpp"
+#include "gamelib/render/image.hpp"
 #include "tz/core/memory/clone.hpp"
 #include "tz/wsi/keyboard.hpp"
 #include <optional>

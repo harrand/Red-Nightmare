@@ -28,7 +28,7 @@ namespace rnlib
 			tz::vec2 pos = tz::vec2::zero();
 			tz::vec2 scale = tz::vec2::zero();
 			float rotation = 0.0f;
-			std::uint32_t texid = 0u;
+			std::uint32_t texid = 0;
 			std::int32_t layer = 0;
 			float pad1[1];
 		};

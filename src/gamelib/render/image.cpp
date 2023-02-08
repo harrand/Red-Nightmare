@@ -18,4 +18,24 @@ namespace rnlib
 		stbi_image_free(imgdata);
 		return ret;
 	}
+
+}
+
+// image implementations.
+#include "tz/core/imported_text.hpp"
+#include ImportedTextHeader(invisible, png)
+#include ImportedTextHeader(undefined, png)
+
+namespace rnlib
+{
+	std::array<std::string_view, static_cast<int>(image_id::_count)> images
+	{
+		ImportedTextData(undefined, png),
+		ImportedTextData(invisible, png)
+	};
+
+	tz::gl::image_resource create_image(image_id_t iid)
+	{
+		return load_image_data(images[iid]);
+	}
 }
