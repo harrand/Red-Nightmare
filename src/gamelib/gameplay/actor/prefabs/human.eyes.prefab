@@ -1,0 +1,46 @@
+namespace human_art
+{
+	enum class eye_type
+	{
+		dots
+	};
+
+	std::optional<animation> get_eyes(eye_type type, humanoid_skeleton_animation anim_type)
+	{
+		switch(type)
+		{
+			case eye_type::dots:
+				switch(anim_type)
+				{
+					case humanoid_skeleton_animation::idle:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_eyes_dot_idle0,
+								image_id::race_human_eyes_dot_idle1
+							},
+							.fps = 2,
+							.loop = true
+						}};
+					break;
+					case humanoid_skeleton_animation::move_side:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_eyes_dot_side0,
+								image_id::race_human_eyes_dot_side1,
+								image_id::race_human_eyes_dot_side2,
+								image_id::race_human_eyes_dot_side3,
+							},
+							.fps = 6,
+							.loop = true
+						}};
+					break;
+				}
+			break;
+		}
+		return std::nullopt;
+	}
+}

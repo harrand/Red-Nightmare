@@ -1,7 +1,12 @@
 return prefab::human
 ({
-	.skin_colour = {0.2f, 0.2f, 0.2f},
-	.hair_colour = {0.3f, 0.7f, 1.0f},
+	.skin_colour = {1.0f, 0.875f, 0.679f},
+	.hair_style = prefab::human_art::hair_style::long_hair,
+	.hair_colour = {0.655f, 0.0f, 0.0f},
+	.eye_type = prefab::human_art::eye_type::dots,
+	.eye_colour = {0.0f, 0.0f, 0.0f},
+	.feet_type = prefab::human_art::feet_type::dots,
+	.feet_colour = {1.0f, 0.0f, 0.0f},
 	.movement_speed = 0.3f,
 	.data =
 	{

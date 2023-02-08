@@ -3,8 +3,10 @@ struct human_prefab_info
 	tz::vec3 skin_colour = {1.0f, 0.875f, 0.679f};
 	human_art::hair_style hair_style = human_art::hair_style::long_hair;
 	tz::vec3 hair_colour = {0.8f, 0.0f, 0.0f};
+	human_art::eye_type eye_type = human_art::eye_type::dots;
 	tz::vec3 eye_colour = tz::vec3::zero();
-	tz::vec3 feet_equipment_colour = tz::vec3::filled(1.0f);
+	human_art::feet_type feet_type = human_art::feet_type::dots;
+	tz::vec3 feet_colour = tz::vec3::filled(1.0f);
 	float movement_speed = 1.0f;
 	actor data;
 };
@@ -31,7 +33,7 @@ actor human(human_prefab_info info = {})
 				{
 					// feet equipment
 					.id = image_id::undefined,
-					.colour_tint = info.feet_equipment_colour
+					.colour_tint = info.feet_colour
 				},
 				{
 					// base
@@ -50,18 +52,8 @@ actor human(human_prefab_info info = {})
 					.animations =
 					{
 						human_art::get_hair(info.hair_style, humanoid_skeleton_animation::idle),
-						animation
-						{{
-							.frame_textures = {image_id::race_human_eyes_dot_idle0, image_id::race_human_eyes_dot_idle1},
-							.fps = 2,
-							.loop = true
-						}},
-						animation
-						{{
-							.frame_textures = {image_id::race_human_equipment_feet_dot_idle0},
-							.fps = 1,
-							.loop = true
-						}},
+						human_art::get_eyes(info.eye_type, humanoid_skeleton_animation::idle),
+						human_art::get_feet(info.feet_type, humanoid_skeleton_animation::idle),
 						animation
 						{{
 							.frame_textures = {image_id::race_human_base_idle0, image_id::race_human_base_idle1},
@@ -77,30 +69,8 @@ actor human(human_prefab_info info = {})
 					.animations =
 					{
 						human_art::get_hair(info.hair_style, humanoid_skeleton_animation::move_side),
-						animation
-						{{
-							.frame_textures =
-							{
-								image_id::race_human_eyes_dot_side0,
-								image_id::race_human_eyes_dot_side1,
-								image_id::race_human_eyes_dot_side2,
-								image_id::race_human_eyes_dot_side3,
-							},
-							.fps = 6,
-							.loop = true
-						}},
-						animation
-						{{
-							.frame_textures = 
-							{
-								image_id::race_human_equipment_feet_dot_side0,
-								image_id::race_human_equipment_feet_dot_side1,
-								image_id::race_human_equipment_feet_dot_side2,
-								image_id::race_human_equipment_feet_dot_side3
-							},
-							.fps = 6,
-							.loop = true
-						}},
+						human_art::get_eyes(info.eye_type, humanoid_skeleton_animation::move_side),
+						human_art::get_feet(info.feet_type, humanoid_skeleton_animation::move_side),
 						animation
 						{{
 							.frame_textures =
