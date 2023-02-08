@@ -2,6 +2,7 @@ struct human_prefab_info
 {
 	tz::vec3 skin_colour = {1.0f, 0.875f, 0.679f};
 	tz::vec3 hair_colour = {0.8f, 0.0f, 0.0f};
+	tz::vec3 eye_colour = tz::vec3::zero();
 	actor data;
 };
 actor human(human_prefab_info info = {})
@@ -19,6 +20,11 @@ actor human(human_prefab_info info = {})
 					.colour_tint = info.hair_colour
 				},
 				{
+					// eyes
+					.id = image_id::undefined,
+					.colour_tint = info.eye_colour
+				},
+				{
 					// base
 					.id = image_id::undefined,
 					.colour_tint = info.skin_colour
@@ -32,6 +38,12 @@ actor human(human_prefab_info info = {})
 				animation
 				{{
 					.frame_textures = {image_id::race_human_hair_long_idle0, image_id::race_human_hair_long_idle1},
+					.fps = 2,
+					.loop = true
+				}},
+				animation
+				{{
+					.frame_textures = {image_id::race_human_eyes_dot_idle0, image_id::race_human_eyes_dot_idle1},
 					.fps = 2,
 					.loop = true
 				}},

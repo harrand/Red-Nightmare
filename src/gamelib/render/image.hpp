@@ -19,6 +19,8 @@ namespace rnlib
 			race_human_base_idle1,
 			race_human_hair_long_idle0,
 			race_human_hair_long_idle1,
+			race_human_eyes_dot_idle0,
+			race_human_eyes_dot_idle1,
 			_count
 		};
 	}

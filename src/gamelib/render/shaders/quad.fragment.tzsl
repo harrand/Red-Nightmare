@@ -11,7 +11,7 @@ import <noise>
 
 void main()
 {
-	out::fragment_depth = 1.0f - depth;
+	out::fragment_depth = depth;
 	float x = tz::noise::simplex(vec2(texid));
 	float y = tz::noise::simplex(vec2(texid * x, texid));
 	out_col = vec4(x, y, 1.0f - x, 1.0f);

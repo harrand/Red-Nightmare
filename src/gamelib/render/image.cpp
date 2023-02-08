@@ -29,6 +29,8 @@ namespace rnlib
 #include ImportedTextHeader(human_base_idle1, png)
 #include ImportedTextHeader(human_hair_long_idle0, png)
 #include ImportedTextHeader(human_hair_long_idle1, png)
+#include ImportedTextHeader(human_eyes_dot_idle0, png)
+#include ImportedTextHeader(human_eyes_dot_idle1, png)
 
 namespace rnlib
 {
@@ -40,6 +42,8 @@ namespace rnlib
 		ImportedTextData(human_base_idle1, png),
 		ImportedTextData(human_hair_long_idle0, png),
 		ImportedTextData(human_hair_long_idle1, png),
+		ImportedTextData(human_eyes_dot_idle0, png),
+		ImportedTextData(human_eyes_dot_idle1, png),
 	};
 
 	tz::gl::image_resource create_image(image_id_t iid)
