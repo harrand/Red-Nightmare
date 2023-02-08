@@ -2,14 +2,11 @@ return prefab::human
 ({
 	.skin_colour = {0.2f, 0.2f, 0.2f},
 	.hair_colour = {0.3f, 0.7f, 1.0f},
+	.movement_speed = 0.3f,
 	.data =
 	{
 		.entity =
 		{
-			actor_component<actor_component_id::motion>
-			{{
-				.speed = 0.3f
-			}},
 			actor_component<actor_component_id::keyboard_control>{}
 		},
 		.name = "Melistra",

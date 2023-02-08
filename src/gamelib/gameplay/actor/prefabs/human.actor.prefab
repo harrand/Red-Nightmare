@@ -4,6 +4,7 @@ struct human_prefab_info
 	tz::vec3 hair_colour = {0.8f, 0.0f, 0.0f};
 	tz::vec3 eye_colour = tz::vec3::zero();
 	tz::vec3 feet_equipment_colour = tz::vec3::filled(1.0f);
+	float movement_speed = 1.0f;
 	actor data;
 };
 actor human(human_prefab_info info = {})
@@ -41,31 +42,88 @@ actor human(human_prefab_info info = {})
 		{{
 			.animations =
 			{
-				animation
-				{{
-					.frame_textures = {image_id::race_human_hair_long_idle0, image_id::race_human_hair_long_idle1},
-					.fps = 2,
-					.loop = true
-				}},
-				animation
-				{{
-					.frame_textures = {image_id::race_human_eyes_dot_idle0, image_id::race_human_eyes_dot_idle1},
-					.fps = 2,
-					.loop = true
-				}},
-				animation
-				{{
-					.frame_textures = {image_id::race_human_equipment_feet_dot_idle0},
-					.fps = 1,
-					.loop = true
-				}},
-				animation
-				{{
-					.frame_textures = {image_id::race_human_base_idle0, image_id::race_human_base_idle1},
-					.fps = 2,
-					.loop = true
-				}}
+				std::nullopt,
+				std::nullopt,
+				std::nullopt,
+				std::nullopt
 			}
+		}},
+		actor_component<actor_component_id::humanoid_skeleton>
+		{{
+			.poses =
+			{
+				actor_component_params<actor_component_id::animation>
+				{
+					// idle
+					.animations =
+					{
+						animation
+						{{
+							.frame_textures = {image_id::race_human_hair_long_idle0, image_id::race_human_hair_long_idle1},
+							.fps = 2,
+							.loop = true
+						}},
+						animation
+						{{
+							.frame_textures = {image_id::race_human_eyes_dot_idle0, image_id::race_human_eyes_dot_idle1},
+							.fps = 2,
+							.loop = true
+						}},
+						animation
+						{{
+							.frame_textures = {image_id::race_human_equipment_feet_dot_idle0},
+							.fps = 1,
+							.loop = true
+						}},
+						animation
+						{{
+							.frame_textures = {image_id::race_human_base_idle0, image_id::race_human_base_idle1},
+							.fps = 2,
+							.loop = true
+						}}	
+					}
+				},
+
+				actor_component_params<actor_component_id::animation>
+				{
+					// move_side
+					.animations =
+					{
+						std::nullopt,
+						std::nullopt,
+						std::nullopt,
+						std::nullopt
+					}
+				},
+
+				actor_component_params<actor_component_id::animation>
+				{
+					// move_up
+					.animations =
+					{
+						std::nullopt,
+						std::nullopt,
+						std::nullopt,
+						std::nullopt
+					}
+				},
+
+				actor_component_params<actor_component_id::animation>
+				{
+					// move_down
+					.animations =
+					{
+						std::nullopt,
+						std::nullopt,
+						std::nullopt,
+						std::nullopt
+					}
+				},
+			}
+		}},
+		actor_component<actor_component_id::motion>
+		{{
+			.speed = info.movement_speed
 		}},
 	};
 	entity.transfer_components(ret.entity);
