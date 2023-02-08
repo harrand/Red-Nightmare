@@ -7,7 +7,13 @@ return
 			.textures =
 			{
 				{
+					// base
 					.id = image_id::undefined
+				},
+				{
+					// hair
+					.id = image_id::undefined,
+					.layer_offset = 1
 				}
 			}
 		}},
@@ -17,8 +23,14 @@ return
 			{
 				animation
 				{{
-					.frame_textures = {image_id::invisible, image_id::undefined},
-					.fps = 1,
+					.frame_textures = {image_id::race_human_base_idle0, image_id::race_human_base_idle1},
+					.fps = 2,
+					.loop = true
+				}},
+				animation
+				{{
+					.frame_textures = {image_id::race_human_hair_long_idle0, image_id::race_human_hair_long_idle1},
+					.fps = 2,
 					.loop = true
 				}}
 			}

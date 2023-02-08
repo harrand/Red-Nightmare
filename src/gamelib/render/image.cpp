@@ -25,13 +25,21 @@ namespace rnlib
 #include "tz/core/imported_text.hpp"
 #include ImportedTextHeader(invisible, png)
 #include ImportedTextHeader(undefined, png)
+#include ImportedTextHeader(human_base_idle0, png)
+#include ImportedTextHeader(human_base_idle1, png)
+#include ImportedTextHeader(human_hair_long_idle0, png)
+#include ImportedTextHeader(human_hair_long_idle1, png)
 
 namespace rnlib
 {
 	std::array<std::string_view, static_cast<int>(image_id::_count)> images
 	{
 		ImportedTextData(undefined, png),
-		ImportedTextData(invisible, png)
+		ImportedTextData(invisible, png),
+		ImportedTextData(human_base_idle0, png),
+		ImportedTextData(human_base_idle1, png),
+		ImportedTextData(human_hair_long_idle0, png),
+		ImportedTextData(human_hair_long_idle1, png),
 	};
 
 	tz::gl::image_resource create_image(image_id_t iid)

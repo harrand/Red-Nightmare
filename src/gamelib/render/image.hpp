@@ -15,6 +15,10 @@ namespace rnlib
 		{
 			undefined,
 			invisible,
+			race_human_base_idle0,
+			race_human_base_idle1,
+			race_human_hair_long_idle0,
+			race_human_hair_long_idle1,
 			_count
 		};
 	}

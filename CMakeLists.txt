@@ -65,6 +65,10 @@ add_text(
 	TEXT_FILES
 		images/meta/undefined.png
 		images/meta/invisible.png
+		images/races/human/base/human_base_idle0.png
+		images/races/human/base/human_base_idle1.png
+		images/races/human/hair/long/human_hair_long_idle0.png
+		images/races/human/hair/long/human_hair_long_idle1.png
 )
 
 tz_add_executable(
