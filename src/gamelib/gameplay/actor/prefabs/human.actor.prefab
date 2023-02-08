@@ -1,0 +1,50 @@
+struct human_prefab_info
+{
+	tz::vec3 skin_colour = {1.0f, 0.875f, 0.679f};
+	tz::vec3 hair_colour = {0.8f, 0.0f, 0.0f};
+	actor data;
+};
+actor human(human_prefab_info info = {})
+{
+	actor ret = info.data;
+	actor_entity entity =
+	{
+		actor_component<actor_component_id::sprite>
+		{{
+			.textures =
+			{
+				{
+					// base
+					.id = image_id::undefined,
+					.colour_tint = info.skin_colour
+				},
+				{
+					// hair
+					.id = image_id::undefined,
+					.colour_tint = info.hair_colour,
+					.layer_offset = 1,
+				}
+			}
+		}},
+		actor_component<actor_component_id::animation>
+		{{
+			.animations =
+			{
+				animation
+				{{
+					.frame_textures = {image_id::race_human_base_idle0, image_id::race_human_base_idle1},
+					.fps = 2,
+					.loop = true
+				}},
+				animation
+				{{
+					.frame_textures = {image_id::race_human_hair_long_idle0, image_id::race_human_hair_long_idle1},
+					.fps = 2,
+					.loop = true
+				}}
+			}
+		}},
+	};
+	entity.transfer_components(ret.entity);
+	return std::move(ret);
+}

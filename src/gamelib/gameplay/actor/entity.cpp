@@ -64,6 +64,12 @@ namespace rnlib
 		return res;
 	}
 
+	// prefab implementations.
+	namespace prefab
+	{
+		#include "gamelib/gameplay/actor/prefabs/human.actor.prefab"
+	}
+
 	actor create_actor(actor_type type)
 	{
 		actor a = [](actor_type t)->actor
