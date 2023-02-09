@@ -2,6 +2,7 @@ namespace human_art
 {
 	enum class feet_type
 	{
+		bare,
 		dots
 	};
 	
@@ -9,6 +10,12 @@ namespace human_art
 	{
 		switch(type)
 		{
+			case feet_type::bare:
+				return animation
+				{{
+					.frame_textures = {image_id::invisible}
+				}};
+			break;
 			case feet_type::dots:
 				switch(anim_type)
 				{

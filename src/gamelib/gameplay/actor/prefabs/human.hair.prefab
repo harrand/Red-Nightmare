@@ -2,6 +2,7 @@ namespace human_art
 {
 	enum class hair_style
 	{
+		bald,
 		long_hair
 	};
 
@@ -9,6 +10,12 @@ namespace human_art
 	{
 		switch(style)
 		{
+			case hair_style::bald:
+				return animation
+				{{
+					.frame_textures = {image_id::invisible}
+				}};
+			break;
 			case hair_style::long_hair:
 				switch(anim_type)
 				{

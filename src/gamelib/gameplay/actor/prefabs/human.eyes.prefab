@@ -2,6 +2,7 @@ namespace human_art
 {
 	enum class eye_type
 	{
+		none,
 		dots
 	};
 
@@ -9,6 +10,12 @@ namespace human_art
 	{
 		switch(type)
 		{
+			case eye_type::none:
+				return animation
+				{{
+					.frame_textures = {image_id::invisible}
+				}};
+			break;
 			case eye_type::dots:
 				switch(anim_type)
 				{
