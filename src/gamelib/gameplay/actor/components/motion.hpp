@@ -12,6 +12,9 @@ struct actor_component_params<actor_component_id::motion>
 {
 	move_direction_t direction = 0;
 	float speed;
+	float tilt_timer = 0.0f;
+	float tilt_factor = 0.05f;
+	float tilt_rate = 0.0125f;
 };
 
 template<>
@@ -39,7 +42,16 @@ inline void actor_component_update<actor_component_id::motion>
 	{
 		actor.transform.local_position[1] -= corrected_speed * (dt / 1000.0f);
 	}
+	if(component.data().direction == 0)
+	{
+		component.data().tilt_timer = 0.0f;
+	}
+	else
+	{
+		component.data().tilt_timer += dt;
+	}
 	component.data().direction = 0;
+	actor.transform.local_rotation = std::sin(component.data().tilt_timer * component.data().tilt_rate) * component.data().tilt_factor;
 }
 
 template<>
