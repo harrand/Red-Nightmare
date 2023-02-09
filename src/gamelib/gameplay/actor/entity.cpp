@@ -1,5 +1,6 @@
 #include "gamelib/gameplay/actor/entity.hpp"
 #include "tz/dbgui/dbgui.hpp"
+#include <random> // randomius.actor
 
 namespace rnlib
 {
@@ -81,7 +82,15 @@ namespace rnlib
 			switch(t)
 			{
 				case actor_type::player_melistra:
-				#include "gamelib/gameplay/actor/types/player_melistra.actor"
+				{
+					#include "gamelib/gameplay/actor/types/player_melistra.actor"
+				}
+				break;
+				case actor_type::randomius:
+				{
+					#include "gamelib/gameplay/actor/types/randomius.actor"
+				}
+				break;
 			}
 			return {};
 		}(type);

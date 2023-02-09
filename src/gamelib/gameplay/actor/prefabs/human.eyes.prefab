@@ -3,7 +3,8 @@ namespace human_art
 	enum class eye_type
 	{
 		none,
-		dots
+		dots,
+		_count
 	};
 
 	std::optional<animation> get_eyes(eye_type type, humanoid_skeleton_animation anim_type)

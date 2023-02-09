@@ -1,0 +1,23 @@
+static std::default_random_engine rng;
+static std::uniform_real_distribution<float> fdist{0.0f, 1.0f};
+return prefab::human
+({
+	.skin_colour = {fdist(rng), fdist(rng), fdist(rng)},
+	.hair_style = [](){return static_cast<prefab::human_art::hair_style>(rng() % static_cast<int>(prefab::human_art::hair_style::_count));}(),
+	.hair_colour = {fdist(rng), fdist(rng), fdist(rng)},
+	.eye_type = prefab::human_art::eye_type::dots,
+	.eye_colour = {fdist(rng), fdist(rng), fdist(rng)},
+	.chest_type = prefab::human_art::chest_type::elemental_robes,
+	.chest_colour = {fdist(rng), fdist(rng), fdist(rng)},
+	.feet_type = [](){return static_cast<prefab::human_art::feet_type>(rng() % static_cast<int>(prefab::human_art::feet_type::_count));}(),
+	.feet_colour = {fdist(rng), fdist(rng), fdist(rng)},
+	.movement_speed = 0.7f + fdist(rng),
+	.data =
+	{
+		.entity =
+		{
+			actor_component<actor_component_id::keyboard_control>{}
+		},
+		.name = "Randomius (Dev)"
+	}
+});

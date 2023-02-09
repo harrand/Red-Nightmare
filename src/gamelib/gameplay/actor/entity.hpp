@@ -114,6 +114,7 @@ namespace rnlib
 	{
 		undefined,
 		player_melistra,
+		randomius,
 		_count
 	};
 

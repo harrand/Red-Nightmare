@@ -9,7 +9,6 @@ return prefab::human
 	.chest_colour = {0.6f, 0.0f, 0.0f},
 	.feet_type = prefab::human_art::feet_type::dots,
 	.feet_colour = {1.0f, 0.0f, 0.0f},
-	.movement_speed = 0.3f,
 	.data =
 	{
 		.entity =

@@ -3,7 +3,8 @@ namespace human_art
 	enum class hair_style
 	{
 		bald,
-		long_hair
+		long_hair,
+		_count
 	};
 
 	std::optional<animation> get_hair(hair_style style, humanoid_skeleton_animation anim_type)

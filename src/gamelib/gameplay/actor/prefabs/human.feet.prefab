@@ -3,7 +3,8 @@ namespace human_art
 	enum class feet_type
 	{
 		bare,
-		dots
+		dots,
+		_count
 	};
 	
 	std::optional<animation> get_feet(feet_type type, humanoid_skeleton_animation anim_type)

@@ -2,7 +2,8 @@ namespace human_art
 {
 	enum class chest_type
 	{
-		elemental_robes
+		elemental_robes,
+		_count
 	};
 
 	std::optional<animation> get_chest(chest_type type, humanoid_skeleton_animation anim_type)
