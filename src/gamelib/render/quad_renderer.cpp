@@ -50,29 +50,49 @@ namespace rnlib
 
 	void quad_renderer::dbgui()
 	{
-		if(ImGui::CollapsingHeader("Debug Operations"))
+		if(ImGui::BeginTabBar("Quad Renderer"))
 		{
-			if(ImGui::Button("Debug Clean"))
+			if(ImGui::BeginTabItem("Quad Data"))
 			{
-				this->clean();
+				if(this->quads().empty())
+				{
+					ImGui::Text("nothing being rendered.");
+					return;
+				}
+				static int qpos = 0;
+				ImGui::SliderInt("quad id", &qpos, 0, this->quads().size() - 1);
+				quad_renderer::quad_data& quad = this->quads()[qpos];
+				
+				ImGui::Indent();
+				ImGui::InputFloat2("position", quad.pos.data().data());
+				ImGui::InputFloat2("scale", quad.scale.data().data());
+				ImGui::DragFloat("rotation", &quad.rotation, 0.01f, -3.14159f, 3.14159f);
+				ImGui::Text("texture id: %u", static_cast<unsigned int>(quad.texid));
+				ImGui::DragInt("layer", reinterpret_cast<int*>(&quad.layer), 0.25f, 0, 1000, "%zu");
+				ImGui::Unindent();
+				ImGui::EndTabItem();
 			}
+			if(ImGui::BeginTabItem("Debug View Options"))
+			{
+				render_data& rdata = this->get_render_data();
+				static int view_opt = 0;
+				ImGui::RadioButton("textured", &view_opt, 0x000);
+				ImGui::RadioButton("coloured", &view_opt, 0x001);
+				ImGui::RadioButton("depth", &view_opt, 0x010);
+				rdata.debug_depth_view = (view_opt & 0x010);
+				rdata.debug_colour_view = (view_opt & 0x001);
+				ImGui::EndTabItem();
+			}
+			if(ImGui::BeginTabItem("Debug Operations"))
+			{
+				if(ImGui::Button("Debug Clean"))
+				{
+					this->clean();
+				}
+				ImGui::EndTabItem();
+			}
+			ImGui::EndTabBar();
 		}
-		if(this->quads().empty())
-		{
-			ImGui::Text("nothing being rendered.");
-			return;
-		}
-		static int qpos = 0;
-		ImGui::SliderInt("quad id", &qpos, 0, this->quads().size() - 1);
-		quad_renderer::quad_data& quad = this->quads()[qpos];
-		
-		ImGui::Indent();
-		ImGui::InputFloat2("position", quad.pos.data().data());
-		ImGui::InputFloat2("scale", quad.scale.data().data());
-		ImGui::DragFloat("rotation", &quad.rotation, 0.01f, -3.14159f, 3.14159f);
-		ImGui::Text("texture id: %u", static_cast<unsigned int>(quad.texid));
-		ImGui::DragInt("layer", reinterpret_cast<int*>(&quad.layer), 0.25f, 0, 1000, "%zu");
-		ImGui::Unindent();
 	}
 
 	std::span<quad_renderer::quad_data> quad_renderer::quads()
@@ -107,7 +127,18 @@ namespace rnlib
 
 	void quad_renderer::set_render_data(render_data data)
 	{
-		this->render_buffer().data_as<render_data>().front() = data;
+		// preserve debug data.
+		auto& d = this->get_render_data();
+		bool debug_depth_view_cache = d.debug_depth_view;
+		bool debug_colour_view_cache = d.debug_colour_view;
+		d = data;
+		d.debug_depth_view = debug_depth_view_cache;
+		d.debug_colour_view = debug_colour_view_cache;
+	}
+
+	quad_renderer::render_data& quad_renderer::get_render_data()
+	{
+		return this->render_buffer().data_as<render_data>().front();
 	}
 
 	tz::gl::buffer_resource& quad_renderer::quad_buffer()

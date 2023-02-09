@@ -38,6 +38,8 @@ namespace rnlib
 		{
 			tz::mat4 view = tz::mat4::identity();
 			tz::mat4 projection = tz::mat4::identity();
+			std::uint32_t debug_depth_view = false;
+			std::uint32_t debug_colour_view = false;
 		};
 		// access data that shader sees.
 		std::span<quad_data> quads();
@@ -47,6 +49,7 @@ namespace rnlib
 		void reserve(std::size_t quad_count);
 		void set_render_data(render_data data);
 	private:
+		render_data& get_render_data();
 		// get the quad data gpu buffer.
 		tz::gl::buffer_resource& quad_buffer();
 		const tz::gl::buffer_resource& quad_buffer() const;

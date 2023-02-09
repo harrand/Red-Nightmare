@@ -5,6 +5,18 @@ input(id = 2) vec2 texcoord;
 input(id = 3) vec3 colour_tint;
 output(id = 0) vec4 out_col;
 
+struct render_data
+{
+	mat4 view;
+	mat4 projection;
+	bool debug_depth_view;
+	bool debug_colour_view;
+};
+resource(id = 1) const buffer render_data_buffer
+{
+	render_data render;
+};
+
 resource(id = 2) const texture images[];
 
 import <noise>
@@ -13,7 +25,24 @@ void main()
 {
 	out::fragment_depth = depth;
 	out_col = texture(images[texid], texcoord);
-	out_col.rgb *= colour_tint;
+	#if TZ_DEBUG
+		if(render.debug_colour_view)
+		{
+			float x = tz::noise::simplex(vec2(texid));
+			float y = tz::noise::simplex(vec2(texid * x, texid));
+			out_col.rgb = vec3(x, y, 1.0f - x);
+		}
+		else if(render.debug_depth_view)
+		{
+			out_col.rgb = vec3(depth);
+		}
+		else
+		{
+			out_col.rgb *= colour_tint;
+		}
+	#else
+			out_col.rgb *= colour_tint;
+	#endif
 	if(out_col.a < 1.0f)
 	{
 		discard;

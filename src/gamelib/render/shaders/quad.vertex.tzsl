@@ -17,6 +17,8 @@ struct render_data
 {
 	mat4 view;
 	mat4 projection;
+	bool debug_depth_view;
+	bool debug_colour_view;
 };
 
 vec2 quad_positions[6] = vec2[](
