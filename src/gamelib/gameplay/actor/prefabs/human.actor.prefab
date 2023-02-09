@@ -1,13 +1,13 @@
 struct human_prefab_info
 {
 	tz::vec3 skin_colour = {1.0f, 0.875f, 0.679f};
-	human_art::hair_style hair_style = human_art::hair_style::long_hair;
+	human_art::hair_style hair_style = human_art::hair_style::bald;
 	tz::vec3 hair_colour = {0.8f, 0.0f, 0.0f};
 	human_art::eye_type eye_type = human_art::eye_type::dots;
 	tz::vec3 eye_colour = tz::vec3::zero();
 	human_art::chest_type chest_type = human_art::chest_type::elemental_robes;
 	tz::vec3 chest_colour = tz::vec3::filled(1.0f);
-	human_art::feet_type feet_type = human_art::feet_type::dots;
+	human_art::feet_type feet_type = human_art::feet_type::bare;
 	tz::vec3 feet_colour = tz::vec3::filled(1.0f);
 	float movement_speed = 1.0f;
 	actor data;
