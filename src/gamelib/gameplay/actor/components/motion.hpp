@@ -13,7 +13,7 @@ struct actor_component_params<actor_component_id::motion>
 	move_direction_t direction = 0;
 	float speed = 1.0f;
 	float tilt_timer = 0.0f;
-	float tilt_factor = 1.02f;
+	float tilt_factor = 0.02f;
 	float tilt_rate = 0.01f;
 };
 
