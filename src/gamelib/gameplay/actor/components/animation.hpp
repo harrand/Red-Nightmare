@@ -2,6 +2,7 @@ template<>
 struct actor_component_params<actor_component_id::animation>
 {
 	std::vector<std::optional<animation>> animations = {};
+	float animation_speed = 1.0f;
 };
 
 template<>
@@ -24,7 +25,7 @@ inline void actor_component_update<actor_component_id::animation>
 		{
 			continue;
 		}
-		animation->update(dt);
+		animation->update(dt * component.data().animation_speed);
 		auto& sprite = sprite_textures[i];
 		sprite.id = animation->get_image();
 	}
