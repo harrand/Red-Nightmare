@@ -50,6 +50,7 @@ namespace rnlib
 			.projection = sys->cam.projection()
 		});
 		mount_result mres;
+		sys->qrenderer.clean();
 		while(mres = sys->actors.mount(sys->qrenderer.quads()), mres.error == mount_error::ooq)
 		{
 			// if mounting fails due to not enough quads, double the number of quads (a la std::vector)
