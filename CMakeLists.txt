@@ -89,6 +89,12 @@ add_text(
 		images/races/human/equipment/chest/elementalrobes/human_equipment_chest_elementalrobes_side1.png
 		images/races/human/equipment/chest/elementalrobes/human_equipment_chest_elementalrobes_side2.png
 		images/races/human/equipment/chest/elementalrobes/human_equipment_chest_elementalrobes_side3.png
+		images/races/human/equipment/chest/shirt/human_equipment_chest_shirt_idle0.png
+		images/races/human/equipment/chest/shirt/human_equipment_chest_shirt_idle1.png
+		images/races/human/equipment/chest/shirt/human_equipment_chest_shirt_side0.png
+		images/races/human/equipment/chest/shirt/human_equipment_chest_shirt_side1.png
+		images/races/human/equipment/chest/shirt/human_equipment_chest_shirt_side2.png
+		images/races/human/equipment/chest/shirt/human_equipment_chest_shirt_side3.png
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_idle0.png
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_side0.png
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_side1.png

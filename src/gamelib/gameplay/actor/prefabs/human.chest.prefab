@@ -3,6 +3,7 @@ namespace human_art
 	enum class chest_type
 	{
 		elemental_robes,
+		shirt,
 		_count
 	};
 
@@ -34,6 +35,37 @@ namespace human_art
 								image_id::race_human_equipment_chest_elementalrobes_side1,
 								image_id::race_human_equipment_chest_elementalrobes_side2,
 								image_id::race_human_equipment_chest_elementalrobes_side3,
+							},
+							.fps = 6,
+							.loop = true
+						}};
+					break;
+				}
+			break;
+			case chest_type::shirt:
+				switch(anim_type)
+				{
+					case humanoid_skeleton_animation::idle:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_equipment_chest_shirt_idle0,
+								image_id::race_human_equipment_chest_shirt_idle1,
+							},
+							.fps = 2,
+							.loop = true
+						}};
+					break;
+					case humanoid_skeleton_animation::move_side:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_equipment_chest_shirt_side0,
+								image_id::race_human_equipment_chest_shirt_side1,
+								image_id::race_human_equipment_chest_shirt_side2,
+								image_id::race_human_equipment_chest_shirt_side3,
 							},
 							.fps = 6,
 							.loop = true
