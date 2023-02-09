@@ -24,6 +24,20 @@ namespace human_art
 							.loop = true
 						}};
 					break;
+					case humanoid_skeleton_animation::move_side:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_equipment_chest_elementalrobes_side0,
+								image_id::race_human_equipment_chest_elementalrobes_side1,
+								image_id::race_human_equipment_chest_elementalrobes_side2,
+								image_id::race_human_equipment_chest_elementalrobes_side3,
+							},
+							.fps = 6,
+							.loop = true
+						}};
+					break;
 				}
 			break;
 		}
