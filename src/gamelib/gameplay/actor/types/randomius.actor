@@ -2,7 +2,7 @@ static std::default_random_engine rng;
 static std::uniform_real_distribution<float> fdist{0.0f, 1.0f};
 return prefab::human
 ({
-	.skin_colour = {fdist(rng), fdist(rng), fdist(rng)},
+	.skin_colour = tz::vec3{0.946f, 0.813f, 0.730f} * fdist(rng),
 	.hair_style = [](){return static_cast<prefab::human_art::hair_style>(rng() % static_cast<int>(prefab::human_art::hair_style::_count));}(),
 	.hair_colour = {fdist(rng), fdist(rng), fdist(rng)},
 	.eye_type = prefab::human_art::eye_type::dots,

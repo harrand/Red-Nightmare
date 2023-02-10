@@ -37,6 +37,12 @@ namespace rnlib
 #include ImportedTextHeader(human_hair_long_side1, png)
 #include ImportedTextHeader(human_hair_long_side2, png)
 #include ImportedTextHeader(human_hair_long_side3, png)
+#include ImportedTextHeader(human_hair_lord_idle0, png)
+#include ImportedTextHeader(human_hair_lord_idle1, png)
+#include ImportedTextHeader(human_hair_lord_side0, png)
+#include ImportedTextHeader(human_hair_lord_side1, png)
+#include ImportedTextHeader(human_hair_lord_side2, png)
+#include ImportedTextHeader(human_hair_lord_side3, png)
 #include ImportedTextHeader(human_hair_prince_idle0, png)
 #include ImportedTextHeader(human_hair_prince_idle1, png)
 #include ImportedTextHeader(human_hair_prince_side0, png)
@@ -85,6 +91,12 @@ namespace rnlib
 		ImportedTextData(human_hair_long_side1, png),
 		ImportedTextData(human_hair_long_side2, png),
 		ImportedTextData(human_hair_long_side3, png),
+		ImportedTextData(human_hair_lord_idle0, png),
+		ImportedTextData(human_hair_lord_idle1, png),
+		ImportedTextData(human_hair_lord_side0, png),
+		ImportedTextData(human_hair_lord_side1, png),
+		ImportedTextData(human_hair_lord_side2, png),
+		ImportedTextData(human_hair_lord_side3, png),
 		ImportedTextData(human_hair_prince_idle0, png),
 		ImportedTextData(human_hair_prince_idle1, png),
 		ImportedTextData(human_hair_prince_side0, png),
