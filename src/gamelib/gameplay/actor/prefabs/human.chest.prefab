@@ -4,6 +4,7 @@ namespace human_art
 	{
 		elemental_robes,
 		shirt,
+		warrior,
 		_count
 	};
 
@@ -66,6 +67,37 @@ namespace human_art
 								image_id::race_human_equipment_chest_shirt_side1,
 								image_id::race_human_equipment_chest_shirt_side2,
 								image_id::race_human_equipment_chest_shirt_side3,
+							},
+							.fps = 6,
+							.loop = true
+						}};
+					break;
+				}
+			break;
+			case chest_type::warrior:
+				switch(anim_type)
+				{
+					case humanoid_skeleton_animation::idle:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_equipment_chest_warrior_idle0,
+								image_id::race_human_equipment_chest_warrior_idle1,
+							},
+							.fps = 2,
+							.loop = true
+						}};
+					break;
+					case humanoid_skeleton_animation::move_side:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_equipment_chest_warrior_side0,
+								image_id::race_human_equipment_chest_warrior_side1,
+								image_id::race_human_equipment_chest_warrior_side2,
+								image_id::race_human_equipment_chest_warrior_side3,
 							},
 							.fps = 6,
 							.loop = true

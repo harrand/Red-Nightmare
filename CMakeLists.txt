@@ -107,6 +107,12 @@ add_text(
 		images/races/human/equipment/chest/shirt/human_equipment_chest_shirt_side1.png
 		images/races/human/equipment/chest/shirt/human_equipment_chest_shirt_side2.png
 		images/races/human/equipment/chest/shirt/human_equipment_chest_shirt_side3.png
+		images/races/human/equipment/chest/warrior/human_equipment_chest_warrior_idle0.png
+		images/races/human/equipment/chest/warrior/human_equipment_chest_warrior_idle1.png
+		images/races/human/equipment/chest/warrior/human_equipment_chest_warrior_side0.png
+		images/races/human/equipment/chest/warrior/human_equipment_chest_warrior_side1.png
+		images/races/human/equipment/chest/warrior/human_equipment_chest_warrior_side2.png
+		images/races/human/equipment/chest/warrior/human_equipment_chest_warrior_side3.png
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_idle0.png
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_side0.png
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_side1.png
