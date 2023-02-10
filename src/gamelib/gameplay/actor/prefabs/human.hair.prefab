@@ -4,6 +4,7 @@ namespace human_art
 	{
 		bald,
 		long_hair,
+		prince,
 		_count
 	};
 
@@ -41,6 +42,37 @@ namespace human_art
 								image_id::race_human_hair_long_side1,
 								image_id::race_human_hair_long_side2,
 								image_id::race_human_hair_long_side3
+							},
+							.fps = 6,
+							.loop = true
+						}};
+					break;
+				}
+			break;
+			case hair_style::prince:
+				switch(anim_type)
+				{
+					case humanoid_skeleton_animation::idle:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_hair_prince_idle0,
+								image_id::race_human_hair_prince_idle1,
+							},
+							.fps = 2,
+							.loop = true
+						}};
+					break;
+					case humanoid_skeleton_animation::move_side:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_hair_prince_side0,
+								image_id::race_human_hair_prince_side1,
+								image_id::race_human_hair_prince_side2,
+								image_id::race_human_hair_prince_side3,
 							},
 							.fps = 6,
 							.loop = true
