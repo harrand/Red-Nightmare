@@ -34,10 +34,14 @@ tz_add_library(
 		src/gamelib/render/animation.hpp
 		src/gamelib/render/camera.cpp
 		src/gamelib/render/camera.hpp
+		src/gamelib/render/font.cpp
+		src/gamelib/render/font.hpp
 		src/gamelib/render/image.cpp
 		src/gamelib/render/image.hpp
 		src/gamelib/render/quad_renderer.cpp
 		src/gamelib/render/quad_renderer.hpp
+		src/gamelib/render/text_renderer.cpp
+		src/gamelib/render/text_renderer.hpp
 
 		src/gamelib/game.cpp
 		src/gamelib/game.hpp
@@ -53,9 +57,11 @@ add_shader(
 	src/gamelib/render/shaders/empty.fragment.tzsl
 	src/gamelib/render/shaders/quad.vertex.tzsl
 	src/gamelib/render/shaders/quad.fragment.tzsl
+	src/gamelib/render/shaders/text.vertex.tzsl
+	src/gamelib/render/shaders/text.fragment.tzsl
 )
 
-target_link_libraries(rnlib PUBLIC stb)
+target_link_libraries(rnlib PUBLIC stb freetype)
 target_compile_definitions(rnlib PUBLIC -DGAME_VERSION=0x${PROJECT_VERSION_MAJOR}${PROJECT_VERSION_MINOR}${PROJECT_VERSION_PATCH}${PROJECT_VERSION_TWEAK})
 
 add_text(
@@ -118,6 +124,7 @@ add_text(
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_side1.png
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_side2.png
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_side3.png
+		fonts/LucidaSansRegular.ttf
 )
 
 tz_add_executable(

@@ -1,0 +1,88 @@
+shader(type = vertex);
+
+vec2 quad_positions[6] = vec2[](
+	vec2(-1.0, -1.0), vec2(1.0, 1.0), vec2(1.0, -1.0),
+	vec2(-1.0, -1.0), vec2(-1.0, 1.0), vec2(1.0, 1.0)
+);
+
+vec2 quad_texcoords[6] = vec2[](
+	vec2(0.0, 1.0), vec2(1.0, 0.0), vec2(1.0, 1.0),
+	vec2(0.0, 1.0), vec2(0.0, 0.0), vec2(1.0, 0.0)
+);
+
+struct word_data
+{
+	vec2 pos;
+	vec2 scale;
+	uint char_cursor;
+};
+
+// todo: no magic number.
+const uint max_word_count = 128;
+resource(id = 0) const buffer word_buffer
+{
+	word_data words[max_word_count];
+};
+
+resource(id = 1) const buffer string_buffer
+{
+	uint string[];
+};
+
+output(id = 0) uint out_texture_id;
+output(id = 1) vec2 out_texcoord;
+
+uint get_texture(uint bit_position)
+{
+	uint data = string[bit_position / 4];
+	uint encoded = data >> (bit_position * 8);
+	encoded &= 0xff;
+
+	// we get our char. need to do some processiing.
+	// if its between 48-57, its a decimal number and we need to -48
+	if(encoded >= 48 && encoded <= 57)
+	{
+		encoded -= 48;
+		//tz::debug::printf("%d", encoded);
+		encoded += 26 + 26;
+	}
+	if(encoded >= 65 && encoded <= 90)
+	{
+		encoded -= 65;
+		//tz::debug::printf("%dth upr", encoded);
+		encoded += 26;
+	}
+	if(encoded >= 97 && encoded <= 122)
+	{
+		encoded -= 97;
+		//tz::debug::printf("%dth lwr", encoded);
+	}
+	return encoded;
+}
+
+import <debug>
+
+void main()
+{
+	// one quad per char.
+	const uint quad_id = in::vertex_id / 6;
+	// 4 bytes per uint. we want to reintepret string[] and find the nth byte, where n is quad_id.
+	out_texture_id = get_texture(quad_id);
+	out_texcoord = quad_texcoords[in::vertex_id % 6];
+	// figure out what word buffer we need.
+	word_data wdata = words[0];
+	for(int i = 1; i < max_word_count; i++)
+	{
+		if(words[i].char_cursor > quad_id || words[i].char_cursor == uint(-1))
+		{
+			//tz::debug::printf("broke at %d", i);
+			break;
+		}
+		wdata = words[i];
+	}
+
+	uint word_index = quad_id - wdata.char_cursor;
+	vec4 worldspace_pos = vec4(wdata.pos + (quad_positions[in::vertex_id % 6] * wdata.scale), 0.0f, 1.0f);
+	worldspace_pos.x += float(word_index) * (wdata.scale.x * 2.0f);
+	out::position = worldspace_pos;
+}

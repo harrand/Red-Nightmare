@@ -18,6 +18,7 @@ namespace rnlib
 		tz::gl::renderer_info rinfo;
 		rinfo.shader().set_shader(tz::gl::shader_stage::vertex, ImportedShaderSource(quad, vertex));
 		rinfo.shader().set_shader(tz::gl::shader_stage::fragment, ImportedShaderSource(quad, fragment));
+		rinfo.set_options({tz::gl::renderer_option::no_present});
 		// quad buffer
 		std::array<quad_data, initial_capacity> initial_quads;
 		this->quad_bh = rinfo.add_resource(tz::gl::buffer_resource::from_many(initial_quads,

@@ -1,5 +1,7 @@
 #include "gamelib/game.hpp"
+#include "gamelib/render/font.hpp"
 #include "gamelib/render/quad_renderer.hpp"
+#include "gamelib/render/text_renderer.hpp"
 #include "gamelib/render/camera.hpp"
 #include "gamelib/gameplay/actor/system.hpp"
 #include "tz/core/profile.hpp"
@@ -11,6 +13,7 @@ namespace rnlib
 	struct system
 	{
 		quad_renderer qrenderer;
+		text_renderer trenderer{rnlib::font::lucida_sans_regular};
 		actor_system actors;
 		camera cam;
 	};
@@ -26,7 +29,10 @@ namespace rnlib
 	void initialise()
 	{
 		TZ_PROFZONE("rnlib - initialise", 0xff0077ee);
+		font_system_initialise();
 		sys = std::make_unique<system>();
+		sys->trenderer.add("itsmorbintime666", tz::vec2{-0.5f, 0.3f}, tz::vec2::filled(0.03f));
+		sys->trenderer.add("sugondeeznutslmao", tz::vec2{-0.9f, -0.4f}, tz::vec2::filled(0.02f));
 		tz::dbgui::game_menu().add_callback([]()
 		{
 			ImGui::MenuItem("Quad Renderer", nullptr, &dbgui_data.show_quad_renderer);
@@ -37,7 +43,7 @@ namespace rnlib
 	void terminate()
 	{
 		TZ_PROFZONE("rnlib - terminate", 0xff0077ee);
-
+		font_system_terminate();
 	}
 
 	void render()
@@ -60,6 +66,7 @@ namespace rnlib
 		}
 		tz::assert(mres.error == mount_error::no_error, "unhandled mount_error. please submit a bug report.");
 		sys->qrenderer.render();
+		sys->trenderer.render();
 	}
 
 	void dbgui()
