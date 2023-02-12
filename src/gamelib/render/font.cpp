@@ -1,9 +1,12 @@
 #include "gamelib/render/font.hpp"
+#include "gamelib/render/image.hpp"
 #include "tz/core/debug.hpp"
 #include "tz/core/imported_text.hpp"
 #include "ft2build.h"
 #include FT_FREETYPE_H
 #include <span>
+
+#include ImportedTextHeader(invisible, png)
 
 namespace rnlib
 {
@@ -45,6 +48,10 @@ namespace rnlib
 		FT_Face ftfont = load_font(f);
 		FT_Set_Pixel_Sizes(ftfont, 0, 64);
 		font_data ret;
+		ret.glyphs[0] = font_glyph
+		{
+			.image = rnlib::load_image_data(ImportedTextData(invisible, png))
+		};
 		// lowercase chars.
 		auto load_char = [ftfont](char c)->font_glyph
 		{
@@ -87,17 +94,17 @@ namespace rnlib
 		};
 		for(std::size_t i = 0; i < 26; i++)
 		{
-			ret.glyphs[i] = load_char('a' + i);
+			ret.glyphs[1 + i] = load_char('a' + i);
 		}
 
 		for(std::size_t i = 0; i < 26; i++)
 		{
-			ret.glyphs[26 + i] = load_char('A' + i);
+			ret.glyphs[1 + 26 + i] = load_char('A' + i);
 		}
 
 		for(std::size_t i = 0; i < 10; i++)
 		{
-			ret.glyphs[26 + 26 + i] = load_char('0' + i);
+			ret.glyphs[1 + 26 + 26 + i] = load_char('0' + i);
 		}
 		return ret;
 	}

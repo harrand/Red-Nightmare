@@ -21,7 +21,8 @@ namespace rnlib
 
 	struct font_data
 	{
-		std::array<font_glyph, (26*2)+10> glyphs;
+		// invisible, lowercase, uppercase, digits,
+		std::array<font_glyph, 1+(26*2)+10> glyphs;
 	};
 
 	void font_system_initialise();

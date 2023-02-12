@@ -1,5 +1,7 @@
 shader(type = vertex);
 
+import <math>
+
 vec2 quad_positions[6] = vec2[](
 	vec2(-1.0, -1.0), vec2(1.0, 1.0), vec2(1.0, -1.0),
 	vec2(-1.0, -1.0), vec2(-1.0, 1.0), vec2(1.0, 1.0)
@@ -15,6 +17,7 @@ struct word_data
 	vec2 pos;
 	vec2 scale;
 	uint char_cursor;
+	uint strlen;
 };
 
 // todo: no magic number.
@@ -40,6 +43,8 @@ resource(id = 2) const buffer glyph_buffer
 {
 	glyph_data glyphs[];
 };
+
+resource(id = 3) const texture images[];
 
 output(id = 0) uint out_texture_id;
 output(id = 1) vec2 out_texcoord;
@@ -69,7 +74,7 @@ uint get_texture(uint bit_position)
 		encoded -= 97;
 		//tz::debug::printf("%dth lwr", encoded);
 	}
-	return encoded;
+	return encoded + 1;
 }
 
 import <debug>
@@ -92,12 +97,20 @@ void main()
 		}
 		wdata = words[i];
 	}
+	if(wdata.char_cursor + wdata.strlen <= quad_id)
+	{
+		// assume 0 == invisible.
+		out_texture_id = 0;
+	}
 
 	uint word_index = quad_id - wdata.char_cursor;
 	vec2 scale = wdata.scale;
-	scale *= (glyphs[out_texture_id].max - glyphs[out_texture_id].min);
+	//scale *= (glyphs[out_texture_id].max - glyphs[out_texture_id].min);
+	ivec2 texdims = textureSize(images[out_texture_id], 0);
+	//scale.x *= (float(texdims.x) / texdims.y);
+	scale *= tz::math::normalise(texdims);
 	vec4 worldspace_pos = vec4(wdata.pos + (quad_positions[in::vertex_id % 6] * scale), 0.0f, 1.0f);
 	//worldspace_pos.xy += glyphs[out_texture_id].min;
-	worldspace_pos.x += float(word_index) * (wdata.scale.x * 2.0f);
+	worldspace_pos.x += float(word_index) * (wdata.scale.x * 1.5f);
 	out::position = worldspace_pos;
 }

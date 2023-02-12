@@ -20,7 +20,7 @@ namespace rnlib
 			tz::vec2 pos = tz::vec2::zero();
 			tz::vec2 scale = tz::vec2::zero();
 			std::uint32_t char_cursor = std::uint32_t(-1);
-			float pad0;
+			std::uint32_t length = 0;
 		};
 		std::span<word_data> words();
 		std::span<std::uint32_t> chars();

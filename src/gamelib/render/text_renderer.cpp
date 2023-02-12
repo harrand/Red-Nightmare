@@ -69,7 +69,8 @@ namespace rnlib
 		{
 			.pos = pos,
 			.scale = scale,
-			.char_cursor = static_cast<std::uint32_t>(this->string_cursor)
+			.char_cursor = static_cast<std::uint32_t>(this->string_cursor),
+			.length = static_cast<std::uint32_t>(str.size())
 		};
 		this->word_cursor++;
 		for(std::size_t i = 0; i < str.size(); i++)
