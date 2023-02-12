@@ -93,12 +93,71 @@ namespace rnlib
 
 	void text_renderer::clear()
 	{
-
+		auto wdata = this->words();
+		std::fill(wdata.begin(), wdata.end(), word_data{});
+		auto string_data = this->chars();
+		std::fill(string_data.begin(), string_data.end(), std::uint32_t{0});
+		this->word_cursor = 0;
+		this->string_cursor = 0;
 	}
 
 	void text_renderer::set_render_data(render_data data)
 	{
 		this->data_buffer().data_as<render_data>().front() = data;
+	}
+
+	void text_renderer::dbgui()
+	{
+		if(ImGui::BeginTabBar("Text Renderer"))
+		{
+			if(ImGui::BeginTabItem("Text Editor"))
+			{
+				if(ImGui::CollapsingHeader("Create..."))
+				{
+					static std::array<char, 256> data = {0};
+					static tz::vec2 pos = tz::vec2::zero();
+					static tz::vec2 scale = tz::vec2::filled(0.05f);
+					ImGui::InputText("Text", data.data(), data.size());
+					ImGui::InputFloat2("Position", pos.data().data());
+					ImGui::InputFloat2("Scale", scale.data().data());
+					if(ImGui::Button("Submit"))
+					{
+						this->add(std::string{data.data()}, pos, scale);
+					}
+				}
+				if(ImGui::Button("Clear"))
+				{
+					this->clear();
+				}
+				ImGui::EndTabItem();
+			}
+			if(ImGui::BeginTabItem("Word Data"))
+			{
+				if(this->word_cursor == 0)
+				{
+					ImGui::Text("no data");
+				}
+				else
+				{
+					static int word_id = 0;
+					ImGui::SliderInt("Word ID", &word_id, 0, this->word_cursor - 1);
+					ImGui::Indent();
+					auto& word = this->words()[word_id];
+					ImGui::InputFloat2("Pos", word.pos.data().data());	
+					ImGui::InputFloat2("Scale", word.scale.data().data());
+					ImGui::SliderInt("Char Cursor", reinterpret_cast<int*>(&word.char_cursor), 0, this->string_cursor - 1, "%zu");
+					ImGui::SliderInt("Length", reinterpret_cast<int*>(&word.length), 0, (this->string_cursor - word.char_cursor), "%zu");	
+					ImGui::Unindent();
+				}
+				ImGui::EndTabItem();
+			}
+			if(ImGui::BeginTabItem("String Data"))
+			{
+				ImGui::Text("%s", std::as_bytes(this->chars()).data());
+				ImGui::EndTabItem();
+			}
+			ImGui::EndTabBar();
+		}
 	}
 
 	std::span<text_renderer::word_data> text_renderer::words()

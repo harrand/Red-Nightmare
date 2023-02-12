@@ -23,6 +23,7 @@ namespace rnlib
 	struct dbgui_data_t
 	{
 		bool show_quad_renderer = false;
+		bool show_text_renderer = false;
 		bool show_actor_system = false;
 	} dbgui_data;
 
@@ -38,6 +39,7 @@ namespace rnlib
 		tz::dbgui::game_menu().add_callback([]()
 		{
 			ImGui::MenuItem("Quad Renderer", nullptr, &dbgui_data.show_quad_renderer);
+			ImGui::MenuItem("Text Renderer", nullptr, &dbgui_data.show_text_renderer);
 			ImGui::MenuItem("Actor System", nullptr, &dbgui_data.show_actor_system);
 		});
 	}
@@ -84,6 +86,12 @@ namespace rnlib
 		{
 			ImGui::Begin("Quad Renderer", &dbgui_data.show_quad_renderer);
 			sys->qrenderer.dbgui();
+			ImGui::End();
+		}
+		if(dbgui_data.show_text_renderer)
+		{
+			ImGui::Begin("Text Renderer", &dbgui_data.show_text_renderer);
+			sys->trenderer.dbgui();
 			ImGui::End();
 		}
 		if(dbgui_data.show_actor_system)

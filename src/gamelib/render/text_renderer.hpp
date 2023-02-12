@@ -23,6 +23,7 @@ namespace rnlib
 		};
 
 		void set_render_data(render_data data);
+		void dbgui();
 	private:
 		struct word_data
 		{
