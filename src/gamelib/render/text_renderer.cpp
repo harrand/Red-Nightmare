@@ -30,11 +30,24 @@ namespace rnlib
 		{
 			.access = tz::gl::resource_access::dynamic_fixed
 		}));
-		for(std::size_t i = 0; i < fdata.images.size(); i++)
+		for(std::size_t i = 0; i < fdata.glyphs.size(); i++)
 		{
-			tz::assert(fdata.images[i].has_value());
-			rinfo.add_resource(fdata.images[i].value());
+			rinfo.add_resource(fdata.glyphs[i].image);
 		}
+		struct glyph_data
+	   	{
+			tz::vec2 min = {};
+			tz::vec2 max = {};
+			float to_next = 0.0f;
+			float pad0 = 0.0f;
+		};
+		std::array<glyph_data, fdata.glyphs.size()> glyphs;
+		std::transform(fdata.glyphs.begin(), fdata.glyphs.end(), glyphs.begin(),
+		[](const font_glyph& glyph)
+		{
+			return glyph_data{.min = glyph.min, .max = glyph.max, .to_next = glyph.to_next};
+		});
+		this->glyph_bh = rinfo.add_resource(tz::gl::buffer_resource::from_many(glyphs));
 		
 		return tz::gl::get_device().create_renderer(rinfo);
 	}())

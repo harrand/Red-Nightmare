@@ -11,9 +11,17 @@ namespace rnlib
 		_count
 	};
 
+	struct font_glyph
+	{
+		tz::gl::image_resource image = tz::gl::image_resource::null();
+		tz::vec2 min = tz::vec2::zero();
+		tz::vec2 max = tz::vec2::zero();
+		float to_next = 0.0f;
+	};
+
 	struct font_data
 	{
-		std::array<std::optional<tz::gl::image_resource>, (26*2)+10> images;
+		std::array<font_glyph, (26*2)+10> glyphs;
 	};
 
 	void font_system_initialise();

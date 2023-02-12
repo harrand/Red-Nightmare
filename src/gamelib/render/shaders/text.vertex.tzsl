@@ -29,6 +29,18 @@ resource(id = 1) const buffer string_buffer
 	uint string[];
 };
 
+struct glyph_data
+{
+	vec2 min;
+	vec2 max;
+	float to_next;
+};
+
+resource(id = 2) const buffer glyph_buffer
+{
+	glyph_data glyphs[];
+};
+
 output(id = 0) uint out_texture_id;
 output(id = 1) vec2 out_texcoord;
 
@@ -82,7 +94,10 @@ void main()
 	}
 
 	uint word_index = quad_id - wdata.char_cursor;
-	vec4 worldspace_pos = vec4(wdata.pos + (quad_positions[in::vertex_id % 6] * wdata.scale), 0.0f, 1.0f);
+	vec2 scale = wdata.scale;
+	scale *= (glyphs[out_texture_id].max - glyphs[out_texture_id].min);
+	vec4 worldspace_pos = vec4(wdata.pos + (quad_positions[in::vertex_id % 6] * scale), 0.0f, 1.0f);
+	//worldspace_pos.xy += glyphs[out_texture_id].min;
 	worldspace_pos.x += float(word_index) * (wdata.scale.x * 2.0f);
 	out::position = worldspace_pos;
 }

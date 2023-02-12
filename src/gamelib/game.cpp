@@ -31,7 +31,7 @@ namespace rnlib
 		TZ_PROFZONE("rnlib - initialise", 0xff0077ee);
 		font_system_initialise();
 		sys = std::make_unique<system>();
-		sys->trenderer.add("itsmorbintime666", tz::vec2{-0.5f, 0.3f}, tz::vec2::filled(0.03f));
+		sys->trenderer.add("Morbius420", tz::vec2{-0.5f, 0.3f}, tz::vec2::filled(0.03f));
 		sys->trenderer.add("sugondeeznutslmao", tz::vec2{-0.9f, -0.4f}, tz::vec2::filled(0.02f));
 		tz::dbgui::game_menu().add_callback([]()
 		{

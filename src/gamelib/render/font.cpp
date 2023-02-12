@@ -46,7 +46,7 @@ namespace rnlib
 		FT_Set_Pixel_Sizes(ftfont, 0, 64);
 		font_data ret;
 		// lowercase chars.
-		auto load_char = [ftfont](char c)->tz::gl::image_resource
+		auto load_char = [ftfont](char c)->font_glyph
 		{
 			FT_Load_Char(ftfont, c, FT_LOAD_RENDER);	
 			// bitmap contains 8-bit grayscale image. we convert to RGBA8.
@@ -64,25 +64,40 @@ namespace rnlib
 				imgdata_rgba8.push_back(pix);
 				imgdata_rgba8.push_back(pix);
 			}
-			return tz::gl::image_resource::from_memory(imgdata_rgba8,
+			tz::vec2 bounding_box_min = tz::vec2::zero();
+			// these values are in 26.6 fixed point format.
+			// to convert we just divide by 65535;
+			bounding_box_min[0] = static_cast<float>(ftfont->glyph->bitmap_left) / width;
+			bounding_box_min[1] = 1.0f - (static_cast<float>(ftfont->glyph->bitmap_top) / height);
+			auto dims = static_cast<tz::vec2>(tz::vector<long int, 2>{ftfont->glyph->metrics.width / 64, ftfont->glyph->metrics.height / 64});
+			tz::vec2 bounding_box_max = bounding_box_min + dims;
+			bounding_box_max[0] /= width;
+			bounding_box_max[1] /= height;
+			return 
 			{
-				.format = tz::gl::image_format::RGBA32,
-				.dimensions = {width, height},
-			});
+				.image = tz::gl::image_resource::from_memory(imgdata_rgba8,
+				{
+					.format = tz::gl::image_format::RGBA32,
+					.dimensions = {width, height}
+				}),
+				.min = bounding_box_min,
+				.max = bounding_box_max,
+				.to_next = static_cast<float>(ftfont->glyph->metrics.horiAdvance >> 6)
+			};
 		};
 		for(std::size_t i = 0; i < 26; i++)
 		{
-			ret.images[i] = load_char('a' + i);
+			ret.glyphs[i] = load_char('a' + i);
 		}
 
 		for(std::size_t i = 0; i < 26; i++)
 		{
-			ret.images[26 + i] = load_char('A' + i);
+			ret.glyphs[26 + i] = load_char('A' + i);
 		}
 
 		for(std::size_t i = 0; i < 10; i++)
 		{
-			ret.images[26 + 26 + i] = load_char('0' + i);
+			ret.glyphs[26 + 26 + i] = load_char('0' + i);
 		}
 		return ret;
 	}

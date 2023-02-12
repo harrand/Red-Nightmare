@@ -31,6 +31,7 @@ namespace rnlib
 
 		tz::gl::resource_handle word_bh = tz::nullhand;
 		tz::gl::resource_handle string_bh = tz::nullhand;
+		tz::gl::resource_handle glyph_bh = tz::nullhand;
 		tz::gl::renderer_handle rh;
 		std::size_t word_cursor = 0;
 		std::size_t string_cursor = 0;
