@@ -30,10 +30,6 @@ namespace rnlib
 		{
 			.access = tz::gl::resource_access::dynamic_fixed
 		}));
-		for(std::size_t i = 0; i < fdata.glyphs.size(); i++)
-		{
-			rinfo.add_resource(fdata.glyphs[i].image);
-		}
 		struct glyph_data
 	   	{
 			tz::vec2 min = {};
@@ -48,6 +44,14 @@ namespace rnlib
 			return glyph_data{.min = glyph.min, .max = glyph.max, .to_next = glyph.to_next};
 		});
 		this->glyph_bh = rinfo.add_resource(tz::gl::buffer_resource::from_many(glyphs));
+		this->data_bh = rinfo.add_resource(tz::gl::buffer_resource::from_one(render_data{},
+		{
+			.access = tz::gl::resource_access::dynamic_fixed
+		}));
+		for(std::size_t i = 0; i < fdata.glyphs.size(); i++)
+		{
+			rinfo.add_resource(fdata.glyphs[i].image);
+		}
 		
 		return tz::gl::get_device().create_renderer(rinfo);
 	}())
@@ -92,6 +96,11 @@ namespace rnlib
 
 	}
 
+	void text_renderer::set_render_data(render_data data)
+	{
+		this->data_buffer().data_as<render_data>().front() = data;
+	}
+
 	std::span<text_renderer::word_data> text_renderer::words()
 	{
 		return this->word_buffer().data_as<word_data>();
@@ -120,5 +129,15 @@ namespace rnlib
 	tz::gl::buffer_resource& text_renderer::string_buffer()
 	{
 		return *static_cast<tz::gl::buffer_resource*>(tz::gl::get_device().get_renderer(this->rh).get_resource(this->string_bh));
+	}
+
+	const tz::gl::buffer_resource& text_renderer::data_buffer() const
+	{
+		return *static_cast<const tz::gl::buffer_resource*>(tz::gl::get_device().get_renderer(this->rh).get_resource(this->data_bh));
+	}
+
+	tz::gl::buffer_resource& text_renderer::data_buffer()
+	{
+		return *static_cast<tz::gl::buffer_resource*>(tz::gl::get_device().get_renderer(this->rh).get_resource(this->data_bh));
 	}
 }

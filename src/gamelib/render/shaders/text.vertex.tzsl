@@ -44,7 +44,18 @@ resource(id = 2) const buffer glyph_buffer
 	glyph_data glyphs[];
 };
 
-resource(id = 3) const texture images[];
+struct render_data
+{
+	mat4 view;
+	mat4 projection;
+};
+
+resource(id = 3) const buffer render_data_buffer
+{
+	render_data render;
+};
+
+resource(id = 4) const texture images[];
 
 output(id = 0) uint out_texture_id;
 output(id = 1) vec2 out_texcoord;
@@ -63,16 +74,20 @@ uint get_texture(uint bit_position)
 		//tz::debug::printf("%d", encoded);
 		encoded += 26 + 26;
 	}
-	if(encoded >= 65 && encoded <= 90)
+	else if(encoded >= 65 && encoded <= 90)
 	{
 		encoded -= 65;
 		//tz::debug::printf("%dth upr", encoded);
 		encoded += 26;
 	}
-	if(encoded >= 97 && encoded <= 122)
+	else if(encoded >= 97 && encoded <= 122)
 	{
 		encoded -= 97;
 		//tz::debug::printf("%dth lwr", encoded);
+	}
+	else
+	{
+		return 0;
 	}
 	return encoded + 1;
 }
@@ -110,7 +125,6 @@ void main()
 	//scale.x *= (float(texdims.x) / texdims.y);
 	scale *= tz::math::normalise(texdims);
 	vec4 worldspace_pos = vec4(wdata.pos + (quad_positions[in::vertex_id % 6] * scale), 0.0f, 1.0f);
-	//worldspace_pos.xy += glyphs[out_texture_id].min;
 	worldspace_pos.x += float(word_index) * (wdata.scale.x * 1.5f);
-	out::position = worldspace_pos;
+	out::position = (render.projection * render.view) * worldspace_pos;
 }

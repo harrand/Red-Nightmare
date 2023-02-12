@@ -32,8 +32,9 @@ namespace rnlib
 		font_system_initialise();
 		sys = std::make_unique<system>();
 		sys->trenderer.add("Morbius420", tz::vec2{-0.5f, 0.3f}, tz::vec2::filled(0.03f));
-		sys->trenderer.add("sugondeeznutslmao", tz::vec2{-0.9f, -0.4f}, tz::vec2::filled(0.02f));
-		sys->trenderer.add("thequickbrownfoxjumpsoverthelazydog", tz::vec2{-0.95f, 0.0f}, tz::vec2::filled(0.025f));
+		sys->trenderer.add("sugon deez nuts lmao", tz::vec2{-0.9f, -0.4f}, tz::vec2::filled(0.02f));
+		sys->trenderer.add("the quick brown fox jumps over the lazy dog POGGERS", tz::vec2{-0.95f, 0.0f}, tz::vec2::filled(0.025f));
+		sys->trenderer.add("im gonna fuckin cum", tz::vec2{-0.95f, -0.5f}, tz::vec2::filled(0.015f));
 		tz::dbgui::game_menu().add_callback([]()
 		{
 			ImGui::MenuItem("Quad Renderer", nullptr, &dbgui_data.show_quad_renderer);
@@ -52,6 +53,11 @@ namespace rnlib
 		TZ_PROFZONE("rnlib - render", 0xff0077ee);
 		tz::assert(sys != nullptr, "rnlib never initialised. please submit a bug report.");
 		sys->qrenderer.set_render_data
+		({
+			.view = sys->cam.view(),
+			.projection = sys->cam.projection()
+		});
+		sys->trenderer.set_render_data
 		({
 			.view = sys->cam.view(),
 			.projection = sys->cam.projection()

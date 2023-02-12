@@ -1,6 +1,7 @@
 #ifndef RNLIB_RENDER_TEXT_RENDERER_HPP
 #define RNLIB_RENDER_TEXT_RENDERER_HPP
 #include "gamelib/render/font.hpp"
+#include "tz/core/matrix.hpp"
 #include "tz/gl/renderer.hpp"
 #include "tz/gl/resource.hpp"
 
@@ -14,6 +15,14 @@ namespace rnlib
 		void add(std::string str, tz::vec2 pos, tz::vec2 scale);
 		void render();
 		void clear();
+
+		struct render_data
+		{
+			tz::mat4 view = tz::mat4::identity();
+			tz::mat4 projection = tz::mat4::identity();
+		};
+
+		void set_render_data(render_data data);
 	private:
 		struct word_data
 		{
@@ -28,10 +37,13 @@ namespace rnlib
 		tz::gl::buffer_resource& word_buffer();
 		const tz::gl::buffer_resource& string_buffer() const;
 		tz::gl::buffer_resource& string_buffer();
+		const tz::gl::buffer_resource& data_buffer() const;
+		tz::gl::buffer_resource& data_buffer();
 
 		tz::gl::resource_handle word_bh = tz::nullhand;
 		tz::gl::resource_handle string_bh = tz::nullhand;
 		tz::gl::resource_handle glyph_bh = tz::nullhand;
+		tz::gl::resource_handle data_bh = tz::nullhand;
 		tz::gl::renderer_handle rh;
 		std::size_t word_cursor = 0;
 		std::size_t string_cursor = 0;
