@@ -10,8 +10,7 @@ int main()
 	tz::initialise
 	({
 		.name = "Red Nightmare",
-		.version = rnlib::get_version(),
-		.flags = {tz::application_flag::window_transparent}
+		.version = rnlib::get_version()
 	});
 	rnlib::initialise();
 	{
