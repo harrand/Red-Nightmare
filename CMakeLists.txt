@@ -77,6 +77,14 @@ add_text(
 		images/races/human/base/human_base_side1.png
 		images/races/human/base/human_base_side2.png
 		images/races/human/base/human_base_side3.png
+		images/races/human/base/human_base_up0.png
+		images/races/human/base/human_base_up1.png
+		images/races/human/base/human_base_up2.png
+		images/races/human/base/human_base_up3.png
+		images/races/human/base/human_base_down0.png
+		images/races/human/base/human_base_down1.png
+		images/races/human/base/human_base_down2.png
+		images/races/human/base/human_base_down3.png
 		images/races/human/hair/long/human_hair_long_idle0.png
 		images/races/human/hair/long/human_hair_long_idle1.png
 		images/races/human/hair/long/human_hair_long_side0.png
@@ -95,12 +103,24 @@ add_text(
 		images/races/human/hair/prince/human_hair_prince_side1.png
 		images/races/human/hair/prince/human_hair_prince_side2.png
 		images/races/human/hair/prince/human_hair_prince_side3.png
+		images/races/human/hair/prince/human_hair_prince_up0.png
+		images/races/human/hair/prince/human_hair_prince_up1.png
+		images/races/human/hair/prince/human_hair_prince_up2.png
+		images/races/human/hair/prince/human_hair_prince_up3.png
+		images/races/human/hair/prince/human_hair_prince_down0.png
+		images/races/human/hair/prince/human_hair_prince_down1.png
+		images/races/human/hair/prince/human_hair_prince_down2.png
+		images/races/human/hair/prince/human_hair_prince_down3.png
 		images/races/human/eyes/dot/human_eyes_dot_idle0.png
 		images/races/human/eyes/dot/human_eyes_dot_idle1.png
 		images/races/human/eyes/dot/human_eyes_dot_side0.png
 		images/races/human/eyes/dot/human_eyes_dot_side1.png
 		images/races/human/eyes/dot/human_eyes_dot_side2.png
 		images/races/human/eyes/dot/human_eyes_dot_side3.png
+		images/races/human/eyes/dot/human_eyes_dot_down0.png
+		images/races/human/eyes/dot/human_eyes_dot_down1.png
+		images/races/human/eyes/dot/human_eyes_dot_down2.png
+		images/races/human/eyes/dot/human_eyes_dot_down3.png
 		images/races/human/equipment/chest/elementalrobes/human_equipment_chest_elementalrobes_idle0.png
 		images/races/human/equipment/chest/elementalrobes/human_equipment_chest_elementalrobes_idle1.png
 		images/races/human/equipment/chest/elementalrobes/human_equipment_chest_elementalrobes_side0.png

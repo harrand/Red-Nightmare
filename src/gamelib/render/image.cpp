@@ -31,6 +31,14 @@ namespace rnlib
 #include ImportedTextHeader(human_base_side1, png)
 #include ImportedTextHeader(human_base_side2, png)
 #include ImportedTextHeader(human_base_side3, png)
+#include ImportedTextHeader(human_base_up0, png)
+#include ImportedTextHeader(human_base_up1, png)
+#include ImportedTextHeader(human_base_up2, png)
+#include ImportedTextHeader(human_base_up3, png)
+#include ImportedTextHeader(human_base_down0, png)
+#include ImportedTextHeader(human_base_down1, png)
+#include ImportedTextHeader(human_base_down2, png)
+#include ImportedTextHeader(human_base_down3, png)
 #include ImportedTextHeader(human_hair_long_idle0, png)
 #include ImportedTextHeader(human_hair_long_idle1, png)
 #include ImportedTextHeader(human_hair_long_side0, png)
@@ -49,12 +57,24 @@ namespace rnlib
 #include ImportedTextHeader(human_hair_prince_side1, png)
 #include ImportedTextHeader(human_hair_prince_side2, png)
 #include ImportedTextHeader(human_hair_prince_side3, png)
+#include ImportedTextHeader(human_hair_prince_up0, png)
+#include ImportedTextHeader(human_hair_prince_up1, png)
+#include ImportedTextHeader(human_hair_prince_up2, png)
+#include ImportedTextHeader(human_hair_prince_up3, png)
+#include ImportedTextHeader(human_hair_prince_down0, png)
+#include ImportedTextHeader(human_hair_prince_down1, png)
+#include ImportedTextHeader(human_hair_prince_down2, png)
+#include ImportedTextHeader(human_hair_prince_down3, png)
 #include ImportedTextHeader(human_eyes_dot_idle0, png)
 #include ImportedTextHeader(human_eyes_dot_idle1, png)
 #include ImportedTextHeader(human_eyes_dot_side0, png)
 #include ImportedTextHeader(human_eyes_dot_side1, png)
 #include ImportedTextHeader(human_eyes_dot_side2, png)
 #include ImportedTextHeader(human_eyes_dot_side3, png)
+#include ImportedTextHeader(human_eyes_dot_down0, png)
+#include ImportedTextHeader(human_eyes_dot_down1, png)
+#include ImportedTextHeader(human_eyes_dot_down2, png)
+#include ImportedTextHeader(human_eyes_dot_down3, png)
 #include ImportedTextHeader(human_equipment_chest_elementalrobes_idle0, png)
 #include ImportedTextHeader(human_equipment_chest_elementalrobes_idle1, png)
 #include ImportedTextHeader(human_equipment_chest_elementalrobes_side0, png)
@@ -91,6 +111,14 @@ namespace rnlib
 		ImportedTextData(human_base_side1, png),
 		ImportedTextData(human_base_side2, png),
 		ImportedTextData(human_base_side3, png),
+		ImportedTextData(human_base_up0, png),
+		ImportedTextData(human_base_up1, png),
+		ImportedTextData(human_base_up2, png),
+		ImportedTextData(human_base_up3, png),
+		ImportedTextData(human_base_down0, png),
+		ImportedTextData(human_base_down1, png),
+		ImportedTextData(human_base_down2, png),
+		ImportedTextData(human_base_down3, png),
 		ImportedTextData(human_hair_long_idle0, png),
 		ImportedTextData(human_hair_long_idle1, png),
 		ImportedTextData(human_hair_long_side0, png),
@@ -109,12 +137,24 @@ namespace rnlib
 		ImportedTextData(human_hair_prince_side1, png),
 		ImportedTextData(human_hair_prince_side2, png),
 		ImportedTextData(human_hair_prince_side3, png),
+		ImportedTextData(human_hair_prince_up0, png),
+		ImportedTextData(human_hair_prince_up1, png),
+		ImportedTextData(human_hair_prince_up2, png),
+		ImportedTextData(human_hair_prince_up3, png),
+		ImportedTextData(human_hair_prince_down0, png),
+		ImportedTextData(human_hair_prince_down1, png),
+		ImportedTextData(human_hair_prince_down2, png),
+		ImportedTextData(human_hair_prince_down3, png),
 		ImportedTextData(human_eyes_dot_idle0, png),
 		ImportedTextData(human_eyes_dot_idle1, png),
 		ImportedTextData(human_eyes_dot_side0, png),
 		ImportedTextData(human_eyes_dot_side1, png),
 		ImportedTextData(human_eyes_dot_side2, png),
 		ImportedTextData(human_eyes_dot_side3, png),
+		ImportedTextData(human_eyes_dot_down0, png),
+		ImportedTextData(human_eyes_dot_down1, png),
+		ImportedTextData(human_eyes_dot_down2, png),
+		ImportedTextData(human_eyes_dot_down3, png),
 		ImportedTextData(human_equipment_chest_elementalrobes_idle0, png),
 		ImportedTextData(human_equipment_chest_elementalrobes_idle1, png),
 		ImportedTextData(human_equipment_chest_elementalrobes_side0, png),

@@ -110,6 +110,34 @@ namespace human_art
 							.loop = true
 						}};
 					break;
+					case humanoid_skeleton_animation::move_up:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_hair_prince_up0,
+								image_id::race_human_hair_prince_up1,
+								image_id::race_human_hair_prince_up2,
+								image_id::race_human_hair_prince_up3,
+							},
+							.fps = 6,
+							.loop = true
+						}};
+					break;
+					case humanoid_skeleton_animation::move_down:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_hair_prince_down0,
+								image_id::race_human_hair_prince_down1,
+								image_id::race_human_hair_prince_down2,
+								image_id::race_human_hair_prince_down3,
+							},
+							.fps = 6,
+							.loop = true
+						}};
+					break;
 				}
 			break;
 		}

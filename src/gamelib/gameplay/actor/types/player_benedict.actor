@@ -5,7 +5,7 @@ return prefab::human
 	.hair_colour = {0.43f, 0.4f, 0.36f},
 	.eye_type = prefab::human_art::eye_type::dots,
 	.eye_colour = {0.07f, 0.22f, 0.39f},
-	.chest_type = prefab::human_art::chest_type::warrior,
+	.chest_type = prefab::human_art::chest_type::topless,
 	.chest_colour = {0.65f, 0.23f, 0.20f},
 	.feet_type = prefab::human_art::feet_type::dots,
 	.feet_colour = {0.4f, 0.4f, 0.4f},
