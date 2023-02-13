@@ -2,6 +2,7 @@ namespace human_art
 {
 	enum class chest_type
 	{
+		topless,
 		elemental_robes,
 		shirt,
 		warrior,
@@ -12,6 +13,12 @@ namespace human_art
 	{
 		switch(type)
 		{
+			case chest_type::topless:
+				return animation
+				{{
+					.frame_textures = {image_id::invisible}
+				}};
+			break;
 			case chest_type::elemental_robes:
 				switch(anim_type)
 				{

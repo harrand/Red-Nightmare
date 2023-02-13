@@ -5,7 +5,7 @@ struct human_prefab_info
 	tz::vec3 hair_colour = {0.8f, 0.0f, 0.0f};
 	human_art::eye_type eye_type = human_art::eye_type::dots;
 	tz::vec3 eye_colour = tz::vec3::zero();
-	human_art::chest_type chest_type = human_art::chest_type::elemental_robes;
+	human_art::chest_type chest_type = human_art::chest_type::topless;
 	tz::vec3 chest_colour = tz::vec3::filled(1.0f);
 	human_art::feet_type feet_type = human_art::feet_type::bare;
 	tz::vec3 feet_colour = tz::vec3::filled(1.0f);
