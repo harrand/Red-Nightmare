@@ -91,6 +91,14 @@ add_text(
 		images/races/human/hair/long/human_hair_long_side1.png
 		images/races/human/hair/long/human_hair_long_side2.png
 		images/races/human/hair/long/human_hair_long_side3.png
+		images/races/human/hair/long/human_hair_long_up0.png
+		images/races/human/hair/long/human_hair_long_up1.png
+		images/races/human/hair/long/human_hair_long_up2.png
+		images/races/human/hair/long/human_hair_long_up3.png
+		images/races/human/hair/long/human_hair_long_down0.png
+		images/races/human/hair/long/human_hair_long_down1.png
+		images/races/human/hair/long/human_hair_long_down2.png
+		images/races/human/hair/long/human_hair_long_down3.png
 		images/races/human/hair/lord/human_hair_lord_idle0.png
 		images/races/human/hair/lord/human_hair_lord_idle1.png
 		images/races/human/hair/lord/human_hair_lord_side0.png
