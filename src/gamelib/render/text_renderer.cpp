@@ -1,4 +1,5 @@
 #include "gamelib/render/text_renderer.hpp"
+#include "tz/core/profile.hpp"
 #include "tz/gl/device.hpp"
 #include "tz/gl/imported_shaders.hpp"
 #include <array>
@@ -12,6 +13,7 @@ namespace rnlib
 	text_renderer::text_renderer(font f):
 	rh([this, &f]()
 	{
+		TZ_PROFZONE("text_renderer - initialise", 0xff0077ee);
 		font_data fdata = get_font(f);
 		tz::gl::renderer_info rinfo;
 		rinfo.shader().set_shader(tz::gl::shader_stage::vertex, ImportedShaderSource(text, vertex));
@@ -109,6 +111,7 @@ namespace rnlib
 
 	void text_renderer::render()
 	{
+		TZ_PROFZONE("text_renderer - render", 0xffee0077);
 		// string buffer contains a large string essentially. each char requires a quad, thus 2 triangles each char.
 		tz::gl::get_device().get_renderer(this->rh).render(this->string_buffer().data().size_bytes() * 2);
 	}
