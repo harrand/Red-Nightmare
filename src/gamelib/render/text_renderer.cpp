@@ -23,12 +23,12 @@ namespace rnlib
 		std::array<text_renderer::word_data, max_word_count> wdata;
 		this->word_bh = rinfo.add_resource(tz::gl::buffer_resource::from_many(wdata,
 		{
-			.access = tz::gl::resource_access::dynamic_fixed
+			.access = tz::gl::resource_access::dynamic_variable
 		}));
 		std::array<char, max_char_count> cdata;
 		this->string_bh = rinfo.add_resource(tz::gl::buffer_resource::from_many(cdata,
 		{
-			.access = tz::gl::resource_access::dynamic_fixed
+			.access = tz::gl::resource_access::dynamic_variable
 		}));
 		struct glyph_data
 	   	{
@@ -77,6 +77,28 @@ namespace rnlib
 			.length = static_cast<std::uint32_t>(str.size())
 		};
 		this->word_cursor++;
+		if(this->word_cursor >= this->words().size())
+		{
+			// ran out of words space. need to resize buffer.
+			tz::gl::get_device().get_renderer(this->rh).edit
+			(
+				tz::gl::RendererEditBuilder{}
+				.buffer_resize({.buffer_handle = this->word_bh, .size = static_cast<std::uint32_t>(this->word_buffer().data().size_bytes() * 2)})
+				.build()
+			);
+			tz::report("resized word buffer to %zu", this->word_buffer().data().size_bytes());
+		}
+		if(this->string_cursor + str.size() >= this->chars().size_bytes())
+		{
+			// ran out of chars space. need to resize buffer.
+			tz::gl::get_device().get_renderer(this->rh).edit
+			(
+				tz::gl::RendererEditBuilder{}
+				.buffer_resize({.buffer_handle = this->string_bh, .size = static_cast<std::uint32_t>(this->string_buffer().data().size_bytes() * 2)})
+				.build()
+			);
+			tz::report("resized string buffer to %zu", this->string_buffer().data().size_bytes());
+		}
 		for(std::size_t i = 0; i < str.size(); i++)
 		{
 			std::uint32_t& data = this->chars()[this->string_cursor / sizeof(std::uint32_t)];
@@ -153,7 +175,8 @@ namespace rnlib
 			}
 			if(ImGui::BeginTabItem("String Data"))
 			{
-				ImGui::Text("%s", std::as_bytes(this->chars()).data());
+				auto bytes = std::as_writable_bytes(this->chars());
+				ImGui::InputText("Data", reinterpret_cast<char*>(bytes.data()), bytes.size_bytes());
 				ImGui::EndTabItem();
 			}
 			ImGui::EndTabBar();
