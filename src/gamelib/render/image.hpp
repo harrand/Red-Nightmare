@@ -96,6 +96,14 @@ namespace rnlib
 			race_human_equipment_feet_dot_side1,
 			race_human_equipment_feet_dot_side2,
 			race_human_equipment_feet_dot_side3,
+			race_human_equipment_feet_dot_up0,
+			race_human_equipment_feet_dot_up1,
+			race_human_equipment_feet_dot_up2,
+			race_human_equipment_feet_dot_up3,
+			race_human_equipment_feet_dot_down0,
+			race_human_equipment_feet_dot_down1,
+			race_human_equipment_feet_dot_down2,
+			race_human_equipment_feet_dot_down3,
 			_count
 		};
 	}

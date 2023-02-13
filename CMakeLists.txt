@@ -152,6 +152,14 @@ add_text(
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_side1.png
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_side2.png
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_side3.png
+		images/races/human/equipment/feet/dot/human_equipment_feet_dot_up0.png
+		images/races/human/equipment/feet/dot/human_equipment_feet_dot_up1.png
+		images/races/human/equipment/feet/dot/human_equipment_feet_dot_up2.png
+		images/races/human/equipment/feet/dot/human_equipment_feet_dot_up3.png
+		images/races/human/equipment/feet/dot/human_equipment_feet_dot_down0.png
+		images/races/human/equipment/feet/dot/human_equipment_feet_dot_down1.png
+		images/races/human/equipment/feet/dot/human_equipment_feet_dot_down2.png
+		images/races/human/equipment/feet/dot/human_equipment_feet_dot_down3.png
 		fonts/LucidaSansRegular.ttf
 )
 
