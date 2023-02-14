@@ -32,10 +32,7 @@ namespace rnlib
 		TZ_PROFZONE("rnlib - initialise", 0xff0077ee);
 		font_system_initialise();
 		sys = std::make_unique<system>();
-		sys->trenderer.add("Morbius420", tz::vec2{-0.5f, 0.3f}, tz::vec2::filled(0.03f));
-		sys->trenderer.add("sugon deez nuts lmao", tz::vec2{-0.9f, -0.4f}, tz::vec2::filled(0.02f));
-		sys->trenderer.add("the quick brown fox jumps over the lazy dog POGGERS", tz::vec2{-0.95f, 0.0f}, tz::vec2::filled(0.025f));
-		sys->trenderer.add("im gonna fuckin cum", tz::vec2{-0.95f, -0.5f}, tz::vec2::filled(0.015f));
+		sys->trenderer.add("ffs harry stop committing swear words in these placeholder texts", tz::vec2{-0.5f, 0.3f}, tz::vec2::filled(0.125f));
 		tz::dbgui::game_menu().add_callback([]()
 		{
 			ImGui::MenuItem("Quad Renderer", nullptr, &dbgui_data.show_quad_renderer);
