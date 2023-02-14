@@ -1,0 +1,22 @@
+namespace human_art
+{
+	enum class helm_type
+	{
+		none,
+		_count
+	};
+
+	std::optional<animation> get_helm(helm_type type, humanoid_skeleton_animation anim_type)
+	{
+		switch(type)
+		{
+			case helm_type::none:
+				return animation
+				{{
+					.frame_textures = {image_id::invisible}
+				}};
+			break;
+		}
+		return std::nullopt;
+	}
+}

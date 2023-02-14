@@ -1,6 +1,8 @@
 struct human_prefab_info
 {
 	tz::vec3 skin_colour = {1.0f, 0.875f, 0.679f};
+	human_art::helm_type helm_type = human_art::helm_type::none;
+	tz::vec3 helm_colour = tz::vec3::filled(1.0f);
 	human_art::hair_style hair_style = human_art::hair_style::bald;
 	tz::vec3 hair_colour = {0.8f, 0.0f, 0.0f};
 	human_art::eye_type eye_type = human_art::eye_type::dots;
@@ -22,6 +24,11 @@ actor human(human_prefab_info info = {})
 		{{
 			.textures =
 			{
+				{
+					// helm
+					.id = image_id::undefined,
+					.colour_tint = info.helm_colour
+				},
 				{
 					// hair
 					.id = image_id::undefined,
@@ -58,6 +65,7 @@ actor human(human_prefab_info info = {})
 					// idle
 					.animations =
 					{
+						human_art::get_helm(info.helm_type, humanoid_skeleton_animation::idle),
 						human_art::get_hair(info.hair_style, humanoid_skeleton_animation::idle),
 						human_art::get_eyes(info.eye_type, humanoid_skeleton_animation::idle),
 						human_art::get_chest(info.chest_type, humanoid_skeleton_animation::idle),
@@ -76,6 +84,7 @@ actor human(human_prefab_info info = {})
 					// move_side
 					.animations =
 					{
+						human_art::get_helm(info.helm_type, humanoid_skeleton_animation::move_side),
 						human_art::get_hair(info.hair_style, humanoid_skeleton_animation::move_side),
 						human_art::get_eyes(info.eye_type, humanoid_skeleton_animation::move_side),
 						human_art::get_chest(info.chest_type, humanoid_skeleton_animation::move_side),
@@ -100,6 +109,7 @@ actor human(human_prefab_info info = {})
 					// move_up
 					.animations =
 					{
+						human_art::get_helm(info.helm_type, humanoid_skeleton_animation::move_up),
 						human_art::get_hair(info.hair_style, humanoid_skeleton_animation::move_up),
 						human_art::get_eyes(info.eye_type, humanoid_skeleton_animation::move_up),
 						human_art::get_chest(info.chest_type, humanoid_skeleton_animation::move_up),
@@ -124,6 +134,7 @@ actor human(human_prefab_info info = {})
 					// move_down
 					.animations =
 					{
+						human_art::get_helm(info.helm_type, humanoid_skeleton_animation::move_down),
 						human_art::get_hair(info.hair_style, humanoid_skeleton_animation::move_down),
 						human_art::get_eyes(info.eye_type, humanoid_skeleton_animation::move_down),
 						human_art::get_chest(info.chest_type, humanoid_skeleton_animation::move_down),
@@ -152,6 +163,7 @@ actor human(human_prefab_info info = {})
 		{{
 			.animations =
 			{
+				std::nullopt,
 				std::nullopt,
 				std::nullopt,
 				std::nullopt,

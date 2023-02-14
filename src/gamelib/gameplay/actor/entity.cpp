@@ -72,6 +72,7 @@ namespace rnlib
 		#include "gamelib/gameplay/actor/prefabs/human.eyes.prefab"
 		#include "gamelib/gameplay/actor/prefabs/human.feet.prefab"
 		#include "gamelib/gameplay/actor/prefabs/human.hair.prefab"
+		#include "gamelib/gameplay/actor/prefabs/human.helm.prefab"
 		#include "gamelib/gameplay/actor/prefabs/human.actor.prefab"
 	}
 
