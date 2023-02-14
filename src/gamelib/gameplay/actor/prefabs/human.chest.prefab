@@ -48,6 +48,34 @@ namespace human_art
 							.loop = true
 						}};
 					break;
+					case humanoid_skeleton_animation::move_up:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_equipment_chest_elementalrobes_up0,
+								image_id::race_human_equipment_chest_elementalrobes_up1,
+								image_id::race_human_equipment_chest_elementalrobes_up2,
+								image_id::race_human_equipment_chest_elementalrobes_up3,
+							},
+							.fps = 6,
+							.loop = true
+						}};
+					break;
+					case humanoid_skeleton_animation::move_down:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_equipment_chest_elementalrobes_down0,
+								image_id::race_human_equipment_chest_elementalrobes_down1,
+								image_id::race_human_equipment_chest_elementalrobes_down2,
+								image_id::race_human_equipment_chest_elementalrobes_down3,
+							},
+							.fps = 6,
+							.loop = true
+						}};
+					break;
 				}
 			break;
 			case chest_type::shirt:
