@@ -116,6 +116,7 @@ namespace rnlib
 		player_melistra,
 		player_benedict,
 		randomius,
+		the_black_knight,
 		_count
 	};
 

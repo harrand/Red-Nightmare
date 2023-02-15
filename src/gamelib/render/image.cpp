@@ -146,6 +146,20 @@ namespace rnlib
 #include ImportedTextHeader(human_equipment_feet_dot_down1, png)
 #include ImportedTextHeader(human_equipment_feet_dot_down2, png)
 #include ImportedTextHeader(human_equipment_feet_dot_down3, png)
+#include ImportedTextHeader(human_equipment_helm_full_idle0, png)
+#include ImportedTextHeader(human_equipment_helm_full_idle1, png)
+#include ImportedTextHeader(human_equipment_helm_full_side0, png)
+#include ImportedTextHeader(human_equipment_helm_full_side1, png)
+#include ImportedTextHeader(human_equipment_helm_full_side2, png)
+#include ImportedTextHeader(human_equipment_helm_full_side3, png)
+#include ImportedTextHeader(human_equipment_helm_full_up0, png)
+#include ImportedTextHeader(human_equipment_helm_full_up1, png)
+#include ImportedTextHeader(human_equipment_helm_full_up2, png)
+#include ImportedTextHeader(human_equipment_helm_full_up3, png)
+#include ImportedTextHeader(human_equipment_helm_full_down0, png)
+#include ImportedTextHeader(human_equipment_helm_full_down1, png)
+#include ImportedTextHeader(human_equipment_helm_full_down2, png)
+#include ImportedTextHeader(human_equipment_helm_full_down3, png)
 
 namespace rnlib
 {
@@ -274,6 +288,20 @@ namespace rnlib
 		ImportedTextData(human_equipment_feet_dot_down1, png),
 		ImportedTextData(human_equipment_feet_dot_down2, png),
 		ImportedTextData(human_equipment_feet_dot_down3, png),
+		ImportedTextData(human_equipment_helm_full_idle0, png),
+		ImportedTextData(human_equipment_helm_full_idle1, png),
+		ImportedTextData(human_equipment_helm_full_side0, png),
+		ImportedTextData(human_equipment_helm_full_side1, png),
+		ImportedTextData(human_equipment_helm_full_side2, png),
+		ImportedTextData(human_equipment_helm_full_side3, png),
+		ImportedTextData(human_equipment_helm_full_up0, png),
+		ImportedTextData(human_equipment_helm_full_up1, png),
+		ImportedTextData(human_equipment_helm_full_up2, png),
+		ImportedTextData(human_equipment_helm_full_up3, png),
+		ImportedTextData(human_equipment_helm_full_down0, png),
+		ImportedTextData(human_equipment_helm_full_down1, png),
+		ImportedTextData(human_equipment_helm_full_down2, png),
+		ImportedTextData(human_equipment_helm_full_down3, png),
 	};
 
 	tz::gl::image_resource create_image(image_id_t iid)

@@ -136,6 +136,20 @@ namespace rnlib
 			race_human_equipment_feet_dot_down1,
 			race_human_equipment_feet_dot_down2,
 			race_human_equipment_feet_dot_down3,
+			race_human_equipment_helm_full_idle0,
+			race_human_equipment_helm_full_idle1,
+			race_human_equipment_helm_full_side0,
+			race_human_equipment_helm_full_side1,
+			race_human_equipment_helm_full_side2,
+			race_human_equipment_helm_full_side3,
+			race_human_equipment_helm_full_up0,
+			race_human_equipment_helm_full_up1,
+			race_human_equipment_helm_full_up2,
+			race_human_equipment_helm_full_up3,
+			race_human_equipment_helm_full_down0,
+			race_human_equipment_helm_full_down1,
+			race_human_equipment_helm_full_down2,
+			race_human_equipment_helm_full_down3,
 			_count
 		};
 	}

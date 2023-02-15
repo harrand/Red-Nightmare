@@ -88,11 +88,18 @@ namespace rnlib
 				}
 				break;
 				case actor_type::player_benedict:
+				{
 					#include "gamelib/gameplay/actor/types/player_benedict.actor"
+				}
 				break;
 				case actor_type::randomius:
 				{
 					#include "gamelib/gameplay/actor/types/randomius.actor"
+				}
+				break;
+				case actor_type::the_black_knight:
+				{
+					#include "gamelib/gameplay/actor/types/the_black_knight.actor"
 				}
 				break;
 			}

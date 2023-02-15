@@ -3,8 +3,16 @@ namespace human_art
 	enum class helm_type
 	{
 		none,
+		full,
 		_count
 	};
+
+	constexpr helm_type helms_that_hide_hair[] = {helm_type::full};
+
+	constexpr bool helm_hides_hair(helm_type t)
+	{
+		return std::find(std::begin(helms_that_hide_hair), std::end(helms_that_hide_hair), t) != std::end(helms_that_hide_hair);
+	}
 
 	std::optional<animation> get_helm(helm_type type, humanoid_skeleton_animation anim_type)
 	{
@@ -15,6 +23,65 @@ namespace human_art
 				{{
 					.frame_textures = {image_id::invisible}
 				}};
+			break;
+			case helm_type::full:
+				switch(anim_type)
+				{
+					case humanoid_skeleton_animation::idle:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_equipment_helm_full_idle0,
+								image_id::race_human_equipment_helm_full_idle1,
+							},
+							.fps = 2,
+							.loop = true
+						}};
+					break;
+					case humanoid_skeleton_animation::move_side:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_equipment_helm_full_side0,
+								image_id::race_human_equipment_helm_full_side1,
+								image_id::race_human_equipment_helm_full_side2,
+								image_id::race_human_equipment_helm_full_side3,
+							},
+							.fps = 6,
+							.loop = true
+						}};
+					break;
+					case humanoid_skeleton_animation::move_up:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_equipment_helm_full_up0,
+								image_id::race_human_equipment_helm_full_up1,
+								image_id::race_human_equipment_helm_full_up2,
+								image_id::race_human_equipment_helm_full_up3,
+							},
+							.fps = 6,
+							.loop = true
+						}};
+					break;
+					case humanoid_skeleton_animation::move_down:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_equipment_helm_full_down0,
+								image_id::race_human_equipment_helm_full_down1,
+								image_id::race_human_equipment_helm_full_down2,
+								image_id::race_human_equipment_helm_full_down3,
+							},
+							.fps = 6,
+							.loop = true
+						}};
+					break;
+				}
 			break;
 		}
 		return std::nullopt;

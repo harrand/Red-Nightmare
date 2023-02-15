@@ -1,0 +1,22 @@
+constexpr tz::vec3 black{0.11f, 0.1f, 0.095f};
+return prefab::human
+({
+	.skin_colour = black,
+	.helm_type = prefab::human_art::helm_type::full,
+	.helm_colour = black,
+	.hair_style = prefab::human_art::hair_style::bald,
+	.eye_type = prefab::human_art::eye_type::dots,
+	.eye_colour = {0.07f, 0.22f, 0.39f},
+	.chest_type = prefab::human_art::chest_type::warrior,
+	.chest_colour = black,
+	.feet_type = prefab::human_art::feet_type::dots,
+	.feet_colour = black,
+	.data =
+	{
+		.entity =
+		{
+			actor_component<actor_component_id::keyboard_control>{}
+		},
+		.name = "The Black Knight",
+	}
+});

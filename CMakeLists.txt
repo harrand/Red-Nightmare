@@ -192,6 +192,20 @@ add_text(
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_down1.png
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_down2.png
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_down3.png
+		images/races/human/equipment/helm/full/human_equipment_helm_full_idle0.png
+		images/races/human/equipment/helm/full/human_equipment_helm_full_idle1.png
+		images/races/human/equipment/helm/full/human_equipment_helm_full_side0.png
+		images/races/human/equipment/helm/full/human_equipment_helm_full_side1.png
+		images/races/human/equipment/helm/full/human_equipment_helm_full_side2.png
+		images/races/human/equipment/helm/full/human_equipment_helm_full_side3.png
+		images/races/human/equipment/helm/full/human_equipment_helm_full_up0.png
+		images/races/human/equipment/helm/full/human_equipment_helm_full_up1.png
+		images/races/human/equipment/helm/full/human_equipment_helm_full_up2.png
+		images/races/human/equipment/helm/full/human_equipment_helm_full_up3.png
+		images/races/human/equipment/helm/full/human_equipment_helm_full_down0.png
+		images/races/human/equipment/helm/full/human_equipment_helm_full_down1.png
+		images/races/human/equipment/helm/full/human_equipment_helm_full_down2.png
+		images/races/human/equipment/helm/full/human_equipment_helm_full_down3.png
 		fonts/LucidaSansRegular.ttf
 )
 

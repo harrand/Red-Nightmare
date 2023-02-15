@@ -17,6 +17,14 @@ struct human_prefab_info
 
 actor human(human_prefab_info info = {})
 {
+	auto get_hair_final = [](human_art::hair_style style, humanoid_skeleton_animation anim, human_art::helm_type helm)
+	{
+		if(helm_hides_hair(helm))
+		{
+			return human_art::get_hair(human_art::hair_style::bald, anim);
+		}
+		return human_art::get_hair(style, anim);
+	};
 	actor ret = info.data;
 	actor_entity entity =
 	{
@@ -66,7 +74,7 @@ actor human(human_prefab_info info = {})
 					.animations =
 					{
 						human_art::get_helm(info.helm_type, humanoid_skeleton_animation::idle),
-						human_art::get_hair(info.hair_style, humanoid_skeleton_animation::idle),
+						get_hair_final(info.hair_style, humanoid_skeleton_animation::idle, info.helm_type),
 						human_art::get_eyes(info.eye_type, humanoid_skeleton_animation::idle),
 						human_art::get_chest(info.chest_type, humanoid_skeleton_animation::idle),
 						human_art::get_feet(info.feet_type, humanoid_skeleton_animation::idle),
@@ -85,7 +93,7 @@ actor human(human_prefab_info info = {})
 					.animations =
 					{
 						human_art::get_helm(info.helm_type, humanoid_skeleton_animation::move_side),
-						human_art::get_hair(info.hair_style, humanoid_skeleton_animation::move_side),
+						get_hair_final(info.hair_style, humanoid_skeleton_animation::move_side, info.helm_type),
 						human_art::get_eyes(info.eye_type, humanoid_skeleton_animation::move_side),
 						human_art::get_chest(info.chest_type, humanoid_skeleton_animation::move_side),
 						human_art::get_feet(info.feet_type, humanoid_skeleton_animation::move_side),
@@ -110,7 +118,7 @@ actor human(human_prefab_info info = {})
 					.animations =
 					{
 						human_art::get_helm(info.helm_type, humanoid_skeleton_animation::move_up),
-						human_art::get_hair(info.hair_style, humanoid_skeleton_animation::move_up),
+						get_hair_final(info.hair_style, humanoid_skeleton_animation::move_up, info.helm_type),
 						human_art::get_eyes(info.eye_type, humanoid_skeleton_animation::move_up),
 						human_art::get_chest(info.chest_type, humanoid_skeleton_animation::move_up),
 						human_art::get_feet(info.feet_type, humanoid_skeleton_animation::move_up),
@@ -135,7 +143,7 @@ actor human(human_prefab_info info = {})
 					.animations =
 					{
 						human_art::get_helm(info.helm_type, humanoid_skeleton_animation::move_down),
-						human_art::get_hair(info.hair_style, humanoid_skeleton_animation::move_down),
+						get_hair_final(info.hair_style, humanoid_skeleton_animation::move_down, info.helm_type),
 						human_art::get_eyes(info.eye_type, humanoid_skeleton_animation::move_down),
 						human_art::get_chest(info.chest_type, humanoid_skeleton_animation::move_down),
 						human_art::get_feet(info.feet_type, humanoid_skeleton_animation::move_down),
