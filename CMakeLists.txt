@@ -206,6 +206,20 @@ add_text(
 		images/races/human/equipment/helm/full/human_equipment_helm_full_down1.png
 		images/races/human/equipment/helm/full/human_equipment_helm_full_down2.png
 		images/races/human/equipment/helm/full/human_equipment_helm_full_down3.png
+		images/races/human/equipment/helm/headband/human_equipment_helm_headband_idle0.png
+		images/races/human/equipment/helm/headband/human_equipment_helm_headband_idle1.png
+		images/races/human/equipment/helm/headband/human_equipment_helm_headband_side0.png
+		images/races/human/equipment/helm/headband/human_equipment_helm_headband_side1.png
+		images/races/human/equipment/helm/headband/human_equipment_helm_headband_side2.png
+		images/races/human/equipment/helm/headband/human_equipment_helm_headband_side3.png
+		images/races/human/equipment/helm/headband/human_equipment_helm_headband_up0.png
+		images/races/human/equipment/helm/headband/human_equipment_helm_headband_up1.png
+		images/races/human/equipment/helm/headband/human_equipment_helm_headband_up2.png
+		images/races/human/equipment/helm/headband/human_equipment_helm_headband_up3.png
+		images/races/human/equipment/helm/headband/human_equipment_helm_headband_down0.png
+		images/races/human/equipment/helm/headband/human_equipment_helm_headband_down1.png
+		images/races/human/equipment/helm/headband/human_equipment_helm_headband_down2.png
+		images/races/human/equipment/helm/headband/human_equipment_helm_headband_down3.png
 		fonts/LucidaSansRegular.ttf
 )
 

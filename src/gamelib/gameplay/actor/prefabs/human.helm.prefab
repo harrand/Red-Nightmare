@@ -4,6 +4,7 @@ namespace human_art
 	{
 		none,
 		full,
+		headband,
 		_count
 	};
 
@@ -76,6 +77,65 @@ namespace human_art
 								image_id::race_human_equipment_helm_full_down1,
 								image_id::race_human_equipment_helm_full_down2,
 								image_id::race_human_equipment_helm_full_down3,
+							},
+							.fps = 6,
+							.loop = true
+						}};
+					break;
+				}
+			break;
+			case helm_type::headband:
+				switch(anim_type)
+				{
+					case humanoid_skeleton_animation::idle:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_equipment_helm_headband_idle0,
+								image_id::race_human_equipment_helm_headband_idle1,
+							},
+							.fps = 2,
+							.loop = true
+						}};
+					break;
+					case humanoid_skeleton_animation::move_side:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_equipment_helm_headband_side0,
+								image_id::race_human_equipment_helm_headband_side1,
+								image_id::race_human_equipment_helm_headband_side2,
+								image_id::race_human_equipment_helm_headband_side3,
+							},
+							.fps = 6,
+							.loop = true
+						}};
+					break;
+					case humanoid_skeleton_animation::move_up:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_equipment_helm_headband_up0,
+								image_id::race_human_equipment_helm_headband_up1,
+								image_id::race_human_equipment_helm_headband_up2,
+								image_id::race_human_equipment_helm_headband_up3,
+							},
+							.fps = 6,
+							.loop = true
+						}};
+					break;
+					case humanoid_skeleton_animation::move_down:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_equipment_helm_headband_down0,
+								image_id::race_human_equipment_helm_headband_down1,
+								image_id::race_human_equipment_helm_headband_down2,
+								image_id::race_human_equipment_helm_headband_down3,
 							},
 							.fps = 6,
 							.loop = true
