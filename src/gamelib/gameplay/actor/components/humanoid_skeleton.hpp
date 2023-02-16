@@ -15,7 +15,7 @@ struct actor_component_params<actor_component_id::humanoid_skeleton>
 	std::array<actor_component_params<actor_component_id::animation>, static_cast<int>(humanoid_skeleton_animation::_count)> poses;
 	bool move_animation_affected_by_speed = true;
 	// implementation detail. if we were moving left last update and we still are, we dont want to re-assign the animation as it would reset the animation timer and stick in the same frame forever.
-	move_direction_t impl_movedir = 4;
+	move_direction_t impl_movedir = 0b100000;
 };
 
 template<>
