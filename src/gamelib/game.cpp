@@ -69,6 +69,11 @@ namespace rnlib
 			const std::size_t quad_count = sys->qrenderer.quads().size();
 			sys->qrenderer.reserve(quad_count * 2);
 			tz::report("ran out of quads. increasing %zu->%zu", quad_count, quad_count * 2);
+			// default assign all new quad values.
+			for(std::size_t i = quad_count; i < quad_count * 2; i++)
+			{
+				sys->qrenderer.quads()[i] = {};
+			}
 		}
 		tz::assert(mres.error == mount_error::no_error, "unhandled mount_error. please submit a bug report.");
 		sys->qrenderer.render();

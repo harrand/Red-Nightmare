@@ -73,6 +73,7 @@ void main()
 #if TZ_DEBUG
 	if(q.pos.y > max_y_coord || q.pos.y < -max_y_coord)
 	{
+		tz::debug::printf("Found a quad (vid: %u) that has an invalid position. q.pos.y == %.3f, max_y_coord = %.3f", quad_id, q.pos.y, max_y_coord);
 		tz::debug::assert(0);		
 	}
 	if(out_depth < 0.0f || out_depth > 1.0f)
