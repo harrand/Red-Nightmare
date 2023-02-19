@@ -7,45 +7,38 @@
 #include <span>
 
 #include ImportedTextHeader(invisible, png)
+#include ImportedTextHeader(LucidaSansRegular, ttf)
 
 namespace rnlib
 {
 	FT_Library ftlib;
 
-	struct font_system
-	{
-		std::vector<FT_Face> font_faces;
-	} fsys;
-
-	FT_Face load_font(font f);
-
 	void font_system_initialise()
 	{
 		int err = FT_Init_FreeType(&ftlib);
 		tz::assert(err == 0, "failed to initialise font system. `FT_Init_FreeType` returned erroneous code %d", err);	
-		constexpr int font_count = static_cast<int>(font::_count);
-		fsys.font_faces.resize(font_count);
-		for(int i = 0; i < font_count; i++)
-		{
-			fsys.font_faces[i] = load_font(static_cast<font>(i));
-		}
 	}
 
 	void font_system_terminate()
 	{
 		[[maybe_unused]] int err = FT_Done_FreeType(ftlib);
-		for(FT_Face font_face : fsys.font_faces)
-		{
-			FT_Done_Face(font_face);
-		}
-		fsys = {};
 		tz::assert(err == 0, "failed to terminate font system. `FT_Done_FreeType` returned erroneous code %d", err);	
 		ftlib = {};
 	}
 
 	font_data get_font(font f)
 	{
-		FT_Face ftfont = load_font(f);
+		std::string_view fontdata;
+		switch(f)
+		{
+			case font::lucida_sans_regular:
+				fontdata = ImportedTextData(LucidaSansRegular, ttf);
+			break;
+		}
+		FT_Face ftfont;
+		int err = FT_New_Memory_Face(ftlib, reinterpret_cast<const FT_Byte*>(fontdata.data()), fontdata.size(), 0, &ftfont);
+		tz::assert(err == 0, "failed to load font %d", static_cast<int>(f));
+
 		FT_Set_Pixel_Sizes(ftfont, 0, 64);
 		font_data ret;
 		ret.glyphs[0] = font_glyph
@@ -106,25 +99,7 @@ namespace rnlib
 		{
 			ret.glyphs[1 + 26 + 26 + i] = load_char('0' + i);
 		}
+		FT_Done_Face(ftfont);
 		return ret;
-	}
-}
-
-#include ImportedTextHeader(LucidaSansRegular, ttf)
-namespace rnlib
-{
-	FT_Face load_font(font f)
-	{
-		std::string_view fontdata;
-		switch(f)
-		{
-			case font::lucida_sans_regular:
-				fontdata = ImportedTextData(LucidaSansRegular, ttf);
-			break;
-		}
-		FT_Face face;
-		int err = FT_New_Memory_Face(ftlib, reinterpret_cast<const FT_Byte*>(fontdata.data()), fontdata.size(), 0, &face);
-		tz::assert(err == 0, "failed to load font %d", static_cast<int>(f));
-		return face;
 	}
 }

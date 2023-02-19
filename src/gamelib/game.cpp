@@ -39,6 +39,10 @@ namespace rnlib
 			ImGui::MenuItem("Text Renderer", nullptr, &dbgui_data.show_text_renderer);
 			ImGui::MenuItem("Actor System", nullptr, &dbgui_data.show_actor_system);
 		});
+		for(std::size_t i = 0; i < 250; i++)
+		{
+			sys->actors.add(actor_type::randomius);
+		}
 	}
 
 	void terminate()
