@@ -2,14 +2,15 @@ shader(type = vertex);
 
 import <math>
 import <debug>
+import "quadtex"
 
 struct quad_data
 {
 	vec2 pos;
 	vec2 scale;
-	vec3 colour_tint;
 	float rotation;
-	uint texid;
+	uint texid[QUAD_TEXCOUNT];
+	vec3 tints[QUAD_TEXCOUNT];
 	int layer;
 };
 
@@ -41,10 +42,10 @@ resource(id = 1) const buffer render_data_buffer
 	render_data render;
 };
 
-output(id = 0) uint out_texid;
-output(id = 1) float out_depth;
-output(id = 2) vec2 out_texcoord;
-output(id = 3) vec3 out_colour_tint;
+output(id = 0) uint out_texid[QUAD_TEXCOUNT];
+output(id = 8) float out_depth;
+output(id = 9) vec2 out_texcoord;
+output(id = 10) vec3 out_tints[QUAD_TEXCOUNT];
 
 void main()
 {
@@ -53,7 +54,10 @@ void main()
 	mat2 rotation_matrix = mat2(cos(q.rotation), -sin(q.rotation), sin(q.rotation), cos(q.rotation));
 	vec4 worldspace_pos = vec4(q.pos + (rotation_matrix * quad_positions[in::vertex_id % 6] * q.scale), 0.0f, 1.0f);
 	out::position = (render.projection * render.view) * worldspace_pos;
-	out_texid = q.texid;
+	for(uint i = 0; i < QUAD_TEXCOUNT; i++)
+	{
+		out_texid[i] = q.texid[i];
+	}
 
 	// depth handling.
 	// q.layer should always be between 0.0 and 1000.0.
@@ -68,7 +72,10 @@ void main()
 	out_depth += ((max_y_coord + q.pos.y) * 0.5f / max_y_coord) * 0.5f;
 	
 	out_texcoord = quad_texcoords[in::vertex_id % 6];
-	out_colour_tint = q.colour_tint;
+	for(uint i = 0; i < QUAD_TEXCOUNT; i++)
+	{
+		out_tints[i] = q.tints[i];
+	}
 
 #if TZ_DEBUG
 	if(q.pos.y > max_y_coord || q.pos.y < -max_y_coord)

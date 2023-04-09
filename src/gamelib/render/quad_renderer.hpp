@@ -4,6 +4,7 @@
 #include "tz/core/matrix.hpp"
 #include "tz/gl/renderer.hpp"
 #include "tz/gl/resource.hpp"
+#include "gamelib/render/shaders/quadtex.tzsl"
 
 namespace rnlib
 {
@@ -19,7 +20,7 @@ namespace rnlib
 		quad_renderer& operator=(quad_renderer&& rhs) = delete;
 
 		// draw all them quads.
-		void render();
+		void render(std::size_t quad_count);
 		void dbgui();
 
 		tz::gl::renderer_handle get() const;
@@ -29,11 +30,12 @@ namespace rnlib
 		{
 			tz::vec2 pos = tz::vec2::zero();
 			tz::vec2 scale = tz::vec2::zero();
-			tz::vec3 colour_tint = tz::vec3::filled(1.0f);
 			float rotation = 0.0f;
-			std::uint32_t texid = 0;
+			std::array<std::uint32_t, QUAD_TEXCOUNT> texid;
+			float pad0[3];
+			std::array<tz::vec4, QUAD_TEXCOUNT> tints;
 			std::int32_t layer = 0;
-			float pad1[2];
+			float pad1[3];
 		};
 
 		struct render_data

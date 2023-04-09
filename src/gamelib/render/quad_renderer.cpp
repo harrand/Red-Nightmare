@@ -23,6 +23,11 @@ namespace rnlib
 		rinfo.set_options({tz::gl::renderer_option::no_present});
 		// quad buffer
 		std::array<quad_data, initial_capacity> initial_quads;
+		for(quad_data& qd : initial_quads)
+		{
+			std::fill(qd.tints.begin(), qd.tints.end(), tz::vec4::filled(1.0f));
+			std::fill(qd.texid.begin(), qd.texid.end(), 1u);
+		}
 		this->quad_bh = rinfo.add_resource(tz::gl::buffer_resource::from_many(initial_quads,
 		{
 			.access = tz::gl::resource_access::dynamic_variable
@@ -54,11 +59,11 @@ namespace rnlib
 
 	}
 
-	void quad_renderer::render()
+	void quad_renderer::render(std::size_t quad_count)
 	{
 		TZ_PROFZONE("quad_renderer - render", 0xffee0077);
 		tz::assert(this->rh != tz::nullhand, "quad_renderer renderer handle is nullhand. initialisation failed in some weird way. submit a bug report.");
-		this->indirect_buffer().data_as<tz::gl::draw_indirect_command>().front().count = this->quads().size() * 2 * 3;
+		this->indirect_buffer().data_as<tz::gl::draw_indirect_command>().front().count = quad_count * 2 * 3;
 	}
 
 	void quad_renderer::dbgui()
@@ -80,7 +85,13 @@ namespace rnlib
 				ImGui::InputFloat2("position", quad.pos.data().data());
 				ImGui::InputFloat2("scale", quad.scale.data().data());
 				ImGui::DragFloat("rotation", &quad.rotation, 0.01f, -3.14159f, 3.14159f);
-				ImGui::Text("texture id: %u", static_cast<unsigned int>(quad.texid));
+				ImGui::Text("texture id: {"); ImGui::SameLine();
+				for(std::size_t i = 0; i < 8; i++)
+				{
+					ImGui::Text(" %u", quad.texid[i]);
+					ImGui::SameLine();
+				}
+				ImGui::Text("}");
 				ImGui::DragInt("layer", reinterpret_cast<int*>(&quad.layer), 0.25f, 0, 1000, "%zu");
 				ImGui::Unindent();
 				ImGui::EndTabItem();

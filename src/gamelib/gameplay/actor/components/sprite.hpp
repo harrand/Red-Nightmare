@@ -1,3 +1,5 @@
+#include "gamelib/render/shaders/quadtex.tzsl"
+
 struct sprite_texture_info
 {
 	std::uint32_t id = 0;
@@ -24,15 +26,24 @@ inline mount_result actor_component_mount<actor_component_id::sprite>
 	{
 		return {.error = mount_error::ooq};
 	}
+	std::vector<sprite_texture_info> sorted_textures = component.data().textures;
+	std::sort(sorted_textures.begin(), sorted_textures.end(), [](const auto& lhs, const auto& rhs)
+	{
+		return lhs.layer_offset < rhs.layer_offset;
+	});
+	auto& quad = quads[0];
+	// each texture has its own layer.
+	// 0th texture needs to be highest layer, and vice versa.
 	for(std::size_t i = 0; i < tex_count; i++)
 	{
-		const sprite_texture_info& texture = component.data().textures[i];
-		quads[i].pos = texture.offset;
-		quads[i].texid = texture.id;
-		quads[i].layer = texture.layer_offset;
-		quads[i].colour_tint = texture.colour_tint;
+		quad.texid[i] = sorted_textures[i].id;
+		quad.tints[i] = sorted_textures[i].colour_tint.with_more(0.0f);
 	}
-	return {.count = tex_count};
+	for(std::size_t i = tex_count; i < QUAD_TEXCOUNT; i++)
+	{
+		quad.texid[i] = 1u;
+	}
+	return {.count = 1};
 }
 
 template<>

@@ -81,7 +81,7 @@ namespace rnlib
 			}
 		}
 		tz::assert(mres.error == mount_error::no_error, "unhandled mount_error. please submit a bug report.");
-		sys->qrenderer.render();
+		sys->qrenderer.render(mres.count);
 		sys->trenderer.render();
 		tz::gl::get_device().render();
 	}
