@@ -17,6 +17,7 @@ namespace rnlib
 		TZ_PROFZONE("text_renderer - initialise", 0xff0077ee);
 		font_data fdata = get_font(f);
 		tz::gl::renderer_info rinfo;
+		rinfo.debug_name("Text Renderer");
 		rinfo.shader().set_shader(tz::gl::shader_stage::vertex, ImportedShaderSource(text, vertex));
 		rinfo.shader().set_shader(tz::gl::shader_stage::fragment, ImportedShaderSource(text, fragment));
 		rinfo.set_options({tz::gl::renderer_option::no_depth_testing, tz::gl::renderer_option::no_clear_output});

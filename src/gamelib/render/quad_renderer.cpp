@@ -17,6 +17,7 @@ namespace rnlib
 	{
 		TZ_PROFZONE("quad_renderer - initialise", 0xff0077ee);
 		tz::gl::renderer_info rinfo;
+		rinfo.debug_name("Quad Renderer");
 		rinfo.shader().set_shader(tz::gl::shader_stage::vertex, ImportedShaderSource(quad, vertex));
 		rinfo.shader().set_shader(tz::gl::shader_stage::fragment, ImportedShaderSource(quad, fragment));
 		rinfo.set_options({tz::gl::renderer_option::no_present});
