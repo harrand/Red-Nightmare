@@ -65,7 +65,7 @@ namespace rnlib
 
 	void actor_system::update(float dt)
 	{
-		constexpr std::size_t arbitrary_serial_update_max = 500;
+		constexpr std::size_t arbitrary_serial_update_max = 250;
 		if(this->entities.size() < arbitrary_serial_update_max)
 		{
 			// if we dont have that many entities, do them all now.
