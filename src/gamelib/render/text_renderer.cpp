@@ -1,6 +1,7 @@
 #include "gamelib/render/text_renderer.hpp"
 #include "tz/core/profile.hpp"
 #include "tz/gl/device.hpp"
+#include "tz/gl/draw.hpp"
 #include "tz/gl/imported_shaders.hpp"
 #include <array>
 #include <cstring>
@@ -32,6 +33,16 @@ namespace rnlib
 		{
 			.access = tz::gl::resource_access::dynamic_variable
 		}));
+		this->indirect_bh = rinfo.add_resource(tz::gl::buffer_resource::from_one(tz::gl::draw_indirect_command
+		{
+			.count = 0u,
+			.first = 0
+		},
+		{
+			.access = tz::gl::resource_access::dynamic_fixed,
+			.flags = {tz::gl::resource_flag::draw_indirect_buffer}
+		}));
+		rinfo.state().graphics.draw_buffer = this->indirect_bh;
 		struct glyph_data
 	   	{
 			tz::vec2 min = {};
@@ -113,7 +124,7 @@ namespace rnlib
 	{
 		TZ_PROFZONE("text_renderer - render", 0xffee0077);
 		// string buffer contains a large string essentially. each char requires a quad, thus 2 triangles each char.
-		tz::gl::get_device().get_renderer(this->rh).render(this->string_buffer().data().size_bytes() * 2);
+		this->indirect_buffer().data_as<tz::gl::draw_indirect_command>().front().count = this->string_buffer().data().size_bytes() * 2 * 3;
 	}
 
 	void text_renderer::clear()
@@ -186,6 +197,11 @@ namespace rnlib
 		}
 	}
 
+	tz::gl::renderer_handle text_renderer::get() const
+	{
+		return this->rh;
+	}
+
 	std::span<text_renderer::word_data> text_renderer::words()
 	{
 		return this->word_buffer().data_as<word_data>();
@@ -224,5 +240,10 @@ namespace rnlib
 	tz::gl::buffer_resource& text_renderer::data_buffer()
 	{
 		return *static_cast<tz::gl::buffer_resource*>(tz::gl::get_device().get_renderer(this->rh).get_resource(this->data_bh));
+	}
+
+	tz::gl::buffer_resource& text_renderer::indirect_buffer()
+	{
+		return *static_cast<tz::gl::buffer_resource*>(tz::gl::get_device().get_renderer(this->rh).get_resource(this->indirect_bh));
 	}
 }

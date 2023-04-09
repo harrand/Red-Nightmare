@@ -24,6 +24,7 @@ namespace rnlib
 
 		void set_render_data(render_data data);
 		void dbgui();
+		tz::gl::renderer_handle get() const;
 	private:
 		struct word_data
 		{
@@ -40,11 +41,13 @@ namespace rnlib
 		tz::gl::buffer_resource& string_buffer();
 		const tz::gl::buffer_resource& data_buffer() const;
 		tz::gl::buffer_resource& data_buffer();
+		tz::gl::buffer_resource& indirect_buffer();
 
 		tz::gl::resource_handle word_bh = tz::nullhand;
 		tz::gl::resource_handle string_bh = tz::nullhand;
 		tz::gl::resource_handle glyph_bh = tz::nullhand;
 		tz::gl::resource_handle data_bh = tz::nullhand;
+		tz::gl::resource_handle indirect_bh = tz::nullhand;
 		tz::gl::renderer_handle rh;
 		std::size_t word_cursor = 0;
 		std::size_t string_cursor = 0;

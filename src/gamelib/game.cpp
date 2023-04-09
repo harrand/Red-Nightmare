@@ -39,10 +39,8 @@ namespace rnlib
 			ImGui::MenuItem("Text Renderer", nullptr, &dbgui_data.show_text_renderer);
 			ImGui::MenuItem("Actor System", nullptr, &dbgui_data.show_actor_system);
 		});
-		for(std::size_t i = 0; i < 250; i++)
-		{
-			sys->actors.add(actor_type::randomius);
-		}
+		tz::gl::get_device().render_graph().add_dependencies(sys->trenderer.get(), sys->qrenderer.get());
+		tz::gl::get_device().render_graph().timeline = {sys->qrenderer.get(), sys->trenderer.get()};
 	}
 
 	void terminate()
@@ -67,21 +65,25 @@ namespace rnlib
 		});
 		mount_result mres;
 		sys->qrenderer.clean();
-		while(mres = sys->actors.mount(sys->qrenderer.quads()), mres.error == mount_error::ooq)
 		{
-			// if mounting fails due to not enough quads, double the number of quads (a la std::vector)
-			const std::size_t quad_count = sys->qrenderer.quads().size();
-			sys->qrenderer.reserve(quad_count * 2);
-			tz::report("ran out of quads. increasing %zu->%zu", quad_count, quad_count * 2);
-			// default assign all new quad values.
-			for(std::size_t i = quad_count; i < quad_count * 2; i++)
+			TZ_PROFZONE("quad renderer - mount", 0xff0077ee);
+			while(mres = sys->actors.mount(sys->qrenderer.quads()), mres.error == mount_error::ooq)
 			{
-				sys->qrenderer.quads()[i] = {};
+				// if mounting fails due to not enough quads, double the number of quads (a la std::vector)
+				const std::size_t quad_count = sys->qrenderer.quads().size();
+				sys->qrenderer.reserve(quad_count * 2);
+				tz::report("ran out of quads. increasing %zu->%zu", quad_count, quad_count * 2);
+				// default assign all new quad values.
+				for(std::size_t i = quad_count; i < quad_count * 2; i++)
+				{
+					sys->qrenderer.quads()[i] = {};
+				}
 			}
 		}
 		tz::assert(mres.error == mount_error::no_error, "unhandled mount_error. please submit a bug report.");
 		sys->qrenderer.render();
 		sys->trenderer.render();
+		tz::gl::get_device().render();
 	}
 
 	void dbgui()

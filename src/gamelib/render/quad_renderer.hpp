@@ -22,6 +22,8 @@ namespace rnlib
 		void render();
 		void dbgui();
 
+		tz::gl::renderer_handle get() const;
+
 		// shader data for each quad.
 		struct quad_data
 		{
@@ -55,9 +57,11 @@ namespace rnlib
 		const tz::gl::buffer_resource& quad_buffer() const;
 		tz::gl::buffer_resource& render_buffer();
 		const tz::gl::buffer_resource& render_buffer() const;
+		tz::gl::buffer_resource& indirect_buffer();
 
 		tz::gl::resource_handle quad_bh = tz::nullhand;
 		tz::gl::resource_handle data_bh = tz::nullhand;
+		tz::gl::resource_handle indirect_bh = tz::nullhand;
 		tz::gl::renderer_handle rh;
 	};
 }

@@ -2,6 +2,7 @@
 #include "gamelib/render/image.hpp"
 #include "tz/core/profile.hpp"
 #include "tz/gl/device.hpp"
+#include "tz/gl/draw.hpp"
 #include "tz/gl/imported_shaders.hpp"
 
 #include ImportedShaderHeader(quad, vertex)
@@ -30,6 +31,17 @@ namespace rnlib
 		{
 			.access = tz::gl::resource_access::dynamic_fixed
 		}));
+		// indirect draw buffer
+		this->indirect_bh = rinfo.add_resource(tz::gl::buffer_resource::from_one(tz::gl::draw_indirect_command
+		{
+			.count = 0u,
+			.first = 0
+		},
+		{
+			.access = tz::gl::resource_access::dynamic_fixed,
+			.flags = {tz::gl::resource_flag::draw_indirect_buffer}
+		}));
+		rinfo.state().graphics.draw_buffer = this->indirect_bh;
 		// all images
 		for(image_id_t i = 0; i < image_id::_count; i++)
 		{
@@ -45,8 +57,7 @@ namespace rnlib
 	{
 		TZ_PROFZONE("quad_renderer - render", 0xffee0077);
 		tz::assert(this->rh != tz::nullhand, "quad_renderer renderer handle is nullhand. initialisation failed in some weird way. submit a bug report.");
-		const std::size_t tri_count = this->quads().size() * 2;
-		tz::gl::get_device().get_renderer(this->rh).render(tri_count);
+		this->indirect_buffer().data_as<tz::gl::draw_indirect_command>().front().count = this->quads().size() * 2 * 3;
 	}
 
 	void quad_renderer::dbgui()
@@ -94,6 +105,11 @@ namespace rnlib
 			}
 			ImGui::EndTabBar();
 		}
+	}
+
+	tz::gl::renderer_handle quad_renderer::get() const
+	{
+		return this->rh;
 	}
 
 	std::span<quad_renderer::quad_data> quad_renderer::quads()
@@ -160,5 +176,10 @@ namespace rnlib
 	const tz::gl::buffer_resource& quad_renderer::render_buffer() const
 	{
 		return *static_cast<const tz::gl::buffer_resource*>(tz::gl::get_device().get_renderer(this->rh).get_resource(this->data_bh));
+	}
+
+	tz::gl::buffer_resource& quad_renderer::indirect_buffer()
+	{
+		return *static_cast<tz::gl::buffer_resource*>(tz::gl::get_device().get_renderer(this->rh).get_resource(this->indirect_bh));
 	}
 }
