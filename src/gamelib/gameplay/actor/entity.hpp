@@ -113,6 +113,7 @@ namespace rnlib
 	enum class actor_type
 	{
 		undefined,
+		doctor_michael_morbius,
 		player_melistra,
 		player_benedict,
 		randomius,

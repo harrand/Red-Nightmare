@@ -81,6 +81,18 @@ namespace rnlib
 			}
 		}
 		tz::assert(mres.error == mount_error::no_error, "unhandled mount_error. please submit a bug report.");
+		if(sys->actors.size())
+		{
+			sys->trenderer.clear();
+			for(rnlib::actor& a : sys->actors.container())
+			{
+				tz::vec2 abscale = a.transform.get_scale();
+				abscale[0] = std::abs(abscale[0]) * 0.75f;
+				abscale[1] = std::abs(abscale[1]);
+				tz::vec2 pos = a.transform.get_position() - abscale;
+				sys->trenderer.add(a.name, pos, tz::vec2{0.05f, 0.05f} * a.transform.get_scale().length());
+			}
+		}
 		sys->qrenderer.render(mres.count);
 		sys->trenderer.render();
 		tz::gl::get_device().render();

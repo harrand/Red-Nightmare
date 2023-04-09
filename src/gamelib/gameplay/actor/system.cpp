@@ -48,6 +48,21 @@ namespace rnlib
 		return res;
 	}
 
+	std::size_t actor_system::size() const
+	{
+		return this->entities.size();
+	}
+
+	std::span<actor> actor_system::container()
+	{
+		return this->entities;
+	}
+
+	std::span<const actor> actor_system::container() const
+	{
+		return this->entities;
+	}
+
 	void actor_system::update(float dt)
 	{
 		constexpr std::size_t arbitrary_serial_update_max = 500;

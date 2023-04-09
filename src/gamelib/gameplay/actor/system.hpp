@@ -16,6 +16,9 @@ namespace rnlib
 		const actor* find(std::size_t uuid) const;
 		actor* find(std::size_t uuid);
 		mount_result mount(std::span<quad_renderer::quad_data> quads);
+		std::size_t size() const;
+		std::span<actor> container();
+		std::span<const actor> container() const;
 		void update(float dt);
 		void dbgui();
 	private:
