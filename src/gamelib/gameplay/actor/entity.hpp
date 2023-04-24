@@ -28,6 +28,7 @@ namespace rnlib
 		keyboard_control,
 		// actor has a set of animations fitting a humanoid skeleton. requires `animation`, `motion`.
 		humanoid_skeleton,
+		skin,
 		_count
 	};
 
@@ -139,13 +140,28 @@ namespace rnlib
 
 	actor create_actor(actor_type type);
 
+
+
 	// component implementations begin.
 	#include "gamelib/gameplay/actor/components/sprite.hpp"
 	#include "gamelib/gameplay/actor/components/animation.hpp"
 	#include "gamelib/gameplay/actor/components/motion.hpp"
 	#include "gamelib/gameplay/actor/components/keyboard_control.hpp"
 	#include "gamelib/gameplay/actor/components/humanoid_skeleton.hpp"
+
+	// prefab implementations.
+	namespace prefab
+	{
+		#include "gamelib/gameplay/actor/prefabs/human.chest.prefab"
+		#include "gamelib/gameplay/actor/prefabs/human.eyes.prefab"
+		#include "gamelib/gameplay/actor/prefabs/human.feet.prefab"
+		#include "gamelib/gameplay/actor/prefabs/human.hair.prefab"
+		#include "gamelib/gameplay/actor/prefabs/human.helm.prefab"
+	}
+
+	#include "gamelib/gameplay/actor/components/skin.hpp"
 	// component implementations end.
+
 }
 
 #endif // RNLIB_GAMEPLAY_ACTOR_HPP

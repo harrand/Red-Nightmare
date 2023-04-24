@@ -15,7 +15,7 @@ namespace human_art
 		return std::find(std::begin(helms_that_hide_hair), std::end(helms_that_hide_hair), t) != std::end(helms_that_hide_hair);
 	}
 
-	std::optional<animation> get_helm(helm_type type, humanoid_skeleton_animation anim_type)
+	inline std::optional<animation> get_helm(helm_type type, humanoid_skeleton_animation anim_type)
 	{
 		switch(type)
 		{

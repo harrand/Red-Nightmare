@@ -7,7 +7,7 @@ namespace human_art
 		_count
 	};
 	
-	std::optional<animation> get_feet(feet_type type, humanoid_skeleton_animation anim_type)
+	inline std::optional<animation> get_feet(feet_type type, humanoid_skeleton_animation anim_type)
 	{
 		switch(type)
 		{

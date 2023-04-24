@@ -18,9 +18,16 @@ namespace rnlib
 
 	void actor_entity::update(float dt, actor& actor)
 	{
+		std::vector<iactor_component*> components;
+		components.reserve(this->components.size());
+		// component update may well add new components, so keep a copy of them for now.
 		for(auto& component_ptr : this->components)
 		{
-			component_ptr->update(dt, actor);
+			components.push_back(component_ptr.get());
+		}
+		for(iactor_component* cmp : components)
+		{
+			cmp->update(dt, actor);
 		}
 	}
 
@@ -65,17 +72,6 @@ namespace rnlib
 		return res;
 	}
 
-	// prefab implementations.
-	namespace prefab
-	{
-		#include "gamelib/gameplay/actor/prefabs/human.chest.prefab"
-		#include "gamelib/gameplay/actor/prefabs/human.eyes.prefab"
-		#include "gamelib/gameplay/actor/prefabs/human.feet.prefab"
-		#include "gamelib/gameplay/actor/prefabs/human.hair.prefab"
-		#include "gamelib/gameplay/actor/prefabs/human.helm.prefab"
-		#include "gamelib/gameplay/actor/prefabs/human.actor.prefab"
-	}
-
 	actor create_actor(actor_type type)
 	{
 		actor a = [](actor_type t)->actor
@@ -111,6 +107,7 @@ namespace rnlib
 			return {};
 		}(type);
 		a.type = type;
+		a.entity.add_component<actor_component_id::keyboard_control>({.enabled = false});
 		return a;
 	}
 }

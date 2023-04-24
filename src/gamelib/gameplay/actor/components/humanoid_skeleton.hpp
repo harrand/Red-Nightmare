@@ -26,18 +26,25 @@ inline void actor_component_update<actor_component_id::humanoid_skeleton>
 	actor& actor
 )
 {
+	auto get_pose = [&component](humanoid_skeleton_animation anim)
+	{
+		return component.data().poses[static_cast<int>(anim)];
+	};
 	// check that our dependent components exist.
-	tz::assert(actor.entity.has_component<actor_component_id::animation>(), "`humanoid_skeleton` component detected on an entity, but the entity doesn't have an `animation` component to manipulate!");
-	tz::assert(actor.entity.has_component<actor_component_id::motion>(), "`humanoid_skeleton` component detected on an entity, but the entity doesn't have a `motion` component to manipulate!");
+	if(!actor.entity.has_component<actor_component_id::animation>())
+	{
+		// add an animation component with a set of empty animations that we will manipulate.
+		actor.entity.add_component<actor_component_id::animation>(get_pose(humanoid_skeleton_animation::idle));
+	}
+	if(!actor.entity.has_component<actor_component_id::motion>())
+	{
+		actor.entity.add_component<actor_component_id::motion>();
+	}
 	auto& animation = *actor.entity.get_component<actor_component_id::animation>();
 	auto& motion = *actor.entity.get_component<actor_component_id::motion>();
 	// set our animation depending on what the motion says our move direction currently is.
 
 	move_direction_t dir = motion.data().direction;
-	auto get_pose = [&component](humanoid_skeleton_animation anim)
-	{
-		return component.data().poses[static_cast<int>(anim)];
-	};
 
 	if(component.data().impl_movedir == dir)
 	{

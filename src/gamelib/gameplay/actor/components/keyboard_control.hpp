@@ -19,7 +19,10 @@ inline void actor_component_update<actor_component_id::keyboard_control>
 	actor& actor
 )
 {
-	tz::assert(actor.entity.has_component<actor_component_id::motion>(), "`keyboard_control` component detected on an entity, but the entity doesn't have a `motion` component to manipulate!");
+	if(!actor.entity.has_component<actor_component_id::motion>())
+	{
+		actor.entity.add_component<actor_component_id::motion>();
+	}
 	auto& motion = actor.entity.get_component<actor_component_id::motion>()->data();
 
 	const auto& state = tz::window().get_keyboard_state();

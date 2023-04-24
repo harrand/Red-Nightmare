@@ -1,20 +1,25 @@
-return prefab::human
-({
-	.skin_colour = {1.0f, 0.895f, 0.709f},
-	.hair_style = prefab::human_art::hair_style::lord,
-	.hair_colour = {0.12f, 0.10f, 0.10f},
-	.eye_type = prefab::human_art::eye_type::dots,
-	.eye_colour = {0.97f, 0.12f, 0.09f},
-	.chest_type = prefab::human_art::chest_type::warrior,
-	.chest_colour = {0.04f, 0.03f, 0.03f},
-	.feet_type = prefab::human_art::feet_type::dots,
-	.feet_colour = {0.0f, 0.0f, 0.0f},
-	.data =
+return actor
+{
+	.entity =
 	{
-		.entity =
-		{
-			actor_component<actor_component_id::keyboard_control>{}
-		},
-		.name = "Doctor Michael Morbius",
-	}
-});
+		actor_component<actor_component_id::skin>
+		{{
+			.data =
+			{
+				.skin_colour = {1.0f, 0.895f, 0.709f},
+				.hair_style = prefab::human_art::hair_style::lord,
+				.hair_colour = {0.12f, 0.10f, 0.10f},
+				.eye_type = prefab::human_art::eye_type::dots,
+				.eye_colour = {0.97f, 0.12f, 0.09f},
+				.equipment =
+				{
+					.chest_type = prefab::human_art::chest_type::warrior,
+					.chest_colour = {0.04f, 0.03f, 0.03f},
+					.feet_type = prefab::human_art::feet_type::dots,
+					.feet_colour = {0.0f, 0.0f, 0.0f}
+				}
+			}
+		}}
+	},
+	.name = "Doctor Michael Morbius"
+};
