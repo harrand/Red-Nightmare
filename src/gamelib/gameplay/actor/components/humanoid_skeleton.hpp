@@ -16,6 +16,7 @@ struct actor_component_params<actor_component_id::humanoid_skeleton>
 	bool move_animation_affected_by_speed = true;
 	// implementation detail. if we were moving left last update and we still are, we dont want to re-assign the animation as it would reset the animation timer and stick in the same frame forever.
 	move_direction_t impl_movedir = 0b100000;
+	bool should_repaint = false;
 };
 
 template<>
@@ -45,6 +46,12 @@ inline void actor_component_update<actor_component_id::humanoid_skeleton>
 	// set our animation depending on what the motion says our move direction currently is.
 
 	move_direction_t dir = motion.data().direction;
+	if(component.data().should_repaint)
+	{
+		animation.data() = get_pose(humanoid_skeleton_animation::idle);
+		component.data().should_repaint = false;
+		return;
+	}
 
 	if(component.data().impl_movedir == dir)
 	{

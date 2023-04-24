@@ -107,7 +107,7 @@ namespace rnlib
 			return {};
 		}(type);
 		a.type = type;
-		a.entity.add_component<actor_component_id::keyboard_control>({.enabled = false});
+		a.entity.add_component<actor_component_id::keyboard_control>();
 		return a;
 	}
 }

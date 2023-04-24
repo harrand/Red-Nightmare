@@ -21,6 +21,7 @@ template<>
 struct actor_component_params<actor_component_id::skin>
 {
 	skin_data data = {};
+	bool impl_dirty = false;
 };
 
 template<>
@@ -59,6 +60,11 @@ inline void actor_component_update<actor_component_id::skin>
 	sprite.data().textures[4].colour_tint = component.data().data.equipment.feet_colour;
 	sprite.data().textures[5].colour_tint = component.data().data.skin_colour;
 	auto& skel = *actor.entity.get_component<actor_component_id::humanoid_skeleton>();
+	if(component.data().impl_dirty)
+	{
+		skel.data().should_repaint = true;
+		component.data().impl_dirty = false;
+	}
 	auto get_hair_final = [](prefab::human_art::hair_style style, humanoid_skeleton_animation anim, prefab::human_art::helm_type helm)
 	{
 		if(prefab::human_art::helm_hides_hair(helm))
@@ -162,4 +168,22 @@ inline void actor_component_update<actor_component_id::skin>
 			}}
 		}
 	};
+}
+
+template<>
+inline void actor_component_dbgui(actor_component<actor_component_id::skin>& component)
+{
+	ImGui::SliderFloat3("Skin Colour", component.data().data.skin_colour.data().data(), 0.0f, 1.0f);
+	ImGui::Spacing();
+	component.data().impl_dirty |= ImGui::SliderInt("Hair Style", reinterpret_cast<int*>(&component.data().data.hair_style), 0, static_cast<int>(prefab::human_art::hair_style::_count) - 1);
+	ImGui::SliderFloat3("Hair Colour", component.data().data.hair_colour.data().data(), 0.0f, 1.0f);
+	ImGui::Spacing();
+	ImGui::SliderFloat3("Eye Colour", component.data().data.eye_colour.data().data(), 0.0f, 1.0f);
+	ImGui::Spacing();
+	component.data().impl_dirty |= ImGui::SliderInt("Helm", reinterpret_cast<int*>(&component.data().data.equipment.helm_type), 0, static_cast<int>(prefab::human_art::helm_type::_count) - 1);
+	ImGui::SliderFloat3("Helm Colour", component.data().data.equipment.helm_colour.data().data(), 0.0f, 1.0f);
+	ImGui::Spacing();
+	component.data().impl_dirty |= ImGui::SliderInt("Chest", reinterpret_cast<int*>(&component.data().data.equipment.chest_type), 0, static_cast<int>(prefab::human_art::chest_type::_count) - 1);
+	ImGui::SliderFloat3("Chest Colour", component.data().data.equipment.chest_colour.data().data(), 0.0f, 1.0f);
+	ImGui::Spacing();
 }
