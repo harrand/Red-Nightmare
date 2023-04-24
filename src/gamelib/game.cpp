@@ -1,6 +1,7 @@
 #include "gamelib/game.hpp"
 #include "gamelib/render/font.hpp"
 #include "gamelib/render/quad_renderer.hpp"
+#include "gamelib/render/scene_renderer.hpp"
 #include "gamelib/render/text_renderer.hpp"
 #include "gamelib/render/camera.hpp"
 #include "gamelib/gameplay/actor/system.hpp"
@@ -13,6 +14,7 @@ namespace rnlib
 	struct system
 	{
 		quad_renderer qrenderer;
+		scene_renderer srenderer;
 		text_renderer trenderer{rnlib::font::lucida_sans_regular};
 		actor_system actors;
 		camera cam;
@@ -41,6 +43,15 @@ namespace rnlib
 		});
 		tz::gl::get_device().render_graph().add_dependencies(sys->trenderer.get(), sys->qrenderer.get());
 		tz::gl::get_device().render_graph().timeline = {sys->qrenderer.get(), sys->trenderer.get()};
+		auto effects = sys->srenderer.get_effects();
+		// quad renderer depends on all effects being finished (?)
+		for(tz::gl::renderer_handle effect : effects)
+		{
+			tz::gl::get_device().render_graph().add_dependencies(sys->qrenderer.get(), effect);
+			// each effect goes to the front of the timeline as they happen first.
+			auto& tl = tz::gl::get_device().render_graph().timeline;
+			tl.insert(tl.begin(), static_cast<unsigned int>(static_cast<tz::hanval>(effect)));
+		}
 	}
 
 	void terminate()
@@ -129,6 +140,7 @@ namespace rnlib
 		TZ_PROFZONE("rnlib - update", 0xff0077ee);
 		tz::assert(sys != nullptr, "rnlib never initialised. please submit a bug report.");
 		sys->actors.update(dt);
+		sys->srenderer.update();
 		handle_camera_zoom();
 	}
 

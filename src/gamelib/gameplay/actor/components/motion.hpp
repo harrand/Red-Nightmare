@@ -57,7 +57,9 @@ inline void actor_component_update<actor_component_id::motion>
 template<>
 inline void actor_component_dbgui(actor_component<actor_component_id::motion>& component)
 {
-	ImGui::SliderFloat("Speed", &component.data().speed, 0.0f, 1.0f);
+	ImGui::SliderFloat("Speed", &component.data().speed, 0.0f, 3.0f);
+	ImGui::SliderFloat("Tilt Factor", &component.data().tilt_factor, 0.0f, 0.5f);
+	ImGui::SliderFloat("Tilt Rate", &component.data().tilt_rate, 0.0f, 0.25f);
 	ImGui::Text("Direction:  %s", [](move_direction_t dir)
 	{
 		std::string str = "";
@@ -80,4 +82,8 @@ inline void actor_component_dbgui(actor_component<actor_component_id::motion>& c
 		if(str.empty()) str = "none";
 		return str;
 	}(component.data().direction).c_str());
+	if(ImGui::Button("Defaults"))
+	{
+		component.data() = {};
+	}
 }

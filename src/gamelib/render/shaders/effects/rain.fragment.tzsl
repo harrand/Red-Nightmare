@@ -1,0 +1,43 @@
+shader(type = fragment);
+
+import <noise>
+import <math>
+
+output(id = 0) vec4 frag_colour;
+
+resource(id = 0) const buffer GlobalEffectBuffer
+{
+	uint time;
+} gdata;
+
+const float rain_speed = 0.2;
+const float rain_density = 0.4f;
+const float rain_scale = 0.1f;
+const vec2 rain_direction = vec2(0.5f, -1.0f);
+const float layer_strength = 0.2f;
+const uint noise_layers = 3;
+
+float rain(vec2 uv)
+{
+	float rand = tz::noise::gold(vec2(uv.x) / rain_scale);
+	return tz::noise::simplex(uv + vec2(rand, 0.0));
+}
+
+void main()
+{
+	const vec3 rain_colour = vec3(0.0, 0.235, 0.361) * 1.5f;
+	vec2 real_rain_dir = vec2(-rain_direction.x, rain_direction.y);
+
+	vec2 uv = in::fragment_coord.xy + real_rain_dir * gdata.time * rain_speed;
+	uv *= rain_scale;
+
+	float alpha = 0.0f;
+	alpha += rain(uv);
+	// Add another layer of noise so its a bit more, er, noisey.
+	for(uint i = 0; i < noise_layers; i++)
+	{
+		float n = float(noise_layers) * layer_strength;
+		alpha += rain(uv * float(noise_layers) * n) * n;
+	}
+	frag_colour = vec4(rain_colour, alpha * rain_density);
+}

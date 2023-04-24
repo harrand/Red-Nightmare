@@ -40,6 +40,8 @@ tz_add_library(
 		src/gamelib/render/image.hpp
 		src/gamelib/render/quad_renderer.cpp
 		src/gamelib/render/quad_renderer.hpp
+		src/gamelib/render/scene_renderer.cpp
+		src/gamelib/render/scene_renderer.hpp
 		src/gamelib/render/text_renderer.cpp
 		src/gamelib/render/text_renderer.hpp
 
@@ -59,6 +61,8 @@ add_shader(
 	src/gamelib/render/shaders/quad.fragment.tzsl
 	src/gamelib/render/shaders/text.vertex.tzsl
 	src/gamelib/render/shaders/text.fragment.tzsl
+	src/gamelib/render/shaders/effects/rain.vertex.tzsl
+	src/gamelib/render/shaders/effects/rain.fragment.tzsl
 )
 
 target_link_libraries(rnlib PUBLIC stb freetype)
