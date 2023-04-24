@@ -61,6 +61,9 @@ add_shader(
 	src/gamelib/render/shaders/quad.fragment.tzsl
 	src/gamelib/render/shaders/text.vertex.tzsl
 	src/gamelib/render/shaders/text.fragment.tzsl
+
+	src/gamelib/render/shaders/effects/layer.vertex.tzsl
+	src/gamelib/render/shaders/effects/layer.fragment.tzsl
 	src/gamelib/render/shaders/effects/rain.vertex.tzsl
 	src/gamelib/render/shaders/effects/rain.fragment.tzsl
 )

@@ -42,15 +42,20 @@ namespace rnlib
 			ImGui::MenuItem("Actor System", nullptr, &dbgui_data.show_actor_system);
 		});
 		tz::gl::get_device().render_graph().add_dependencies(sys->trenderer.get(), sys->qrenderer.get());
-		tz::gl::get_device().render_graph().timeline = {sys->qrenderer.get(), sys->trenderer.get()};
+		tz::gl::get_device().render_graph().add_dependencies(sys->qrenderer.get(), sys->srenderer.get_layer_renderer());
+		tz::gl::get_device().render_graph().timeline = {sys->srenderer.get_layer_renderer(), sys->qrenderer.get(), sys->trenderer.get()};
 		auto effects = sys->srenderer.get_effects();
 		// quad renderer depends on all effects being finished (?)
 		for(tz::gl::renderer_handle effect : effects)
 		{
-			tz::gl::get_device().render_graph().add_dependencies(sys->qrenderer.get(), effect);
+			tz::gl::get_device().render_graph().add_dependencies(sys->srenderer.get_layer_renderer(), effect);
 			// each effect goes to the front of the timeline as they happen first.
 			auto& tl = tz::gl::get_device().render_graph().timeline;
 			tl.insert(tl.begin(), static_cast<unsigned int>(static_cast<tz::hanval>(effect)));
+		}
+		for(std::size_t i = 0; i < 50; i++)
+		{
+			sys->actors.add(actor_type::randomius);
 		}
 	}
 

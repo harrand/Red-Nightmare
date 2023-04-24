@@ -25,6 +25,8 @@ namespace rnlib
 		scene_renderer();
 		std::array<tz::gl::renderer_handle, static_cast<std::size_t>(effect_type::_count) - 1> get_effects() const;
 		void update();
+		std::span<std::uint32_t> effect();
+		tz::gl::renderer_handle get_layer_renderer() const;
 	private:
 		struct effect_data
 		{
@@ -40,6 +42,8 @@ namespace rnlib
 
 		tz::gl::renderer_handle global_storage = tz::nullhand;
 		tz::gl::resource_handle global_buffer = tz::nullhand;
+		tz::gl::renderer_handle layer_renderer = tz::nullhand;
+		tz::gl::resource_handle layer_texture_buffer = tz::nullhand;
 		std::array<effect_data, static_cast<int>(effect_type::_count) - 1> effects = {};
 		tz::duration creation = tz::system_time();
 	};

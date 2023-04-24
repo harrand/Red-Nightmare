@@ -65,9 +65,11 @@ namespace rnlib
 
 	void actor_system::update(float dt)
 	{
+		TZ_PROFZONE("actor_system - update", 0xffee0077);
 		constexpr std::size_t arbitrary_serial_update_max = 250;
 		if(this->entities.size() < arbitrary_serial_update_max)
 		{
+			TZ_PROFZONE("actor_system - serial update", 0xffee0077);
 			// if we dont have that many entities, do them all now.
 			for(auto& entity : this->entities)
 			{
@@ -85,6 +87,7 @@ namespace rnlib
 		{
 			jobs[i] = tz::job_system().execute([this, i, dt, job_batch_size](){this->update_n(i * job_batch_size, job_batch_size, dt);});
 		}
+		TZ_PROFZONE("actor_system - parallel update", 0xffee0077);
 		this->update_n(ecount - remainder_jobs, remainder_jobs, dt);
 		for(tz::job_handle jh : jobs)
 		{
@@ -165,11 +168,13 @@ namespace rnlib
 
 	void actor_system::update_one(std::size_t eid, float dt)
 	{
+		TZ_PROFZONE("actor_system - update one", 0xffee0077);
 		this->entities[eid].update(dt);
 	}
 
 	void actor_system::update_n(std::size_t eid_begin, std::size_t n, float dt)
 	{
+		TZ_PROFZONE("actor_system - update n", 0xffee0077);
 		for(std::size_t i = eid_begin; i < (eid_begin + n); i++)
 		{
 			tz::assert(i < this->entities.size());

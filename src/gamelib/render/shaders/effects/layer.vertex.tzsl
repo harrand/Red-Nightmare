@@ -1,0 +1,28 @@
+shader(type = vertex);
+
+output(id = 0) uint texid[4];
+output(id = 4) vec2 texcoord;
+resource(id = 0) const buffer texbuf
+{
+	uint texid[4];
+} texture_buffer;
+
+vec2 quad_positions[6] = vec2[](
+	vec2(-1.0, -1.0), vec2(1.0, 1.0), vec2(1.0, -1.0),
+	vec2(-1.0, -1.0), vec2(-1.0, 1.0), vec2(1.0, 1.0)
+);
+
+vec2 quad_texcoords[6] = vec2[](
+	vec2(0.0, 1.0), vec2(1.0, 0.0), vec2(1.0, 1.0),
+	vec2(0.0, 1.0), vec2(0.0, 0.0), vec2(1.0, 0.0)
+);
+
+void main()
+{
+	out::position = vec4(quad_positions[in::vertex_id % 6], 0.0f, 1.0f);
+	texcoord = quad_texcoords[in::vertex_id % 6];
+	for(uint i = 0; i < 4; i++)
+	{
+		texid[i] = texture_buffer.texid[i];
+	}
+}

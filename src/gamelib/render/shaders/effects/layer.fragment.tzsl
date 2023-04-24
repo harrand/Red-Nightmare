@@ -1,0 +1,19 @@
+shader(type = fragment);
+
+input(id = 0, flat) uint texid[4];
+input(id = 4) vec2 texcoord;
+output(id = 0) vec4 out_col;
+resource(id = 1) const texture images[];
+
+void main()
+{
+	out_col = vec4(0.0);
+	for(uint i = 0; i < 4; i++)
+	{
+		out_col += texture(images[texid[i]], texcoord);
+	}
+	if(out_col.a < 0.95f)
+	{
+		discard;
+	}
+}

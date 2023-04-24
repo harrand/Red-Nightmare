@@ -8,6 +8,7 @@ namespace rnlib
 
 	mount_result actor_entity::mount(std::span<quad_renderer::quad_data> quads) const
 	{
+		TZ_PROFZONE("actor_entity - mount", 0xffee0077);
 		mount_result res;
 		for(auto& component_ptr : this->components)
 		{
@@ -18,6 +19,7 @@ namespace rnlib
 
 	void actor_entity::update(float dt, actor& actor)
 	{
+		TZ_PROFZONE("actor_entity - update", 0xffee0077);
 		std::vector<iactor_component*> components;
 		components.reserve(this->components.size());
 		// component update may well add new components, so keep a copy of them for now.
@@ -56,11 +58,13 @@ namespace rnlib
 
 	void actor::update(float dt)
 	{
+		TZ_PROFZONE("actor - update", 0xffee0077);
 		this->entity.update(dt, *this);
 	}
 
 	mount_result actor::mount(std::span<quad_renderer::quad_data> quads) const
 	{
+		TZ_PROFZONE("actor - mount", 0xffee0077);
 		mount_result res = this->entity.mount(quads);
 		for(std::size_t i = 0; i < res.count; i++)
 		{
@@ -74,6 +78,7 @@ namespace rnlib
 
 	actor create_actor(actor_type type)
 	{
+		TZ_PROFZONE("actor - create_actor", 0xffee0077);
 		actor a = [](actor_type t)->actor
 		{
 			switch(t)
