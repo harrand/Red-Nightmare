@@ -53,10 +53,6 @@ namespace rnlib
 			auto& tl = tz::gl::get_device().render_graph().timeline;
 			tl.insert(tl.begin(), static_cast<unsigned int>(static_cast<tz::hanval>(effect)));
 		}
-		for(std::size_t i = 0; i < 50; i++)
-		{
-			sys->actors.add(actor_type::randomius);
-		}
 	}
 
 	void terminate()

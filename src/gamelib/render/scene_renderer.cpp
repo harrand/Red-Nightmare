@@ -62,6 +62,7 @@ namespace rnlib
 			rinfo.state().graphics.tri_count = 2;
 			rinfo.shader().set_shader(tz::gl::shader_stage::vertex, ImportedShaderSource(layer, vertex));
 			rinfo.shader().set_shader(tz::gl::shader_stage::fragment, ImportedShaderSource(layer, fragment));
+			rinfo.set_options({tz::gl::renderer_option::no_present});
 			this->layer_texture_buffer = rinfo.add_resource(tz::gl::buffer_resource::from_one(layer_texture_ids,
 			{
 				.access = tz::gl::resource_access::dynamic_fixed
@@ -127,7 +128,7 @@ namespace rnlib
 		rinfo.state().graphics.tri_count = 1;
 		rinfo.shader().set_shader(tz::gl::shader_stage::vertex, ImportedShaderSource(rain, vertex));
 		rinfo.shader().set_shader(tz::gl::shader_stage::fragment, ImportedShaderSource(rain, fragment));
-		rinfo.set_options({tz::gl::renderer_option::no_depth_testing});
+		rinfo.set_options({tz::gl::renderer_option::no_depth_testing, tz::gl::renderer_option::no_present});
 		rinfo.ref_resource(this->global_storage, this->global_buffer);
 		// set output to the storage renderer's image.
 		rinfo.set_output(tz::gl::image_output
