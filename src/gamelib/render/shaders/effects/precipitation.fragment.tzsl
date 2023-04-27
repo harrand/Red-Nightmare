@@ -19,11 +19,12 @@ resource(id = 1) const buffer RainBuffer
 	float layer_strength;
 	uint noise_layer_count;
 	vec3 colour;
+	vec3 rand_colour_tint;
 } rain;
 
 float get_rain(vec2 uv)
 {
-	float rand = tz::noise::gold(vec2(uv.x) / rain.scale);
+	float rand = tz::noise::simplex(vec2(uv.x) / rain.scale);
 	return tz::noise::simplex(uv + vec2(rand, 0.0));
 }
 
@@ -42,5 +43,6 @@ void main()
 		float n = float(rain.noise_layer_count) * rain.layer_strength;
 		alpha += get_rain(uv * float(rain.noise_layer_count) * n) * n;
 	}
-	frag_colour = vec4(rain.colour, alpha * rain.density);
+	vec3 random_colour_increase = rain.rand_colour_tint * get_rain(uv * 123435.0f);
+	frag_colour = vec4(rain.colour + random_colour_increase, alpha * rain.density);
 }

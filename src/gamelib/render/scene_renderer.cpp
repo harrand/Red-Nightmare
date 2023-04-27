@@ -121,14 +121,16 @@ namespace rnlib
 
 	struct precipitation_buffer_data
 	{
-		float precipitation_speed = 0.2f;
-		float precipitation_density = 0.4f;
+		float precipitation_speed = 0.4f;
+		float precipitation_density = 0.5f;
 		float precipitation_scale = 0.1f;
 		float pad0;
 		tz::vec2 precipitation_direction = {0.5f, -1.0f};
 		float layer_strength = 0.2f;
 		std::uint32_t noise_layers = 3;
 		tz::vec3 colour = {0.0f, 0.3f, 0.5f};
+		float pad1;
+		tz::vec3 random_colour_tint_max = {0.0f, 0.0f, 0.0f};
 	};
 
 
@@ -183,10 +185,11 @@ namespace rnlib
 		auto& precipitation = res->data_as<precipitation_buffer_data>().front();
 		ImGui::SliderFloat("Speed", &precipitation.precipitation_speed, -1.0f, 1.0f);
 		ImGui::SliderFloat("Density", &precipitation.precipitation_density, 0.0f, 1.0f);
-		ImGui::SliderFloat("Scale", &precipitation.precipitation_scale, 0.0f, 0.5f);
+		ImGui::SliderFloat("Scale", &precipitation.precipitation_scale, 0.01f, 0.5f);
 		ImGui::SliderFloat2("Direction", precipitation.precipitation_direction.data().data(), -1.0f, 1.0f);
 		ImGui::SliderFloat("Layer Strength", &precipitation.layer_strength, 0.0f, 1.0f);
 		ImGui::SliderInt("Noise Layers", reinterpret_cast<int*>(&precipitation.noise_layers), 1, 5, "%u");
 		ImGui::SliderFloat3("Colour", precipitation.colour.data().data(), 0.0f, 1.0f);
+		ImGui::SliderFloat3("Random Colour Tint", precipitation.random_colour_tint_max.data().data(), 0.0f, 1.0f);
 	}
 }
