@@ -64,8 +64,8 @@ add_shader(
 
 	src/gamelib/render/shaders/effects/layer.vertex.tzsl
 	src/gamelib/render/shaders/effects/layer.fragment.tzsl
-	src/gamelib/render/shaders/effects/rain.vertex.tzsl
-	src/gamelib/render/shaders/effects/rain.fragment.tzsl
+	src/gamelib/render/shaders/effects/precipitation.vertex.tzsl
+	src/gamelib/render/shaders/effects/precipitation.fragment.tzsl
 )
 
 target_link_libraries(rnlib PUBLIC stb freetype)

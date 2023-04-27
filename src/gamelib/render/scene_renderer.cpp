@@ -5,8 +5,8 @@
 
 #include ImportedShaderHeader(empty, vertex)
 #include ImportedShaderHeader(empty, fragment)
-#include ImportedShaderHeader(rain, vertex)
-#include ImportedShaderHeader(rain, fragment)
+#include ImportedShaderHeader(precipitation, vertex)
+#include ImportedShaderHeader(precipitation, fragment)
 #include ImportedShaderHeader(layer, vertex)
 #include ImportedShaderHeader(layer, fragment)
 
@@ -42,8 +42,8 @@ namespace rnlib
 			TZ_PROFZONE("scene_renderer - create effects", 0xffee0077);
 			switch(static_cast<effect_type>(i))
 			{
-				case effect_type::rain:
-					this->effects[i-1] = scene_renderer::make_rain_effect();
+				case effect_type::precipitation:
+					this->effects[i-1] = scene_renderer::make_precipitation_effect();
 				break;
 			}
 		}
@@ -76,7 +76,7 @@ namespace rnlib
 			return tz::gl::get_device().create_renderer(rinfo);
 		}();
 
-		this->effect().front() = static_cast<std::uint32_t>(effect_type::rain);
+		this->effect().front() = static_cast<std::uint32_t>(effect_type::precipitation);
 	}
 
 	std::array<tz::gl::renderer_handle, static_cast<std::size_t>(effect_type::_count) - 1> scene_renderer::get_effects() const
@@ -102,10 +102,10 @@ namespace rnlib
 		auto effect_span = this->effect();
 		if(std::any_of(effect_span.begin(), effect_span.end(), [](std::uint32_t e)
 		{
-			return e == static_cast<int>(effect_type::rain);
+			return e == static_cast<int>(effect_type::precipitation);
 		}))
 		{
-			this->dbgui_rain();
+			this->dbgui_precipitation();
 		}
 	}
 
@@ -119,26 +119,26 @@ namespace rnlib
 		return this->layer_renderer;
 	}
 
-	struct rain_buffer_data
+	struct precipitation_buffer_data
 	{
-		float rain_speed = 0.2f;
-		float rain_density = 0.4f;
-		float rain_scale = 0.1f;
+		float precipitation_speed = 0.2f;
+		float precipitation_density = 0.4f;
+		float precipitation_scale = 0.1f;
 		float pad0;
-		tz::vec2 rain_direction = {0.5f, -1.0f};
+		tz::vec2 precipitation_direction = {0.5f, -1.0f};
 		float layer_strength = 0.2f;
 		std::uint32_t noise_layers = 3;
 		tz::vec3 colour = {0.0f, 0.3f, 0.5f};
 	};
 
 
-	scene_renderer::effect_data scene_renderer::make_rain_effect()
+	scene_renderer::effect_data scene_renderer::make_precipitation_effect()
 	{
-		TZ_PROFZONE("scene_renderer - create rain effect", 0xffee0077);
+		TZ_PROFZONE("scene_renderer - create precipitation effect", 0xffee0077);
 		scene_renderer::effect_data ret;
 
 		tz::gl::renderer_info sinfo;
-		sinfo.debug_name("Rain Effect Storage");
+		sinfo.debug_name("Precipitation Effect Storage");
 		ret.storage_resource = sinfo.add_resource(tz::gl::image_resource::from_uninitialised
 		({
 			.format = tz::gl::image_format::BGRA32,
@@ -150,14 +150,14 @@ namespace rnlib
 		ret.storage = tz::gl::get_device().create_renderer(sinfo);
 
 		tz::gl::renderer_info rinfo;
-		rinfo.debug_name("Rain Effect Renderer");
+		rinfo.debug_name("Precipitation Effect Renderer");
 		rinfo.state().graphics.tri_count = 1;
-		rinfo.shader().set_shader(tz::gl::shader_stage::vertex, ImportedShaderSource(rain, vertex));
-		rinfo.shader().set_shader(tz::gl::shader_stage::fragment, ImportedShaderSource(rain, fragment));
+		rinfo.shader().set_shader(tz::gl::shader_stage::vertex, ImportedShaderSource(precipitation, vertex));
+		rinfo.shader().set_shader(tz::gl::shader_stage::fragment, ImportedShaderSource(precipitation, fragment));
 		rinfo.set_options({tz::gl::renderer_option::no_depth_testing, tz::gl::renderer_option::no_present});
 		rinfo.ref_resource(this->global_storage, this->global_buffer);
 
-		ret.extra_resource = rinfo.add_resource(tz::gl::buffer_resource::from_one(rain_buffer_data{},
+		ret.extra_resource = rinfo.add_resource(tz::gl::buffer_resource::from_one(precipitation_buffer_data{},
 		{
 			#if TZ_DEBUG
 			.access = tz::gl::resource_access::dynamic_fixed
@@ -175,18 +175,18 @@ namespace rnlib
 		return ret;
 	}
 
-	void scene_renderer::dbgui_rain()
+	void scene_renderer::dbgui_precipitation()
 	{
-		const auto& effect = this->effects[static_cast<int>(effect_type::rain) - 1];
+		const auto& effect = this->effects[static_cast<int>(effect_type::precipitation) - 1];
 		tz::gl::iresource* res = tz::gl::get_device().get_renderer(effect.effect).get_resource(effect.extra_resource);
 		tz::assert(res != nullptr);
-		auto& rain = res->data_as<rain_buffer_data>().front();
-		ImGui::SliderFloat("Speed", &rain.rain_speed, -1.0f, 1.0f);
-		ImGui::SliderFloat("Density", &rain.rain_density, 0.0f, 1.0f);
-		ImGui::SliderFloat("Scale", &rain.rain_scale, 0.0f, 0.5f);
-		ImGui::SliderFloat2("Direction", rain.rain_direction.data().data(), -1.0f, 1.0f);
-		ImGui::SliderFloat("Layer Strength", &rain.layer_strength, 0.0f, 1.0f);
-		ImGui::SliderInt("Noise Layers", reinterpret_cast<int*>(&rain.noise_layers), 1, 5, "%u");
-		ImGui::SliderFloat3("Colour", rain.colour.data().data(), 0.0f, 1.0f);
+		auto& precipitation = res->data_as<precipitation_buffer_data>().front();
+		ImGui::SliderFloat("Speed", &precipitation.precipitation_speed, -1.0f, 1.0f);
+		ImGui::SliderFloat("Density", &precipitation.precipitation_density, 0.0f, 1.0f);
+		ImGui::SliderFloat("Scale", &precipitation.precipitation_scale, 0.0f, 0.5f);
+		ImGui::SliderFloat2("Direction", precipitation.precipitation_direction.data().data(), -1.0f, 1.0f);
+		ImGui::SliderFloat("Layer Strength", &precipitation.layer_strength, 0.0f, 1.0f);
+		ImGui::SliderInt("Noise Layers", reinterpret_cast<int*>(&precipitation.noise_layers), 1, 5, "%u");
+		ImGui::SliderFloat3("Colour", precipitation.colour.data().data(), 0.0f, 1.0f);
 	}
 }

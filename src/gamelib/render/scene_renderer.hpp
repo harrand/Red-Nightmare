@@ -10,7 +10,7 @@ namespace rnlib
 	enum class effect_type
 	{
 		none,
-		rain,
+		precipitation,
 		_count
 	};
 	// scenes renderers draw the background of a particular scene.
@@ -18,7 +18,7 @@ namespace rnlib
 	// backdrop
 	//	- background and foreground 
 	//	(example: background is a grassy field, and foreground is a set of roads, buildings etc...)
-	// a list of effects that draws over the backdrop. e.g rain and other environmental effects
+	// a list of effects that draws over the backdrop. e.g precipitation and other environmental effects
 	class scene_renderer
 	{
 	public:
@@ -41,8 +41,8 @@ namespace rnlib
 			tz::gl::resource_handle extra_resource = tz::nullhand;
 		};
 
-		effect_data make_rain_effect();
-		void dbgui_rain();
+		effect_data make_precipitation_effect();
+		void dbgui_precipitation();
 
 		tz::gl::renderer_handle global_storage = tz::nullhand;
 		tz::gl::resource_handle global_buffer = tz::nullhand;
