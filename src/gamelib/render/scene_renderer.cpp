@@ -93,7 +93,20 @@ namespace rnlib
 	{
 		TZ_PROFZONE("scene_renderer - update", 0xffee0077);
 		global_effect_data& gdata = tz::gl::get_device().get_renderer(this->global_storage).get_resource(this->global_buffer)->data_as<global_effect_data>().front();
-		gdata.time = (tz::system_time() - this->creation).millis<std::uint32_t>();
+		gdata.time = (tz::system_time() - this->creation).millis<std::uint32_t>() * this->effect_timer_multiplier;
+	}
+
+	void scene_renderer::dbgui()
+	{
+		ImGui::SliderFloat("Time Flow", &this->effect_timer_multiplier, 0.25f, 10.0f);	
+		auto effect_span = this->effect();
+		if(std::any_of(effect_span.begin(), effect_span.end(), [](std::uint32_t e)
+		{
+			return e == static_cast<int>(effect_type::rain);
+		}))
+		{
+			this->dbgui_rain();
+		}
 	}
 
 	std::span<std::uint32_t> scene_renderer::effect()
@@ -105,6 +118,19 @@ namespace rnlib
 	{
 		return this->layer_renderer;
 	}
+
+	struct rain_buffer_data
+	{
+		float rain_speed = 0.2f;
+		float rain_density = 0.4f;
+		float rain_scale = 0.1f;
+		float pad0;
+		tz::vec2 rain_direction = {0.5f, -1.0f};
+		float layer_strength = 0.2f;
+		std::uint32_t noise_layers = 3;
+		tz::vec3 colour = {0.0f, 0.3f, 0.5f};
+	};
+
 
 	scene_renderer::effect_data scene_renderer::make_rain_effect()
 	{
@@ -130,6 +156,15 @@ namespace rnlib
 		rinfo.shader().set_shader(tz::gl::shader_stage::fragment, ImportedShaderSource(rain, fragment));
 		rinfo.set_options({tz::gl::renderer_option::no_depth_testing, tz::gl::renderer_option::no_present});
 		rinfo.ref_resource(this->global_storage, this->global_buffer);
+
+		ret.extra_resource = rinfo.add_resource(tz::gl::buffer_resource::from_one(rain_buffer_data{},
+		{
+			#if TZ_DEBUG
+			.access = tz::gl::resource_access::dynamic_fixed
+			#else
+			.access = tz::gl::resource_access::static_fixed
+			#endif
+		}));
 		// set output to the storage renderer's image.
 		rinfo.set_output(tz::gl::image_output
 		{{
@@ -138,5 +173,20 @@ namespace rnlib
 		ret.effect = tz::gl::get_device().create_renderer(rinfo);
 
 		return ret;
+	}
+
+	void scene_renderer::dbgui_rain()
+	{
+		const auto& effect = this->effects[static_cast<int>(effect_type::rain) - 1];
+		tz::gl::iresource* res = tz::gl::get_device().get_renderer(effect.effect).get_resource(effect.extra_resource);
+		tz::assert(res != nullptr);
+		auto& rain = res->data_as<rain_buffer_data>().front();
+		ImGui::SliderFloat("Speed", &rain.rain_speed, -1.0f, 1.0f);
+		ImGui::SliderFloat("Density", &rain.rain_density, 0.0f, 1.0f);
+		ImGui::SliderFloat("Scale", &rain.rain_scale, 0.0f, 0.5f);
+		ImGui::SliderFloat2("Direction", rain.rain_direction.data().data(), -1.0f, 1.0f);
+		ImGui::SliderFloat("Layer Strength", &rain.layer_strength, 0.0f, 1.0f);
+		ImGui::SliderInt("Noise Layers", reinterpret_cast<int*>(&rain.noise_layers), 1, 5, "%u");
+		ImGui::SliderFloat3("Colour", rain.colour.data().data(), 0.0f, 1.0f);
 	}
 }

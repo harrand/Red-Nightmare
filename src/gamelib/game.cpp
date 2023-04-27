@@ -26,6 +26,7 @@ namespace rnlib
 	{
 		bool show_quad_renderer = false;
 		bool show_text_renderer = false;
+		bool show_effect_renderer = false;
 		bool show_actor_system = false;
 	} dbgui_data;
 
@@ -39,6 +40,7 @@ namespace rnlib
 		{
 			ImGui::MenuItem("Quad Renderer", nullptr, &dbgui_data.show_quad_renderer);
 			ImGui::MenuItem("Text Renderer", nullptr, &dbgui_data.show_text_renderer);
+			ImGui::MenuItem("Effect Renderer", nullptr, &dbgui_data.show_effect_renderer);
 			ImGui::MenuItem("Actor System", nullptr, &dbgui_data.show_actor_system);
 		});
 		tz::gl::get_device().render_graph().add_dependencies(sys->trenderer.get(), sys->qrenderer.get());
@@ -124,6 +126,12 @@ namespace rnlib
 		{
 			ImGui::Begin("Text Renderer", &dbgui_data.show_text_renderer);
 			sys->trenderer.dbgui();
+			ImGui::End();
+		}
+		if(dbgui_data.show_effect_renderer)
+		{
+			ImGui::Begin("Effect Renderer", &dbgui_data.show_effect_renderer);
+			sys->srenderer.dbgui();
 			ImGui::End();
 		}
 		if(dbgui_data.show_actor_system)

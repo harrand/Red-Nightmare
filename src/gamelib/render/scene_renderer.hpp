@@ -25,6 +25,7 @@ namespace rnlib
 		scene_renderer();
 		std::array<tz::gl::renderer_handle, static_cast<std::size_t>(effect_type::_count) - 1> get_effects() const;
 		void update();
+		void dbgui();
 		std::span<std::uint32_t> effect();
 		tz::gl::renderer_handle get_layer_renderer() const;
 	private:
@@ -36,9 +37,12 @@ namespace rnlib
 			tz::gl::renderer_handle effect = tz::nullhand;
 			// resource handle for the storage renderer's resource.
 			tz::gl::resource_handle storage_resource = tz::nullhand;
+			// resource handle for effect-specific data. can be anything the effect wants.
+			tz::gl::resource_handle extra_resource = tz::nullhand;
 		};
 
 		effect_data make_rain_effect();
+		void dbgui_rain();
 
 		tz::gl::renderer_handle global_storage = tz::nullhand;
 		tz::gl::resource_handle global_buffer = tz::nullhand;
@@ -46,6 +50,7 @@ namespace rnlib
 		tz::gl::resource_handle layer_texture_buffer = tz::nullhand;
 		std::array<effect_data, static_cast<int>(effect_type::_count) - 1> effects = {};
 		tz::duration creation = tz::system_time();
+		float effect_timer_multiplier = 1.0f;
 	};
 }
 

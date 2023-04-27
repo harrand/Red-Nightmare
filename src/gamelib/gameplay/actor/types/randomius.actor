@@ -23,6 +23,10 @@ return actor
 					.feet_colour = {fdist(rng), fdist(rng), fdist(rng)},
 				}
 			}
+		}},
+		actor_component<actor_component_id::motion>
+		{{
+			.speed = fdist(rng) * 2.0f + 0.5f
 		}}
 	},
 	.name = "Randomius (Dev)"
