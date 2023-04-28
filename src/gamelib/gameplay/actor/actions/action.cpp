@@ -1,6 +1,7 @@
 #include "gamelib/gameplay/actor/actions/action.hpp"
 #include "gamelib/gameplay/actor/system.hpp"
 #include "tz/core/debug.hpp"
+#include <random>
 #include <algorithm>
 
 namespace rnlib
@@ -26,4 +27,11 @@ namespace rnlib
 		caster.transform.local_position = action.data().location;
 		action.set_is_complete(true);
 	ACTION_IMPL_END(action_id::teleport)
+
+	ACTION_IMPL_BEGIN(action_id::random_teleport)
+		std::default_random_engine rng;
+		std::uniform_real_distribution dist{0.0f, 1.0f};
+		caster.actions.set_component<action_id::teleport>({.location = {dist(rng), dist(rng)}});
+		action.set_is_complete(true);
+	ACTION_IMPL_END(action_id::random_teleport)
 }

@@ -56,9 +56,9 @@ namespace rnlib
 		if(ImGui::CollapsingHeader("Actions"))
 		{
 			this->actions.dbgui();
-			if(ImGui::Button("Teleport"))
+			if(ImGui::Button("Random Teleport"))
 			{
-				this->actions.set_component<action_id::teleport>({.location = tz::vec2::zero()});			
+				this->actions.set_component<action_id::random_teleport>();			
 			}
 		}
 		ImGui::Unindent();

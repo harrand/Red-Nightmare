@@ -9,6 +9,7 @@ namespace rnlib
 	enum class action_id
 	{
 		teleport,
+		random_teleport,
 		_count
 	};
 
