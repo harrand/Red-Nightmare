@@ -1,6 +1,7 @@
 #include "gamelib/gameplay/actor/system.hpp"
 #include "tz/dbgui/dbgui.hpp"
 #include "tz/core/job/job.hpp"
+#include "tz/core/algorithms/static.hpp"
 
 namespace rnlib
 {
@@ -102,7 +103,12 @@ namespace rnlib
 			for(auto& entity : this->entities)
 			{
 				#define HANDLE_ACTION(T) if(entity.actions.has_component<T>()){rnlib::action_invoke<T>(*this, entity, *entity.actions.get_component<T>());}
-				HANDLE_ACTION(action_id::teleport);
+				//HANDLE_ACTION(action_id::teleport);
+				tz::static_for<0, static_cast<int>(action_id::_count)>([this, &entity](auto i)
+				{
+					constexpr auto id = static_cast<action_id>(static_cast<int>(i));
+					HANDLE_ACTION(id);
+				});
 
 				entity.actions.update();
 			}

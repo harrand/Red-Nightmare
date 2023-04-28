@@ -8,7 +8,8 @@ namespace rnlib
 {
 	enum class action_id
 	{
-		teleport
+		teleport,
+		_count
 	};
 
 	template<action_id ID>
