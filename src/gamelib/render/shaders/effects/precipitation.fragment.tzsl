@@ -43,6 +43,8 @@ void main()
 		float n = float(rain.noise_layer_count) * rain.layer_strength;
 		alpha += get_rain(uv * float(rain.noise_layer_count) * n) * n;
 	}
-	vec3 random_colour_increase = rain.rand_colour_tint * get_rain(uv * 123435.0f);
+	vec3 random_colour_increase = rain.rand_colour_tint * get_rain(uv * 12.0f);
+	random_colour_increase.y *= get_rain(uv.yy * 123.0f);
+	random_colour_increase.z *= get_rain(uv.yx * 123456.0f);
 	frag_colour = vec4(rain.colour + random_colour_increase, alpha * rain.density);
 }

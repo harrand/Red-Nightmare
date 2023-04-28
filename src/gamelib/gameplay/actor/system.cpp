@@ -75,23 +75,34 @@ namespace rnlib
 			{
 				entity.update(dt);		
 			}
-			return;
 		}
-		// otherwise, do a multi-threaded approach.
-		const std::size_t ecount = this->entities.size();
-		const std::size_t job_count = std::thread::hardware_concurrency();
-		std::size_t job_batch_size = ecount / job_count;
-		std::size_t remainder_jobs = ecount % job_count;
-		std::vector<tz::job_handle> jobs(job_count);
-		for(std::size_t i = 0; i < job_count; i++)
+		else
 		{
-			jobs[i] = tz::job_system().execute([this, i, dt, job_batch_size](){this->update_n(i * job_batch_size, job_batch_size, dt);});
+			// otherwise, do a multi-threaded approach.
+			const std::size_t ecount = this->entities.size();
+			const std::size_t job_count = std::thread::hardware_concurrency();
+			std::size_t job_batch_size = ecount / job_count;
+			std::size_t remainder_jobs = ecount % job_count;
+			std::vector<tz::job_handle> jobs(job_count);
+			for(std::size_t i = 0; i < job_count; i++)
+			{
+				jobs[i] = tz::job_system().execute([this, i, dt, job_batch_size](){this->update_n(i * job_batch_size, job_batch_size, dt);});
+			}
+			TZ_PROFZONE("actor_system - parallel update", 0xffee0077);
+			this->update_n(ecount - remainder_jobs, remainder_jobs, dt);
+			for(tz::job_handle jh : jobs)
+			{
+				tz::job_system().block(jh);
+			}
 		}
-		TZ_PROFZONE("actor_system - parallel update", 0xffee0077);
-		this->update_n(ecount - remainder_jobs, remainder_jobs, dt);
-		for(tz::job_handle jh : jobs)
+
+		// now go ahead and pump actions.
+		for(auto& entity : this->entities)
 		{
-			tz::job_system().block(jh);
+			#define HANDLE_ACTION(T) if(entity.actions.has_component<T>()){rnlib::action_invoke<T>(*this, entity, *entity.actions.get_component<T>());}
+			HANDLE_ACTION(action_id::teleport);
+
+			entity.actions.update();
 		}
 	}
 

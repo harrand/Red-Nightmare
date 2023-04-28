@@ -6,6 +6,7 @@
 #include "gamelib/render/animation.hpp"
 #include "gamelib/render/quad_renderer.hpp"
 #include "gamelib/render/image.hpp"
+#include "gamelib/gameplay/actor/actions/action.hpp"
 #include "tz/core/memory/clone.hpp"
 #include "tz/wsi/keyboard.hpp"
 #include <optional>
@@ -131,6 +132,7 @@ namespace rnlib
 		mount_result mount(std::span<quad_renderer::quad_data> quads) const;
 
 		actor_entity entity = {};
+		action_entity actions = {};
 		transform_t transform = {};
 		const char* name = "Untitled";
 		std::size_t uuid = uuid_count++;

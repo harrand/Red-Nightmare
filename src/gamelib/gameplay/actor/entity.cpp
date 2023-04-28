@@ -53,6 +53,14 @@ namespace rnlib
 		ImGui::Indent();
 		this->transform.dbgui();
 		this->entity.dbgui();
+		if(ImGui::CollapsingHeader("Actions"))
+		{
+			this->actions.dbgui();
+			if(ImGui::Button("Teleport"))
+			{
+				this->actions.set_component<action_id::teleport>({.location = tz::vec2::zero()});			
+			}
+		}
 		ImGui::Unindent();
 	}
 
