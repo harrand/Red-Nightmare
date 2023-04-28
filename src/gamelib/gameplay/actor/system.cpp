@@ -97,12 +97,15 @@ namespace rnlib
 		}
 
 		// now go ahead and pump actions.
-		for(auto& entity : this->entities)
 		{
-			#define HANDLE_ACTION(T) if(entity.actions.has_component<T>()){rnlib::action_invoke<T>(*this, entity, *entity.actions.get_component<T>());}
-			HANDLE_ACTION(action_id::teleport);
+			TZ_PROFZONE("actor_system - actions advance", 0xffee0077);
+			for(auto& entity : this->entities)
+			{
+				#define HANDLE_ACTION(T) if(entity.actions.has_component<T>()){rnlib::action_invoke<T>(*this, entity, *entity.actions.get_component<T>());}
+				HANDLE_ACTION(action_id::teleport);
 
-			entity.actions.update();
+				entity.actions.update();
+			}
 		}
 	}
 
