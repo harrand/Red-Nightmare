@@ -9,6 +9,7 @@ namespace human_art
 
 	inline std::optional<animation> get_eyes(eye_type type, humanoid_skeleton_animation anim_type)
 	{
+		TZ_PROFZONE("human art - get eyes", 0xff880077);
 		switch(type)
 		{
 			case eye_type::none:

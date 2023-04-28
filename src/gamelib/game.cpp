@@ -97,6 +97,7 @@ namespace rnlib
 		tz::assert(mres.error == mount_error::no_error, "unhandled mount_error. please submit a bug report.");
 		if(sys->actors.size())
 		{
+			TZ_PROFZONE("apply text to all actors temp", 0xff0077ee);
 			sys->trenderer.clear();
 			for(rnlib::actor& a : sys->actors.container())
 			{

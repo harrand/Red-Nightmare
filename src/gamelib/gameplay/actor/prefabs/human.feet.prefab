@@ -9,6 +9,7 @@ namespace human_art
 	
 	inline std::optional<animation> get_feet(feet_type type, humanoid_skeleton_animation anim_type)
 	{
+		TZ_PROFZONE("human art - get feet", 0xff880077);
 		switch(type)
 		{
 			case feet_type::bare:

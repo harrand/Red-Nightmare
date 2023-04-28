@@ -27,6 +27,7 @@ inline void actor_component_update<actor_component_id::humanoid_skeleton>
 	actor& actor
 )
 {
+	TZ_PROFZONE("humanoid_skeleton component - update", 0xffaa0077);
 	auto get_pose = [&component](humanoid_skeleton_animation anim)
 	{
 		return component.data().poses[static_cast<int>(anim)];

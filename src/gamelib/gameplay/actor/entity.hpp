@@ -8,6 +8,7 @@
 #include "gamelib/render/image.hpp"
 #include "gamelib/gameplay/actor/actions/action.hpp"
 #include "tz/core/memory/clone.hpp"
+#include "tz/core/profile.hpp" // for profiler instrumentation for components.
 #include "tz/wsi/keyboard.hpp"
 #include <optional>
 #include <limits>

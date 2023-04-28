@@ -25,6 +25,7 @@ inline void actor_component_update<actor_component_id::motion>
 	actor& actor
 )
 {
+	TZ_PROFZONE("motion component - update", 0xffaa0077);
 	float corrected_speed = component.data().speed / std::max(std::popcount(static_cast<unsigned int>(component.data().direction)), 1);
 	if(component.data().direction & move_direction::right)
 	{

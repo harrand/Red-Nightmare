@@ -19,6 +19,7 @@ inline void actor_component_update<actor_component_id::keyboard_control>
 	actor& actor
 )
 {
+	TZ_PROFZONE("keyboard_control component - update", 0xffaa0077);
 	if(!actor.entity.has_component<actor_component_id::motion>())
 	{
 		actor.entity.add_component<actor_component_id::motion>();
