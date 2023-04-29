@@ -12,6 +12,7 @@ namespace rnlib
 
 		tz::mat4 view() const;
 		tz::mat4 projection() const;
+		std::pair<tz::vec2, tz::vec2> get_view_bounds() const;
 		bool operator==(const camera& rhs) const = default;
 	};
 }

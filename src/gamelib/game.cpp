@@ -120,6 +120,10 @@ namespace rnlib
 		if(dbgui_data.show_quad_renderer)
 		{
 			ImGui::Begin("Quad Renderer", &dbgui_data.show_quad_renderer);
+			{
+				auto [min, max] = sys->cam.get_view_bounds();
+				ImGui::Text("View Bounds: {%.2f, %.2f}, {%.2f, %.2f}", min[0], min[1], max[0], max[1]);
+			}
 			sys->qrenderer.dbgui();
 			ImGui::End();
 		}

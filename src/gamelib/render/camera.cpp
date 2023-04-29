@@ -11,8 +11,18 @@ namespace rnlib
 
 	tz::mat4 camera::projection() const
 	{
+		const auto [min, max] = this->get_view_bounds();
+		return tz::orthographic(min[0], max[0], max[1], min[1], 0.0f, -1.0f);
+	}
+
+	std::pair<tz::vec2, tz::vec2> camera::get_view_bounds() const
+	{
 		const tz::vec2ui dims = tz::window().get_dimensions();
 		const auto aspect_ratio = static_cast<float>(dims[0]) / dims[1];
-		return tz::orthographic(-aspect_ratio * this->zoom, aspect_ratio * this->zoom, zoom, -zoom, 0.0f, -1.0f);
+		return
+		{
+			tz::vec2{-aspect_ratio, -1.0f} * zoom,
+			tz::vec2{aspect_ratio, 1.0f} * zoom
+		};
 	}
 }
