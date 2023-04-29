@@ -60,6 +60,10 @@ namespace rnlib
 			{
 				this->actions.set_component<action_id::random_teleport>();			
 			}
+			if(ImGui::Button("Debug Move to Origin"))
+			{
+				this->actions.set_component<action_id::move_to>({.location = tz::vec2::zero()});
+			}
 			if(ImGui::Button("Despawn"))
 			{
 				this->actions.add_component<action_id::despawn>();

@@ -41,4 +41,57 @@ namespace rnlib
 		system.remove(caster.uuid);
 		action.set_is_complete(true);
 	ACTION_IMPL_END(action_id::despawn)
+
+	ACTION_IMPL_BEGIN(action_id::move_to)
+		if(caster.entity.has_component<actor_component_id::motion>())
+		{
+			// set motion direction towards the target.
+			auto& motion = caster.entity.get_component<actor_component_id::motion>()->data();
+			motion.impl_held = true;
+			motion.direction = 0;
+			tz::vec2 now = caster.transform.get_position();
+			tz::vec2 target = action.data().location;
+			// leeway is the distance we travel in 16.66ms
+			const float leeway = motion.speed * 0.1f;
+			const float xdiff = now[0] - target[0];
+			bool destination = false;
+			if(xdiff < -leeway)
+			{
+				motion.direction |= move_direction::right;
+			}
+			else if(xdiff > leeway)
+			{
+				motion.direction |= move_direction::left;
+			}
+			else
+			{
+				destination = true;
+			}
+			const float ydiff = now[1] - target[1];
+			if(ydiff < -leeway)
+			{
+				motion.direction |= move_direction::up;
+			}
+			else if(ydiff > leeway)
+			{
+				motion.direction |= move_direction::down;
+			}
+			else
+			{
+				if(destination)
+				{
+					// made it within leeway on both x and y. we're there.
+					action.set_is_complete(true);
+					motion.impl_held = false;
+				}
+			}
+		}
+		else
+		{
+			// actor can't move, we either ignore the request or teleport.
+			// teleport probs makes more sense?
+			caster.actions.set_component<action_id::teleport>({.location = action.data().location});
+			action.set_is_complete(true);
+		}
+	ACTION_IMPL_END(action_id::move_to)
 }

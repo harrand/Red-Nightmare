@@ -11,6 +11,7 @@ namespace rnlib
 		teleport,
 		random_teleport,
 		despawn,
+		move_to,
 		_count
 	};
 
@@ -23,12 +24,19 @@ namespace rnlib
 		tz::vec2 location;
 	};
 
+	template<>
+	struct action_params<action_id::move_to>
+	{
+		tz::vec2 location;
+	};
+
 	class iaction : public tz::unique_cloneable<iaction>
 	{
 	public:
 		virtual constexpr action_id get_id() const = 0;
 		virtual ~iaction() = default;
 		void set_is_complete(bool complete){this->is_complete = complete;}
+		void cancel(){this->set_is_complete(true);}
 		bool get_is_complete() const{return this->is_complete;}
 	private:
 		bool is_complete = false;

@@ -25,7 +25,11 @@ inline void actor_component_update<actor_component_id::keyboard_control>
 		actor.entity.add_component<actor_component_id::motion>();
 	}
 	auto& motion = actor.entity.get_component<actor_component_id::motion>()->data();
-
+	if(motion.impl_held)
+	{
+		// something has taken control of our movement. ignore all inputs.
+		return;
+	}
 	const auto& state = tz::window().get_keyboard_state();
 	auto key_down = [state, &component](move_direction_t dir)
 	{
