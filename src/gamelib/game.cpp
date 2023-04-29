@@ -153,7 +153,11 @@ namespace rnlib
 	{
 		TZ_PROFZONE("rnlib - update", 0xff0077ee);
 		tz::assert(sys != nullptr, "rnlib never initialised. please submit a bug report.");
-		sys->actors.update(dt);
+		sys->actors.update(dt,
+		{
+			.view_bounds = sys->cam.get_view_bounds(),
+			.level_bounds = {tz::vec2::zero(), tz::vec2::zero()}
+		});
 		sys->srenderer.update();
 		handle_camera_zoom();
 	}

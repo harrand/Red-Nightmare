@@ -64,7 +64,7 @@ namespace rnlib
 		return this->entities;
 	}
 
-	void actor_system::update(float dt)
+	void actor_system::update(float dt, update_context ctx)
 	{
 		TZ_PROFZONE("actor_system - update", 0xffee0077);
 		constexpr std::size_t arbitrary_serial_update_max = 250;
@@ -103,12 +103,12 @@ namespace rnlib
 			for(auto& entity : this->entities)
 			{
 				#define HANDLE_ACTION(T) if(entity.actions.has_component<T>()){rnlib::action_invoke<T>(*this, entity, *entity.actions.get_component<T>());}
-				tz::static_for<0, static_cast<int>(action_id::_count)>([this, &entity](auto i)
+				tz::static_for<0, static_cast<int>(action_id::_count)>([this, &entity, &ctx](auto i)
 				{
 					constexpr auto id = static_cast<action_id>(static_cast<int>(i));
 					if(entity.actions.has_component<id>())
 					{
-						rnlib::action_invoke<id>(*this, entity, *entity.actions.get_component<id>());
+						rnlib::action_invoke<id>(*this, entity, *entity.actions.get_component<id>(), ctx);
 					}
 				});
 

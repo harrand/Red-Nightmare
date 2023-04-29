@@ -60,8 +60,13 @@ namespace rnlib
 	class actor_system;
 	class actor;
 
+	struct update_context
+	{
+		std::pair<tz::vec2, tz::vec2> view_bounds, level_bounds;
+	};
+
 	template<action_id ID>
-	void action_invoke(actor_system& system, actor& caster, action<ID>& action);
+	void action_invoke(actor_system& system, actor& caster, action<ID>& action, update_context ctx);
 }
 
 #endif //RNLIB_GAMEPLAY_ACTOR_ACTIONS_ACTION_HPP

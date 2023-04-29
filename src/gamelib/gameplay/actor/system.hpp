@@ -19,7 +19,7 @@ namespace rnlib
 		std::size_t size() const;
 		std::span<actor> container();
 		std::span<const actor> container() const;
-		void update(float dt);
+		void update(float dt, update_context ctx);
 		void dbgui();
 	private:
 		void update_one(std::size_t eid, float dt);

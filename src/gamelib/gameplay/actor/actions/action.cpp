@@ -20,8 +20,8 @@ namespace rnlib
 		ImGui::Text("Current Count: %zu", this->components.size());
 	}
 
-	#define ACTION_IMPL_BEGIN(T) template<> void action_invoke<T>(actor_system& system, actor& caster, action<T>& action){
-	#define ACTION_IMPL_END(T) } template void action_invoke<T>(actor_system& system, actor& caster, action<T>&);
+	#define ACTION_IMPL_BEGIN(T) template<> void action_invoke<T>(actor_system& system, actor& caster, action<T>& action, update_context context){
+	#define ACTION_IMPL_END(T) } template void action_invoke<T>(actor_system& system, actor& caster, action<T>&, update_context);
 
 	std::default_random_engine rng;
 
@@ -31,8 +31,9 @@ namespace rnlib
 	ACTION_IMPL_END(action_id::teleport)
 
 	ACTION_IMPL_BEGIN(action_id::random_teleport)
-		std::uniform_real_distribution dist{0.0f, 1.0f};
-		caster.actions.set_component<action_id::teleport>({.location = {dist(rng), dist(rng)}});
+		std::uniform_real_distribution dstx{context.view_bounds.first[0], context.view_bounds.second[0]};
+		std::uniform_real_distribution dsty{context.view_bounds.first[1], context.view_bounds.second[1]};
+		caster.actions.set_component<action_id::teleport>({.location = {dstx(rng), dsty(rng)}});
 		action.set_is_complete(true);
 	ACTION_IMPL_END(action_id::random_teleport)
 }
