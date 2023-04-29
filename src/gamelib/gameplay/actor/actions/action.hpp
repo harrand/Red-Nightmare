@@ -10,6 +10,7 @@ namespace rnlib
 	{
 		teleport,
 		random_teleport,
+		despawn,
 		_count
 	};
 

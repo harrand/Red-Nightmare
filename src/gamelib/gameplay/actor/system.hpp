@@ -15,6 +15,7 @@ namespace rnlib
 
 		const actor* find(std::size_t uuid) const;
 		actor* find(std::size_t uuid);
+		void remove(std::size_t uuid);
 		mount_result mount(std::span<quad_renderer::quad_data> quads);
 		std::size_t size() const;
 		std::span<actor> container();
@@ -25,6 +26,7 @@ namespace rnlib
 		void update_one(std::size_t eid, float dt);
 		void update_n(std::size_t eid_begin, std::size_t n, float dt);
 		std::vector<actor> entities = {};
+		std::vector<std::size_t> entities_to_delete = {};
 	};
 }
 

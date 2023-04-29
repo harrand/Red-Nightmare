@@ -36,4 +36,9 @@ namespace rnlib
 		caster.actions.set_component<action_id::teleport>({.location = {dstx(rng), dsty(rng)}});
 		action.set_is_complete(true);
 	ACTION_IMPL_END(action_id::random_teleport)
+
+	ACTION_IMPL_BEGIN(action_id::despawn)
+		system.remove(caster.uuid);
+		action.set_is_complete(true);
+	ACTION_IMPL_END(action_id::despawn)
 }

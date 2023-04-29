@@ -60,6 +60,10 @@ namespace rnlib
 			{
 				this->actions.set_component<action_id::random_teleport>();			
 			}
+			if(ImGui::Button("Despawn"))
+			{
+				this->actions.add_component<action_id::despawn>();
+			}
 		}
 		ImGui::Unindent();
 	}

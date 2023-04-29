@@ -39,6 +39,11 @@ namespace rnlib
 		return &*iter;
 	}
 
+	void actor_system::remove(std::size_t uuid)
+	{
+		this->entities_to_delete.push_back(uuid);
+	}
+
 	mount_result actor_system::mount(std::span<quad_renderer::quad_data> quads)
 	{
 		mount_result res;
@@ -115,6 +120,14 @@ namespace rnlib
 				entity.actions.update();
 			}
 		}
+
+		// remove all entities that need to be deleted.
+		this->entities.erase(std::remove_if(this->entities.begin(), this->entities.end(),
+		[this](const actor& a)
+		{
+			return std::find(this->entities_to_delete.begin(), this->entities_to_delete.end(), a.uuid) != this->entities_to_delete.end();
+		}), this->entities.end());
+		this->entities_to_delete.clear();
 	}
 
 	void actor_system::dbgui()
@@ -175,7 +188,7 @@ namespace rnlib
 				{
 					if(ImGui::Button("Pop Back"))
 					{
-						this->entities.pop_back();
+						this->remove(this->entities.back().uuid);
 					}
 					if(ImGui::Button("Clear"))
 					{
