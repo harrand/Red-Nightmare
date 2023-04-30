@@ -27,6 +27,10 @@ return actor
 		actor_component<actor_component_id::motion>
 		{{
 			.speed = fdist(rng) * 2.0f + 0.5f
+		}},
+		actor_component<actor_component_id::damageable>
+		{{
+			.max_health = static_cast<int>(fdist(rng) * 100)
 		}}
 	},
 	.name = "Randomius (Dev)"
