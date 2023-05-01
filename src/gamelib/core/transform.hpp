@@ -1,6 +1,7 @@
 #ifndef RNLIB_CORE_TRANSFORM_HPP
 #define RNLIB_CORE_TRANSFORM_HPP
 #include "tz/core/data/vector.hpp"
+#include "gamelib/core/box.hpp"
 
 namespace rnlib
 {
@@ -14,6 +15,8 @@ namespace rnlib
 		tz::vec2 get_position() const;
 		tz::vec2 get_scale() const;
 		float get_rotation() const;
+
+		box get_bounding_box() const;
 
 		void dbgui();
 	};

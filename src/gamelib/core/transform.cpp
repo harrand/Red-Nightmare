@@ -35,6 +35,22 @@ namespace rnlib
 		return rot;
 	}
 
+	box transform_t::get_bounding_box() const
+	{
+		auto min = tz::vec2::filled(-0.5f);
+		auto max = tz::vec2::filled(0.5f);
+		tz::vec2 scale = this->get_scale();
+		scale[0] = std::abs(scale[0]);
+		scale[1] = std::abs(scale[1]);
+		min[0] *= scale[0];
+		min[1] *= scale[1];
+		max[0] *= scale[0];
+		max[1] *= scale[1];
+		min += this->get_position();
+		max += this->get_position();
+		return {min, max};
+	}
+
 	void transform_t::dbgui()
 	{
 		ImGui::InputFloat2("Local Position", this->local_position.data().data());

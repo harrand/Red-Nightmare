@@ -69,6 +69,11 @@ namespace rnlib
 		return this->entities;
 	}
 
+	void actor_system::set_intersection_state(actor_quadtree::intersection_state_t state)
+	{
+		this->intersection_state = state;
+	}
+
 	void actor_system::update(float dt, update_context ctx)
 	{
 		TZ_PROFZONE("actor_system - update", 0xffee0077);
@@ -147,6 +152,19 @@ namespace rnlib
 				else
 				{
 					ImGui::Text("No actors to display :(");
+				}
+				ImGui::EndTabItem();
+			}
+			if(ImGui::BeginTabItem("Collision Detection"))
+			{
+				ImGui::Text("%zu intersections", this->intersection_state.size());
+				for(const auto[lnode, rnode] : this->intersection_state)
+				{
+					actor* lactor = this->find(lnode.uuid);
+					actor* ractor = this->find(rnode.uuid);
+					tz::assert(lactor != nullptr);
+					tz::assert(ractor != nullptr);
+					ImGui::Text("%zu (%s) <=> %zu (%s)", lactor->uuid, lactor->name, ractor->uuid, ractor->name);
 				}
 				ImGui::EndTabItem();
 			}

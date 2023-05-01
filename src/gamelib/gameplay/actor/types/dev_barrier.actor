@@ -1,0 +1,14 @@
+return actor
+{
+	.entity =
+	{
+		actor_component<actor_component_id::sprite>
+		{{
+			.textures =
+			{{
+				.id = image_id::border8
+			}}
+		}}
+	},
+	.name = "X"
+};

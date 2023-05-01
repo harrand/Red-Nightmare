@@ -15,10 +15,15 @@ add_subdirectory(lib)
 tz_add_library(
 	TARGET rnlib
 	SOURCES
+		src/gamelib/core/box.cpp
+		src/gamelib/core/box.hpp
 		src/gamelib/core/entity.cpp
 		src/gamelib/core/entity.hpp
 		src/gamelib/core/entity.inl
 		src/gamelib/core/mount.hpp
+		src/gamelib/core/quadtree.cpp
+		src/gamelib/core/quadtree.hpp
+		src/gamelib/core/quadtree.inl
 		src/gamelib/core/transform.cpp
 		src/gamelib/core/transform.hpp
 
@@ -80,6 +85,7 @@ add_text(
 	TEXT_FILES
 		images/meta/undefined.png
 		images/meta/invisible.png
+		images/meta/border8.png
 		images/races/human/base/human_base_idle0.png
 		images/races/human/base/human_base_idle1.png
 		images/races/human/base/human_base_side0.png

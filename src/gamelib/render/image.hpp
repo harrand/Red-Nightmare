@@ -15,6 +15,7 @@ namespace rnlib
 		{
 			undefined,
 			invisible,
+			border8,
 			race_human_base_idle0,
 			race_human_base_idle1,
 			race_human_base_side0,

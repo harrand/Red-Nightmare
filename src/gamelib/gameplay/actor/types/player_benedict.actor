@@ -22,6 +22,7 @@ return actor
 				}
 			}
 		}},
+		actor_component<actor_component_id::keyboard_control>{}
 	},
 	.name = "Benedict Blackwill"
 };

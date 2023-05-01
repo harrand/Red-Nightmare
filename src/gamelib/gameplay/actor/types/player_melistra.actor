@@ -19,7 +19,8 @@ return actor
 					.feet_colour = {1.0f, 0.0f, 0.0f}
 				}
 			}
-		}}
+		}},
+		actor_component<actor_component_id::keyboard_control>{}
 	},
 	.name = "Lady Melistra"
 };

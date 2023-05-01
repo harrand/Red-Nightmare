@@ -99,6 +99,11 @@ namespace rnlib
 		{
 			switch(t)
 			{
+				case actor_type::dev_barrier:
+				{
+					#include "gamelib/gameplay/actor/types/dev_barrier.actor"
+				}
+				break;
 				case actor_type::doctor_michael_morbius:
 				{
 					#include "gamelib/gameplay/actor/types/doctor_michael_morbius.actor"
@@ -128,7 +133,6 @@ namespace rnlib
 			return {};
 		}(type);
 		a.type = type;
-		a.entity.add_component<actor_component_id::keyboard_control>();
 		return a;
 	}
 }

@@ -1,4 +1,5 @@
 #include "gamelib/game.hpp"
+#include "gamelib/core/quadtree.hpp"
 #include "gamelib/render/font.hpp"
 #include "gamelib/render/quad_renderer.hpp"
 #include "gamelib/render/scene_renderer.hpp"
@@ -18,6 +19,7 @@ namespace rnlib
 		text_renderer trenderer{rnlib::font::lucida_sans_regular};
 		actor_system actors;
 		camera cam;
+		actor_quadtree tree{box{tz::vec2{-100.0f, -100.0f}, tz::vec2{100.0f, 100.0f}}};
 	};
 
 	std::unique_ptr<system> sys = nullptr;
@@ -152,6 +154,18 @@ namespace rnlib
 	void update(float dt)
 	{
 		TZ_PROFZONE("rnlib - update", 0xff0077ee);
+		// handle quadtree.
+		{
+			TZ_PROFZONE("build quadtree", 0xff0077ee);
+			sys->tree.clear();
+			for(const actor& a : sys->actors.container())
+			{
+				sys->tree.add({.uuid = a.uuid, .bounding_box = a.transform.get_bounding_box()});
+			}
+			sys->actors.set_intersection_state(sys->tree.find_all_intersections());
+		}
+		// done quadtree.
+
 		tz::assert(sys != nullptr, "rnlib never initialised. please submit a bug report.");
 		sys->actors.update(dt,
 		{
