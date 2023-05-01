@@ -55,7 +55,10 @@ namespace rnlib
 				{
 					box bchild = detail::quadtree_helper::compute_quadrant_box(b, i);
 					nodes.push_back({.b = bchild, .n = node_ptr.get()});
-					boxes.push_back(bchild);
+					if(std::find(boxes.begin(), boxes.end(), bchild) == boxes.end())
+					{
+						boxes.push_back(bchild);
+					}
 				}
 			}
 		}
@@ -69,7 +72,7 @@ namespace rnlib
 			quad.scale = box.get_dimensions() * 0.5f;
 			quad.texid[0] = image_id::border32;
 			quad.tints[0] = tz::vec4{1.0f, 0.0f, 0.0f, 1.0f};
-			quad.layer = 100;
+			quad.layer = 100 + (boxes.size() - i);
 		}
 		return {.count = boxes.size()};
 	}
