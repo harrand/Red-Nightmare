@@ -3,12 +3,13 @@ shader(type = fragment);
 resource(id = 4) const texture images[];
 input(id = 0, flat) uint texid;
 input(id = 1) vec2 texcoord;
+input(id = 2) vec3 colour;
 output(id = 0) vec4 frag_colour;
 
 void main()
 {
 	// red text for now.
-	frag_colour = texture(images[texid], texcoord) * vec4(1.0, 0.0, 0.0, 1.0);
+	frag_colour = texture(images[texid], texcoord) * vec4(colour, 1.0);
 	if(frag_colour.a == 0.0f)
 	{
 		discard;

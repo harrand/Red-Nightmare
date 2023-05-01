@@ -18,6 +18,7 @@ struct word_data
 	vec2 scale;
 	uint char_cursor;
 	uint strlen;
+	vec3 colour;
 };
 
 // todo: no magic number.
@@ -59,6 +60,7 @@ resource(id = 4) const texture images[];
 
 output(id = 0) uint out_texture_id;
 output(id = 1) vec2 out_texcoord;
+output(id = 2) vec3 out_colour;
 
 uint get_texture(uint bit_position)
 {
@@ -126,5 +128,6 @@ void main()
 	scale *= tz::math::normalise(texdims);
 	vec4 worldspace_pos = vec4(wdata.pos + (quad_positions[in::vertex_id % 6] * scale), 0.0f, 1.0f);
 	worldspace_pos.x += float(word_index) * (wdata.scale.x * 1.5f);
+	out_colour = wdata.colour;
 	out::position = (render.projection * render.view) * worldspace_pos;
 }

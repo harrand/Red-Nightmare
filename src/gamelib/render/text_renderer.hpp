@@ -12,7 +12,7 @@ namespace rnlib
 	public:
 		text_renderer(font f);
 
-		void add(std::string str, tz::vec2 pos, tz::vec2 scale);
+		void add(std::string str, tz::vec2 pos, tz::vec2 scale, tz::vec3 colour = tz::vec3::filled(1.0f));
 		void render();
 		void clear();
 
@@ -32,6 +32,9 @@ namespace rnlib
 			tz::vec2 scale = tz::vec2::zero();
 			std::uint32_t char_cursor = std::uint32_t(-1);
 			std::uint32_t length = 0;
+			float pad1[2];
+			tz::vec3 colour = {1.0f, 0.0f, 0.0f};
+			float pad0;
 		};
 		std::span<word_data> words();
 		std::span<std::uint32_t> chars();

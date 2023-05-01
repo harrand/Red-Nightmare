@@ -81,14 +81,15 @@ namespace rnlib
 		data |= encoded;
 	}
 
-	void text_renderer::add(std::string str, tz::vec2 pos, tz::vec2 scale)
+	void text_renderer::add(std::string str, tz::vec2 pos, tz::vec2 scale, tz::vec3 colour)
 	{
 		this->words()[this->word_cursor] =
 		{
 			.pos = pos,
 			.scale = scale,
 			.char_cursor = static_cast<std::uint32_t>(this->string_cursor),
-			.length = static_cast<std::uint32_t>(str.size())
+			.length = static_cast<std::uint32_t>(str.size()),
+			.colour = colour
 		};
 		this->word_cursor++;
 		if(this->word_cursor >= this->words().size())
@@ -182,6 +183,7 @@ namespace rnlib
 					auto& word = this->words()[word_id];
 					ImGui::InputFloat2("Pos", word.pos.data().data());	
 					ImGui::InputFloat2("Scale", word.scale.data().data());
+					ImGui::SliderFloat3("Colour", word.colour.data().data(), 0.0f, 1.0f);
 					ImGui::SliderInt("Char Cursor", reinterpret_cast<int*>(&word.char_cursor), 0, this->string_cursor - 1, "%zu");
 					ImGui::SliderInt("Length", reinterpret_cast<int*>(&word.length), 0, (this->string_cursor - word.char_cursor), "%zu");	
 					ImGui::Unindent();

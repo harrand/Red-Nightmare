@@ -122,7 +122,7 @@ namespace rnlib
 					abscale[0] = std::abs(abscale[0]) * 0.75f;
 					abscale[1] = std::abs(abscale[1]);
 					tz::vec2 pos = a.transform.get_position() - abscale;
-					sys->trenderer.add(name, pos, tz::vec2{0.05f, 0.05f} * a.transform.get_scale().length());
+					sys->trenderer.add(name, pos, tz::vec2{0.05f, 0.05f} * a.transform.get_scale().length(), label.colour);
 				}
 			}
 		}
