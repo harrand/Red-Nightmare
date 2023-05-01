@@ -18,7 +18,8 @@ inline void actor_component_dbgui(actor_component<actor_component_id::label>& co
 	ImGui::SameLine();
 	if(ImGui::Button("Clear"))
 	{
-		std::memset(buf, 64, 0);
+		std::memset(buf, 0, 64);
+		component.data().text = "";
 	}
 	ImGui::SliderFloat3("Colour", component.data().colour.data().data(), 0.0f, 1.0f);
 }
