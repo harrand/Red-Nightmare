@@ -19,7 +19,8 @@ namespace rnlib
 		text_renderer trenderer{rnlib::font::lucida_sans_regular};
 		actor_system actors;
 		camera cam;
-		actor_quadtree tree{box{tz::vec2{-10.0f, -10.0f}, tz::vec2{10.0f, 10.0f}}};
+		static constexpr float initial_quadtree_size = 10.0f;
+		actor_quadtree tree{box{tz::vec2{-1.0f, -1.0f} * initial_quadtree_size, tz::vec2{1.0f, 1.0f} * initial_quadtree_size}};
 	};
 
 	std::unique_ptr<system> sys = nullptr;
