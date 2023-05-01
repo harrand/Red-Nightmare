@@ -130,6 +130,7 @@ namespace rnlib
 				}
 				break;
 			}
+			tz::error("Attempted to spawn actor of an unknown type. Add support for the actor.");	
 			return {};
 		}(type);
 		a.type = type;

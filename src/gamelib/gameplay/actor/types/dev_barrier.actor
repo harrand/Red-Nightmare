@@ -10,5 +10,5 @@ return actor
 			}}
 		}}
 	},
-	.name = "X"
+	.name = "Dev Barrier"
 };
