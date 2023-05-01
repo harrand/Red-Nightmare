@@ -21,7 +21,8 @@ return actor
 					.feet_colour = black
 				}
 			}
-		}}
+		}},
+		actor_component<actor_component_id::label>()
 	},
 	.name = "The Black Knight"
 };

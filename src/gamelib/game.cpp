@@ -106,15 +106,24 @@ namespace rnlib
 		}
 		if(sys->actors.size())
 		{
-			TZ_PROFZONE("apply text to all actors temp", 0xff0077ee);
+			TZ_PROFZONE("Actor Label Text", 0xff0077ee);
 			sys->trenderer.clear();
 			for(rnlib::actor& a : sys->actors.container())
 			{
-				tz::vec2 abscale = a.transform.get_scale();
-				abscale[0] = std::abs(abscale[0]) * 0.75f;
-				abscale[1] = std::abs(abscale[1]);
-				tz::vec2 pos = a.transform.get_position() - abscale;
-				sys->trenderer.add(a.name, pos, tz::vec2{0.05f, 0.05f} * a.transform.get_scale().length());
+				if(a.entity.has_component<actor_component_id::label>())
+				{
+					auto& label = a.entity.get_component<actor_component_id::label>()->data();
+					const char* name = a.name;
+					if(!label.text.empty())
+					{
+						name = label.text.c_str();
+					}
+					tz::vec2 abscale = a.transform.get_scale();
+					abscale[0] = std::abs(abscale[0]) * 0.75f;
+					abscale[1] = std::abs(abscale[1]);
+					tz::vec2 pos = a.transform.get_position() - abscale;
+					sys->trenderer.add(name, pos, tz::vec2{0.05f, 0.05f} * a.transform.get_scale().length());
+				}
 			}
 		}
 		sys->qrenderer.render(mres.count);

@@ -30,6 +30,8 @@ namespace rnlib
 		motion,
 		// actor is controlled by a keyboard. requires `motion`
 		keyboard_control,
+		// actor contains a text label to be displayed above it.
+		label,
 		// actor has a set of animations fitting a humanoid skeleton. requires `animation`, `motion`.
 		humanoid_skeleton,
 		skin,
@@ -37,7 +39,7 @@ namespace rnlib
 	};
 
 	// each trait above must have a corresponding name string in the following array (or enjoy a cryptic crash)
-	constexpr std::array<const char*, static_cast<int>(actor_component_id::_count)> actor_component_id_name{"Sprite", "Animation", "Damageable", "Motion", "Keyboard Control", "Humanoid Skeleton", "Skin"};
+	constexpr std::array<const char*, static_cast<int>(actor_component_id::_count)> actor_component_id_name{"Sprite", "Animation", "Damageable", "Motion", "Keyboard Control", "Label", "Humanoid Skeleton", "Skin"};
 
 	// ECS boilerplate begin.
 	template<actor_component_id ID>
@@ -154,6 +156,7 @@ namespace rnlib
 	#include "gamelib/gameplay/actor/components/damageable.hpp"
 	#include "gamelib/gameplay/actor/components/motion.hpp"
 	#include "gamelib/gameplay/actor/components/keyboard_control.hpp"
+	#include "gamelib/gameplay/actor/components/label.hpp"
 	#include "gamelib/gameplay/actor/components/humanoid_skeleton.hpp"
 
 	// prefab implementations.
