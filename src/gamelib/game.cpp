@@ -19,7 +19,7 @@ namespace rnlib
 		text_renderer trenderer{rnlib::font::lucida_sans_regular};
 		actor_system actors;
 		camera cam;
-		actor_quadtree tree{box{tz::vec2{-100.0f, -100.0f}, tz::vec2{100.0f, 100.0f}}};
+		actor_quadtree tree{box{tz::vec2{-10.0f, -10.0f}, tz::vec2{10.0f, 10.0f}}};
 	};
 
 	std::unique_ptr<system> sys = nullptr;
@@ -30,6 +30,7 @@ namespace rnlib
 		bool show_text_renderer = false;
 		bool show_effect_renderer = false;
 		bool show_actor_system = false;
+		bool debug_draw_quadtree = TZ_DEBUG;
 	} dbgui_data;
 
 	void initialise()
@@ -97,6 +98,10 @@ namespace rnlib
 			}
 		}
 		tz::assert(mres.error == mount_error::no_error, "unhandled mount_error. please submit a bug report.");
+		if(dbgui_data.debug_draw_quadtree)
+		{
+			mres.count += sys->tree.debug_mount(sys->qrenderer.quads().subspan(mres.count)).count;
+		}
 		if(sys->actors.size())
 		{
 			TZ_PROFZONE("apply text to all actors temp", 0xff0077ee);
@@ -125,6 +130,7 @@ namespace rnlib
 			{
 				auto [min, max] = sys->cam.get_view_bounds();
 				ImGui::Text("View Bounds: {%.2f, %.2f}, {%.2f, %.2f}", min[0], min[1], max[0], max[1]);
+				ImGui::Checkbox("Draw Quadtree", &dbgui_data.debug_draw_quadtree);
 			}
 			sys->qrenderer.dbgui();
 			ImGui::End();

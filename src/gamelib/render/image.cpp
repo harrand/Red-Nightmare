@@ -26,6 +26,7 @@ namespace rnlib
 #include ImportedTextHeader(invisible, png)
 #include ImportedTextHeader(undefined, png)
 #include ImportedTextHeader(border8, png)
+#include ImportedTextHeader(border32, png)
 #include ImportedTextHeader(human_base_idle0, png)
 #include ImportedTextHeader(human_base_idle1, png)
 #include ImportedTextHeader(human_base_side0, png)
@@ -183,6 +184,7 @@ namespace rnlib
 		ImportedTextData(undefined, png),
 		ImportedTextData(invisible, png),
 		ImportedTextData(border8, png),
+		ImportedTextData(border32, png),
 		ImportedTextData(human_base_idle0, png),
 		ImportedTextData(human_base_idle1, png),
 		ImportedTextData(human_base_side0, png),

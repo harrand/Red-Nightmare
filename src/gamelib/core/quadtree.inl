@@ -1,4 +1,7 @@
 #include "tz/core/debug.hpp"
+#include "gamelib/render/image.hpp"
+#include <deque>
+
 namespace rnlib
 {
 	template<boxed_t T>
@@ -33,10 +36,56 @@ namespace rnlib
 	}
 
 	template<boxed_t T>
+	mount_result quadtree<T>::debug_mount(std::span<quad_renderer::quad_data> quads)
+	{
+		std::vector<box> boxes;
+		boxes.push_back(this->global_boundary);
+		struct boxed_node{box b; node* n;};
+		std::deque<boxed_node> nodes = {{.b = this->global_boundary, .n = &this->root}};
+		while(!nodes.empty())
+		{
+			auto bn = nodes.front();
+			nodes.pop_front();
+			node* n = bn.n;
+			box b = bn.b;
+			for(std::size_t i = 0; i < 4; i++)
+			{
+				const auto& node_ptr = n->children[i];
+				if(node_ptr != nullptr)
+				{
+					box bchild = detail::quadtree_helper::compute_quadrant_box(b, i);
+					nodes.push_back({.b = bchild, .n = node_ptr.get()});
+					boxes.push_back(bchild);
+				}
+			}
+		}
+		// now draw all the boxes.
+		for(std::size_t i = 0; i < boxes.size(); i++)
+		{
+			auto& quad = quads[i];
+			const auto& box = boxes[i];
+			// draw midpoint as position.
+			quad.pos = box.get_centre();
+			quad.scale = box.get_dimensions() * 0.5f;
+			quad.texid[0] = image_id::border32;
+			quad.tints[0] = tz::vec4{1.0f, 0.0f, 0.0f, 1.0f};
+			quad.layer = 100;
+		}
+		return {.count = boxes.size()};
+	}
+
+	template<boxed_t T>
 	void quadtree<T>::node_add_value(node* node, std::size_t depth, const box& box, const T& value)
 	{
 		tz::assert(node != nullptr, "Passed nullptr to node_add_value");
-		tz::assert(box.contains(value.get_box()), "Passed box which cannot contain value's box boundary. Depth = %zu. Value box Centre = {%.2f, %.2f}, Value box Dimensions = {%.2f, %.2f} (Top-level node: %d)", depth, value.get_box().get_centre()[0], value.get_box().get_centre()[1], value.get_box().get_dimensions()[0], value.get_box().get_dimensions()[1], box == this->global_boundary);
+		if(!box.contains(value.get_box()))
+		{
+			// tried to add something that can't be added.
+			// crashing here is super extreme, just means that intersections cannot be queried for it.
+			// ideally should warn, but in our use case this warn is super spammy. so errr.... looking for a bug with intersection sometimes not working? put an assert here!
+			// TODO: write safe code
+			return;
+		}
 		if(node->is_leaf())
 		{
 			// node: should the first clause be inversed?

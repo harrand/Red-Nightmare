@@ -1,6 +1,9 @@
 #ifndef RNLIB_CORE_QUADTREE_HPP
 #define RNLIB_CORE_QUADTREE_HPP
 #include "gamelib/core/box.hpp"
+#include "gamelib/core/mount.hpp"
+#include "gamelib/render/quad_renderer.hpp"
+#include "gamelib/render/image.hpp"
 #include <array>
 #include <memory>
 #include <vector>
@@ -33,6 +36,7 @@ namespace rnlib
 		void remove(const T& value);
 		void clear();
 		std::vector<std::pair<T, T>> find_all_intersections() const;
+		mount_result debug_mount(std::span<quad_renderer::quad_data> quads);
 	private:
 		static constexpr std::size_t threshold = 16;
 		static constexpr std::size_t max_depth = 8;
