@@ -31,7 +31,7 @@ namespace rnlib
 		bool show_text_renderer = false;
 		bool show_effect_renderer = false;
 		bool show_actor_system = false;
-		bool debug_draw_quadtree = TZ_DEBUG;
+		bool show_quadtree = false;
 	} dbgui_data;
 
 	void initialise()
@@ -46,6 +46,7 @@ namespace rnlib
 			ImGui::MenuItem("Text Renderer", nullptr, &dbgui_data.show_text_renderer);
 			ImGui::MenuItem("Effect Renderer", nullptr, &dbgui_data.show_effect_renderer);
 			ImGui::MenuItem("Actor System", nullptr, &dbgui_data.show_actor_system);
+			ImGui::MenuItem("Quadtree", nullptr, &dbgui_data.show_quadtree);
 		});
 		tz::gl::get_device().render_graph().add_dependencies(sys->trenderer.get(), sys->qrenderer.get());
 		tz::gl::get_device().render_graph().add_dependencies(sys->qrenderer.get(), sys->srenderer.get_layer_renderer());
@@ -99,7 +100,7 @@ namespace rnlib
 			}
 		}
 		tz::assert(mres.error == mount_error::no_error, "unhandled mount_error. please submit a bug report.");
-		if(dbgui_data.debug_draw_quadtree)
+		if(sys->tree.debug_should_draw())
 		{
 			mres.count += sys->tree.debug_mount(sys->qrenderer.quads().subspan(mres.count)).count;
 		}
@@ -131,7 +132,6 @@ namespace rnlib
 			{
 				auto [min, max] = sys->cam.get_view_bounds();
 				ImGui::Text("View Bounds: {%.2f, %.2f}, {%.2f, %.2f}", min[0], min[1], max[0], max[1]);
-				ImGui::Checkbox("Draw Quadtree", &dbgui_data.debug_draw_quadtree);
 			}
 			sys->qrenderer.dbgui();
 			ImGui::End();
@@ -152,6 +152,12 @@ namespace rnlib
 		{
 			ImGui::Begin("Actor System", &dbgui_data.show_actor_system);
 			sys->actors.dbgui();
+			ImGui::End();
+		}
+		if(dbgui_data.show_quadtree)
+		{
+			ImGui::Begin("Quadtree", &dbgui_data.show_quadtree);
+			sys->tree.dbgui();
 			ImGui::End();
 		}
 	}

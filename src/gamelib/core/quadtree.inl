@@ -36,6 +36,18 @@ namespace rnlib
 	}
 
 	template<boxed_t T>
+	void quadtree<T>::dbgui()
+	{
+		ImGui::Checkbox("Debug Draw", &this->debug_draw_enabled);
+		static tz::vec2 position = tz::vec2::filled(0.0f), size = tz::vec2::filled(10.0f);
+		if(ImGui::InputFloat2("Position", position.data().data()) || ImGui::InputFloat2("Scale", size.data().data()))
+		{
+			this->global_boundary = {position - (size * 0.5f), position + (size * 0.5f)};
+			this->clear();
+		}
+	}
+
+	template<boxed_t T>
 	mount_result quadtree<T>::debug_mount(std::span<quad_renderer::quad_data> quads)
 	{
 		std::vector<box> boxes;
@@ -75,6 +87,12 @@ namespace rnlib
 			quad.layer = 100 + (boxes.size() - i);
 		}
 		return {.count = boxes.size()};
+	}
+
+	template<boxed_t T>
+	bool quadtree<T>::debug_should_draw() const
+	{
+		return this->debug_draw_enabled;
 	}
 
 	template<boxed_t T>

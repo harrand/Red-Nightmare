@@ -36,7 +36,9 @@ namespace rnlib
 		void remove(const T& value);
 		void clear();
 		std::vector<std::pair<T, T>> find_all_intersections() const;
+		void dbgui();
 		mount_result debug_mount(std::span<quad_renderer::quad_data> quads);
+		bool debug_should_draw() const;
 	private:
 		static constexpr std::size_t threshold = 16;
 		static constexpr std::size_t max_depth = 8;
@@ -63,6 +65,7 @@ namespace rnlib
 
 		box global_boundary;
 		node root;
+		bool debug_draw_enabled = false;
 	};
 
 
