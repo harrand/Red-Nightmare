@@ -38,10 +38,11 @@ inline mount_result actor_component_mount<actor_component_id::sprite>
 	{
 		quad.texid[i] = sorted_textures[i].id;
 		quad.tints[i] = sorted_textures[i].colour_tint.with_more(0.0f);
+		quad.scale = tz::vec2::filled(1.0f);
 	}
 	for(std::size_t i = tex_count; i < QUAD_TEXCOUNT; i++)
 	{
-		quad.texid[i] = 1u;
+		quad.texid[i] = image_id::invisible;
 	}
 	return {.count = 1};
 }

@@ -214,6 +214,15 @@ namespace rnlib
 						this->entities.clear();
 					}
 				}
+				static bool display_all_colliders = true;
+				ImGui::Checkbox("Display All Colliders", &display_all_colliders);
+				for(auto& ent : this->entities)
+				{
+					if(ent.entity.has_component<actor_component_id::collide>())
+					{
+						ent.entity.get_component<actor_component_id::collide>()->data().debug_draw = display_all_colliders;
+					}
+				}
 				ImGui::EndTabItem();
 			}
 			ImGui::EndTabBar();

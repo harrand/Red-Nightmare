@@ -12,7 +12,7 @@ namespace rnlib
 		mount_result res;
 		for(auto& component_ptr : this->components)
 		{
-			res << component_ptr->mount(quads);
+			res << component_ptr->mount(quads.subspan(res.count));
 		}
 		return res;
 	}
@@ -85,7 +85,8 @@ namespace rnlib
 		for(std::size_t i = 0; i < res.count; i++)
 		{
 			quads[i].pos += this->transform.get_position();
-			quads[i].scale = this->transform.get_scale();
+			quads[i].scale[0] *= this->transform.get_scale()[0];
+			quads[i].scale[1] *= this->transform.get_scale()[1];
 			quads[i].rotation = this->transform.get_rotation();
 			quads[i].layer += this->layer;
 		}
