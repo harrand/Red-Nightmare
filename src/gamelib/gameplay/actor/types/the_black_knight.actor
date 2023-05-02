@@ -22,7 +22,8 @@ return actor
 				}
 			}
 		}},
-		actor_component<actor_component_id::label>()
+		actor_component<actor_component_id::label>(),
+		actor_component<actor_component_id::collide>()
 	},
 	.name = "The Black Knight"
 };

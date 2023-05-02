@@ -19,7 +19,8 @@ return actor
 					.feet_colour = {0.0f, 0.0f, 0.0f}
 				}
 			}
-		}}
+		}},
+		actor_component<actor_component_id::collide>()
 	},
 	.name = "Doctor Michael Morbius"
 };

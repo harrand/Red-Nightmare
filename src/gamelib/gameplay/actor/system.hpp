@@ -27,6 +27,8 @@ namespace rnlib
 	private:
 		void update_one(std::size_t eid, float dt);
 		void update_n(std::size_t eid_begin, std::size_t n, float dt);
+		void collision_response();
+		void resolve_collision(std::size_t uuid_a, std::size_t uuid_b);
 		std::vector<actor> entities = {};
 		std::vector<std::size_t> entities_to_delete = {};
 		actor_quadtree::intersection_state_t intersection_state = {};

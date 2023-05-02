@@ -20,7 +20,8 @@ return actor
 				}
 			}
 		}},
-		actor_component<actor_component_id::keyboard_control>{}
+		actor_component<actor_component_id::keyboard_control>{},
+		actor_component<actor_component_id::collide>()
 	},
 	.name = "Lady Melistra"
 };

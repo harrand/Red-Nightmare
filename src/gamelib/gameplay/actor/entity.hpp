@@ -24,6 +24,8 @@ namespace rnlib
 		sprite,
 		// actor has an animation, which means its sprite texture changes over time. requires `sprite`
 		animation,
+		// actor collides with others.
+		collide,
 		// actor has the concept of health, damage and death.
 		damageable,
 		// actor has the concept of proper movement.
@@ -39,7 +41,7 @@ namespace rnlib
 	};
 
 	// each trait above must have a corresponding name string in the following array (or enjoy a cryptic crash)
-	constexpr std::array<const char*, static_cast<int>(actor_component_id::_count)> actor_component_id_name{"Sprite", "Animation", "Damageable", "Motion", "Keyboard Control", "Label", "Humanoid Skeleton", "Skin"};
+	constexpr std::array<const char*, static_cast<int>(actor_component_id::_count)> actor_component_id_name{"Sprite", "Animation", "Collide", "Damageable", "Motion", "Keyboard Control", "Label", "Humanoid Skeleton", "Skin"};
 
 	// ECS boilerplate begin.
 	template<actor_component_id ID>
@@ -153,6 +155,7 @@ namespace rnlib
 	// component implementations begin.
 	#include "gamelib/gameplay/actor/components/sprite.hpp"
 	#include "gamelib/gameplay/actor/components/animation.hpp"
+	#include "gamelib/gameplay/actor/components/collide.hpp"
 	#include "gamelib/gameplay/actor/components/damageable.hpp"
 	#include "gamelib/gameplay/actor/components/motion.hpp"
 	#include "gamelib/gameplay/actor/components/keyboard_control.hpp"

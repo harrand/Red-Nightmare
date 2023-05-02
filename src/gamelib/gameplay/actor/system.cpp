@@ -77,6 +77,7 @@ namespace rnlib
 	void actor_system::update(float dt, update_context ctx)
 	{
 		TZ_PROFZONE("actor_system - update", 0xffee0077);
+		this->collision_response();
 		constexpr std::size_t arbitrary_serial_update_max = 250;
 		if(this->entities.size() < arbitrary_serial_update_max)
 		{
@@ -232,6 +233,72 @@ namespace rnlib
 		{
 			tz::assert(i < this->entities.size());
 			this->update_one(i, dt);
+		}
+	}
+
+	void actor_system::collision_response()
+	{
+		TZ_PROFZONE("actor_system - collision resolution", 0xffee0077);
+		for(const auto& [node_a, node_b] : this->intersection_state)
+		{
+			std::size_t uuid_a = node_a.uuid;
+			std::size_t uuid_b = node_b.uuid;
+			this->resolve_collision(uuid_a, uuid_b);
+			this->resolve_collision(uuid_b, uuid_a);
+		}
+	}
+
+	void actor_system::resolve_collision(std::size_t uuid_a, std::size_t uuid_b)
+	{
+		TZ_PROFZONE("actor_system - resolve collision", 0xffee0077);
+		actor* a = this->find(uuid_a);
+		actor* b = this->find(uuid_b);
+		tz::assert(a != nullptr && b != nullptr);
+		if(!a->entity.has_component<actor_component_id::collide>() || !b->entity.has_component<actor_component_id::collide>())
+		{
+			// unless both of them have a collide component, we ignore collisions.
+		}
+		// code on collision could happen here.
+		// resolve collision by calculating bounding box overlap and resolving based on that displacement.
+		auto calculate_overlap = [](float min1, float max1, float min2, float max2)
+		{
+			if(max1 <= min2 || max2 <= min1)
+			{
+				return 0.0f;
+			}
+			else
+			{
+				return std::min(max1, max2) - std::max(min1, min2);
+			}
+		};
+		box a_box = a->transform.get_bounding_box();
+		box b_box = b->transform.get_bounding_box();
+		float overlap_x = calculate_overlap(b_box.get_left(), b_box.get_right(), a_box.get_left(), a_box.get_right());
+		float overlap_y = calculate_overlap(b_box.get_bottom(), b_box.get_top(), a_box.get_bottom(), a_box.get_top());
+		float correction = std::min(overlap_x, overlap_y) * a->entity.get_component<actor_component_id::collide>()->data().mass_ratio;
+		if(overlap_x < overlap_y)
+		{
+			// solve based on x.
+			if(b_box.get_centre()[0] > a_box.get_centre()[0])
+			{
+				b->transform.local_position[0] += correction;
+			}
+			else
+			{
+				b->transform.local_position[0] -= correction;
+			}
+		}
+		else
+		{
+			// solve based on y.
+			if(b_box.get_centre()[1] > a_box.get_centre()[1])
+			{
+				b->transform.local_position[1] += correction;
+			}
+			else
+			{
+				b->transform.local_position[1] -= correction;
+			}
 		}
 	}
 }

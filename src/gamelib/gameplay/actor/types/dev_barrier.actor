@@ -8,6 +8,10 @@ return actor
 			{{
 				.id = image_id::border8
 			}}
+		}},
+		actor_component<actor_component_id::collide>
+		{{
+			.mass_ratio = 1.0f
 		}}
 	},
 	.name = "Dev Barrier"
