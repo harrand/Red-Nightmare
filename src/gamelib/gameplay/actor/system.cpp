@@ -138,11 +138,11 @@ namespace rnlib
 
 	void actor_system::dbgui()
 	{
+		static int entity_id = 0;
 		if(ImGui::BeginTabBar("Actor"))
 		{
 			if(ImGui::BeginTabItem("Actors List"))
 			{
-				static int entity_id = 0;
 				if(this->entities.size())
 				{
 					ImGui::SliderInt("Entity ID", &entity_id, 0, this->entities.size() - 1);
@@ -208,10 +208,18 @@ namespace rnlib
 					if(ImGui::Button("Pop Back"))
 					{
 						this->remove(this->entities.back().uuid);
+						if(entity_id >= (this->entities.size() - 1))
+						{
+							if(entity_id > 0)
+							{
+								entity_id--;
+							}
+						}
 					}
 					if(ImGui::Button("Clear"))
 					{
 						this->entities.clear();
+						entity_id = 0;
 					}
 				}
 				static bool display_all_colliders = true;

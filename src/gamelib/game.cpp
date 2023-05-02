@@ -182,7 +182,11 @@ namespace rnlib
 			sys->tree.clear();
 			for(const actor& a : sys->actors.container())
 			{
-				sys->tree.add({.uuid = a.uuid, .bounding_box = a.transform.get_bounding_box()});
+				if(a.entity.has_component<actor_component_id::collide>())
+				{
+					box b = a.entity.get_component<actor_component_id::collide>()->data().get_bounding_box(a);
+					sys->tree.add({.uuid = a.uuid, .bounding_box = b});
+				}
 			}
 			sys->actors.set_intersection_state(sys->tree.find_all_intersections());
 		}
