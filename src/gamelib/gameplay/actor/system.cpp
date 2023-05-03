@@ -7,8 +7,8 @@ namespace rnlib
 {
 	actor& actor_system::add(actor_type t)
 	{
-		this->entities.push_back(rnlib::create_actor(t));
-		return this->entities.back();
+		this->entities_to_add.push_back(rnlib::create_actor(t));
+		return this->entities_to_add.back();
 	}
 
 	const actor* actor_system::find(std::size_t uuid) const
@@ -122,7 +122,6 @@ namespace rnlib
 						rnlib::action_invoke<id>(*this, entity, *entity.actions.get_component<id>(), ctx);
 					}
 				});
-
 				entity.actions.update();
 			}
 		}
@@ -134,6 +133,11 @@ namespace rnlib
 			return std::find(this->entities_to_delete.begin(), this->entities_to_delete.end(), a.uuid) != this->entities_to_delete.end();
 		}), this->entities.end());
 		this->entities_to_delete.clear();
+		for(actor a : this->entities_to_add)
+		{
+			this->entities.push_back(a);
+		}
+		this->entities_to_add.clear();
 	}
 
 	void actor_system::dbgui()

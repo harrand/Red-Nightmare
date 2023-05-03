@@ -42,6 +42,13 @@ namespace rnlib
 		action.set_is_complete(true);
 	ACTION_IMPL_END(action_id::despawn)
 
+	ACTION_IMPL_BEGIN(action_id::spawn)
+		actor& a = system.add(action.data().type);
+		a.transform = caster.transform;
+		action.data().actions.transfer_components(a.actions);
+		action.set_is_complete(true);
+	ACTION_IMPL_END(action_id::spawn)
+
 	ACTION_IMPL_BEGIN(action_id::move_to)
 		if(caster.entity.has_component<actor_component_id::motion>())
 		{

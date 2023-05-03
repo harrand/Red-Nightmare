@@ -31,6 +31,7 @@ namespace rnlib
 		void resolve_collision(std::size_t uuid_a, std::size_t uuid_b);
 		std::vector<actor> entities = {};
 		std::vector<std::size_t> entities_to_delete = {};
+		std::vector<actor> entities_to_add = {};
 		actor_quadtree::intersection_state_t intersection_state = {};
 	};
 }

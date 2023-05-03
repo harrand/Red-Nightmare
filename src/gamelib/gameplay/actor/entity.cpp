@@ -68,6 +68,14 @@ namespace rnlib
 			{
 				this->actions.add_component<action_id::despawn>();
 			}
+			if(ImGui::Button("Mitosis"))
+			{
+				this->actions.add_component<action_id::spawn>
+				({
+					.type = this->type,
+		 			.actions = this->actions
+				});
+			}
 		}
 		ImGui::Unindent();
 	}

@@ -11,23 +11,9 @@ namespace rnlib
 		teleport,
 		random_teleport,
 		despawn,
+		spawn,
 		move_to,
 		_count
-	};
-
-	template<action_id ID>
-	struct action_params{};
-
-	template<>
-	struct action_params<action_id::teleport>
-	{
-		tz::vec2 location;
-	};
-
-	template<>
-	struct action_params<action_id::move_to>
-	{
-		tz::vec2 location;
 	};
 
 	class iaction : public tz::unique_cloneable<iaction>
@@ -41,6 +27,10 @@ namespace rnlib
 	private:
 		bool is_complete = false;
 	};
+
+
+	template<action_id ID>
+	struct action_params{};
 
 	template<action_id ID>
 	class action : public iaction
@@ -72,6 +62,29 @@ namespace rnlib
 	struct update_context
 	{
 		std::pair<tz::vec2, tz::vec2> view_bounds, level_bounds;
+	};
+
+	// action params
+
+	template<>
+	struct action_params<action_id::teleport>
+	{
+		tz::vec2 location;
+	};
+
+	enum class actor_type;
+
+	template<>
+	struct action_params<action_id::spawn>
+	{
+		actor_type type;
+		action_entity actions = {};
+	};
+
+	template<>
+	struct action_params<action_id::move_to>
+	{
+		tz::vec2 location;
 	};
 
 	template<action_id ID>
