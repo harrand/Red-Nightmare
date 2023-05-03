@@ -6,6 +6,7 @@ struct sprite_texture_info
 	tz::vec2 offset = tz::vec2::zero();
 	tz::vec3 colour_tint = tz::vec3::filled(1.0f);
 	unsigned int layer_offset = 0;
+	bool visible = true;
 };
 
 template<>
@@ -36,7 +37,7 @@ inline mount_result actor_component_mount<actor_component_id::sprite>
 	// 0th texture needs to be highest layer, and vice versa.
 	for(std::size_t i = 0; i < tex_count; i++)
 	{
-		quad.texid[i] = sorted_textures[i].id;
+		quad.texid[i] = sorted_textures[i].visible ? sorted_textures[i].id : image_id::invisible;
 		quad.tints[i] = sorted_textures[i].colour_tint.with_more(0.0f);
 		quad.scale = tz::vec2::filled(1.0f);
 	}
@@ -64,5 +65,6 @@ inline void actor_component_dbgui(actor_component<actor_component_id::sprite>& c
 	ImGui::SliderFloat3("Colour Tint", tex.colour_tint.data().data(), 0.0f, 1.0f);
 	// todo: no magic number.
 	ImGui::SliderInt("Layer Offset", reinterpret_cast<int*>(&tex.layer_offset), 0, 1000, "%u");
+	ImGui::Checkbox("Visible", &tex.visible);
 	ImGui::Unindent();
 }

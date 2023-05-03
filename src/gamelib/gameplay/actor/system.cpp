@@ -275,7 +275,6 @@ namespace rnlib
 		{
 			// unless both of them have a collide component, we ignore collisions.
 		}
-		// code on collision could happen here.
 		// resolve collision by calculating bounding box overlap and resolving based on that displacement.
 		auto calculate_overlap = [](float min1, float max1, float min2, float max2)
 		{
@@ -315,6 +314,15 @@ namespace rnlib
 			else
 			{
 				b->transform.local_position[1] -= correction;
+			}
+		}
+
+		// code on collision could happen here.
+		if(a->entity.has_component<actor_component_id::action_listener>())
+		{
+			for(const auto& callable : a->entity.get_component<actor_component_id::action_listener>()->data().on_collide)
+			{
+				callable(*a, *b);
 			}
 		}
 	}
