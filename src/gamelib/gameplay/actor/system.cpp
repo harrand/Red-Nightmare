@@ -143,6 +143,7 @@ namespace rnlib
 	void actor_system::dbgui()
 	{
 		static int entity_id = 0;
+		static bool display_all_colliders = true;
 		if(ImGui::BeginTabBar("Actor"))
 		{
 			if(ImGui::BeginTabItem("Actors List"))
@@ -226,18 +227,19 @@ namespace rnlib
 						entity_id = 0;
 					}
 				}
-				static bool display_all_colliders = true;
 				ImGui::Checkbox("Display All Colliders", &display_all_colliders);
-				for(auto& ent : this->entities)
-				{
-					if(ent.entity.has_component<actor_component_id::collide>())
-					{
-						ent.entity.get_component<actor_component_id::collide>()->data().debug_draw = display_all_colliders;
-					}
-				}
 				ImGui::EndTabItem();
 			}
 			ImGui::EndTabBar();
+		}
+		for(auto& ent : this->entities)
+		{
+			if(ent.entity.has_component<actor_component_id::collide>())
+			{
+				auto& collide = ent.entity.get_component<actor_component_id::collide>()->data();
+				collide.debug_draw = display_all_colliders;
+				collide.debug_draw_colour = (ent.uuid == this->entities[entity_id].uuid) ? tz::vec3{1.0f, 0.0f, 0.0f} : tz::vec3::filled(1.0f);
+			}
 		}
 	}
 
