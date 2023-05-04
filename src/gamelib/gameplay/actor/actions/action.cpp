@@ -97,6 +97,7 @@ namespace rnlib
 		{
 			// actor can't move, we either ignore the request or teleport.
 			// teleport probs makes more sense?
+			tz::report("action `move_to` detected on actor (%s) without a motion component. the actor will instantly teleport to the location.", caster.name);
 			caster.actions.set_component<action_id::teleport>({.location = action.data().location});
 			action.set_is_complete(true);
 		}

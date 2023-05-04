@@ -75,6 +75,10 @@ namespace rnlib
 			}
 		}
 		// now draw all the boxes.
+		if(boxes.size() >= quads.size())
+		{
+			return {.error = mount_error::ooq, .count = quads.size()};
+		}
 		for(std::size_t i = 0; i < boxes.size(); i++)
 		{
 			auto& quad = quads[i];

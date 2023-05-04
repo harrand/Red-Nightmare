@@ -37,6 +37,11 @@ tz_add_library(
 		src/gamelib/gameplay/actor/system.cpp
 		src/gamelib/gameplay/actor/system.hpp
 
+		src/gamelib/gameplay/scene/node.cpp
+		src/gamelib/gameplay/scene/node.hpp
+		src/gamelib/gameplay/scene/scene.cpp
+		src/gamelib/gameplay/scene/scene.hpp
+
 		src/gamelib/render/animation.cpp
 		src/gamelib/render/animation.hpp
 		src/gamelib/render/camera.cpp
