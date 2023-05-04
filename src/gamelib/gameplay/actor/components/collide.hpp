@@ -2,6 +2,7 @@ template<>
 struct actor_component_params<actor_component_id::collide>
 {
 	float mass_ratio = 0.01f;
+	std::function<bool(const actor& self, const actor& other)> collide_if = [](const auto& a, const auto& b){(void)a;(void)b; return true;};
 	bool debug_draw = false;
 	tz::vec2 aabb_offset = tz::vec2::zero();
 	tz::vec2 aabb_scale = tz::vec2::filled(1.0f);

@@ -280,6 +280,14 @@ namespace rnlib
 		if(!a->entity.has_component<actor_component_id::collide>() || !b->entity.has_component<actor_component_id::collide>())
 		{
 			// unless both of them have a collide component, we ignore collisions.
+			return;
+		}
+		auto& collide_a = a->entity.get_component<actor_component_id::collide>()->data();
+		auto& collide_b = b->entity.get_component<actor_component_id::collide>()->data();
+		if(!collide_a.collide_if(*a, *b) || !collide_b.collide_if(*b, *a))
+		{
+			// both actor colliders need to agree that they should collide. otherwise ignore.
+			return;
 		}
 		// resolve collision by calculating bounding box overlap and resolving based on that displacement.
 		auto calculate_overlap = [](float min1, float max1, float min2, float max2)
