@@ -50,7 +50,7 @@ namespace rnlib
 	ACTION_IMPL_END(action_id::spawn)
 
 	ACTION_IMPL_BEGIN(action_id::cast)
-		caster.entity.add_component<actor_component_id::cast>();
+		caster.entity.add_component<actor_component_id::cast>({.spell = rnlib::create_spell(action.data().spell)});
 		action.set_is_complete(true);
 	ACTION_IMPL_END(action_id::cast)
 

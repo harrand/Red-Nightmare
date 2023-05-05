@@ -126,6 +126,7 @@ namespace rnlib
 			}
 		}
 
+		const auto& mouse = tz::window().get_mouse_state();
 		// handle spell casts.
 		for(auto& entity : this->entities)
 		{
@@ -137,6 +138,24 @@ namespace rnlib
 					// do the cast effect.
 					cast.spell.function(entity, *this);
 					entity.entity.remove_component<actor_component_id::cast>();
+				}
+			}
+			if(entity.entity.has_component<actor_component_id::action_listener>())
+			{
+				auto& action_listener = entity.entity.get_component<actor_component_id::action_listener>()->data();
+				if(action_listener.on_click.size())
+				{
+					tz::static_for<0, static_cast<int>(tz::wsi::mouse_button::_count)>([this, &mouse, &action_listener, &entity](auto i)
+					{
+						auto button = static_cast<tz::wsi::mouse_button>(static_cast<int>(i));
+						if(tz::wsi::is_mouse_button_down(mouse, button) && !tz::dbgui::claims_mouse())
+						{
+							for(const auto& func : action_listener.on_click)
+							{
+								func(entity, button);
+							}
+						}
+					});
 				}
 			}
 		}

@@ -1,0 +1,15 @@
+return spell
+{
+	.cast =
+	{
+
+	},
+	.function = [](actor& a, actor_system& sys)
+	{
+		if(a.entity.has_component<actor_component_id::damageable>())
+		{
+			auto& damageable = a.entity.get_component<actor_component_id::damageable>()->data();
+			damageable.health = damageable.max_health;
+		}
+	}
+};

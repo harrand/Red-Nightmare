@@ -82,10 +82,12 @@ namespace rnlib
 		action_entity actions = {};
 	};
 
+	enum class spell_id;
+
 	template<>
 	struct action_params<action_id::cast>
 	{
-		int unused;
+		spell_id spell;
 	};
 
 	template<>
