@@ -74,6 +74,17 @@ namespace human_art
 							.loop = true
 						}};
 					break;
+					case humanoid_skeleton_animation::cast:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_equipment_feet_dot_cast0,
+							},
+							.fps = 7,
+							.loop = true
+						}};
+					break;
 				}
 			break;
 		}

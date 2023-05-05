@@ -70,6 +70,24 @@ namespace human_art
 							.loop = true
 						}};
 					break;
+					case humanoid_skeleton_animation::cast:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_eyes_dot_cast0,
+								image_id::race_human_eyes_dot_cast0,
+								image_id::race_human_eyes_dot_cast0,
+								image_id::race_human_eyes_dot_cast1,
+								image_id::race_human_eyes_dot_cast1,
+								image_id::race_human_eyes_dot_cast1,
+								image_id::race_human_eyes_dot_cast0,
+								image_id::race_human_eyes_dot_cast0,
+							},
+							.fps = 7,
+							.loop = true
+						}};
+					break;
 				}
 			break;
 		}

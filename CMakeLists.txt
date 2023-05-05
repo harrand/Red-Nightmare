@@ -125,6 +125,8 @@ add_text(
 		images/races/human/hair/long/human_hair_long_down1.png
 		images/races/human/hair/long/human_hair_long_down2.png
 		images/races/human/hair/long/human_hair_long_down3.png
+		images/races/human/hair/long/human_hair_long_cast0.png
+		images/races/human/hair/long/human_hair_long_cast1.png
 		images/races/human/hair/lord/human_hair_lord_idle0.png
 		images/races/human/hair/lord/human_hair_lord_idle1.png
 		images/races/human/hair/lord/human_hair_lord_side0.png
@@ -139,6 +141,8 @@ add_text(
 		images/races/human/hair/lord/human_hair_lord_down1.png
 		images/races/human/hair/lord/human_hair_lord_down2.png
 		images/races/human/hair/lord/human_hair_lord_down3.png
+		images/races/human/hair/lord/human_hair_lord_cast0.png
+		images/races/human/hair/lord/human_hair_lord_cast1.png
 		images/races/human/hair/prince/human_hair_prince_idle0.png
 		images/races/human/hair/prince/human_hair_prince_idle1.png
 		images/races/human/hair/prince/human_hair_prince_side0.png
@@ -153,6 +157,8 @@ add_text(
 		images/races/human/hair/prince/human_hair_prince_down1.png
 		images/races/human/hair/prince/human_hair_prince_down2.png
 		images/races/human/hair/prince/human_hair_prince_down3.png
+		images/races/human/hair/prince/human_hair_prince_cast0.png
+		images/races/human/hair/prince/human_hair_prince_cast1.png
 		images/races/human/eyes/dot/human_eyes_dot_idle0.png
 		images/races/human/eyes/dot/human_eyes_dot_idle1.png
 		images/races/human/eyes/dot/human_eyes_dot_side0.png
@@ -163,6 +169,8 @@ add_text(
 		images/races/human/eyes/dot/human_eyes_dot_down1.png
 		images/races/human/eyes/dot/human_eyes_dot_down2.png
 		images/races/human/eyes/dot/human_eyes_dot_down3.png
+		images/races/human/eyes/dot/human_eyes_dot_cast0.png
+		images/races/human/eyes/dot/human_eyes_dot_cast1.png
 		images/races/human/equipment/chest/elementalrobes/human_equipment_chest_elementalrobes_idle0.png
 		images/races/human/equipment/chest/elementalrobes/human_equipment_chest_elementalrobes_idle1.png
 		images/races/human/equipment/chest/elementalrobes/human_equipment_chest_elementalrobes_side0.png
@@ -233,6 +241,7 @@ add_text(
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_down1.png
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_down2.png
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_down3.png
+		images/races/human/equipment/feet/dot/human_equipment_feet_dot_cast0.png
 		images/races/human/equipment/helm/full/human_equipment_helm_full_idle0.png
 		images/races/human/equipment/helm/full/human_equipment_helm_full_idle1.png
 		images/races/human/equipment/helm/full/human_equipment_helm_full_side0.png
@@ -247,6 +256,8 @@ add_text(
 		images/races/human/equipment/helm/full/human_equipment_helm_full_down1.png
 		images/races/human/equipment/helm/full/human_equipment_helm_full_down2.png
 		images/races/human/equipment/helm/full/human_equipment_helm_full_down3.png
+		images/races/human/equipment/helm/full/human_equipment_helm_full_cast0.png
+		images/races/human/equipment/helm/full/human_equipment_helm_full_cast1.png
 		images/races/human/equipment/helm/headband/human_equipment_helm_headband_idle0.png
 		images/races/human/equipment/helm/headband/human_equipment_helm_headband_idle1.png
 		images/races/human/equipment/helm/headband/human_equipment_helm_headband_side0.png
@@ -261,6 +272,8 @@ add_text(
 		images/races/human/equipment/helm/headband/human_equipment_helm_headband_down1.png
 		images/races/human/equipment/helm/headband/human_equipment_helm_headband_down2.png
 		images/races/human/equipment/helm/headband/human_equipment_helm_headband_down3.png
+		images/races/human/equipment/helm/headband/human_equipment_helm_headband_cast0.png
+		images/races/human/equipment/helm/headband/human_equipment_helm_headband_cast1.png
 		fonts/LucidaSansRegular.ttf
 )
 
