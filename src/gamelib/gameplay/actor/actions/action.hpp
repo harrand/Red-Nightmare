@@ -12,6 +12,7 @@ namespace rnlib
 		random_teleport,
 		despawn,
 		spawn,
+		cast,
 		move_to,
 		_count
 	};
@@ -79,6 +80,12 @@ namespace rnlib
 	{
 		actor_type type;
 		action_entity actions = {};
+	};
+
+	template<>
+	struct action_params<action_id::cast>
+	{
+		int unused;
 	};
 
 	template<>

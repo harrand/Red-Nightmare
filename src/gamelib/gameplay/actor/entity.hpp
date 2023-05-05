@@ -9,6 +9,7 @@
 #include "gamelib/gameplay/actor/actions/action.hpp"
 #include "tz/core/memory/clone.hpp"
 #include "tz/core/profile.hpp" // for profiler instrumentation for components.
+#include "tz/core/time.hpp" // for actor_component_id::cast
 #include "tz/wsi/mouse.hpp" // actor_component_id::humanoid_skeleton cast animation (dev debug)
 #include "tz/wsi/keyboard.hpp"
 #include "tz/dbgui/dbgui.hpp" // actor_component_id::humanoid_skeleton cast animation (dev debug)
@@ -30,6 +31,8 @@ namespace rnlib
 		animation,
 		// actor collides with others.
 		collide,
+		// actor is casting some kind of spell/ability.
+		cast,
 		// actor has the concept of health, damage and death.
 		damageable,
 		// actor has the concept of proper movement.
@@ -45,7 +48,7 @@ namespace rnlib
 	};
 
 	// each trait above must have a corresponding name string in the following array (or enjoy a cryptic crash)
-	constexpr std::array<const char*, static_cast<int>(actor_component_id::_count)> actor_component_id_name{"Action Listener", "Sprite", "Animation", "Collide", "Damageable", "Motion", "Keyboard Control", "Label", "Humanoid Skeleton", "Skin"};
+	constexpr std::array<const char*, static_cast<int>(actor_component_id::_count)> actor_component_id_name{"Action Listener", "Sprite", "Animation", "Collide", "Cast", "Damageable", "Motion", "Keyboard Control", "Label", "Humanoid Skeleton", "Skin"};
 
 	// ECS boilerplate begin.
 	template<actor_component_id ID>
@@ -160,6 +163,7 @@ namespace rnlib
 	#include "gamelib/gameplay/actor/components/action_listener.hpp"
 	#include "gamelib/gameplay/actor/components/sprite.hpp"
 	#include "gamelib/gameplay/actor/components/animation.hpp"
+	#include "gamelib/gameplay/actor/components/cast.hpp"
 	#include "gamelib/gameplay/actor/components/collide.hpp"
 	#include "gamelib/gameplay/actor/components/damageable.hpp"
 	#include "gamelib/gameplay/actor/components/motion.hpp"

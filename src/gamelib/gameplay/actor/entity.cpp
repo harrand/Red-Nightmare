@@ -76,6 +76,10 @@ namespace rnlib
 		 			.actions = this->actions
 				});
 			}
+			if(ImGui::Button("Fake Cast"))
+			{
+				this->actions.add_component<action_id::cast>();
+			}
 		}
 		ImGui::Unindent();
 	}

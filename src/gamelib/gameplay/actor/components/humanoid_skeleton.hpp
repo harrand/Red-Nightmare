@@ -17,6 +17,7 @@ struct actor_component_params<actor_component_id::humanoid_skeleton>
 	bool move_animation_affected_by_speed = true;
 	// implementation detail. if we were moving left last update and we still are, we dont want to re-assign the animation as it would reset the animation timer and stick in the same frame forever.
 	move_direction_t impl_movedir = 0b100000;
+	bool impl_casting = false;
 	bool should_repaint = false;
 };
 
@@ -52,6 +53,27 @@ inline void actor_component_update<actor_component_id::humanoid_skeleton>
 	{
 		animation.data() = get_pose(humanoid_skeleton_animation::idle);
 		component.data().should_repaint = false;
+		return;
+	}
+
+	if(!component.data().impl_casting)
+	{
+		if(actor.entity.has_component<actor_component_id::cast>())
+		{
+			// just started casting.
+			animation.data() = get_pose(humanoid_skeleton_animation::cast);
+			component.data().impl_casting = true;
+			return;
+		}
+	}
+	else
+	{
+		if(!actor.entity.has_component<actor_component_id::cast>())
+		{
+			// just stopped casting.
+			component.data().impl_casting = false;
+			component.data().should_repaint = true;
+		}
 		return;
 	}
 
@@ -97,16 +119,7 @@ inline void actor_component_update<actor_component_id::humanoid_skeleton>
 	}
 	else
 	{
-		// TODO: Fix (just use idle pose)
-		const auto& ms = tz::window().get_mouse_state();
-		if(tz::wsi::is_mouse_button_down(ms, tz::wsi::mouse_button::left) && !tz::dbgui::claims_mouse())
-		{
-			animation.data() = get_pose(humanoid_skeleton_animation::cast);
-		}
-		else
-		{
-			animation.data() = get_pose(humanoid_skeleton_animation::cast);
-		}
+		animation.data() = get_pose(humanoid_skeleton_animation::idle);
 	}
 }
 

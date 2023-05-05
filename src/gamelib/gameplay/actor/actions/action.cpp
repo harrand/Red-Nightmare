@@ -49,6 +49,11 @@ namespace rnlib
 		action.set_is_complete(true);
 	ACTION_IMPL_END(action_id::spawn)
 
+	ACTION_IMPL_BEGIN(action_id::cast)
+		caster.entity.add_component<actor_component_id::cast>();
+		action.set_is_complete(true);
+	ACTION_IMPL_END(action_id::cast)
+
 	ACTION_IMPL_BEGIN(action_id::move_to)
 		if(caster.entity.has_component<actor_component_id::motion>())
 		{
