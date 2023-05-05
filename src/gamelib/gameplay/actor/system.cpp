@@ -126,6 +126,21 @@ namespace rnlib
 			}
 		}
 
+		// handle spell casts.
+		for(auto& entity : this->entities)
+		{
+			if(entity.entity.has_component<actor_component_id::cast>())
+			{
+				auto& cast = entity.entity.get_component<actor_component_id::cast>()->data();
+				if(cast.complete())
+				{
+					// do the cast effect.
+					cast.spell.function(entity, *this);
+					entity.entity.remove_component<actor_component_id::cast>();
+				}
+			}
+		}
+
 		// remove all entities that need to be deleted.
 		this->entities.erase(std::remove_if(this->entities.begin(), this->entities.end(),
 		[this](const actor& a)

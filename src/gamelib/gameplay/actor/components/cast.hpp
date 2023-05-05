@@ -1,14 +1,7 @@
-enum class cast_direction
-{
-	// casting something at a specific thing/place
-	directed,
-	// casting in no general direction (e.g a self heal)
-	omni
-};
-
 template<>
 struct actor_component_params<actor_component_id::cast>
 {
+	spell spell;
 	float cast_length_seconds = 1.0f;
 	cast_direction direction = cast_direction::omni;
 	tz::duration cast_begin_time = tz::system_time();
@@ -19,22 +12,6 @@ struct actor_component_params<actor_component_id::cast>
 		return tz::system_time().seconds<std::uint64_t>() > (static_cast<std::uint64_t>(this->cast_length_seconds) + this->cast_begin_time.seconds<std::uint64_t>());
 	}
 };
-
-template<>
-inline void actor_component_update<actor_component_id::cast>
-(
-	actor_component<actor_component_id::cast>& component,
-	float dt,
-	actor& actor
-)
-{
-	TZ_PROFZONE("cast component - update", 0xffaa0077);
-	if(component.data().complete())
-	{
-		// kill ourselves (is this ub?)
-		actor.entity.remove_component<actor_component_id::cast>();
-	}
-}
 
 template<>
 inline void actor_component_dbgui(actor_component<actor_component_id::cast>& component)
