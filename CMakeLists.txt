@@ -115,6 +115,14 @@ add_text(
 		images/races/human/base/human_base_cast2.png
 		images/races/human/base/human_base_cast3.png
 		images/races/human/base/human_base_cast4.png
+		images/races/human/cast/human_cast0.png
+		images/races/human/cast/human_cast1.png
+		images/races/human/cast/human_cast2.png
+		images/races/human/cast/human_cast3.png
+		images/races/human/cast/human_cast4.png
+		images/races/human/cast/human_cast5.png
+		images/races/human/cast/human_cast6.png
+		images/races/human/cast/human_cast7.png
 		images/races/human/hair/long/human_hair_long_idle0.png
 		images/races/human/hair/long/human_hair_long_idle1.png
 		images/races/human/hair/long/human_hair_long_side0.png

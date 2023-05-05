@@ -2,7 +2,8 @@ return spell
 {
 	.cast =
 	{
-
+		.colour = {1.0f, 1.0f, 0.4f},
+		.cast_time_seconds = 9.5f
 	},
 	.function = [](actor& a, actor_system& sys)
 	{

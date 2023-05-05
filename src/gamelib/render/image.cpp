@@ -46,6 +46,14 @@ namespace rnlib
 #include ImportedTextHeader(human_base_cast2, png)
 #include ImportedTextHeader(human_base_cast3, png)
 #include ImportedTextHeader(human_base_cast4, png)
+#include ImportedTextHeader(human_cast0, png)
+#include ImportedTextHeader(human_cast1, png)
+#include ImportedTextHeader(human_cast2, png)
+#include ImportedTextHeader(human_cast3, png)
+#include ImportedTextHeader(human_cast4, png)
+#include ImportedTextHeader(human_cast5, png)
+#include ImportedTextHeader(human_cast6, png)
+#include ImportedTextHeader(human_cast7, png)
 #include ImportedTextHeader(human_hair_long_idle0, png)
 #include ImportedTextHeader(human_hair_long_idle1, png)
 #include ImportedTextHeader(human_hair_long_side0, png)
@@ -237,6 +245,14 @@ namespace rnlib
 		ImportedTextData(human_base_cast2, png),
 		ImportedTextData(human_base_cast3, png),
 		ImportedTextData(human_base_cast4, png),
+		ImportedTextData(human_cast0, png),
+		ImportedTextData(human_cast1, png),
+		ImportedTextData(human_cast2, png),
+		ImportedTextData(human_cast3, png),
+		ImportedTextData(human_cast4, png),
+		ImportedTextData(human_cast5, png),
+		ImportedTextData(human_cast6, png),
+		ImportedTextData(human_cast7, png),
 		ImportedTextData(human_hair_long_idle0, png),
 		ImportedTextData(human_hair_long_idle1, png),
 		ImportedTextData(human_hair_long_side0, png),

@@ -9,6 +9,11 @@ namespace rnlib
 
 	std::uint32_t animation::get_image() const
 	{
+		if(this->data.frame_textures.empty())
+		{
+			// assume 1 is a magic number that represents an invisible image. i know its awful.
+			return 1;
+		}
 		const auto frame_count = static_cast<unsigned int>(this->data.frame_textures.size());
 		const float frame_period = 1.0f / this->data.fps;
 
@@ -58,5 +63,10 @@ namespace rnlib
 		{
 			this->elapsed = 0.0f;
 		}
+	}
+
+	std::size_t animation::size() const
+	{
+		return this->data.frame_textures.size();
 	}
 }

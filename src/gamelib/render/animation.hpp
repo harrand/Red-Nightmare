@@ -7,18 +7,19 @@ namespace rnlib
 {
 	struct animation_data
 	{
-		std::vector<std::uint32_t> frame_textures;
-		unsigned int fps;
-		bool loop;
+		std::vector<std::uint32_t> frame_textures = {};
+		unsigned int fps = 1;
+		bool loop = false;
 	};
 
 	class animation
 	{
 	public:
-		animation(animation_data data);
+		animation(animation_data data = {});
 		std::uint32_t get_image() const;
 		void update(float dt);
 		void dbgui();
+		std::size_t size() const;
 	private:
 		animation_data data;
 		float time_multiplier = 1.0f;

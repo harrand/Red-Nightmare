@@ -51,7 +51,8 @@ inline void actor_component_update<actor_component_id::skin>
 		({
 			.textures =
 	   		{
-		   		// helm, hair, eyes, chest, feet, base
+		   		// helm, hair, eyes, chest, feet, base, spell
+				{.id = image_id::undefined, .colour_tint = tz::vec3::zero()},
 				{.id = image_id::undefined, .colour_tint = tz::vec3::zero()},
 				{.id = image_id::undefined, .colour_tint = tz::vec3::zero()},
 				{.id = image_id::undefined, .colour_tint = tz::vec3::zero()},
@@ -71,6 +72,7 @@ inline void actor_component_update<actor_component_id::skin>
 		sprite.data().textures[3].colour_tint = component.data().data.equipment.chest_colour;
 		sprite.data().textures[4].colour_tint = component.data().data.equipment.feet_colour;
 		sprite.data().textures[5].colour_tint = component.data().data.skin_colour;
+		sprite.data().textures[6].colour_tint = tz::vec3::filled(1.0f);
 	}
 	auto& skel = *actor.entity.get_component<actor_component_id::humanoid_skeleton>();
 	if(component.data().impl_dirty)
@@ -120,7 +122,8 @@ inline void actor_component_update<actor_component_id::skin>
 					},
 					.fps = 2,
 					.loop = true
-				}}
+				}},
+				animation{} // spell effect
 			}
 		};
 		// move side
@@ -144,7 +147,8 @@ inline void actor_component_update<actor_component_id::skin>
 					},
 					.fps = 6,
 					.loop = true
-				}}
+				}},
+				animation{} // spell effect
 			}
 		};
 		// move up
@@ -168,7 +172,8 @@ inline void actor_component_update<actor_component_id::skin>
 					},
 					.fps = 6,
 					.loop = true
-				}}
+				}},
+				animation{} // spell effect
 			}
 		};
 		// move down
@@ -192,7 +197,8 @@ inline void actor_component_update<actor_component_id::skin>
 					},
 					.fps = 6,
 					.loop = true
-				}}
+				}},
+				animation{} // spell effect
 			}
 		};
 		// cast
@@ -220,7 +226,8 @@ inline void actor_component_update<actor_component_id::skin>
 					},
 					.fps = 7,
 					.loop = true
-				}}
+				}},
+				animation{} // spell effect
 			}
 		};
 	}
