@@ -25,7 +25,8 @@ return actor
 			.health = 100,
 			.max_health = 100
 		}},
-		actor_component<actor_component_id::keyboard_control>{},
+		actor_component<actor_component_id::label>(),
+		actor_component<actor_component_id::keyboard_control>(),
 		actor_component<actor_component_id::collide>(),
 		actor_component<actor_component_id::action_listener>
 		{{

@@ -3,14 +3,20 @@ return spell
 	.cast =
 	{
 		.colour = {1.0f, 1.0f, 0.4f},
-		.cast_time_seconds = 9.5f
+		.cast_time_seconds = 2.5f
 	},
 	.function = [](actor& a, actor_system& sys)
 	{
 		if(a.entity.has_component<actor_component_id::damageable>())
 		{
-			auto& damageable = a.entity.get_component<actor_component_id::damageable>()->data();
+			actor* tar = sys.find(a.target);
+			if(tar == nullptr)
+			{
+				tar = &a;
+			}
+			auto& damageable = tar->entity.get_component<actor_component_id::damageable>()->data();
 			damageable.health = damageable.max_health;
 		}
-	}
+	},
+	.name = "Lesser Heal"
 };

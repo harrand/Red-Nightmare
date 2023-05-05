@@ -20,6 +20,30 @@ inline void actor_component_update<actor_component_id::cast>
 )
 {
 	TZ_PROFZONE("cast component - update", 0xffaa0077);
+	if(actor.entity.has_component<actor_component_id::label>())
+	{
+		auto& label = actor.entity.get_component<actor_component_id::label>()->data();
+		if(component.data().complete())
+		{
+			label.text = "";
+		}
+		else
+		{
+			label.text = std::string(component.data().spell.name) + " I";
+			auto cast_elapsed_time = (tz::system_time() - component.data().cast_begin_time).millis<std::uint64_t>();
+			float cast_proportion = (cast_elapsed_time / 1000.0f) / component.data().spell.cast.cast_time_seconds;
+			auto block_count = static_cast<std::size_t>(cast_proportion * 10.0f);
+			for(std::size_t i = 0; i < block_count; i++)
+			{
+				label.text += "X";
+			}
+			for(std::size_t i = block_count; i < 10; i++)
+			{
+				label.text += " ";
+			}
+			label.text += "I";
+		}
+	}
 	if(actor.entity.has_component<actor_component_id::humanoid_skeleton>())
 	{
 		// humanoid, we give it the human casting effect.

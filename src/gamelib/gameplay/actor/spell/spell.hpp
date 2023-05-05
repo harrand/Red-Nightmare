@@ -42,6 +42,7 @@ namespace rnlib
 				tz::report("Spell cast %d detected", static_cast<int>(this->id));
 			#endif
 		};
+		const char* name = "";
 	};
 
 	spell create_spell(spell_id id);

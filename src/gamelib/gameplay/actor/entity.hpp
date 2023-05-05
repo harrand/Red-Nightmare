@@ -154,6 +154,7 @@ namespace rnlib
 		std::size_t uuid = uuid_count++;
 		actor_type type = actor_type::undefined;
 		unsigned int layer = 0;
+		std::size_t target = nullid;
 	};
 
 	actor create_actor(actor_type type);
@@ -164,12 +165,12 @@ namespace rnlib
 	#include "gamelib/gameplay/actor/components/action_listener.hpp"
 	#include "gamelib/gameplay/actor/components/sprite.hpp"
 	#include "gamelib/gameplay/actor/components/animation.hpp"
-	#include "gamelib/gameplay/actor/components/cast.hpp"
 	#include "gamelib/gameplay/actor/components/collide.hpp"
 	#include "gamelib/gameplay/actor/components/damageable.hpp"
 	#include "gamelib/gameplay/actor/components/motion.hpp"
 	#include "gamelib/gameplay/actor/components/keyboard_control.hpp"
 	#include "gamelib/gameplay/actor/components/label.hpp"
+	#include "gamelib/gameplay/actor/components/cast.hpp"
 	#include "gamelib/gameplay/actor/components/humanoid_skeleton.hpp"
 
 	// prefab implementations.

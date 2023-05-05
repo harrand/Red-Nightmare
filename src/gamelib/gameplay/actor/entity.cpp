@@ -52,6 +52,14 @@ namespace rnlib
 		ImGui::Text("%s (%zu)", this->name, this->uuid);
 		ImGui::Indent();
 		this->transform.dbgui();
+		if(this->target == nullid)
+		{
+			ImGui::Text("No target");
+		}
+		else
+		{
+			ImGui::Text("Target: %zu", this->target);
+		}
 		this->entity.dbgui();
 		if(ImGui::CollapsingHeader("Actions"))
 		{
