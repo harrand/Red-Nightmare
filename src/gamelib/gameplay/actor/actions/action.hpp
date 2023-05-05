@@ -13,6 +13,7 @@ namespace rnlib
 		despawn,
 		spawn,
 		cast,
+		cancel_cast,
 		move_to,
 		_count
 	};

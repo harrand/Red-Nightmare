@@ -50,6 +50,11 @@ inline void actor_component_update<actor_component_id::motion>
 	}
 	else
 	{
+		// if we're casting while moving, cancel the cast. not allowed.
+		if(actor.entity.has_component<actor_component_id::cast>())
+		{
+			actor.actions.add_component<action_id::cancel_cast>();
+		}
 		component.data().tilt_timer += dt;
 	}
 	if(!component.data().impl_held)

@@ -127,11 +127,12 @@ namespace rnlib
 		}
 
 		const auto& mouse = tz::window().get_mouse_state();
-		// handle spell casts.
+		// handle spell casts and click input.
 		for(auto& entity : this->entities)
 		{
 			if(entity.entity.has_component<actor_component_id::cast>())
 			{
+				TZ_PROFZONE("actor_system - handle spell cast", 0xffee0077);
 				auto& cast = entity.entity.get_component<actor_component_id::cast>()->data();
 				if(cast.complete())
 				{
@@ -142,6 +143,7 @@ namespace rnlib
 			}
 			if(entity.entity.has_component<actor_component_id::action_listener>())
 			{
+				TZ_PROFZONE("actor_system - handle click action_listener", 0xffee0077);
 				auto& action_listener = entity.entity.get_component<actor_component_id::action_listener>()->data();
 				if(action_listener.on_click.size())
 				{
@@ -150,6 +152,7 @@ namespace rnlib
 						auto button = static_cast<tz::wsi::mouse_button>(static_cast<int>(i));
 						if(tz::wsi::is_mouse_button_down(mouse, button) && !tz::dbgui::claims_mouse())
 						{
+							TZ_PROFZONE("actor_system - action_listener trigger on click", 0xffee0077);
 							for(const auto& func : action_listener.on_click)
 							{
 								func(entity, button);
