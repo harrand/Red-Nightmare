@@ -5,6 +5,7 @@ enum class humanoid_skeleton_animation
 	move_side,
 	move_up,
 	move_down,
+	cast,
 	_count
 };
 
@@ -96,7 +97,16 @@ inline void actor_component_update<actor_component_id::humanoid_skeleton>
 	}
 	else
 	{
-		animation.data() = get_pose(humanoid_skeleton_animation::idle);
+		// TODO: Fix (just use idle pose)
+		const auto& ms = tz::window().get_mouse_state();
+		if(tz::wsi::is_mouse_button_down(ms, tz::wsi::mouse_button::left) && !tz::dbgui::claims_mouse())
+		{
+			animation.data() = get_pose(humanoid_skeleton_animation::cast);
+		}
+		else
+		{
+			animation.data() = get_pose(humanoid_skeleton_animation::cast);
+		}
 	}
 }
 

@@ -77,6 +77,24 @@ namespace human_art
 							.loop = true
 						}};
 					break;
+					case humanoid_skeleton_animation::cast:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_equipment_chest_elementalrobes_cast0,
+								image_id::race_human_equipment_chest_elementalrobes_cast1,
+								image_id::race_human_equipment_chest_elementalrobes_cast2,
+								image_id::race_human_equipment_chest_elementalrobes_cast3,
+								image_id::race_human_equipment_chest_elementalrobes_cast4,
+								image_id::race_human_equipment_chest_elementalrobes_cast3,
+								image_id::race_human_equipment_chest_elementalrobes_cast2,
+								image_id::race_human_equipment_chest_elementalrobes_cast1
+							},
+							.fps = 7,
+							.loop = true
+						}};
+					break;
 				}
 			break;
 			case chest_type::shirt:
@@ -136,6 +154,24 @@ namespace human_art
 							.loop = true
 						}};
 					break;
+					case humanoid_skeleton_animation::cast:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_equipment_chest_shirt_cast0,
+								image_id::race_human_equipment_chest_shirt_cast1,
+								image_id::race_human_equipment_chest_shirt_cast2,
+								image_id::race_human_equipment_chest_shirt_cast3,
+								image_id::race_human_equipment_chest_shirt_cast4,
+								image_id::race_human_equipment_chest_shirt_cast3,
+								image_id::race_human_equipment_chest_shirt_cast2,
+								image_id::race_human_equipment_chest_shirt_cast1
+							},
+							.fps = 7,
+							.loop = true
+						}};
+					break;
 				}
 			break;
 			case chest_type::warrior:
@@ -192,6 +228,24 @@ namespace human_art
 								image_id::race_human_equipment_chest_warrior_down3,
 							},
 							.fps = 6,
+							.loop = true
+						}};
+					break;
+					case humanoid_skeleton_animation::cast:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_equipment_chest_warrior_cast0,
+								image_id::race_human_equipment_chest_warrior_cast1,
+								image_id::race_human_equipment_chest_warrior_cast2,
+								image_id::race_human_equipment_chest_warrior_cast3,
+								image_id::race_human_equipment_chest_warrior_cast4,
+								image_id::race_human_equipment_chest_warrior_cast3,
+								image_id::race_human_equipment_chest_warrior_cast2,
+								image_id::race_human_equipment_chest_warrior_cast1
+							},
+							.fps = 7,
 							.loop = true
 						}};
 					break;

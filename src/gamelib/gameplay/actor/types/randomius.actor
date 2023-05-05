@@ -34,10 +34,6 @@ return actor
 		}},
 		actor_component<actor_component_id::collide>
 		{{
-			.collide_if = [](const actor& self, const actor& a)
-			{
-				return self.type == a.type;
-			}
 		}}
 	},
 	.name = "Randomius (Dev)"

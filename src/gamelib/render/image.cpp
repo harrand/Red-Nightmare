@@ -41,6 +41,11 @@ namespace rnlib
 #include ImportedTextHeader(human_base_down1, png)
 #include ImportedTextHeader(human_base_down2, png)
 #include ImportedTextHeader(human_base_down3, png)
+#include ImportedTextHeader(human_base_cast0, png)
+#include ImportedTextHeader(human_base_cast1, png)
+#include ImportedTextHeader(human_base_cast2, png)
+#include ImportedTextHeader(human_base_cast3, png)
+#include ImportedTextHeader(human_base_cast4, png)
 #include ImportedTextHeader(human_hair_long_idle0, png)
 #include ImportedTextHeader(human_hair_long_idle1, png)
 #include ImportedTextHeader(human_hair_long_side0, png)
@@ -107,6 +112,11 @@ namespace rnlib
 #include ImportedTextHeader(human_equipment_chest_elementalrobes_down1, png)
 #include ImportedTextHeader(human_equipment_chest_elementalrobes_down2, png)
 #include ImportedTextHeader(human_equipment_chest_elementalrobes_down3, png)
+#include ImportedTextHeader(human_equipment_chest_elementalrobes_cast0, png)
+#include ImportedTextHeader(human_equipment_chest_elementalrobes_cast1, png)
+#include ImportedTextHeader(human_equipment_chest_elementalrobes_cast2, png)
+#include ImportedTextHeader(human_equipment_chest_elementalrobes_cast3, png)
+#include ImportedTextHeader(human_equipment_chest_elementalrobes_cast4, png)
 #include ImportedTextHeader(human_equipment_chest_shirt_idle0, png)
 #include ImportedTextHeader(human_equipment_chest_shirt_idle1, png)
 #include ImportedTextHeader(human_equipment_chest_shirt_side0, png)
@@ -121,6 +131,11 @@ namespace rnlib
 #include ImportedTextHeader(human_equipment_chest_shirt_down1, png)
 #include ImportedTextHeader(human_equipment_chest_shirt_down2, png)
 #include ImportedTextHeader(human_equipment_chest_shirt_down3, png)
+#include ImportedTextHeader(human_equipment_chest_shirt_cast0, png)
+#include ImportedTextHeader(human_equipment_chest_shirt_cast1, png)
+#include ImportedTextHeader(human_equipment_chest_shirt_cast2, png)
+#include ImportedTextHeader(human_equipment_chest_shirt_cast3, png)
+#include ImportedTextHeader(human_equipment_chest_shirt_cast4, png)
 #include ImportedTextHeader(human_equipment_chest_warrior_idle0, png)
 #include ImportedTextHeader(human_equipment_chest_warrior_idle1, png)
 #include ImportedTextHeader(human_equipment_chest_warrior_side0, png)
@@ -135,6 +150,11 @@ namespace rnlib
 #include ImportedTextHeader(human_equipment_chest_warrior_down1, png)
 #include ImportedTextHeader(human_equipment_chest_warrior_down2, png)
 #include ImportedTextHeader(human_equipment_chest_warrior_down3, png)
+#include ImportedTextHeader(human_equipment_chest_warrior_cast0, png)
+#include ImportedTextHeader(human_equipment_chest_warrior_cast1, png)
+#include ImportedTextHeader(human_equipment_chest_warrior_cast2, png)
+#include ImportedTextHeader(human_equipment_chest_warrior_cast3, png)
+#include ImportedTextHeader(human_equipment_chest_warrior_cast4, png)
 #include ImportedTextHeader(human_equipment_feet_dot_idle0, png)
 #include ImportedTextHeader(human_equipment_feet_dot_side0, png)
 #include ImportedTextHeader(human_equipment_feet_dot_side1, png)
@@ -199,6 +219,11 @@ namespace rnlib
 		ImportedTextData(human_base_down1, png),
 		ImportedTextData(human_base_down2, png),
 		ImportedTextData(human_base_down3, png),
+		ImportedTextData(human_base_cast0, png),
+		ImportedTextData(human_base_cast1, png),
+		ImportedTextData(human_base_cast2, png),
+		ImportedTextData(human_base_cast3, png),
+		ImportedTextData(human_base_cast4, png),
 		ImportedTextData(human_hair_long_idle0, png),
 		ImportedTextData(human_hair_long_idle1, png),
 		ImportedTextData(human_hair_long_side0, png),
@@ -265,6 +290,11 @@ namespace rnlib
 		ImportedTextData(human_equipment_chest_elementalrobes_down1, png),
 		ImportedTextData(human_equipment_chest_elementalrobes_down2, png),
 		ImportedTextData(human_equipment_chest_elementalrobes_down3, png),
+		ImportedTextData(human_equipment_chest_elementalrobes_cast0, png),
+		ImportedTextData(human_equipment_chest_elementalrobes_cast1, png),
+		ImportedTextData(human_equipment_chest_elementalrobes_cast2, png),
+		ImportedTextData(human_equipment_chest_elementalrobes_cast3, png),
+		ImportedTextData(human_equipment_chest_elementalrobes_cast4, png),
 		ImportedTextData(human_equipment_chest_shirt_idle0, png),
 		ImportedTextData(human_equipment_chest_shirt_idle1, png),
 		ImportedTextData(human_equipment_chest_shirt_side0, png),
@@ -279,6 +309,11 @@ namespace rnlib
 		ImportedTextData(human_equipment_chest_shirt_down1, png),
 		ImportedTextData(human_equipment_chest_shirt_down2, png),
 		ImportedTextData(human_equipment_chest_shirt_down3, png),
+		ImportedTextData(human_equipment_chest_shirt_cast0, png),
+		ImportedTextData(human_equipment_chest_shirt_cast1, png),
+		ImportedTextData(human_equipment_chest_shirt_cast2, png),
+		ImportedTextData(human_equipment_chest_shirt_cast3, png),
+		ImportedTextData(human_equipment_chest_shirt_cast4, png),
 		ImportedTextData(human_equipment_chest_warrior_idle0, png),
 		ImportedTextData(human_equipment_chest_warrior_idle1, png),
 		ImportedTextData(human_equipment_chest_warrior_side0, png),
@@ -293,6 +328,11 @@ namespace rnlib
 		ImportedTextData(human_equipment_chest_warrior_down1, png),
 		ImportedTextData(human_equipment_chest_warrior_down2, png),
 		ImportedTextData(human_equipment_chest_warrior_down3, png),
+		ImportedTextData(human_equipment_chest_warrior_cast0, png),
+		ImportedTextData(human_equipment_chest_warrior_cast1, png),
+		ImportedTextData(human_equipment_chest_warrior_cast2, png),
+		ImportedTextData(human_equipment_chest_warrior_cast3, png),
+		ImportedTextData(human_equipment_chest_warrior_cast4, png),
 		ImportedTextData(human_equipment_feet_dot_idle0, png),
 		ImportedTextData(human_equipment_feet_dot_side0, png),
 		ImportedTextData(human_equipment_feet_dot_side1, png),

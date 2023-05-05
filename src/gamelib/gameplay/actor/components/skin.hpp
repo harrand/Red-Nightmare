@@ -195,6 +195,34 @@ inline void actor_component_update<actor_component_id::skin>
 				}}
 			}
 		};
+		// cast
+		skel.data().poses[4] = actor_component_params<actor_component_id::animation>
+		{
+			.animations =
+			{
+				prefab::human_art::get_helm(component.data().data.equipment.helm_type, humanoid_skeleton_animation::cast),
+				get_hair_final(component.data().data.hair_style, humanoid_skeleton_animation::cast, component.data().data.equipment.helm_type),
+				prefab::human_art::get_eyes(component.data().data.eye_type, humanoid_skeleton_animation::cast),
+				prefab::human_art::get_chest(component.data().data.equipment.chest_type, humanoid_skeleton_animation::cast),
+				prefab::human_art::get_feet(component.data().data.equipment.feet_type, humanoid_skeleton_animation::cast),
+				animation
+				{{
+					.frame_textures =
+					{
+						image_id::race_human_base_cast0,
+						image_id::race_human_base_cast1,
+						image_id::race_human_base_cast2,
+						image_id::race_human_base_cast3,
+						image_id::race_human_base_cast4,
+						image_id::race_human_base_cast3,
+						image_id::race_human_base_cast2,
+						image_id::race_human_base_cast1,
+					},
+					.fps = 7,
+					.loop = true
+				}}
+			}
+		};
 	}
 }
 

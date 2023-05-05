@@ -9,7 +9,9 @@
 #include "gamelib/gameplay/actor/actions/action.hpp"
 #include "tz/core/memory/clone.hpp"
 #include "tz/core/profile.hpp" // for profiler instrumentation for components.
+#include "tz/wsi/mouse.hpp" // actor_component_id::humanoid_skeleton cast animation (dev debug)
 #include "tz/wsi/keyboard.hpp"
+#include "tz/dbgui/dbgui.hpp" // actor_component_id::humanoid_skeleton cast animation (dev debug)
 #include <optional>
 #include <limits>
 #include <bit> // actor_component_id::motion
