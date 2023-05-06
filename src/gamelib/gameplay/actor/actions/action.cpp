@@ -42,6 +42,15 @@ namespace rnlib
 		action.set_is_complete(true);
 	ACTION_IMPL_END(action_id::despawn)
 
+	ACTION_IMPL_BEGIN(action_id::timed_despawn)
+		auto seconds_elapsed = (tz::system_time() - action.data().impl_start).seconds<std::uint64_t>();
+		if(seconds_elapsed > action.data().seconds_until_despawn)
+		{
+			caster.actions.set_component<action_id::despawn>();
+			action.set_is_complete(true);
+		}
+	ACTION_IMPL_END(action_id::timed_despawn)
+
 	ACTION_IMPL_BEGIN(action_id::spawn)
 		actor& a = system.add(action.data().type);
 		a.transform = caster.transform;
@@ -115,4 +124,39 @@ namespace rnlib
 			action.set_is_complete(true);
 		}
 	ACTION_IMPL_END(action_id::move_to)
+
+	ACTION_IMPL_BEGIN(action_id::emit_combat_text)
+		actor& text = system.add(actor_type::unknown);
+		text.transform = caster.transform;
+		tz::vec2 abscale = text.transform.get_scale();
+		abscale[0] = std::abs(abscale[0]);
+		abscale[1] = std::abs(abscale[1]);
+		text.transform.local_position += abscale;
+		text.actions.add_component<action_id::timed_despawn>
+		({
+			.seconds_until_despawn = 1.5f
+		});
+		text.entity.add_component<actor_component_id::motion>
+		({
+			.direction = move_direction::up,
+	   		.tilt_factor = 0.1f,
+	   		.impl_held = true,
+		});
+		tz::vec3 col = tz::vec3::filled(1.0f);
+		switch(action.data().type)
+		{
+			case combat_text_type::damage:
+				col = {1.0f, 0.0f, 0.0f};
+			break;
+			case combat_text_type::heal:
+				col = {0.0f, 1.0f, 0.0f};
+			break;
+		}
+		text.entity.set_component<actor_component_id::label>
+		({
+			.text = std::to_string(action.data().amount),
+			.colour = col
+		});
+		action.set_is_complete(true);
+	ACTION_IMPL_END(action_id::emit_combat_text)
 }

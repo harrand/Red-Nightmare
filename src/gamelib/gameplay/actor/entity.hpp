@@ -136,6 +136,7 @@ namespace rnlib
 		player_benedict,
 		randomius,
 		the_black_knight,
+		unknown,
 		_count
 	};
 

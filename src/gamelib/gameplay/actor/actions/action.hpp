@@ -3,6 +3,7 @@
 #include "gamelib/core/entity.hpp"
 #include "tz/core/memory/clone.hpp"
 #include "tz/core/data/vector.hpp"
+#include "tz/core/time.hpp"
 
 namespace rnlib
 {
@@ -11,10 +12,12 @@ namespace rnlib
 		teleport,
 		random_teleport,
 		despawn,
+		timed_despawn,
 		spawn,
 		cast,
 		cancel_cast,
 		move_to,
+		emit_combat_text,
 		_count
 	};
 
@@ -74,6 +77,13 @@ namespace rnlib
 		tz::vec2 location;
 	};
 
+	template<>
+	struct action_params<action_id::timed_despawn>
+	{
+		float seconds_until_despawn = 0.0f;
+		tz::duration impl_start = tz::system_time();
+	};
+
 	enum class actor_type;
 
 	template<>
@@ -95,6 +105,20 @@ namespace rnlib
 	struct action_params<action_id::move_to>
 	{
 		tz::vec2 location;
+	};
+
+	enum class combat_text_type
+	{
+		damage,
+		heal,
+		immune
+	};
+
+	template<>
+	struct action_params<action_id::emit_combat_text>
+	{
+		combat_text_type type;
+		std::size_t amount;
 	};
 
 	template<action_id ID>

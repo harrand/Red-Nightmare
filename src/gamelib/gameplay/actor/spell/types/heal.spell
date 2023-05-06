@@ -15,7 +15,14 @@ return spell
 				tar = &a;
 			}
 			auto& damageable = tar->entity.get_component<actor_component_id::damageable>()->data();
-			damageable.health = damageable.max_health;
+			std::size_t heal_amt = damageable.max_health - damageable.health;
+			heal_amt = std::min(heal_amt, static_cast<std::size_t>(50));
+			damageable.health += heal_amt;
+			tar->actions.add_component<action_id::emit_combat_text>
+			({
+				.type = combat_text_type::heal,
+				.amount = heal_amt
+			});
 		}
 	},
 	.name = "Lesser Heal"

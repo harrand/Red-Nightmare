@@ -150,6 +150,9 @@ namespace rnlib
 					#include "gamelib/gameplay/actor/types/the_black_knight.actor"
 				}
 				break;
+				case actor_type::unknown:
+					return {};
+				break;
 			}
 			tz::error("Attempted to spawn actor of an unknown type. Add support for the actor.");	
 			return {};
