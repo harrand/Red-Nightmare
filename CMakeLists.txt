@@ -289,6 +289,16 @@ add_text(
 		images/races/human/equipment/chest/warrior/human_equipment_chest_warrior_cast2.png
 		images/races/human/equipment/chest/warrior/human_equipment_chest_warrior_cast3.png
 		images/races/human/equipment/chest/warrior/human_equipment_chest_warrior_cast4.png
+		images/races/human/equipment/chest/warrior/human_equipment_chest_warrior_death00.png
+		images/races/human/equipment/chest/warrior/human_equipment_chest_warrior_death01.png
+		images/races/human/equipment/chest/warrior/human_equipment_chest_warrior_death02.png
+		images/races/human/equipment/chest/warrior/human_equipment_chest_warrior_death03.png
+		images/races/human/equipment/chest/warrior/human_equipment_chest_warrior_death04.png
+		images/races/human/equipment/chest/warrior/human_equipment_chest_warrior_death05.png
+		images/races/human/equipment/chest/warrior/human_equipment_chest_warrior_death06.png
+		images/races/human/equipment/chest/warrior/human_equipment_chest_warrior_death07.png
+		images/races/human/equipment/chest/warrior/human_equipment_chest_warrior_death08.png
+		images/races/human/equipment/chest/warrior/human_equipment_chest_warrior_death09.png
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_idle0.png
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_side0.png
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_side1.png

@@ -216,6 +216,16 @@ namespace rnlib
 #include ImportedTextHeader(human_equipment_chest_warrior_cast2, png)
 #include ImportedTextHeader(human_equipment_chest_warrior_cast3, png)
 #include ImportedTextHeader(human_equipment_chest_warrior_cast4, png)
+#include ImportedTextHeader(human_equipment_chest_warrior_death00, png)
+#include ImportedTextHeader(human_equipment_chest_warrior_death01, png)
+#include ImportedTextHeader(human_equipment_chest_warrior_death02, png)
+#include ImportedTextHeader(human_equipment_chest_warrior_death03, png)
+#include ImportedTextHeader(human_equipment_chest_warrior_death04, png)
+#include ImportedTextHeader(human_equipment_chest_warrior_death05, png)
+#include ImportedTextHeader(human_equipment_chest_warrior_death06, png)
+#include ImportedTextHeader(human_equipment_chest_warrior_death07, png)
+#include ImportedTextHeader(human_equipment_chest_warrior_death08, png)
+#include ImportedTextHeader(human_equipment_chest_warrior_death09, png)
 #include ImportedTextHeader(human_equipment_feet_dot_idle0, png)
 #include ImportedTextHeader(human_equipment_feet_dot_side0, png)
 #include ImportedTextHeader(human_equipment_feet_dot_side1, png)
@@ -460,6 +470,16 @@ namespace rnlib
 		ImportedTextData(human_equipment_chest_warrior_cast2, png),
 		ImportedTextData(human_equipment_chest_warrior_cast3, png),
 		ImportedTextData(human_equipment_chest_warrior_cast4, png),
+		ImportedTextData(human_equipment_chest_warrior_death00, png),
+		ImportedTextData(human_equipment_chest_warrior_death01, png),
+		ImportedTextData(human_equipment_chest_warrior_death02, png),
+		ImportedTextData(human_equipment_chest_warrior_death03, png),
+		ImportedTextData(human_equipment_chest_warrior_death04, png),
+		ImportedTextData(human_equipment_chest_warrior_death05, png),
+		ImportedTextData(human_equipment_chest_warrior_death06, png),
+		ImportedTextData(human_equipment_chest_warrior_death07, png),
+		ImportedTextData(human_equipment_chest_warrior_death08, png),
+		ImportedTextData(human_equipment_chest_warrior_death09, png),
 		ImportedTextData(human_equipment_feet_dot_idle0, png),
 		ImportedTextData(human_equipment_feet_dot_side0, png),
 		ImportedTextData(human_equipment_feet_dot_side1, png),
