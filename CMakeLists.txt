@@ -323,6 +323,8 @@ add_text(
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_down2.png
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_down3.png
 		images/races/human/equipment/feet/dot/human_equipment_feet_dot_cast0.png
+		images/races/human/equipment/feet/dot/human_equipment_feet_dot_death00.png
+		images/races/human/equipment/feet/dot/human_equipment_feet_dot_death01.png
 		images/races/human/equipment/helm/full/human_equipment_helm_full_idle0.png
 		images/races/human/equipment/helm/full/human_equipment_helm_full_idle1.png
 		images/races/human/equipment/helm/full/human_equipment_helm_full_side0.png

@@ -240,6 +240,8 @@ namespace rnlib
 			race_human_equipment_feet_dot_down2,
 			race_human_equipment_feet_dot_down3,
 			race_human_equipment_feet_dot_cast0,
+			race_human_equipment_feet_dot_death0,
+			race_human_equipment_feet_dot_death1,
 			race_human_equipment_helm_full_idle0,
 			race_human_equipment_helm_full_idle1,
 			race_human_equipment_helm_full_side0,

@@ -250,6 +250,8 @@ namespace rnlib
 #include ImportedTextHeader(human_equipment_feet_dot_down2, png)
 #include ImportedTextHeader(human_equipment_feet_dot_down3, png)
 #include ImportedTextHeader(human_equipment_feet_dot_cast0, png)
+#include ImportedTextHeader(human_equipment_feet_dot_death00, png)
+#include ImportedTextHeader(human_equipment_feet_dot_death01, png)
 #include ImportedTextHeader(human_equipment_helm_full_idle0, png)
 #include ImportedTextHeader(human_equipment_helm_full_idle1, png)
 #include ImportedTextHeader(human_equipment_helm_full_side0, png)
@@ -514,6 +516,8 @@ namespace rnlib
 		ImportedTextData(human_equipment_feet_dot_down2, png),
 		ImportedTextData(human_equipment_feet_dot_down3, png),
 		ImportedTextData(human_equipment_feet_dot_cast0, png),
+		ImportedTextData(human_equipment_feet_dot_death00, png),
+		ImportedTextData(human_equipment_feet_dot_death01, png),
 		ImportedTextData(human_equipment_helm_full_idle0, png),
 		ImportedTextData(human_equipment_helm_full_idle1, png),
 		ImportedTextData(human_equipment_helm_full_side0, png),

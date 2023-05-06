@@ -85,6 +85,28 @@ namespace human_art
 							.loop = true
 						}};
 					break;
+					case humanoid_skeleton_animation::death:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_equipment_feet_dot_death0,
+								image_id::race_human_equipment_feet_dot_death0,
+								image_id::race_human_equipment_feet_dot_death1,
+								image_id::race_human_equipment_feet_dot_death1,
+								image_id::race_human_equipment_feet_dot_death1,
+								image_id::race_human_equipment_feet_dot_death1,
+								image_id::race_human_equipment_feet_dot_death1,
+								image_id::race_human_equipment_feet_dot_death1,
+								image_id::race_human_equipment_feet_dot_death1,
+								image_id::race_human_equipment_feet_dot_death1,
+								image_id::race_human_equipment_feet_dot_death1,
+								image_id::race_human_equipment_feet_dot_death1,
+							},
+							.fps = 14,
+							.loop = false
+						}};
+					break;
 				}
 			break;
 		}
