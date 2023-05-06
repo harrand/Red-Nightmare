@@ -184,6 +184,16 @@ add_text(
 		images/races/human/hair/lord/human_hair_lord_down3.png
 		images/races/human/hair/lord/human_hair_lord_cast0.png
 		images/races/human/hair/lord/human_hair_lord_cast1.png
+		images/races/human/hair/lord/human_hair_lord_death00.png
+		images/races/human/hair/lord/human_hair_lord_death01.png
+		images/races/human/hair/lord/human_hair_lord_death02.png
+		images/races/human/hair/lord/human_hair_lord_death03.png
+		images/races/human/hair/lord/human_hair_lord_death04.png
+		images/races/human/hair/lord/human_hair_lord_death05.png
+		images/races/human/hair/lord/human_hair_lord_death06.png
+		images/races/human/hair/lord/human_hair_lord_death07.png
+		images/races/human/hair/lord/human_hair_lord_death08.png
+		images/races/human/hair/lord/human_hair_lord_death09.png
 		images/races/human/hair/prince/human_hair_prince_idle0.png
 		images/races/human/hair/prince/human_hair_prince_idle1.png
 		images/races/human/hair/prince/human_hair_prince_side0.png
