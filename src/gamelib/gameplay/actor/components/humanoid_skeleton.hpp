@@ -73,6 +73,11 @@ inline void actor_component_update<actor_component_id::humanoid_skeleton>
 		}
 		else
 		{
+			if(component.data().impl_dead)
+			{
+				// we were dead, but now we're not. repaint.
+				component.data().should_repaint = true;
+			}
 			component.data().impl_dead = false;
 		}
 	}

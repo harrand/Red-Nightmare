@@ -59,6 +59,15 @@ namespace rnlib
 	ACTION_IMPL_END(action_id::spawn)
 
 	ACTION_IMPL_BEGIN(action_id::cast)
+		if(caster.entity.has_component<actor_component_id::damageable>())
+		{
+			// you can't cast while you're dead.
+			if(caster.entity.get_component<actor_component_id::damageable>()->data().dead())
+			{
+				action.set_is_complete(true);
+				return;
+			}
+		}
 		caster.entity.add_component<actor_component_id::cast>({.spell = rnlib::create_spell(action.data().spell)});
 		action.set_is_complete(true);
 	ACTION_IMPL_END(action_id::cast)

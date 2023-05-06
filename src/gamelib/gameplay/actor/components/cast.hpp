@@ -20,6 +20,11 @@ inline void actor_component_update<actor_component_id::cast>
 )
 {
 	TZ_PROFZONE("cast component - update", 0xffaa0077);
+	if(actor.entity.has_component<actor_component_id::damageable>() && actor.entity.get_component<actor_component_id::damageable>()->data().dead())
+	{
+		// if actor is dead, immediately request to stop casting as we cant do that.
+		actor.actions.set_component<action_id::cancel_cast>();
+	}
 	if(actor.entity.has_component<actor_component_id::label>())
 	{
 		auto& label = actor.entity.get_component<actor_component_id::label>()->data();
