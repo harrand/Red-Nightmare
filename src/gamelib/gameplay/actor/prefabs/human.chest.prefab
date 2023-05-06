@@ -95,6 +95,28 @@ namespace human_art
 							.loop = true
 						}};
 					break;
+					case humanoid_skeleton_animation::death:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_equipment_chest_elementalrobes_death0,
+								image_id::race_human_equipment_chest_elementalrobes_death1,
+								image_id::race_human_equipment_chest_elementalrobes_death2,
+								image_id::race_human_equipment_chest_elementalrobes_death3,
+								image_id::race_human_equipment_chest_elementalrobes_death4,
+								image_id::race_human_equipment_chest_elementalrobes_death5,
+								image_id::race_human_equipment_chest_elementalrobes_death6,
+								image_id::race_human_equipment_chest_elementalrobes_death6,
+								image_id::race_human_equipment_chest_elementalrobes_death6,
+								image_id::race_human_equipment_chest_elementalrobes_death7,
+								image_id::race_human_equipment_chest_elementalrobes_death8,
+								image_id::race_human_equipment_chest_elementalrobes_death9,
+							},
+							.fps = 14,
+							.loop = false
+						}};
+					break;
 				}
 			break;
 			case chest_type::shirt:

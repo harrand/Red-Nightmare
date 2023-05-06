@@ -19,6 +19,15 @@ inline void actor_component_update<actor_component_id::damageable>
 )
 {
 	TZ_PROFZONE("damageable component - update", 0xffaa0077);
+	if(actor.entity.has_component<actor_component_id::motion>())
+	{
+		auto& motion = actor.entity.get_component<actor_component_id::motion>()->data();
+		motion.impl_held = component.data().dead();
+		if(component.data().dead())
+		{
+			motion.direction = 0;
+		}
+	}
 }
 
 template<>

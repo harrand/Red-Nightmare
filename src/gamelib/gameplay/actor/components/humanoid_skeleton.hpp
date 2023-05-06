@@ -6,6 +6,7 @@ enum class humanoid_skeleton_animation
 	move_up,
 	move_down,
 	cast,
+	death,
 	_count
 };
 
@@ -18,6 +19,7 @@ struct actor_component_params<actor_component_id::humanoid_skeleton>
 	// implementation detail. if we were moving left last update and we still are, we dont want to re-assign the animation as it would reset the animation timer and stick in the same frame forever.
 	move_direction_t impl_movedir = 0b100000;
 	bool impl_casting = false;
+	bool impl_dead = false;
 	bool should_repaint = false;
 };
 
@@ -54,6 +56,25 @@ inline void actor_component_update<actor_component_id::humanoid_skeleton>
 		animation.data() = get_pose(humanoid_skeleton_animation::idle);
 		component.data().should_repaint = false;
 		return;
+	}
+
+	if(actor.entity.has_component<actor_component_id::damageable>())
+	{
+		auto& damageable = actor.entity.get_component<actor_component_id::damageable>()->data();
+		if(damageable.dead())
+		{
+			if(!component.data().impl_dead)
+			{
+				// we just died. send the anim.
+				animation.data() = get_pose(humanoid_skeleton_animation::death);
+				component.data().impl_dead = true;
+			}
+			return;
+		}
+		else
+		{
+			component.data().impl_dead = false;
+		}
 	}
 
 	if(!component.data().impl_casting)

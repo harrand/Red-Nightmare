@@ -230,6 +230,40 @@ inline void actor_component_update<actor_component_id::skin>
 				animation{} // spell effect
 			}
 		};
+
+		// death
+		skel.data().poses[5] = actor_component_params<actor_component_id::animation>
+		{
+			.animations =
+			{
+				prefab::human_art::get_helm(component.data().data.equipment.helm_type, humanoid_skeleton_animation::death),
+				get_hair_final(component.data().data.hair_style, humanoid_skeleton_animation::death, component.data().data.equipment.helm_type),
+				prefab::human_art::get_eyes(component.data().data.eye_type, humanoid_skeleton_animation::death),
+				prefab::human_art::get_chest(component.data().data.equipment.chest_type, humanoid_skeleton_animation::death),
+				prefab::human_art::get_feet(component.data().data.equipment.feet_type, humanoid_skeleton_animation::death),
+				animation
+				{{
+					.frame_textures =
+					{
+						image_id::race_human_base_death0,
+						image_id::race_human_base_death1,
+						image_id::race_human_base_death2,
+						image_id::race_human_base_death3,
+						image_id::race_human_base_death4,
+						image_id::race_human_base_death5,
+						image_id::race_human_base_death6,
+						image_id::race_human_base_death6,
+						image_id::race_human_base_death6,
+						image_id::race_human_base_death7,
+						image_id::race_human_base_death8,
+						image_id::race_human_base_death9,
+					},
+					.fps = 14,
+					.loop = false
+				}},
+				animation{} // spell effect
+			}
+		};
 	}
 }
 

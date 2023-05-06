@@ -51,6 +51,16 @@ namespace rnlib
 #include ImportedTextHeader(human_base_cast2, png)
 #include ImportedTextHeader(human_base_cast3, png)
 #include ImportedTextHeader(human_base_cast4, png)
+#include ImportedTextHeader(human_base_death00, png)
+#include ImportedTextHeader(human_base_death01, png)
+#include ImportedTextHeader(human_base_death02, png)
+#include ImportedTextHeader(human_base_death03, png)
+#include ImportedTextHeader(human_base_death04, png)
+#include ImportedTextHeader(human_base_death05, png)
+#include ImportedTextHeader(human_base_death06, png)
+#include ImportedTextHeader(human_base_death07, png)
+#include ImportedTextHeader(human_base_death08, png)
+#include ImportedTextHeader(human_base_death09, png)
 #include ImportedTextHeader(human_cast0, png)
 #include ImportedTextHeader(human_cast1, png)
 #include ImportedTextHeader(human_cast2, png)
@@ -138,6 +148,16 @@ namespace rnlib
 #include ImportedTextHeader(human_equipment_chest_elementalrobes_cast2, png)
 #include ImportedTextHeader(human_equipment_chest_elementalrobes_cast3, png)
 #include ImportedTextHeader(human_equipment_chest_elementalrobes_cast4, png)
+#include ImportedTextHeader(human_equipment_chest_elementalrobes_death00, png)
+#include ImportedTextHeader(human_equipment_chest_elementalrobes_death01, png)
+#include ImportedTextHeader(human_equipment_chest_elementalrobes_death02, png)
+#include ImportedTextHeader(human_equipment_chest_elementalrobes_death03, png)
+#include ImportedTextHeader(human_equipment_chest_elementalrobes_death04, png)
+#include ImportedTextHeader(human_equipment_chest_elementalrobes_death05, png)
+#include ImportedTextHeader(human_equipment_chest_elementalrobes_death06, png)
+#include ImportedTextHeader(human_equipment_chest_elementalrobes_death07, png)
+#include ImportedTextHeader(human_equipment_chest_elementalrobes_death08, png)
+#include ImportedTextHeader(human_equipment_chest_elementalrobes_death09, png)
 #include ImportedTextHeader(human_equipment_chest_shirt_idle0, png)
 #include ImportedTextHeader(human_equipment_chest_shirt_idle1, png)
 #include ImportedTextHeader(human_equipment_chest_shirt_side0, png)
@@ -255,6 +275,16 @@ namespace rnlib
 		ImportedTextData(human_base_cast2, png),
 		ImportedTextData(human_base_cast3, png),
 		ImportedTextData(human_base_cast4, png),
+		ImportedTextData(human_base_death00, png),
+		ImportedTextData(human_base_death01, png),
+		ImportedTextData(human_base_death02, png),
+		ImportedTextData(human_base_death03, png),
+		ImportedTextData(human_base_death04, png),
+		ImportedTextData(human_base_death05, png),
+		ImportedTextData(human_base_death06, png),
+		ImportedTextData(human_base_death07, png),
+		ImportedTextData(human_base_death08, png),
+		ImportedTextData(human_base_death09, png),
 		ImportedTextData(human_cast0, png),
 		ImportedTextData(human_cast1, png),
 		ImportedTextData(human_cast2, png),
@@ -342,6 +372,16 @@ namespace rnlib
 		ImportedTextData(human_equipment_chest_elementalrobes_cast2, png),
 		ImportedTextData(human_equipment_chest_elementalrobes_cast3, png),
 		ImportedTextData(human_equipment_chest_elementalrobes_cast4, png),
+		ImportedTextData(human_equipment_chest_elementalrobes_death00, png),
+		ImportedTextData(human_equipment_chest_elementalrobes_death01, png),
+		ImportedTextData(human_equipment_chest_elementalrobes_death02, png),
+		ImportedTextData(human_equipment_chest_elementalrobes_death03, png),
+		ImportedTextData(human_equipment_chest_elementalrobes_death04, png),
+		ImportedTextData(human_equipment_chest_elementalrobes_death05, png),
+		ImportedTextData(human_equipment_chest_elementalrobes_death06, png),
+		ImportedTextData(human_equipment_chest_elementalrobes_death07, png),
+		ImportedTextData(human_equipment_chest_elementalrobes_death08, png),
+		ImportedTextData(human_equipment_chest_elementalrobes_death09, png),
 		ImportedTextData(human_equipment_chest_shirt_idle0, png),
 		ImportedTextData(human_equipment_chest_shirt_idle1, png),
 		ImportedTextData(human_equipment_chest_shirt_side0, png),

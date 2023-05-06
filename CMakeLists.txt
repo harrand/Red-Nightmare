@@ -124,6 +124,16 @@ add_text(
 		images/races/human/base/human_base_cast2.png
 		images/races/human/base/human_base_cast3.png
 		images/races/human/base/human_base_cast4.png
+		images/races/human/base/human_base_death00.png
+		images/races/human/base/human_base_death01.png
+		images/races/human/base/human_base_death02.png
+		images/races/human/base/human_base_death03.png
+		images/races/human/base/human_base_death04.png
+		images/races/human/base/human_base_death05.png
+		images/races/human/base/human_base_death06.png
+		images/races/human/base/human_base_death07.png
+		images/races/human/base/human_base_death08.png
+		images/races/human/base/human_base_death09.png
 		images/races/human/cast/human_cast0.png
 		images/races/human/cast/human_cast1.png
 		images/races/human/cast/human_cast2.png
@@ -211,6 +221,16 @@ add_text(
 		images/races/human/equipment/chest/elementalrobes/human_equipment_chest_elementalrobes_cast2.png
 		images/races/human/equipment/chest/elementalrobes/human_equipment_chest_elementalrobes_cast3.png
 		images/races/human/equipment/chest/elementalrobes/human_equipment_chest_elementalrobes_cast4.png
+		images/races/human/equipment/chest/elementalrobes/human_equipment_chest_elementalrobes_death00.png
+		images/races/human/equipment/chest/elementalrobes/human_equipment_chest_elementalrobes_death01.png
+		images/races/human/equipment/chest/elementalrobes/human_equipment_chest_elementalrobes_death02.png
+		images/races/human/equipment/chest/elementalrobes/human_equipment_chest_elementalrobes_death03.png
+		images/races/human/equipment/chest/elementalrobes/human_equipment_chest_elementalrobes_death04.png
+		images/races/human/equipment/chest/elementalrobes/human_equipment_chest_elementalrobes_death05.png
+		images/races/human/equipment/chest/elementalrobes/human_equipment_chest_elementalrobes_death06.png
+		images/races/human/equipment/chest/elementalrobes/human_equipment_chest_elementalrobes_death07.png
+		images/races/human/equipment/chest/elementalrobes/human_equipment_chest_elementalrobes_death08.png
+		images/races/human/equipment/chest/elementalrobes/human_equipment_chest_elementalrobes_death09.png
 		images/races/human/equipment/chest/shirt/human_equipment_chest_shirt_idle0.png
 		images/races/human/equipment/chest/shirt/human_equipment_chest_shirt_idle1.png
 		images/races/human/equipment/chest/shirt/human_equipment_chest_shirt_side0.png
