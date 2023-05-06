@@ -1,5 +1,6 @@
 #ifndef RNLIB_GAMEPLAY_ACTOR_SPELL_HPP
 #define RNLIB_GAMEPLAY_ACTOR_SPELL_HPP
+#include "gamelib/gameplay/actor/combat_log.hpp"
 #include "tz/core/data/vector.hpp"
 #include <functional>
 
@@ -30,7 +31,7 @@ namespace rnlib
 
 	class actor;
 	class actor_system;
-	using spell_on_cast_t = std::function<void(actor&, actor_system&)>;
+	using spell_on_cast_t = std::function<combat_event(actor&, actor_system&)>;
 
 	struct spell
 	{
@@ -41,6 +42,7 @@ namespace rnlib
 			#if TZ_DEBUG
 				tz::report("Spell cast %d detected", static_cast<int>(this->id));
 			#endif
+			return combat_event::null();
 		};
 		const char* name = "";
 	};

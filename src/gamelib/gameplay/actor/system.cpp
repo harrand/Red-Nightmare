@@ -69,6 +69,17 @@ namespace rnlib
 		return this->entities;
 	}
 
+	const combat_log& actor_system::get_combat_log() const
+	{
+		return this->log;
+	}
+
+	void actor_system::add_to_combat_log(combat_event evt)
+	{
+		this->log.add(evt);
+		this->combat_events_this_frame.push_back(evt);
+	}
+
 	void actor_system::set_intersection_state(actor_quadtree::intersection_state_t state)
 	{
 		this->intersection_state = state;
@@ -137,7 +148,7 @@ namespace rnlib
 				if(cast.complete())
 				{
 					// do the cast effect.
-					cast.spell.function(entity, *this);
+					this->add_to_combat_log(cast.spell.function(entity, *this));
 					entity.entity.remove_component<actor_component_id::cast>();
 				}
 			}
@@ -175,6 +186,8 @@ namespace rnlib
 			this->entities.push_back(a);
 		}
 		this->entities_to_add.clear();
+
+		this->send_combat_text();
 	}
 
 	void actor_system::dbgui()
@@ -265,6 +278,38 @@ namespace rnlib
 					}
 				}
 				ImGui::Checkbox("Display All Colliders", &display_all_colliders);
+				ImGui::EndTabItem();
+			}
+			if(ImGui::BeginTabItem("Combat Log"))
+			{
+				for(const combat_event& evt : this->log.container())
+				{
+					spell sp = rnlib::create_spell(evt.spell);
+					const actor* caster = this->find(evt.caster_uuid);
+					const actor* target = this->find(evt.target_uuid);
+					if(caster == nullptr || target == nullptr)
+					{
+						continue;
+					}
+					const char* verb = "";
+					switch(evt.type)
+					{
+						case combat_text_type::damage:
+							verb = "hurt";
+						break;
+						case combat_text_type::heal:
+							verb = "healed";
+						break;
+						case combat_text_type::immune:
+							ImGui::Text("%s casted [%s] on %s, but was immune.", caster->name, sp.name, target->name);	
+							continue;
+						break;
+						default:
+							tz::error("unknown combat text type. please add support.");
+						break;
+					}
+					ImGui::Text("%s's [%s] %s %s for %zu", caster->name, sp.name, verb, target->name, evt.value);
+				}
 				ImGui::EndTabItem();
 			}
 			ImGui::EndTabBar();
@@ -376,5 +421,24 @@ namespace rnlib
 				callable(*a, *b);
 			}
 		}
+	}
+
+	void actor_system::send_combat_text()
+	{
+		for(const combat_event& evt : this->combat_events_this_frame)
+		{
+			actor* a = this->find(evt.caster_uuid);
+			actor* b = this->find(evt.target_uuid);
+			if(a == nullptr || b == nullptr)
+			{
+				continue;
+			}
+			b->actions.add_component<action_id::emit_combat_text>
+			({
+				.type = evt.type,
+				.amount = evt.value
+			});
+		}
+		this->combat_events_this_frame.clear();
 	}
 }

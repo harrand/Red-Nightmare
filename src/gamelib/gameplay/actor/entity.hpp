@@ -8,6 +8,7 @@
 #include "gamelib/render/image.hpp"
 #include "gamelib/gameplay/actor/actions/action.hpp"
 #include "gamelib/gameplay/actor/spell/spell.hpp" // for actor_component_id::cast
+#include "gamelib/gameplay/actor/combat_log.hpp"
 #include "tz/core/memory/clone.hpp"
 #include "tz/core/profile.hpp" // for profiler instrumentation for components.
 #include "tz/core/time.hpp" // for actor_component_id::cast

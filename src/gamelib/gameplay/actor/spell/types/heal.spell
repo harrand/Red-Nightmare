@@ -18,12 +18,15 @@ return spell
 			std::size_t heal_amt = damageable.max_health - damageable.health;
 			heal_amt = std::min(heal_amt, static_cast<std::size_t>(50));
 			damageable.health += heal_amt;
-			tar->actions.add_component<action_id::emit_combat_text>
-			({
+			return combat_event
+			{
+				.caster_uuid = a.uuid,
+				.target_uuid = tar->uuid,
 				.type = combat_text_type::heal,
-				.amount = heal_amt
-			});
+				.value = heal_amt
+			};
 		}
+		return combat_event::null();
 	},
 	.name = "Lesser Heal"
 };

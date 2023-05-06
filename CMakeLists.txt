@@ -36,6 +36,8 @@ tz_add_library(
 		src/gamelib/gameplay/actor/spell/spell.cpp
 		src/gamelib/gameplay/actor/spell/spell.hpp
 
+		src/gamelib/gameplay/actor/combat_log.cpp
+		src/gamelib/gameplay/actor/combat_log.hpp
 		src/gamelib/gameplay/actor/entity.cpp
 		src/gamelib/gameplay/actor/entity.hpp
 		src/gamelib/gameplay/actor/system.cpp
