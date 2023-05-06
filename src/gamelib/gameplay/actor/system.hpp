@@ -24,6 +24,7 @@ namespace rnlib
 		std::span<const actor> container() const;
 		const combat_log& get_combat_log() const;
 		void add_to_combat_log(combat_event evt);
+		void add_to_combat_log(std::span<const combat_event> evts);
 		void set_intersection_state(actor_quadtree::intersection_state_t state);
 		void update(float dt, update_context ctx);
 		void dbgui();

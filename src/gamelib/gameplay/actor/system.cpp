@@ -80,6 +80,14 @@ namespace rnlib
 		this->combat_events_this_frame.push_back(evt);
 	}
 
+	void actor_system::add_to_combat_log(std::span<const combat_event> evts)
+	{
+		for(combat_event evt : evts)
+		{
+			this->add_to_combat_log(evt);
+		}
+	}
+
 	void actor_system::set_intersection_state(actor_quadtree::intersection_state_t state)
 	{
 		this->intersection_state = state;
@@ -148,7 +156,12 @@ namespace rnlib
 				if(cast.complete())
 				{
 					// do the cast effect.
-					this->add_to_combat_log(cast.spell.function(entity, *this));
+					auto events = cast.spell.function(entity, *this);
+					for(auto& evt : events)
+					{
+						evt.spell = cast.spell.id;
+					}
+					this->add_to_combat_log(events);
 					entity.entity.remove_component<actor_component_id::cast>();
 				}
 			}

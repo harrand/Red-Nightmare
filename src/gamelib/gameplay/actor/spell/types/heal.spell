@@ -5,7 +5,7 @@ return spell
 		.colour = {1.0f, 1.0f, 0.4f},
 		.cast_time_seconds = 2.5f
 	},
-	.function = [](actor& a, actor_system& sys)
+	.function = [](actor& a, actor_system& sys)->combat_events
 	{
 		if(a.entity.has_component<actor_component_id::damageable>())
 		{
@@ -18,15 +18,18 @@ return spell
 			std::size_t heal_amt = damageable.max_health - damageable.health;
 			heal_amt = std::min(heal_amt, static_cast<std::size_t>(50));
 			damageable.health += heal_amt;
-			return combat_event
+			return
 			{
-				.caster_uuid = a.uuid,
-				.target_uuid = tar->uuid,
-				.type = combat_text_type::heal,
-				.value = heal_amt
+				combat_event
+				{
+					.caster_uuid = a.uuid,
+					.target_uuid = tar->uuid,
+					.type = combat_text_type::heal,
+					.value = heal_amt
+				}
 			};
 		}
-		return combat_event::null();
+		return {};
 	},
 	.name = "Lesser Heal"
 };

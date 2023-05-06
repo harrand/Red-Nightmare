@@ -30,7 +30,8 @@ return actor
 		}},
 		actor_component<actor_component_id::damageable>
 		{{
-			.max_health = static_cast<int>(fdist(rng) * 100)
+			.health = static_cast<int>(fdist(rng) * 500),
+			.max_health = 500
 		}},
 		actor_component<actor_component_id::collide>
 		{{

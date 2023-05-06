@@ -20,6 +20,8 @@ namespace rnlib
 		static combat_event null();
 	};
 
+	using combat_events = std::vector<combat_event>;
+
 	class combat_log
 	{
 	public:

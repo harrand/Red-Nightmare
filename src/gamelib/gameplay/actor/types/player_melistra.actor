@@ -38,6 +38,10 @@ return actor
 					{
 						a.actions.add_component<action_id::cast>({.spell = spell_id::heal});
 					}
+					if(button == tz::wsi::mouse_button::right)
+					{
+						a.actions.add_component<action_id::cast>({.spell = spell_id::hand_of_death});
+					}
 				}
 			}
 		}}

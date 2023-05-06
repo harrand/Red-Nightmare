@@ -132,6 +132,7 @@ namespace rnlib
 		abscale[0] = std::abs(abscale[0]);
 		abscale[1] = std::abs(abscale[1]);
 		text.transform.local_position += abscale;
+		text.transform.local_scale *= 2.0f;
 		text.actions.add_component<action_id::timed_despawn>
 		({
 			.seconds_until_despawn = 1.5f

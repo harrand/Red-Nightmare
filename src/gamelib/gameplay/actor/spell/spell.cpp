@@ -15,6 +15,11 @@ namespace rnlib
 					#include "gamelib/gameplay/actor/spell/types/heal.spell"
 				}
 				break;
+				case spell_id::hand_of_death:
+				{
+					#include "gamelib/gameplay/actor/spell/types/hand_of_death.spell"
+				}
+				break;
 			}
 			tz::error("Attempted to create spell of an unknown type. Add support for this spell type.");
 			return {};

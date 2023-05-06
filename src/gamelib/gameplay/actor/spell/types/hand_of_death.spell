@@ -1,0 +1,31 @@
+return spell
+{
+	.cast =
+	{
+		.colour = {0.5f, 0.0f, 0.8f},
+		.cast_time_seconds = 10.0f
+	},
+	.function = [](actor& a, actor_system& sys)->combat_events
+	{
+		combat_events ret;
+		for(auto& victim : sys.container())
+		{
+			if(victim.uuid == a.uuid || !victim.entity.has_component<actor_component_id::damageable>())
+			{
+				continue;
+			}
+			auto& damageable = victim.entity.get_component<actor_component_id::damageable>()->data();
+			std::size_t dmg_amt = damageable.health;
+			damageable.health = 0;
+			ret.push_back
+			({
+				.caster_uuid = a.uuid,
+				.target_uuid = victim.uuid,
+				.type = combat_text_type::damage,
+				.value = dmg_amt
+			});
+		}
+		return ret;
+	},
+	.name = "Hand of Death"
+};
