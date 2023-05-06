@@ -202,6 +202,16 @@ add_text(
 		images/races/human/eyes/dot/human_eyes_dot_down3.png
 		images/races/human/eyes/dot/human_eyes_dot_cast0.png
 		images/races/human/eyes/dot/human_eyes_dot_cast1.png
+		images/races/human/eyes/dot/human_eyes_dot_death00.png
+		images/races/human/eyes/dot/human_eyes_dot_death01.png
+		images/races/human/eyes/dot/human_eyes_dot_death02.png
+		images/races/human/eyes/dot/human_eyes_dot_death03.png
+		images/races/human/eyes/dot/human_eyes_dot_death04.png
+		images/races/human/eyes/dot/human_eyes_dot_death05.png
+		images/races/human/eyes/dot/human_eyes_dot_death06.png
+		images/races/human/eyes/dot/human_eyes_dot_death07.png
+		images/races/human/eyes/dot/human_eyes_dot_death08.png
+		images/races/human/eyes/dot/human_eyes_dot_death09.png
 		images/races/human/equipment/chest/elementalrobes/human_equipment_chest_elementalrobes_idle0.png
 		images/races/human/equipment/chest/elementalrobes/human_equipment_chest_elementalrobes_idle1.png
 		images/races/human/equipment/chest/elementalrobes/human_equipment_chest_elementalrobes_side0.png
