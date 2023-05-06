@@ -125,6 +125,11 @@ namespace rnlib
 					#include "gamelib/gameplay/actor/types/dev_barrier.actor"
 				}
 				break;
+				case actor_type::heal_effect:
+				{
+					#include "gamelib/gameplay/actor/types/heal_effect.actor"
+				}
+				break;
 				case actor_type::doctor_michael_morbius:
 				{
 					#include "gamelib/gameplay/actor/types/doctor_michael_morbius.actor"

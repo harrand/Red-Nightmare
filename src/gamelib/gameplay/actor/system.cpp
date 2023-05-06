@@ -438,6 +438,13 @@ namespace rnlib
 				.type = evt.type,
 				.amount = evt.value
 			});
+			if(evt.type == combat_text_type::heal)
+			{
+				b->actions.add_component<action_id::spawn>
+				({
+					.type = actor_type::heal_effect
+				});
+			}
 		}
 		this->combat_events_this_frame.clear();
 	}

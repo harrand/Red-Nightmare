@@ -98,6 +98,13 @@ add_text(
 		images/meta/invisible.png
 		images/meta/border8.png
 		images/meta/border32.png
+
+		images/effects/healed0.png
+		images/effects/healed1.png
+		images/effects/healed2.png
+		images/effects/healed3.png
+		images/effects/healed4.png
+
 		images/races/human/base/human_base_idle0.png
 		images/races/human/base/human_base_idle1.png
 		images/races/human/base/human_base_side0.png

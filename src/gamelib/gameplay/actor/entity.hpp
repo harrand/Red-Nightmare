@@ -132,6 +132,7 @@ namespace rnlib
 	{
 		undefined,
 		dev_barrier,
+		heal_effect,
 		doctor_michael_morbius,
 		player_melistra,
 		player_benedict,
@@ -155,7 +156,7 @@ namespace rnlib
 		const char* name = "Untitled";
 		std::size_t uuid = uuid_count++;
 		actor_type type = actor_type::undefined;
-		unsigned int layer = 0;
+		unsigned int layer = 1;
 		std::size_t target = nullid;
 	};
 

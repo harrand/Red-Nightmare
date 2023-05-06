@@ -27,6 +27,11 @@ namespace rnlib
 #include ImportedTextHeader(undefined, png)
 #include ImportedTextHeader(border8, png)
 #include ImportedTextHeader(border32, png)
+#include ImportedTextHeader(healed0, png)
+#include ImportedTextHeader(healed1, png)
+#include ImportedTextHeader(healed2, png)
+#include ImportedTextHeader(healed3, png)
+#include ImportedTextHeader(healed4, png)
 #include ImportedTextHeader(human_base_idle0, png)
 #include ImportedTextHeader(human_base_idle1, png)
 #include ImportedTextHeader(human_base_side0, png)
@@ -226,6 +231,11 @@ namespace rnlib
 		ImportedTextData(invisible, png),
 		ImportedTextData(border8, png),
 		ImportedTextData(border32, png),
+		ImportedTextData(healed0, png),
+		ImportedTextData(healed1, png),
+		ImportedTextData(healed2, png),
+		ImportedTextData(healed3, png),
+		ImportedTextData(healed4, png),
 		ImportedTextData(human_base_idle0, png),
 		ImportedTextData(human_base_idle1, png),
 		ImportedTextData(human_base_side0, png),

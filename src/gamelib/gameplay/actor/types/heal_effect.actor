@@ -1,0 +1,50 @@
+return actor
+{
+	.entity =
+	{
+		actor_component<actor_component_id::motion>
+		{{
+			.direction = move_direction::up,
+			.speed = 0.4f,
+			.impl_held = true
+		}},
+		actor_component<actor_component_id::sprite>
+		{{
+			.textures =
+			{
+				{
+					.id = image_id::invisible,
+					.colour_tint = tz::vec3::filled(1.0f)
+				}
+			}
+		}},
+		actor_component<actor_component_id::animation>
+		{{
+			.animations =
+			{
+				animation
+				{{
+					.frame_textures =
+					{
+						image_id::effect_healed0,
+						image_id::effect_healed1,
+						image_id::effect_healed2,
+						image_id::effect_healed3,
+						image_id::effect_healed4
+					},
+					.fps = 5,
+					.loop = false
+				}}
+			}
+		}}
+	},
+	.actions =
+	{
+		action<action_id::timed_despawn>
+		{{
+			.seconds_until_despawn = 1.0f
+		}}
+	},
+	.name = "Heal Effect",
+	.layer = 0
+};
