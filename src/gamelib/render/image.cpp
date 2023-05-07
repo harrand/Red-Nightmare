@@ -314,6 +314,16 @@ namespace rnlib
 #include ImportedTextHeader(human_equipment_helm_headband_down3, png)
 #include ImportedTextHeader(human_equipment_helm_headband_cast0, png)
 #include ImportedTextHeader(human_equipment_helm_headband_cast1, png)
+#include ImportedTextHeader(human_equipment_helm_headband_death00, png)
+#include ImportedTextHeader(human_equipment_helm_headband_death01, png)
+#include ImportedTextHeader(human_equipment_helm_headband_death02, png)
+#include ImportedTextHeader(human_equipment_helm_headband_death03, png)
+#include ImportedTextHeader(human_equipment_helm_headband_death04, png)
+#include ImportedTextHeader(human_equipment_helm_headband_death05, png)
+#include ImportedTextHeader(human_equipment_helm_headband_death06, png)
+#include ImportedTextHeader(human_equipment_helm_headband_death07, png)
+#include ImportedTextHeader(human_equipment_helm_headband_death08, png)
+#include ImportedTextHeader(human_equipment_helm_headband_death09, png)
 
 namespace rnlib
 {
@@ -610,6 +620,16 @@ namespace rnlib
 		ImportedTextData(human_equipment_helm_headband_down3, png),
 		ImportedTextData(human_equipment_helm_headband_cast0, png),
 		ImportedTextData(human_equipment_helm_headband_cast1, png),
+		ImportedTextData(human_equipment_helm_headband_death00, png),
+		ImportedTextData(human_equipment_helm_headband_death01, png),
+		ImportedTextData(human_equipment_helm_headband_death02, png),
+		ImportedTextData(human_equipment_helm_headband_death03, png),
+		ImportedTextData(human_equipment_helm_headband_death04, png),
+		ImportedTextData(human_equipment_helm_headband_death05, png),
+		ImportedTextData(human_equipment_helm_headband_death06, png),
+		ImportedTextData(human_equipment_helm_headband_death07, png),
+		ImportedTextData(human_equipment_helm_headband_death08, png),
+		ImportedTextData(human_equipment_helm_headband_death09, png),
 	};
 
 	tz::gl::image_resource create_image(image_id_t iid)

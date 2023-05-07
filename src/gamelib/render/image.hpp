@@ -304,6 +304,16 @@ namespace rnlib
 			race_human_equipment_helm_headband_down3,
 			race_human_equipment_helm_headband_cast0,
 			race_human_equipment_helm_headband_cast1,
+			race_human_equipment_helm_headband_death0,
+			race_human_equipment_helm_headband_death1,
+			race_human_equipment_helm_headband_death2,
+			race_human_equipment_helm_headband_death3,
+			race_human_equipment_helm_headband_death4,
+			race_human_equipment_helm_headband_death5,
+			race_human_equipment_helm_headband_death6,
+			race_human_equipment_helm_headband_death7,
+			race_human_equipment_helm_headband_death8,
+			race_human_equipment_helm_headband_death9,
 			_count
 		};
 	}
