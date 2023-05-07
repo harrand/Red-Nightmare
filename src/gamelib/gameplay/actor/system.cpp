@@ -379,9 +379,10 @@ namespace rnlib
 		}
 		auto& collide_a = a->entity.get_component<actor_component_id::collide>()->data();
 		auto& collide_b = b->entity.get_component<actor_component_id::collide>()->data();
-		if(!collide_a.collide_if(*a, *b) || !collide_b.collide_if(*b, *a))
+		if(!collide_a.collide_if(*a, *b) || !collide_b.collide_if(*b, *a) || b->dead() || a->dead())
 		{
 			// both actor colliders need to agree that they should collide. otherwise ignore.
+			// also dead people can't collide.
 			return;
 		}
 		// resolve collision by calculating bounding box overlap and resolving based on that displacement.

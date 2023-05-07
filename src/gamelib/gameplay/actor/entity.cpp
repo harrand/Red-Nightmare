@@ -113,6 +113,11 @@ namespace rnlib
 		return res;
 	}
 
+	bool actor::dead() const
+	{
+		return this->entity.has_component<actor_component_id::damageable>() && this->entity.get_component<actor_component_id::damageable>()->data().dead();
+	}
+
 	actor create_actor(actor_type type)
 	{
 		TZ_PROFZONE("actor - create_actor", 0xffee0077);

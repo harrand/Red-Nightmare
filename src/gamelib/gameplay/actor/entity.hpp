@@ -149,6 +149,7 @@ namespace rnlib
 		void dbgui();
 		void update(float dt);
 		mount_result mount(std::span<quad_renderer::quad_data> quads) const;
+		bool dead() const;
 
 		actor_entity entity = {};
 		action_entity actions = {};
