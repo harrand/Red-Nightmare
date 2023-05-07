@@ -101,6 +101,28 @@ namespace human_art
 							.loop = true
 						}};
 					break;
+					case humanoid_skeleton_animation::death:
+						return animation
+						{{
+							.frame_textures =
+							{
+								image_id::race_human_equipment_helm_full_death0,
+								image_id::race_human_equipment_helm_full_death1,
+								image_id::race_human_equipment_helm_full_death2,
+								image_id::race_human_equipment_helm_full_death3,
+								image_id::race_human_equipment_helm_full_death4,
+								image_id::race_human_equipment_helm_full_death5,
+								image_id::race_human_equipment_helm_full_death6,
+								image_id::race_human_equipment_helm_full_death6,
+								image_id::race_human_equipment_helm_full_death6,
+								image_id::race_human_equipment_helm_full_death7,
+								image_id::race_human_equipment_helm_full_death8,
+								image_id::race_human_equipment_helm_full_death9,
+							},
+							.fps = 14,
+							.loop = false
+						}};
+					break;
 				}
 			break;
 			case helm_type::headband:

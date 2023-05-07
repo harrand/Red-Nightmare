@@ -361,6 +361,16 @@ add_text(
 		images/races/human/equipment/helm/full/human_equipment_helm_full_down3.png
 		images/races/human/equipment/helm/full/human_equipment_helm_full_cast0.png
 		images/races/human/equipment/helm/full/human_equipment_helm_full_cast1.png
+		images/races/human/equipment/helm/full/human_equipment_helm_full_death00.png
+		images/races/human/equipment/helm/full/human_equipment_helm_full_death01.png
+		images/races/human/equipment/helm/full/human_equipment_helm_full_death02.png
+		images/races/human/equipment/helm/full/human_equipment_helm_full_death03.png
+		images/races/human/equipment/helm/full/human_equipment_helm_full_death04.png
+		images/races/human/equipment/helm/full/human_equipment_helm_full_death05.png
+		images/races/human/equipment/helm/full/human_equipment_helm_full_death06.png
+		images/races/human/equipment/helm/full/human_equipment_helm_full_death07.png
+		images/races/human/equipment/helm/full/human_equipment_helm_full_death08.png
+		images/races/human/equipment/helm/full/human_equipment_helm_full_death09.png
 		images/races/human/equipment/helm/headband/human_equipment_helm_headband_idle0.png
 		images/races/human/equipment/helm/headband/human_equipment_helm_headband_idle1.png
 		images/races/human/equipment/helm/headband/human_equipment_helm_headband_side0.png
