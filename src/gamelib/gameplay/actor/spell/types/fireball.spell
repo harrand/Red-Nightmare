@@ -1,0 +1,35 @@
+return spell
+{
+	.cast =
+	{
+		.colour = {1.0f, 0.7f, 0.0f},
+		.cast_time_seconds = 1.0f
+	},
+	.function = [](actor& a, actor_system& sys)->combat_events
+	{
+		// shoot a fireball at the target, or at the mouse.
+		actor* tar = sys.find(a.target);
+		tz::vec2 destination_position;
+		if(tar == nullptr)
+		{
+			destination_position = tz::window().get_mouse_state().mouse_position;
+		}
+		else
+		{
+			destination_position = tar->transform.get_position();
+		}
+		a.actions.add_component<action_id::spawn>
+		({
+			.type = actor_type::fireball,
+			.actions =
+			{
+				action<action_id::move_to>
+				{{
+					.location = destination_position
+				}}
+			}
+		});
+		return {};
+	},
+	.name = "Fireball"
+};

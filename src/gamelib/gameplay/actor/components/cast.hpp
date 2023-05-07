@@ -7,7 +7,7 @@ struct actor_component_params<actor_component_id::cast>
 
 	bool complete() const
 	{
-		return tz::system_time().seconds<std::uint64_t>() > (static_cast<std::uint64_t>(this->spell.cast.cast_time_seconds) + this->cast_begin_time.seconds<std::uint64_t>());
+		return tz::system_time().millis<std::uint64_t>() >= ((1000 * static_cast<std::uint64_t>(this->spell.cast.cast_time_seconds)) + this->cast_begin_time.millis<std::uint64_t>());
 	}
 };
 

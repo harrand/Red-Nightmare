@@ -1,0 +1,50 @@
+return actor
+{
+	.entity =
+	{
+		actor_component<actor_component_id::motion>
+		{{
+			.speed = 3.0f
+		}},
+		actor_component<actor_component_id::sprite>
+		{{
+			.textures =
+			{
+				{
+					.id = image_id::border8,
+					.colour_tint = {1.0f, 0.7f, 0.0f}
+				}
+			}
+		}},
+		actor_component<actor_component_id::collide>
+		{{
+			.collide_if = [](const actor& a, const actor& b)
+			{
+				return b.type != actor_type::player_melistra;
+			}
+		}},
+		actor_component<actor_component_id::action_listener>
+		{{
+			.on_collide =
+			{
+				[](actor& a, actor& tar)
+				{
+					a.target = tar.uuid;
+					a.actions.add_component<action_id::cast>
+					({
+						.spell = spell_id::scorch
+					});
+				}
+			}
+		}}
+	},
+	.actions =
+	{
+		action<action_id::timed_despawn>
+		{{
+			.seconds_until_despawn = 5.0f
+		}}
+	},
+	.name = "Fireball",
+	.layer = 0
+};

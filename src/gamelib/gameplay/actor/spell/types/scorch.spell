@@ -1,0 +1,25 @@
+return spell
+{
+	.cast =
+	{
+		.colour = {1.0f, 0.7f, 0.0f},
+		.cast_time_seconds = 0.0f
+	},
+	.function = [](actor& a, actor_system& sys)->combat_events
+	{
+		actor* tar = sys.find(a.target);
+		tz::assert(tar != nullptr, "scorch must be casted on a target");
+		a.actions.set_component<action_id::despawn>();
+		return
+		{
+			combat_event
+			{
+				.caster_uuid = a.uuid,
+				.target_uuid = tar->uuid,
+				.type = combat_text_type::damage,
+				.value = 25
+			}
+		};
+	},
+	.name = "Scorch"
+};

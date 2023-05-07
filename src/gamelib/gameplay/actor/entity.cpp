@@ -140,6 +140,11 @@ namespace rnlib
 					#include "gamelib/gameplay/actor/types/doctor_michael_morbius.actor"
 				}
 				break;
+				case actor_type::fireball:
+				{
+					#include "gamelib/gameplay/actor/types/fireball.actor"
+				}
+				break;
 				case actor_type::player_melistra:
 				{
 					#include "gamelib/gameplay/actor/types/player_melistra.actor"

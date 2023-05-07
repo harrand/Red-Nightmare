@@ -20,6 +20,16 @@ namespace rnlib
 					#include "gamelib/gameplay/actor/spell/types/hand_of_death.spell"
 				}
 				break;
+				case spell_id::fireball:
+				{
+					#include "gamelib/gameplay/actor/spell/types/fireball.spell"
+				}
+				break;
+				case spell_id::scorch:
+				{
+					#include "gamelib/gameplay/actor/spell/types/scorch.spell"
+				}
+				break;
 			}
 			tz::error("Attempted to create spell of an unknown type. Add support for this spell type.");
 			return {};

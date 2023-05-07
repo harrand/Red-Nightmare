@@ -134,6 +134,7 @@ namespace rnlib
 		dev_barrier,
 		heal_effect,
 		doctor_michael_morbius,
+		fireball,
 		player_melistra,
 		player_benedict,
 		randomius,

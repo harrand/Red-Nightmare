@@ -9,7 +9,9 @@ namespace rnlib
 	enum class spell_id
 	{
 		heal,
-		hand_of_death
+		hand_of_death,
+		fireball,
+		scorch
 	};
 
 	enum class cast_direction

@@ -226,8 +226,10 @@ namespace rnlib
 				{
 					actor* lactor = this->find(lnode.uuid);
 					actor* ractor = this->find(rnode.uuid);
-					tz::assert(lactor != nullptr);
-					tz::assert(ractor != nullptr);
+					if(lactor == nullptr || ractor == nullptr)
+					{
+						continue;
+					}
 					ImGui::Text("%zu (%s) <=> %zu (%s)", lactor->uuid, lactor->name, ractor->uuid, ractor->name);
 				}
 				ImGui::EndTabItem();
