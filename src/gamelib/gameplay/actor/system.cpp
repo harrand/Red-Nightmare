@@ -1,4 +1,5 @@
 #include "gamelib/gameplay/actor/system.hpp"
+#include "gamelib/gameplay/actor/combat.hpp"
 #include "tz/dbgui/dbgui.hpp"
 #include "tz/core/job/job.hpp"
 #include "tz/core/algorithms/static.hpp"
@@ -69,14 +70,8 @@ namespace rnlib
 		return this->entities;
 	}
 
-	const combat_log& actor_system::get_combat_log() const
-	{
-		return this->log;
-	}
-
 	void actor_system::add_to_combat_log(combat_event evt)
 	{
-		this->log.add(evt);
 		this->combat_events_this_frame.push_back(evt);
 	}
 
@@ -295,7 +290,7 @@ namespace rnlib
 			}
 			if(ImGui::BeginTabItem("Combat Log"))
 			{
-				for(const combat_event& evt : this->log.container())
+				for(const combat_event& evt : combat::get_log().container())
 				{
 					spell sp = rnlib::create_spell(evt.spell);
 					const actor* caster = this->find(evt.caster_uuid);
@@ -305,13 +300,16 @@ namespace rnlib
 						continue;
 					}
 					const char* verb = "";
+					const char* over_adj = "";
 					switch(evt.type)
 					{
 						case combat_text_type::damage:
 							verb = "hurt";
+							over_adj = "kill";
 						break;
 						case combat_text_type::heal:
 							verb = "healed";
+							over_adj = "heal";
 						break;
 						case combat_text_type::immune:
 							ImGui::Text("%s casted [%s] on %s, but was immune.", caster->name, sp.name, target->name);	
@@ -322,6 +320,11 @@ namespace rnlib
 						break;
 					}
 					ImGui::Text("%s's [%s] %s %s for %zu", caster->name, sp.name, verb, target->name, evt.value);
+					if(evt.over.has_value())
+					{
+						ImGui::SameLine();
+						ImGui::Text("(over%s: %zu)", over_adj, evt.over.value());
+					}
 				}
 				ImGui::EndTabItem();
 			}
@@ -447,17 +450,17 @@ namespace rnlib
 			{
 				continue;
 			}
-			b->actions.add_component<action_id::emit_combat_text>
-			({
-				.type = evt.type,
-				.amount = evt.value
-			});
-			if(evt.type == combat_text_type::heal)
+			if(b->entity.has_component<actor_component_id::damageable>())
 			{
-				b->actions.add_component<action_id::spawn>
-				({
-					.type = actor_type::heal_effect
-				});
+				switch(evt.type)
+				{
+					case combat_text_type::damage:
+						combat::damage(*b, a, evt.spell, evt.value);
+					break;
+					case combat_text_type::heal:
+						combat::heal(*b, a, evt.spell, evt.value);
+					break;
+				}
 			}
 		}
 		this->combat_events_this_frame.clear();

@@ -22,7 +22,6 @@ namespace rnlib
 		std::size_t size() const;
 		std::span<actor> container();
 		std::span<const actor> container() const;
-		const combat_log& get_combat_log() const;
 		void add_to_combat_log(combat_event evt);
 		void add_to_combat_log(std::span<const combat_event> evts);
 		void set_intersection_state(actor_quadtree::intersection_state_t state);
@@ -34,10 +33,14 @@ namespace rnlib
 		void collision_response();
 		void resolve_collision(std::size_t uuid_a, std::size_t uuid_b);
 		void send_combat_text();
+		struct overflow_data
+		{
+			bool over = false;
+			std::size_t amt = 0;
+		};
 		std::vector<actor> entities = {};
 		std::vector<std::size_t> entities_to_delete = {};
 		std::vector<actor> entities_to_add = {};
-		combat_log log = {};
 		std::vector<combat_event> combat_events_this_frame = {};
 		actor_quadtree::intersection_state_t intersection_state = {};
 	};

@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <span>
 #include <vector>
+#include <optional>
 
 namespace rnlib
 {
@@ -16,6 +17,7 @@ namespace rnlib
 		std::size_t target_uuid;
 		combat_text_type type;
 		std::size_t value;
+		std::optional<std::size_t> over = std::nullopt;
 
 		static combat_event null();
 	};
