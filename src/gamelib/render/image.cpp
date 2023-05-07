@@ -137,6 +137,16 @@ namespace rnlib
 #include ImportedTextHeader(human_hair_prince_down3, png)
 #include ImportedTextHeader(human_hair_prince_cast0, png)
 #include ImportedTextHeader(human_hair_prince_cast1, png)
+#include ImportedTextHeader(human_hair_prince_death00, png)
+#include ImportedTextHeader(human_hair_prince_death01, png)
+#include ImportedTextHeader(human_hair_prince_death02, png)
+#include ImportedTextHeader(human_hair_prince_death03, png)
+#include ImportedTextHeader(human_hair_prince_death04, png)
+#include ImportedTextHeader(human_hair_prince_death05, png)
+#include ImportedTextHeader(human_hair_prince_death06, png)
+#include ImportedTextHeader(human_hair_prince_death07, png)
+#include ImportedTextHeader(human_hair_prince_death08, png)
+#include ImportedTextHeader(human_hair_prince_death09, png)
 #include ImportedTextHeader(human_eyes_dot_idle0, png)
 #include ImportedTextHeader(human_eyes_dot_idle1, png)
 #include ImportedTextHeader(human_eyes_dot_side0, png)
@@ -413,6 +423,16 @@ namespace rnlib
 		ImportedTextData(human_hair_prince_down3, png),
 		ImportedTextData(human_hair_prince_cast0, png),
 		ImportedTextData(human_hair_prince_cast1, png),
+		ImportedTextData(human_hair_prince_death00, png),
+		ImportedTextData(human_hair_prince_death01, png),
+		ImportedTextData(human_hair_prince_death02, png),
+		ImportedTextData(human_hair_prince_death03, png),
+		ImportedTextData(human_hair_prince_death04, png),
+		ImportedTextData(human_hair_prince_death05, png),
+		ImportedTextData(human_hair_prince_death06, png),
+		ImportedTextData(human_hair_prince_death07, png),
+		ImportedTextData(human_hair_prince_death08, png),
+		ImportedTextData(human_hair_prince_death09, png),
 		ImportedTextData(human_eyes_dot_idle0, png),
 		ImportedTextData(human_eyes_dot_idle1, png),
 		ImportedTextData(human_eyes_dot_side0, png),

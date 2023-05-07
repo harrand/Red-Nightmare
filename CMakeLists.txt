@@ -210,6 +210,16 @@ add_text(
 		images/races/human/hair/prince/human_hair_prince_down3.png
 		images/races/human/hair/prince/human_hair_prince_cast0.png
 		images/races/human/hair/prince/human_hair_prince_cast1.png
+		images/races/human/hair/prince/human_hair_prince_death00.png
+		images/races/human/hair/prince/human_hair_prince_death01.png
+		images/races/human/hair/prince/human_hair_prince_death02.png
+		images/races/human/hair/prince/human_hair_prince_death03.png
+		images/races/human/hair/prince/human_hair_prince_death04.png
+		images/races/human/hair/prince/human_hair_prince_death05.png
+		images/races/human/hair/prince/human_hair_prince_death06.png
+		images/races/human/hair/prince/human_hair_prince_death07.png
+		images/races/human/hair/prince/human_hair_prince_death08.png
+		images/races/human/hair/prince/human_hair_prince_death09.png
 		images/races/human/eyes/dot/human_eyes_dot_idle0.png
 		images/races/human/eyes/dot/human_eyes_dot_idle1.png
 		images/races/human/eyes/dot/human_eyes_dot_side0.png
