@@ -297,10 +297,8 @@ namespace rnlib
 					spell sp = rnlib::create_spell(evt.spell);
 					const actor* caster = this->find(evt.caster_uuid);
 					const actor* target = this->find(evt.target_uuid);
-					if(caster == nullptr || target == nullptr)
-					{
-						continue;
-					}
+					const char* caster_name = caster ? caster->name : "???";
+					const char* target_name = target ? target->name : "???";
 					const char* verb = "";
 					const char* over_adj = "";
 					switch(evt.type)
@@ -314,14 +312,14 @@ namespace rnlib
 							over_adj = "heal";
 						break;
 						case combat_text_type::immune:
-							ImGui::Text("%s casted [%s] on %s, but was immune.", caster->name, sp.name, target->name);	
+							ImGui::Text("%s casted [%s] on %s, but was immune.", caster_name, sp.name, target_name);	
 							continue;
 						break;
 						default:
 							tz::error("unknown combat text type. please add support.");
 						break;
 					}
-					ImGui::Text("%s's [%s] %s %s for %zu", caster->name, sp.name, verb, target->name, evt.value);
+					ImGui::Text("%s's [%s] %s %s for %zu", caster_name, sp.name, verb, target_name, evt.value);
 					if(evt.over.has_value())
 					{
 						ImGui::SameLine();

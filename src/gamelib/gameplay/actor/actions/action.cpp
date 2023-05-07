@@ -53,7 +53,8 @@ namespace rnlib
 
 	ACTION_IMPL_BEGIN(action_id::spawn)
 		actor& a = system.add(action.data().type);
-		a.transform = caster.transform;
+		a.transform.parent = caster.transform.parent;
+		a.transform.local_position = caster.transform.local_position;
 		action.data().actions.transfer_components(a.actions);
 		action.set_is_complete(true);
 	ACTION_IMPL_END(action_id::spawn)

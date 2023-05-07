@@ -4,14 +4,16 @@ return actor
 	{
 		actor_component<actor_component_id::motion>
 		{{
-			.speed = 3.0f
+			.speed = 5.0f,
+			.tilt_factor = 0.5f,
+			.tilt_rate = 10.0f
 		}},
 		actor_component<actor_component_id::sprite>
 		{{
 			.textures =
 			{
 				{
-					.id = image_id::border8,
+					.id = image_id::border32,
 					.colour_tint = {1.0f, 0.7f, 0.0f}
 				}
 			}
@@ -20,7 +22,7 @@ return actor
 		{{
 			.collide_if = [](const actor& a, const actor& b)
 			{
-				return b.type != actor_type::player_melistra;
+				return b.type != actor_type::player_melistra && b.entity.has_component<actor_component_id::damageable>();
 			}
 		}},
 		actor_component<actor_component_id::action_listener>
@@ -44,6 +46,10 @@ return actor
 		{{
 			.seconds_until_despawn = 5.0f
 		}}
+	},
+	.transform
+	{
+		.local_scale = {0.25f, 0.25f}
 	},
 	.name = "Fireball",
 	.layer = 0

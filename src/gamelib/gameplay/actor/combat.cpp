@@ -34,8 +34,8 @@ namespace rnlib::combat
 		combat_data.log.add
 		({
 			.spell = cause,
-	   		.caster_uuid = target.uuid,
-	   		.target_uuid = attacker->uuid,
+	   		.caster_uuid = attacker->uuid,
+	   		.target_uuid = target.uuid,
 	   		.type = combat_text_type::damage,
 	   		.value = amt,
 	   		.over = overkill
@@ -68,8 +68,8 @@ namespace rnlib::combat
 		combat_data.log.add
 		({
 			.spell = cause,
-	   		.caster_uuid = target.uuid,
-	   		.target_uuid = healer->uuid,
+	   		.caster_uuid = healer->uuid,
+	   		.target_uuid = target.uuid,
 	   		.type = combat_text_type::heal,
 	   		.value = amt,
 	   		.over = overheal
