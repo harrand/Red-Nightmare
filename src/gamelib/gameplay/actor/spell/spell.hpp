@@ -34,13 +34,14 @@ namespace rnlib
 
 	class actor;
 	class actor_system;
-	using spell_on_cast_t = std::function<combat_events(actor&, actor_system&)>;
+	class update_context;
+	using spell_on_cast_t = std::function<combat_events(actor&, actor_system&, update_context&)>;
 
 	struct spell
 	{
 		spell_id id;
 		spell_cast_info cast = {};
-		spell_on_cast_t function = [this](actor&, actor_system&)->combat_events
+		spell_on_cast_t function = [this](actor&, actor_system&, update_context&)->combat_events
 		{
 			#if TZ_DEBUG
 				tz::report("Spell cast %d detected", static_cast<int>(this->id));

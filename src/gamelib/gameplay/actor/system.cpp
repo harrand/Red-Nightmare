@@ -151,7 +151,7 @@ namespace rnlib
 				if(cast.complete())
 				{
 					// do the cast effect.
-					auto events = cast.spell.function(entity, *this);
+					auto events = cast.spell.function(entity, *this, ctx);
 					for(auto& evt : events)
 					{
 						evt.spell = cast.spell.id;

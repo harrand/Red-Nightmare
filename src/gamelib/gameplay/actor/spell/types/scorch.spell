@@ -5,7 +5,7 @@ return spell
 		.colour = {1.0f, 0.7f, 0.0f},
 		.cast_time_seconds = 0.0f
 	},
-	.function = [](actor& a, actor_system& sys)->combat_events
+	.function = [](actor& a, actor_system& sys, update_context& ctx)->combat_events
 	{
 		actor* tar = sys.find(a.target);
 		tz::assert(tar != nullptr, "scorch must be casted on a target");

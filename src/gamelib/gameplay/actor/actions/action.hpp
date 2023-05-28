@@ -67,6 +67,7 @@ namespace rnlib
 	struct update_context
 	{
 		std::pair<tz::vec2, tz::vec2> view_bounds, level_bounds;
+		tz::vec2 mouse_position;
 	};
 
 	// action params
