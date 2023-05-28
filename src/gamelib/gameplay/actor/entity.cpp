@@ -84,9 +84,12 @@ namespace rnlib
 		 			.actions = this->actions
 				});
 			}
-			if(ImGui::Button("Fake Cast"))
+			if(ImGui::Button("Cast Teleport"))
 			{
-				this->actions.add_component<action_id::cast>();
+				this->actions.add_component<action_id::cast>
+				({
+					.spell = spell_id::teleport
+				});
 			}
 		}
 		ImGui::Unindent();

@@ -1,0 +1,15 @@
+return spell
+{
+	.cast =
+	{
+		.colour = {0.4f, 0.5f, 0.9f},
+		.cast_time_seconds = 1.0f
+	},
+	.function = [](actor& a, actor_system& sys, const update_context& ctx)->combat_events
+	{
+		combat_events ret;
+		a.transform.local_position = ctx.mouse_position;
+		return ret;
+	},
+	.name = "Teleport"
+};

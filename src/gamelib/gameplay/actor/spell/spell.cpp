@@ -30,6 +30,11 @@ namespace rnlib
 					#include "gamelib/gameplay/actor/spell/types/scorch.spell"
 				}
 				break;
+				case spell_id::teleport:
+				{
+					#include "gamelib/gameplay/actor/spell/types/teleport.spell"
+				}
+				break;
 			}
 			tz::error("Attempted to create spell of an unknown type. Add support for this spell type.");
 			return {};

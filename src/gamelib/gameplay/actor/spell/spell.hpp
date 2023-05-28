@@ -11,7 +11,8 @@ namespace rnlib
 		heal,
 		hand_of_death,
 		fireball,
-		scorch
+		scorch,
+		teleport
 	};
 
 	enum class cast_direction
