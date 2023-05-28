@@ -138,6 +138,19 @@ namespace rnlib
 		}
 	ACTION_IMPL_END(action_id::move_to)
 
+	ACTION_IMPL_BEGIN(action_id::move_in_direction)
+		if(!caster.entity.has_component<actor_component_id::motion>())
+		{
+			action.set_is_complete(true);
+			return;
+		}
+		auto& motion = caster.entity.get_component<actor_component_id::motion>()->data();
+		if(!motion.impl_held)
+		{
+			caster.transform.local_position += action.data().dir.normalised() * motion.speed * (motion.impl_dt / 1000.0f);
+		}
+	ACTION_IMPL_END(action_id::move_in_direction)
+
 	ACTION_IMPL_BEGIN(action_id::emit_combat_text)
 		actor& text = system.add(actor_type::unknown);
 		text.transform = caster.transform;

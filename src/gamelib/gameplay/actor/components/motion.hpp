@@ -16,6 +16,7 @@ struct actor_component_params<actor_component_id::motion>
 	float tilt_factor = 0.02f;
 	float tilt_rate = 0.01f;
 	bool impl_held = false;
+	float impl_dt = 0.0f;
 };
 
 template<>
@@ -27,6 +28,7 @@ inline void actor_component_update<actor_component_id::motion>
 )
 {
 	TZ_PROFZONE("motion component - update", 0xffaa0077);
+	component.data().impl_dt = dt;
 	float corrected_speed = component.data().speed / std::max(std::popcount(static_cast<unsigned int>(component.data().direction)), 1);
 	if(component.data().direction & move_direction::right)
 	{

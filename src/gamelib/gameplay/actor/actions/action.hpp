@@ -17,6 +17,7 @@ namespace rnlib
 		cast,
 		cancel_cast,
 		move_to,
+		move_in_direction,
 		emit_combat_text,
 		_count
 	};
@@ -106,6 +107,12 @@ namespace rnlib
 	struct action_params<action_id::move_to>
 	{
 		tz::vec2 location;
+	};
+
+	template<>
+	struct action_params<action_id::move_in_direction>
+	{
+		tz::vec2 dir;
 	};
 
 	enum class combat_text_type

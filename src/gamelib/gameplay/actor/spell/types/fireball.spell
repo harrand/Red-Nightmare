@@ -9,25 +9,33 @@ return spell
 	{
 		// shoot a fireball at the target, or at the mouse.
 		actor* tar = sys.find(a.target);
-		tz::vec2 destination_position;
+		action_entity after;
 		if(tar == nullptr)
 		{
-			destination_position = ctx.mouse_position;
+			tz::vec2 to_mouse = (ctx.mouse_position - a.transform.get_position()).normalised();
+			after =
+			{
+				action<action_id::move_in_direction>
+				{{
+					.dir = to_mouse
+				}}
+			};
 		}
 		else
 		{
-			destination_position = tar->transform.get_position();
+			tz::vec2 e = tar->transform.get_position();
+			after =
+			{
+				action<action_id::move_to>
+				{{
+					.location = e
+				}}
+			};
 		}
 		a.actions.add_component<action_id::spawn>
 		({
 			.type = actor_type::fireball,
-			.actions =
-			{
-				action<action_id::move_to>
-				{{
-					.location = destination_position
-				}}
-			}
+			.actions = after
 		});
 		return {};
 	},
