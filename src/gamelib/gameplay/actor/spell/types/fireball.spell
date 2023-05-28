@@ -5,7 +5,7 @@ return spell
 		.colour = {1.0f, 0.7f, 0.0f},
 		.cast_time_seconds = 0.5f
 	},
-	.function = [](actor& a, actor_system& sys, update_context& ctx)->combat_events
+	.function = [](actor& a, actor_system& sys, const update_context& ctx)->combat_events
 	{
 		// shoot a fireball at the target, or at the mouse.
 		actor* tar = sys.find(a.target);

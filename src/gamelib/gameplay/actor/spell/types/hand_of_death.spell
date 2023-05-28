@@ -5,7 +5,7 @@ return spell
 		.colour = {0.5f, 0.0f, 0.8f},
 		.cast_time_seconds = 10.0f
 	},
-	.function = [](actor& a, actor_system& sys, update_context& ctx)->combat_events
+	.function = [](actor& a, actor_system& sys, const update_context& ctx)->combat_events
 	{
 		combat_events ret;
 		for(auto& victim : sys.container())

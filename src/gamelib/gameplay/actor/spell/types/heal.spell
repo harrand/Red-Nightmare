@@ -5,7 +5,7 @@ return spell
 		.colour = {1.0f, 1.0f, 0.4f},
 		.cast_time_seconds = 2.5f
 	},
-	.function = [](actor& a, actor_system& sys, update_context& ctx)->combat_events
+	.function = [](actor& a, actor_system& sys, const update_context& ctx)->combat_events
 	{
 		actor* tar = sys.find(a.target);
 		if(tar == nullptr)
