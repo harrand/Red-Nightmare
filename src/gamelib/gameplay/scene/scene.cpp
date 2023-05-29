@@ -19,7 +19,7 @@ namespace rnlib
 		this->actors.update(dt,
 		{
 			.view_bounds = this->cam.get_view_bounds(),
-			.level_bounds = {tz::vec2::zero(), tz::vec2::zero()},
+			.level_bounds = {{-1.0f, -1.0f}, {1.0f, 1.0f}},
 			.mouse_position = this->cam.screen_to_world(tz::window().get_mouse_state().mouse_position)
 		});
 		this->handle_camera_zoom();

@@ -29,6 +29,8 @@ namespace rnlib
 		action_listener,
 		// actor has a sprite, meaning it can be drawn in the world as a textured quad.
 		sprite,
+		// actor represents the level foreground and/or background.
+		level_background,
 		// actor has an animation, which means its sprite texture changes over time. requires `sprite`
 		animation,
 		// actor collides with others.
@@ -50,7 +52,7 @@ namespace rnlib
 	};
 
 	// each trait above must have a corresponding name string in the following array (or enjoy a cryptic crash)
-	constexpr std::array<const char*, static_cast<int>(actor_component_id::_count)> actor_component_id_name{"Action Listener", "Sprite", "Animation", "Collide", "Cast", "Damageable", "Motion", "Keyboard Control", "Label", "Humanoid Skeleton", "Skin"};
+	constexpr std::array<const char*, static_cast<int>(actor_component_id::_count)> actor_component_id_name{"Action Listener", "Sprite", "Level Background", "Animation", "Collide", "Cast", "Damageable", "Motion", "Keyboard Control", "Label", "Humanoid Skeleton", "Skin"};
 
 	// ECS boilerplate begin.
 	template<actor_component_id ID>
@@ -169,6 +171,7 @@ namespace rnlib
 	// component implementations begin.
 	#include "gamelib/gameplay/actor/components/action_listener.hpp"
 	#include "gamelib/gameplay/actor/components/sprite.hpp"
+	#include "gamelib/gameplay/actor/components/level_background.hpp"
 	#include "gamelib/gameplay/actor/components/animation.hpp"
 	#include "gamelib/gameplay/actor/components/collide.hpp"
 	#include "gamelib/gameplay/actor/components/motion.hpp"

@@ -144,6 +144,12 @@ namespace rnlib
 		// handle spell casts and click input.
 		for(auto& entity : this->entities)
 		{
+			if(entity.entity.has_component<actor_component_id::level_background>())
+			{
+				auto [min, max] = ctx.level_bounds;
+				entity.transform.local_position = (min + max) / 2.0f;
+				entity.transform.local_scale = max - min;
+			}
 			if(entity.entity.has_component<actor_component_id::cast>())
 			{
 				TZ_PROFZONE("actor_system - handle spell cast", 0xffee0077);
@@ -288,6 +294,15 @@ namespace rnlib
 					}
 				}
 				ImGui::Checkbox("Display All Colliders", &display_all_colliders);
+				if(ImGui::Button("Add Level Background"))
+				{
+					auto& ent = this->entities.emplace_back();
+					ent.entity.add_component<actor_component_id::level_background>
+					({
+						.background_texid = image_id::effect_healed0
+					});
+					ent.layer = 100;
+				}
 				ImGui::EndTabItem();
 			}
 			if(ImGui::BeginTabItem("Combat Log"))
