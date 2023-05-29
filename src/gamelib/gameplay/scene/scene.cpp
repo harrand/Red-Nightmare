@@ -23,6 +23,7 @@ namespace rnlib
 			.mouse_position = this->cam.screen_to_world(tz::window().get_mouse_state().mouse_position)
 		});
 		this->handle_camera_zoom();
+		this->handle_camera_position();
 	}
 
 	void scene::dbgui()
@@ -104,5 +105,21 @@ namespace rnlib
 			this->cam.zoom += 0.1f;
 		}
 		scroll_cache = scroll;
+	}
+
+	void scene::handle_camera_position()
+	{
+		tz::vec2 meanpos = this->cam.position;
+		std::size_t pcount = 1;
+		for(const auto& a : this->actors.container())
+		{
+			if(a.type == actor_type::player_benedict || a.type == actor_type::player_melistra)
+			{
+				meanpos += a.transform.get_position();
+				pcount++;
+			}
+		}
+		meanpos /= static_cast<float>(pcount);
+		this->cam.position = meanpos;
 	}
 }

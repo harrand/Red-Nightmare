@@ -21,6 +21,7 @@ namespace rnlib
 	private:
 		void rebuild_quadtree();
 		void handle_camera_zoom();
+		void handle_camera_position();
 
 		actor_system actors = {};
 		camera cam = {};
