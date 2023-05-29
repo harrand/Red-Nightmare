@@ -113,13 +113,17 @@ namespace rnlib
 		std::size_t pcount = 1;
 		for(const auto& a : this->actors.container())
 		{
-			if(a.type == actor_type::player_benedict || a.type == actor_type::player_melistra)
+			if(a.type == actor_type::player_benedict || a.type == actor_type::player_melistra
+			&& (a.transform.get_position() - this->cam.position).length() > this->cam.zoom)
 			{
 				meanpos += a.transform.get_position();
 				pcount++;
 			}
 		}
 		meanpos /= static_cast<float>(pcount);
-		this->cam.position = meanpos;
+		// destination = meanpos.
+		// lerp between campos and meanpos
+		constexpr float lerp_amt_per_frame = 0.003f;
+		this->cam.position = this->cam.position + (meanpos - this->cam.position) * lerp_amt_per_frame;
 	}
 }
