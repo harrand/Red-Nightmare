@@ -50,8 +50,8 @@ template<>
 inline void actor_component_dbgui(actor_component<actor_component_id::level_background>& component)
 {
 	ImGui::SliderInt("Background Image", &component.data().background_texid, 0, image_id::_count - 1);
-	ImGui::SliderFloat("Tex Scale", &component.data().background_texscale, 0.01f, 15.0f);
+	ImGui::SliderFloat("Background Tex Scale", &component.data().background_texscale, 0.01f, 15.0f);
 	ImGui::Spacing();
 	ImGui::SliderInt("Foreground Image", &component.data().foreground_texid, 0, image_id::_count - 1);
-	ImGui::SliderFloat("Tex Scale", &component.data().foreground_texscale, 0.01f, 15.0f);
+	ImGui::SliderFloat("Foreground Tex Scale", &component.data().foreground_texscale, 0.01f, 15.0f);
 }
