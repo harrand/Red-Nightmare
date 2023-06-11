@@ -9,6 +9,7 @@ namespace rnlib
 		{
 			ImGui::MenuItem("Actor System", nullptr, &this->actor_dbgui);
 			ImGui::MenuItem("Quadtree", nullptr, &this->tree_dbgui);
+			ImGui::MenuItem("Scene", nullptr, &this->scene_dbgui);
 		});
 	}
 
@@ -19,7 +20,7 @@ namespace rnlib
 		this->actors.update(dt,
 		{
 			.view_bounds = this->cam.get_view_bounds(),
-			.level_bounds = {{-1.0f, -1.0f}, {1.0f, 1.0f}},
+			.level_bounds = this->level_bounds,
 			.mouse_position = this->cam.screen_to_world(tz::window().get_mouse_state().mouse_position)
 		});
 		this->handle_camera_zoom();
@@ -38,6 +39,13 @@ namespace rnlib
 		{
 			ImGui::Begin("Quadtree", &this->tree_dbgui);
 			this->tree.dbgui();
+			ImGui::End();
+		}
+		if(this->scene_dbgui)
+		{
+			ImGui::Begin("Scene", &this->scene_dbgui);
+			ImGui::SliderFloat2("Level Bounds Min", this->level_bounds.first.data().data(), -5.0f, 5.0f);
+			ImGui::SliderFloat2("Level Bounds Max", this->level_bounds.second.data().data(), -5.0f, 5.0f);
 			ImGui::End();
 		}
 	}

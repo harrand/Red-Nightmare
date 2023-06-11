@@ -10,6 +10,7 @@ struct quad_data
 	vec2 scale;
 	float rotation;
 	uint texid[QUAD_TEXCOUNT];
+	float tex_scales[QUAD_TEXCOUNT];
 	vec3 tints[QUAD_TEXCOUNT];
 	int layer;
 };
@@ -45,7 +46,8 @@ resource(id = 1) const buffer render_data_buffer
 output(id = 0) uint out_texid[QUAD_TEXCOUNT];
 output(id = 8) float out_depth;
 output(id = 9) vec2 out_texcoord;
-output(id = 10) vec3 out_tints[QUAD_TEXCOUNT];
+output(id = 10) float out_texcoord_scales[QUAD_TEXCOUNT];
+output(id = 18) vec3 out_tints[QUAD_TEXCOUNT];
 
 void main()
 {
@@ -75,6 +77,7 @@ void main()
 	for(uint i = 0; i < QUAD_TEXCOUNT; i++)
 	{
 		out_tints[i] = q.tints[i];
+		out_texcoord_scales[i] = q.tex_scales[i];
 	}
 
 #if TZ_DEBUG

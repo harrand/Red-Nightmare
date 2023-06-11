@@ -32,6 +32,7 @@ namespace rnlib
 			tz::vec2 scale = tz::vec2::zero();
 			float rotation = 0.0f;
 			std::array<std::uint32_t, QUAD_TEXCOUNT> texid;
+			std::array<float, QUAD_TEXCOUNT> tex_scales = {1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f};
 			float pad0[3];
 			std::array<tz::vec4, QUAD_TEXCOUNT> tints;
 			std::int32_t layer = 0;

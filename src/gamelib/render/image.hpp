@@ -314,6 +314,7 @@ namespace rnlib
 			race_human_equipment_helm_headband_death7,
 			race_human_equipment_helm_headband_death8,
 			race_human_equipment_helm_headband_death9,
+			background_grassy,
 			_count
 		};
 	}

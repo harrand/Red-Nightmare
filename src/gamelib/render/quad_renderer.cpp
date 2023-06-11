@@ -92,6 +92,10 @@ namespace rnlib
 					ImGui::SameLine();
 				}
 				ImGui::Text("}");
+				for(std::size_t i = 0; i < 8; i++)
+				{
+					ImGui::SliderFloat((std::string("Texcoord + ") + std::to_string(i)).c_str(), &quad.tex_scales[i], 0.1f, 2.0f);
+				}
 				ImGui::DragInt("layer", reinterpret_cast<int*>(&quad.layer), 0.25f, 0, 1000, "%zu");
 				ImGui::Unindent();
 				ImGui::EndTabItem();

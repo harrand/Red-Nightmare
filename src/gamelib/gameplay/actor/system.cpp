@@ -148,7 +148,7 @@ namespace rnlib
 			{
 				auto [min, max] = ctx.level_bounds;
 				entity.transform.local_position = (min + max) / 2.0f;
-				entity.transform.local_scale = max - min;
+				entity.transform.local_scale = (max - min) * 0.5f;
 			}
 			if(entity.entity.has_component<actor_component_id::cast>())
 			{
@@ -299,7 +299,7 @@ namespace rnlib
 					auto& ent = this->entities.emplace_back();
 					ent.entity.add_component<actor_component_id::level_background>
 					({
-						.background_texid = image_id::effect_healed0
+						.background_texid = image_id::background_grassy
 					});
 					ent.layer = 100;
 				}

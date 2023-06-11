@@ -25,10 +25,12 @@ namespace rnlib
 
 		actor_system actors = {};
 		camera cam = {};
+		std::pair<tz::vec2, tz::vec2> level_bounds = {{-10.0f, -10.0f}, {10.0f, 10.0f}};
 		static constexpr float initial_quadtree_size = 10.0f;
 		actor_quadtree tree{box{tz::vec2{-1.0f, -1.0f} * initial_quadtree_size, tz::vec2{1.0f, 1.0f} * initial_quadtree_size}};
 		bool actor_dbgui = false;
 		bool tree_dbgui = false;
+		bool scene_dbgui = false;
 	};
 }
 

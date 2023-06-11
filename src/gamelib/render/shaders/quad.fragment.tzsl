@@ -5,7 +5,8 @@ import "quadtex"
 input(id = 0, flat) uint texid[QUAD_TEXCOUNT];
 input(id = 8) float depth;
 input(id = 9) vec2 texcoord;
-input(id = 10) vec3 tints[QUAD_TEXCOUNT];
+input(id = 10) float texcoord_scales[QUAD_TEXCOUNT];
+input(id = 18) vec3 tints[QUAD_TEXCOUNT];
 output(id = 0) vec4 out_col;
 
 struct render_data
@@ -30,7 +31,7 @@ void main()
 	out_col = vec4(0.0, 0.0, 0.0, 0.0);
 	for(uint i = 0; i < QUAD_TEXCOUNT; i++)
 	{
-		vec4 cur_col = texture(images[texid[i]], texcoord) * vec4(tints[i], 1.0);
+		vec4 cur_col = texture(images[texid[i]], texcoord * texcoord_scales[i]) * vec4(tints[i], 1.0);
 		if(cur_col.a == 1.0f)
 		{
 			out_col = cur_col;
