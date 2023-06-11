@@ -24,7 +24,7 @@ namespace rnlib
 		void handle_camera_position();
 
 		actor_system actors = {};
-		camera cam = {};
+		camera cam = {.zoom = 10.0f};
 		std::pair<tz::vec2, tz::vec2> level_bounds = {{-50.0f, -50.0f}, {50.0f, 50.0f}};
 		static constexpr float initial_quadtree_size = 50.0f;
 		actor_quadtree tree{box{tz::vec2{-1.0f, -1.0f} * initial_quadtree_size, tz::vec2{1.0f, 1.0f} * initial_quadtree_size}};

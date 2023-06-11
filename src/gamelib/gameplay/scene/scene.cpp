@@ -46,6 +46,7 @@ namespace rnlib
 			ImGui::Begin("Scene", &this->scene_dbgui);
 			ImGui::SliderFloat2("Level Bounds Min", this->level_bounds.first.data().data(), -5.0f, 5.0f);
 			ImGui::SliderFloat2("Level Bounds Max", this->level_bounds.second.data().data(), -5.0f, 5.0f);
+			ImGui::SliderFloat("Camera Zoom", &this->cam.zoom, 0.01f, 10.0f);
 			ImGui::End();
 		}
 	}
