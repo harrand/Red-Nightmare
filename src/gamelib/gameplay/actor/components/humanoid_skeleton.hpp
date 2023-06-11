@@ -109,39 +109,29 @@ inline void actor_component_update<actor_component_id::humanoid_skeleton>
 	}
 	component.data().impl_movedir = dir;
 
+	constexpr float anim_speed_affect_coeff = 0.6f;
+	const float anim_speed_multiplier = component.data().move_animation_affected_by_speed ? ((1.0f - anim_speed_affect_coeff) + (anim_speed_affect_coeff * std::sqrt(motion.data().speed))) : 1.0f;
 	if(dir & move_direction::right)
 	{
 		animation.data() = get_pose(humanoid_skeleton_animation::move_side);
-		if(component.data().move_animation_affected_by_speed)
-		{
-			animation.data().animation_speed = motion.data().speed;
-		}
+		animation.data().animation_speed = anim_speed_multiplier;
 		actor.transform.local_scale[0] = -std::abs(actor.transform.local_scale[0]);
 	}
 	else if(dir & move_direction::left)
 	{
 		animation.data() = get_pose(humanoid_skeleton_animation::move_side);
-		if(component.data().move_animation_affected_by_speed)
-		{
-			animation.data().animation_speed = motion.data().speed;
-		}
+		animation.data().animation_speed = anim_speed_multiplier;
 		actor.transform.local_scale[0] = std::abs(actor.transform.local_scale[0]);
 	}
 	else if(dir & move_direction::up)
 	{
 		animation.data() = get_pose(humanoid_skeleton_animation::move_up);
-		if(component.data().move_animation_affected_by_speed)
-		{
-			animation.data().animation_speed = motion.data().speed;
-		}
+		animation.data().animation_speed = anim_speed_multiplier;
 	}
 	else if(dir & move_direction::down)
 	{
 		animation.data() = get_pose(humanoid_skeleton_animation::move_down);
-		if(component.data().move_animation_affected_by_speed)
-		{
-			animation.data().animation_speed = motion.data().speed;
-		}
+		animation.data().animation_speed = anim_speed_multiplier;
 	}
 	else
 	{

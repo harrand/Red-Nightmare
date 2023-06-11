@@ -24,7 +24,7 @@ resource(id = 1) const buffer RainBuffer
 
 float get_rain(vec2 uv)
 {
-	float rand = tz::noise::simplex(vec2(uv.x) / rain.scale);
+	float rand = tz::noise::simplex(uv / rain.scale);
 	return tz::noise::simplex(uv + vec2(rand, 0.0));
 }
 

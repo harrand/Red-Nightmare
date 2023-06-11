@@ -16,6 +16,7 @@ inline void actor_component_update<actor_component_id::level_background>
 )
 {
 	actor.layer = 100;
+	actor.name = "Level Background";
 }
 
 template<>
