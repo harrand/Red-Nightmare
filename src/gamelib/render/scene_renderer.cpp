@@ -62,7 +62,7 @@ namespace rnlib
 			rinfo.state().graphics.tri_count = 2;
 			rinfo.shader().set_shader(tz::gl::shader_stage::vertex, ImportedShaderSource(layer, vertex));
 			rinfo.shader().set_shader(tz::gl::shader_stage::fragment, ImportedShaderSource(layer, fragment));
-			rinfo.set_options({tz::gl::renderer_option::no_present});
+			rinfo.set_options({tz::gl::renderer_option::no_present, tz::gl::renderer_option::no_depth_testing});
 			this->layer_texture_buffer = rinfo.add_resource(tz::gl::buffer_resource::from_one(layer_texture_ids,
 			{
 				.access = tz::gl::resource_access::dynamic_fixed

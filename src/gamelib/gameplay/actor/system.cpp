@@ -299,7 +299,8 @@ namespace rnlib
 					auto& ent = this->entities.emplace_back();
 					ent.entity.add_component<actor_component_id::level_background>
 					({
-						.background_texid = image_id::background_grassy
+						.background_texid = image_id::background_grassy,
+		  				.foreground_texid = image_id::foreground_blanchfield_cemetary
 					});
 					ent.layer = 100;
 				}

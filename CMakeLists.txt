@@ -401,6 +401,7 @@ add_text(
 		images/races/human/equipment/helm/headband/human_equipment_helm_headband_death09.png
 		images/backgrounds/background_grassy.png
 		images/backgrounds/background_snowy.png
+		images/foregrounds/foreground_blanchfield_cemetary.png
 		fonts/LucidaSansRegular.ttf
 )
 

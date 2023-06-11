@@ -326,6 +326,7 @@ namespace rnlib
 #include ImportedTextHeader(human_equipment_helm_headband_death09, png)
 #include ImportedTextHeader(background_grassy, png)
 #include ImportedTextHeader(background_snowy, png)
+#include ImportedTextHeader(foreground_blanchfield_cemetary, png)
 
 namespace rnlib
 {
@@ -634,6 +635,7 @@ namespace rnlib
 		ImportedTextData(human_equipment_helm_headband_death09, png),
 		ImportedTextData(background_grassy, png),
 		ImportedTextData(background_snowy, png),
+		ImportedTextData(foreground_blanchfield_cemetary, png),
 	};
 
 	tz::gl::image_resource create_image(image_id_t iid)
