@@ -19,7 +19,8 @@ return spell
 				.caster_uuid = a.uuid,
 				.target_uuid = victim.uuid,
 				.type = combat_text_type::damage,
-				.value = 99999
+				.value = 99999,
+				.damage_type = {combat_damage_type::shadow, combat_damage_type::fire}
 			});
 		}
 		return ret;

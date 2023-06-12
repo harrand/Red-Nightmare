@@ -315,6 +315,8 @@ namespace rnlib
 			race_human_equipment_helm_headband_death8,
 			race_human_equipment_helm_headband_death9,
 			scenery_foliage_oak_tree0,
+			projectile_magic_ball0,
+			projectile_magic_ball1,
 			background_grassy,
 			background_snowy,
 			foreground_blanchfield_cemetary,

@@ -122,7 +122,7 @@ namespace rnlib
 		std::size_t pcount = 1;
 		for(const auto& a : this->actors.container())
 		{
-			if(a.type == actor_type::player_benedict || a.type == actor_type::player_melistra
+			if((a.type == actor_type::player_benedict || a.type == actor_type::player_melistra)
 			&& (a.transform.get_position() - this->cam.position).length() > this->cam.zoom)
 			{
 				meanpos += a.transform.get_position();

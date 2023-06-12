@@ -11,7 +11,59 @@ namespace rnlib::combat
 		combat_log log;
 	} combat_data;
 
-	void damage(actor& target, actor* attacker, spell_id cause, std::size_t amt)
+	const char* get_damage_type_name(const combat_damage_types& type)
+	{
+		// base types.
+		if(type == combat_damage_types{combat_damage_type::untyped})
+		{
+			return "";
+		}
+		if(type == combat_damage_types{combat_damage_type::physical})
+		{
+			return "Physical";
+		}
+		if(type == combat_damage_types{combat_damage_type::fire})
+		{
+			return "Fire";
+		}
+		if(type == combat_damage_types{combat_damage_type::frost})
+		{
+			return "Frost";
+		}
+		if(type == combat_damage_types{combat_damage_type::earth})
+		{
+			return "Earth";
+		}
+		if(type == combat_damage_types{combat_damage_type::air})
+		{
+			return "Air";
+		}
+		if(type == combat_damage_types{combat_damage_type::shadow})
+		{
+			return "Shadow";
+		}
+		if(type == combat_damage_types{combat_damage_type::nihimancy})
+		{
+			return "Nihimancy";
+		}
+		if(type == combat_damage_types{combat_damage_type::divine})
+		{
+			return "Divine";
+		}
+
+		// multiple types
+		if(type == combat_damage_types{combat_damage_type::shadow, combat_damage_type::fire})
+		{
+			return "Shadowflame";
+		}
+		if(type == combat_damage_types{combat_damage_type::divine, combat_damage_type::fire})
+		{
+			return "Radiant";
+		}
+		return "Mystery";
+	}
+
+	void damage(actor& target, actor* attacker, spell_id cause, std::size_t amt, const combat_damage_types& type)
 	{
 		std::optional<std::size_t> overkill = std::nullopt;
 		tz::assert(target.entity.has_component<actor_component_id::damageable>());
@@ -38,11 +90,12 @@ namespace rnlib::combat
 	   		.target_uuid = target.uuid,
 	   		.type = combat_text_type::damage,
 	   		.value = amt,
+	   		.damage_type = type,
 	   		.over = overkill
 		});
 	}
 
-	void heal(actor& target, actor* healer, spell_id cause, std::size_t amt)
+	void heal(actor& target, actor* healer, spell_id cause, std::size_t amt, const combat_damage_types& type)
 	{
 		tz::assert(target.entity.has_component<actor_component_id::damageable>());
 		std::optional<std::size_t> overheal = std::nullopt;
@@ -72,6 +125,7 @@ namespace rnlib::combat
 	   		.target_uuid = target.uuid,
 	   		.type = combat_text_type::heal,
 	   		.value = amt,
+	   		.damage_type = type,
 	   		.over = overheal
 		});
 	}

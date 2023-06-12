@@ -20,6 +20,18 @@ namespace rnlib
 		ImGui::Text("Current Count: %zu", this->components.size());
 	}
 
+	float calc_rotation_from_dir(tz::vec2 dir)
+	{
+		float mul = 1.0f;
+		float offset = 3.14159f;
+		if(dir[0] > 0.0f)
+		{
+			offset = 0.0f;
+			mul *= -1.0f;
+		}
+		return offset + (mul * std::asin(dir[1] / dir.length()));
+	}
+
 	#define ACTION_IMPL_BEGIN(T) template<> void action_invoke<T>(actor_system& system, actor& caster, action<T>& action, update_context context){
 	#define ACTION_IMPL_END(T) } template void action_invoke<T>(actor_system& system, actor& caster, action<T>&, update_context);
 
@@ -97,6 +109,11 @@ namespace rnlib
 			const float leeway = motion.speed * 0.1f;
 			const float xdiff = now[0] - target[0];
 			bool destination = false;
+			if(action.data().rotate_towards)
+			{
+				tz::vec2 dir = target - now;
+				caster.transform.local_rotation = calc_rotation_from_dir(dir);
+			}
 			if(xdiff < -leeway)
 			{
 				motion.direction |= move_direction::right;
@@ -148,6 +165,10 @@ namespace rnlib
 		if(!motion.impl_held)
 		{
 			caster.transform.local_position += action.data().dir.normalised() * motion.speed * (motion.impl_dt / 1000.0f);
+			if(action.data().rotate_towards)
+			{
+				caster.transform.local_rotation = calc_rotation_from_dir(action.data().dir);
+			}
 		}
 	ACTION_IMPL_END(action_id::move_in_direction)
 

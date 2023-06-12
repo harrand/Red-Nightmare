@@ -107,12 +107,14 @@ namespace rnlib
 	struct action_params<action_id::move_to>
 	{
 		tz::vec2 location;
+		bool rotate_towards = false;
 	};
 
 	template<>
 	struct action_params<action_id::move_in_direction>
 	{
 		tz::vec2 dir;
+		bool rotate_towards = false;
 	};
 
 	enum class combat_text_type

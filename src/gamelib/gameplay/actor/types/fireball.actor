@@ -4,7 +4,7 @@ return actor
 	{
 		actor_component<actor_component_id::motion>
 		{{
-			.speed = 5.0f,
+			.speed = 15.0f,
 			.tilt_factor = 0.5f,
 			.tilt_rate = 10.0f
 		}},
@@ -13,16 +13,32 @@ return actor
 			.textures =
 			{
 				{
-					.id = image_id::border32,
-					.colour_tint = {1.0f, 0.7f, 0.0f}
+					.id = image_id::invisible,
+					.colour_tint = {1.0f, 0.35f, 0.05f}
 				}
+			}
+		}},
+		actor_component<actor_component_id::animation>
+		{{
+			.animations =
+			{
+				animation
+				{{
+					.frame_textures =
+					{
+						image_id::projectile_magic_ball0,
+						image_id::projectile_magic_ball1
+					},
+					.fps = 12,
+					.loop = true
+				}}
 			}
 		}},
 		actor_component<actor_component_id::collide>
 		{{
 			.collide_if = [](const actor& a, const actor& b)
 			{
-				return b.type == actor_type::oak_tree || b.type != actor_type::player_melistra && b.entity.has_component<actor_component_id::damageable>();
+				return b.type == actor_type::oak_tree || (b.type != actor_type::player_benedict && b.type != actor_type::player_melistra && b.entity.has_component<actor_component_id::damageable>());
 			}
 		}},
 		actor_component<actor_component_id::action_listener>
@@ -49,7 +65,7 @@ return actor
 	},
 	.transform
 	{
-		.local_scale = {0.25f, 0.25f}
+		.local_scale = {0.75f, 0.75f}
 	},
 	.name = "Fireball",
 	.layer = 0

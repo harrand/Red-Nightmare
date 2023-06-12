@@ -336,7 +336,13 @@ namespace rnlib
 							tz::error("unknown combat text type. please add support.");
 						break;
 					}
-					ImGui::Text("%s's [%s] %s %s for %zu", caster_name, sp.name, verb, target_name, evt.value);
+					std::string damage_type_name = "";
+					const char* dtype = rnlib::combat::get_damage_type_name(evt.damage_type);
+					if(std::strcmp(dtype, "") != 0)
+					{
+						damage_type_name = std::string(" ") + dtype;
+					}
+					ImGui::Text("%s's [%s] %s %s for %zu%s", caster_name, sp.name, verb, target_name, evt.value, damage_type_name.c_str());
 					if(evt.over.has_value())
 					{
 						ImGui::SameLine();
@@ -472,10 +478,10 @@ namespace rnlib
 				switch(evt.type)
 				{
 					case combat_text_type::damage:
-						combat::damage(*b, a, evt.spell, evt.value);
+						combat::damage(*b, a, evt.spell, evt.value, evt.damage_type);
 					break;
 					case combat_text_type::heal:
-						combat::heal(*b, a, evt.spell, evt.value);
+						combat::heal(*b, a, evt.spell, evt.value, evt.damage_type);
 					break;
 				}
 			}

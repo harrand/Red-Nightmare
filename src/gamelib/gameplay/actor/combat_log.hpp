@@ -1,5 +1,6 @@
 #ifndef RNLIB_GAMEPLAY_ACTOR_COMBAT_LOG_HPP
 #define RNLIB_GAMEPLAY_ACTOR_COMBAT_LOG_HPP
+#include "tz/core/data/enum_field.hpp"
 #include <cstddef>
 #include <span>
 #include <vector>
@@ -10,6 +11,22 @@ namespace rnlib
 	enum class combat_text_type;
 	enum class spell_id;
 
+	enum class combat_damage_type
+	{
+		untyped,
+		physical,
+		fire,
+		frost,
+		earth,
+		air,
+		shadow,
+		nihimancy,
+		divine
+	};
+
+	using combat_damage_types = tz::enum_field<combat_damage_type>;
+
+
 	struct combat_event
 	{
 		spell_id spell;
@@ -17,6 +34,7 @@ namespace rnlib
 		std::size_t target_uuid;
 		combat_text_type type;
 		std::size_t value;
+		combat_damage_types damage_type = {};
 		std::optional<std::size_t> over = std::nullopt;
 
 		static combat_event null();

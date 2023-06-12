@@ -19,7 +19,8 @@ return spell
 				.caster_uuid = a.uuid,
 				.target_uuid = tar->uuid,
 				.type = combat_text_type::heal,
-				.value = 50
+				.value = 50,
+				.damage_type = {rnlib::combat_damage_type::divine}
 			}
 		};
 	},
