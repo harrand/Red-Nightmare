@@ -106,6 +106,12 @@ add_text(
 		images/effects/healed2.png
 		images/effects/healed3.png
 		images/effects/healed4.png
+		images/effects/ball_impact_remnants0.png
+		images/effects/ball_impact_remnants1.png
+		images/effects/ball_impact_remnants2.png
+		images/effects/ball_impact_remnants3.png
+		images/effects/ball_impact_remnants4.png
+		images/effects/ball_impact_remnants5.png
 
 		images/races/human/base/human_base_idle0.png
 		images/races/human/base/human_base_idle1.png

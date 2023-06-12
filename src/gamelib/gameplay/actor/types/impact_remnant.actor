@@ -1,0 +1,50 @@
+return actor
+{
+	.entity =
+	{
+		actor_component<actor_component_id::sprite>
+		{{
+			.textures =
+			{
+				{
+					.id = image_id::invisible,
+					.colour_tint = {1.0f, 1.0f, 1.0f}
+				}
+			}
+		}},
+		actor_component<actor_component_id::animation>
+		{{
+			.animations =
+			{
+				animation
+				{{
+					.frame_textures =
+					{
+						image_id::effect_ball_impact_remnants0,
+						image_id::effect_ball_impact_remnants1,
+						image_id::effect_ball_impact_remnants2,
+						image_id::effect_ball_impact_remnants3,
+						image_id::effect_ball_impact_remnants4,
+						image_id::effect_ball_impact_remnants5,
+						image_id::invisible
+					},
+					.fps = 9,
+					.loop = false
+				}}
+			}
+		}},
+	},
+	.actions =
+	{
+		action<action_id::timed_despawn>
+		{{
+			.seconds_until_despawn = 1.0f
+		}}
+	},
+	.transform
+	{
+		.local_scale = {0.75f, 0.75f}
+	},
+	.name = "Impact Remnant",
+	.layer = 0
+};

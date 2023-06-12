@@ -138,6 +138,11 @@ namespace rnlib
 					#include "gamelib/gameplay/actor/types/heal_effect.actor"
 				}
 				break;
+				case actor_type::impact_remnant:
+				{
+					#include "gamelib/gameplay/actor/types/impact_remnant.actor"
+				}
+				break;
 				case actor_type::oak_tree:
 				{
 					#include "gamelib/gameplay/actor/types/oak_tree.actor"

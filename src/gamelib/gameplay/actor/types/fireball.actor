@@ -4,7 +4,7 @@ return actor
 	{
 		actor_component<actor_component_id::motion>
 		{{
-			.speed = 15.0f,
+			.speed = 11.0f,
 			.tilt_factor = 0.5f,
 			.tilt_rate = 10.0f
 		}},
@@ -48,6 +48,10 @@ return actor
 				[](actor& a, actor& tar)
 				{
 					a.target = tar.uuid;
+					tar.actions.add_component<action_id::spawn>
+					({
+						.type = actor_type::impact_remnant
+					});
 					a.actions.add_component<action_id::cast>
 					({
 						.spell = spell_id::scorch

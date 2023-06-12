@@ -32,6 +32,12 @@ namespace rnlib
 #include ImportedTextHeader(healed2, png)
 #include ImportedTextHeader(healed3, png)
 #include ImportedTextHeader(healed4, png)
+#include ImportedTextHeader(ball_impact_remnants0, png)
+#include ImportedTextHeader(ball_impact_remnants1, png)
+#include ImportedTextHeader(ball_impact_remnants2, png)
+#include ImportedTextHeader(ball_impact_remnants3, png)
+#include ImportedTextHeader(ball_impact_remnants4, png)
+#include ImportedTextHeader(ball_impact_remnants5, png)
 #include ImportedTextHeader(human_base_idle0, png)
 #include ImportedTextHeader(human_base_idle1, png)
 #include ImportedTextHeader(human_base_side0, png)
@@ -344,6 +350,12 @@ namespace rnlib
 		ImportedTextData(healed2, png),
 		ImportedTextData(healed3, png),
 		ImportedTextData(healed4, png),
+		ImportedTextData(ball_impact_remnants0, png),
+		ImportedTextData(ball_impact_remnants1, png),
+		ImportedTextData(ball_impact_remnants2, png),
+		ImportedTextData(ball_impact_remnants3, png),
+		ImportedTextData(ball_impact_remnants4, png),
+		ImportedTextData(ball_impact_remnants5, png),
 		ImportedTextData(human_base_idle0, png),
 		ImportedTextData(human_base_idle1, png),
 		ImportedTextData(human_base_side0, png),
