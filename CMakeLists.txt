@@ -399,6 +399,7 @@ add_text(
 		images/races/human/equipment/helm/headband/human_equipment_helm_headband_death07.png
 		images/races/human/equipment/helm/headband/human_equipment_helm_headband_death08.png
 		images/races/human/equipment/helm/headband/human_equipment_helm_headband_death09.png
+		images/scenery/foliage/oak_tree0.png
 		images/backgrounds/background_grassy.png
 		images/backgrounds/background_snowy.png
 		images/foregrounds/foreground_blanchfield_cemetary.png

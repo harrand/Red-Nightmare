@@ -22,7 +22,7 @@ return actor
 		{{
 			.collide_if = [](const actor& a, const actor& b)
 			{
-				return b.type != actor_type::player_melistra && b.entity.has_component<actor_component_id::damageable>();
+				return b.type == actor_type::oak_tree || b.type != actor_type::player_melistra && b.entity.has_component<actor_component_id::damageable>();
 			}
 		}},
 		actor_component<actor_component_id::action_listener>

@@ -324,6 +324,7 @@ namespace rnlib
 #include ImportedTextHeader(human_equipment_helm_headband_death07, png)
 #include ImportedTextHeader(human_equipment_helm_headband_death08, png)
 #include ImportedTextHeader(human_equipment_helm_headband_death09, png)
+#include ImportedTextHeader(oak_tree0, png)
 #include ImportedTextHeader(background_grassy, png)
 #include ImportedTextHeader(background_snowy, png)
 #include ImportedTextHeader(foreground_blanchfield_cemetary, png)
@@ -633,6 +634,7 @@ namespace rnlib
 		ImportedTextData(human_equipment_helm_headband_death07, png),
 		ImportedTextData(human_equipment_helm_headband_death08, png),
 		ImportedTextData(human_equipment_helm_headband_death09, png),
+		ImportedTextData(oak_tree0, png),
 		ImportedTextData(background_grassy, png),
 		ImportedTextData(background_snowy, png),
 		ImportedTextData(foreground_blanchfield_cemetary, png),

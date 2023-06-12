@@ -1,0 +1,24 @@
+return actor
+{
+	.entity =
+	{
+		actor_component<actor_component_id::sprite>
+		{{
+			.textures =
+			{
+				{
+					.id = image_id::scenery_foliage_oak_tree0,
+				}
+			}
+		}},
+		actor_component<actor_component_id::collide>
+		{{
+			.mass_ratio = 1.0f,
+		}}
+	},
+	.transform
+	{
+		.local_scale = {1.5f, 1.5f}
+	},
+	.name = "Oak Tree"
+};

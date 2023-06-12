@@ -135,6 +135,7 @@ namespace rnlib
 		undefined,
 		dev_barrier,
 		heal_effect,
+		oak_tree,
 		doctor_michael_morbius,
 		fireball,
 		player_melistra,
