@@ -6,6 +6,7 @@ struct sprite_texture_info
 	tz::vec2 offset = tz::vec2::zero();
 	tz::vec3 colour_tint = tz::vec3::filled(1.0f);
 	unsigned int layer_offset = 0;
+	float tex_scale = 1.0f;
 	bool visible = true;
 };
 
@@ -39,6 +40,7 @@ inline mount_result actor_component_mount<actor_component_id::sprite>
 	{
 		quad.texid[i] = sorted_textures[i].visible ? sorted_textures[i].id : image_id::invisible;
 		quad.tints[i] = sorted_textures[i].colour_tint.with_more(0.0f);
+		quad.tex_scales[i] = sorted_textures[i].tex_scale;
 		quad.scale = tz::vec2::filled(1.0f);
 	}
 	for(std::size_t i = tex_count; i < QUAD_TEXCOUNT; i++)
@@ -61,10 +63,11 @@ inline void actor_component_dbgui(actor_component<actor_component_id::sprite>& c
 	ImGui::Indent();
 	auto& tex = component.data().textures[texture_index];
 	ImGui::Text("Texture ID: %zu", tex.id);
-	ImGui::InputFloat2("Offset", tex.offset.data().data());
+	ImGui::InputFloat2("Texture Offset", tex.offset.data().data());
 	ImGui::SliderFloat3("Colour Tint", tex.colour_tint.data().data(), 0.0f, 1.0f);
 	// todo: no magic number.
 	ImGui::SliderInt("Layer Offset", reinterpret_cast<int*>(&tex.layer_offset), 0, 1000, "%u");
+	ImGui::SliderFloat("Texture Scale", &tex.tex_scale, 0.01f, 50.0f);
 	ImGui::Checkbox("Visible", &tex.visible);
 	ImGui::Unindent();
 }
