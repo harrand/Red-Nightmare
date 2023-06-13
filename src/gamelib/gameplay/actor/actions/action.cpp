@@ -207,4 +207,9 @@ namespace rnlib
 		});
 		action.set_is_complete(true);
 	ACTION_IMPL_END(action_id::emit_combat_text)
+
+	ACTION_IMPL_BEGIN(action_id::custom)
+		action.data().run(caster, system, context);
+		action.set_is_complete(true);
+	ACTION_IMPL_END(action_id::custom)
 }

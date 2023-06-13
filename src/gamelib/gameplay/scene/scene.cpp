@@ -120,19 +120,28 @@ namespace rnlib
 	{
 		tz::vec2 meanpos = this->cam.position;
 		std::size_t pcount = 1;
+		float meandist = 0.0f;
+		const float view_size = [this]()
+		{
+			auto [min, max] = this->cam.get_view_bounds();
+			return (max - min).length();
+		}() + 0.001f;
 		for(const auto& a : this->actors.container())
 		{
+			float dst = (a.transform.get_position() - this->cam.position).length();
+			meandist += dst;
 			if((a.type == actor_type::player_benedict || a.type == actor_type::player_melistra)
-			&& (a.transform.get_position() - this->cam.position).length() > this->cam.zoom * 0.6f)
+			&& (dst > this->cam.zoom * 0.6f))
 			{
 				meanpos += a.transform.get_position();
 				pcount++;
 			}
 		}
 		meanpos /= static_cast<float>(pcount);
+		meandist /= static_cast<float>(pcount);
 		// destination = meanpos.
 		// lerp between campos and meanpos
 		constexpr float lerp_amt_per_frame = 0.003f;
-		this->cam.position = this->cam.position + (meanpos - this->cam.position) * lerp_amt_per_frame;
+		this->cam.position = this->cam.position + (meanpos - this->cam.position) * lerp_amt_per_frame * (meandist / view_size);
 	}
 }

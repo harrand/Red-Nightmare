@@ -20,6 +20,11 @@ namespace rnlib
 					#include "gamelib/gameplay/actor/spell/types/hand_of_death.spell"
 				}
 				break;
+				case spell_id::fiery_burst:
+				{
+					#include "gamelib/gameplay/actor/spell/types/fiery_burst.spell"
+				}
+				break;
 				case spell_id::fireball:
 				{
 					#include "gamelib/gameplay/actor/spell/types/fireball.spell"

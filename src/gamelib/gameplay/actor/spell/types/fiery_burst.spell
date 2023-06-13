@@ -1,0 +1,55 @@
+return spell
+{
+	.cast =
+	{
+		.colour = {1.0f, 0.35f, 0.05f},
+		.cast_time_seconds = 1.5f
+	},
+	.function = [](actor& a, actor_system& sys, const update_context& ctx)->combat_events
+	{
+		// shoot a large fireball at the mouse.
+		tz::vec2 to_mouse = (ctx.mouse_position - a.transform.get_position()).normalised();
+		std::size_t caster_uuid = a.uuid;
+		a.actions.add_component<action_id::spawn>
+		({
+			.type = actor_type::fireball,
+			.actions =
+			{
+				action<action_id::move_in_direction>
+				{{
+					.dir = to_mouse,
+					.rotate_towards = true
+				}},
+				action<action_id::custom>
+				{{
+					.run = [caster_uuid](actor& fb, actor_system& sys, [[maybe_unused]] const update_context& ctx2)
+					{
+						// attach the caster to the fireball's transform.
+						// set the caster to not be able to move.
+						actor* a = sys.find(caster_uuid);
+						tz::assert(a);
+						a->transform.parent = &fb.transform;
+						a->transform.local_position = {};
+						tz::assert(fb.entity.has_component<actor_component_id::action_listener>());
+						auto& listener = fb.entity.get_component<actor_component_id::action_listener>()->data();
+						// when the fireball collides, we expect it to despawn. we detach the caster first.
+						listener.on_collide.push_back([caster_uuid, &sys](actor& me, actor& collidee)
+						{
+							// regardless of who i collide with, detach the caster's transform from me.
+							(void)me;
+							(void)collidee;
+							actor* caster = sys.find(caster_uuid);
+							tz::assert(caster);
+							caster->transform.parent = nullptr;
+							caster->transform.local_position = me.transform.get_position();
+						});
+						// lastly, the fireball auto despawns after 5 seconds, we remove that action.
+						fb.actions.remove_component<action_id::timed_despawn>();
+					}
+				}}
+			}
+		});
+		return {};
+	},
+	.name = "Fiery Burst"
+};

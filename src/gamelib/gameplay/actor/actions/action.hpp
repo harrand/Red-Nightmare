@@ -19,6 +19,7 @@ namespace rnlib
 		move_to,
 		move_in_direction,
 		emit_combat_text,
+		custom,
 		_count
 	};
 
@@ -129,6 +130,12 @@ namespace rnlib
 	{
 		combat_text_type type;
 		std::size_t amount;
+	};
+
+	template<>
+	struct action_params<action_id::custom>
+	{
+		std::function<void(actor& a, actor_system& sys, const update_context& ctx)> run = [](actor& a, actor_system& sys, const update_context& ctx){};
 	};
 
 	template<action_id ID>

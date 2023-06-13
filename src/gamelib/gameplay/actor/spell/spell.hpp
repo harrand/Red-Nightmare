@@ -10,6 +10,7 @@ namespace rnlib
 	{
 		heal,
 		hand_of_death,
+		fiery_burst,
 		fireball,
 		scorch,
 		teleport

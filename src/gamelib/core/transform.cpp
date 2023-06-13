@@ -5,6 +5,7 @@ namespace rnlib
 {
 	tz::vec2 transform_t::get_position() const
 	{
+		tz::assert(this->parent != this, "detected recursive transform. illegal.");
 		tz::vec2 pos = this->local_position;
 		if(this->parent != nullptr)
 		{
@@ -15,6 +16,7 @@ namespace rnlib
 
 	tz::vec2 transform_t::get_scale() const
 	{
+		tz::assert(this->parent != this, "detected recursive transform. illegal.");
 		tz::vec2 scale = this->local_scale;
 		if(this->parent != nullptr)
 		{
@@ -27,6 +29,7 @@ namespace rnlib
 
 	float transform_t::get_rotation() const
 	{
+		tz::assert(this->parent != this, "detected recursive transform. illegal.");
 		float rot = this->local_rotation;
 		if(this->parent != nullptr)
 		{
