@@ -408,6 +408,8 @@ add_text(
 		images/scenery/foliage/oak_tree0.png
 		images/projectiles/magic_ball0.png
 		images/projectiles/magic_ball1.png
+		images/projectiles/magic_ball2.png
+		images/projectiles/magic_ball3.png
 		images/backgrounds/background_grassy.png
 		images/backgrounds/background_snowy.png
 		images/foregrounds/foreground_blanchfield_cemetary.png

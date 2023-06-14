@@ -323,6 +323,8 @@ namespace rnlib
 			scenery_foliage_oak_tree0,
 			projectile_magic_ball0,
 			projectile_magic_ball1,
+			projectile_magic_ball2,
+			projectile_magic_ball3,
 			background_grassy,
 			background_snowy,
 			foreground_blanchfield_cemetary,

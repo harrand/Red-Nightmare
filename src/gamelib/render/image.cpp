@@ -333,6 +333,8 @@ namespace rnlib
 #include ImportedTextHeader(oak_tree0, png)
 #include ImportedTextHeader(magic_ball0, png)
 #include ImportedTextHeader(magic_ball1, png)
+#include ImportedTextHeader(magic_ball2, png)
+#include ImportedTextHeader(magic_ball3, png)
 #include ImportedTextHeader(background_grassy, png)
 #include ImportedTextHeader(background_snowy, png)
 #include ImportedTextHeader(foreground_blanchfield_cemetary, png)
@@ -651,6 +653,8 @@ namespace rnlib
 		ImportedTextData(oak_tree0, png),
 		ImportedTextData(magic_ball0, png),
 		ImportedTextData(magic_ball1, png),
+		ImportedTextData(magic_ball2, png),
+		ImportedTextData(magic_ball3, png),
 		ImportedTextData(background_grassy, png),
 		ImportedTextData(background_snowy, png),
 		ImportedTextData(foreground_blanchfield_cemetary, png),

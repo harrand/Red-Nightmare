@@ -27,7 +27,9 @@ return actor
 					.frame_textures =
 					{
 						image_id::projectile_magic_ball0,
-						image_id::projectile_magic_ball1
+						image_id::projectile_magic_ball1,
+						image_id::projectile_magic_ball2,
+						image_id::projectile_magic_ball3,
 					},
 					.fps = 12,
 					.loop = true
