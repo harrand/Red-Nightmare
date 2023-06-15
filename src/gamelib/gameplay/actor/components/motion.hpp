@@ -32,19 +32,19 @@ inline void actor_component_update<actor_component_id::motion>
 	float corrected_speed = component.data().speed / std::max(std::popcount(static_cast<unsigned int>(component.data().direction)), 1);
 	if(component.data().direction & move_direction::right)
 	{
-		actor.transform.local_position[0] += corrected_speed * (dt / 1000.0f);
+		actor.transform.position[0] += corrected_speed * (dt / 1000.0f);
 	}
 	if(component.data().direction & move_direction::left)
 	{
-		actor.transform.local_position[0] -= corrected_speed * (dt / 1000.0f);
+		actor.transform.position[0] -= corrected_speed * (dt / 1000.0f);
 	}
 	if(component.data().direction & move_direction::up)
 	{
-		actor.transform.local_position[1] += corrected_speed * (dt / 1000.0f);
+		actor.transform.position[1] += corrected_speed * (dt / 1000.0f);
 	}
 	if(component.data().direction & move_direction::down)
 	{
-		actor.transform.local_position[1] -= corrected_speed * (dt / 1000.0f);
+		actor.transform.position[1] -= corrected_speed * (dt / 1000.0f);
 	}
 	if(component.data().direction == 0)
 	{
@@ -62,7 +62,7 @@ inline void actor_component_update<actor_component_id::motion>
 	if(!component.data().impl_held)
 	{
 		component.data().direction = 0;
-		actor.transform.local_rotation = std::sin(component.data().tilt_timer * component.data().tilt_rate * component.data().speed) * component.data().tilt_factor * std::clamp(component.data().speed, 1.0f, 2.0f);
+		actor.transform.rotation = std::sin(component.data().tilt_timer * component.data().tilt_rate * component.data().speed) * component.data().tilt_factor * std::clamp(component.data().speed, 1.0f, 2.0f);
 	}
 }
 

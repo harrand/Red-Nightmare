@@ -147,13 +147,15 @@ namespace rnlib
 		_count
 	};
 
+	class actor_system;
+
 	struct actor
 	{
 		static std::size_t uuid_count;
 		static constexpr std::size_t nullid = std::numeric_limits<std::size_t>::max();
 		void dbgui();
 		void update(float dt);
-		mount_result mount(std::span<quad_renderer::quad_data> quads) const;
+		mount_result mount(std::span<quad_renderer::quad_data> quads, const actor_system& sys) const;
 		bool dead() const;
 
 		actor_entity entity = {};
@@ -164,6 +166,7 @@ namespace rnlib
 		actor_type type = actor_type::undefined;
 		unsigned int layer = 1;
 		std::size_t target = nullid;
+		std::size_t parent = nullid;
 	};
 
 	actor create_actor(actor_type type);

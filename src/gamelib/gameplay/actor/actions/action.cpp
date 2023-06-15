@@ -38,7 +38,7 @@ namespace rnlib
 	std::default_random_engine rng;
 
 	ACTION_IMPL_BEGIN(action_id::teleport)
-		caster.transform.local_position = action.data().location;
+		caster.transform.position = action.data().location;
 		action.set_is_complete(true);
 	ACTION_IMPL_END(action_id::teleport)
 
@@ -65,8 +65,8 @@ namespace rnlib
 
 	ACTION_IMPL_BEGIN(action_id::spawn)
 		actor& a = system.add(action.data().type);
-		a.transform.parent = caster.transform.parent;
-		a.transform.local_position = caster.transform.local_position;
+		a.parent = caster.parent;
+		a.transform.position = caster.transform.position;
 		action.data().actions.transfer_components(a.actions);
 		action.set_is_complete(true);
 	ACTION_IMPL_END(action_id::spawn)
@@ -103,7 +103,7 @@ namespace rnlib
 			auto& motion = caster.entity.get_component<actor_component_id::motion>()->data();
 			motion.impl_held = true;
 			motion.direction = 0;
-			tz::vec2 now = caster.transform.get_position();
+			tz::vec2 now = system.get_global_transform(caster.uuid).position;
 			tz::vec2 target = action.data().location;
 			// leeway is the distance we travel in 16.66ms
 			const float leeway = motion.speed * 0.1f;
@@ -112,7 +112,7 @@ namespace rnlib
 			if(action.data().rotate_towards)
 			{
 				tz::vec2 dir = target - now;
-				caster.transform.local_rotation = calc_rotation_from_dir(dir);
+				caster.transform.rotation = calc_rotation_from_dir(dir);
 			}
 			if(xdiff < -leeway)
 			{
@@ -164,10 +164,10 @@ namespace rnlib
 		auto& motion = caster.entity.get_component<actor_component_id::motion>()->data();
 		if(!motion.impl_held)
 		{
-			caster.transform.local_position += action.data().dir.normalised() * motion.speed * (motion.impl_dt / 1000.0f);
+			caster.transform.position += action.data().dir.normalised() * motion.speed * (motion.impl_dt / 1000.0f);
 			if(action.data().rotate_towards)
 			{
-				caster.transform.local_rotation = calc_rotation_from_dir(action.data().dir);
+				caster.transform.rotation = calc_rotation_from_dir(action.data().dir);
 			}
 		}
 	ACTION_IMPL_END(action_id::move_in_direction)
@@ -175,11 +175,11 @@ namespace rnlib
 	ACTION_IMPL_BEGIN(action_id::emit_combat_text)
 		actor& text = system.add(actor_type::unknown);
 		text.transform = caster.transform;
-		tz::vec2 abscale = text.transform.get_scale();
+		tz::vec2 abscale = system.get_global_transform(text.uuid).scale;
 		abscale[0] = std::abs(abscale[0]);
 		abscale[1] = std::abs(abscale[1]);
-		text.transform.local_position += abscale;
-		text.transform.local_scale *= 2.0f;
+		text.transform.position += abscale;
+		text.transform.scale *= 2.0f;
 		text.actions.add_component<action_id::timed_despawn>
 		({
 			.seconds_until_despawn = 1.5f

@@ -115,13 +115,13 @@ inline void actor_component_update<actor_component_id::humanoid_skeleton>
 	{
 		animation.data() = get_pose(humanoid_skeleton_animation::move_side);
 		animation.data().animation_speed = anim_speed_multiplier;
-		actor.transform.local_scale[0] = -std::abs(actor.transform.local_scale[0]);
+		actor.transform.scale[0] = -std::abs(actor.transform.scale[0]);
 	}
 	else if(dir & move_direction::left)
 	{
 		animation.data() = get_pose(humanoid_skeleton_animation::move_side);
 		animation.data().animation_speed = anim_speed_multiplier;
-		actor.transform.local_scale[0] = std::abs(actor.transform.local_scale[0]);
+		actor.transform.scale[0] = std::abs(actor.transform.scale[0]);
 	}
 	else if(dir & move_direction::up)
 	{

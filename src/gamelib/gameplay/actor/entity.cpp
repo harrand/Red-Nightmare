@@ -1,4 +1,5 @@
 #include "gamelib/gameplay/actor/entity.hpp"
+#include "gamelib/gameplay/actor/system.hpp"
 #include "tz/dbgui/dbgui.hpp"
 #include <random> // randomius.actor
 
@@ -101,16 +102,17 @@ namespace rnlib
 		this->entity.update(dt, *this);
 	}
 
-	mount_result actor::mount(std::span<quad_renderer::quad_data> quads) const
+	mount_result actor::mount(std::span<quad_renderer::quad_data> quads, const actor_system& sys) const
 	{
 		TZ_PROFZONE("actor - mount", 0xffee0077);
 		mount_result res = this->entity.mount(quads);
+		transform_t t = sys.get_global_transform(this->uuid);
 		for(std::size_t i = 0; i < res.count; i++)
 		{
-			quads[i].pos += this->transform.get_position();
-			quads[i].scale[0] *= this->transform.get_scale()[0];
-			quads[i].scale[1] *= this->transform.get_scale()[1];
-			quads[i].rotation = this->transform.get_rotation();
+			quads[i].pos += t.position;
+			quads[i].scale[0] *= t.scale[0];
+			quads[i].scale[1] *= t.scale[1];
+			quads[i].rotation = t.rotation;
 			quads[i].layer += this->layer;
 		}
 		return res;

@@ -7,18 +7,14 @@ namespace rnlib
 {
 	struct transform_t
 	{
-		transform_t* parent = nullptr;
-		tz::vec2 local_position = tz::vec2::zero();
-		tz::vec2 local_scale = tz::vec2::filled(1.0f);
-		float local_rotation = 0.0f;
-
-		tz::vec2 get_position() const;
-		tz::vec2 get_scale() const;
-		float get_rotation() const;
+		tz::vec2 position = tz::vec2::zero();
+		tz::vec2 scale = tz::vec2::filled(1.0f);
+		float rotation = 0.0f;
 
 		box get_bounding_box() const;
 
 		void dbgui();
+		transform_t operator+(const transform_t& rhs) const;
 	};
 }
 

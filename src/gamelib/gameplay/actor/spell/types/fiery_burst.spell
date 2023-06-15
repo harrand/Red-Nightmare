@@ -8,7 +8,7 @@ return spell
 	.function = [](actor& a, actor_system& sys, const update_context& ctx)->combat_events
 	{
 		// shoot a large fireball at the mouse.
-		tz::vec2 to_mouse = (ctx.mouse_position - a.transform.get_position()).normalised();
+		tz::vec2 to_mouse = (ctx.mouse_position - sys.get_global_transform(a.uuid).position).normalised();
 		std::size_t caster_uuid = a.uuid;
 		a.actions.add_component<action_id::spawn>
 		({
@@ -28,8 +28,8 @@ return spell
 						// set the caster to not be able to move.
 						actor* a = sys.find(caster_uuid);
 						tz::assert(a);
-						a->transform.parent = &fb.transform;
-						a->transform.local_position = {};
+						a->parent = fb.uuid;
+						a->transform.position = {};
 						tz::assert(fb.entity.has_component<actor_component_id::action_listener>());
 						auto& listener = fb.entity.get_component<actor_component_id::action_listener>()->data();
 						// when the fireball collides, we expect it to despawn. we detach the caster first.
@@ -40,8 +40,8 @@ return spell
 							(void)collidee;
 							actor* caster = sys.find(caster_uuid);
 							tz::assert(caster);
-							caster->transform.parent = nullptr;
-							caster->transform.local_position = me.transform.get_position();
+							caster->parent = actor::nullid;
+							caster->transform.position = sys.get_global_transform(me.uuid).position;
 						});
 						// lastly, the fireball auto despawns after 5 seconds, we remove that action.
 						fb.actions.remove_component<action_id::timed_despawn>();

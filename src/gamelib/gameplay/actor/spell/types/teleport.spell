@@ -8,7 +8,7 @@ return spell
 	.function = [](actor& a, actor_system& sys, const update_context& ctx)->combat_events
 	{
 		combat_events ret;
-		a.transform.local_position = ctx.mouse_position;
+		a.transform.position = ctx.mouse_position;
 		return ret;
 	},
 	.name = "Teleport"

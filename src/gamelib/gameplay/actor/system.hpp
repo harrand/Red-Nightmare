@@ -17,6 +17,7 @@ namespace rnlib
 
 		const actor* find(std::size_t uuid) const;
 		actor* find(std::size_t uuid);
+		transform_t get_global_transform(std::size_t uuid) const;
 		void remove(std::size_t uuid);
 		mount_result mount(std::span<quad_renderer::quad_data> quads);
 		std::size_t size() const;

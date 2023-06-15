@@ -18,7 +18,7 @@ return actor
 	},
 	.transform
 	{
-		.local_scale = {1.5f, 1.5f}
+		.scale = {1.5f, 1.5f}
 	},
 	.name = "Oak Tree"
 };

@@ -12,7 +12,7 @@ return spell
 		action_entity after;
 		if(tar == nullptr)
 		{
-			tz::vec2 to_mouse = (ctx.mouse_position - a.transform.get_position()).normalised();
+			tz::vec2 to_mouse = (ctx.mouse_position - sys.get_global_transform(a.uuid).position).normalised();
 			after =
 			{
 				action<action_id::move_in_direction>
@@ -24,7 +24,7 @@ return spell
 		}
 		else
 		{
-			tz::vec2 e = tar->transform.get_position();
+			tz::vec2 e = sys.get_global_transform(tar->uuid).position;
 			after =
 			{
 				action<action_id::move_to>

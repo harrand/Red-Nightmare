@@ -40,6 +40,17 @@ namespace rnlib
 		return &*iter;
 	}
 
+	transform_t actor_system::get_global_transform(std::size_t uuid) const
+	{
+		const actor* a = this->find(uuid);
+		tz::assert(a != nullptr, "Failed to find global transform for actor, because the actor could not be found. You've probably deleted an actor recently in a way that wasn't safe.");
+		if(a->parent == actor::nullid)
+		{
+			return a->transform;
+		}
+		return a->transform + this->get_global_transform(a->parent);
+	}
+
 	void actor_system::remove(std::size_t uuid)
 	{
 		this->entities_to_delete.push_back(uuid);
@@ -50,7 +61,7 @@ namespace rnlib
 		mount_result res;
 		for(const actor& entity : this->entities)
 		{
-			res << entity.mount(quads.subspan(res.count));
+			res << entity.mount(quads.subspan(res.count), *this);
 		}
 		return res;
 	}
@@ -147,8 +158,8 @@ namespace rnlib
 			if(entity.entity.has_component<actor_component_id::level_background>())
 			{
 				auto [min, max] = ctx.level_bounds;
-				entity.transform.local_position = (min + max) / 2.0f;
-				entity.transform.local_scale = (max - min) * 0.5f;
+				entity.transform.position = (min + max) / 2.0f;
+				entity.transform.scale = (max - min) * 0.5f;
 			}
 			if(entity.entity.has_component<actor_component_id::cast>())
 			{
@@ -433,11 +444,11 @@ namespace rnlib
 			// solve based on x.
 			if(b_box.get_centre()[0] > a_box.get_centre()[0])
 			{
-				b->transform.local_position[0] += correction;
+				b->transform.position[0] += correction;
 			}
 			else
 			{
-				b->transform.local_position[0] -= correction;
+				b->transform.position[0] -= correction;
 			}
 		}
 		else
@@ -445,11 +456,11 @@ namespace rnlib
 			// solve based on y.
 			if(b_box.get_centre()[1] > a_box.get_centre()[1])
 			{
-				b->transform.local_position[1] += correction;
+				b->transform.position[1] += correction;
 			}
 			else
 			{
-				b->transform.local_position[1] -= correction;
+				b->transform.position[1] -= correction;
 			}
 		}
 

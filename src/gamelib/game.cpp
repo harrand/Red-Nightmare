@@ -98,11 +98,12 @@ namespace rnlib
 					{
 						name = label.text.c_str();
 					}
-					tz::vec2 abscale = a.transform.get_scale();
+					transform_t atrans = sys->current_scene.get_actor_system().get_global_transform(a.uuid);
+					tz::vec2 abscale = atrans.scale;
 					abscale[0] = std::abs(abscale[0]) * 0.75f;
 					abscale[1] = std::abs(abscale[1]);
-					tz::vec2 pos = a.transform.get_position() - abscale;
-					sys->trenderer.add(name, pos, tz::vec2{0.05f, 0.05f} * a.transform.get_scale().length(), label.colour);
+					tz::vec2 pos = atrans.position - abscale;
+					sys->trenderer.add(name, pos, tz::vec2{0.05f, 0.05f} * atrans.scale.length(), label.colour);
 				}
 			}
 		}

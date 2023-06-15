@@ -43,7 +43,7 @@ return actor
 	},
 	.transform
 	{
-		.local_scale = {0.75f, 0.75f}
+		.scale = {0.75f, 0.75f}
 	},
 	.name = "Impact Remnant",
 	.layer = 0

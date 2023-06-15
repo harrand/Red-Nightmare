@@ -128,12 +128,13 @@ namespace rnlib
 		}() + 0.001f;
 		for(const auto& a : this->actors.container())
 		{
-			float dst = (a.transform.get_position() - this->cam.position).length();
+			tz::vec2 pos = this->actors.get_global_transform(a.uuid).position;
+			float dst = (pos - this->cam.position).length();
 			meandist += dst;
 			if((a.type == actor_type::player_benedict || a.type == actor_type::player_melistra)
 			&& (dst > this->cam.zoom * 0.6f))
 			{
-				meanpos += a.transform.get_position();
+				meanpos += pos;
 				pcount++;
 			}
 		}
