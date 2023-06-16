@@ -67,6 +67,35 @@ namespace rnlib
 #include ImportedTextHeader(human_base_death07, png)
 #include ImportedTextHeader(human_base_death08, png)
 #include ImportedTextHeader(human_base_death09, png)
+#include ImportedTextHeader(human_skele_idle0, png)
+#include ImportedTextHeader(human_skele_idle1, png)
+#include ImportedTextHeader(human_skele_side0, png)
+#include ImportedTextHeader(human_skele_side1, png)
+#include ImportedTextHeader(human_skele_side2, png)
+#include ImportedTextHeader(human_skele_side3, png)
+#include ImportedTextHeader(human_skele_up0, png)
+#include ImportedTextHeader(human_skele_up1, png)
+#include ImportedTextHeader(human_skele_up2, png)
+#include ImportedTextHeader(human_skele_up3, png)
+#include ImportedTextHeader(human_skele_down0, png)
+#include ImportedTextHeader(human_skele_down1, png)
+#include ImportedTextHeader(human_skele_down2, png)
+#include ImportedTextHeader(human_skele_down3, png)
+#include ImportedTextHeader(human_skele_cast0, png)
+#include ImportedTextHeader(human_skele_cast1, png)
+#include ImportedTextHeader(human_skele_cast2, png)
+#include ImportedTextHeader(human_skele_cast3, png)
+#include ImportedTextHeader(human_skele_cast4, png)
+//#include ImportedTextHeader(human_skele_death00, png)
+//#include ImportedTextHeader(human_skele_death01, png)
+//#include ImportedTextHeader(human_skele_death02, png)
+//#include ImportedTextHeader(human_skele_death03, png)
+//#include ImportedTextHeader(human_skele_death04, png)
+//#include ImportedTextHeader(human_skele_death05, png)
+//#include ImportedTextHeader(human_skele_death06, png)
+//#include ImportedTextHeader(human_skele_death07, png)
+//#include ImportedTextHeader(human_skele_death08, png)
+//#include ImportedTextHeader(human_skele_death09, png)
 #include ImportedTextHeader(human_cast0, png)
 #include ImportedTextHeader(human_cast1, png)
 #include ImportedTextHeader(human_cast2, png)
@@ -387,6 +416,35 @@ namespace rnlib
 		ImportedTextData(human_base_death07, png),
 		ImportedTextData(human_base_death08, png),
 		ImportedTextData(human_base_death09, png),
+		ImportedTextData(human_skele_idle0, png),
+		ImportedTextData(human_skele_idle1, png),
+		ImportedTextData(human_skele_side0, png),
+		ImportedTextData(human_skele_side1, png),
+		ImportedTextData(human_skele_side2, png),
+		ImportedTextData(human_skele_side3, png),
+		ImportedTextData(human_skele_up0, png),
+		ImportedTextData(human_skele_up1, png),
+		ImportedTextData(human_skele_up2, png),
+		ImportedTextData(human_skele_up3, png),
+		ImportedTextData(human_skele_down0, png),
+		ImportedTextData(human_skele_down1, png),
+		ImportedTextData(human_skele_down2, png),
+		ImportedTextData(human_skele_down3, png),
+		ImportedTextData(human_skele_cast0, png),
+		ImportedTextData(human_skele_cast1, png),
+		ImportedTextData(human_skele_cast2, png),
+		ImportedTextData(human_skele_cast3, png),
+		ImportedTextData(human_skele_cast4, png),
+		//ImportedTextData(human_skele_death00, png),
+		//ImportedTextData(human_skele_death01, png),
+		//ImportedTextData(human_skele_death02, png),
+		//ImportedTextData(human_skele_death03, png),
+		//ImportedTextData(human_skele_death04, png),
+		//ImportedTextData(human_skele_death05, png),
+		//ImportedTextData(human_skele_death06, png),
+		//ImportedTextData(human_skele_death07, png),
+		//ImportedTextData(human_skele_death08, png),
+		//ImportedTextData(human_skele_death09, png),
 		ImportedTextData(human_cast0, png),
 		ImportedTextData(human_cast1, png),
 		ImportedTextData(human_cast2, png),

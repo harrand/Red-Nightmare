@@ -141,6 +141,7 @@ namespace rnlib
 		fireball,
 		player_melistra,
 		player_benedict,
+		player_mr_bones,
 		randomius,
 		the_black_knight,
 		unknown,

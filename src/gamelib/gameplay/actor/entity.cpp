@@ -170,6 +170,11 @@ namespace rnlib
 					#include "gamelib/gameplay/actor/types/player_benedict.actor"
 				}
 				break;
+				case actor_type::player_mr_bones:
+				{
+					#include "gamelib/gameplay/actor/types/player_mr_bones.actor"
+				}
+				break;
 				case actor_type::randomius:
 				{
 					#include "gamelib/gameplay/actor/types/randomius.actor"

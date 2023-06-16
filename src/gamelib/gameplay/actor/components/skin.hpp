@@ -1,5 +1,15 @@
+enum class humanoid_skin_type
+{
+	human,
+	skeleton,
+	_count
+};
+
+constexpr std::array<const char*, (int)humanoid_skin_type::_count> humanoid_skin_type_names{"human", "skeleton"};
+
 struct skin_data
 {
+	humanoid_skin_type skin_type = humanoid_skin_type::human;
 	tz::vec3 skin_colour = {1.0f, 0.875f, 0.679f};
 	prefab::human_art::hair_style hair_style = prefab::human_art::hair_style::bald;
 	tz::vec3 hair_colour = {0.8f, 0.0f, 0.0f};
@@ -24,6 +34,7 @@ struct actor_component_params<actor_component_id::skin>
 	bool impl_dirty = false;
 	struct skin_cache_t
 	{
+		humanoid_skin_type skin_type;
 		prefab::human_art::hair_style hair_style;
 		prefab::human_art::eye_type eye_type;
 		prefab::human_art::helm_type helm_type;
@@ -89,6 +100,7 @@ inline void actor_component_update<actor_component_id::skin>
 		return prefab::human_art::get_hair(style, anim);
 	};
 	bool cache_miss = false;
+	cache_miss |= (component.data().skin_cache.skin_type != component.data().data.skin_type);
 	cache_miss |= (component.data().skin_cache.hair_style != component.data().data.hair_style);
 	cache_miss |= (component.data().skin_cache.eye_type != component.data().data.eye_type);
 	cache_miss |= (component.data().skin_cache.helm_type != component.data().data.equipment.helm_type);
@@ -96,6 +108,7 @@ inline void actor_component_update<actor_component_id::skin>
 	cache_miss |= (component.data().skin_cache.feet_type != component.data().data.equipment.feet_type);
 	if(cache_miss)
 	{
+		component.data().skin_cache.skin_type = component.data().data.skin_type;
 		component.data().skin_cache.hair_style = component.data().data.hair_style;
 		component.data().skin_cache.eye_type = component.data().data.eye_type;
 		component.data().skin_cache.helm_type = component.data().data.equipment.helm_type;
@@ -104,6 +117,19 @@ inline void actor_component_update<actor_component_id::skin>
 		TZ_PROFZONE("pose updates", 0xffaa0077);
 		// HUMAN POSES
 		// idle
+		image_id_t base_offset = 0;
+		switch(component.data().data.skin_type)
+		{
+			case humanoid_skin_type::skeleton:
+				base_offset = image_id::human_to_skeleton;
+			break;
+			default:
+				tz::error("Unimplemented skin type!");
+				[[fallthrough]];
+			case humanoid_skin_type::human:
+
+			break;
+		};
 		skel.data().poses[0] = actor_component_params<actor_component_id::animation>
 		{
 			.animations =
@@ -117,8 +143,8 @@ inline void actor_component_update<actor_component_id::skin>
 				{{
 					.frame_textures =
 					{
-						image_id::race_human_base_idle0,
-						image_id::race_human_base_idle1
+						image_id::race_human_base_idle0 + base_offset,
+						image_id::race_human_base_idle1 + base_offset
 					},
 					.fps = 2,
 					.loop = true
@@ -140,10 +166,10 @@ inline void actor_component_update<actor_component_id::skin>
 				{{
 					.frame_textures =
 					{
-						image_id::race_human_base_side0,
-						image_id::race_human_base_side1,
-						image_id::race_human_base_side2,
-						image_id::race_human_base_side3
+						image_id::race_human_base_side0 + base_offset,
+						image_id::race_human_base_side1 + base_offset,
+						image_id::race_human_base_side2 + base_offset,
+						image_id::race_human_base_side3 + base_offset
 					},
 					.fps = 6,
 					.loop = true
@@ -165,10 +191,10 @@ inline void actor_component_update<actor_component_id::skin>
 				{{
 					.frame_textures =
 					{
-						image_id::race_human_base_up0,
-						image_id::race_human_base_up1,
-						image_id::race_human_base_up2,
-						image_id::race_human_base_up3
+						image_id::race_human_base_up0 + base_offset,
+						image_id::race_human_base_up1 + base_offset,
+						image_id::race_human_base_up2 + base_offset,
+						image_id::race_human_base_up3 + base_offset
 					},
 					.fps = 6,
 					.loop = true
@@ -190,10 +216,10 @@ inline void actor_component_update<actor_component_id::skin>
 				{{
 					.frame_textures =
 					{
-						image_id::race_human_base_down0,
-						image_id::race_human_base_down1,
-						image_id::race_human_base_down2,
-						image_id::race_human_base_down3
+						image_id::race_human_base_down0 + base_offset,
+						image_id::race_human_base_down1 + base_offset,
+						image_id::race_human_base_down2 + base_offset,
+						image_id::race_human_base_down3 + base_offset
 					},
 					.fps = 6,
 					.loop = true
@@ -215,14 +241,14 @@ inline void actor_component_update<actor_component_id::skin>
 				{{
 					.frame_textures =
 					{
-						image_id::race_human_base_cast0,
-						image_id::race_human_base_cast1,
-						image_id::race_human_base_cast2,
-						image_id::race_human_base_cast3,
-						image_id::race_human_base_cast4,
-						image_id::race_human_base_cast3,
-						image_id::race_human_base_cast2,
-						image_id::race_human_base_cast1,
+						image_id::race_human_base_cast0 + base_offset,
+						image_id::race_human_base_cast1 + base_offset,
+						image_id::race_human_base_cast2 + base_offset,
+						image_id::race_human_base_cast3 + base_offset,
+						image_id::race_human_base_cast4 + base_offset,
+						image_id::race_human_base_cast3 + base_offset,
+						image_id::race_human_base_cast2 + base_offset,
+						image_id::race_human_base_cast1 + base_offset
 					},
 					.fps = 7,
 					.loop = true
@@ -270,6 +296,25 @@ inline void actor_component_update<actor_component_id::skin>
 template<>
 inline void actor_component_dbgui(actor_component<actor_component_id::skin>& component)
 {
+	humanoid_skin_type& skint = component.data().data.skin_type;
+	const char* current_skin_name = humanoid_skin_type_names[(int)skint];
+	if(ImGui::BeginCombo("Skin Type", current_skin_name))
+	{
+		for(std::size_t i = 0; i < (int)humanoid_skin_type::_count; i++)
+		{
+			bool is_selected = (int)skint == i;
+			if(ImGui::Selectable(humanoid_skin_type_names[i], is_selected))
+			{
+				skint = static_cast<humanoid_skin_type>(i);
+				component.data().impl_dirty = true;
+			}
+			if(is_selected)
+			{
+				ImGui::SetItemDefaultFocus();
+			}
+		}
+		ImGui::EndCombo();
+	}
 	ImGui::SliderFloat3("Skin Colour", component.data().data.skin_colour.data().data(), 0.0f, 1.0f);
 	ImGui::Spacing();
 	component.data().impl_dirty |= ImGui::SliderInt("Hair Style", reinterpret_cast<int*>(&component.data().data.hair_style), 0, static_cast<int>(prefab::human_art::hair_style::_count) - 1);

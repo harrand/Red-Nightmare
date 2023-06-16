@@ -150,6 +150,35 @@ add_text(
 		images/races/human/cast/human_cast5.png
 		images/races/human/cast/human_cast6.png
 		images/races/human/cast/human_cast7.png
+		images/races/human/base/human_skele_idle0.png
+		images/races/human/base/human_skele_idle1.png
+		images/races/human/base/human_skele_side0.png
+		images/races/human/base/human_skele_side1.png
+		images/races/human/base/human_skele_side2.png
+		images/races/human/base/human_skele_side3.png
+		images/races/human/base/human_skele_up0.png
+		images/races/human/base/human_skele_up1.png
+		images/races/human/base/human_skele_up2.png
+		images/races/human/base/human_skele_up3.png
+		images/races/human/base/human_skele_down0.png
+		images/races/human/base/human_skele_down1.png
+		images/races/human/base/human_skele_down2.png
+		images/races/human/base/human_skele_down3.png
+		images/races/human/base/human_skele_cast0.png
+		images/races/human/base/human_skele_cast1.png
+		images/races/human/base/human_skele_cast2.png
+		images/races/human/base/human_skele_cast3.png
+		images/races/human/base/human_skele_cast4.png
+		#images/races/human/base/human_skele_death00.png
+		#images/races/human/base/human_skele_death01.png
+		#images/races/human/base/human_skele_death02.png
+		#images/races/human/base/human_skele_death03.png
+		#images/races/human/base/human_skele_death04.png
+		#images/races/human/base/human_skele_death05.png
+		#images/races/human/base/human_skele_death06.png
+		#images/races/human/base/human_skele_death07.png
+		#images/races/human/base/human_skele_death08.png
+		#images/races/human/base/human_skele_death09.png
 		images/races/human/hair/long/human_hair_long_idle0.png
 		images/races/human/hair/long/human_hair_long_idle1.png
 		images/races/human/hair/long/human_hair_long_side0.png

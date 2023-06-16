@@ -57,6 +57,35 @@ namespace rnlib
 			race_human_base_death7,
 			race_human_base_death8,
 			race_human_base_death9,
+			race_human_skele_idle0,
+			race_human_skele_idle1,
+			race_human_skele_side0,
+			race_human_skele_side1,
+			race_human_skele_side2,
+			race_human_skele_side3,
+			race_human_skele_up0,
+			race_human_skele_up1,
+			race_human_skele_up2,
+			race_human_skele_up3,
+			race_human_skele_down0,
+			race_human_skele_down1,
+			race_human_skele_down2,
+			race_human_skele_down3,
+			race_human_skele_cast0,
+			race_human_skele_cast1,
+			race_human_skele_cast2,
+			race_human_skele_cast3,
+			race_human_skele_cast4,
+			//race_human_skele_death0,
+			//race_human_skele_death1,
+			//race_human_skele_death2,
+			//race_human_skele_death3,
+			//race_human_skele_death4,
+			//race_human_skele_death5,
+			//race_human_skele_death6,
+			//race_human_skele_death7,
+			//race_human_skele_death8,
+			//race_human_skele_death9,
 			race_human_cast0,
 			race_human_cast1,
 			race_human_cast2,
@@ -330,6 +359,8 @@ namespace rnlib
 			foreground_blanchfield_cemetary,
 			_count
 		};
+
+		constexpr image_id_t human_to_skeleton = race_human_skele_idle0 - race_human_base_idle0;
 	}
 
 	tz::gl::image_resource create_image(image_id_t iid);

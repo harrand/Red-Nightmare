@@ -1,0 +1,42 @@
+return actor
+{
+	.entity =
+	{
+		actor_component<actor_component_id::skin>
+		{{
+			.data =
+			{
+				.skin_type = humanoid_skin_type::skeleton,
+				.skin_colour = {1.0f, 1.0f, 1.0f},
+				.eye_type = prefab::human_art::eye_type::dots,
+				.eye_colour = {0.0f, 0.0f, 0.0f},
+			}
+		}},
+		actor_component<actor_component_id::label>(),
+		actor_component<actor_component_id::keyboard_control>{},
+		actor_component<actor_component_id::collide>(),
+		actor_component<actor_component_id::damageable>
+		{{
+			.health = 100,
+			.max_health = 100
+		}},
+		actor_component<actor_component_id::action_listener>
+		{{
+			.on_click =
+			{
+				[](actor& a, tz::wsi::mouse_button button)
+				{
+					if(button == tz::wsi::mouse_button::left)
+					{
+						a.actions.add_component<action_id::cast>({.spell = spell_id::fireball});
+					}
+					if(button == tz::wsi::mouse_button::right)
+					{
+						a.actions.add_component<action_id::cast>({.spell = spell_id::heal});
+					}
+				}
+			}
+		}}
+	},
+	.name = "Mr Bones"
+};

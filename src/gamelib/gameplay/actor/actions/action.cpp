@@ -175,7 +175,7 @@ namespace rnlib
 	ACTION_IMPL_BEGIN(action_id::emit_combat_text)
 		actor& text = system.add(actor_type::unknown);
 		text.transform = caster.transform;
-		tz::vec2 abscale = system.get_global_transform(text.uuid).scale;
+		tz::vec2 abscale = text.transform.scale;
 		abscale[0] = std::abs(abscale[0]);
 		abscale[1] = std::abs(abscale[1]);
 		text.transform.position += abscale;
