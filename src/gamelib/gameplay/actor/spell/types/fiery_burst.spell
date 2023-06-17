@@ -13,6 +13,7 @@ return spell
 		a.actions.add_component<action_id::spawn>
 		({
 			.type = actor_type::fireball,
+			.inherit_faction = true,
 			.actions =
 			{
 				action<action_id::move_in_direction>

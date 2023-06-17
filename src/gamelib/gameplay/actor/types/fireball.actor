@@ -40,7 +40,7 @@ return actor
 		{{
 			.collide_if = [](const actor& a, const actor& b)
 			{
-				return b.type == actor_type::oak_tree || (b.type != actor_type::player_benedict && b.type != actor_type::player_melistra && b.entity.has_component<actor_component_id::damageable>());
+				return get_allegience(a.faction, b.faction) == allegience_t::enemy;
 			}
 		}},
 		actor_component<actor_component_id::action_listener>

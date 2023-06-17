@@ -67,6 +67,10 @@ namespace rnlib
 		actor& a = system.add(action.data().type);
 		a.parent = caster.parent;
 		a.transform.position = caster.transform.position;
+		if(action.data().inherit_faction)
+		{
+			a.faction = caster.faction;
+		}
 		action.data().actions.transfer_components(a.actions);
 		action.set_is_complete(true);
 	ACTION_IMPL_END(action_id::spawn)

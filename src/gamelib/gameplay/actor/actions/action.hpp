@@ -94,6 +94,7 @@ namespace rnlib
 	struct action_params<action_id::spawn>
 	{
 		actor_type type;
+		bool inherit_faction = false;
 		action_entity actions = {};
 	};
 
