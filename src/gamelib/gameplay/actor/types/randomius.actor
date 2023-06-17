@@ -37,5 +37,6 @@ return actor
 		{{
 		}}
 	},
-	.name = "Randomius (Dev)"
+	.name = "Randomius (Dev)",
+	.faction = {faction_t::pure_evil}
 };

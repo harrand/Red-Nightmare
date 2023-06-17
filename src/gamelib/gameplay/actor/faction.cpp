@@ -11,10 +11,12 @@ namespace rnlib
 		return
 		{
 			
-			//                              pyr        ,anthor     ,white_legion
-			/* pyr           */ allegiences{fr         ,en         ,ne},
-			/* anthor        */ allegiences{en         ,fr         ,en},
-			/* white legion  */ allegiences{ne         ,en         ,fr},
+			//                              pyr        ,anthor     ,white_legion,pure_evil   ,pure_good   ,
+			/* pyr           */ allegiences{fr         ,en         ,ne          ,en          ,fr},
+			/* anthor        */ allegiences{en         ,fr         ,en          ,en          ,fr},
+			/* white legion  */ allegiences{ne         ,en         ,fr          ,en          ,fr},
+			/* pure evil     */ allegiences{en         ,en         ,en          ,en          ,en},
+			/* pure good     */ allegiences{fr         ,fr         ,fr          ,en          ,fr},
 		};
 	}
 

@@ -11,6 +11,8 @@ namespace rnlib
 		pyr,
 		anthor,
 		white_legion,
+		pure_evil, // meta faction. enemy to everyone
+		pure_good, // meta faction. friend to everyone (excluding pure evil).
 		_count
 	};
 	// to add a new faction:
@@ -23,7 +25,7 @@ namespace rnlib
 
 	constexpr std::array<const char*, (int)faction_t::_count> faction_names
 	{
-		"pyr", "anthor", "white legion"
+		"pyr", "anthor", "white legion", "pure evil", "pure good"
 	};
 
 	constexpr std::array<tz::vec3, (int)faction_t::_count> faction_colours
@@ -31,6 +33,8 @@ namespace rnlib
 		tz::vec3{1.0f, 0.5f, 0.0f}, // pyr,
 		tz::vec3{102.0f/255.0f, 0.0f, 204.0f/255.0f}, // anthor
 		tz::vec3{1.0f, 1.0f, 153.0f/255.0f}, // white legion
+		tz::vec3{0.5f, 0.0f, 0.0f}, // pure evil
+		tz::vec3{0.0f, 0.5f, 0.0f}, // pure good
 	};
 
 	using factions_t = tz::enum_field<faction_t>;
