@@ -117,12 +117,14 @@ namespace rnlib
 						.seconds_till_action = 3.0f,
 						.run = [](actor& a, actor_system& sys, const update_context& ctx)
 						{
+			  				a.faction = {faction_t::anthor};
 							auto& skin = a.entity.get_component<actor_component_id::skin>()->data();
 			  				skin.data.skin_type = humanoid_skin_type::skeleton;
 			  				skin.data.skin_colour = tz::vec3::filled(1.0f);
-			  				skin.impl_dirty = true;
+				  			skin.data.eye_type = prefab::human_art::eye_type::dots;
+				  			skin.data.eye_colour = faction_colours[(int)faction_t::anthor];
 			  				skin.data.hair_style = prefab::human_art::hair_style::bald;
-			  				skin.data.eye_colour = tz::vec3::zero();
+			  				skin.impl_dirty = true;
 			  				a.entity.get_component<actor_component_id::damageable>()->data().health = 1;
 						}
 					});
