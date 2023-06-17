@@ -42,6 +42,8 @@ tz_add_library(
 		src/gamelib/gameplay/actor/combat_log.hpp
 		src/gamelib/gameplay/actor/entity.cpp
 		src/gamelib/gameplay/actor/entity.hpp
+		src/gamelib/gameplay/actor/faction.cpp
+		src/gamelib/gameplay/actor/faction.hpp
 		src/gamelib/gameplay/actor/system.cpp
 		src/gamelib/gameplay/actor/system.hpp
 

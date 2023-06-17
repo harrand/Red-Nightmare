@@ -370,7 +370,28 @@ namespace rnlib
 			{
 				auto& collide = ent.entity.get_component<actor_component_id::collide>()->data();
 				collide.debug_draw = display_all_colliders;
-				collide.debug_draw_colour = (ent.uuid == this->entities[entity_id].uuid) ? tz::vec3{1.0f, 0.0f, 0.0f} : tz::vec3::filled(1.0f);
+				if(ent.uuid == this->entities[entity_id].uuid)
+				{
+					// box is us, bright blue background.
+					collide.debug_draw_colour = tz::vec3(0.0f, 0.0f, 1.0f);
+				}
+				else
+				{
+					tz::vec3 allegience_colour;
+					switch(rnlib::get_allegience(ent.faction, this->entities[entity_id].faction))
+					{
+						case allegience_t::friendly:
+							allegience_colour = {0.0f, 1.0f, 0.0f};
+						break;
+						case allegience_t::enemy:
+							allegience_colour = {1.0f, 0.0f, 0.0f};
+						break;
+						case allegience_t::neutral:
+							allegience_colour = {1.0f, 1.0f, 0.0f};
+						break;
+					}
+					collide.debug_draw_colour = allegience_colour;
+				}
 			}
 		}
 	}

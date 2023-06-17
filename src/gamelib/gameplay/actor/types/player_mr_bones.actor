@@ -38,5 +38,6 @@ return actor
 			}
 		}}
 	},
-	.name = "Mr Bones"
+	.name = "Mr Bones",
+	.faction = {faction_t::anthor}
 };

@@ -61,6 +61,20 @@ namespace rnlib
 		{
 			ImGui::Text("Target: %zu", this->target);
 		}
+		if(this->faction.empty())
+		{
+			ImGui::Text("No allegiences");
+		}
+		else
+		{
+			std::string txt = "";
+			for(faction_t f : this->faction)
+			{
+				txt += rnlib::faction_names[(int)f];
+				txt += " ";
+			}
+			ImGui::Text("Faction(s): %s", txt.c_str());
+		}
 		this->entity.dbgui();
 		if(ImGui::CollapsingHeader("Actions"))
 		{
@@ -91,6 +105,28 @@ namespace rnlib
 				({
 					.spell = spell_id::teleport
 				});
+			}
+			if(ImGui::Button("Undeath"))
+			{
+				if(this->entity.has_component<actor_component_id::damageable>() && this->entity.has_component<actor_component_id::skin>())
+				{
+					this->entity.get_component<actor_component_id::damageable>()->data().health = 0;
+					this->entity.get_component<actor_component_id::damageable>()->data().invincible = false;
+					this->actions.add_component<action_id::delayed_custom>
+					({
+						.seconds_till_action = 3.0f,
+						.run = [](actor& a, actor_system& sys, const update_context& ctx)
+						{
+							auto& skin = a.entity.get_component<actor_component_id::skin>()->data();
+			  				skin.data.skin_type = humanoid_skin_type::skeleton;
+			  				skin.data.skin_colour = tz::vec3::filled(1.0f);
+			  				skin.impl_dirty = true;
+			  				skin.data.hair_style = prefab::human_art::hair_style::bald;
+			  				skin.data.eye_colour = tz::vec3::zero();
+			  				a.entity.get_component<actor_component_id::damageable>()->data().health = 1;
+						}
+					});
+				}
 			}
 		}
 		ImGui::Unindent();

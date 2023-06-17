@@ -20,6 +20,7 @@ namespace rnlib
 		move_in_direction,
 		emit_combat_text,
 		custom,
+		delayed_custom,
 		_count
 	};
 
@@ -135,6 +136,14 @@ namespace rnlib
 	template<>
 	struct action_params<action_id::custom>
 	{
+		std::function<void(actor& a, actor_system& sys, const update_context& ctx)> run = [](actor& a, actor_system& sys, const update_context& ctx){};
+	};
+
+	template<>
+	struct action_params<action_id::delayed_custom>
+	{
+		float seconds_till_action = 0.0f;
+		tz::duration impl_start = tz::system_time();
 		std::function<void(actor& a, actor_system& sys, const update_context& ctx)> run = [](actor& a, actor_system& sys, const update_context& ctx){};
 	};
 

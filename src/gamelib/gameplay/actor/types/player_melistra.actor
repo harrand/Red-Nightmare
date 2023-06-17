@@ -46,5 +46,6 @@ return actor
 			}
 		}}
 	},
-	.name = "Lady Melistra"
+	.name = "Lady Melistra",
+	.faction = {faction_t::pyr}
 };

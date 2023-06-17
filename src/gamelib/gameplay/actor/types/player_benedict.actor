@@ -48,5 +48,6 @@ return actor
 			}
 		}}
 	},
-	.name = "Benedict Blackwill"
+	.name = "Benedict Blackwill",
+	.faction = {faction_t::white_legion}
 };

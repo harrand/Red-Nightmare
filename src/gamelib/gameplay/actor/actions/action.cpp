@@ -208,6 +208,18 @@ namespace rnlib
 		action.set_is_complete(true);
 	ACTION_IMPL_END(action_id::emit_combat_text)
 
+	ACTION_IMPL_BEGIN(action_id::delayed_custom)
+		auto seconds_elapsed = (tz::system_time() - action.data().impl_start).seconds<std::uint64_t>();
+		if(seconds_elapsed > action.data().seconds_till_action)
+		{
+			caster.actions.set_component<action_id::custom>
+			({
+				.run = action.data().run
+			});
+			action.set_is_complete(true);
+		}
+	ACTION_IMPL_END(action_id::delayed_custom)
+
 	ACTION_IMPL_BEGIN(action_id::custom)
 		action.data().run(caster, system, context);
 		action.set_is_complete(true);

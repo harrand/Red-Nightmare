@@ -9,6 +9,7 @@
 #include "gamelib/gameplay/actor/actions/action.hpp"
 #include "gamelib/gameplay/actor/spell/spell.hpp" // for actor_component_id::cast
 #include "gamelib/gameplay/actor/combat_log.hpp"
+#include "gamelib/gameplay/actor/faction.hpp"
 #include "tz/core/memory/clone.hpp"
 #include "tz/core/profile.hpp" // for profiler instrumentation for components.
 #include "tz/core/time.hpp" // for actor_component_id::cast
@@ -165,6 +166,7 @@ namespace rnlib
 		const char* name = "Untitled";
 		std::size_t uuid = uuid_count++;
 		actor_type type = actor_type::undefined;
+		factions_t faction = {};
 		unsigned int layer = 1;
 		std::size_t target = nullid;
 		std::size_t parent = nullid;
