@@ -20,5 +20,6 @@ return actor
 	{
 		.scale = {1.5f, 1.5f}
 	},
-	.name = "Oak Tree"
+	.name = "Oak Tree",
+	.faction = {faction_t::pure_evil}
 };

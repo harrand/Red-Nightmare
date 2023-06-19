@@ -11,7 +11,7 @@ namespace rnlib
 		pyr,
 		anthor,
 		white_legion,
-		pure_evil, // meta faction. enemy to everyone
+		pure_evil, // meta faction. enemy to everyone (excluding pure evil).
 		pure_good, // meta faction. friend to everyone (excluding pure evil).
 		_count
 	};

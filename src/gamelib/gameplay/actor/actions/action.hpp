@@ -17,6 +17,9 @@ namespace rnlib
 		cast,
 		cancel_cast,
 		move_to,
+		move_to_actor,
+		move_to_target,
+		target_actor_if,
 		move_in_direction,
 		emit_combat_text,
 		custom,
@@ -111,6 +114,25 @@ namespace rnlib
 	{
 		tz::vec2 location;
 		bool rotate_towards = false;
+	};
+
+	template<>
+	struct action_params<action_id::move_to_actor>
+	{
+		std::size_t uuid;
+		bool rotate_towards = false;
+	};
+
+	template<>
+	struct action_params<action_id::move_to_target>
+	{
+		bool rotate_towards = false;
+	};
+
+	template<>
+	struct action_params<action_id::target_actor_if>
+	{
+		std::function<bool(const actor&, const actor&)> predicate = [](const actor& me, const actor& a){return false;};
 	};
 
 	template<>

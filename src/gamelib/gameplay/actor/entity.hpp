@@ -36,6 +36,8 @@ namespace rnlib
 		animation,
 		// actor collides with others.
 		collide,
+		// actor performs certain combat behaviours.
+		combat_behaviour,
 		// actor is casting some kind of spell/ability.
 		cast,
 		// actor has the concept of health, damage and death.
@@ -53,7 +55,7 @@ namespace rnlib
 	};
 
 	// each trait above must have a corresponding name string in the following array (or enjoy a cryptic crash)
-	constexpr std::array<const char*, static_cast<int>(actor_component_id::_count)> actor_component_id_name{"Action Listener", "Sprite", "Level Background", "Animation", "Collide", "Cast", "Damageable", "Motion", "Keyboard Control", "Label", "Humanoid Skeleton", "Skin"};
+	constexpr std::array<const char*, static_cast<int>(actor_component_id::_count)> actor_component_id_name{"Action Listener", "Sprite", "Level Background", "Animation", "Collide", "Combat Behaviour", "Cast", "Damageable", "Motion", "Keyboard Control", "Label", "Humanoid Skeleton", "Skin"};
 
 	// ECS boilerplate begin.
 	template<actor_component_id ID>
@@ -139,6 +141,7 @@ namespace rnlib
 		impact_remnant,
 		oak_tree,
 		doctor_michael_morbius,
+		fire_wizard,
 		fireball,
 		player_melistra,
 		player_benedict,
@@ -159,6 +162,7 @@ namespace rnlib
 		void update(float dt);
 		mount_result mount(std::span<quad_renderer::quad_data> quads, const actor_system& sys) const;
 		bool dead() const;
+		bool casting() const;
 
 		actor_entity entity = {};
 		action_entity actions = {};
@@ -188,6 +192,7 @@ namespace rnlib
 	#include "gamelib/gameplay/actor/components/label.hpp"
 	#include "gamelib/gameplay/actor/components/cast.hpp"
 	#include "gamelib/gameplay/actor/components/humanoid_skeleton.hpp"
+	#include "gamelib/gameplay/actor/components/combat_behaviour.hpp"
 
 	// prefab implementations.
 	namespace prefab

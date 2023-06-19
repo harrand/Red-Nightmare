@@ -101,6 +101,11 @@ namespace rnlib
 	ACTION_IMPL_END(action_id::cancel_cast)
 
 	ACTION_IMPL_BEGIN(action_id::move_to)
+		if(caster.dead())
+		{
+			action.set_is_complete(true);
+			return;
+		}
 		if(caster.entity.has_component<actor_component_id::motion>())
 		{
 			// set motion direction towards the target.
@@ -158,6 +163,41 @@ namespace rnlib
 			action.set_is_complete(true);
 		}
 	ACTION_IMPL_END(action_id::move_to)
+
+	ACTION_IMPL_BEGIN(action_id::move_to_actor)
+		caster.actions.set_component<action_id::move_to>
+		({
+			.location = system.get_global_transform(action.data().uuid).position,
+	   		.rotate_towards = action.data().rotate_towards
+		});
+		action.set_is_complete(true);
+	ACTION_IMPL_END(action_id::move_to_actor)
+
+	ACTION_IMPL_BEGIN(action_id::move_to_target)
+		if(caster.target == actor::nullid || caster.dead())
+		{
+			action.set_is_complete(true);
+			return;
+		}
+		caster.actions.set_component<action_id::move_to_actor>
+		({
+	   		.uuid = caster.target,
+	   		.rotate_towards = action.data().rotate_towards
+		});
+		action.set_is_complete(true);
+	ACTION_IMPL_END(action_id::move_to_target)
+
+	ACTION_IMPL_BEGIN(action_id::target_actor_if)
+		for(const actor& a : system.container())
+		{
+			if(action.data().predicate(caster, a))
+			{
+				caster.target = a.uuid;
+				return;
+			}
+		}
+		action.set_is_complete(true);
+	ACTION_IMPL_END(action_id::target_actor_if)
 
 	ACTION_IMPL_BEGIN(action_id::move_in_direction)
 		if(!caster.entity.has_component<actor_component_id::motion>())

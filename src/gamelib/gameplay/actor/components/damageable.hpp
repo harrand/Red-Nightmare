@@ -8,6 +8,11 @@ struct actor_component_params<actor_component_id::damageable>
 	{
 		return !this->invincible && this->health <= 0;
 	}
+	float hp_pct() const
+	{
+		if(max_health == 0) return 0;
+		return 1.0f * health / max_health;
+	}
 };
 
 template<>

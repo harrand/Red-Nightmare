@@ -15,18 +15,16 @@ return actor
 				.eye_colour = {fdist(rng), fdist(rng), fdist(rng)},
 				.equipment =
 				{
-					.helm_type = [](){return static_cast<prefab::human_art::helm_type>(rng() % static_cast<int>(prefab::human_art::helm_type::_count));}(),
-					.helm_colour = {fdist(rng), fdist(rng), fdist(rng)},
-					.chest_type = [](){return static_cast<prefab::human_art::chest_type>(rng() % static_cast<int>(prefab::human_art::chest_type::_count));}(),
-					.chest_colour = {fdist(rng), fdist(rng), fdist(rng)},
-					.feet_type = [](){return static_cast<prefab::human_art::feet_type>(rng() % static_cast<int>(prefab::human_art::feet_type::_count));}(),
-					.feet_colour = {fdist(rng), fdist(rng), fdist(rng)},
+					.chest_type = prefab::human_art::chest_type::elemental_robes,
+					.chest_colour = {0.6f, 0.0f, 0.0f},
+					.feet_type = prefab::human_art::feet_type::dots,
+					.feet_colour = {1.0f, 0.0f, 0.0f}
 				}
 			}
 		}},
 		actor_component<actor_component_id::motion>
 		{{
-			.speed = fdist(rng) * 2.0f + 0.5f
+			.speed = fdist(rng) * 0.3f + 0.1f
 		}},
 		actor_component<actor_component_id::damageable>
 		{{
@@ -38,9 +36,9 @@ return actor
 		}},
 		actor_component<actor_component_id::combat_behaviour>
 		{{
-			.flags = {combat_behaviour_flag::heal_when_low, combat_behaviour_flag::chase_nearest_enemy, combat_behaviour_flag::sometimes_cast_fireball}
+			.flags = {combat_behaviour_flag::chase_nearest_enemy, combat_behaviour_flag::sometimes_cast_fireball}
 		}}
 	},
-	.name = "Randomius (Dev)",
-	.faction = {faction_t::pure_evil}
+	.name = "Fire Wizard",
+	.faction = {faction_t::pyr}
 };

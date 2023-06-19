@@ -161,6 +161,11 @@ namespace rnlib
 		return this->entity.has_component<actor_component_id::damageable>() && this->entity.get_component<actor_component_id::damageable>()->data().dead();
 	}
 
+	bool actor::casting() const
+	{
+		return this->entity.has_component<actor_component_id::cast>() || this->actions.has_component<action_id::cast>();
+	}
+
 	actor create_actor(actor_type type)
 	{
 		TZ_PROFZONE("actor - create_actor", 0xffee0077);
@@ -191,6 +196,11 @@ namespace rnlib
 				case actor_type::doctor_michael_morbius:
 				{
 					#include "gamelib/gameplay/actor/types/doctor_michael_morbius.actor"
+				}
+				break;
+				case actor_type::fire_wizard:
+				{
+					#include "gamelib/gameplay/actor/types/fire_wizard.actor"
 				}
 				break;
 				case actor_type::fireball:

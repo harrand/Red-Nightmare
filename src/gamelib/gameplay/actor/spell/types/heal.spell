@@ -3,26 +3,21 @@ return spell
 	.cast =
 	{
 		.colour = {1.0f, 1.0f, 0.4f},
-		.cast_time_seconds = 2.5f
+		.cast_time_seconds = 2.75f
 	},
 	.function = [](actor& a, actor_system& sys, const update_context& ctx)->combat_events
 	{
-		actor* tar = sys.find(a.target);
-		if(tar == nullptr)
-		{
-			tar = &a;
-		}
 		return
 		{
 			combat_event
 			{
 				.caster_uuid = a.uuid,
-				.target_uuid = tar->uuid,
+				.target_uuid = a.uuid,
 				.type = combat_text_type::heal,
-				.value = 50,
+				.value = 30,
 				.damage_type = {rnlib::combat_damage_type::divine}
 			}
 		};
 	},
-	.name = "Lesser Heal"
+	.name = "Heal"
 };
