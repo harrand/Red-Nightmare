@@ -136,6 +136,7 @@ namespace rnlib
 	enum class actor_type
 	{
 		undefined,
+		deathbolt,
 		dev_barrier,
 		heal_effect,
 		impact_remnant,

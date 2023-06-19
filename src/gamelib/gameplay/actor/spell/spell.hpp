@@ -11,6 +11,7 @@ namespace rnlib
 		heal,
 		hand_of_death,
 		fiery_burst,
+		finger_of_death,
 		fireball,
 		scorch,
 		summon_skeleton,

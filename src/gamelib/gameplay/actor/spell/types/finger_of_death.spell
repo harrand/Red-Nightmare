@@ -1,0 +1,38 @@
+return spell
+{
+	.cast =
+	{
+		.colour = {faction_colours[(int)faction_t::anthor]},
+		.cast_time_seconds = 0.5f
+	},
+	.function = [](actor& a, actor_system& sys, const update_context& ctx)->combat_events
+	{
+		// shoot a fireball at the target, or at the mouse.
+		actor* tar = sys.find(a.target);
+		tz::vec2 target_dir;
+		if(tar == nullptr)
+		{
+			target_dir = (ctx.mouse_position - sys.get_global_transform(a.uuid).position).normalised();
+		}
+		else
+		{
+			tz::vec2 e = sys.get_global_transform(tar->uuid).position;
+			target_dir = e - sys.get_global_transform(a.uuid).position;
+		}
+		a.actions.add_component<action_id::spawn>
+		({
+			.type = actor_type::deathbolt,
+			.inherit_faction = true,
+			.actions =
+			{
+				action<action_id::move_in_direction>
+				{{
+					.dir = target_dir,
+					.rotate_towards = true
+				}}
+			}
+		});
+		return {};
+	},
+	.name = "Finger of Death"
+};

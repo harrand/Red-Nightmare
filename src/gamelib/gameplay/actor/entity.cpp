@@ -173,6 +173,11 @@ namespace rnlib
 		{
 			switch(t)
 			{
+				case actor_type::deathbolt:
+				{
+					#include "gamelib/gameplay/actor/types/deathbolt.actor"
+				}
+				break;
 				case actor_type::dev_barrier:
 				{
 					#include "gamelib/gameplay/actor/types/dev_barrier.actor"

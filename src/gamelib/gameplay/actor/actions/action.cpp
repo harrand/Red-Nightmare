@@ -165,11 +165,14 @@ namespace rnlib
 	ACTION_IMPL_END(action_id::move_to)
 
 	ACTION_IMPL_BEGIN(action_id::move_to_actor)
-		caster.actions.set_component<action_id::move_to>
-		({
-			.location = system.get_global_transform(action.data().uuid).position,
-	   		.rotate_towards = action.data().rotate_towards
-		});
+		if(system.find(action.data().uuid) != nullptr)
+		{
+			caster.actions.set_component<action_id::move_to>
+			({
+				.location = system.get_global_transform(action.data().uuid).position,
+				.rotate_towards = action.data().rotate_towards
+			});
+		}
 		action.set_is_complete(true);
 	ACTION_IMPL_END(action_id::move_to_actor)
 

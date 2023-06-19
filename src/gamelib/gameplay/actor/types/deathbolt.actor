@@ -1,0 +1,97 @@
+return actor
+{
+	.entity =
+	{
+		actor_component<actor_component_id::motion>
+		{{
+			.speed = 11.0f,
+			.tilt_factor = 0.5f,
+			.tilt_rate = 10.0f
+		}},
+		actor_component<actor_component_id::sprite>
+		{{
+			.textures =
+			{
+				{
+					.id = image_id::invisible,
+					.colour_tint = {faction_colours[(int)faction_t::anthor]}
+				}
+			}
+		}},
+		actor_component<actor_component_id::animation>
+		{{
+			.animations =
+			{
+				animation
+				{{
+					.frame_textures =
+					{
+						image_id::projectile_magic_ball0,
+						image_id::projectile_magic_ball1,
+						image_id::projectile_magic_ball2,
+						image_id::projectile_magic_ball3,
+					},
+					.fps = 12,
+					.loop = true
+				}}
+			}
+		}},
+		actor_component<actor_component_id::collide>
+		{{
+			.collide_if = [](const actor& a, const actor& b)
+			{
+				return get_allegience(a.faction, b.faction) == allegience_t::enemy;
+			}
+		}},
+		actor_component<actor_component_id::action_listener>
+		{{
+			.on_collide =
+			{
+				[](actor& a, actor& tar)
+				{
+					tar.actions.add_component<action_id::spawn>
+					({
+						.type = actor_type::impact_remnant
+					});
+					// kill them and set them to become a skeleton in 3 seconds.
+					if(!tar.entity.has_component<actor_component_id::damageable>())
+					{
+						return;
+					}
+					auto& damageable = tar.entity.get_component<actor_component_id::damageable>()->data();
+					damageable.health = 0;
+					damageable.invincible = false;
+					tar.actions.add_component<action_id::delayed_custom>
+					({
+						.seconds_till_action = 3.0f,
+						.run = [tar_faction = a.faction](actor& a, actor_system& sys, const update_context& ctx)
+						{
+			  				a.faction = tar_faction;
+							auto& skin = a.entity.get_component<actor_component_id::skin>()->data();
+			  				skin.data.skin_type = humanoid_skin_type::skeleton;
+			  				skin.data.skin_colour = tz::vec3::filled(1.0f);
+				  			skin.data.eye_type = prefab::human_art::eye_type::dots;
+				  			skin.data.eye_colour = faction_colours[(int)faction_t::anthor];
+			  				skin.data.hair_style = prefab::human_art::hair_style::bald;
+			  				skin.impl_dirty = true;
+			  				a.entity.get_component<actor_component_id::damageable>()->data().health = 200;
+						}
+					});
+				}
+			}
+		}}
+	},
+	.actions =
+	{
+		action<action_id::timed_despawn>
+		{{
+			.seconds_until_despawn = 5.0f
+		}}
+	},
+	.transform
+	{
+		.scale = {0.75f, 0.75f}
+	},
+	.name = "Deathbolt",
+	.layer = 0
+};
