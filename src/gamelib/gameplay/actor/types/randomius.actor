@@ -38,7 +38,21 @@ return actor
 		}},
 		actor_component<actor_component_id::combat_behaviour>
 		{{
-			.flags = {combat_behaviour_flag::heal_when_low, combat_behaviour_flag::chase_nearest_enemy, combat_behaviour_flag::sometimes_cast_fireball}
+			.flags = {combat_behaviour_flag::heal_when_low, combat_behaviour_flag::chase_nearest_enemy, combat_behaviour_flag::sometimes_cast_fireball},
+			.aggressive_ranged_spells =
+			{
+				{
+					.spellid = spell_id::fireball,
+					.cooldown_seconds = 3.0f
+				}
+			},
+			.defensive_ranged_spells =
+			{
+				{
+					.spellid = spell_id::heal,
+					.cooldown_seconds = 7.0f
+				}
+			}
 		}}
 	},
 	.name = "Randomius (Dev)",

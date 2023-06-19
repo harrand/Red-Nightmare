@@ -3,7 +3,7 @@ return spell
 	.cast =
 	{
 		.colour = {1.0f, 1.0f, 0.4f},
-		.cast_time_seconds = 2.75f
+		.cast_time_seconds = 2.5f
 	},
 	.function = [](actor& a, actor_system& sys, const update_context& ctx)->combat_events
 	{
@@ -14,7 +14,7 @@ return spell
 				.caster_uuid = a.uuid,
 				.target_uuid = a.uuid,
 				.type = combat_text_type::heal,
-				.value = 30,
+				.value = 70,
 				.damage_type = {rnlib::combat_damage_type::divine}
 			}
 		};
