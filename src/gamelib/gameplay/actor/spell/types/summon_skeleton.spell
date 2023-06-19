@@ -1,0 +1,18 @@
+return spell
+{
+	.cast =
+	{
+		.colour = faction_colours[(int)faction_t::anthor],
+		.cast_time_seconds = 1.0f
+	},
+	.function = [](actor& a, actor_system& sys, const update_context& ctx)->combat_events
+	{
+		a.actions.add_component<action_id::spawn>
+		({
+			.type = actor_type::skeleton,
+			.inherit_faction = true,
+		});
+		return {};
+	},
+	.name = "Summon Skeleton"
+};

@@ -13,6 +13,7 @@ namespace rnlib
 		fiery_burst,
 		fireball,
 		scorch,
+		summon_skeleton,
 		teleport
 	};
 

@@ -35,6 +35,11 @@ namespace rnlib
 					#include "gamelib/gameplay/actor/spell/types/scorch.spell"
 				}
 				break;
+				case spell_id::summon_skeleton:
+				{
+					#include "gamelib/gameplay/actor/spell/types/summon_skeleton.spell"
+				}
+				break;
 				case spell_id::teleport:
 				{
 					#include "gamelib/gameplay/actor/spell/types/teleport.spell"

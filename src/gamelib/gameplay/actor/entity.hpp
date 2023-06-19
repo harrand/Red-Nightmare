@@ -147,6 +147,7 @@ namespace rnlib
 		player_benedict,
 		player_mr_bones,
 		randomius,
+		skeleton,
 		the_black_knight,
 		unknown,
 		_count

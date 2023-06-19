@@ -32,7 +32,7 @@ return actor
 					}
 					if(button == tz::wsi::mouse_button::right)
 					{
-						a.actions.add_component<action_id::cast>({.spell = spell_id::heal});
+						a.actions.add_component<action_id::cast>({.spell = spell_id::summon_skeleton});
 					}
 				}
 			}

@@ -1,0 +1,36 @@
+static std::default_random_engine rng;
+static std::uniform_real_distribution<float> fdist{0.0f, 1.0f};
+
+return actor
+{
+	.entity =
+	{
+		actor_component<actor_component_id::skin>
+		{{
+			.data =
+			{
+				.skin_type = humanoid_skin_type::skeleton,
+				.skin_colour = {1.0f, 1.0f, 1.0f},
+				.eye_type = prefab::human_art::eye_type::dots,
+				.eye_colour = {102.0f/255.0f, 0.0f, 204.0f/255.0f}
+			}
+		}},
+		actor_component<actor_component_id::motion>
+		{{
+			.speed = fdist(rng) * 0.8f + 0.4f
+		}},
+		actor_component<actor_component_id::damageable>
+		{{
+			.health = static_cast<int>(fdist(rng) * 500),
+			.max_health = 500
+		}},
+		actor_component<actor_component_id::collide>
+		{{
+		}},
+		actor_component<actor_component_id::combat_behaviour>
+		{{
+			.flags = {combat_behaviour_flag::chase_nearest_enemy}
+		}}
+	},
+	.name = "Skeleton",
+};
