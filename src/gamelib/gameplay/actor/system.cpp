@@ -103,7 +103,7 @@ namespace rnlib
 	{
 		TZ_PROFZONE("actor_system - update", 0xffee0077);
 		this->collision_response();
-		constexpr std::size_t arbitrary_serial_update_max = 250;
+		constexpr std::size_t arbitrary_serial_update_max = 50;
 		if(this->entities.size() < arbitrary_serial_update_max)
 		{
 			TZ_PROFZONE("actor_system - serial update", 0xffee0077);

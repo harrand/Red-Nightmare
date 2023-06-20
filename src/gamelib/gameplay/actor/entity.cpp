@@ -193,6 +193,11 @@ namespace rnlib
 					#include "gamelib/gameplay/actor/types/impact_remnant.actor"
 				}
 				break;
+				case actor_type::necromancer:
+				{
+					#include "gamelib/gameplay/actor/types/necromancer.actor"
+				}
+				break;
 				case actor_type::oak_tree:
 				{
 					#include "gamelib/gameplay/actor/types/oak_tree.actor"
@@ -251,6 +256,20 @@ namespace rnlib
 			return {};
 		}(type);
 		a.type = type;
+
+		// we inject an extra bit of functionality here. we want to despawn actors that have been dead for 45 seconds.
+		if(!a.entity.has_component<actor_component_id::action_listener>())
+		{
+			a.entity.add_component<actor_component_id::action_listener>();
+		}
+		auto& action_listener = a.entity.get_component<actor_component_id::action_listener>()->data();
+		action_listener.on_death.push_back([](actor& me, combat_event killing_evt)
+		{
+			me.actions.add_component<action_id::timed_despawn>
+			({
+				.seconds_until_despawn = 45.0f
+			});
+		});
 		return a;
 	}
 }

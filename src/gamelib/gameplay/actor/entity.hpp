@@ -20,6 +20,7 @@
 #include <limits>
 #include <bit> // actor_component_id::motion
 #include <unordered_map> // actor_component_id::keyboard_control
+#include <random> // actor_component_id::combat_behaviour random wander
 
 namespace rnlib
 {
@@ -140,6 +141,7 @@ namespace rnlib
 		dev_barrier,
 		heal_effect,
 		impact_remnant,
+		necromancer,
 		oak_tree,
 		doctor_michael_morbius,
 		fire_wizard,

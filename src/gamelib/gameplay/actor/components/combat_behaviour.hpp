@@ -3,6 +3,7 @@ enum class combat_behaviour_flag
 	chase_nearest_enemy,
 	sometimes_cast_fireball,
 	heal_when_low,
+	wander_if_idle,
 };
 using combat_behaviour_flags = tz::enum_field<combat_behaviour_flag>;
 
@@ -144,6 +145,18 @@ inline void actor_component_update<actor_component_id::combat_behaviour>
 				.spell = aggro_spell->spellid
 			});
 			aggro_spell->impl_current_cd = aggro_spell->cooldown_seconds;
+		}
+		else if(component.data().flags.contains(combat_behaviour_flag::wander_if_idle))
+		{
+			tz::vec2 random_location = actor_me.transform.position;
+			auto sr = std::random_device{};
+			std::uniform_real_distribution dst{-0.5f, 0.5f};
+			random_location[0] += dst(sr);
+			random_location[1] += dst(sr);
+			actor_me.actions.add_component<action_id::move_to>
+			({
+				.location = random_location
+			});
 		}
 	}
 }

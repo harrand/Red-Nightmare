@@ -77,6 +77,7 @@ return actor
 			  				a.entity.get_component<actor_component_id::damageable>()->data().health = 200;
 						}
 					});
+					a.actions.add_component<action_id::despawn>();
 				}
 			}
 		}}

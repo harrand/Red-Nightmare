@@ -1,0 +1,67 @@
+static std::default_random_engine rng;
+static std::uniform_real_distribution<float> fdist{0.0f, 1.0f};
+
+return actor
+{
+	.entity =
+	{
+		actor_component<actor_component_id::skin>
+		{{
+			.data =
+			{
+				.skin_colour = tz::vec3{0.946f, 0.813f, 0.730f} * fdist(rng),
+				.hair_style = [](){return static_cast<prefab::human_art::hair_style>(rng() % static_cast<int>(prefab::human_art::hair_style::_count));}(),
+				.eye_type = prefab::human_art::eye_type::dots,
+				.eye_colour = faction_colours[(int)faction_t::anthor],
+				.equipment =
+				{
+					.chest_type = prefab::human_art::chest_type::elemental_robes,
+					.chest_colour = faction_colours[(int)faction_t::anthor],
+					.feet_type = prefab::human_art::feet_type::dots,
+					.feet_colour = {1.0f, 0.0f, 0.0f}
+				}
+			}
+		}},
+		actor_component<actor_component_id::motion>
+		{{
+			.speed = fdist(rng) * 0.3f + 0.4f
+		}},
+		actor_component<actor_component_id::label>(),
+		actor_component<actor_component_id::damageable>
+		{{
+			.health = static_cast<int>(fdist(rng) * 500),
+			.max_health = 500
+		}},
+		actor_component<actor_component_id::collide>
+		{{
+		}},
+		actor_component<actor_component_id::combat_behaviour>
+		{{
+			.flags = {combat_behaviour_flag::sometimes_cast_fireball, combat_behaviour_flag::wander_if_idle},
+			.aggressive_ranged_spells =
+			{
+				{
+					.spellid = spell_id::fireball,
+					.cooldown_seconds = 3.5f
+				},
+				{
+					.spellid = spell_id::summon_skeleton,
+					.cooldown_seconds = 5.5f
+				},
+				{
+					.spellid = spell_id::finger_of_death,
+					.cooldown_seconds = 20.0f
+				}
+			},
+			.defensive_ranged_spells =
+			{
+				{
+					.spellid = spell_id::heal,
+					.cooldown_seconds = 5.0f
+				}
+			}
+		}}
+	},
+	.name = "Necromancer",
+	.faction = {faction_t::anthor}
+};

@@ -3,7 +3,7 @@ return spell
 	.cast =
 	{
 		.colour = {faction_colours[(int)faction_t::anthor]},
-		.cast_time_seconds = 0.5f
+		.cast_time_seconds = 1.5f
 	},
 	.function = [](actor& a, actor_system& sys, const update_context& ctx)->combat_events
 	{

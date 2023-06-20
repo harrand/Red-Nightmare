@@ -69,11 +69,16 @@ namespace rnlib::combat
 		tz::assert(target.entity.has_component<actor_component_id::damageable>());
 		auto& damageable = target.entity.get_component<actor_component_id::damageable>()->data();
 		// process damage calculation.
+		bool killed = false;
 		if(damageable.health <= amt)
 		{
 			overkill = amt - damageable.health;
 			amt = damageable.health;
-			// this will kill the actor.
+			// this will kill the actor. register it as a new kill if they are currently alive.
+			if(damageable.health > 0)
+			{
+				killed = true;
+			}
 		}
 		damageable.health -= amt;
 
@@ -83,8 +88,8 @@ namespace rnlib::combat
 	   		.amount = amt
 		});
 
-		combat_data.log.add
-		({
+		combat_event evt
+		{
 			.spell = cause,
 	   		.caster_uuid = attacker->uuid,
 	   		.target_uuid = target.uuid,
@@ -92,7 +97,16 @@ namespace rnlib::combat
 	   		.value = amt,
 	   		.damage_type = type,
 	   		.over = overkill
-		});
+		};
+		combat_data.log.add(evt);
+		if(killed && target.entity.has_component<actor_component_id::action_listener>())
+		{
+			auto& action_listener = target.entity.get_component<actor_component_id::action_listener>()->data();
+			for(auto& callback : action_listener.on_death)
+			{
+				callback(target, evt);
+			}
+		}
 	}
 
 	void heal(actor& target, actor* healer, spell_id cause, std::size_t amt, const combat_damage_types& type)
