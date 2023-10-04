@@ -15,6 +15,9 @@ add_subdirectory(lib)
 tz_add_library(
 	TARGET rednightmare_gamelib
 	SOURCES
+		src/gamelib/renderer/scene_renderer.cpp
+		src/gamelib/renderer/scene_renderer.hpp
+
 		src/gamelib/rnlib.cpp
 		src/gamelib/rnlib.hpp
 		src/gamelib/config.hpp

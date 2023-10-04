@@ -5,11 +5,6 @@
 #include "tz/core/profile.hpp"
 #include "tz/core/time.hpp"
 
-struct dbgui_data_t
-{
-	bool enabled = false;
-} dbgui_data;
-
 int main()
 {
 	tz::initialise
@@ -28,13 +23,6 @@ int main()
 		{
 			TZ_FRAME_BEGIN;
 			tz::begin_frame();
-			tz::dbgui::run([]()
-			{
-				if(dbgui_data.enabled)
-				{
-					game::dbgui();
-				}
-			});
 			auto diff = (tz::system_time() - t).micros<std::uint64_t>();
 			t = tz::system_time();
 			game::update(diff);
