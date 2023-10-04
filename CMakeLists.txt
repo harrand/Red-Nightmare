@@ -40,10 +40,11 @@ tz_add_executable(
 
 target_link_libraries(rednightmare PRIVATE rednightmare_gamelib)
 
-#add_text(
-#	TARGET rednightmare_gamelib
-#	INPUT_DIR ${PROJECT_SOURCE_DIR}
-#	OUTPUT_DIR ${PROJECT_BINARY_DIR}
-#	TEXT_FILES
-#		res/images/missing.png
-#)
+add_text(
+	TARGET rednightmare_gamelib
+	INPUT_DIR ${PROJECT_SOURCE_DIR}
+	OUTPUT_DIR ${PROJECT_BINARY_DIR}
+	TEXT_FILES
+		res/models/human_animated_textured.glb
+		res/models/plane.glb
+)
