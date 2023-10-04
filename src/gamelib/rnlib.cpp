@@ -1,5 +1,5 @@
 #include "gamelib/rnlib.hpp"
-#include "tz/debug.hpp"
+#include "tz/core/debug.hpp"
 
 namespace game
 {
@@ -9,6 +9,21 @@ namespace game
 	}
 
 	void terminate()
+	{
+
+	}
+
+	void update()
+	{
+
+	}
+
+	void dbgui()
+	{
+
+	}
+
+	void dbgui_game_bar()
 	{
 
 	}
