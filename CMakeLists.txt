@@ -15,248 +15,31 @@ add_subdirectory(lib)
 tz_add_library(
 	TARGET rednightmare_gamelib
 	SOURCES
-		src/core/action.cpp
-		src/core/action.hpp
-		src/core/action.inl
-		src/core/actor.cpp
-		src/core/actor.hpp
-		src/core/box.cpp
-		src/core/box.hpp
-		src/core/entity.hpp
-		src/core/entity.inl
-		src/core/event.hpp
-		src/core/faction.hpp
-		src/core/flag.hpp
-		src/core/level.cpp
-		src/core/level.hpp
-		src/core/quadtree.cpp
-		src/core/quadtree.hpp
-		src/core/quadtree.inl
-		src/core/scene.cpp
-		src/core/scene.hpp
-		src/core/util.cpp
-		src/core/util.hpp
-		src/core/zone.cpp
-		src/core/zone.hpp
-
-		src/gfx/animation.cpp
-		src/gfx/animation.hpp
-		src/gfx/effect.cpp
-		src/gfx/effect.hpp
-		src/gfx/images.cpp
-		src/gfx/images.hpp
-		src/gfx/quad_renderer.cpp
-		src/gfx/quad_renderer.hpp
-
-		src/game.cpp
-		src/game.hpp
-		src/stats.cpp
-		src/stats.hpp
+		src/gamelib/rnlib.cpp
+		src/gamelib/rnlib.hpp
 )
 target_include_directories(rednightmare_gamelib PUBLIC ${PROJECT_SOURCE_DIR}/src)
 
-add_shader(
-	TARGET rednightmare_gamelib
-	SHADERS
-	src/gfx/effects/empty.vertex.tzsl
-	src/gfx/effects/empty.fragment.tzsl
-	src/gfx/effects/light.vertex.tzsl
-	src/gfx/effects/light.fragment.tzsl
-	src/gfx/effects/rain.vertex.tzsl
-	src/gfx/effects/rain.fragment.tzsl
-	src/gfx/effects/snow.vertex.tzsl
-	src/gfx/effects/snow.fragment.tzsl
-	src/gfx/default.vertex.tzsl
-	src/gfx/default.fragment.tzsl
-	src/gfx/quad.vertex.tzsl
-	src/gfx/quad.fragment.tzsl
-)
+#add_shader(
+#	TARGET rednightmare_gamelib
+#	SHADERS
+#	src/gfx/effects/empty.vertex.tzsl
+#)
 
-target_link_libraries(rednightmare_gamelib PUBLIC stb)
 target_compile_definitions(rednightmare_gamelib PUBLIC -DGAME_VERSION=0x${PROJECT_VERSION_MAJOR}${PROJECT_VERSION_MINOR}${PROJECT_VERSION_PATCH}${PROJECT_VERSION_TWEAK})
 
 tz_add_executable(
 	TARGET rednightmare
 	SOURCES
-		src/main.cpp
+		src/game/main.cpp
 )
 
-target_link_libraries(rednightmare PRIVATE rednightmare_gamelib stb)
+target_link_libraries(rednightmare PRIVATE rednightmare_gamelib)
 
-add_text(
-	TARGET rednightmare_gamelib
-	INPUT_DIR ${PROJECT_SOURCE_DIR}
-	OUTPUT_DIR ${PROJECT_BINARY_DIR}
-	TEXT_FILES
-		res/images/missing.png
-		res/images/invisible.png
-		res/images/smooth_normals.png
-
-		res/images/player/akhara/skins/classic/player_classic_cast0.png
-		res/images/player/akhara/skins/classic/player_classic_cast1.png
-		res/images/player/akhara/skins/classic/player_classic_cast2.png
-		res/images/player/akhara/skins/classic/player_classic_cast3.png
-		res/images/player/akhara/skins/classic/player_classic_cast4.png
-		res/images/player/akhara/skins/classic/player_classic_cast5.png
-		res/images/player/akhara/skins/classic/player_classic_cast6.png
-		res/images/player/akhara/skins/classic/player_classic_cast7.png
-		res/images/player/akhara/skins/classic/player_classic_death00.png
-		res/images/player/akhara/skins/classic/player_classic_death01.png
-		res/images/player/akhara/skins/classic/player_classic_death02.png
-		res/images/player/akhara/skins/classic/player_classic_death03.png
-		res/images/player/akhara/skins/classic/player_classic_death04.png
-		res/images/player/akhara/skins/classic/player_classic_death05.png
-		res/images/player/akhara/skins/classic/player_classic_death06.png
-		res/images/player/akhara/skins/classic/player_classic_death07.png
-		res/images/player/akhara/skins/classic/player_classic_death08.png
-		res/images/player/akhara/skins/classic/player_classic_death09.png
-		res/images/player/akhara/skins/classic/player_classic_death10.png
-		res/images/player/akhara/skins/classic/player_classic_death11.png
-		res/images/player/akhara/skins/classic/player_classic_down0.png
-		res/images/player/akhara/skins/classic/player_classic_down1.png
-		res/images/player/akhara/skins/classic/player_classic_down2.png
-		res/images/player/akhara/skins/classic/player_classic_down3.png
-		res/images/player/akhara/skins/classic/player_classic_endcast0.png
-		res/images/player/akhara/skins/classic/player_classic_endcast1.png
-		res/images/player/akhara/skins/classic/player_classic_endcast2.png
-		res/images/player/akhara/skins/classic/player_classic_endcast3.png
-		res/images/player/akhara/skins/classic/player_classic_endcast4.png
-		res/images/player/akhara/skins/classic/player_classic_endcast5.png
-		res/images/player/akhara/skins/classic/player_classic_idle0.png
-		res/images/player/akhara/skins/classic/player_classic_idle1.png
-		res/images/player/akhara/skins/classic/player_classic_side0.png
-		res/images/player/akhara/skins/classic/player_classic_side1.png
-		res/images/player/akhara/skins/classic/player_classic_side2.png
-		res/images/player/akhara/skins/classic/player_classic_side3.png
-		res/images/player/akhara/skins/classic/player_classic_up0.png
-		res/images/player/akhara/skins/classic/player_classic_up1.png
-		res/images/player/akhara/skins/classic/player_classic_up2.png
-		res/images/player/akhara/skins/classic/player_classic_up3.png
-
-		res/images/enemies/ghosts/zombie/ghost_zombie_death0.png
-		res/images/enemies/ghosts/zombie/ghost_zombie_death1.png
-		res/images/enemies/ghosts/zombie/ghost_zombie_death2.png
-		res/images/enemies/ghosts/zombie/ghost_zombie_death3.png
-		res/images/enemies/ghosts/zombie/ghost_zombie_down0.png
-		res/images/enemies/ghosts/zombie/ghost_zombie_down1.png
-		res/images/enemies/ghosts/zombie/ghost_zombie_down2.png
-		res/images/enemies/ghosts/zombie/ghost_zombie_down3.png
-		res/images/enemies/ghosts/zombie/ghost_zombie_idle0.png
-		res/images/enemies/ghosts/zombie/ghost_zombie_idle1.png
-		res/images/enemies/ghosts/zombie/ghost_zombie_side0.png
-		res/images/enemies/ghosts/zombie/ghost_zombie_side1.png
-		res/images/enemies/ghosts/zombie/ghost_zombie_side2.png
-		res/images/enemies/ghosts/zombie/ghost_zombie_side3.png
-		res/images/enemies/ghosts/zombie/ghost_zombie_up0.png
-		res/images/enemies/ghosts/zombie/ghost_zombie_up1.png
-		res/images/enemies/ghosts/zombie/ghost_zombie_up2.png
-		res/images/enemies/ghosts/zombie/ghost_zombie_up3.png
-
-		res/images/enemies/ghosts/mjzombie/mjzombie_death0.png
-		res/images/enemies/ghosts/mjzombie/mjzombie_death1.png
-		res/images/enemies/ghosts/mjzombie/mjzombie_death2.png
-		res/images/enemies/ghosts/mjzombie/mjzombie_death3.png
-		res/images/enemies/ghosts/mjzombie/mjzombie_down0.png
-		res/images/enemies/ghosts/mjzombie/mjzombie_down1.png
-		res/images/enemies/ghosts/mjzombie/mjzombie_down2.png
-		res/images/enemies/ghosts/mjzombie/mjzombie_down3.png
-		res/images/enemies/ghosts/mjzombie/mjzombie_idle0.png
-		res/images/enemies/ghosts/mjzombie/mjzombie_idle1.png
-		res/images/enemies/ghosts/mjzombie/mjzombie_side0.png
-		res/images/enemies/ghosts/mjzombie/mjzombie_side1.png
-		res/images/enemies/ghosts/mjzombie/mjzombie_side2.png
-		res/images/enemies/ghosts/mjzombie/mjzombie_side3.png
-		res/images/enemies/ghosts/mjzombie/mjzombie_up0.png
-		res/images/enemies/ghosts/mjzombie/mjzombie_up1.png
-		res/images/enemies/ghosts/mjzombie/mjzombie_up2.png
-		res/images/enemies/ghosts/mjzombie/mjzombie_up3.png
-
-		res/images/enemies/ghosts/banshee/banshee_idle0.png
-		res/images/enemies/ghosts/banshee/banshee_idle1.png
-		res/images/enemies/ghosts/banshee/banshee_death00.png
-		res/images/enemies/ghosts/banshee/banshee_death01.png
-		res/images/enemies/ghosts/banshee/banshee_death02.png
-		res/images/enemies/ghosts/banshee/banshee_death03.png
-		res/images/enemies/ghosts/banshee/banshee_death04.png
-		res/images/enemies/ghosts/banshee/banshee_death05.png
-		res/images/enemies/ghosts/banshee/banshee_death06.png
-		res/images/enemies/ghosts/banshee/banshee_death07.png
-		res/images/enemies/ghosts/banshee/banshee_death08.png
-		res/images/enemies/ghosts/banshee/banshee_death09.png
-		res/images/enemies/ghosts/banshee/banshee_death10.png
-		res/images/enemies/ghosts/banshee/banshee_death11.png
-
-		res/images/player/akhara/ability/player_classic_default_fireball.png
-		res/images/player/akhara/ability/player_classic_default_fireball_particles_0.png
-		res/images/player/akhara/ability/player_classic_default_fireball_particles_1.png
-		res/images/player/akhara/ability/player_classic_default_fireball_particles_2.png
-		res/images/player/akhara/ability/player_classic_default_fireball_particles_3.png
-		res/images/player/akhara/ability/player_classic_default_fireball_particles_4.png
-		res/images/player/akhara/ability/player_classic_default_fireball_particles_5.png
-		res/images/player/akhara/ability/player_classic_default_fireball_particles_6.png
-
-		res/images/effects/block_break/block_break00.png
-		res/images/effects/block_break/block_break01.png
-		res/images/effects/block_break/block_break02.png
-		res/images/effects/block_break/block_break03.png
-		res/images/effects/block_break/block_break04.png
-		res/images/effects/block_break/block_break05.png
-		res/images/effects/block_break/block_break06.png
-		res/images/effects/block_break/block_break07.png
-		res/images/effects/block_break/block_break08.png
-		res/images/effects/block_break/block_break09.png
-		res/images/effects/block_break/block_break10.png
-		res/images/effects/block_break/block_break11.png
-		res/images/effects/block_break/block_break12.png
-		res/images/effects/block_break/block_break13.png
-
-		res/images/effects/blood_splatter/blood_splatter0.png
-		res/images/effects/blood_splatter/blood_splatter1.png
-		res/images/effects/blood_splatter/blood_splatter2.png
-		res/images/effects/blood_splatter/blood_splatter3.png
-		res/images/effects/blood_splatter/blood_splatter4.png
-		res/images/effects/blood_splatter/blood_splatter5.png
-		res/images/effects/blood_splatter/blood_splatter6.png
-		res/images/effects/blood_splatter/blood_splatter7.png
-
-		res/images/effects/fire_explosion/fire_explosion_0.png
-		res/images/effects/fire_explosion/fire_explosion_1.png
-		res/images/effects/fire_explosion/fire_explosion_2.png
-		res/images/effects/fire_explosion/fire_explosion_3.png
-		res/images/effects/fire_explosion/fire_explosion_4.png
-		res/images/effects/fire_explosion/fire_explosion_5.png
-		res/images/effects/fire_explosion/fire_explosion_6.png
-
-		res/images/materials/material_stone.png
-		res/images/materials/material_stone_normal.png
-
-		res/images/gui/healthbar_empty.png
-		res/images/scenery/gravestone_0.png
-		res/images/scenery/gravestone_1.png
-
-		res/images/interactables/light/torch_off.png
-		res/images/interactables/level_change/downwards_trapdoor.png
-		res/images/interactables/level_change/stone_stairs_down_nx.png
-		res/images/interactables/level_change/stone_stairs_up_nx.png
-		res/images/interactables/level_change/stone_stairs_down_py.png
-		res/images/interactables/level_change/stone_stairs_up_py.png
-
-		res/images/powerups/sprint/sprint0.png
-		res/images/powerups/sprint/sprint1.png
-		res/images/powerups/sprint/sprint2.png
-
-		res/images/levels/procedural_intro.png
-		res/images/levels/dev_level_0.png
-		res/images/levels/dev_level_1.png
-		res/images/levels/dev_level_1_backdrop.png
-		res/images/levels/dev_level_1_backdrop_normal.png
-		res/images/levels/dev_level_2.png
-		res/images/levels/dev_level_3.png
-		res/images/levels/banshee_boss_battle_room.png
-		res/images/levels/banshee_boss_battle_room_backdrop.png
-		res/images/levels/backdrops/generic/grass_backdrop.png
-		res/images/levels/backdrops/generic/grass_backdrop_normal.png
-		res/images/levels/backdrops/generic/snow_backdrop.png
-		res/images/levels/backdrops/generic/dungeon_floor_backdrop.png
-		res/images/levels/backdrops/generic/dungeon_floor_backdrop_normal.png
-)
+#add_text(
+#	TARGET rednightmare_gamelib
+#	INPUT_DIR ${PROJECT_SOURCE_DIR}
+#	OUTPUT_DIR ${PROJECT_BINARY_DIR}
+#	TEXT_FILES
+#		res/images/missing.png
+#)
