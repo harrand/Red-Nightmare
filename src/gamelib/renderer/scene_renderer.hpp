@@ -48,6 +48,11 @@ namespace game::render
 		void update(float delta);
 		void dbgui();
 	private:
+		void update_camera(float delta);
+
+		int impl_mouse_scroll_delta = 0;
+		object_handle root = tz::nullhand;
+		tz::vec2 view_bounds = {64.0f, 64.0f};
 		std::vector<tz::ren::animation_renderer::asset_package> entries = {};
 		std::array<tz::ren::animation_renderer::asset_package, static_cast<int>(model::_count)> base_models = {};
 	};

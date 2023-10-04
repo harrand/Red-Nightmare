@@ -37,7 +37,7 @@ namespace game
 
 		if(game_system->dbgui.display_animation_renderer)
 		{
-			if(ImGui::Begin("Animation Renderer", &game_system->dbgui.display_animation_renderer))
+			if(ImGui::Begin("Scene Renderer", &game_system->dbgui.display_animation_renderer))
 			{
 				game_system->sceneren.dbgui();
 				ImGui::End();
