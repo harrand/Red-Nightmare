@@ -17,6 +17,7 @@ tz_add_library(
 	SOURCES
 		src/gamelib/rnlib.cpp
 		src/gamelib/rnlib.hpp
+		src/gamelib/config.hpp
 )
 target_include_directories(rednightmare_gamelib PUBLIC ${PROJECT_SOURCE_DIR}/src)
 

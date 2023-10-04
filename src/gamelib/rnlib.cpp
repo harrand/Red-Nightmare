@@ -13,7 +13,12 @@ namespace game
 
 	}
 
-	void update()
+	void update(std::uint64_t delta_micros)
+	{
+
+	}
+
+	void fixed_update(std::uint64_t delta_micros, std::uint64_t unprocessed)
 	{
 
 	}
