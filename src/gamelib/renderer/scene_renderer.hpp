@@ -79,6 +79,9 @@ namespace game::render
 		scene_renderer* renderer = nullptr;
 		scene_renderer::entry entry = {};
 
+		std::size_t get_object_count() const;
+		tz::ren::texture_locator object_get_texture(tz::ren::animation_renderer::object_handle oh, std::size_t bound_texture_id) const;
+		void object_set_texture(tz::ren::animation_renderer::object_handle h, std::size_t bound_texture_id, tz::ren::texture_locator tloc);
 		scene_renderer::model get_model() const;
 		std::size_t get_animation_count() const;
 		std::optional<std::size_t> get_playing_animation_id() const;

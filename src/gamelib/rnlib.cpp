@@ -34,6 +34,35 @@ namespace game
 				e0:queue_animation(i, false)
 			end
 		)");
+		tz::io::image img
+		{
+			.width = 2u,
+			.height = 2u,
+			.data = 
+			{
+				std::byte{255},
+				std::byte{255},
+				std::byte{255},
+				std::byte{255},
+
+				std::byte{255},
+				std::byte{0},
+				std::byte{255},
+				std::byte{255},
+
+				std::byte{255},
+				std::byte{0},
+				std::byte{255},
+				std::byte{255},
+
+				std::byte{255},
+				std::byte{255},
+				std::byte{255},
+				std::byte{255},
+			}
+		};
+		tz::ren::animation_renderer::texture_handle th = game_system->sceneren.get_renderer().add_texture(img);
+		tz::report("new texture: %zu", static_cast<std::size_t>(static_cast<tz::hanval>(th)));
 
 		// c++ version:
 		//auto e = game_system->sceneren.add_model(game::render::scene_renderer::model::humanoid);
