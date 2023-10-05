@@ -94,6 +94,7 @@ namespace game
 				ImGui::End();
 			}
 		}
+		tz::lua::get_state().execute("if rn.update ~= nil then rn.update() end");
 		tz::gl::get_device().render();
 	}
 

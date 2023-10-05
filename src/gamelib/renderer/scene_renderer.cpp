@@ -262,7 +262,13 @@ namespace game::render
 
 		int is_animation_playing(tz::lua::state& state)
 		{
-			state.stack_push_bool(this->elem.get_playing_animation_id().has_value());
+			bool playing = this->elem.get_playing_animation_id().has_value();
+			if(playing)
+			{
+				const float progress = this->elem.renderer->get_renderer().get_playing_animation_progress(this->elem.entry.pkg);
+				playing &= (progress < 1.0f);
+			}
+			state.stack_push_bool(playing);
 			return 1;
 		}
 
