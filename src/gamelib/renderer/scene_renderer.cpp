@@ -35,19 +35,24 @@ namespace game::render
 
 			this->entries.push_back(tz::ren::animation_renderer::add_gltf(scene_renderer::get_model(m), this->root, opkg));
 		}
-		auto handle = static_cast<tz::hanval>(this->entries.size());
+		auto handle = this->entries.back().objects.front();
 		// human is way bigger than quad, so cut it down a size a bit.
 		if(m == model::humanoid)
 		{
-			tz::trs trs = tz::ren::animation_renderer::get_object_base_transform(this->entries.back().objects.front());
+			tz::trs trs = tz::ren::animation_renderer::get_object_base_transform(handle);
 			trs.scale *= 0.25f;
-			tz::ren::animation_renderer::set_object_base_transform(this->entries.back().objects.front(), trs);
+			tz::ren::animation_renderer::set_object_base_transform(handle, trs);
 		}
 		return
 		{
-			.handle = handle,
+			.pkg = this->entries.back(),
 			.m = m
 		};
+	}
+
+	scene_element scene_renderer::get_element(entry e)
+	{
+		return {this, e};
 	}
 
 	void scene_renderer::update(float delta)
@@ -72,6 +77,11 @@ namespace game::render
 		tz::ren::animation_renderer::dbgui();
 	}
 
+	tz::ren::animation_renderer& scene_renderer::get_renderer()
+	{
+		return *static_cast<tz::ren::animation_renderer*>(this);
+	}
+
 	void scene_renderer::update_camera(float delta)
 	{
 		if(tz::dbgui::claims_mouse())
@@ -91,5 +101,35 @@ namespace game::render
 			// scrolled down.	
 			this->view_bounds *= (1.0f + std::clamp(delta, 0.1f, 0.3f));
 		}
+	}
+
+	scene_renderer::model scene_element::get_model() const
+	{
+		return this->entry.m;
+	}
+
+	std::size_t scene_element::get_animation_count() const
+	{
+		return this->renderer->get_renderer().get_animation_count(this->entry.pkg);
+	}
+
+	std::optional<std::size_t> scene_element::get_playing_animation_id() const
+	{
+		return this->renderer->get_renderer().get_playing_animation(this->entry.pkg);
+	}
+
+	std::string_view scene_element::get_animation_name(std::size_t anim_id) const
+	{
+		return this->renderer->get_renderer().get_animation_name(this->entry.pkg, anim_id);
+	}
+
+	void scene_element::play_animation(std::size_t anim_id, bool loop)
+	{
+		this->renderer->get_renderer().play_animation(this->entry.pkg, anim_id);
+	}
+
+	void scene_element::queue_animation(std::size_t anim_id, bool loop)
+	{
+		this->renderer->get_renderer().queue_animation(this->entry.pkg, anim_id);
 	}
 }

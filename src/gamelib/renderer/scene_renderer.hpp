@@ -10,6 +10,7 @@
 
 namespace game::render
 {
+	struct scene_element;
 	class scene_renderer : private tz::ren::animation_renderer
 	{
 	public:
@@ -24,7 +25,7 @@ namespace game::render
 
 		struct entry
 		{
-			tz::handle<tz::ren::animation_renderer::asset_package> handle;
+			tz::ren::animation_renderer::asset_package pkg;
 			model m;
 		};
 
@@ -45,8 +46,11 @@ namespace game::render
 			}
 		}
 		entry add_model(model m);
+		scene_element get_element(entry e);
 		void update(float delta);
 		void dbgui();
+
+		tz::ren::animation_renderer& get_renderer();
 	private:
 		void update_camera(float delta);
 
@@ -55,6 +59,19 @@ namespace game::render
 		tz::vec2 view_bounds = {64.0f, 64.0f};
 		std::vector<tz::ren::animation_renderer::asset_package> entries = {};
 		std::array<tz::ren::animation_renderer::asset_package, static_cast<int>(model::_count)> base_models = {};
+	};
+
+	struct scene_element
+	{
+		scene_renderer* renderer = nullptr;
+		scene_renderer::entry entry = {};
+
+		scene_renderer::model get_model() const;
+		std::size_t get_animation_count() const;
+		std::optional<std::size_t> get_playing_animation_id() const;
+		std::string_view get_animation_name(std::size_t anim_id) const;
+		void play_animation(std::size_t anim_id, bool loop = false);
+		void queue_animation(std::size_t anim_id, bool loop = false);
 	};
 }
 

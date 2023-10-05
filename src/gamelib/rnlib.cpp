@@ -21,7 +21,14 @@ namespace game
 	{
 		game_system = std::make_unique<game_system_t>();
 
-		game_system->sceneren.add_model(game::render::scene_renderer::model::humanoid);
+		auto e = game_system->sceneren.add_model(game::render::scene_renderer::model::humanoid);
+		game::render::scene_element ele = game_system->sceneren.get_element(e);
+		ele.play_animation(0);
+		for(std::size_t i = 1; i < ele.get_animation_count(); i++)
+		{
+			ele.queue_animation(i);
+		}
+
 		game_system->sceneren.add_model(game::render::scene_renderer::model::quad);
 	}
 
