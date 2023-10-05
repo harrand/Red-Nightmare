@@ -1,10 +1,12 @@
 #include "gamelib/rnlib.hpp"
 #include "gamelib/renderer/scene_renderer.hpp"
 #include "tz/core/debug.hpp"
+#include "tz/lua/api.hpp"
 #include <memory>
 
 namespace game
 {
+	void lua_initialise();
 	struct dbgui_data_t
 	{
 		bool display_animation_renderer = false;
@@ -20,6 +22,7 @@ namespace game
 	void initialise()
 	{
 		game_system = std::make_unique<game_system_t>();
+		lua_initialise();
 
 		auto e = game_system->sceneren.add_model(game::render::scene_renderer::model::humanoid);
 		game::render::scene_element ele = game_system->sceneren.get_element(e);
@@ -65,5 +68,14 @@ namespace game
 	void dbgui_game_bar()
 	{
 		ImGui::Text("Well met!");
+	}
+
+	// called directly from initialise.
+	void lua_initialise()
+	{
+		tz::lua::for_all_states([](tz::lua::state& state)
+		{
+			game_system->sceneren.lua_initialise(state);
+		});
 	}
 }

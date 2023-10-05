@@ -3,6 +3,7 @@
 #include "tz/ren/animation.hpp"
 #include "tz/io/gltf.hpp"
 #include "tz/core/debug.hpp"
+#include "tz/lua/api.hpp"
 
 #include "tz/core/imported_text.hpp"
 #include ImportedTextHeader(plane, glb)
@@ -22,6 +23,15 @@ namespace game::render
 			humanoid,
 			_count
 		};
+
+		static constexpr const char* get_model_name(model m)
+		{
+			return std::array<const char*, static_cast<int>(model::_count)>
+			{
+				"quad",
+				"humanoid"
+			}[static_cast<int>(m)];
+		}
 
 		struct entry
 		{
@@ -51,6 +61,7 @@ namespace game::render
 		void dbgui();
 
 		tz::ren::animation_renderer& get_renderer();
+		void lua_initialise(tz::lua::state& state);
 	private:
 		void update_camera(float delta);
 
