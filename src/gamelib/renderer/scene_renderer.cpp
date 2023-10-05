@@ -27,7 +27,7 @@ namespace game::render
 		{
 			// no base model exists, create a new one.
 			this->base_models[mid] = tz::ren::animation_renderer::add_gltf(scene_renderer::get_model(m), this->root);
-			this->entries.push_back(this->base_models[mid]);
+			this->entries.push_back({.pkg = this->base_models[mid], .m = m});
 		}
 		else
 		{
@@ -35,9 +35,9 @@ namespace game::render
 			opkg.overrides = {tz::ren::animation_renderer::override_flag::mesh, tz::ren::animation_renderer::override_flag::texture};
 			opkg.pkg = this->base_models[mid];
 
-			this->entries.push_back(tz::ren::animation_renderer::add_gltf(scene_renderer::get_model(m), this->root, opkg));
+			this->entries.push_back({.pkg = tz::ren::animation_renderer::add_gltf(scene_renderer::get_model(m), this->root, opkg), .m = m});
 		}
-		auto handle = this->entries.back().objects.front();
+		auto handle = this->entries.back().pkg.objects.front();
 		// human is way bigger than quad, so cut it down a size a bit.
 		if(m == model::humanoid)
 		{
@@ -45,16 +45,23 @@ namespace game::render
 			trs.scale *= 0.25f;
 			tz::ren::animation_renderer::set_object_base_transform(handle, trs);
 		}
-		return
-		{
-			.pkg = this->entries.back(),
-			.m = m
-		};
+		return this->entries.back();
 	}
 
 	scene_element scene_renderer::get_element(entry e)
 	{
 		return {this, e};
+	}
+
+	scene_renderer::entry scene_renderer::entry_at(std::size_t idx) const
+	{
+		tz::assert(idx < this->entries.size());
+		return this->entries[idx];
+	}
+
+	std::size_t scene_renderer::entry_count() const
+	{
+		return this->entries.size();
 	}
 
 	void scene_renderer::update(float delta)
@@ -216,11 +223,26 @@ namespace game::render
 			LUA_CLASS_PUSH(state, impl_rn_scene_element, {.elem = renderer->get_element(renderer->add_model(mod))});
 			return 1;	
 		}
+
+		int get_element(tz::lua::state& state)
+		{
+			auto [_, entry_id] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+			LUA_CLASS_PUSH(state, impl_rn_scene_element, {.elem = this->renderer->get_element(this->renderer->entry_at(entry_id))});
+			return 1;
+		}
+
+		int element_count(tz::lua::state& state)
+		{
+			state.stack_push_uint(this->renderer->entry_count());
+			return 1;
+		}
 	};
 
 	LUA_CLASS_BEGIN(impl_rn_scene_renderer)
 		LUA_CLASS_METHODS_BEGIN
 			LUA_METHOD(impl_rn_scene_renderer, add_model)
+			LUA_METHOD(impl_rn_scene_renderer, get_element)
+			LUA_METHOD(impl_rn_scene_renderer, element_count)
 		LUA_CLASS_METHODS_END
 	LUA_CLASS_END
 

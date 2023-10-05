@@ -57,6 +57,8 @@ namespace game::render
 		}
 		entry add_model(model m);
 		scene_element get_element(entry e);
+		entry entry_at(std::size_t idx) const;
+		std::size_t entry_count() const;
 		void update(float delta);
 		void dbgui();
 
@@ -68,7 +70,7 @@ namespace game::render
 		int impl_mouse_scroll_delta = 0;
 		object_handle root = tz::nullhand;
 		tz::vec2 view_bounds = {64.0f, 64.0f};
-		std::vector<tz::ren::animation_renderer::asset_package> entries = {};
+		std::vector<entry> entries = {};
 		std::array<tz::ren::animation_renderer::asset_package, static_cast<int>(model::_count)> base_models = {};
 	};
 
