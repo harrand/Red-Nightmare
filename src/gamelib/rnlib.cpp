@@ -1,5 +1,5 @@
 #include "gamelib/rnlib.hpp"
-#include "gamelib/renderer/scene_renderer.hpp"
+#include "gamelib/entity/scene.hpp"
 #include "tz/core/debug.hpp"
 #include "tz/lua/api.hpp"
 #include <memory>
@@ -13,7 +13,7 @@ namespace game
 	};
 	struct game_system_t
 	{
-		game::render::scene_renderer sceneren;
+		game::entity::scene scene;
 		dbgui_data_t dbgui;
 	};
 
@@ -61,19 +61,19 @@ namespace game
 				std::byte{255},
 			}
 		};
-		tz::ren::animation_renderer::texture_handle th = game_system->sceneren.get_renderer().add_texture(img);
+		tz::ren::animation_renderer::texture_handle th = game_system->scene.get_renderer().get_renderer().add_texture(img);
 		tz::report("new texture: %zu", static_cast<std::size_t>(static_cast<tz::hanval>(th)));
 
 		// c++ version:
-		//auto e = game_system->sceneren.add_model(game::render::scene_renderer::model::humanoid);
-		//game::render::scene_element ele = game_system->sceneren.get_element(e);
+		//auto e = game_system->scene.get_renderer().add_model(game::render::scene_renderer::model::humanoid);
+		//game::render::scene_element ele = game_system->scene.get_renderer().get_element(e);
 		//ele.play_animation(0);
 		//for(std::size_t i = 1; i < ele.get_animation_count(); i++)
 		//{
 		//	ele.queue_animation(i);
 		//}
 
-		//game_system->sceneren.add_model(game::render::scene_renderer::model::quad);
+		//game_system->scene.get_renderer().add_model(game::render::scene_renderer::model::quad);
 	}
 
 	void terminate()
@@ -84,13 +84,13 @@ namespace game
 	void update(std::uint64_t delta_micros)
 	{
 		float delta_seconds = delta_micros / 1000000.0f;
-		game_system->sceneren.update(delta_seconds);
+		game_system->scene.get_renderer().update(delta_seconds);
 
 		if(game_system->dbgui.display_animation_renderer)
 		{
 			if(ImGui::Begin("Scene Renderer", &game_system->dbgui.display_animation_renderer))
 			{
-				game_system->sceneren.dbgui();
+				game_system->scene.get_renderer().dbgui();
 				ImGui::End();
 			}
 		}
@@ -117,7 +117,7 @@ namespace game
 	{
 		tz::lua::for_all_states([](tz::lua::state& state)
 		{
-			game_system->sceneren.lua_initialise(state);
+			game_system->scene.lua_initialise(state);
 		});
 	}
 }
