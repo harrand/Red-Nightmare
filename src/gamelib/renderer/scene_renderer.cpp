@@ -10,10 +10,6 @@ namespace game::render
 		tz::ren::animation_renderer::append_to_render_graph();
 		this->root = tz::ren::animation_renderer::add_object
 		({
-			.trs = 
-			{
-				.rotate = tz::quat::from_axis_angle({0.0f, 1.0f, 0.0f}, 1.5708f)
-			},
 			.mesh = tz::nullhand,
 			.bound_textures = {},
 			.parent = tz::nullhand,
@@ -313,7 +309,6 @@ namespace game::render
 
 	void scene_renderer::lua_initialise(tz::lua::state& state)
 	{
-		state.assign_emptytable("rn");
 		state.new_type("impl_rn_scene_texture_locator", LUA_CLASS_NAME(impl_rn_scene_texture_locator)::registers);
 		state.new_type("impl_rn_scene_element", LUA_CLASS_NAME(impl_rn_scene_element)::registers);
 		state.new_type("impl_rn_scene_renderer", LUA_CLASS_NAME(impl_rn_scene_renderer)::registers);

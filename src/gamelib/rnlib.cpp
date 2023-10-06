@@ -75,6 +75,16 @@ namespace game
 	{
 		tz::lua::for_all_states([](tz::lua::state& state)
 		{
+			state.assign_emptytable("rn");
+			std::string cwd = std::filesystem::current_path().string();
+			state.stack_push_string(cwd);
+			state.assign_stack("rn_impl_cwd");
+			state.execute("rn.cwd = rn_impl_cwd");
+			state.execute("rn.rootdir = rn.cwd .. \"\\\\src\\\\game\\\\lua\"");
+			// debug builds: use root_dir/lua
+			state.execute("package.path = rn.rootdir .. \"\\\\?.lua\"");
+			state.execute("package.path = package.path .. \";\" .. rn.rootdir .. \"\\\\entity\\\\?.lua\"");
+
 			game_system->scene.lua_initialise(state);
 			state.assign_func("rn.scene", LUA_FN_NAME(rn_impl_get_scene));
 		});
