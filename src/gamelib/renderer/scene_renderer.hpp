@@ -89,6 +89,76 @@ namespace game::render
 		void play_animation(std::size_t anim_id, bool loop = false);
 		void queue_animation(std::size_t anim_id, bool loop = false);
 	};
+
+	// LUA API
+
+	struct impl_rn_scene_texture_locator
+	{
+		tz::ren::texture_locator tloc;
+		int get_colour_tint(tz::lua::state& state);
+		int set_colour_tint(tz::lua::state& state);
+		int get_texture_handle(tz::lua::state& state);
+		int set_texture_handle(tz::lua::state& state);
+	};
+
+	LUA_CLASS_BEGIN(impl_rn_scene_texture_locator)
+		LUA_CLASS_METHODS_BEGIN
+			LUA_METHOD(impl_rn_scene_texture_locator, get_colour_tint)
+			LUA_METHOD(impl_rn_scene_texture_locator, set_colour_tint)
+			LUA_METHOD(impl_rn_scene_texture_locator, get_texture_handle)
+			LUA_METHOD(impl_rn_scene_texture_locator, set_texture_handle)
+		LUA_CLASS_METHODS_END
+	LUA_CLASS_END
+
+	struct impl_rn_scene_element
+	{
+		scene_element elem;
+		int get_object_count(tz::lua::state& state);
+		int object_get_texture(tz::lua::state& state);
+		int object_set_texture_tint(tz::lua::state& state);
+		int object_set_texture_handle(tz::lua::state& state);
+		int get_model(tz::lua::state& state);
+		int get_animation_count(tz::lua::state& state);
+		int get_playing_animation_id(tz::lua::state& state);
+		int is_animation_playing(tz::lua::state& state);
+		int get_animation_name(tz::lua::state& state);
+		int play_animation(tz::lua::state& state);
+		int queue_animation(tz::lua::state& state);
+	};
+
+	LUA_CLASS_BEGIN(impl_rn_scene_element)
+		LUA_CLASS_METHODS_BEGIN
+			LUA_METHOD(impl_rn_scene_element, get_object_count)
+			LUA_METHOD(impl_rn_scene_element, object_get_texture)
+			LUA_METHOD(impl_rn_scene_element, object_set_texture_tint)
+			LUA_METHOD(impl_rn_scene_element, object_set_texture_handle)
+			LUA_METHOD(impl_rn_scene_element, get_model)
+			LUA_METHOD(impl_rn_scene_element, get_animation_count)
+			LUA_METHOD(impl_rn_scene_element, get_playing_animation_id)
+			LUA_METHOD(impl_rn_scene_element, is_animation_playing)
+			LUA_METHOD(impl_rn_scene_element, get_animation_name)
+			LUA_METHOD(impl_rn_scene_element, play_animation)
+			LUA_METHOD(impl_rn_scene_element, queue_animation)
+		LUA_CLASS_METHODS_END
+	LUA_CLASS_END
+
+	struct impl_rn_scene_renderer
+	{
+		scene_renderer* renderer = nullptr;
+		int add_model(tz::lua::state& state);
+		int get_element(tz::lua::state& state);
+		int element_count(tz::lua::state& state);
+		int load_texture_from_disk(tz::lua::state& state);
+	};
+
+	LUA_CLASS_BEGIN(impl_rn_scene_renderer)
+		LUA_CLASS_METHODS_BEGIN
+			LUA_METHOD(impl_rn_scene_renderer, add_model)
+			LUA_METHOD(impl_rn_scene_renderer, get_element)
+			LUA_METHOD(impl_rn_scene_renderer, element_count)
+			LUA_METHOD(impl_rn_scene_renderer, load_texture_from_disk)
+		LUA_CLASS_METHODS_END
+	LUA_CLASS_END
 }
 
 #endif // RN_GAMELIB_RENDERER_SCENE_RENDERER_HPP

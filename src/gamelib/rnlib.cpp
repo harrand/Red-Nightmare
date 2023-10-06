@@ -25,15 +25,16 @@ namespace game
 		lua_initialise();
 
 		// lua version:
-		tz::lua::get_state().execute(R"(
-			ren = rn.get_scene_renderer()
-			e0 = ren:add_model(1)
-
-			e0:play_animation(0, false)
-			for i=1,e0:get_animation_count()-1,1 do
-				e0:queue_animation(i, false)
-			end
-		)");
+		//tz::lua::get_state().execute(R"(
+		//	ren = rn.get_scene_renderer()
+		//	e0 = ren:add_model(1)
+		//
+		//	e0:play_animation(0, false)
+		//	for i=1,e0:get_animation_count()-1,1 do
+		//		e0:queue_animation(i, false)
+		//	end
+		//)");
+		game_system->scene.add(0);
 		tz::io::image img
 		{
 			.width = 2u,

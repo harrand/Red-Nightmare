@@ -15,6 +15,8 @@ add_subdirectory(lib)
 tz_add_library(
 	TARGET rednightmare_gamelib
 	SOURCES
+	 	src/gamelib/entity/api.cpp
+	 	src/gamelib/entity/api.hpp
 		src/gamelib/entity/scene.cpp
 		src/gamelib/entity/scene.hpp
 
@@ -50,4 +52,5 @@ add_text(
 	TEXT_FILES
 		res/models/human_animated_textured.glb
 		res/models/plane.glb
+		src/gamelib/entity/entity.lua
 )

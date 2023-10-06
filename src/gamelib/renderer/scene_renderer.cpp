@@ -158,199 +158,152 @@ namespace game::render
 	}
 
 	// LUA API
-
-	struct impl_rn_scene_texture_locator
+	int impl_rn_scene_texture_locator::get_colour_tint(tz::lua::state& state)
 	{
-		tz::ren::texture_locator tloc;
-		int get_colour_tint(tz::lua::state& state)
-		{
-			state.stack_push_float(this->tloc.colour_tint[0]);
-			state.stack_push_float(this->tloc.colour_tint[1]);
-			state.stack_push_float(this->tloc.colour_tint[2]);
-			return 3;
-		}
+		state.stack_push_float(this->tloc.colour_tint[0]);
+		state.stack_push_float(this->tloc.colour_tint[1]);
+		state.stack_push_float(this->tloc.colour_tint[2]);
+		return 3;
+	}
 
-		int set_colour_tint(tz::lua::state& state)
-		{
-			auto [_, r, g, b] = tz::lua::parse_args<tz::lua::nil, float, float, float>(state);
-			this->tloc.colour_tint = {r, g, b};
-			return 0;
-		}
-
-		int get_texture_handle(tz::lua::state& state)
-		{
-			state.stack_push_uint(static_cast<std::size_t>(static_cast<tz::hanval>(this->tloc.texture)));
-			return 1;
-		}
-
-		int set_texture_handle(tz::lua::state& state)
-		{
-			auto [_, hanval] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
-			this->tloc.texture = static_cast<tz::hanval>(hanval);
-			return 0;
-		}
-	};
-	LUA_CLASS_BEGIN(impl_rn_scene_texture_locator)
-		LUA_CLASS_METHODS_BEGIN
-			LUA_METHOD(impl_rn_scene_texture_locator, get_colour_tint)
-			LUA_METHOD(impl_rn_scene_texture_locator, set_colour_tint)
-			LUA_METHOD(impl_rn_scene_texture_locator, get_texture_handle)
-			LUA_METHOD(impl_rn_scene_texture_locator, set_texture_handle)
-		LUA_CLASS_METHODS_END
-	LUA_CLASS_END
-
-	struct impl_rn_scene_element
+	int impl_rn_scene_texture_locator::set_colour_tint(tz::lua::state& state)
 	{
-		scene_element elem;
+		auto [_, r, g, b] = tz::lua::parse_args<tz::lua::nil, float, float, float>(state);
+		this->tloc.colour_tint = {r, g, b};
+		return 0;
+	}
 
-		int get_object_count(tz::lua::state& state)
-		{
-			state.stack_push_uint(elem.get_object_count());
-			return 1;
-		}
-
-		int object_get_texture(tz::lua::state& state)
-		{
-			auto [_, oh, bound_texture_id] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int>(state);
-			LUA_CLASS_PUSH(state, impl_rn_scene_texture_locator, {.tloc = this->elem.object_get_texture(static_cast<tz::hanval>(oh), bound_texture_id)});
-			return 1;
-		}
-
-		int object_set_texture_tint(tz::lua::state& state)
-		{
-			auto [_, oh, bound_texture_id, r, g, b] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int, float, float, float>(state);
-			tz::ren::texture_locator tloc = this->elem.object_get_texture(static_cast<tz::hanval>(oh), bound_texture_id);
-			tloc.colour_tint = {r, g, b};
-			this->elem.object_set_texture(static_cast<tz::hanval>(oh), bound_texture_id, tloc);
-			return 0;
-		}
-
-		int object_set_texture_handle(tz::lua::state& state)
-		{
-			auto [_, oh, bound_texture_id, texhandle] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int, unsigned int>(state);
-			tz::ren::texture_locator tloc = this->elem.object_get_texture(static_cast<tz::hanval>(oh), bound_texture_id);
-			tloc.texture = static_cast<tz::hanval>(texhandle);
-			this->elem.object_set_texture(static_cast<tz::hanval>(oh), bound_texture_id, tloc);
-			return 0;
-		}
-
-		int get_model(tz::lua::state& state)
-		{
-			state.stack_push_int(static_cast<int>(this->elem.get_model()));
-			return 1;
-		}
-
-		int get_animation_count(tz::lua::state& state)
-		{
-			state.stack_push_uint(this->elem.get_animation_count());
-			return 1;
-		}
-
-		int get_playing_animation_id(tz::lua::state& state)
-		{
-			auto maybe_id = this->elem.get_playing_animation_id();
-			if(maybe_id.has_value())
-			{
-				state.stack_push_uint(maybe_id.value());
-			}
-			else
-			{
-				state.stack_push_uint(std::numeric_limits<std::uint64_t>::max());
-			}
-			return 1;
-		}
-
-		int is_animation_playing(tz::lua::state& state)
-		{
-			bool playing = this->elem.get_playing_animation_id().has_value();
-			if(playing)
-			{
-				const float progress = this->elem.renderer->get_renderer().get_playing_animation_progress(this->elem.entry.pkg);
-				playing &= (progress < 1.0f);
-			}
-			state.stack_push_bool(playing);
-			return 1;
-		}
-
-		int get_animation_name(tz::lua::state& state)
-		{
-			auto [_, anim_id] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
-			state.stack_push_string(this->elem.get_animation_name(anim_id));
-			return 1;
-		}
-
-		int play_animation(tz::lua::state& state)
-		{
-			auto [_, anim_id, loop] = tz::lua::parse_args<tz::lua::nil, unsigned int, bool>(state);
-			this->elem.play_animation(anim_id, loop);
-			return 0;
-		}
-
-		int queue_animation(tz::lua::state& state)
-		{
-			auto [_, anim_id, loop] = tz::lua::parse_args<tz::lua::nil, unsigned int, bool>(state);
-			this->elem.queue_animation(anim_id, loop);
-			return 0;
-		}
-	};
-
-	LUA_CLASS_BEGIN(impl_rn_scene_element)
-		LUA_CLASS_METHODS_BEGIN
-			LUA_METHOD(impl_rn_scene_element, get_object_count)
-			LUA_METHOD(impl_rn_scene_element, object_get_texture)
-			LUA_METHOD(impl_rn_scene_element, object_set_texture_tint)
-			LUA_METHOD(impl_rn_scene_element, object_set_texture_handle)
-			LUA_METHOD(impl_rn_scene_element, get_model)
-			LUA_METHOD(impl_rn_scene_element, get_animation_count)
-			LUA_METHOD(impl_rn_scene_element, get_playing_animation_id)
-			LUA_METHOD(impl_rn_scene_element, is_animation_playing)
-			LUA_METHOD(impl_rn_scene_element, get_animation_name)
-			LUA_METHOD(impl_rn_scene_element, play_animation)
-			LUA_METHOD(impl_rn_scene_element, queue_animation)
-		LUA_CLASS_METHODS_END
-	LUA_CLASS_END
-
-	struct impl_rn_scene_renderer
+	int impl_rn_scene_texture_locator::get_texture_handle(tz::lua::state& state)
 	{
-		scene_renderer* renderer = nullptr;
-		int add_model(tz::lua::state& state)
-		{
-			auto [_, modelval] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
-			auto mod = static_cast<scene_renderer::model>(modelval);
-			LUA_CLASS_PUSH(state, impl_rn_scene_element, {.elem = renderer->get_element(renderer->add_model(mod))});
-			return 1;	
-		}
+		state.stack_push_uint(static_cast<std::size_t>(static_cast<tz::hanval>(this->tloc.texture)));
+		return 1;
+	}
 
-		int get_element(tz::lua::state& state)
-		{
-			auto [_, entry_id] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
-			LUA_CLASS_PUSH(state, impl_rn_scene_element, {.elem = this->renderer->get_element(this->renderer->entry_at(entry_id))});
-			return 1;
-		}
+	int impl_rn_scene_texture_locator::set_texture_handle(tz::lua::state& state)
+	{
+		auto [_, hanval] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+		this->tloc.texture = static_cast<tz::hanval>(hanval);
+		return 0;
+	}
 
-		int element_count(tz::lua::state& state)
-		{
-			state.stack_push_uint(this->renderer->entry_count());
-			return 1;
-		}
+	int impl_rn_scene_element::get_object_count(tz::lua::state& state)
+	{
+		state.stack_push_uint(elem.get_object_count());
+		return 1;
+	}
 
-		int load_texture_from_disk(tz::lua::state& state)
-		{
-			auto [_, path] = tz::lua::parse_args<tz::lua::nil, std::string>(state);
-			tz::ren::animation_renderer::texture_handle rethan = this->renderer->get_renderer().add_texture(tz::io::image::load_from_file(path));
-			state.stack_push_uint(static_cast<std::size_t>(static_cast<tz::hanval>(rethan)));
-			return 1;
-		}
-	};
+	int impl_rn_scene_element::object_get_texture(tz::lua::state& state)
+	{
+		auto [_, oh, bound_texture_id] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int>(state);
+		LUA_CLASS_PUSH(state, impl_rn_scene_texture_locator, {.tloc = this->elem.object_get_texture(static_cast<tz::hanval>(oh), bound_texture_id)});
+		return 1;
+	}
 
-	LUA_CLASS_BEGIN(impl_rn_scene_renderer)
-		LUA_CLASS_METHODS_BEGIN
-			LUA_METHOD(impl_rn_scene_renderer, add_model)
-			LUA_METHOD(impl_rn_scene_renderer, get_element)
-			LUA_METHOD(impl_rn_scene_renderer, element_count)
-			LUA_METHOD(impl_rn_scene_renderer, load_texture_from_disk)
-		LUA_CLASS_METHODS_END
-	LUA_CLASS_END
+	int impl_rn_scene_element::object_set_texture_tint(tz::lua::state& state)
+	{
+		auto [_, oh, bound_texture_id, r, g, b] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int, float, float, float>(state);
+		tz::ren::texture_locator tloc = this->elem.object_get_texture(static_cast<tz::hanval>(oh), bound_texture_id);
+		tloc.colour_tint = {r, g, b};
+		this->elem.object_set_texture(static_cast<tz::hanval>(oh), bound_texture_id, tloc);
+		return 0;
+	}
+
+	int impl_rn_scene_element::object_set_texture_handle(tz::lua::state& state)
+	{
+		auto [_, oh, bound_texture_id, texhandle] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int, unsigned int>(state);
+		tz::ren::texture_locator tloc = this->elem.object_get_texture(static_cast<tz::hanval>(oh), bound_texture_id);
+		tloc.texture = static_cast<tz::hanval>(texhandle);
+		this->elem.object_set_texture(static_cast<tz::hanval>(oh), bound_texture_id, tloc);
+		return 0;
+	}
+
+	int impl_rn_scene_element::get_model(tz::lua::state& state)
+	{
+		state.stack_push_int(static_cast<int>(this->elem.get_model()));
+		return 1;
+	}
+
+	int impl_rn_scene_element::get_animation_count(tz::lua::state& state)
+	{
+		state.stack_push_uint(this->elem.get_animation_count());
+		return 1;
+	}
+
+	int impl_rn_scene_element::get_playing_animation_id(tz::lua::state& state)
+	{
+		auto maybe_id = this->elem.get_playing_animation_id();
+		if(maybe_id.has_value())
+		{
+			state.stack_push_uint(maybe_id.value());
+		}
+		else
+		{
+			state.stack_push_uint(std::numeric_limits<std::uint64_t>::max());
+		}
+		return 1;
+	}
+
+	int impl_rn_scene_element::is_animation_playing(tz::lua::state& state)
+	{
+		bool playing = this->elem.get_playing_animation_id().has_value();
+		if(playing)
+		{
+			const float progress = this->elem.renderer->get_renderer().get_playing_animation_progress(this->elem.entry.pkg);
+			playing &= (progress < 1.0f);
+		}
+		state.stack_push_bool(playing);
+		return 1;
+	}
+
+	int impl_rn_scene_element::get_animation_name(tz::lua::state& state)
+	{
+		auto [_, anim_id] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+		state.stack_push_string(this->elem.get_animation_name(anim_id));
+		return 1;
+	}
+
+	int impl_rn_scene_element::play_animation(tz::lua::state& state)
+	{
+		auto [_, anim_id, loop] = tz::lua::parse_args<tz::lua::nil, unsigned int, bool>(state);
+		this->elem.play_animation(anim_id, loop);
+		return 0;
+	}
+
+	int impl_rn_scene_element::queue_animation(tz::lua::state& state)
+	{
+		auto [_, anim_id, loop] = tz::lua::parse_args<tz::lua::nil, unsigned int, bool>(state);
+		this->elem.queue_animation(anim_id, loop);
+		return 0;
+	}
+
+	int impl_rn_scene_renderer::add_model(tz::lua::state& state)
+	{
+		auto [_, modelval] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+		auto mod = static_cast<scene_renderer::model>(modelval);
+		LUA_CLASS_PUSH(state, impl_rn_scene_element, {.elem = renderer->get_element(renderer->add_model(mod))});
+		return 1;	
+	}
+
+	int impl_rn_scene_renderer::get_element(tz::lua::state& state)
+	{
+		auto [_, entry_id] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+		LUA_CLASS_PUSH(state, impl_rn_scene_element, {.elem = this->renderer->get_element(this->renderer->entry_at(entry_id))});
+		return 1;
+	}
+
+	int impl_rn_scene_renderer::element_count(tz::lua::state& state)
+	{
+		state.stack_push_uint(this->renderer->entry_count());
+		return 1;
+	}
+
+	int impl_rn_scene_renderer::load_texture_from_disk(tz::lua::state& state)
+	{
+		auto [_, path] = tz::lua::parse_args<tz::lua::nil, std::string>(state);
+		tz::ren::animation_renderer::texture_handle rethan = this->renderer->get_renderer().add_texture(tz::io::image::load_from_file(path));
+		state.stack_push_uint(static_cast<std::size_t>(static_cast<tz::hanval>(rethan)));
+		return 1;
+	}
 
 	LUA_BEGIN(impl_rn_scene_renderer_get_model_name)
 		auto [modelval] = tz::lua::parse_args<int>(state);
