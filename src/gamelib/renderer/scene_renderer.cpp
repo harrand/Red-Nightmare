@@ -216,6 +216,58 @@ namespace game::render
 		return 0;
 	}
 
+	int impl_rn_scene_element::face_forward(tz::lua::state& state)
+	{
+		auto objh = this->elem.entry.pkg.objects.front();
+		auto& ren = this->elem.renderer->get_renderer();
+		auto transform = ren.get_object_base_transform(objh);
+		transform.rotate = tz::quat::from_axis_angle(tz::vec3::zero(), 1.0f);
+		ren.set_object_base_transform(objh, transform);
+		return 0;
+	}
+
+	int impl_rn_scene_element::face_left(tz::lua::state& state)
+	{
+		auto objh = this->elem.entry.pkg.objects.front();
+		auto& ren = this->elem.renderer->get_renderer();
+		tz::trs transform = ren.get_object_base_transform(objh);
+		transform.rotate = tz::quat::from_axis_angle({0.0f, 1.0f, 0.0f}, -1.5708f);
+		ren.set_object_base_transform(objh, transform);
+		return 0;
+	}
+
+	int impl_rn_scene_element::face_right(tz::lua::state& state)
+	{
+		auto objh = this->elem.entry.pkg.objects.front();
+		auto& ren = this->elem.renderer->get_renderer();
+		tz::trs transform = ren.get_object_base_transform(objh);
+		transform.rotate = tz::quat::from_axis_angle({0.0f, 1.0f, 0.0f}, 1.5708f);
+		ren.set_object_base_transform(objh, transform);
+		return 0;
+	}
+
+	int impl_rn_scene_element::get_position(tz::lua::state& state)
+	{
+		auto objh = this->elem.entry.pkg.objects.front();
+		auto& ren = this->elem.renderer->get_renderer();
+		tz::trs transform = ren.get_object_base_transform(objh);
+		state.stack_push_float(transform.translate[0]);
+		state.stack_push_float(transform.translate[1]);
+		return 2;
+	}
+
+	int impl_rn_scene_element::set_position(tz::lua::state& state)
+	{
+		auto [_, x, y] = tz::lua::parse_args<tz::lua::nil, float, float>(state);
+		auto objh = this->elem.entry.pkg.objects.front();
+		auto& ren = this->elem.renderer->get_renderer();
+		tz::trs transform = ren.get_object_base_transform(objh);
+		transform.translate[0] = x;
+		transform.translate[1] = y;
+		ren.set_object_base_transform(objh, transform);
+		return 0;
+	}
+
 	int impl_rn_scene_element::get_model(tz::lua::state& state)
 	{
 		state.stack_push_int(static_cast<int>(this->elem.get_model()));

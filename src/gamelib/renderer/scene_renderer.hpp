@@ -117,6 +117,11 @@ namespace game::render
 		int object_get_texture(tz::lua::state& state);
 		int object_set_texture_tint(tz::lua::state& state);
 		int object_set_texture_handle(tz::lua::state& state);
+		int face_forward(tz::lua::state& state);
+		int face_left(tz::lua::state& state);
+		int face_right(tz::lua::state& state);
+		int get_position(tz::lua::state& state);
+		int set_position(tz::lua::state& state);
 		int get_model(tz::lua::state& state);
 		int get_animation_count(tz::lua::state& state);
 		int get_playing_animation_id(tz::lua::state& state);
@@ -132,6 +137,11 @@ namespace game::render
 			LUA_METHOD(impl_rn_scene_element, object_get_texture)
 			LUA_METHOD(impl_rn_scene_element, object_set_texture_tint)
 			LUA_METHOD(impl_rn_scene_element, object_set_texture_handle)
+			LUA_METHOD(impl_rn_scene_element, face_forward)
+			LUA_METHOD(impl_rn_scene_element, face_left)
+			LUA_METHOD(impl_rn_scene_element, face_right)
+			LUA_METHOD(impl_rn_scene_element, get_position)
+			LUA_METHOD(impl_rn_scene_element, set_position)
 			LUA_METHOD(impl_rn_scene_element, get_model)
 			LUA_METHOD(impl_rn_scene_element, get_animation_count)
 			LUA_METHOD(impl_rn_scene_element, get_playing_animation_id)
