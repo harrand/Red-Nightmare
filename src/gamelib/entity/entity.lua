@@ -42,3 +42,22 @@ rn.entity_postinit = function(type)
 	end
 	ent:get_element():play_animation(1, false)
 end
+
+rn.entity_update = function(ent)
+	tz.assert(ent ~= nil)
+	local handler = rn.entity_handler[ent:get_type()]
+	tz.assert(handler ~= nil)
+	if handler.update ~= nil then
+		handler.update(ent)
+	end
+end
+
+rn.update = function()
+	sc = rn.scene()
+	if sc:size() > 0 then
+		for i=0,sc:size()-1,1 do
+			ent = sc:get(i)
+			rn.entity_update(ent)
+		end
+	end
+end

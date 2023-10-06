@@ -29,6 +29,7 @@ namespace game::entity
 
 		entity& get();
 
+		int get_type(tz::lua::state& state);
 		int get_name(tz::lua::state& state);
 		int set_name(tz::lua::state& state);
 		int get_model(tz::lua::state& state);
@@ -38,6 +39,7 @@ namespace game::entity
 
 	LUA_CLASS_BEGIN(rn_impl_entity)
 		LUA_CLASS_METHODS_BEGIN
+			LUA_METHOD(rn_impl_entity, get_type)
 			LUA_METHOD(rn_impl_entity, get_name)
 			LUA_METHOD(rn_impl_entity, set_name)
 			LUA_METHOD(rn_impl_entity, get_model)

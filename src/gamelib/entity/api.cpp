@@ -8,6 +8,12 @@ namespace game::entity
 		return this->scene->get(this->entity_hanval);
 	}
 
+	int rn_impl_entity::get_type(tz::lua::state& state)
+	{
+		state.stack_push_uint(this->get().type);
+		return 1;
+	}
+
 	int rn_impl_entity::get_name(tz::lua::state& state)
 	{
 		state.stack_push_string(this->get().name);

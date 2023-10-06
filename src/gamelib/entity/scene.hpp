@@ -16,6 +16,7 @@ namespace game::entity
 		void remove(entity_handle e);
 		const entity& get(entity_handle e) const;
 		entity& get(entity_handle e);
+		std::size_t size() const;
 
 		render::scene_renderer& get_renderer();
 		void lua_initialise(tz::lua::state& state);
@@ -32,6 +33,7 @@ namespace game::entity
 		int add(tz::lua::state& state);
 		int remove(tz::lua::state& state);
 		int get(tz::lua::state& state);
+		int size(tz::lua::state& state);
 	};
 
 	LUA_CLASS_BEGIN(rn_impl_scene)
@@ -39,6 +41,7 @@ namespace game::entity
 			LUA_METHOD(rn_impl_scene, add)
 			LUA_METHOD(rn_impl_scene, remove)
 			LUA_METHOD(rn_impl_scene, get)
+			LUA_METHOD(rn_impl_scene, size)
 		LUA_CLASS_METHODS_END
 	LUA_CLASS_END
 }

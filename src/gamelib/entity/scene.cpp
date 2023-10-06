@@ -41,6 +41,11 @@ namespace game::entity
 		return this->entities[hanval];
 	}
 
+	std::size_t scene::size() const
+	{
+		return this->entities.size();
+	}
+
 	void scene::lua_initialise(tz::lua::state& state)
 	{
 		this->get_renderer().lua_initialise(state);
@@ -87,6 +92,12 @@ namespace game::entity
 		auto [_, eh] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
 		rn_impl_entity ent{.scene = this->sc, .entity_hanval = static_cast<tz::hanval>(eh)};
 		LUA_CLASS_PUSH(state, rn_impl_entity, ent);
+		return 1;
+	}
+
+	int rn_impl_scene::size(tz::lua::state& state)
+	{
+		state.stack_push_uint(this->sc->size());
 		return 1;
 	}
 }
