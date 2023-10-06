@@ -191,25 +191,28 @@ namespace game::render
 	int impl_rn_scene_element::object_get_texture(tz::lua::state& state)
 	{
 		auto [_, oh, bound_texture_id] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int>(state);
-		LUA_CLASS_PUSH(state, impl_rn_scene_texture_locator, {.tloc = this->elem.object_get_texture(static_cast<tz::hanval>(oh), bound_texture_id)});
+		auto objh = this->elem.entry.pkg.objects[oh];
+		LUA_CLASS_PUSH(state, impl_rn_scene_texture_locator, {.tloc = this->elem.object_get_texture(objh, bound_texture_id)});
 		return 1;
 	}
 
 	int impl_rn_scene_element::object_set_texture_tint(tz::lua::state& state)
 	{
 		auto [_, oh, bound_texture_id, r, g, b] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int, float, float, float>(state);
-		tz::ren::texture_locator tloc = this->elem.object_get_texture(static_cast<tz::hanval>(oh), bound_texture_id);
+		auto objh = this->elem.entry.pkg.objects[oh];
+		tz::ren::texture_locator tloc = this->elem.object_get_texture(objh, bound_texture_id);
 		tloc.colour_tint = {r, g, b};
-		this->elem.object_set_texture(static_cast<tz::hanval>(oh), bound_texture_id, tloc);
+		this->elem.object_set_texture(objh, bound_texture_id, tloc);
 		return 0;
 	}
 
 	int impl_rn_scene_element::object_set_texture_handle(tz::lua::state& state)
 	{
 		auto [_, oh, bound_texture_id, texhandle] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int, unsigned int>(state);
-		tz::ren::texture_locator tloc = this->elem.object_get_texture(static_cast<tz::hanval>(oh), bound_texture_id);
+		auto objh = this->elem.entry.pkg.objects[oh];
+		tz::ren::texture_locator tloc = this->elem.object_get_texture(objh, bound_texture_id);
 		tloc.texture = static_cast<tz::hanval>(texhandle);
-		this->elem.object_set_texture(static_cast<tz::hanval>(oh), bound_texture_id, tloc);
+		this->elem.object_set_texture(objh, bound_texture_id, tloc);
 		return 0;
 	}
 
