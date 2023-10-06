@@ -153,6 +153,16 @@ namespace game::render
 		this->renderer->get_renderer().queue_animation(this->entry.pkg, anim_id, loop);
 	}
 
+	void scene_element::skip_animation()
+	{
+		this->renderer->get_renderer().skip_animation(this->entry.pkg);
+	}
+
+	void scene_element::halt_animation()
+	{
+		this->renderer->get_renderer().halt_animation(this->entry.pkg);
+	}
+
 	// LUA API
 	int impl_rn_scene_texture_locator::get_colour_tint(tz::lua::state& state)
 	{
@@ -324,6 +334,18 @@ namespace game::render
 	{
 		auto [_, anim_id, loop] = tz::lua::parse_args<tz::lua::nil, unsigned int, bool>(state);
 		this->elem.queue_animation(anim_id, loop);
+		return 0;
+	}
+
+	int impl_rn_scene_element::skip_animation(tz::lua::state& state)
+	{
+		this->elem.skip_animation();
+		return 0;
+	}
+
+	int impl_rn_scene_element::halt_animation(tz::lua::state& state)
+	{
+		this->elem.halt_animation();
 		return 0;
 	}
 

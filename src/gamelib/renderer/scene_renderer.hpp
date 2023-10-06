@@ -88,6 +88,8 @@ namespace game::render
 		std::string_view get_animation_name(std::size_t anim_id) const;
 		void play_animation(std::size_t anim_id, bool loop = false);
 		void queue_animation(std::size_t anim_id, bool loop = false);
+		void skip_animation();
+		void halt_animation();
 	};
 
 	// LUA API
@@ -129,6 +131,8 @@ namespace game::render
 		int get_animation_name(tz::lua::state& state);
 		int play_animation(tz::lua::state& state);
 		int queue_animation(tz::lua::state& state);
+		int skip_animation(tz::lua::state& state);
+		int halt_animation(tz::lua::state& state);
 	};
 
 	LUA_CLASS_BEGIN(impl_rn_scene_element)
@@ -149,6 +153,8 @@ namespace game::render
 			LUA_METHOD(impl_rn_scene_element, get_animation_name)
 			LUA_METHOD(impl_rn_scene_element, play_animation)
 			LUA_METHOD(impl_rn_scene_element, queue_animation)
+			LUA_METHOD(impl_rn_scene_element, skip_animation)
+			LUA_METHOD(impl_rn_scene_element, halt_animation)
 		LUA_CLASS_METHODS_END
 	LUA_CLASS_END
 
