@@ -25,6 +25,22 @@ namespace game::entity
 		std::deque<entity_handle> free_list = {};
 		render::scene_renderer renderer;
 	};
+
+	struct rn_impl_scene
+	{
+		scene* sc;
+		int add(tz::lua::state& state);
+		int remove(tz::lua::state& state);
+		int get(tz::lua::state& state);
+	};
+
+	LUA_CLASS_BEGIN(rn_impl_scene)
+		LUA_CLASS_METHODS_BEGIN
+			LUA_METHOD(rn_impl_scene, add)
+			LUA_METHOD(rn_impl_scene, remove)
+			LUA_METHOD(rn_impl_scene, get)
+		LUA_CLASS_METHODS_END
+	LUA_CLASS_END
 }
 
 #endif // RN_GAMELIB_ENTITY_SCENE_HPP

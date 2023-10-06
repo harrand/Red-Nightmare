@@ -45,6 +45,7 @@ namespace game::entity
 	{
 		this->get_renderer().lua_initialise(state);
 		state.new_type("rn_impl_entity", LUA_CLASS_NAME(rn_impl_entity)::registers);
+		state.new_type("rn_impl_scene", LUA_CLASS_NAME(rn_impl_scene)::registers);
 		
 		std::string str{ImportedTextData(entity, lua)};
 		state.execute(str.c_str());
@@ -60,5 +61,30 @@ namespace game::entity
 		state.execute(cmd.c_str());
 
 		lua_data.get().elem = this->get_renderer().get_element(this->get_renderer().add_model(lua_data.get().elem.entry.m));
+	}
+
+	// LUA API
+
+	int rn_impl_scene::add(tz::lua::state& state)
+	{
+		auto [_, type] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+		scene::entity_handle e = this->sc->add(type);
+		state.stack_push_uint(static_cast<std::size_t>(static_cast<tz::hanval>(e)));
+		return 1;
+	}
+
+	int rn_impl_scene::remove(tz::lua::state& state)
+	{
+		auto [_, eh] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+		this->sc->remove(static_cast<tz::hanval>(eh));
+		return 0;
+	}
+
+	int rn_impl_scene::get(tz::lua::state& state)
+	{
+		auto [_, eh] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+		rn_impl_entity ent{.scene = this->sc, .entity_hanval = static_cast<tz::hanval>(eh)};
+		LUA_CLASS_PUSH(state, rn_impl_entity, ent);
+		return 1;
 	}
 }
