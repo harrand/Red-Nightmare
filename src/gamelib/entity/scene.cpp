@@ -59,6 +59,6 @@ namespace game::entity
 		std::string cmd = "rn.initialise_entity(" + std::to_string(type) + ")";
 		state.execute(cmd.c_str());
 
-		lua_data.get().elem = this->get_renderer().get_element(this->get_renderer().add_model(lua_data.model));
+		lua_data.get().elem = this->get_renderer().get_element(this->get_renderer().add_model(lua_data.get().elem.entry.m));
 	}
 }
