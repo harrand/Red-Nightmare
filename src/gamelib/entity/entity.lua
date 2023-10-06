@@ -24,7 +24,9 @@ rn.entity_preinit = function(type)
 
 	local handler = rn.entity_handler[type]
 	tz.assert(handler ~= nil)
-	handler.preinit(ent)
+	if handler.preinit ~= nil then
+		handler.preinit(ent)
+	end
 end
 
 -- called straight after the entity has finished initialisation. you can
@@ -35,6 +37,8 @@ rn.entity_postinit = function(type)
 
 	local handler = rn.entity_handler[type]
 	tz.assert(handler ~= nil)
-	handler.postinit(ent)
+	if handler.postinit ~= nil then
+		handler.postinit(ent)
+	end
 	ent:get_element():play_animation(1, false)
 end
