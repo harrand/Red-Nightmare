@@ -33,6 +33,7 @@ namespace game::entity
 		int set_name(tz::lua::state& state);
 		int get_model(tz::lua::state& state);
 		int set_model(tz::lua::state& state);
+		int get_element(tz::lua::state& state);
 	};
 
 	LUA_CLASS_BEGIN(rn_impl_entity)
@@ -41,6 +42,7 @@ namespace game::entity
 			LUA_METHOD(rn_impl_entity, set_name)
 			LUA_METHOD(rn_impl_entity, get_model)
 			LUA_METHOD(rn_impl_entity, set_model)
+			LUA_METHOD(rn_impl_entity, get_element)
 		LUA_CLASS_METHODS_END
 	LUA_CLASS_END
 }

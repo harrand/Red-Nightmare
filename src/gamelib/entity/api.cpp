@@ -33,4 +33,11 @@ namespace game::entity
 		this->get().elem.entry.m = static_cast<render::scene_renderer::model>(modelval);
 		return 0;
 	}
+
+	int rn_impl_entity::get_element(tz::lua::state& state)
+	{
+		using namespace game::render;
+		LUA_CLASS_PUSH(state, impl_rn_scene_element, {.elem = this->get().elem});
+		return 1;
+	}
 }

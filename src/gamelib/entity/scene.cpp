@@ -57,10 +57,12 @@ namespace game::entity
 		rn_impl_entity lua_data{.scene = this, .entity_hanval = entity_hanval};
 		LUA_CLASS_PUSH(state, rn_impl_entity, lua_data);
 		state.assign_stack("rn_impl_new_entity");
-		std::string cmd = "rn.initialise_entity(" + std::to_string(type) + ")";
+		std::string cmd = "rn.entity_preinit(" + std::to_string(type) + ")";
 		state.execute(cmd.c_str());
 
 		lua_data.get().elem = this->get_renderer().get_element(this->get_renderer().add_model(lua_data.get().elem.entry.m));
+		cmd = "rn.entity_postinit(" + std::to_string(type) + ")";
+		state.execute(cmd.c_str());
 	}
 
 	// LUA API

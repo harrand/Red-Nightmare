@@ -311,23 +311,14 @@ namespace game::render
 		return 1;
 	LUA_END
 
-	scene_renderer* impl_scene_renderer = nullptr;
-
-	LUA_BEGIN(impl_rn_scene_renderer_get)
-		LUA_CLASS_PUSH(state, impl_rn_scene_renderer, {.renderer = impl_scene_renderer});
-		return 1;
-	LUA_END
-
 	void scene_renderer::lua_initialise(tz::lua::state& state)
 	{
-		impl_scene_renderer = this;
 		state.assign_emptytable("rn");
 		state.new_type("impl_rn_scene_texture_locator", LUA_CLASS_NAME(impl_rn_scene_texture_locator)::registers);
 		state.new_type("impl_rn_scene_element", LUA_CLASS_NAME(impl_rn_scene_element)::registers);
 		state.new_type("impl_rn_scene_renderer", LUA_CLASS_NAME(impl_rn_scene_renderer)::registers);
 		state.assign_uint("badu", std::numeric_limits<std::uint64_t>::max());
 		state.assign_func("rn.get_model_name", LUA_FN_NAME(impl_rn_scene_renderer_get_model_name));
-		state.assign_func("rn.get_scene_renderer", LUA_FN_NAME(impl_rn_scene_renderer_get));
 	}
 
 }
