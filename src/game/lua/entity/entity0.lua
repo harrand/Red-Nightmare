@@ -14,7 +14,7 @@ rn.entity_handler[id] =
 		ent:set_model(rn.model.humanoid)
 	end,
 	postinit = function(ent)
-		ent:get_element():object_set_texture_tint(2, 0, 1, 0.1, 0.1)
+		ent:get_element():object_set_texture_handle(2, 0, rn.scene():get_renderer():load_texture_from_disk("C:/Users/Harry/Documents/RedNightmareDevData/Skin2.png"))
 	end,
 	update = function(ent)
 		local e = ent:get_element()

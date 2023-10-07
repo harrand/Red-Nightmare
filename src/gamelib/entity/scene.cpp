@@ -95,6 +95,13 @@ namespace game::entity
 		return 1;
 	}
 
+	int rn_impl_scene::get_renderer(tz::lua::state& state)
+	{
+		using namespace game::render;
+		LUA_CLASS_PUSH(state, impl_rn_scene_renderer, {.renderer = &this->sc->get_renderer()});
+		return 1;
+	}
+
 	int rn_impl_scene::size(tz::lua::state& state)
 	{
 		state.stack_push_uint(this->sc->size());

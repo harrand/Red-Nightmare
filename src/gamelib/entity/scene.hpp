@@ -33,6 +33,7 @@ namespace game::entity
 		int add(tz::lua::state& state);
 		int remove(tz::lua::state& state);
 		int get(tz::lua::state& state);
+		int get_renderer(tz::lua::state& state);
 		int size(tz::lua::state& state);
 	};
 
@@ -41,6 +42,7 @@ namespace game::entity
 			LUA_METHOD(rn_impl_scene, add)
 			LUA_METHOD(rn_impl_scene, remove)
 			LUA_METHOD(rn_impl_scene, get)
+			LUA_METHOD(rn_impl_scene, get_renderer)
 			LUA_METHOD(rn_impl_scene, size)
 		LUA_CLASS_METHODS_END
 	LUA_CLASS_END
