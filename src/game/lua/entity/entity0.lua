@@ -60,7 +60,7 @@ rn.entity_handler[id] =
 
 		if moving then
 			keep_playing_animation(e, 8, false)
-		elseif tz.window():is_key_down("z") then
+		elseif tz.window():is_mouse_down("left") then
 			e:play_animation(6, false)
 			e:queue_animation(2, false)
 		else
