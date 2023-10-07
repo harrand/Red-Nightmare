@@ -236,6 +236,17 @@ namespace game::render
 		return 0;
 	}
 
+	int impl_rn_scene_element::face_backward(tz::lua::state& state)
+	{
+		auto objh = this->elem.entry.pkg.objects.front();
+		auto& ren = this->elem.renderer->get_renderer();
+		auto transform = ren.get_object_base_transform(objh);
+		transform.rotate = tz::quat::from_axis_angle({0.0f, 1.0f, 0.0f}, 3.14159f);
+		ren.set_object_base_transform(objh, transform);
+		return 0;
+	}
+
+
 	int impl_rn_scene_element::face_left(tz::lua::state& state)
 	{
 		auto objh = this->elem.entry.pkg.objects.front();

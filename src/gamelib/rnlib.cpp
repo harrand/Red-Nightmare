@@ -24,7 +24,7 @@ namespace game
 		game_system = std::make_unique<game_system_t>();
 		lua_initialise();
 
-		game_system->scene.add(0);
+		//game_system->scene.add(0);
 		// lua equivalent: rn.scene():add(0)
 	}
 

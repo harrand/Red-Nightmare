@@ -21,7 +21,19 @@ rn.entity_handler[id] =
 		local moving = e:is_animation_playing() and e:get_playing_animation_id() == 8
 		local movement_speed = 3.0
 
-		if tz.window():is_key_down("a") then
+		if tz.window():is_key_down("w") then
+			x, y = e:get_position()
+			y = y + movement_speed * rn.delta_time
+			e:set_position(x, y)
+			e:face_backward()
+			moving = true
+		elseif tz.window():is_key_down("s") then
+			x, y = e:get_position()
+			y = y - movement_speed * rn.delta_time
+			e:set_position(x, y)
+			e:face_forward()
+			moving = true
+		elseif tz.window():is_key_down("a") then
 			x, y = e:get_position()
 			x = x - movement_speed * rn.delta_time
 			e:set_position(x, y)
