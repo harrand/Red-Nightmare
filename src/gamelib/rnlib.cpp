@@ -46,6 +46,7 @@ namespace game
 				ImGui::End();
 			}
 		}
+		tz::lua::get_state().assign_float("rn.delta_time", delta_seconds);
 		tz::lua::get_state().execute("if rn.update ~= nil then rn.update() end");
 		tz::gl::get_device().render();
 	}
