@@ -21,30 +21,35 @@ rn.entity_handler[id] =
 		local moving = e:is_animation_playing() and e:get_playing_animation_id() == 8
 		local movement_speed = 3.0
 
+		local xdiff = 0
+		local ydiff = 0
+
 		if tz.window():is_key_down("w") then
-			x, y = e:get_position()
-			y = y + movement_speed * rn.delta_time
-			e:set_position(x, y)
+			ydiff = ydiff + 1
 			e:face_backward()
-			moving = true
-		elseif tz.window():is_key_down("s") then
-			x, y = e:get_position()
-			y = y - movement_speed * rn.delta_time
-			e:set_position(x, y)
+		end
+		if tz.window():is_key_down("s") then
+			ydiff = ydiff - 1
 			e:face_forward()
-			moving = true
-		elseif tz.window():is_key_down("a") then
-			x, y = e:get_position()
-			x = x - movement_speed * rn.delta_time
-			e:set_position(x, y)
+		end
+		if tz.window():is_key_down("a") then
+			xdiff = xdiff - 1
 			e:face_left()
-			moving = true
-		elseif tz.window():is_key_down("d") then
-			x, y = e:get_position()
-			x = x + movement_speed * rn.delta_time
-			e:set_position(x, y)
+		end
+		if tz.window():is_key_down("d") then
+			xdiff = xdiff + 1
 			e:face_right()
+		end
+
+		if xdiff ~= 0 or ydiff ~= 0 then
 			moving = true
+			local x, y = e:get_position()
+			local hypot = math.sqrt(xdiff*xdiff + ydiff*ydiff)
+			xdiff = xdiff / hypot
+			ydiff = ydiff / hypot
+			x = x + xdiff * movement_speed * rn.delta_time
+			y = y + ydiff * movement_speed * rn.delta_time
+			e:set_position(x, y)
 		else
 			if e:get_playing_animation_id() == 8 then
 				e:skip_animation()
