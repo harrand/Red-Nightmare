@@ -19,7 +19,6 @@ rn.entity_handler[id] =
 	update = function(ent)
 		local e = ent:get_element()
 		local moving = e:is_animation_playing() and e:get_playing_animation_id() == 8
-		local movement_speed = 3.0
 
 		local xdiff = 0
 		local ydiff = 0
@@ -47,10 +46,12 @@ rn.entity_handler[id] =
 			local hypot = math.sqrt(xdiff*xdiff + ydiff*ydiff)
 			xdiff = xdiff / hypot
 			ydiff = ydiff / hypot
-			x = x + xdiff * movement_speed * rn.delta_time
-			y = y + ydiff * movement_speed * rn.delta_time
+			x = x + xdiff * ent:get_movement_speed() * rn.delta_time
+			y = y + ydiff * ent:get_movement_speed() * rn.delta_time
 			e:set_position(x, y)
+			e:set_animation_speed(math.sqrt(ent:get_movement_speed() / 3.0))
 		else
+			e:set_animation_speed(1.0)
 			if e:get_playing_animation_id() == 8 then
 				e:skip_animation()
 				moving = false

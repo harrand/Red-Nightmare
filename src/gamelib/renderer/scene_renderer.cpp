@@ -334,6 +334,19 @@ namespace game::render
 		return 1;
 	}
 
+	int impl_rn_scene_element::get_animation_speed(tz::lua::state& state)
+	{
+		state.stack_push_float(this->elem.renderer->get_renderer().get_animation_speed(this->elem.entry.pkg));
+		return 1;
+	}
+
+	int impl_rn_scene_element::set_animation_speed(tz::lua::state& state)
+	{
+		auto [_, anim_speed] = tz::lua::parse_args<tz::lua::nil, float>(state);
+		this->elem.renderer->get_renderer().set_animation_speed(this->elem.entry.pkg, anim_speed);
+		return 0;
+	}
+
 	int impl_rn_scene_element::play_animation(tz::lua::state& state)
 	{
 		auto [_, anim_id, loop] = tz::lua::parse_args<tz::lua::nil, unsigned int, bool>(state);

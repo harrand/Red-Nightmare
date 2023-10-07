@@ -8,6 +8,7 @@ namespace game::entity
 	{
 		std::size_t type = 0;
 		std::string name = "Untitled Entity";
+		float movement_speed = 3.0f;
 		game::render::scene_element elem = {};
 
 		static entity null()
@@ -32,6 +33,8 @@ namespace game::entity
 		int get_type(tz::lua::state& state);
 		int get_name(tz::lua::state& state);
 		int set_name(tz::lua::state& state);
+		int get_movement_speed(tz::lua::state& state);
+		int set_movement_speed(tz::lua::state& state);
 		int get_model(tz::lua::state& state);
 		int set_model(tz::lua::state& state);
 		int get_element(tz::lua::state& state);
@@ -42,6 +45,8 @@ namespace game::entity
 			LUA_METHOD(rn_impl_entity, get_type)
 			LUA_METHOD(rn_impl_entity, get_name)
 			LUA_METHOD(rn_impl_entity, set_name)
+			LUA_METHOD(rn_impl_entity, get_movement_speed)
+			LUA_METHOD(rn_impl_entity, set_movement_speed)
 			LUA_METHOD(rn_impl_entity, get_model)
 			LUA_METHOD(rn_impl_entity, set_model)
 			LUA_METHOD(rn_impl_entity, get_element)

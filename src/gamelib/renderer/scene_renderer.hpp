@@ -130,6 +130,8 @@ namespace game::render
 		int get_playing_animation_id(tz::lua::state& state);
 		int is_animation_playing(tz::lua::state& state);
 		int get_animation_name(tz::lua::state& state);
+		int get_animation_speed(tz::lua::state& state);
+		int set_animation_speed(tz::lua::state& state);
 		int play_animation(tz::lua::state& state);
 		int queue_animation(tz::lua::state& state);
 		int skip_animation(tz::lua::state& state);
@@ -153,6 +155,8 @@ namespace game::render
 			LUA_METHOD(impl_rn_scene_element, get_playing_animation_id)
 			LUA_METHOD(impl_rn_scene_element, is_animation_playing)
 			LUA_METHOD(impl_rn_scene_element, get_animation_name)
+			LUA_METHOD(impl_rn_scene_element, get_animation_speed)
+			LUA_METHOD(impl_rn_scene_element, set_animation_speed)
 			LUA_METHOD(impl_rn_scene_element, play_animation)
 			LUA_METHOD(impl_rn_scene_element, queue_animation)
 			LUA_METHOD(impl_rn_scene_element, skip_animation)
