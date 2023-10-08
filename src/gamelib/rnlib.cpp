@@ -1,5 +1,6 @@
 #include "gamelib/rnlib.hpp"
 #include "gamelib/entity/scene.hpp"
+#include "gamelib/renderer/texture_manager.hpp"
 #include "tz/core/debug.hpp"
 #include "tz/lua/api.hpp"
 #include <memory>
@@ -14,6 +15,7 @@ namespace game
 	struct game_system_t
 	{
 		game::entity::scene scene;
+		game::render::texture_manager texmgr{scene.get_renderer().get_renderer()};
 		dbgui_data_t dbgui;
 	};
 
@@ -71,6 +73,12 @@ namespace game
 		return 1;
 	LUA_END
 
+	LUA_BEGIN(rn_impl_get_texture_manager)
+		using namespace game::render;
+		LUA_CLASS_PUSH(state, impl_rn_texture_manager, {.texmgr = &game_system->texmgr})
+		return 1;
+	LUA_END
+
 	// called directly from initialise.
 	void lua_initialise()
 	{
@@ -87,7 +95,9 @@ namespace game
 			state.execute("package.path = package.path .. \";\" .. rn.rootdir .. \"\\\\entity\\\\?.lua\"");
 
 			game_system->scene.lua_initialise(state);
+			game_system->texmgr.lua_initialise(state);
 			state.assign_func("rn.scene", LUA_FN_NAME(rn_impl_get_scene));
+			state.assign_func("rn.texture_manager", LUA_FN_NAME(rn_impl_get_texture_manager));
 		});
 
 		tz::lua::get_state().execute("rn.entity_static_init()");

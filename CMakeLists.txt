@@ -22,6 +22,8 @@ tz_add_library(
 
 		src/gamelib/renderer/scene_renderer.cpp
 		src/gamelib/renderer/scene_renderer.hpp
+		src/gamelib/renderer/texture_manager.cpp
+		src/gamelib/renderer/texture_manager.hpp
 
 		src/gamelib/rnlib.cpp
 		src/gamelib/rnlib.hpp

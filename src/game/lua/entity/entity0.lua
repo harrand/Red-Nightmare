@@ -1,5 +1,6 @@
 local id = 0
-rn.entity.type["player_lady_melistra"] = id
+local typestr = "player_lady_melistra"
+rn.entity.type[typestr] = id
 
 function keep_playing_animation(e, anim_id, loop)
 	if e:get_playing_animation_id() ~= anim_id or not e:is_animation_playing() then
@@ -12,15 +13,16 @@ rn.entity_handler[id] =
 	-- invoked exactly once during game initialisation.
 	-- if this entity has any unique bespoke resources to pre-load, now is the time.
 	static_init = function()
-
+		rn.texture_manager():register_texture(typestr .. ".skin", "./res/images/skins/entity0.png")
 	end,
 	preinit = function(ent)
 		ent:set_name("Lady Melistra")
 		ent:set_model(rn.model.humanoid)
 	end,
 	postinit = function(ent)
-		local tex_path = "./res/images/skins/entity0.png"
-		ent:get_element():object_set_texture_handle(2, 0, rn.scene():get_renderer():load_texture_from_disk(tex_path))
+		tz.assert(rn.texture_manager():has_texture(typestr .. ".skin"))
+		local texh = rn.texture_manager():get_texture(typestr .. ".skin")
+		ent:get_element():object_set_texture_handle(2, 0, texh)
 	end,
 	update = function(ent)
 		local e = ent:get_element()
