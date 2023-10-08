@@ -13,6 +13,15 @@ rn.entity_handler = {}
 require "entity0"
 require "entity1"
 
+rn.entity_static_init = function()
+	for i in pairs(rn.entity_handler) do
+		h = rn.entity_handler[i]
+		if h.static_init ~= nil then
+			h.static_init()
+		end
+	end
+end
+
 -- called early on in initialisation - before the scene element is attached
 -- this is your opportunity to choose which model the entity will use.
 -- note: as the scene element doesn't exist, you cannot use `ent:get_element()`

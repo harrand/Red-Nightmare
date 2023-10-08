@@ -9,12 +9,18 @@ end
 
 rn.entity_handler[id] =
 {
+	-- invoked exactly once during game initialisation.
+	-- if this entity has any unique bespoke resources to pre-load, now is the time.
+	static_init = function()
+
+	end,
 	preinit = function(ent)
 		ent:set_name("Lady Melistra")
 		ent:set_model(rn.model.humanoid)
 	end,
 	postinit = function(ent)
-		ent:get_element():object_set_texture_handle(2, 0, rn.scene():get_renderer():load_texture_from_disk("C:/Users/Harry/Documents/RedNightmareDevData/Skin2.png"))
+		local tex_path = "./res/images/skins/entity0.png"
+		ent:get_element():object_set_texture_handle(2, 0, rn.scene():get_renderer():load_texture_from_disk(tex_path))
 	end,
 	update = function(ent)
 		local e = ent:get_element()

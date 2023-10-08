@@ -89,5 +89,7 @@ namespace game
 			game_system->scene.lua_initialise(state);
 			state.assign_func("rn.scene", LUA_FN_NAME(rn_impl_get_scene));
 		});
+
+		tz::lua::get_state().execute("rn.entity_static_init()");
 	}
 }
