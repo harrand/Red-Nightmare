@@ -69,8 +69,41 @@ rn.entity_update = function(ent)
 	tracy.ZoneEnd()
 end
 
+rn.internal_key_state = {}
+
+rn.empty_key_state = function()
+	for i=0,tz.wsi_key_count-2,1 do
+		rn.internal_key_state[i] = false
+	end
+end
+
+rn.is_key_down = function(name)
+	if rn.internal_key_names == nil then
+		rn.internal_key_names = {}
+		for i=0,tz.wsi_key_count-2,1 do
+			local str = tz.window():get_key_name(i)
+			rn.internal_key_names[tz.window():get_key_name(i)] = i
+		end
+	end
+
+	local key_id = rn.internal_key_names[name]
+	local ret = rn.internal_key_state[key_id]
+	return rn.internal_key_state[key_id]
+end
+
+rn.advance_key_state = function()
+	local wnd = tz.window()
+	for i=0,tz.wsi_key_count-2,1 do
+		local val = wnd:is_key_id_down(i)
+		rn.internal_key_state[i] = val
+	end
+end
+
 rn.update = function()
 	tracy.ZoneBegin()
+
+	rn.empty_key_state()
+	rn.advance_key_state()
 
 	sc = rn.scene()
 	if sc:size() > 0 then

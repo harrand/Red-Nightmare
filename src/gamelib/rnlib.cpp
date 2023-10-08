@@ -28,10 +28,7 @@ namespace game
 		game_system = std::make_unique<game_system_t>();
 		lua_initialise();
 
-		for(std::size_t i = 0; i < 1; i++)
-		{
-			game_system->scene.add(0);
-		}
+		game_system->scene.add(0);
 		// lua equivalent: rn.scene():add(0)
 	}
 
@@ -54,9 +51,11 @@ namespace game
 				ImGui::End();
 			}
 		}
-		TZ_PROFZONE("rnlib - lua update", 0xFF00AAFF);
-		tz::lua::get_state().assign_float("rn.delta_time", delta_seconds);
-		tz::lua::get_state().execute("if rn.update ~= nil then rn.update() end");
+		{
+			TZ_PROFZONE("rnlib - lua update", 0xFF00AAFF);
+			tz::lua::get_state().assign_float("rn.delta_time", delta_seconds);
+			tz::lua::get_state().execute("if rn.update ~= nil then rn.update() end");
+		}
 		tz::gl::get_device().render();
 	}
 

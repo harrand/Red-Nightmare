@@ -46,19 +46,19 @@ rn.entity_handler[id] =
 		tracy.ZoneEnd()
 
 		tracy.ZoneBeginN("input handling")
-		if wnd:is_key_down("w") then
+		if rn.is_key_down("w") then
 			ydiff = ydiff + 1
 			e:face_backward()
 		end
-		if wnd:is_key_down("s") then
+		if rn.is_key_down("s") then
 			ydiff = ydiff - 1
 			e:face_forward()
 		end
-		if wnd:is_key_down("a") then
+		if rn.is_key_down("a") then
 			xdiff = xdiff - 1
 			e:face_left()
 		end
-		if wnd:is_key_down("d") then
+		if rn.is_key_down("d") then
 			xdiff = xdiff + 1
 			e:face_right()
 		end
