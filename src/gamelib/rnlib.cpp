@@ -2,6 +2,7 @@
 #include "gamelib/entity/scene.hpp"
 #include "gamelib/renderer/texture_manager.hpp"
 #include "tz/core/debug.hpp"
+#include "tz/core/profile.hpp"
 #include "tz/lua/api.hpp"
 #include <memory>
 
@@ -23,10 +24,14 @@ namespace game
 
 	void initialise()
 	{
+		TZ_PROFZONE("rnlib - initialise", 0xFF00AAFF);
 		game_system = std::make_unique<game_system_t>();
 		lua_initialise();
 
-		game_system->scene.add(0);
+		for(std::size_t i = 0; i < 1; i++)
+		{
+			game_system->scene.add(0);
+		}
 		// lua equivalent: rn.scene():add(0)
 	}
 
@@ -37,6 +42,7 @@ namespace game
 
 	void update(std::uint64_t delta_micros)
 	{
+		TZ_PROFZONE("rnlib - update", 0xFF00AAFF);
 		float delta_seconds = delta_micros / 1000000.0f;
 		game_system->scene.get_renderer().update(delta_seconds);
 
@@ -48,6 +54,7 @@ namespace game
 				ImGui::End();
 			}
 		}
+		TZ_PROFZONE("rnlib - lua update", 0xFF00AAFF);
 		tz::lua::get_state().assign_float("rn.delta_time", delta_seconds);
 		tz::lua::get_state().execute("if rn.update ~= nil then rn.update() end");
 		tz::gl::get_device().render();
@@ -82,8 +89,10 @@ namespace game
 	// called directly from initialise.
 	void lua_initialise()
 	{
+		TZ_PROFZONE("rnlib - lua initialise", 0xFF00AAFF);
 		tz::lua::for_all_states([](tz::lua::state& state)
 		{
+			TZ_PROFZONE("rnlib - lua single state init", 0xFF00AAFF);
 			state.assign_emptytable("rn");
 			std::string cwd = std::filesystem::current_path().string();
 			state.stack_push_string(cwd);
@@ -100,6 +109,7 @@ namespace game
 			state.assign_func("rn.texture_manager", LUA_FN_NAME(rn_impl_get_texture_manager));
 		});
 
+		TZ_PROFZONE("rnlib - lua entity static init", 0xFF00AAFF);
 		tz::lua::get_state().execute("rn.entity_static_init()");
 	}
 }

@@ -1,4 +1,5 @@
 #include "gamelib/renderer/texture_manager.hpp"
+#include "tz/core/profile.hpp"
 
 namespace game::render
 {
@@ -9,6 +10,7 @@ namespace game::render
 
 	void texture_manager::register_texture(std::string name, std::string_view texture_path)
 	{
+		TZ_PROFZONE("texture manager - register texture", 0xFF11CC88);
 		auto iter = this->stored_textures.find(name);
 		if(TZ_DEBUG && iter != this->stored_textures.end())
 		{
@@ -23,6 +25,7 @@ namespace game::render
 
 	tz::ren::animation_renderer::texture_handle texture_manager::get_texture(const std::string& name) const
 	{
+		TZ_PROFZONE("texture manager - get texture", 0xFF11CC88);
 		auto iter = this->stored_textures.find(name);
 		if(iter != this->stored_textures.end())
 		{

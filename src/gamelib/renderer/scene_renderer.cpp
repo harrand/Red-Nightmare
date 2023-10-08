@@ -1,4 +1,5 @@
 #include "gamelib/renderer/scene_renderer.hpp"
+#include "tz/core/profile.hpp"
 #include "tz/wsi/monitor.hpp"
 #include "tz/lua/api.hpp"
 #include <limits>
@@ -7,6 +8,7 @@ namespace game::render
 {
 	scene_renderer::scene_renderer()
 	{
+		TZ_PROFZONE("scene renderer - create", 0xFFFF4488);
 		tz::ren::animation_renderer::append_to_render_graph();
 		this->root = tz::ren::animation_renderer::add_object
 		({
@@ -18,6 +20,7 @@ namespace game::render
 
 	scene_renderer::entry scene_renderer::add_model(model m)
 	{
+		TZ_PROFZONE("scene renderer - add model", 0xFFFF4488);
 		auto mid = static_cast<int>(m);	
 		if(this->base_models[mid].objects.empty())
 		{
@@ -62,6 +65,7 @@ namespace game::render
 
 	void scene_renderer::update(float delta)
 	{
+		TZ_PROFZONE("scene renderer - update", 0xFFFF4488);
 		this->update_camera(delta);
 		tz::ren::animation_renderer::update(delta);
 		const tz::vec2ui mondims = tz::wsi::get_monitors().front().dimensions;
@@ -89,6 +93,7 @@ namespace game::render
 
 	void scene_renderer::update_camera(float delta)
 	{
+		TZ_PROFZONE("scene renderer - update camera", 0xFFFF4488);
 		if(tz::dbgui::claims_mouse())
 		{
 			return;
@@ -208,6 +213,7 @@ namespace game::render
 
 	int impl_rn_scene_element::object_set_texture_tint(tz::lua::state& state)
 	{
+		TZ_PROFZONE("scene element - object set texture tint", 0xFFFFAAEE);
 		auto [_, oh, bound_texture_id, r, g, b] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int, float, float, float>(state);
 		auto objh = this->elem.entry.pkg.objects[oh];
 		tz::ren::texture_locator tloc = this->elem.object_get_texture(objh, bound_texture_id);
@@ -218,6 +224,7 @@ namespace game::render
 
 	int impl_rn_scene_element::object_set_texture_handle(tz::lua::state& state)
 	{
+		TZ_PROFZONE("scene element - object set texture handle", 0xFFFFAAEE);
 		auto [_, oh, bound_texture_id, texhandle] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int, unsigned int>(state);
 		auto objh = this->elem.entry.pkg.objects[oh];
 		tz::ren::texture_locator tloc = this->elem.object_get_texture(objh, bound_texture_id);
@@ -228,6 +235,7 @@ namespace game::render
 
 	int impl_rn_scene_element::face_forward(tz::lua::state& state)
 	{
+		TZ_PROFZONE("scene element - face forward", 0xFFFFAAEE);
 		auto objh = this->elem.entry.pkg.objects.front();
 		auto& ren = this->elem.renderer->get_renderer();
 		auto transform = ren.get_object_base_transform(objh);
@@ -238,6 +246,7 @@ namespace game::render
 
 	int impl_rn_scene_element::face_backward(tz::lua::state& state)
 	{
+		TZ_PROFZONE("scene element - face backward", 0xFFFFAAEE);
 		auto objh = this->elem.entry.pkg.objects.front();
 		auto& ren = this->elem.renderer->get_renderer();
 		auto transform = ren.get_object_base_transform(objh);
@@ -249,6 +258,7 @@ namespace game::render
 
 	int impl_rn_scene_element::face_left(tz::lua::state& state)
 	{
+		TZ_PROFZONE("scene element - face left", 0xFFFFAAEE);
 		auto objh = this->elem.entry.pkg.objects.front();
 		auto& ren = this->elem.renderer->get_renderer();
 		tz::trs transform = ren.get_object_base_transform(objh);
@@ -259,6 +269,7 @@ namespace game::render
 
 	int impl_rn_scene_element::face_right(tz::lua::state& state)
 	{
+		TZ_PROFZONE("scene element - face right", 0xFFFFAAEE);
 		auto objh = this->elem.entry.pkg.objects.front();
 		auto& ren = this->elem.renderer->get_renderer();
 		tz::trs transform = ren.get_object_base_transform(objh);
@@ -269,6 +280,7 @@ namespace game::render
 
 	int impl_rn_scene_element::get_position(tz::lua::state& state)
 	{
+		TZ_PROFZONE("scene element - get position", 0xFFFFAAEE);
 		auto objh = this->elem.entry.pkg.objects.front();
 		auto& ren = this->elem.renderer->get_renderer();
 		tz::trs transform = ren.get_object_base_transform(objh);
@@ -279,6 +291,7 @@ namespace game::render
 
 	int impl_rn_scene_element::set_position(tz::lua::state& state)
 	{
+		TZ_PROFZONE("scene element - set position", 0xFFFFAAEE);
 		auto [_, x, y] = tz::lua::parse_args<tz::lua::nil, float, float>(state);
 		auto objh = this->elem.entry.pkg.objects.front();
 		auto& ren = this->elem.renderer->get_renderer();
@@ -291,18 +304,21 @@ namespace game::render
 
 	int impl_rn_scene_element::get_model(tz::lua::state& state)
 	{
+		TZ_PROFZONE("scene element - get model", 0xFFFFAAEE);
 		state.stack_push_int(static_cast<int>(this->elem.get_model()));
 		return 1;
 	}
 
 	int impl_rn_scene_element::get_animation_count(tz::lua::state& state)
 	{
+		TZ_PROFZONE("scene element - get animation count", 0xFFFFAAEE);
 		state.stack_push_uint(this->elem.get_animation_count());
 		return 1;
 	}
 
 	int impl_rn_scene_element::get_playing_animation_id(tz::lua::state& state)
 	{
+		TZ_PROFZONE("scene element - get animation", 0xFFFFAAEE);
 		auto maybe_id = this->elem.get_playing_animation_id();
 		if(maybe_id.has_value())
 		{
@@ -317,6 +333,7 @@ namespace game::render
 
 	int impl_rn_scene_element::is_animation_playing(tz::lua::state& state)
 	{
+		TZ_PROFZONE("scene element - is animation playing", 0xFFFFAAEE);
 		bool playing = this->elem.get_playing_animation_id().has_value();
 		if(playing)
 		{
@@ -329,6 +346,7 @@ namespace game::render
 
 	int impl_rn_scene_element::get_animation_name(tz::lua::state& state)
 	{
+		TZ_PROFZONE("scene element - get animation name", 0xFFFFAAEE);
 		auto [_, anim_id] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
 		state.stack_push_string(this->elem.get_animation_name(anim_id));
 		return 1;
@@ -336,12 +354,14 @@ namespace game::render
 
 	int impl_rn_scene_element::get_animation_speed(tz::lua::state& state)
 	{
+		TZ_PROFZONE("scene element - get animation speed", 0xFFFFAAEE);
 		state.stack_push_float(this->elem.renderer->get_renderer().get_animation_speed(this->elem.entry.pkg));
 		return 1;
 	}
 
 	int impl_rn_scene_element::set_animation_speed(tz::lua::state& state)
 	{
+		TZ_PROFZONE("scene element - set animation speed", 0xFFFFAAEE);
 		auto [_, anim_speed] = tz::lua::parse_args<tz::lua::nil, float>(state);
 		this->elem.renderer->get_renderer().set_animation_speed(this->elem.entry.pkg, anim_speed);
 		return 0;
@@ -349,6 +369,7 @@ namespace game::render
 
 	int impl_rn_scene_element::play_animation(tz::lua::state& state)
 	{
+		TZ_PROFZONE("scene element - play animation", 0xFFFFAAEE);
 		auto [_, anim_id, loop] = tz::lua::parse_args<tz::lua::nil, unsigned int, bool>(state);
 		this->elem.play_animation(anim_id, loop);
 		return 0;
@@ -356,6 +377,7 @@ namespace game::render
 
 	int impl_rn_scene_element::queue_animation(tz::lua::state& state)
 	{
+		TZ_PROFZONE("scene element - queue animation", 0xFFFFAAEE);
 		auto [_, anim_id, loop] = tz::lua::parse_args<tz::lua::nil, unsigned int, bool>(state);
 		this->elem.queue_animation(anim_id, loop);
 		return 0;
@@ -375,6 +397,7 @@ namespace game::render
 
 	int impl_rn_scene_renderer::add_model(tz::lua::state& state)
 	{
+		TZ_PROFZONE("scene element - add model", 0xFFFFAAEE);
 		auto [_, modelval] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
 		auto mod = static_cast<scene_renderer::model>(modelval);
 		LUA_CLASS_PUSH(state, impl_rn_scene_element, {.elem = renderer->get_element(renderer->add_model(mod))});
@@ -396,6 +419,7 @@ namespace game::render
 
 	int impl_rn_scene_renderer::load_texture_from_disk(tz::lua::state& state)
 	{
+		TZ_PROFZONE("scene element - load texture from disk", 0xFFFFAAEE);
 		auto [_, path] = tz::lua::parse_args<tz::lua::nil, std::string>(state);
 		tz::ren::animation_renderer::texture_handle rethan = this->renderer->get_renderer().add_texture(tz::io::image::load_from_file(path));
 		state.stack_push_uint(static_cast<std::size_t>(static_cast<tz::hanval>(rethan)));
@@ -410,6 +434,7 @@ namespace game::render
 
 	void scene_renderer::lua_initialise(tz::lua::state& state)
 	{
+		TZ_PROFZONE("scene renderer - lua initialise", 0xFFFF4488);
 		state.new_type("impl_rn_scene_texture_locator", LUA_CLASS_NAME(impl_rn_scene_texture_locator)::registers);
 		state.new_type("impl_rn_scene_element", LUA_CLASS_NAME(impl_rn_scene_element)::registers);
 		state.new_type("impl_rn_scene_renderer", LUA_CLASS_NAME(impl_rn_scene_renderer)::registers);

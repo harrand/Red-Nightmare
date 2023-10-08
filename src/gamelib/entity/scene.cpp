@@ -12,6 +12,7 @@ namespace game::entity
 
 	scene::entity_handle scene::add(std::size_t type)
 	{
+		TZ_PROFZONE("scene - add", 0xFF99CC44);
 		tz::hanval ret_hanval;
 		if(this->free_list.empty())
 		{
@@ -48,6 +49,7 @@ namespace game::entity
 
 	void scene::lua_initialise(tz::lua::state& state)
 	{
+		TZ_PROFZONE("scene - lua initialise", 0xFF99CC44);
 		this->get_renderer().lua_initialise(state);
 		state.new_type("rn_impl_entity", LUA_CLASS_NAME(rn_impl_entity)::registers);
 		state.new_type("rn_impl_scene", LUA_CLASS_NAME(rn_impl_scene)::registers);
@@ -58,6 +60,7 @@ namespace game::entity
 
 	void scene::initialise_entity(tz::hanval entity_hanval, std::size_t type)
 	{
+		TZ_PROFZONE("scene - initialise entity", 0xFF99CC44);
 		auto& state = tz::lua::get_state();
 		rn_impl_entity lua_data{.scene = this, .entity_hanval = entity_hanval};
 		LUA_CLASS_PUSH(state, rn_impl_entity, lua_data);
