@@ -3,6 +3,7 @@ local typestr = "player_lady_melistra"
 rn.entity.type[typestr] = id
 rn.entity.data[id] =
 {
+	cast_id = nil,
 	cast_begin = nil
 }
 
@@ -96,7 +97,7 @@ rn.entity_handler[id] =
 			tracy.ZoneEnd()
 		end
 
-		local const_cast_time = 1000
+		local const_cast_time = 1500
 
 		if data.cast_begin ~= nil then
 			-- we are casting.
@@ -110,9 +111,14 @@ rn.entity_handler[id] =
 				keep_playing_animation(e, 8, false)
 			elseif wnd:is_mouse_down("left") then
 				data.cast_begin = tz.time()
+				data.cast_id = 0
 				--e:play_animation(6, false)
 				--e:queue_animation(2, false)
 				e:play_animation(2, false)
+			elseif wnd:is_mouse_down("right") then
+				data.cast_begin = tz.time()
+				data.cast_id = 1
+				e:play_animation(5, false)
 			else
 				keep_playing_animation(e, 6, false)
 			end
