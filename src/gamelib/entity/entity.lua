@@ -6,6 +6,7 @@ rn.model =
 
 rn.entity = {}
 rn.entity.type = {}
+rn.entity.data = {}
 
 rn.entity_handler = {}
 

@@ -1,6 +1,10 @@
 local id = 0
 local typestr = "player_lady_melistra"
 rn.entity.type[typestr] = id
+rn.entity.data[id] =
+{
+	cast_begin = nil
+}
 
 function keep_playing_animation(e, anim_id, loop)
 	if e:get_playing_animation_id() ~= anim_id or not e:is_animation_playing() then
@@ -31,6 +35,7 @@ rn.entity_handler[id] =
 		tracy.ZoneEnd()
 	end,
 	update = function(ent)
+		local data = rn.entity.data[id]
 		tracy.ZoneBeginN(typestr .. " - update")
 		tracy.ZoneBeginN("get element")
 		local e = ent:get_element()
@@ -62,9 +67,13 @@ rn.entity_handler[id] =
 			xdiff = xdiff + 1
 			e:face_right()
 		end
+		if rn.is_key_down("esc") and data.cast_begin ~= nil then
+			data.cast_begin = nil
+			print("cancelcast")
+		end
 		tracy.ZoneEnd()
 
-		if xdiff ~= 0 or ydiff ~= 0 then
+		if (xdiff ~= 0 or ydiff ~= 0) and data.cast_begin == nil then
 			tracy.ZoneBeginN("movement")
 			moving = true
 			local x, y = e:get_position()
@@ -80,19 +89,33 @@ rn.entity_handler[id] =
 			tracy.ZoneBeginN("stationary")
 			e:set_animation_speed(1.0)
 			if e:get_playing_animation_id() == 8 then
+				print("POO")
 				e:skip_animation()
 				moving = false
 			end
 			tracy.ZoneEnd()
 		end
 
-		if moving then
-			keep_playing_animation(e, 8, false)
-		elseif wnd:is_mouse_down("left") then
-			e:play_animation(6, false)
-			e:queue_animation(2, false)
+		local const_cast_time = 1000
+
+		if data.cast_begin ~= nil then
+			-- we are casting.
+			local cast_end = data.cast_begin + const_cast_time
+			if tz.time() >= cast_end then
+				print("cast end!")
+				data.cast_begin = nil
+			end
 		else
-			keep_playing_animation(e, 6, false)
+			if moving then
+				keep_playing_animation(e, 8, false)
+			elseif wnd:is_mouse_down("left") then
+				data.cast_begin = tz.time()
+				--e:play_animation(6, false)
+				--e:queue_animation(2, false)
+				e:play_animation(2, false)
+			else
+				keep_playing_animation(e, 6, false)
+			end
 		end
 		tracy.ZoneEnd()
 	end
