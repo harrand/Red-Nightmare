@@ -16,7 +16,7 @@ namespace game::entity
 		tz::hanval ret_hanval;
 		if(this->free_list.empty())
 		{
-			this->entities.push_back({});
+			this->entities.push_back({.type = type});
 			ret_hanval = static_cast<tz::hanval>(this->entities.size() - 1);
 		}	
 		this->initialise_entity(ret_hanval, type);

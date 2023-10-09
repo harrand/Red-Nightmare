@@ -17,7 +17,7 @@ require "entity1"
 rn.entity_static_init = function()
 	tracy.ZoneBegin()
 	for i in pairs(rn.entity_handler) do
-		h = rn.entity_handler[i]
+		local h = rn.entity_handler[i]
 		if h.static_init ~= nil then
 			h.static_init()
 		end
@@ -55,7 +55,6 @@ rn.entity_postinit = function(type)
 	if handler.postinit ~= nil then
 		handler.postinit(ent)
 	end
-	ent:get_element():play_animation(1, false)
 	tracy.ZoneEnd()
 end
 
@@ -106,10 +105,10 @@ rn.update = function()
 	rn.empty_key_state()
 	rn.advance_key_state()
 
-	sc = rn.scene()
+	local sc = rn.scene()
 	if sc:size() > 0 then
 		for i=0,sc:size()-1,1 do
-			ent = sc:get(i)
+			local ent = sc:get(i)
 			rn.entity_update(ent)
 		end
 	end

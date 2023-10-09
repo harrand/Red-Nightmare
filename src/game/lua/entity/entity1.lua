@@ -10,6 +10,9 @@ rn.entity_handler[id] =
 		ent:set_model(rn.model.quad)
 	end,
 	postinit = function(ent)
-
+		ent:get_element():face_right()
+	end,
+	update = function(ent)
+		tz.assert(ent:get_name() == "Wall")
 	end
 }

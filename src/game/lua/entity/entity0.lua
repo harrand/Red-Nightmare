@@ -37,6 +37,7 @@ rn.entity_handler[id] =
 	end,
 	update = function(ent)
 		local data = rn.entity.data[id]
+		tz.assert(ent:get_name() == "Lady Melistra")
 		tracy.ZoneBeginN(typestr .. " - update")
 		tracy.ZoneBeginN("get element")
 		local e = ent:get_element()
@@ -105,6 +106,10 @@ rn.entity_handler[id] =
 			if tz.time() >= cast_end then
 				print("cast end!")
 				data.cast_begin = nil
+				local sc = rn.scene()
+				local projectile = sc:get(sc:add(1))
+				local x, y = e:get_position()
+				projectile:get_element():set_position(x, y)
 			end
 		else
 			if moving then
