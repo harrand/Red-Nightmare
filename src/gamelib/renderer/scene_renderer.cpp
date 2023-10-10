@@ -278,6 +278,18 @@ namespace game::render
 		return 0;
 	}
 
+	int impl_rn_scene_element::rotate(tz::lua::state& state)
+	{
+		TZ_PROFZONE("scene element - rotate", 0xFFFFAAEE);
+		auto [_, angle] = tz::lua::parse_args<tz::lua::nil, float>(state);
+		auto objh  = this->elem.entry.pkg.objects.front();
+		auto& ren = this->elem.renderer->get_renderer();
+		tz::trs transform = ren.get_object_base_transform(objh);
+		transform.rotate.combine(tz::quat::from_axis_angle({0.0f, 0.0f, 1.0f}, angle));
+		ren.set_object_base_transform(objh, transform);
+		return 0;
+	}
+
 	int impl_rn_scene_element::get_position(tz::lua::state& state)
 	{
 		TZ_PROFZONE("scene element - get position", 0xFFFFAAEE);

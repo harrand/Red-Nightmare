@@ -19,13 +19,14 @@ rn.entity_handler[id] =
 		ent:set_model(rn.model.quad)
 	end,
 	postinit = function(ent)
-		ent:get_element():face_right()
 		local texh = rn.texture_manager():get_texture(typestr .. ".sprite0")
 		ent:get_element():object_set_texture_handle(1, 0, texh)
 		ent:get_element():object_set_texture_tint(1, 0, 1.0, 0.35, 0.05)
 	end,
 	update = function(ent)
 		tz.assert(ent:get_name() == "Darkstone Block")
+		ent:get_element():face_right()
+		ent:get_element():rotate(-1.5708)
 		local data = rn.entity.data[id]
 		data.flipbook_timer = data.flipbook_timer + rn.delta_time
 		-- when flipbook timer hits a threshold (fps / 4), advance to the next frame
