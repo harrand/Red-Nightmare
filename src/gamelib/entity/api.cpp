@@ -3,6 +3,8 @@
 
 namespace game::entity
 {
+	std::size_t entity::uid_global_counter = 0;
+
 	entity& rn_impl_entity::get()
 	{
 		return this->scene->get(this->entity_hanval);
@@ -11,6 +13,12 @@ namespace game::entity
 	int rn_impl_entity::get_type(tz::lua::state& state)
 	{
 		state.stack_push_uint(this->get().type);
+		return 1;
+	}
+
+	int rn_impl_entity::uid(tz::lua::state& state)
+	{
+		state.stack_push_uint(this->get().uid);
 		return 1;
 	}
 

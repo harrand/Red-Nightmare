@@ -1,11 +1,6 @@
 local id = 0
 local typestr = "player_lady_melistra"
 rn.entity.type[typestr] = id
-rn.entity.data[id] =
-{
-	cast_id = nil,
-	cast_begin = nil
-}
 
 function keep_playing_animation(e, anim_id, loop)
 	if e:get_playing_animation_id() ~= anim_id or not e:is_animation_playing() then
@@ -26,6 +21,11 @@ rn.entity_handler[id] =
 		tracy.ZoneBeginN(typestr .. " - preinit")
 		ent:set_name("Lady Melistra")
 		ent:set_model(rn.model.humanoid)
+		rn.entity.data[ent:uid()] =
+		{
+			cast_id = nil,
+			cast_begin = nil
+		}
 		tracy.ZoneEnd()
 	end,
 	postinit = function(ent)
@@ -36,7 +36,7 @@ rn.entity_handler[id] =
 		tracy.ZoneEnd()
 	end,
 	update = function(ent)
-		local data = rn.entity.data[id]
+		local data = rn.entity.data[ent:uid()]
 		tz.assert(ent:get_name() == "Lady Melistra")
 		tracy.ZoneBeginN(typestr .. " - update")
 		tracy.ZoneBeginN("get element")

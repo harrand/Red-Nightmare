@@ -1,11 +1,6 @@
 local id = 1
 local typestr = "block_darkstone"
 rn.entity.type[typestr] = id
-rn.entity.data[id] =
-{
-	flipbook_timer = 0,
-	cur_texture_id = 0
-}
 rn.entity_handler[id] =
 {
 	static_init = function()
@@ -17,6 +12,13 @@ rn.entity_handler[id] =
 	preinit = function(ent)
 		ent:set_name("Darkstone Block")
 		ent:set_model(rn.model.quad)
+		print("uid: " .. ent:uid())
+
+		rn.entity.data[ent:uid()] =
+		{
+			flipbook_timer = 0,
+			cur_texture_id = 0
+		}
 	end,
 	postinit = function(ent)
 		local texh = rn.texture_manager():get_texture(typestr .. ".sprite0")
@@ -27,7 +29,7 @@ rn.entity_handler[id] =
 		tz.assert(ent:get_name() == "Darkstone Block")
 		ent:get_element():face_right()
 		ent:get_element():rotate(-1.5708)
-		local data = rn.entity.data[id]
+		local data = rn.entity.data[ent:uid()]
 		data.flipbook_timer = data.flipbook_timer + rn.delta_time
 		-- when flipbook timer hits a threshold (fps / 4), advance to the next frame
 		if data.flipbook_timer > 0.1 then

@@ -6,7 +6,9 @@ namespace game::entity
 {
 	struct entity
 	{
+		static std::size_t uid_global_counter;
 		std::size_t type = 0;
+		std::size_t uid = uid_global_counter++;
 		std::string name = "Untitled Entity";
 		float movement_speed = 3.0f;
 		game::render::scene_element elem = {};
@@ -31,6 +33,7 @@ namespace game::entity
 		entity& get();
 
 		int get_type(tz::lua::state& state);
+		int uid(tz::lua::state& state);
 		int get_name(tz::lua::state& state);
 		int set_name(tz::lua::state& state);
 		int get_movement_speed(tz::lua::state& state);
@@ -43,6 +46,7 @@ namespace game::entity
 	LUA_CLASS_BEGIN(rn_impl_entity)
 		LUA_CLASS_METHODS_BEGIN
 			LUA_METHOD(rn_impl_entity, get_type)
+			LUA_METHOD(rn_impl_entity, uid)
 			LUA_METHOD(rn_impl_entity, get_name)
 			LUA_METHOD(rn_impl_entity, set_name)
 			LUA_METHOD(rn_impl_entity, get_movement_speed)
