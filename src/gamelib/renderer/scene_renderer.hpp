@@ -126,6 +126,7 @@ namespace game::render
 		int rotate(tz::lua::state& state);
 		int get_position(tz::lua::state& state);
 		int set_position(tz::lua::state& state);
+		int get_subobject_position(tz::lua::state& state);
 		int get_scale(tz::lua::state& state);
 		int set_scale(tz::lua::state& state);
 		int get_uniform_scale(tz::lua::state& state);
@@ -156,6 +157,7 @@ namespace game::render
 			LUA_METHOD(impl_rn_scene_element, rotate)
 			LUA_METHOD(impl_rn_scene_element, get_position)
 			LUA_METHOD(impl_rn_scene_element, set_position)
+			LUA_METHOD(impl_rn_scene_element, get_subobject_position)
 			LUA_METHOD(impl_rn_scene_element, get_scale)
 			LUA_METHOD(impl_rn_scene_element, set_scale)
 			LUA_METHOD(impl_rn_scene_element, get_uniform_scale)

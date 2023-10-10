@@ -17,18 +17,20 @@ rn.entity_handler[id] =
 		rn.entity.data[ent:uid()] =
 		{
 			flipbook_timer = 0,
-			cur_texture_id = 0
+			cur_texture_id = 0,
+			shoot_dir = nil
 		}
 	end,
 	postinit = function(ent)
 		local texh = rn.texture_manager():get_texture(typestr .. ".sprite0")
 		ent:get_element():object_set_texture_handle(1, 0, texh)
 		ent:get_element():object_set_texture_tint(1, 0, 1.0, 0.35, 0.05)
+		ent:get_element():face_right()
+		ent:get_element():rotate(-1.5708)
+		ent:set_movement_speed(ent:get_movement_speed() * 2)
 	end,
 	update = function(ent)
 		tz.assert(ent:get_name() == "Darkstone Block")
-		ent:get_element():face_right()
-		ent:get_element():rotate(-1.5708)
 		local data = rn.entity.data[ent:uid()]
 		data.flipbook_timer = data.flipbook_timer + rn.delta_time
 		-- when flipbook timer hits a threshold (fps / 4), advance to the next frame
@@ -38,5 +40,21 @@ rn.entity_handler[id] =
 			local texh = rn.texture_manager():get_texture(typestr .. ".sprite" .. data.cur_texture_id)
 			ent:get_element():object_set_texture_handle(1, 0, texh)
 		end
+		local x, y = ent:get_element():get_position()
+
+		tz.assert(data.shoot_dir ~= nil)
+		if data.shoot_dir == "right" then
+			x = x + ent:get_movement_speed() * rn.delta_time
+		elseif data.shoot_dir == "left" then
+			x = x - ent:get_movement_speed() * rn.delta_time
+		elseif data.shoot_dir == "forward" then
+			y = y - ent:get_movement_speed() * rn.delta_time
+		elseif data.shoot_dir == "backward" then
+			y = y + ent:get_movement_speed() * rn.delta_time
+		else
+			tz.assert(false)
+		end
+
+		ent:get_element():set_position(x, y)
 	end
 }

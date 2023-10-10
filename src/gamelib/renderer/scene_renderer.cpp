@@ -314,6 +314,18 @@ namespace game::render
 		return 0;
 	}
 
+	int impl_rn_scene_element::get_subobject_position(tz::lua::state& state)
+	{
+		TZ_PROFZONE("scene element - get position", 0xFFFFAAEE);
+		auto [_, oid] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+		auto objh = this->elem.entry.pkg.objects[oid];
+		auto& ren = this->elem.renderer->get_renderer();
+		tz::trs transform = ren.get_object_global_transform(objh);
+		state.stack_push_float(transform.translate[0]);
+		state.stack_push_float(transform.translate[1]);
+		return 2;
+	}
+
 	int impl_rn_scene_element::get_scale(tz::lua::state& state)
 	{
 		TZ_PROFZONE("scene element - get scale", 0xFFFFAAEE);

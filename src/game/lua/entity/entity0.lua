@@ -24,7 +24,8 @@ rn.entity_handler[id] =
 		rn.entity.data[ent:uid()] =
 		{
 			cast_id = nil,
-			cast_begin = nil
+			cast_begin = nil,
+			face_dir = "forward"
 		}
 		tracy.ZoneEnd()
 	end,
@@ -58,18 +59,22 @@ rn.entity_handler[id] =
 		if rn.is_key_down("w") then
 			ydiff = ydiff + 1
 			e:face_backward()
+			data.face_dir = "backward"
 		end
 		if rn.is_key_down("s") then
 			ydiff = ydiff - 1
 			e:face_forward()
+			data.face_dir = "forward"
 		end
 		if rn.is_key_down("a") then
 			xdiff = xdiff - 1
 			e:face_left()
+			data.face_dir = "left"
 		end
 		if rn.is_key_down("d") then
 			xdiff = xdiff + 1
 			e:face_right()
+			data.face_dir = "right"
 		end
 		if rn.is_key_down("esc") and data.cast_begin ~= nil then
 			data.cast_begin = nil
@@ -100,18 +105,44 @@ rn.entity_handler[id] =
 			tracy.ZoneEnd()
 		end
 
-		local const_cast_time = 1500
+		local cast_times = 
+		{
+			800, 1200
+		}
 
 		if data.cast_begin ~= nil then
 			-- we are casting.
-			local cast_end = data.cast_begin + const_cast_time
+			local cast_end = data.cast_begin + cast_times[data.cast_id + 1]
 			if tz.time() >= cast_end then
 				print("cast end!")
-				data.cast_begin = nil
 				local sc = rn.scene()
 				local projectile = sc:get(sc:add(1))
-				local x, y = e:get_position()
+				local x, y = e:get_subobject_position(17)
+				if data.cast_id == 1 then
+					local x2, y2 = e:get_subobject_position(13)
+					x = (x + x2) / 2.0
+					y = (y + y2) / 2.0
+					projectile:get_element():set_uniform_scale(projectile:get_element():get_uniform_scale() * 2)
+				end
 				projectile:get_element():set_position(x, y)
+				data.cast_begin = nil
+				local projdata = rn.entity.data[projectile:uid()]
+				projdata.shoot_dir = data.face_dir
+				if data.face_dir == "right" then
+					-- do nothing. sprite faces right by default
+					print("shoot right")
+				elseif data.face_dir == "left" then
+					print("shoot left")
+					projectile:get_element():rotate(3.14159)
+				elseif data.face_dir == "forward" then
+					print("shoot forward")
+					projectile:get_element():rotate(-1.5708)
+				elseif data.face_dir == "backward" then
+					print("shoot backward")
+					projectile:get_element():rotate(1.5708)
+				else
+					tz.assert(false)
+				end
 			end
 		else
 			if moving then
