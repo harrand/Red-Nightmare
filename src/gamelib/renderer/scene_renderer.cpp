@@ -314,6 +314,53 @@ namespace game::render
 		return 0;
 	}
 
+	int impl_rn_scene_element::get_scale(tz::lua::state& state)
+	{
+		TZ_PROFZONE("scene element - get scale", 0xFFFFAAEE);
+		auto objh = this->elem.entry.pkg.objects.front();
+		auto& ren = this->elem.renderer->get_renderer();
+		tz::trs transform = ren.get_object_base_transform(objh);
+		state.stack_push_float(transform.scale[0]);
+		state.stack_push_float(transform.scale[1]);
+		return 2;
+	}
+
+	int impl_rn_scene_element::set_scale(tz::lua::state& state)
+	{
+		TZ_PROFZONE("scene element - set scale", 0xFFFFAAEE);
+		auto [_, x, y] = tz::lua::parse_args<tz::lua::nil, float, float>(state);
+		auto objh = this->elem.entry.pkg.objects.front();
+		auto& ren = this->elem.renderer->get_renderer();
+		tz::trs transform = ren.get_object_base_transform(objh);
+		transform.scale[0] = x;
+		transform.scale[1] = y;
+		ren.set_object_base_transform(objh, transform);
+		return 0;
+	}
+
+	int impl_rn_scene_element::get_uniform_scale(tz::lua::state& state)
+	{
+		TZ_PROFZONE("scene element - get uniform scale", 0xFFFFAAEE);
+		auto objh = this->elem.entry.pkg.objects.front();
+		auto& ren = this->elem.renderer->get_renderer();
+		tz::trs transform = ren.get_object_base_transform(objh);
+		tz::assert(transform.scale[0] == transform.scale[1] && transform.scale[1] && transform.scale[2]);
+		state.stack_push_float(transform.scale[0]);
+		return 1;
+	}
+
+	int impl_rn_scene_element::set_uniform_scale(tz::lua::state& state)
+	{
+		TZ_PROFZONE("scene element - set uniform scale", 0xFFFFAAEE);
+		auto [_, s] = tz::lua::parse_args<tz::lua::nil, float>(state);
+		auto objh = this->elem.entry.pkg.objects.front();
+		auto& ren = this->elem.renderer->get_renderer();
+		tz::trs transform = ren.get_object_base_transform(objh);
+		transform.scale = tz::vec3::filled(s);
+		ren.set_object_base_transform(objh, transform);
+		return 0;
+	}
+
 	int impl_rn_scene_element::get_model(tz::lua::state& state)
 	{
 		TZ_PROFZONE("scene element - get model", 0xFFFFAAEE);

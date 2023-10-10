@@ -33,6 +33,8 @@ rn.entity_handler[id] =
 		tz.assert(rn.texture_manager():has_texture(typestr .. ".skin"))
 		local texh = rn.texture_manager():get_texture(typestr .. ".skin")
 		ent:get_element():object_set_texture_handle(2, 0, texh)
+		local sc = ent:get_element():get_uniform_scale()
+		ent:get_element():set_uniform_scale(sc * 0.5)
 		tracy.ZoneEnd()
 	end,
 	update = function(ent)

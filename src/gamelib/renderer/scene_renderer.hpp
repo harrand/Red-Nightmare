@@ -126,6 +126,10 @@ namespace game::render
 		int rotate(tz::lua::state& state);
 		int get_position(tz::lua::state& state);
 		int set_position(tz::lua::state& state);
+		int get_scale(tz::lua::state& state);
+		int set_scale(tz::lua::state& state);
+		int get_uniform_scale(tz::lua::state& state);
+		int set_uniform_scale(tz::lua::state& state);
 		int get_model(tz::lua::state& state);
 		int get_animation_count(tz::lua::state& state);
 		int get_playing_animation_id(tz::lua::state& state);
@@ -152,6 +156,10 @@ namespace game::render
 			LUA_METHOD(impl_rn_scene_element, rotate)
 			LUA_METHOD(impl_rn_scene_element, get_position)
 			LUA_METHOD(impl_rn_scene_element, set_position)
+			LUA_METHOD(impl_rn_scene_element, get_scale)
+			LUA_METHOD(impl_rn_scene_element, set_scale)
+			LUA_METHOD(impl_rn_scene_element, get_uniform_scale)
+			LUA_METHOD(impl_rn_scene_element, set_uniform_scale)
 			LUA_METHOD(impl_rn_scene_element, get_model)
 			LUA_METHOD(impl_rn_scene_element, get_animation_count)
 			LUA_METHOD(impl_rn_scene_element, get_playing_animation_id)
