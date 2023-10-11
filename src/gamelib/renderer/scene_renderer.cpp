@@ -1,5 +1,6 @@
 #include "gamelib/renderer/scene_renderer.hpp"
 #include "tz/core/profile.hpp"
+#include "tz/ren/animation.hpp"
 #include "tz/wsi/monitor.hpp"
 #include "tz/lua/api.hpp"
 #include <limits>
@@ -139,6 +140,16 @@ namespace game::render
 		this->renderer->get_renderer().object_set_texture(h, bound_texture_id, tloc);
 	}
 
+	bool scene_element::object_get_visibility(tz::ren::animation_renderer::object_handle h) const
+	{
+		return this->renderer->get_renderer().object_get_visible(h);
+	}
+
+	void scene_element::object_set_visibility(tz::ren::animation_renderer::object_handle h, bool visible)
+	{
+		this->renderer->get_renderer().object_set_visible(h, visible);
+	}
+
 	scene_renderer::model scene_element::get_model() const
 	{
 		return this->entry.m;
@@ -241,6 +252,24 @@ namespace game::render
 		tz::ren::texture_locator tloc = this->elem.object_get_texture(objh, bound_texture_id);
 		tloc.texture = static_cast<tz::hanval>(texhandle);
 		this->elem.object_set_texture(objh, bound_texture_id, tloc);
+		return 0;
+	}
+	
+	int impl_rn_scene_element::object_get_visibility(tz::lua::state& state)
+	{
+		TZ_PROFZONE("scene element - object get visibility", 0xFFFFAAEE);
+		auto [_, oh] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+		auto objh = this->elem.entry.pkg.objects[oh];
+		state.stack_push_bool(this->elem.object_get_visibility(objh));
+		return 1;
+	}
+
+	int impl_rn_scene_element::object_set_visibility(tz::lua::state& state)
+	{
+		TZ_PROFZONE("scene element - object set visibility", 0xFFFFAAEE);
+		auto [_, oh, visible] = tz::lua::parse_args<tz::lua::nil, unsigned int, bool>(state);
+		auto objh = this->elem.entry.pkg.objects[oh];
+		this->elem.object_set_visibility(objh, visible);
 		return 0;
 	}
 

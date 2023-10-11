@@ -83,6 +83,8 @@ namespace game::render
 		std::size_t get_object_count() const;
 		tz::ren::texture_locator object_get_texture(tz::ren::animation_renderer::object_handle oh, std::size_t bound_texture_id) const;
 		void object_set_texture(tz::ren::animation_renderer::object_handle h, std::size_t bound_texture_id, tz::ren::texture_locator tloc);
+		bool object_get_visibility(tz::ren::animation_renderer::object_handle h) const;
+		void object_set_visibility(tz::ren::animation_renderer::object_handle, bool visibility);
 		scene_renderer::model get_model() const;
 		std::size_t get_animation_count() const;
 		std::optional<std::size_t> get_playing_animation_id() const;
@@ -120,6 +122,8 @@ namespace game::render
 		int object_get_texture(tz::lua::state& state);
 		int object_set_texture_tint(tz::lua::state& state);
 		int object_set_texture_handle(tz::lua::state& state);
+		int object_get_visibility(tz::lua::state& state);
+		int object_set_visibility(tz::lua::state& state);
 		int face_forward(tz::lua::state& state);
 		int face_backward(tz::lua::state& state);
 		int face_left(tz::lua::state& state);
@@ -151,6 +155,8 @@ namespace game::render
 			LUA_METHOD(impl_rn_scene_element, object_get_texture)
 			LUA_METHOD(impl_rn_scene_element, object_set_texture_tint)
 			LUA_METHOD(impl_rn_scene_element, object_set_texture_handle)
+			LUA_METHOD(impl_rn_scene_element, object_get_visibility)
+			LUA_METHOD(impl_rn_scene_element, object_set_visibility)
 			LUA_METHOD(impl_rn_scene_element, face_forward)
 			LUA_METHOD(impl_rn_scene_element, face_backward)
 			LUA_METHOD(impl_rn_scene_element, face_left)
