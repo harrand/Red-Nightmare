@@ -14,6 +14,7 @@ rn.entity_handler = {}
 -- Include all entities here.
 require "entity0"
 require "entity1"
+require "entity2"
 
 rn.entity_static_init = function()
 	tracy.ZoneBegin()

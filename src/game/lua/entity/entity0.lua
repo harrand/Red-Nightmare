@@ -107,7 +107,7 @@ rn.entity_handler[id] =
 
 		local cast_times = 
 		{
-			800, 1200
+			800, 1100
 		}
 
 		if data.cast_begin ~= nil then
