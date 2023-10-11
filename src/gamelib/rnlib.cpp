@@ -70,7 +70,7 @@ namespace game
 
 	void dbgui_game_bar()
 	{
-		ImGui::Text("Well met!");
+		ImGui::Text("Scene size: %zu", game_system->scene.size());
 	}
 
 	LUA_BEGIN(rn_impl_get_scene)

@@ -22,6 +22,7 @@ namespace game::entity
 		void lua_initialise(tz::lua::state& state);
 	private:
 		void initialise_entity(tz::hanval entity_hanval, std::size_t type);
+		void deinitialise_entity(tz::hanval entity_hanval, std::size_t uid);
 		std::vector<entity> entities = {};
 		std::deque<entity_handle> free_list = {};
 		render::scene_renderer renderer;
@@ -32,6 +33,7 @@ namespace game::entity
 		scene* sc;
 		int add(tz::lua::state& state);
 		int remove(tz::lua::state& state);
+		int remove_uid(tz::lua::state& state);
 		int get(tz::lua::state& state);
 		int get_renderer(tz::lua::state& state);
 		int size(tz::lua::state& state);
@@ -41,6 +43,7 @@ namespace game::entity
 		LUA_CLASS_METHODS_BEGIN
 			LUA_METHOD(rn_impl_scene, add)
 			LUA_METHOD(rn_impl_scene, remove)
+			LUA_METHOD(rn_impl_scene, remove_uid)
 			LUA_METHOD(rn_impl_scene, get)
 			LUA_METHOD(rn_impl_scene, get_renderer)
 			LUA_METHOD(rn_impl_scene, size)

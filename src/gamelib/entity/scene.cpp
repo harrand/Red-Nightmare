@@ -19,13 +19,29 @@ namespace game::entity
 			this->entities.push_back({.type = type});
 			ret_hanval = static_cast<tz::hanval>(this->entities.size() - 1);
 		}	
+		else
+		{
+			ret_hanval = static_cast<tz::hanval>(this->free_list.front());
+			this->entities[static_cast<std::size_t>(ret_hanval)] = {.type = type};
+			this->free_list.pop_front();
+		}
 		this->initialise_entity(ret_hanval, type);
 		return ret_hanval;
 	}
 
 	void scene::remove(entity_handle e)
 	{
-
+		auto hanval = static_cast<std::size_t>(static_cast<tz::hanval>(e));
+		if(std::find(this->free_list.begin(), this->free_list.end(), e) != this->free_list.end())
+		{
+			// double remove. is bad!
+			tz::report("scene::remove(%zu) - double remove detected!", hanval);
+			return;
+		}
+		this->free_list.push_back(e);
+		this->renderer.remove_model(this->entities[hanval].elem.entry);
+		this->deinitialise_entity(static_cast<tz::hanval>(hanval), this->entities[hanval].uid);
+		this->entities[hanval] = {};
 	}
 
 	const entity& scene::get(entity_handle e) const
@@ -73,6 +89,17 @@ namespace game::entity
 		state.execute(cmd.c_str());
 	}
 
+	void scene::deinitialise_entity(tz::hanval entity_hanval, std::size_t uid)
+	{
+		auto& state = tz::lua::get_state();
+		rn_impl_entity lua_data{.scene = this, .entity_hanval = entity_hanval};
+		auto& ent = this->get(entity_hanval);
+		LUA_CLASS_PUSH(state, rn_impl_entity, lua_data);
+		state.assign_stack("rn_impl_dead_entity");
+		std::string cmd = "rn.entity_deinit()";
+		state.execute(cmd.c_str());
+	}
+
 	// LUA API
 
 	int rn_impl_scene::add(tz::lua::state& state)
@@ -87,6 +114,21 @@ namespace game::entity
 	{
 		auto [_, eh] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
 		this->sc->remove(static_cast<tz::hanval>(eh));
+		return 0;
+	}
+
+	int rn_impl_scene::remove_uid(tz::lua::state& state)
+	{
+		auto [_, uid] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+		for(std::size_t i = 0; i < this->sc->size(); i++)
+		{
+			auto hv = static_cast<tz::hanval>(i);
+			if(this->sc->get(hv).uid == uid)
+			{
+				this->sc->remove(hv);
+				break;
+			}
+		}
 		return 0;
 	}
 

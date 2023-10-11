@@ -56,6 +56,7 @@ namespace game::render
 			}
 		}
 		entry add_model(model m);
+		void remove_model(entry e);
 		scene_element get_element(entry e);
 		entry entry_at(std::size_t idx) const;
 		std::size_t entry_count() const;

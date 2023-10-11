@@ -6,6 +6,7 @@ rn.model =
 
 rn.entity = {}
 rn.entity.type = {}
+rn.entity.living = {}
 rn.entity.data = {}
 
 rn.entity_handler = {}
@@ -40,6 +41,7 @@ rn.entity_preinit = function(type)
 	if handler.preinit ~= nil then
 		handler.preinit(ent)
 	end
+	rn.entity.living[ent:uid()] = true
 	tracy.ZoneEnd()
 end
 
@@ -67,6 +69,14 @@ rn.entity_update = function(ent)
 		handler.update(ent)
 	end
 	tracy.ZoneEnd()
+end
+
+rn.entity_deinit = function()
+	-- assume variable exists in global `rn_impl_dead_entity`
+	tz.assert(rn_impl_dead_entity ~= nil)
+	local uid = rn_impl_dead_entity:uid()
+	rn.entity.living[uid] = false
+	rn.entity.data[uid] = {}
 end
 
 rn.internal_key_state = {}
@@ -109,7 +119,9 @@ rn.update = function()
 	if sc:size() > 0 then
 		for i=0,sc:size()-1,1 do
 			local ent = sc:get(i)
-			rn.entity_update(ent)
+			if rn.entity.living[ent:uid()] == true then
+				rn.entity_update(ent)
+			end
 		end
 	end
 	tracy.ZoneEnd()

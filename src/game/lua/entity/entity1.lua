@@ -12,13 +12,13 @@ rn.entity_handler[id] =
 	preinit = function(ent)
 		ent:set_name("Darkstone Block")
 		ent:set_model(rn.model.quad)
-		print("uid: " .. ent:uid())
 
 		rn.entity.data[ent:uid()] =
 		{
 			flipbook_timer = 0,
 			cur_texture_id = 0,
-			shoot_dir = nil
+			shoot_dir = nil,
+			spawned_at = tz.time()
 		}
 	end,
 	postinit = function(ent)
@@ -56,5 +56,11 @@ rn.entity_handler[id] =
 		end
 
 		ent:get_element():set_position(x, y)
+
+		-- we only live for 5 seconds
+		if data.spawned_at + 5000 <= tz.time() then
+			-- WE DIE NOW :)
+			rn.scene():remove_uid(ent:uid())
+		end
 	end
 }

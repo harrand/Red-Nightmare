@@ -47,6 +47,17 @@ namespace game::render
 		return this->entries.back();
 	}
 
+	void scene_renderer::remove_model(entry e)
+	{
+		if(this->base_models[static_cast<int>(e.m)] == e.pkg)
+		{
+			// this is the base model. gotta remove it somehow :(
+			// we could set base model to empty here, but it means the next time this model is added, the mesh data is added again
+			// so we cannot do anything until we delete the actual meshes and textures.
+		}
+		tz::ren::animation_renderer::remove_objects(e.pkg, tz::ren::animation_renderer::transform_hierarchy::remove_strategy::remove_children);
+	}
+
 	scene_element scene_renderer::get_element(entry e)
 	{
 		return {this, e};
