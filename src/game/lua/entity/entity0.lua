@@ -15,6 +15,7 @@ rn.entity_handler[id] =
 	static_init = function()
 		tracy.ZoneBeginN(typestr .. " - static init")
 		rn.texture_manager():register_texture(typestr .. ".skin", "./res/images/skins/entity0.png")
+		rn.texture_manager():register_texture(typestr .. ".body", "./res/images/skins/body_armour/chainmail.png")
 		rn.texture_manager():register_texture(typestr .. ".helm", "./res/images/skins/helm/med_helm.png")
 		tracy.ZoneEnd()
 	end,
@@ -26,7 +27,8 @@ rn.entity_handler[id] =
 		{
 			cast_id = nil,
 			cast_begin = nil,
-			face_dir = "forward"
+			face_dir = "forward",
+			counter = 0
 		}
 		tracy.ZoneEnd()
 	end,
@@ -35,14 +37,17 @@ rn.entity_handler[id] =
 		tz.assert(rn.texture_manager():has_texture(typestr .. ".skin"))
 		local texh = rn.texture_manager():get_texture(typestr .. ".skin")
 		ent:get_element():object_set_texture_handle(2, 0, texh)
+		local body_texh = rn.texture_manager():get_texture(typestr .. ".body")
+		ent:get_element():object_set_texture_handle(4, 0, body_texh)
 		local helm_texh = rn.texture_manager():get_texture(typestr .. ".helm")
-		ent:get_element():object_set_texture_handle(4, 0, helm_texh)
+		ent:get_element():object_set_texture_handle(6, 0, helm_texh)
 		local sc = ent:get_element():get_uniform_scale()
 		ent:get_element():set_uniform_scale(sc * 0.5)
 		tracy.ZoneEnd()
 	end,
 	update = function(ent)
 		local data = rn.entity.data[ent:uid()]
+		data.counter = data.counter + rn.delta_time * 2.8957
 		tz.assert(ent:get_name() == "Lady Melistra")
 		tracy.ZoneBeginN(typestr .. " - update")
 		tracy.ZoneBeginN("get element")
