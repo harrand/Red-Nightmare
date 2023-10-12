@@ -15,7 +15,7 @@ rn.entity_handler[id] =
 	static_init = function()
 		tracy.ZoneBeginN(typestr .. " - static init")
 		rn.texture_manager():register_texture(typestr .. ".skin", "./res/images/skins/entity0.png")
-		rn.texture_manager():register_texture(typestr .. ".body", "./res/images/skins/body_armour/chainmail.png")
+		rn.texture_manager():register_texture(typestr .. ".body", "./res/images/skins/body_armour/left_arm_tattoos.png")
 		rn.texture_manager():register_texture(typestr .. ".helm", "./res/images/skins/helm/med_helm.png")
 		tracy.ZoneEnd()
 	end,
@@ -38,6 +38,7 @@ rn.entity_handler[id] =
 		local texh = rn.texture_manager():get_texture(typestr .. ".skin")
 		ent:get_element():object_set_texture_handle(2, 0, texh)
 		local body_texh = rn.texture_manager():get_texture(typestr .. ".body")
+		ent:get_element():object_set_texture_tint(4, 0, 0.0, 0.0, 0.0)
 		ent:get_element():object_set_texture_handle(4, 0, body_texh)
 		local helm_texh = rn.texture_manager():get_texture(typestr .. ".helm")
 		ent:get_element():object_set_texture_handle(6, 0, helm_texh)
@@ -125,9 +126,9 @@ rn.entity_handler[id] =
 				print("cast end!")
 				local sc = rn.scene()
 				local projectile = sc:get(sc:add(1))
-				local x, y = e:get_subobject_position(17)
+				local x, y = e:get_subobject_position(21)
 				if data.cast_id == 1 then
-					local x2, y2 = e:get_subobject_position(13)
+					local x2, y2 = e:get_subobject_position(17)
 					x = (x + x2) / 2.0
 					y = (y + y2) / 2.0
 					projectile:get_element():set_uniform_scale(projectile:get_element():get_uniform_scale() * 2)

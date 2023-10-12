@@ -8,6 +8,7 @@ rn.entity_handler[id] =
 		tracy.ZoneBeginN(typestr .. " - static init")
 		rn.texture_manager():register_texture(typestr .. ".skin", "./res/images/skins/entity2.png")
 		rn.texture_manager():register_texture(typestr .. ".helm", "./res/images/skins/helm/med_helm.png")
+		rn.texture_manager():register_texture(typestr .. ".body", "./res/images/skins/body_armour/chainmail.png")
 		tracy.ZoneEnd()
 	end,
 	preinit = function(ent)
@@ -21,6 +22,8 @@ rn.entity_handler[id] =
 	postinit = function(ent)
 		local texh = rn.texture_manager():get_texture(typestr .. ".skin")
 		ent:get_element():object_set_texture_handle(2, 0, texh)
+		local bodytexh = rn.texture_manager():get_texture(typestr .. ".body")
+		ent:get_element():object_set_texture_handle(4, 0, bodytexh)
 		local helmtexh = rn.texture_manager():get_texture(typestr .. ".helm")
 		ent:get_element():object_set_texture_handle(6, 0, helmtexh)
 		local sc = ent:get_element():get_uniform_scale()
