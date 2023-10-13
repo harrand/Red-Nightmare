@@ -54,5 +54,5 @@ add_text(
 	TEXT_FILES
 		res/models/human_animated_textured.glb
 		res/models/plane.glb
-		src/gamelib/entity/entity.lua
+		src/gamelib/lua/entity.lua
 )
