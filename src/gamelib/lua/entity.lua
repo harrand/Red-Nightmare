@@ -53,6 +53,13 @@ rn.entity_postinit = function(type)
 	tz.assert(rn_impl_new_entity ~= nil)
 	local ent = rn_impl_new_entity
 
+	local mod = ent:get_model()
+	if mod == rn.model.humanoid then
+		local e = ent:get_element()
+		e:object_set_visibility(4, false)
+		e:object_set_visibility(6, false)
+	end
+
 	local handler = rn.entity_handler[type]
 	tz.assert(handler ~= nil)
 	if handler.postinit ~= nil then

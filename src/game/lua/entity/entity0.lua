@@ -40,10 +40,12 @@ rn.entity_handler[id] =
 		local body_texh = rn.texture_manager():get_texture(typestr .. ".body")
 		ent:get_element():object_set_texture_tint(4, 0, 0.0, 0.0, 0.0)
 		ent:get_element():object_set_texture_handle(4, 0, body_texh)
-		local helm_texh = rn.texture_manager():get_texture(typestr .. ".helm")
-		ent:get_element():object_set_texture_handle(6, 0, helm_texh)
+
+		rn.equip(ent, "Iron Sallet")
+
 		local sc = ent:get_element():get_uniform_scale()
 		ent:get_element():set_uniform_scale(sc * 0.5)
+
 		tracy.ZoneEnd()
 	end,
 	update = function(ent)

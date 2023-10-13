@@ -55,4 +55,6 @@ add_text(
 		res/models/human_animated_textured.glb
 		res/models/plane.glb
 		src/gamelib/lua/entity.lua
+		src/gamelib/lua/equipment.lua
+		src/gamelib/lua/item.lua
 )

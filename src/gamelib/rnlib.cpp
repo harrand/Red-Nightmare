@@ -3,8 +3,12 @@
 #include "gamelib/renderer/texture_manager.hpp"
 #include "tz/core/debug.hpp"
 #include "tz/core/profile.hpp"
+#include "tz/core/imported_text.hpp"
 #include "tz/lua/api.hpp"
 #include <memory>
+
+#include ImportedTextHeader(equipment, lua)
+#include ImportedTextHeader(item, lua)
 
 namespace game
 {
@@ -101,14 +105,25 @@ namespace game
 			// debug builds: use root_dir/lua
 			state.execute("package.path = rn.rootdir .. \"\\\\?.lua\"");
 			state.execute("package.path = package.path .. \";\" .. rn.rootdir .. \"\\\\entity\\\\?.lua\"");
+			state.execute("package.path = package.path .. \";\" .. rn.rootdir .. \"\\\\item\\\\?.lua\"");
 
 			game_system->scene.lua_initialise(state);
 			game_system->texmgr.lua_initialise(state);
 			state.assign_func("rn.scene", LUA_FN_NAME(rn_impl_get_scene));
 			state.assign_func("rn.texture_manager", LUA_FN_NAME(rn_impl_get_texture_manager));
+
+			{
+				std::string str{ImportedTextData(equipment, lua)};
+				state.execute(str.c_str());
+			}
+			{
+				std::string str{ImportedTextData(item, lua)};
+				state.execute(str.c_str());
+			}
 		});
 
 		TZ_PROFZONE("rnlib - lua entity static init", 0xFF00AAFF);
 		tz::lua::get_state().execute("rn.entity_static_init()");
+		tz::lua::get_state().execute("rn.item_static_init()");
 	}
 }
