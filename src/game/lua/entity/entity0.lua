@@ -89,7 +89,6 @@ rn.entity_handler[id] =
 		end
 		if rn.is_key_down("esc") and data.cast_begin ~= nil then
 			data.cast_begin = nil
-			print("cancelcast")
 		end
 		tracy.ZoneEnd()
 
@@ -109,7 +108,6 @@ rn.entity_handler[id] =
 			tracy.ZoneBeginN("stationary")
 			e:set_animation_speed(1.0)
 			if e:get_playing_animation_id() == 8 then
-				print("POO")
 				e:skip_animation()
 				moving = false
 			end
@@ -125,7 +123,6 @@ rn.entity_handler[id] =
 			-- we are casting.
 			local cast_end = data.cast_begin + cast_times[data.cast_id + 1]
 			if tz.time() >= cast_end then
-				print("cast end!")
 				local sc = rn.scene()
 				local projectile = sc:get(sc:add(1))
 				local x, y = e:get_subobject_position(21)
@@ -141,15 +138,11 @@ rn.entity_handler[id] =
 				projdata.shoot_dir = data.face_dir
 				if data.face_dir == "right" then
 					-- do nothing. sprite faces right by default
-					print("shoot right")
 				elseif data.face_dir == "left" then
-					print("shoot left")
 					projectile:get_element():rotate(3.14159)
 				elseif data.face_dir == "forward" then
-					print("shoot forward")
 					projectile:get_element():rotate(-1.5708)
 				elseif data.face_dir == "backward" then
-					print("shoot backward")
 					projectile:get_element():rotate(1.5708)
 				else
 					tz.assert(false)

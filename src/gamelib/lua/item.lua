@@ -49,6 +49,7 @@ end
 rn.items = {}
 
 require "item0"
+require "item1"
 
 rn.item_static_init = function()
 	for k, cur_item in pairs(rn.items) do
