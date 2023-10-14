@@ -12,6 +12,7 @@ namespace game::entity
 			auto& buff = iter->second;
 			if(!buff.time_remaining_seconds.has_value())
 			{
+				iter++;
 				continue;
 			}
 			float& t = buff.time_remaining_seconds.value();
@@ -59,17 +60,31 @@ namespace game::entity
 		return 0;
 	}
 
-	int rn_impl_entity::stats_get_movement_speed(tz::lua::state& state)
+	int rn_impl_entity::get_base_stats(tz::lua::state& state)
 	{
-		state.stack_push_float(this->get().base_stats.movement_speed);
+		using namespace game::logic;
+		LUA_CLASS_PUSH(state, rn_impl_stats, {.s = this->get().base_stats});
 		return 1;
 	}
 
-	int rn_impl_entity::stats_set_movement_speed(tz::lua::state& state)
+	int rn_impl_entity::set_base_stats(tz::lua::state& state)
 	{
-		auto [_, movement_speed] = tz::lua::parse_args<tz::lua::nil, float>(state);
-		this->get().base_stats.movement_speed = movement_speed;
+		using namespace game::logic;
+		auto& stats = state.stack_get_userdata<rn_impl_stats>(2);
+		this->get().base_stats = stats.s;
 		return 0;
+	}
+
+	int rn_impl_entity::get_stats(tz::lua::state& state)
+	{
+		using namespace game::logic;
+		auto s = this->get().base_stats;
+		for(const auto& [_, buff] : this->get().buffs)
+		{
+			s = s + buff;
+		}
+		LUA_CLASS_PUSH(state, rn_impl_stats, {.s = s});
+		return 1;
 	}
 
 	int rn_impl_entity::apply_buff(tz::lua::state& state)

@@ -40,8 +40,9 @@ namespace game::entity
 		int uid(tz::lua::state& state);
 		int get_name(tz::lua::state& state);
 		int set_name(tz::lua::state& state);
-		int stats_get_movement_speed(tz::lua::state& state);
-		int stats_set_movement_speed(tz::lua::state& state);
+		int get_base_stats(tz::lua::state& state);
+		int set_base_stats(tz::lua::state& state);
+		int get_stats(tz::lua::state& state);
 		int apply_buff(tz::lua::state& state);
 		int get_model(tz::lua::state& state);
 		int set_model(tz::lua::state& state);
@@ -54,8 +55,9 @@ namespace game::entity
 			LUA_METHOD(rn_impl_entity, uid)
 			LUA_METHOD(rn_impl_entity, get_name)
 			LUA_METHOD(rn_impl_entity, set_name)
-			LUA_METHOD(rn_impl_entity, stats_get_movement_speed)
-			LUA_METHOD(rn_impl_entity, stats_set_movement_speed)
+			LUA_METHOD(rn_impl_entity, get_base_stats)
+			LUA_METHOD(rn_impl_entity, set_base_stats)
+			LUA_METHOD(rn_impl_entity, get_stats)
 			LUA_METHOD(rn_impl_entity, apply_buff)
 			LUA_METHOD(rn_impl_entity, get_model)
 			LUA_METHOD(rn_impl_entity, set_model)

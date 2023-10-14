@@ -27,7 +27,10 @@ rn.entity_handler[id] =
 		ent:get_element():object_set_texture_tint(1, 0, 1.0, 0.35, 0.05)
 		ent:get_element():face_right()
 		ent:get_element():rotate(-1.5708)
-		ent:stats_set_movement_speed(ent:stats_get_movement_speed() * 2)
+		local b = rn.new_buff()
+		b:set_name("<Projectile Speed>")
+		b:set_increased_movement_speed(100)
+		ent:apply_buff(b)
 	end,
 	update = function(ent)
 		tz.assert(ent:get_name() == "Darkstone Block")
@@ -43,14 +46,15 @@ rn.entity_handler[id] =
 		local x, y = ent:get_element():get_position()
 
 		tz.assert(data.shoot_dir ~= nil)
+		local movement_speed = ent:get_stats():get_movement_speed()
 		if data.shoot_dir == "right" then
-			x = x + ent:stats_get_movement_speed() * rn.delta_time
+			x = x + movement_speed * rn.delta_time
 		elseif data.shoot_dir == "left" then
-			x = x - ent:stats_get_movement_speed() * rn.delta_time
+			x = x - movement_speed * rn.delta_time
 		elseif data.shoot_dir == "forward" then
-			y = y - ent:stats_get_movement_speed() * rn.delta_time
+			y = y - movement_speed * rn.delta_time
 		elseif data.shoot_dir == "backward" then
-			y = y + ent:stats_get_movement_speed() * rn.delta_time
+			y = y + movement_speed * rn.delta_time
 		else
 			tz.assert(false)
 		end

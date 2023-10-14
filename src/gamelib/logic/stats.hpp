@@ -57,13 +57,17 @@ namespace game::logic
 	struct rn_impl_stats
 	{
 		stats s;
+		int get_health(tz::lua::state& state);
 		int set_health(tz::lua::state& state);
+		int get_movement_speed(tz::lua::state& state);
 		int set_movement_speed(tz::lua::state& state);
 	};
 
 	LUA_CLASS_BEGIN(rn_impl_stats)
 		LUA_CLASS_METHODS_BEGIN
+			LUA_METHOD(rn_impl_stats, get_health)
 			LUA_METHOD(rn_impl_stats, set_health)
+			LUA_METHOD(rn_impl_stats, get_movement_speed)
 			LUA_METHOD(rn_impl_stats, set_movement_speed)
 		LUA_CLASS_METHODS_END
 	LUA_CLASS_END

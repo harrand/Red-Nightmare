@@ -79,11 +79,23 @@ namespace game::logic
 	
 	/////////////////
 
+	int rn_impl_stats::get_health(tz::lua::state& state)
+	{
+		state.stack_push_uint(this->s.health);
+		return 1;
+	}
+
 	int rn_impl_stats::set_health(tz::lua::state& state)
 	{
 		auto [_, hp] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
 		this->s.health = hp;
 		return 0;
+	}
+
+	int rn_impl_stats::get_movement_speed(tz::lua::state& state)
+	{
+		state.stack_push_float(this->s.movement_speed);
+		return 1;
 	}
 
 	int rn_impl_stats::set_movement_speed(tz::lua::state& state)
