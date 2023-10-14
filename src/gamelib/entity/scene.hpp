@@ -4,6 +4,8 @@
 #include "gamelib/entity/api.hpp"
 #include "gamelib/physics/quadtree.hpp"
 #include <deque>
+#include <unordered_map>
+#include <unordered_set>
 
 namespace game::entity
 {
@@ -35,6 +37,10 @@ namespace game::entity
 
 		render::scene_renderer& get_renderer();
 		std::size_t debug_get_intersection_count() const;
+		std::size_t get_collision_count(entity_handle e) const;
+		std::size_t get_collision_count(std::size_t uid) const;
+		entity_handle get_collision_id(entity_handle e, std::size_t id) const;
+		entity_handle get_collision_id(std::size_t uid, std::size_t id) const;
 		void lua_initialise(tz::lua::state& state);
 	private:
 		void initialise_entity(tz::hanval entity_hanval, std::size_t type);
@@ -45,6 +51,8 @@ namespace game::entity
 		std::deque<entity_handle> free_list = {};
 		scene_quadtree quadtree{game::physics::aabb{tz::vec2{-1.0f, -1.0f} * scene_quadtree_initial_size, tz::vec2{1.0f, 1.0f} * scene_quadtree_initial_size}};
 		scene_quadtree::intersection_state_t intersection_state = {};
+		// uid maps to a set of entity handles. i know that seems inconsistent but its cheapest for the lua to use.
+		mutable std::unordered_map<std::size_t, std::unordered_set<tz::hanval>> collision_data = {};
 		render::scene_renderer renderer;
 	};
 
@@ -54,6 +62,8 @@ namespace game::entity
 		int add(tz::lua::state& state);
 		int remove(tz::lua::state& state);
 		int remove_uid(tz::lua::state& state);
+		int get_collision_count(tz::lua::state& state);
+		int get_collision(tz::lua::state& state);
 		int get(tz::lua::state& state);
 		int get_renderer(tz::lua::state& state);
 		int size(tz::lua::state& state);
@@ -64,6 +74,8 @@ namespace game::entity
 			LUA_METHOD(rn_impl_scene, add)
 			LUA_METHOD(rn_impl_scene, remove)
 			LUA_METHOD(rn_impl_scene, remove_uid)
+			LUA_METHOD(rn_impl_scene, get_collision_count)
+			LUA_METHOD(rn_impl_scene, get_collision)
 			LUA_METHOD(rn_impl_scene, get)
 			LUA_METHOD(rn_impl_scene, get_renderer)
 			LUA_METHOD(rn_impl_scene, size)

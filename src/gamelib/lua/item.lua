@@ -68,6 +68,14 @@ require "item1"
 require "item2"
 require "item3"
 
+rn.drop_item_at = function(item_name, x, y)
+	local mannequin_id = 3
+	local eid = rn.scene():add(mannequin_id)
+	local ent = rn.scene():get(eid)
+	rn.equip(ent, item_name)
+	ent:get_element():set_position(x, y)
+end
+
 rn.item_static_init = function()
 	for k, cur_item in pairs(rn.items) do
 		-- item static init

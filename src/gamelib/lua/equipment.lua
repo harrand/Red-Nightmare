@@ -5,7 +5,8 @@ rn.equipment.slot =
 	off_hand = 2,
 	helm = 3,
 	body_armour = 4,
-	aura = 5
+	aura = 5,
+	_count = 6
 }
 
 rn._internal_equipment_slot_object_mapping =
@@ -20,6 +21,7 @@ rn._internal_equipment_slot_object_mapping =
 rn.entity_equipment = {}
 
 rn.get_equipped_item = function(ent, slot)
+	rn.entity_equipment[ent:uid()] = rn.entity_equipment[ent:uid()] or {}
 	return rn.entity_equipment[ent:uid()][slot]
 end
 

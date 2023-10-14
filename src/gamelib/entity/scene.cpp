@@ -35,6 +35,30 @@ namespace game::entity
 		return this->intersection_state.size();
 	}
 
+	std::size_t scene::get_collision_count(entity_handle e) const
+	{
+		return this->get_collision_count(this->get(e).uid);
+	}
+
+	std::size_t scene::get_collision_count(std::size_t uid) const
+	{
+		return this->collision_data[uid].size();
+	}
+
+	scene::entity_handle scene::get_collision_id(entity_handle e, std::size_t collision_id) const
+	{
+		return this->get_collision_id(this->get(e).uid, collision_id);
+	}
+
+	scene::entity_handle scene::get_collision_id(std::size_t uid, std::size_t collision_id) const
+	{
+		auto& container = this->collision_data[uid];
+		auto iter = container.begin();
+		tz::assert(collision_id < container.size());
+		std::advance(iter, collision_id);
+		return *iter;
+	}
+
 	scene::entity_handle scene::add(std::size_t type)
 	{
 		TZ_PROFZONE("scene - add", 0xFF99CC44);
@@ -134,6 +158,7 @@ namespace game::entity
 	void scene::rebuild_quadtree()
 	{
 		this->quadtree.clear();
+		this->collision_data.clear();
 		for(std::size_t i = 0; i < this->size(); i++)
 		{
 			auto hanval = static_cast<tz::hanval>(i);
@@ -143,6 +168,13 @@ namespace game::entity
 			}
 		}
 		this->intersection_state = this->quadtree.find_all_intersections();
+		for(const auto [node_a, node_b] : intersection_state)
+		{
+			auto uid_a = this->get(node_a.entity_hanval).uid;
+			auto uid_b = this->get(node_b.entity_hanval).uid;
+			this->collision_data[uid_a].insert(node_b.entity_hanval);
+			this->collision_data[uid_b].insert(node_a.entity_hanval);
+		}
 	}
 
 	bool scene::is_valid(tz::hanval entity_hanval) const
@@ -180,6 +212,21 @@ namespace game::entity
 			}
 		}
 		return 0;
+	}
+
+	int rn_impl_scene::get_collision_count(tz::lua::state& state)
+	{
+		auto [_, uid] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+		state.stack_push_uint(this->sc->get_collision_count(static_cast<std::size_t>(static_cast<tz::hanval>(uid))));
+		return 1;
+	}
+
+	int rn_impl_scene::get_collision(tz::lua::state& state)
+	{
+		auto [_, uid, id] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int>(state);
+		auto colliding_eh = this->sc->get_collision_id(static_cast<std::size_t>(static_cast<tz::hanval>(uid)), id);
+		state.stack_push_uint(static_cast<std::size_t>(static_cast<tz::hanval>(colliding_eh)));
+		return 1;
 	}
 
 	int rn_impl_scene::get(tz::lua::state& state)

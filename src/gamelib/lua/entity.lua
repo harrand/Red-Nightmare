@@ -90,6 +90,19 @@ end
 
 rn.internal_key_state = {}
 
+rn.for_each_collision = function(ent, fn)
+	local collision_count = rn.scene():get_collision_count(ent:uid())
+	if collision_count == 0 then
+		return false
+	end
+	for i=0,collision_count-1,1 do
+		local colliding_entity_id = rn.scene():get_collision(ent:uid(), i)
+		local colliding_entity = rn.scene():get(colliding_entity_id)
+		fn(colliding_entity)
+	end
+	return true
+end
+
 rn.empty_key_state = function()
 	for i=0,tz.wsi_key_count-2,1 do
 		rn.internal_key_state[i] = false
