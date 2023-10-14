@@ -5,6 +5,16 @@ namespace game::entity
 {
 	std::size_t entity::uid_global_counter = 0;
 
+	game::logic::stats entity::get_stats() const
+	{
+		game::logic::stats ret = this->base_stats;
+		for(const auto&[_, buff] : this->buffs)
+		{
+			ret = ret + buff;
+		}
+		return ret;
+	}
+
 	void entity::update(float delta_seconds)
 	{
 		for(auto iter = this->buffs.begin(); iter != this->buffs.end();)
@@ -78,13 +88,22 @@ namespace game::entity
 	int rn_impl_entity::get_stats(tz::lua::state& state)
 	{
 		using namespace game::logic;
-		auto s = this->get().base_stats;
-		for(const auto& [_, buff] : this->get().buffs)
-		{
-			s = s + buff;
-		}
+		auto s = this->get().get_stats();
 		LUA_CLASS_PUSH(state, rn_impl_stats, {.s = s});
 		return 1;
+	}
+
+	int rn_impl_entity::get_health(tz::lua::state& state)
+	{
+		state.stack_push_uint(this->get().current_health);
+		return 1;
+	}
+
+	int rn_impl_entity::set_health(tz::lua::state& state)
+	{
+		auto [_, hp] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+		this->get().current_health = std::clamp(hp, 0u, static_cast<unsigned int>(this->get().get_stats().maximum_health));
+		return 0;
 	}
 
 	int rn_impl_entity::apply_buff(tz::lua::state& state)

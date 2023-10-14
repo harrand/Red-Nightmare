@@ -15,8 +15,8 @@ namespace game::logic
 	stats stats::operator+(const buff& rhs) const
 	{
 		stats cpy = *this;
-		cpy.health *= rhs.amplified_health;
-		cpy.health += rhs.increased_health;
+		cpy.maximum_health *= rhs.amplified_health;
+		cpy.maximum_health += rhs.increased_health;
 		cpy.movement_speed *= (100.0f + rhs.increased_movement_speed) / 100.0f;
 		return cpy;
 	}
@@ -79,16 +79,16 @@ namespace game::logic
 	
 	/////////////////
 
-	int rn_impl_stats::get_health(tz::lua::state& state)
+	int rn_impl_stats::get_maximum_health(tz::lua::state& state)
 	{
-		state.stack_push_uint(this->s.health);
+		state.stack_push_uint(this->s.maximum_health);
 		return 1;
 	}
 
-	int rn_impl_stats::set_health(tz::lua::state& state)
+	int rn_impl_stats::set_maximum_health(tz::lua::state& state)
 	{
 		auto [_, hp] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
-		this->s.health = hp;
+		this->s.maximum_health = hp;
 		return 0;
 	}
 

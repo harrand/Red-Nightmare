@@ -53,6 +53,7 @@ rn.entity_postinit = function(type)
 	tracy.ZoneBegin()
 	tz.assert(rn_impl_new_entity ~= nil)
 	local ent = rn_impl_new_entity
+	ent:set_health(ent:get_stats():get_maximum_health())
 
 	local mod = ent:get_model()
 	if mod == rn.model.humanoid then

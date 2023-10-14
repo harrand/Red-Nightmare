@@ -28,6 +28,10 @@ rn.entity_handler[id] =
 			face_dir = "forward",
 			counter = 0
 		}
+
+		local bstats = ent:get_base_stats()
+		bstats:set_maximum_health(100)
+		ent:set_base_stats(bstats)
 		tracy.ZoneEnd()
 	end,
 	postinit = function(ent)
