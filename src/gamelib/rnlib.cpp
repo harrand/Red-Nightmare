@@ -45,7 +45,7 @@ namespace game
 	{
 		TZ_PROFZONE("rnlib - update", 0xFF00AAFF);
 		float delta_seconds = delta_micros / 1000000.0f;
-		game_system->scene.get_renderer().update(delta_seconds);
+		game_system->scene.update(delta_seconds);
 
 		if(game_system->dbgui.display_animation_renderer)
 		{
@@ -75,6 +75,8 @@ namespace game
 	void dbgui_game_bar()
 	{
 		ImGui::Text("Scene size: %zu", game_system->scene.size());
+		ImGui::SameLine();
+		ImGui::Text("%zu intersections", game_system->scene.debug_get_intersection_count());
 	}
 
 	LUA_BEGIN(rn_impl_get_scene)

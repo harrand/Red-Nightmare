@@ -22,6 +22,8 @@ tz_add_library(
 
 		src/gamelib/physics/aabb.cpp
 		src/gamelib/physics/aabb.hpp
+		src/gamelib/physics/quadtree.cpp
+		src/gamelib/physics/quadtree.hpp
 
 		src/gamelib/renderer/scene_renderer.cpp
 		src/gamelib/renderer/scene_renderer.hpp

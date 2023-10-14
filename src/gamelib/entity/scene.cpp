@@ -5,9 +5,34 @@
 
 namespace game::entity
 {
+	game::physics::aabb scene_quadtree_node::get_aabb() const
+	{
+		entity& e = this->sc->get(this->entity_hanval);
+		auto& elem = e.elem;
+		// get first object, represent its scale and position as a very basic aabb
+
+		auto& ren = elem.renderer->get_renderer();
+		tz::trs transform = ren.get_object_base_transform(elem.entry.pkg.objects.front());
+		tz::vec2 position = transform.translate.swizzle<0, 1>();
+		tz::vec2 half_scale = transform.scale.swizzle<0, 1>() * 0.5f;
+		if(elem.get_model() == game::render::scene_renderer::model::humanoid)
+		{
+			// humanoid has implicit internal scale of 0.001. multiply by 1000 to offset
+			half_scale *= 1000.0f;
+		}
+		// min is position - half_scale
+		// max is position + half_scale
+		return {position - half_scale, position + half_scale};
+	}
+
 	render::scene_renderer& scene::get_renderer()
 	{
 		return this->renderer;
+	}
+
+	std::size_t scene::debug_get_intersection_count() const
+	{
+		return this->intersection_state.size();
 	}
 
 	scene::entity_handle scene::add(std::size_t type)
@@ -63,6 +88,12 @@ namespace game::entity
 		return this->entities.size();
 	}
 
+	void scene::update(float delta_seconds)
+	{
+		this->renderer.update(delta_seconds);
+		this->rebuild_quadtree();
+	}
+
 	void scene::lua_initialise(tz::lua::state& state)
 	{
 		TZ_PROFZONE("scene - lua initialise", 0xFF99CC44);
@@ -98,6 +129,25 @@ namespace game::entity
 		state.assign_stack("rn_impl_dead_entity");
 		std::string cmd = "rn.entity_deinit()";
 		state.execute(cmd.c_str());
+	}
+
+	void scene::rebuild_quadtree()
+	{
+		this->quadtree.clear();
+		for(std::size_t i = 0; i < this->size(); i++)
+		{
+			auto hanval = static_cast<tz::hanval>(i);
+			if(this->is_valid(hanval))
+			{
+				this->quadtree.add({.sc = this, .entity_hanval = hanval});
+			}
+		}
+		this->intersection_state = this->quadtree.find_all_intersections();
+	}
+
+	bool scene::is_valid(tz::hanval entity_hanval) const
+	{
+		return std::find(this->free_list.begin(), this->free_list.end(), entity_hanval) == this->free_list.end();
 	}
 
 	// LUA API

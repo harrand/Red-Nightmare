@@ -2,10 +2,23 @@
 #define RN_GAMELIB_ENTITY_SCENE_HPP
 #include "gamelib/renderer/scene_renderer.hpp"
 #include "gamelib/entity/api.hpp"
+#include "gamelib/physics/quadtree.hpp"
 #include <deque>
 
 namespace game::entity
 {
+	struct scene_quadtree_node
+	{
+		scene* sc = nullptr;
+		tz::hanval entity_hanval = static_cast<tz::hanval>(tz::handle<int>{tz::nullhand});
+
+		game::physics::aabb get_aabb() const;
+		inline bool operator==(const scene_quadtree_node& rhs) const{return this->entity_hanval != rhs.entity_hanval;}
+	};
+
+	using scene_quadtree = game::physics::quadtree<scene_quadtree_node>;
+	constexpr float scene_quadtree_initial_size = 500.0f;
+
 	class scene
 	{
 	public:
@@ -18,13 +31,20 @@ namespace game::entity
 		entity& get(entity_handle e);
 		std::size_t size() const;
 
+		void update(float delta_seconds);
+
 		render::scene_renderer& get_renderer();
+		std::size_t debug_get_intersection_count() const;
 		void lua_initialise(tz::lua::state& state);
 	private:
 		void initialise_entity(tz::hanval entity_hanval, std::size_t type);
 		void deinitialise_entity(tz::hanval entity_hanval, std::size_t uid);
+		void rebuild_quadtree();
+		bool is_valid(tz::hanval entity_hanval) const;
 		std::vector<entity> entities = {};
 		std::deque<entity_handle> free_list = {};
+		scene_quadtree quadtree{game::physics::aabb{tz::vec2{-1.0f, -1.0f} * scene_quadtree_initial_size, tz::vec2{1.0f, 1.0f} * scene_quadtree_initial_size}};
+		scene_quadtree::intersection_state_t intersection_state = {};
 		render::scene_renderer renderer;
 	};
 

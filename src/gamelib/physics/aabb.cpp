@@ -46,9 +46,10 @@ namespace game::physics
 
 	bool aabb::intersects(const aabb& rhs) const
 	{
-		return !(this->get_left() >= rhs.get_right() ||
+		bool ret =  !(this->get_left() >= rhs.get_right() ||
 			this->get_right() <= rhs.get_left() ||
 			this->get_bottom() >= rhs.get_top() ||
 			this->get_top() <= rhs.get_bottom());
+		return ret;
 	}
 }
