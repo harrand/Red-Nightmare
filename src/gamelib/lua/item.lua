@@ -4,7 +4,11 @@ rn.item =
 	name = "Unknown",
 	slot_id = nil,
 	texture_name = nil,
-	texture_tint = {1.0, 1.0, 1.0}
+	-- we can't use a table here i.e `texture_tint = {1, 1, 1}` coz tables are pass by reference, meaning they all reference the same thing.
+	-- might be a way to do it properly, but separate members for the components works fine.
+	texture_tint_r = 1,
+	texture_tint_g = 1,
+	texture_tint_b = 1
 }
 rn.items = {}
 
@@ -48,13 +52,13 @@ function rn.item:set_texture_name(name)
 end
 
 function rn.item:get_texture_tint()
-	return self.texture_tint[1], self.texture_tint[2], self.texture_tint[3]
+	return self.texture_tint_r, self.texture_tint_g, self.texture_tint_b
 end
 
 function rn.item:set_texture_tint(r, g, b)
-	self.texture_tint[1] = r
-	self.texture_tint[2] = g
-	self.texture_tint[3] = b
+	self.texture_tint_r = r
+	self.texture_tint_g = g
+	self.texture_tint_b = b
 end
 
 rn.items = {}

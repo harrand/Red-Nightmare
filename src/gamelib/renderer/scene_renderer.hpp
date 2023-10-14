@@ -120,8 +120,13 @@ namespace game::render
 		scene_element elem;
 		int get_object_count(tz::lua::state& state);
 		int object_get_texture(tz::lua::state& state);
+		// note: setting texture tint affects the texture locator itself, meaning everything using the texture handle is affected.
+		// if you want to just affect this specific object, use object_set_colour_tint
 		int object_set_texture_tint(tz::lua::state& state);
 		int object_set_texture_handle(tz::lua::state& state);
+		// get/set colour tint for this specific object only. does not affect any other object, even if they use the same texture id.
+		int object_get_colour_tint(tz::lua::state& state);
+		int object_set_colour_tint(tz::lua::state& state);
 		int object_get_visibility(tz::lua::state& state);
 		int object_set_visibility(tz::lua::state& state);
 		int face_forward(tz::lua::state& state);
@@ -155,6 +160,8 @@ namespace game::render
 			LUA_METHOD(impl_rn_scene_element, object_get_texture)
 			LUA_METHOD(impl_rn_scene_element, object_set_texture_tint)
 			LUA_METHOD(impl_rn_scene_element, object_set_texture_handle)
+			LUA_METHOD(impl_rn_scene_element, object_get_colour_tint)
+			LUA_METHOD(impl_rn_scene_element, object_set_colour_tint)
 			LUA_METHOD(impl_rn_scene_element, object_get_visibility)
 			LUA_METHOD(impl_rn_scene_element, object_set_visibility)
 			LUA_METHOD(impl_rn_scene_element, face_forward)

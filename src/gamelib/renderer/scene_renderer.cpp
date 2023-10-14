@@ -254,6 +254,25 @@ namespace game::render
 		this->elem.object_set_texture(objh, bound_texture_id, tloc);
 		return 0;
 	}
+
+	int impl_rn_scene_element::object_get_colour_tint(tz::lua::state& state)
+	{
+		auto [_, oh] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+		auto objh = this->elem.entry.pkg.objects[oh];
+		tz::vec3 ret = this->elem.renderer->get_renderer().object_get_colour(objh);
+		state.stack_push_float(ret[0]);
+		state.stack_push_float(ret[1]);
+		state.stack_push_float(ret[2]);
+		return 3;
+	}
+
+	int impl_rn_scene_element::object_set_colour_tint(tz::lua::state& state)
+	{
+		auto [_, oh, r, g, b] = tz::lua::parse_args<tz::lua::nil, unsigned int, float, float, float>(state);
+		auto objh = this->elem.entry.pkg.objects[oh];
+		this->elem.renderer->get_renderer().object_set_colour(objh, {r, g, b});
+		return 0;
+	}
 	
 	int impl_rn_scene_element::object_get_visibility(tz::lua::state& state)
 	{
