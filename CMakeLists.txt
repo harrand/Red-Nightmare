@@ -20,6 +20,9 @@ tz_add_library(
 		src/gamelib/entity/scene.cpp
 		src/gamelib/entity/scene.hpp
 
+		src/gamelib/physics/aabb.cpp
+		src/gamelib/physics/aabb.hpp
+
 		src/gamelib/renderer/scene_renderer.cpp
 		src/gamelib/renderer/scene_renderer.hpp
 		src/gamelib/renderer/texture_manager.cpp
