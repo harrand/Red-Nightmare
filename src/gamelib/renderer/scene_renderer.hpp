@@ -2,6 +2,7 @@
 #define RN_GAMELIB_RENDERER_SCENE_RENDERER_HPP
 #include "tz/ren/animation.hpp"
 #include "tz/io/gltf.hpp"
+#include "tz/gl/output.hpp"
 #include "tz/core/debug.hpp"
 #include "tz/lua/api.hpp"
 
@@ -12,7 +13,7 @@
 namespace game::render
 {
 	struct scene_element;
-	class scene_renderer : private tz::ren::animation_renderer
+	class scene_renderer
 	{
 	public:
 		scene_renderer();
@@ -68,8 +69,22 @@ namespace game::render
 	private:
 		void update_camera(float delta);
 
+		struct pixelate_pass_t
+		{
+			pixelate_pass_t();
+			tz::gl::icomponent* get_background_image();
+			tz::gl::icomponent* get_foreground_image();
+
+			tz::gl::renderer_handle handle = tz::nullhand;
+			tz::gl::resource_handle bg_image = tz::nullhand;
+			tz::gl::resource_handle fg_image = tz::nullhand;
+		};
+
+		pixelate_pass_t pixelate_pass;
+		tz::gl::image_output output;
+		tz::ren::animation_renderer renderer;
 		int impl_mouse_scroll_delta = 0;
-		object_handle root = tz::nullhand;
+		tz::ren::animation_renderer::object_handle root = tz::nullhand;
 		tz::vec2 view_bounds = {64.0f, 64.0f};
 		std::vector<entry> entries = {};
 		std::array<tz::ren::animation_renderer::asset_package, static_cast<int>(model::_count)> base_models = {};

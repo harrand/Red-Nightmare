@@ -2,16 +2,41 @@
 #include "tz/core/profile.hpp"
 #include "tz/ren/animation.hpp"
 #include "tz/wsi/monitor.hpp"
+#include "tz/gl/resource.hpp"
 #include "tz/lua/api.hpp"
 #include <limits>
 
+#include "tz/gl/imported_shaders.hpp"
+#include ImportedShaderHeader(pixelate, vertex)
+#include ImportedShaderHeader(pixelate, fragment)
+#include ImportedShaderHeader(scene_renderer, fragment)
+
 namespace game::render
 {
-	scene_renderer::scene_renderer()
+	scene_renderer::scene_renderer():
+	pixelate_pass(),
+	output
+	{tz::gl::image_output_info{
+		.colours =
+		{
+			this->pixelate_pass.get_background_image(),
+			this->pixelate_pass.get_foreground_image()
+		}
+	}},
+	renderer
+	(
+		128u,
+		{tz::gl::renderer_option::no_present},
+		ImportedShaderSource(scene_renderer, fragment),
+		&this->output
+	)
 	{
 		TZ_PROFZONE("scene renderer - create", 0xFFFF4488);
-		tz::ren::animation_renderer::append_to_render_graph();
-		this->root = tz::ren::animation_renderer::add_object
+		this->renderer.append_to_render_graph();
+		// add pixelate pass to render graph, and then make sure it depends on animation renderer.
+		tz::gl::get_device().render_graph().timeline.push_back(static_cast<tz::gl::eid_t>(static_cast<tz::hanval>(this->pixelate_pass.handle)));
+		tz::gl::get_device().render_graph().add_dependencies(this->pixelate_pass.handle, this->renderer.get_render_pass());
+		this->root = this->renderer.add_object
 		({
 			.mesh = tz::nullhand,
 			.bound_textures = {},
@@ -26,7 +51,7 @@ namespace game::render
 		if(this->base_models[mid].objects.empty())
 		{
 			// no base model exists, create a new one.
-			this->base_models[mid] = tz::ren::animation_renderer::add_gltf(scene_renderer::get_model(m), this->root);
+			this->base_models[mid] = this->renderer.add_gltf(scene_renderer::get_model(m), this->root);
 			this->entries.push_back({.pkg = this->base_models[mid], .m = m});
 		}
 		else
@@ -35,15 +60,15 @@ namespace game::render
 			opkg.overrides = {tz::ren::animation_renderer::override_flag::mesh, tz::ren::animation_renderer::override_flag::texture};
 			opkg.pkg = this->base_models[mid];
 
-			this->entries.push_back({.pkg = tz::ren::animation_renderer::add_gltf(scene_renderer::get_model(m), this->root, opkg), .m = m});
+			this->entries.push_back({.pkg = this->renderer.add_gltf(scene_renderer::get_model(m), this->root, opkg), .m = m});
 		}
 		auto handle = this->entries.back().pkg.objects.front();
 		// human is way bigger than quad, so cut it down a size a bit.
 		if(m == model::humanoid)
 		{
-			tz::trs trs = tz::ren::animation_renderer::get_object_base_transform(handle);
+			tz::trs trs = this->renderer.get_object_base_transform(handle);
 			trs.scale *= 0.25f;
-			tz::ren::animation_renderer::set_object_base_transform(handle, trs);
+			this->renderer.set_object_base_transform(handle, trs);
 		}
 		return this->entries.back();
 	}
@@ -56,7 +81,7 @@ namespace game::render
 			// we could set base model to empty here, but it means the next time this model is added, the mesh data is added again
 			// so we cannot do anything until we delete the actual meshes and textures.
 		}
-		tz::ren::animation_renderer::remove_objects(e.pkg, tz::ren::animation_renderer::transform_hierarchy::remove_strategy::remove_children);
+		this->renderer.remove_objects(e.pkg, tz::ren::animation_renderer::transform_hierarchy::remove_strategy::remove_children);
 	}
 
 	scene_element scene_renderer::get_element(entry e)
@@ -79,10 +104,10 @@ namespace game::render
 	{
 		TZ_PROFZONE("scene renderer - update", 0xFFFF4488);
 		this->update_camera(delta);
-		tz::ren::animation_renderer::update(delta);
+		this->renderer.update(delta);
 		const tz::vec2ui mondims = tz::wsi::get_monitors().front().dimensions;
 		const float aspect_ratio = static_cast<float>(mondims[0]) / mondims[1];
-		tz::ren::animation_renderer::camera_orthographic
+		this->renderer.camera_orthographic
 		({
 			.left = -this->view_bounds[0],
 			.right = this->view_bounds[0],
@@ -95,12 +120,12 @@ namespace game::render
 
 	void scene_renderer::dbgui()
 	{
-		tz::ren::animation_renderer::dbgui();
+		this->renderer.dbgui();
 	}
 
 	tz::ren::animation_renderer& scene_renderer::get_renderer()
 	{
-		return *static_cast<tz::ren::animation_renderer*>(this);
+		return this->renderer;
 	}
 
 	void scene_renderer::update_camera(float delta)
@@ -123,6 +148,41 @@ namespace game::render
 			// scrolled down.	
 			this->view_bounds *= (1.0f + std::clamp(delta, 0.1f, 0.3f));
 		}
+	}
+
+	// pixelate pass
+	scene_renderer::pixelate_pass_t::pixelate_pass_t()
+	{
+		// todo: we depend on animation renderer's render pass.
+		tz::gl::renderer_info rinfo;
+		rinfo.state().graphics.tri_count = 1;
+		rinfo.shader().set_shader(tz::gl::shader_stage::vertex, ImportedShaderSource(pixelate, vertex));
+		rinfo.shader().set_shader(tz::gl::shader_stage::fragment, ImportedShaderSource(pixelate, fragment));
+		//auto mondims = tz::wsi::get_monitors().front().dimensions;
+		auto mondims = tz::window().get_dimensions();
+		this->bg_image = rinfo.add_resource(tz::gl::image_resource::from_uninitialised
+		({
+			.format = tz::gl::image_format::BGRA32,
+			.dimensions = mondims,
+			.flags = {tz::gl::resource_flag::renderer_output}
+		}));
+		this->fg_image = rinfo.add_resource(tz::gl::image_resource::from_uninitialised
+		({
+			.format = tz::gl::image_format::BGRA32,
+			.dimensions = mondims,
+			.flags = {tz::gl::resource_flag::renderer_output}
+		}));
+		this->handle = tz::gl::get_device().create_renderer(rinfo);
+	}
+
+	tz::gl::icomponent* scene_renderer::pixelate_pass_t::get_background_image()
+	{
+		return tz::gl::get_device().get_renderer(this->handle).get_component(this->bg_image);
+	}
+
+	tz::gl::icomponent* scene_renderer::pixelate_pass_t::get_foreground_image()
+	{
+		return tz::gl::get_device().get_renderer(this->handle).get_component(this->fg_image);
 	}
 
 	std::size_t scene_element::get_object_count() const
