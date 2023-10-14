@@ -27,10 +27,9 @@ rn.entity_handler[id] =
 		ent:get_element():object_set_texture_tint(1, 0, 1.0, 0.35, 0.05)
 		ent:get_element():face_right()
 		ent:get_element():rotate(-1.5708)
-		local b = rn.new_buff()
-		b:set_name("<Projectile Speed>")
-		b:set_increased_movement_speed(100)
-		ent:apply_buff(b)
+		local stats = ent:get_base_stats()
+		stats:set_movement_speed(stats:get_movement_speed() * 2.0)
+		ent:set_base_stats(stats)
 	end,
 	update = function(ent)
 		tz.assert(ent:get_name() == "Darkstone Block")
