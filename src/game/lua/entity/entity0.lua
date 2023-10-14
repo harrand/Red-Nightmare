@@ -15,8 +15,6 @@ rn.entity_handler[id] =
 	static_init = function()
 		tracy.ZoneBeginN(typestr .. " - static init")
 		rn.texture_manager():register_texture(typestr .. ".skin", "./res/images/skins/entity0.png")
-		rn.texture_manager():register_texture(typestr .. ".body", "./res/images/skins/body_armour/left_arm_tattoos.png")
-		rn.texture_manager():register_texture(typestr .. ".helm", "./res/images/skins/helm/med_helm.png")
 		tracy.ZoneEnd()
 	end,
 	preinit = function(ent)
@@ -37,9 +35,6 @@ rn.entity_handler[id] =
 		tz.assert(rn.texture_manager():has_texture(typestr .. ".skin"))
 		local texh = rn.texture_manager():get_texture(typestr .. ".skin")
 		ent:get_element():object_set_texture_handle(2, 0, texh)
-		local body_texh = rn.texture_manager():get_texture(typestr .. ".body")
-		ent:get_element():object_set_texture_tint(4, 0, 0.0, 0.0, 0.0)
-		ent:get_element():object_set_texture_handle(4, 0, body_texh)
 
 		rn.equip(ent, "Iron Sallet")
 

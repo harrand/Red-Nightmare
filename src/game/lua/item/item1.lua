@@ -1,4 +1,3 @@
-
 local item = rn.item:new()
 local name = "White Cloth Headband"
 item:set_id(1)

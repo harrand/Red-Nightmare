@@ -45,5 +45,7 @@ rn.equip = function(ent, item_name)
 
 	local texh = rn.texture_manager():get_texture(item_name .. ".texture")
 	e:object_set_texture_handle(object_index, 0, texh)
+	local r, g, b = itemdata:get_texture_tint()
+	e:object_set_texture_tint(object_index, 0, r, g, b)
 	e:object_set_visibility(object_index, true)
 end
