@@ -1,4 +1,5 @@
 #include "gamelib/rnlib.hpp"
+#include "gamelib/logic/stats.hpp"
 #include "gamelib/entity/scene.hpp"
 #include "gamelib/renderer/texture_manager.hpp"
 #include "tz/core/debug.hpp"
@@ -111,6 +112,7 @@ namespace game
 
 			game_system->scene.lua_initialise(state);
 			game_system->texmgr.lua_initialise(state);
+			game::logic::stats_static_initialise(state);
 			state.assign_func("rn.scene", LUA_FN_NAME(rn_impl_get_scene));
 			state.assign_func("rn.texture_manager", LUA_FN_NAME(rn_impl_get_texture_manager));
 

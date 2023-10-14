@@ -94,10 +94,10 @@ rn.entity_handler[id] =
 			local hypot = math.sqrt(xdiff*xdiff + ydiff*ydiff)
 			xdiff = xdiff / hypot
 			ydiff = ydiff / hypot
-			x = x + xdiff * ent:get_movement_speed() * rn.delta_time
-			y = y + ydiff * ent:get_movement_speed() * rn.delta_time
+			x = x + xdiff * ent:stats_get_movement_speed() * rn.delta_time
+			y = y + ydiff * ent:stats_get_movement_speed() * rn.delta_time
 			e:set_position(x, y)
-			e:set_animation_speed(math.sqrt(ent:get_movement_speed() / 3.0))
+			e:set_animation_speed(math.sqrt(ent:stats_get_movement_speed() / 3.0))
 			tracy.ZoneEnd()
 		else
 			tracy.ZoneBeginN("stationary")

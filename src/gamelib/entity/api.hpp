@@ -1,6 +1,7 @@
 #ifndef RN_GAMELIB_ENTITY_API_HPP
 #define RN_GAMELIB_ENTITY_API_HPP
 #include "gamelib/renderer/scene_renderer.hpp"
+#include "gamelib/logic/stats.hpp"
 
 namespace game::entity
 {
@@ -10,8 +11,11 @@ namespace game::entity
 		std::size_t type = 0;
 		std::size_t uid = uid_global_counter++;
 		std::string name = "Untitled Entity";
-		float movement_speed = 3.0f;
+		game::logic::stats base_stats = {};
+		std::unordered_map<std::string, game::logic::buff> buffs = {};
 		game::render::scene_element elem = {};
+
+		void update(float delta_seconds);
 
 		static entity null()
 		{
@@ -36,8 +40,9 @@ namespace game::entity
 		int uid(tz::lua::state& state);
 		int get_name(tz::lua::state& state);
 		int set_name(tz::lua::state& state);
-		int get_movement_speed(tz::lua::state& state);
-		int set_movement_speed(tz::lua::state& state);
+		int stats_get_movement_speed(tz::lua::state& state);
+		int stats_set_movement_speed(tz::lua::state& state);
+		int apply_buff(tz::lua::state& state);
 		int get_model(tz::lua::state& state);
 		int set_model(tz::lua::state& state);
 		int get_element(tz::lua::state& state);
@@ -49,8 +54,9 @@ namespace game::entity
 			LUA_METHOD(rn_impl_entity, uid)
 			LUA_METHOD(rn_impl_entity, get_name)
 			LUA_METHOD(rn_impl_entity, set_name)
-			LUA_METHOD(rn_impl_entity, get_movement_speed)
-			LUA_METHOD(rn_impl_entity, set_movement_speed)
+			LUA_METHOD(rn_impl_entity, stats_get_movement_speed)
+			LUA_METHOD(rn_impl_entity, stats_set_movement_speed)
+			LUA_METHOD(rn_impl_entity, apply_buff)
 			LUA_METHOD(rn_impl_entity, get_model)
 			LUA_METHOD(rn_impl_entity, set_model)
 			LUA_METHOD(rn_impl_entity, get_element)

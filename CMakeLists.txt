@@ -20,6 +20,9 @@ tz_add_library(
 		src/gamelib/entity/scene.cpp
 		src/gamelib/entity/scene.hpp
 
+		src/gamelib/logic/stats.cpp
+		src/gamelib/logic/stats.hpp
+
 		src/gamelib/physics/aabb.cpp
 		src/gamelib/physics/aabb.hpp
 		src/gamelib/physics/quadtree.cpp

@@ -5,6 +5,30 @@ namespace game::entity
 {
 	std::size_t entity::uid_global_counter = 0;
 
+	void entity::update(float delta_seconds)
+	{
+		for(auto iter = this->buffs.begin(); iter != this->buffs.end();)
+		{
+			auto& buff = iter->second;
+			if(!buff.time_remaining_seconds.has_value())
+			{
+				continue;
+			}
+			float& t = buff.time_remaining_seconds.value();
+			t -= delta_seconds;
+			if(t < 0.0f)
+			{
+				// time to remove the buff.
+				tz::report("Buff %s has timed out.", buff.name.c_str());
+				iter = this->buffs.erase(iter);
+			}
+			else
+			{
+				iter++;
+			}
+		}
+	}
+
 	entity& rn_impl_entity::get()
 	{
 		return this->scene->get(this->entity_hanval);
@@ -35,16 +59,24 @@ namespace game::entity
 		return 0;
 	}
 
-	int rn_impl_entity::get_movement_speed(tz::lua::state& state)
+	int rn_impl_entity::stats_get_movement_speed(tz::lua::state& state)
 	{
-		state.stack_push_float(this->get().movement_speed);
+		state.stack_push_float(this->get().base_stats.movement_speed);
 		return 1;
 	}
 
-	int rn_impl_entity::set_movement_speed(tz::lua::state& state)
+	int rn_impl_entity::stats_set_movement_speed(tz::lua::state& state)
 	{
 		auto [_, movement_speed] = tz::lua::parse_args<tz::lua::nil, float>(state);
-		this->get().movement_speed = movement_speed;
+		this->get().base_stats.movement_speed = movement_speed;
+		return 0;
+	}
+
+	int rn_impl_entity::apply_buff(tz::lua::state& state)
+	{
+		using namespace game::logic;
+		auto& buff = state.stack_get_userdata<rn_impl_buff>(2);
+		this->get().buffs[buff.b.name] = buff.b;
 		return 0;
 	}
 

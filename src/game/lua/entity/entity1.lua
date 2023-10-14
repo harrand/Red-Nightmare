@@ -27,7 +27,7 @@ rn.entity_handler[id] =
 		ent:get_element():object_set_texture_tint(1, 0, 1.0, 0.35, 0.05)
 		ent:get_element():face_right()
 		ent:get_element():rotate(-1.5708)
-		ent:set_movement_speed(ent:get_movement_speed() * 2)
+		ent:stats_set_movement_speed(ent:stats_get_movement_speed() * 2)
 	end,
 	update = function(ent)
 		tz.assert(ent:get_name() == "Darkstone Block")
@@ -44,13 +44,13 @@ rn.entity_handler[id] =
 
 		tz.assert(data.shoot_dir ~= nil)
 		if data.shoot_dir == "right" then
-			x = x + ent:get_movement_speed() * rn.delta_time
+			x = x + ent:stats_get_movement_speed() * rn.delta_time
 		elseif data.shoot_dir == "left" then
-			x = x - ent:get_movement_speed() * rn.delta_time
+			x = x - ent:stats_get_movement_speed() * rn.delta_time
 		elseif data.shoot_dir == "forward" then
-			y = y - ent:get_movement_speed() * rn.delta_time
+			y = y - ent:stats_get_movement_speed() * rn.delta_time
 		elseif data.shoot_dir == "backward" then
-			y = y + ent:get_movement_speed() * rn.delta_time
+			y = y + ent:stats_get_movement_speed() * rn.delta_time
 		else
 			tz.assert(false)
 		end
