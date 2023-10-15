@@ -27,7 +27,7 @@ rn.entity_handler[id] =
 			cast_begin = nil,
 			face_dir = "forward",
 			counter = 0,
-			cast_buildup = nil
+			cast_effect_right = nil
 		}
 
 		local bstats = ent:get_base_stats()
@@ -89,9 +89,9 @@ rn.entity_handler[id] =
 			data.face_dir = "right"
 		end
 		if rn.is_key_down("esc") and data.cast_begin ~= nil then
-			if data.cast_buildup ~= nil then
-				rn.scene():remove_uid(data.cast_buildup:uid())
-				data.cast_buildup = nil	
+			if data.cast_effect_right ~= nil then
+				rn.scene():remove_uid(data.cast_effect_right:uid())
+				data.cast_effect_right = nil	
 			end
 			data.cast_begin = nil
 		end
@@ -134,9 +134,13 @@ rn.entity_handler[id] =
 				local projectile = sc:get(sc:add(1))
 				projectile:set_faction(ent:get_faction())
 				print(projectile:get_name() .. " spawned with faction " .. rn.get_faction(projectile))
-				if data.cast_buildup ~= nil then
-					rn.scene():remove_uid(data.cast_buildup:uid())
-					data.cast_buildup = nil
+				if data.cast_effect_right ~= nil then
+					rn.scene():remove_uid(data.cast_effect_right:uid())
+					data.cast_effect_right = nil
+				end
+				if data.cast_effect_left ~= nil then
+					rn.scene():remove_uid(data.cast_effect_left:uid())
+					data.cast_effect_left = nil
 				end
 				local x, y = e:get_subobject_position(21)
 				if data.cast_id == 1 then
@@ -167,16 +171,29 @@ rn.entity_handler[id] =
 			elseif wnd:is_mouse_down("left") then
 				data.cast_begin = tz.time()
 				data.cast_id = 0
-				data.cast_buildup = rn.scene():get(rn.scene():add(4))
-				rn.entity.data[data.cast_buildup:uid()].target_entity = ent
-				rn.entity.data[data.cast_buildup:uid()].cast_duration = cast_times[1]
+				data.cast_effect_right = rn.scene():get(rn.scene():add(4))
+				rn.entity.data[data.cast_effect_right:uid()].target_entity = ent
+				rn.entity.data[data.cast_effect_right:uid()].subobject = 21
+				rn.entity.data[data.cast_effect_right:uid()].cast_duration = cast_times[1]
 				--e:play_animation(6, false)
 				--e:queue_animation(2, false)
 				e:play_animation(2, false)
 			elseif wnd:is_mouse_down("right") then
 				data.cast_begin = tz.time()
 				data.cast_id = 1
-				e:play_animation(5, false)
+				data.cast_effect_right = rn.scene():get(rn.scene():add(4))
+				rn.entity.data[data.cast_effect_right:uid()].target_entity = ent
+				rn.entity.data[data.cast_effect_right:uid()].subobject = 21
+				rn.entity.data[data.cast_effect_right:uid()].cast_duration = cast_times[2]
+				data.cast_effect_left = rn.scene():get(rn.scene():add(4))
+				rn.entity.data[data.cast_effect_left:uid()].target_entity = ent
+				rn.entity.data[data.cast_effect_left:uid()].subobject = 17
+				rn.entity.data[data.cast_effect_left:uid()].cast_duration = cast_times[2]
+				if data.face_dir == "left" or data.face_dir == "right" then
+					e:play_animation(4, false)
+				else
+					e:play_animation(5, false)
+				end
 			else
 				keep_playing_animation(e, 6, false)
 			end

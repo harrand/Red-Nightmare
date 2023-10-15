@@ -21,7 +21,8 @@ rn.entity_handler[id] =
 			cur_texture_id = 0,
 			spawned_at = tz.time(),
 			target_entity = nil,
-			cast_duration = nil
+			cast_duration = nil,
+			subobject = nil
 		}
 	end,
 	postinit = function(ent)
@@ -34,7 +35,8 @@ rn.entity_handler[id] =
 	update = function(ent)
 		local data = rn.entity.data[ent:uid()]
 		tz.assert(data.target_entity ~= nil)
-		local xtar, ytar = data.target_entity:get_element():get_subobject_position(21)
+		tz.assert(data.subobject ~= nil)
+		local xtar, ytar = data.target_entity:get_element():get_subobject_position(data.subobject)
 		ent:get_element():set_position(xtar, ytar)
 
 		local casted_time = tz.time() - data.spawned_at
