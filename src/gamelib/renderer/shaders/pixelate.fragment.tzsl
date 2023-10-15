@@ -1,17 +1,25 @@
 shader(type = fragment);
 
-resource(id = 0) const texture res::textures[];
-output(id = 0) vec4 out::frag_colour;
+resource(id = 0) const buffer zoom_buffer
+{
+	float value;
+} zoom;
 
-//const vec2 resolution = vec2(1920.0f, 1080.0f);
-const vec2 resolution = vec2(800.0f, 600.0f);
+resource(id = 1) const buffer dimension_buffer
+{
+	float w, h;
+} dimensions;
+
+resource(id = 2) const texture res::textures[];
+output(id = 0) vec4 out::frag_colour;
 
 void main()
 {
-	vec2 uv = vec2(in::fragment_coord.xy / resolution.xy);	
-	float pixels = 4096.0f;
-	float dx = 15.0f * (1.0f / pixels);
-	float dy = 10.0f * (1.0f / pixels);
+	vec2 uv = vec2(in::fragment_coord.xy / vec2(dimensions.w, dimensions.h));	
+	const float pixelate_amt = 2048.0f;
+	float pixels = pixelate_amt * zoom.value;
+	float dx = 1.0f / pixels;
+	float dy = 1.0f / pixels;
 	vec2 coord = vec2(dx * floor(uv.x / dx), dy * floor(uv.y / dy));
 
 	out::frag_colour = texture(res::textures[0], coord);

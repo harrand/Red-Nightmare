@@ -116,6 +116,8 @@ namespace game::render
 			.near_plane = -20.0f,
 			.far_plane = 21.5f
 		});
+
+		this->pixelate_pass.handle_resize(this->renderer.get_render_pass());
 	}
 
 	void scene_renderer::dbgui()
@@ -141,12 +143,16 @@ namespace game::render
 		if(ynow > ybefore)
 		{
 			// scrolled up.
-			this->view_bounds *= (1.0f - std::clamp(delta, 0.1f, 0.3f));
+			const float multiplier = (1.0f - std::clamp(delta, 0.1f, 0.3f));
+			this->view_bounds *= multiplier;
+			this->pixelate_pass.zoom_amount() *= multiplier;
 		}
 		else if(ynow < ybefore)
 		{
 			// scrolled down.	
-			this->view_bounds *= (1.0f + std::clamp(delta, 0.1f, 0.3f));
+			const float multiplier = (1.0f + std::clamp(delta, 0.1f, 0.3f));
+			this->view_bounds *= multiplier;
+			this->pixelate_pass.zoom_amount() *= multiplier;
 		}
 	}
 
@@ -160,6 +166,14 @@ namespace game::render
 		rinfo.shader().set_shader(tz::gl::shader_stage::fragment, ImportedShaderSource(pixelate, fragment));
 		//auto mondims = tz::wsi::get_monitors().front().dimensions;
 		auto mondims = tz::window().get_dimensions();
+		std::array<float, 2> dimension_buffer_data;
+		dimension_buffer_data[0] = mondims[0];
+		dimension_buffer_data[1] = mondims[1];
+		this->zoom_buffer = rinfo.add_resource(tz::gl::buffer_resource::from_one(1.0f,
+		{
+			.access = tz::gl::resource_access::dynamic_access
+		}));
+		this->dimension_buffer = rinfo.add_resource(tz::gl::buffer_resource::from_many(dimension_buffer_data));
 		this->bg_image = rinfo.add_resource(tz::gl::image_resource::from_uninitialised
 		({
 			.format = tz::gl::image_format::BGRA32,
@@ -173,6 +187,7 @@ namespace game::render
 			.flags = {tz::gl::resource_flag::renderer_output}
 		}));
 		this->handle = tz::gl::get_device().create_renderer(rinfo);
+		this->dims_cache = tz::window().get_dimensions();
 	}
 
 	tz::gl::icomponent* scene_renderer::pixelate_pass_t::get_background_image()
@@ -183,6 +198,54 @@ namespace game::render
 	tz::gl::icomponent* scene_renderer::pixelate_pass_t::get_foreground_image()
 	{
 		return tz::gl::get_device().get_renderer(this->handle).get_component(this->fg_image);
+	}
+
+	float& scene_renderer::pixelate_pass_t::zoom_amount()
+	{
+		return tz::gl::get_device().get_renderer(this->handle).get_resource(this->zoom_buffer)->data_as<float>().front();
+	}
+
+	void scene_renderer::pixelate_pass_t::handle_resize(tz::gl::renderer_handle animation_render_pass)
+	{
+		if(tz::window().get_dimensions() != this->dims_cache && tz::window().get_dimensions() != tz::vec2ui{0u, 0u})
+		{
+			// we have been resized.
+			// firstly resize our foreground and background images.
+			{
+				tz::gl::RendererEditBuilder builder;
+				auto windims = static_cast<tz::vec2>(tz::window().get_dimensions());
+				builder.write
+				({
+					.resource = this->dimension_buffer,
+					.data = std::as_bytes(windims.data()),
+					.offset = 0
+				});
+				builder.image_resize
+				({
+					.image_handle = this->bg_image,
+					.dimensions = tz::window().get_dimensions()
+				});
+				builder.image_resize
+				({
+					.image_handle = this->fg_image,
+					.dimensions = tz::window().get_dimensions()
+				});
+				builder.mark_dirty({.images = true});
+				tz::gl::get_device().get_renderer(this->handle).edit(builder.build());
+			}
+
+			// then tell the animation renderer to recreate its render targets.
+			{
+				tz::gl::RendererEditBuilder builder;
+				builder.mark_dirty
+				({
+					.work_commands = true,
+					.render_targets = true,
+				});
+				tz::gl::get_device().get_renderer(animation_render_pass).edit(builder.build());
+				this->dims_cache = tz::window().get_dimensions();
+			}
+		}
 	}
 
 	std::size_t scene_element::get_object_count() const

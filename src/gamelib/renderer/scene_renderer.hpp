@@ -74,10 +74,15 @@ namespace game::render
 			pixelate_pass_t();
 			tz::gl::icomponent* get_background_image();
 			tz::gl::icomponent* get_foreground_image();
+			float& zoom_amount();
+			void handle_resize(tz::gl::renderer_handle animation_render_pass);
 
 			tz::gl::renderer_handle handle = tz::nullhand;
+			tz::gl::resource_handle dimension_buffer = tz::nullhand;
+			tz::gl::resource_handle zoom_buffer = tz::nullhand;
 			tz::gl::resource_handle bg_image = tz::nullhand;
 			tz::gl::resource_handle fg_image = tz::nullhand;
+			tz::vec2ui dims_cache;
 		};
 
 		pixelate_pass_t pixelate_pass;
