@@ -22,7 +22,8 @@ rn.entity_handler[id] =
 			spawned_at = tz.time(),
 			target_entity = nil,
 			cast_duration = nil,
-			subobject = nil
+			subobject = nil,
+			reverse = false
 		}
 	end,
 	postinit = function(ent)
@@ -43,7 +44,9 @@ rn.entity_handler[id] =
 		local cast_progress = casted_time / data.cast_duration
 		-- frame count = 7
 		local frame_id = math.floor(cast_progress * 6) % 7
-		print("frame id = " .. frame_id)
+		if data.reverse then
+			frame_id = 6 - frame_id
+		end
 		ent:get_element():object_set_texture_handle(1, 0, rn.texture_manager():get_texture(typestr .. ".sprite" .. frame_id))
 	end
 }
