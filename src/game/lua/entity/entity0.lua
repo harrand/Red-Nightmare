@@ -26,7 +26,8 @@ rn.entity_handler[id] =
 			cast_id = nil,
 			cast_begin = nil,
 			face_dir = "forward",
-			counter = 0
+			counter = 0,
+			cast_buildup = nil
 		}
 
 		local bstats = ent:get_base_stats()
@@ -118,7 +119,7 @@ rn.entity_handler[id] =
 
 		local cast_times = 
 		{
-			800, 1100
+			850, 1100
 		}
 
 		if data.cast_begin ~= nil then
@@ -129,6 +130,10 @@ rn.entity_handler[id] =
 				local projectile = sc:get(sc:add(1))
 				projectile:set_faction(ent:get_faction())
 				print(projectile:get_name() .. " spawned with faction " .. rn.get_faction(projectile))
+				if data.cast_buildup ~= nil then
+					rn.scene():remove_uid(data.cast_buildup:uid())
+					data.cast_buildup = nil
+				end
 				local x, y = e:get_subobject_position(21)
 				if data.cast_id == 1 then
 					local x2, y2 = e:get_subobject_position(17)
@@ -158,6 +163,9 @@ rn.entity_handler[id] =
 			elseif wnd:is_mouse_down("left") then
 				data.cast_begin = tz.time()
 				data.cast_id = 0
+				data.cast_buildup = rn.scene():get(rn.scene():add(4))
+				rn.entity.data[data.cast_buildup:uid()].target_entity = ent
+				rn.entity.data[data.cast_buildup:uid()].cast_duration = cast_times[1]
 				--e:play_animation(6, false)
 				--e:queue_animation(2, false)
 				e:play_animation(2, false)

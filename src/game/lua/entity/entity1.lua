@@ -69,7 +69,7 @@ rn.entity_handler[id] =
 		rn.for_each_collision(ent, function(ent2)
 			if not data.collided_this_update and rn.get_relationship(ent, ent2) == "hostile" then
 				data.collided_this_update = true
-				print(ent2:get_name() .. " finna get booped by le fireball")
+				ent2:get_element():play_animation(7, false)
 			end
 		end)
 
