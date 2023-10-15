@@ -89,6 +89,10 @@ rn.entity_handler[id] =
 			data.face_dir = "right"
 		end
 		if rn.is_key_down("esc") and data.cast_begin ~= nil then
+			if data.cast_buildup ~= nil then
+				rn.scene():remove_uid(data.cast_buildup:uid())
+				data.cast_buildup = nil	
+			end
 			data.cast_begin = nil
 		end
 		tracy.ZoneEnd()

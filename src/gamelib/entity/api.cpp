@@ -154,6 +154,12 @@ namespace game::entity
 		return 0;
 	}
 
+	int rn_impl_entity::is_dead(tz::lua::state& state)
+	{
+		state.stack_push_bool(this->get().current_health == 0);
+		return 1;
+	}
+
 	int rn_impl_entity::apply_buff(tz::lua::state& state)
 	{
 		using namespace game::logic;
