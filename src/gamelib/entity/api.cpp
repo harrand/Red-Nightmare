@@ -15,6 +15,32 @@ namespace game::entity
 		return ret;
 	}
 
+	relationship entity::get_relationship(const entity& rhs) const
+	{
+		if(this->allegience == faction::pure_friend || rhs.allegience == faction::pure_friend)
+		{
+			return relationship::friendly;
+		}
+		if(this->allegience == faction::pure_neutral || rhs.allegience == faction::pure_neutral)
+		{
+			return relationship::neutral;
+		}
+		if(this->allegience == faction::pure_enemy || rhs.allegience == faction::pure_enemy)
+		{
+			return relationship::hostile;
+		}
+		tz::assert(this->allegience == faction::player_ally || this->allegience == faction::player_enemy);
+		tz::assert(rhs.allegience == faction::player_ally || rhs.allegience == faction::player_enemy);
+		if(this->allegience == rhs.allegience)
+		{
+			return relationship::friendly;
+		}	
+		else
+		{
+			return relationship::hostile;
+		}
+	}
+
 	void entity::update(float delta_seconds)
 	{
 		for(auto iter = this->buffs.begin(); iter != this->buffs.end();)
@@ -68,6 +94,28 @@ namespace game::entity
 		auto [_, name] = tz::lua::parse_args<tz::lua::nil, std::string>(state);
 		this->get().name = name;
 		return 0;
+	}
+
+	int rn_impl_entity::get_faction(tz::lua::state& state)
+	{
+		state.stack_push_int(static_cast<int>(this->get().allegience));
+		return 1;
+	}
+
+	int rn_impl_entity::set_faction(tz::lua::state& state)
+	{
+		auto [_, facval] = tz::lua::parse_args<tz::lua::nil, int>(state);
+		tz::assert(facval >= 0 && facval <= 4, "Invalid faction value %d. Must be between 0-4", facval);
+		this->get().allegience = static_cast<faction>(facval);
+		return 0;
+	}
+
+	int rn_impl_entity::get_relationship(tz::lua::state& state)
+	{
+		auto& rhs_ent = state.stack_get_userdata<rn_impl_entity>(2);
+		relationship ret = this->get().get_relationship(rhs_ent.get());
+		state.stack_push_int(static_cast<int>(ret));
+		return 1;
 	}
 
 	int rn_impl_entity::get_base_stats(tz::lua::state& state)

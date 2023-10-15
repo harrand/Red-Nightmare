@@ -4,12 +4,45 @@ rn.model =
 	humanoid = 1
 }
 
+rn.faction =
+{
+	"pure friend",
+	"pure enemy",
+	"pure neutral",
+	"player ally",
+	"player enemy"
+}
+
+rn.faction_id =
+{
+	pure_friend = 0,
+	pure_enemy = 1,
+	pure_neutral = 2,
+	player_ally = 3,
+	player_enemy = 4
+}
+
+rn.relationship =
+{
+	"friendly",
+	"neutral",
+	"hostile"
+}
+
 rn.entity = {}
 rn.entity.type = {}
 rn.entity.living = {}
 rn.entity.data = {}
 
 rn.entity_handler = {}
+
+rn.get_faction = function(ent)
+	return rn.faction[ent:get_faction() + 1]
+end
+
+rn.get_relationship = function(ent1, ent2)
+	return rn.relationship[ent1:get_relationship(ent2) + 1]
+end
 
 -- Include all entities here.
 require "entity0"

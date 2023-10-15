@@ -44,6 +44,7 @@ rn.entity_handler[id] =
 
 		local sc = ent:get_element():get_uniform_scale()
 		ent:get_element():set_uniform_scale(sc * 0.5)
+		ent:set_faction(rn.faction_id.player_ally)
 
 		tracy.ZoneEnd()
 	end,
@@ -126,6 +127,8 @@ rn.entity_handler[id] =
 			if tz.time() >= cast_end then
 				local sc = rn.scene()
 				local projectile = sc:get(sc:add(1))
+				projectile:set_faction(ent:get_faction())
+				print(projectile:get_name() .. " spawned with faction " .. rn.get_faction(projectile))
 				local x, y = e:get_subobject_position(21)
 				if data.cast_id == 1 then
 					local x2, y2 = e:get_subobject_position(17)

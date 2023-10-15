@@ -30,6 +30,7 @@ rn.entity_handler[id] =
 		ent:get_element():set_uniform_scale(sc * 0.5)
 
 		ent:get_element():play_animation(12, true)
+		ent:set_faction(rn.faction_id.player_enemy)
 	end,
 	update = function(ent)
 

@@ -1,5 +1,5 @@
 local id = 1
-local typestr = "block_darkstone"
+local typestr = "fireball"
 rn.entity.type[typestr] = id
 rn.entity_handler[id] =
 {
@@ -10,7 +10,7 @@ rn.entity_handler[id] =
 		end
 	end,
 	preinit = function(ent)
-		ent:set_name("Darkstone Block")
+		ent:set_name("Fireball")
 		ent:set_model(rn.model.quad)
 
 		rn.entity.data[ent:uid()] =
@@ -18,7 +18,8 @@ rn.entity_handler[id] =
 			flipbook_timer = 0,
 			cur_texture_id = 0,
 			shoot_dir = nil,
-			spawned_at = tz.time()
+			spawned_at = tz.time(),
+			collided_this_update = false
 		}
 	end,
 	postinit = function(ent)
@@ -32,7 +33,6 @@ rn.entity_handler[id] =
 		ent:set_base_stats(stats)
 	end,
 	update = function(ent)
-		tz.assert(ent:get_name() == "Darkstone Block")
 		local data = rn.entity.data[ent:uid()]
 		data.flipbook_timer = data.flipbook_timer + rn.delta_time
 		-- when flipbook timer hits a threshold (fps / 4), advance to the next frame
@@ -63,6 +63,17 @@ rn.entity_handler[id] =
 		-- we only live for 5 seconds
 		if data.spawned_at + 5000 <= tz.time() then
 			-- WE DIE NOW :)
+			rn.scene():remove_uid(ent:uid())
+		end
+
+		rn.for_each_collision(ent, function(ent2)
+			if not data.collided_this_update and rn.get_relationship(ent, ent2) == "hostile" then
+				data.collided_this_update = true
+				print(ent2:get_name() .. " finna get booped by le fireball")
+			end
+		end)
+
+		if data.collided_this_update then
 			rn.scene():remove_uid(ent:uid())
 		end
 	end

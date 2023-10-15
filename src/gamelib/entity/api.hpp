@@ -5,11 +5,31 @@
 
 namespace game::entity
 {
+	enum class faction
+	{
+		// friendly with everyone
+		pure_friend,
+		// hostile with everyone
+		pure_enemy,
+		// neutral with everyone
+		pure_neutral,
+		// friendly with other player_ally, hostile with player_enemy, otherwise neutral
+		player_ally,
+		// friendly with other player_enemy, hostile with player_ally, otherwise neutral
+		player_enemy,
+	};
+	enum class relationship
+	{
+		friendly,
+		neutral,
+		hostile
+	};
 	struct entity
 	{
 		static std::size_t uid_global_counter;
 		std::size_t type = 0;
 		std::size_t uid = uid_global_counter++;
+		faction allegience = faction::pure_neutral;
 		std::string name = "Untitled Entity";
 		game::logic::stats base_stats = {};
 		std::uint16_t current_health = 0u;
@@ -17,6 +37,7 @@ namespace game::entity
 		game::render::scene_element elem = {};
 
 		game::logic::stats get_stats() const;
+		relationship get_relationship(const entity& rhs) const;
 		void update(float delta_seconds);
 
 		static entity null()
@@ -42,6 +63,9 @@ namespace game::entity
 		int uid(tz::lua::state& state);
 		int get_name(tz::lua::state& state);
 		int set_name(tz::lua::state& state);
+		int get_faction(tz::lua::state& state);
+		int set_faction(tz::lua::state& state);
+		int get_relationship(tz::lua::state& state);
 		int get_base_stats(tz::lua::state& state);
 		int set_base_stats(tz::lua::state& state);
 		int get_stats(tz::lua::state& state);
@@ -59,6 +83,9 @@ namespace game::entity
 			LUA_METHOD(rn_impl_entity, uid)
 			LUA_METHOD(rn_impl_entity, get_name)
 			LUA_METHOD(rn_impl_entity, set_name)
+			LUA_METHOD(rn_impl_entity, get_faction)
+			LUA_METHOD(rn_impl_entity, set_faction)
+			LUA_METHOD(rn_impl_entity, get_relationship)
 			LUA_METHOD(rn_impl_entity, get_base_stats)
 			LUA_METHOD(rn_impl_entity, set_base_stats)
 			LUA_METHOD(rn_impl_entity, get_stats)
