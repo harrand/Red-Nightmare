@@ -93,6 +93,10 @@ rn.entity_handler[id] =
 				rn.scene():remove_uid(data.cast_effect_right:uid())
 				data.cast_effect_right = nil	
 			end
+			if data.cast_effect_left ~= nil then
+				rn.scene():remove_uid(data.cast_effect_left:uid())
+				data.cast_effect_left = nil
+			end
 			data.cast_begin = nil
 		end
 		tracy.ZoneEnd()

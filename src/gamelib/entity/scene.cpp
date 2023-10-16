@@ -89,6 +89,8 @@ namespace game::entity
 		}
 		this->free_list.push_back(e);
 		this->renderer.remove_model(this->entities[hanval].elem.entry);
+		std::string cmd = "rn.entity.data[" + std::to_string(this->entities[hanval].uid) + "] = nil";
+		tz::lua::get_state().execute(cmd.c_str());
 		this->deinitialise_entity(static_cast<tz::hanval>(hanval), this->entities[hanval].uid);
 		this->entities[hanval] = {};
 	}
