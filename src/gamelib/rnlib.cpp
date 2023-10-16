@@ -16,6 +16,7 @@ namespace game
 	void lua_initialise();
 	struct dbgui_data_t
 	{
+		bool display_scene = false;
 		bool display_animation_renderer = false;
 	};
 	struct game_system_t
@@ -48,9 +49,18 @@ namespace game
 		float delta_seconds = delta_micros / 1000000.0f;
 		game_system->scene.update(delta_seconds);
 
+		if(game_system->dbgui.display_scene)
+		{
+			if(ImGui::Begin("Scene", &game_system->dbgui.display_scene))
+			{
+				game_system->scene.dbgui();
+				ImGui::End();
+			}
+		}
+
 		if(game_system->dbgui.display_animation_renderer)
 		{
-			if(ImGui::Begin("Scene Renderer", &game_system->dbgui.display_animation_renderer))
+			if(ImGui::Begin("Renderer", &game_system->dbgui.display_animation_renderer))
 			{
 				game_system->scene.get_renderer().dbgui();
 				ImGui::End();
@@ -70,14 +80,13 @@ namespace game
 
 	void dbgui()
 	{
+		ImGui::MenuItem("Scene", nullptr, &game_system->dbgui.display_scene);
 		ImGui::MenuItem("Animation Renderer", nullptr, &game_system->dbgui.display_animation_renderer);
 	}
 
 	void dbgui_game_bar()
 	{
-		ImGui::Text("Scene size: %zu", game_system->scene.size());
-		ImGui::SameLine();
-		ImGui::Text("%zu intersections", game_system->scene.debug_get_intersection_count());
+		game_system->scene.dbgui_game_bar();
 	}
 
 	LUA_BEGIN(rn_impl_get_scene)

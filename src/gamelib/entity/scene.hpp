@@ -34,6 +34,8 @@ namespace game::entity
 		std::size_t size() const;
 
 		void update(float delta_seconds);
+		void dbgui();
+		void dbgui_game_bar();
 
 		render::scene_renderer& get_renderer();
 		std::size_t debug_get_intersection_count() const;

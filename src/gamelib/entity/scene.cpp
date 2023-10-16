@@ -128,6 +128,30 @@ namespace game::entity
 		this->rebuild_quadtree();
 	}
 
+	void scene::dbgui()
+	{
+		ImGui::Text("well met :)");
+	}
+
+	void scene::dbgui_game_bar()
+	{
+		ImGui::Text("Scene size: %zu", this->size());
+		ImGui::SameLine();
+		ImGui::Text("| %zu intersections | ", this->debug_get_intersection_count());
+		auto iter = std::find_if(this->entities.begin(), this->entities.end(),
+		[](const entity& ent)
+		{
+			// player melistra
+			return ent.type == 0;
+		});
+
+		if(iter != this->entities.end())
+		{
+			ImGui::SameLine();
+			ImGui::Text("%s %llu/%llu hp (%.1f%%)", iter->name.c_str(), iter->current_health, iter->get_stats().maximum_health, 100.0f * iter->current_health / iter->get_stats().maximum_health);
+		}
+	}
+
 	void scene::lua_initialise(tz::lua::state& state)
 	{
 		TZ_PROFZONE("scene - lua initialise", 0xFF99CC44);
