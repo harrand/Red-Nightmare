@@ -1,12 +1,12 @@
 local id = 3
-local typestr = "mannequin"
+local typestr = "loot drop"
 -- intended to be used to display dropped items on the floor.
 -- for each dropped item, you can equip it onto this mannequin and it will display as if being worn by an invisible humanoid.
 rn.entity.type[typestr] = id
 rn.entity_handler[id] =
 {
 	preinit = function(ent)
-		ent:set_name("Invisible Mannequin")
+		ent:set_name("Dropped Item")
 		ent:set_model(rn.model.humanoid)
 		rn.entity.data[ent:uid()] =
 		{

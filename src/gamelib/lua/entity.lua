@@ -51,6 +51,23 @@ require "entity2"
 require "entity3"
 require "entity4"
 
+rn.get_entity_type_name = function()
+	_tmp_type_name = nil
+	for i in pairs(rn.entity.type) do
+		local id = rn.entity.type[i]
+		if id == _tmp_type_id then
+			_tmp_type_name = i
+		end
+	end
+end
+
+rn.get_entity_type_count = function()
+	_tmp_type_count = 0
+	for _, _ in pairs(rn.entity_handler) do
+		_tmp_type_count = _tmp_type_count + 1
+	end
+end
+
 rn.entity_static_init = function()
 	tracy.ZoneBegin()
 	for i in pairs(rn.entity_handler) do

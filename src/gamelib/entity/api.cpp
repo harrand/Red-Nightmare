@@ -66,6 +66,26 @@ namespace game::entity
 		}
 	}
 
+	/*static*/ std::string entity::get_type_name(std::size_t type)
+	{
+		auto& state = tz::lua::get_state();	
+		std::string cmd = "_tmp_type_id = " + std::to_string(type);
+		state.execute(cmd.c_str());
+		state.execute("rn.get_entity_type_name()");
+		std::optional<std::string> ret = state.get_string("_tmp_type_name");
+		tz::assert(ret.has_value());
+		return ret.value();
+	}
+
+	/*static*/ std::size_t entity::get_type_count()
+	{
+		auto& state = tz::lua::get_state();	
+		state.execute("rn.get_entity_type_count()");
+		std::optional<std::uint64_t> ret = state.get_uint("_tmp_type_count");
+		tz::assert(ret.has_value());
+		return ret.value();
+	}
+
 	entity& rn_impl_entity::get()
 	{
 		return this->scene->get(this->entity_hanval);

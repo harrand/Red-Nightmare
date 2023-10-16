@@ -48,6 +48,9 @@ namespace game::entity
 				.name = "Null Entity"		
 			};
 		}
+
+		static std::string get_type_name(std::size_t type);
+		static std::size_t get_type_count();
 	};
 
 	class scene;

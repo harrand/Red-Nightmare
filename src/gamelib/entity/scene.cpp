@@ -92,7 +92,7 @@ namespace game::entity
 		std::string cmd = "rn.entity.data[" + std::to_string(this->entities[hanval].uid) + "] = nil";
 		tz::lua::get_state().execute(cmd.c_str());
 		this->deinitialise_entity(static_cast<tz::hanval>(hanval), this->entities[hanval].uid);
-		this->entities[hanval] = {};
+		this->entities[hanval] = {.type = std::numeric_limits<std::size_t>::max()};
 	}
 
 	const entity& scene::get(entity_handle e) const
@@ -130,7 +130,7 @@ namespace game::entity
 
 	void scene::dbgui()
 	{
-		ImGui::Text("well met :)");
+		this->dbgui_impl();
 	}
 
 	void scene::dbgui_game_bar()
@@ -282,5 +282,84 @@ namespace game::entity
 	{
 		state.stack_push_uint(this->sc->size());
 		return 1;
+	}
+
+	// dbgui
+
+	void scene::dbgui_impl()
+	{
+		ImGui::TextColored(ImVec4{1.0f, 0.3f, 0.3f, 1.0f}, "ENTITIES LIST");
+		ImGui::Spacing();
+		
+		std::size_t resident_count = std::count_if(this->entities.begin(), this->entities.end(),
+		[](const entity& ent)
+		{
+			return ent.type != std::numeric_limits<std::size_t>::max();
+		});
+
+		ImGui::Text("%zu entities (%zu resident, %zu free-list)", this->size(), resident_count, this->size() - resident_count);
+		constexpr float slider_height = 160.0f;
+		static int entity_id = 0;
+		if(ImGui::Button("+"))
+		{
+			entity_id = std::min(entity_id + 1, static_cast<int>(this->size()) - 1);
+		}
+		ImGui::VSliderInt("##entityid", ImVec2{18.0f, slider_height}, &entity_id, 0, this->entities.size() - 1);
+		auto& ent = this->entities[entity_id];
+		ImGui::SameLine();
+		ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10.0f);
+		if(ImGui::BeginChild("#who_asked", ImVec2(0, slider_height), false, ImGuiWindowFlags_ChildWindow))
+		{
+			if(ent.type == std::numeric_limits<std::size_t>::max())
+			{
+				// its a deleted entity
+				ImGui::Text("Deleted Entity");
+				if(entity_id > 0)
+				{
+					if(ImGui::Button("\\/\\/"))
+					{
+						while(entity_id > 0 && this->entities[entity_id].type == std::numeric_limits<std::size_t>::max())
+						{
+							entity_id--;
+						}
+					}
+					ImGui::SameLine();
+					if(ImGui::Button("\\/"))
+					{
+						entity_id--;
+					}
+				}
+				ImGui::SameLine();
+				if(entity_id < (this->size() - 1))
+				{
+					if(ImGui::Button("^"))
+					{
+						entity_id++;	
+					}
+					ImGui::SameLine();
+					if(ImGui::Button("^^"))
+					{
+						while(entity_id < (this->size() - 1) && this->entities[entity_id].type == std::numeric_limits<std::size_t>::max())
+						{
+							entity_id++;
+						}
+					}
+				}
+			}
+			else
+			{
+				std::string type_name = entity::get_type_name(ent.type);
+				ImGui::Text("Type: %zu (%s)", ent.type, type_name.c_str());
+				ImGui::Text("Name: %s", ent.name.c_str());
+			}
+		}
+		ImGui::EndChild();
+		if(ImGui::Button("-"))
+		{
+			if(entity_id > 0)
+			{
+				entity_id--;
+			}
+		}
 	}
 }

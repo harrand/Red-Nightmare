@@ -49,6 +49,7 @@ namespace game::entity
 		void deinitialise_entity(tz::hanval entity_hanval, std::size_t uid);
 		void rebuild_quadtree();
 		bool is_valid(tz::hanval entity_hanval) const;
+		void dbgui_impl();
 		std::vector<entity> entities = {};
 		std::deque<entity_handle> free_list = {};
 		scene_quadtree quadtree{game::physics::aabb{tz::vec2{-1.0f, -1.0f} * scene_quadtree_initial_size, tz::vec2{1.0f, 1.0f} * scene_quadtree_initial_size}};
