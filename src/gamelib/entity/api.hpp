@@ -42,6 +42,7 @@ namespace game::entity
 		std::string name = "Untitled Entity";
 		game::logic::stats base_stats = {};
 		std::uint64_t current_health = 0u;
+		std::uint8_t level = 1u;
 		std::unordered_map<std::string, game::logic::buff> buffs = {};
 		game::render::scene_element elem = {};
 
@@ -50,6 +51,8 @@ namespace game::entity
 		relationship get_relationship(faction allegience) const;
 		void dbgui();
 		void update(float delta_seconds);
+		void level_up();
+		void set_level(std::uint8_t new_level);
 
 		static entity null()
 		{
@@ -85,6 +88,8 @@ namespace game::entity
 		int get_stats(tz::lua::state& state);
 		int get_health(tz::lua::state& state);
 		int set_health(tz::lua::state& state);
+		int get_level(tz::lua::state& state);
+		int set_level(tz::lua::state& state);
 		int is_dead(tz::lua::state& state);
 		int apply_buff(tz::lua::state& state);
 		int get_model(tz::lua::state& state);
@@ -106,6 +111,8 @@ namespace game::entity
 			LUA_METHOD(rn_impl_entity, get_stats)
 			LUA_METHOD(rn_impl_entity, get_health)
 			LUA_METHOD(rn_impl_entity, set_health)
+			LUA_METHOD(rn_impl_entity, get_level)
+			LUA_METHOD(rn_impl_entity, set_level)
 			LUA_METHOD(rn_impl_entity, is_dead)
 			LUA_METHOD(rn_impl_entity, apply_buff)
 			LUA_METHOD(rn_impl_entity, get_model)

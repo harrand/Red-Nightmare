@@ -1,5 +1,6 @@
 #include "gamelib/entity/api.hpp"
 #include "gamelib/entity/scene.hpp"
+#include "tz/dbgui/dbgui.hpp"
 
 namespace game::entity
 {
@@ -8,6 +9,10 @@ namespace game::entity
 	game::logic::stats entity::get_stats() const
 	{
 		game::logic::stats ret = this->base_stats;
+		// level increases stats too.
+		// 5% max health per level up.
+		ret.maximum_health *= 1.0f + ((this->level - 1.0f) * 0.05f);
+
 		for(const auto&[_, buff] : this->buffs)
 		{
 			ret = ret + buff;
@@ -71,6 +76,31 @@ namespace game::entity
 		}
 	}
 
+	void entity::level_up()
+	{
+		if(this->level < std::numeric_limits<std::uint8_t>::max())
+		{
+			this->level++;
+			this->current_health = this->get_stats().maximum_health;
+		}
+	}
+
+	void entity::set_level(std::uint8_t new_level)
+	{
+		if(new_level <= this->level)
+		{
+			this->level = new_level;
+			this->current_health = std::min(this->current_health, this->get_stats().maximum_health);
+		}
+		else
+		{
+			while(this->level < new_level)
+			{
+				this->level_up();
+			}
+		}
+	}
+
 	/*static*/ std::string entity::get_type_name(std::size_t type)
 	{
 		auto& state = tz::lua::get_state();	
@@ -107,6 +137,16 @@ namespace game::entity
 		}
 		const float max_hp = this->get_stats().maximum_health;
 		ImGui::SliderInt("Health", reinterpret_cast<int*>(&this->current_health), 0u, max_hp);
+		int tmp_level = this->level;
+		if(ImGui::SliderInt("Level", &tmp_level, 1, std::numeric_limits<std::uint8_t>::max()))
+		{
+			this->set_level(tmp_level);
+		}
+		ImGui::SameLine();
+		if(ImGui::Button("+"))
+		{
+			this->level_up();
+		}
 
 		ImGui::Separator();
 		ImGui::Text("Faction: "); ImGui::SameLine();	
@@ -214,6 +254,25 @@ namespace game::entity
 	{
 		auto [_, hp] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
 		this->get().current_health = std::clamp(hp, 0u, static_cast<unsigned int>(this->get().get_stats().maximum_health));
+		return 0;
+	}
+
+	int rn_impl_entity::get_level(tz::lua::state& state)
+	{
+		state.stack_push_uint(this->get().level);
+		return 1;
+	}
+
+	int rn_impl_entity::set_level(tz::lua::state& state)
+	{
+		auto [_, new_level] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+		constexpr auto lvl_max = std::numeric_limits<std::uint8_t>::max();
+		if(new_level > lvl_max)
+		{
+			new_level = lvl_max;
+			tz::report("Warning: Setting level to %u is invalid. Max level is %u", new_level, lvl_max);
+		}
+		this->get().set_level(new_level);
 		return 0;
 	}
 
