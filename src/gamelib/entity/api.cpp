@@ -17,21 +17,26 @@ namespace game::entity
 
 	relationship entity::get_relationship(const entity& rhs) const
 	{
-		if(this->allegience == faction::pure_friend || rhs.allegience == faction::pure_friend)
+		return this->get_relationship(rhs.allegience);
+	}
+
+	relationship entity::get_relationship(faction allegience) const
+	{
+		if(this->allegience == faction::pure_friend || allegience == faction::pure_friend)
 		{
 			return relationship::friendly;
 		}
-		if(this->allegience == faction::pure_neutral || rhs.allegience == faction::pure_neutral)
+		if(this->allegience == faction::pure_neutral || allegience == faction::pure_neutral)
 		{
 			return relationship::neutral;
 		}
-		if(this->allegience == faction::pure_enemy || rhs.allegience == faction::pure_enemy)
+		if(this->allegience == faction::pure_enemy || allegience == faction::pure_enemy)
 		{
 			return relationship::hostile;
 		}
 		tz::assert(this->allegience == faction::player_ally || this->allegience == faction::player_enemy);
-		tz::assert(rhs.allegience == faction::player_ally || rhs.allegience == faction::player_enemy);
-		if(this->allegience == rhs.allegience)
+		tz::assert(allegience == faction::player_ally || allegience == faction::player_enemy);
+		if(this->allegience == allegience)
 		{
 			return relationship::friendly;
 		}	
@@ -85,6 +90,44 @@ namespace game::entity
 		tz::assert(ret.has_value());
 		return ret.value();
 	}
+
+
+	void entity::dbgui()
+	{
+		std::string type_name = entity::get_type_name(this->type);
+		ImGui::Text("Type: %zu (%s)", this->type, type_name.c_str());
+		ImGui::Text("Name: %s", this->name.c_str());
+		ImGui::Spacing();
+		auto oh = this->elem.entry.pkg.objects.front();
+		tz::trs trs = this->elem.renderer->get_renderer().get_object_base_transform(oh);
+		ImGui::Text("Position");
+		if(ImGui::InputFloat2("##pos", trs.translate.data().data()))
+		{
+			this->elem.renderer->get_renderer().set_object_base_transform(oh, trs);
+		}
+		const float max_hp = this->get_stats().maximum_health;
+		ImGui::SliderInt("Health", reinterpret_cast<int*>(&this->current_health), 0u, max_hp);
+
+		ImGui::Separator();
+		ImGui::Text("Faction: "); ImGui::SameLine();	
+		ImVec4 faction_col;
+		const char* faction_str = "<unknown faction>";
+		switch(this->get_relationship(faction::player_ally))
+		{
+			case relationship::friendly:
+				faction_col = ImVec4{0.2f, 0.9f, 0.2f, 1.0f};
+			break;
+			case relationship::neutral:
+				faction_col = ImVec4{0.8f, 0.8f, 0.0f, 1.0f};
+			break;
+			case relationship::hostile:
+				faction_col = ImVec4{1.0f, 0.1f, 0.1f, 1.0f};
+			break;
+		}
+		ImGui::TextColored(faction_col, game::entity::faction_names[static_cast<int>(this->allegience)]);
+	}
+
+	// Lua API
 
 	entity& rn_impl_entity::get()
 	{

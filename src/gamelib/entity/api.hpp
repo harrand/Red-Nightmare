@@ -17,6 +17,15 @@ namespace game::entity
 		player_ally,
 		// friendly with other player_enemy, hostile with player_ally, otherwise neutral
 		player_enemy,
+		_count
+	};
+	constexpr std::array<const char*, (int)faction::_count> faction_names =
+	{
+		"pure friend",
+		"pure enemy",
+		"pure neutral",
+		"player ally",
+		"player enemy"
 	};
 	enum class relationship
 	{
@@ -38,6 +47,8 @@ namespace game::entity
 
 		game::logic::stats get_stats() const;
 		relationship get_relationship(const entity& rhs) const;
+		relationship get_relationship(faction allegience) const;
+		void dbgui();
 		void update(float delta_seconds);
 
 		static entity null()

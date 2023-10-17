@@ -348,9 +348,12 @@ namespace game::entity
 			}
 			else
 			{
-				std::string type_name = entity::get_type_name(ent.type);
-				ImGui::Text("Type: %zu (%s)", ent.type, type_name.c_str());
-				ImGui::Text("Name: %s", ent.name.c_str());
+				ent.dbgui();
+				ImGui::Separator();
+				if(ImGui::Button("Remove"))
+				{
+					this->remove(static_cast<tz::hanval>(entity_id));
+				}
 			}
 		}
 		ImGui::EndChild();
