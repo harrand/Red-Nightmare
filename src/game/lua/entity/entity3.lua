@@ -22,7 +22,7 @@ rn.entity_handler[id] =
 	update = function(ent)
 		local data = rn.entity.data[ent:uid()]
 		rn.for_each_collision(ent, function(ent2)
-			if not data.collided_this_update and ent2:get_model() == rn.model.humanoid and ent2:get_type() ~= ent:get_type() then
+			if not data.collided_this_update and ent2:get_model() == rn.model.humanoid and ent2:get_type() ~= ent:get_type() and not ent2:is_dead() then
 				-- equip whatever we're wearing onto ent2
 				-- iterate through each slot
 				for i=1,rn.equipment.slot._count-1,1 do

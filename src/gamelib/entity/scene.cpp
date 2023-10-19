@@ -187,6 +187,9 @@ namespace game::entity
 		state.assign_stack("rn_impl_dead_entity");
 		std::string cmd = "rn.entity_deinit()";
 		state.execute(cmd.c_str());
+		// note: this doesnt work. something to do with re-using gltfs im pretty sure.
+		// todo: fix this engine-side, as draw count never stops increasing even when we recycle stuff :(
+		//this->get_renderer().remove_model(ent.elem.entry);
 	}
 
 	void scene::rebuild_quadtree()
