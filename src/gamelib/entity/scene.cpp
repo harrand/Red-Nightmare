@@ -271,6 +271,30 @@ namespace game::entity
 		return 1;
 	}
 
+	int rn_impl_scene::get_uid(tz::lua::state& state)
+	{
+		auto [_, uid] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+		rn_impl_entity ent{};
+		for(std::size_t i = 0; i < this->sc->size(); i++)
+		{
+			auto hv = static_cast<tz::hanval>(i);
+			if(this->sc->get(hv).uid == uid)
+			{
+				ent = {.scene = this->sc, .entity_hanval = hv};
+				break;
+			}
+		}
+		if(ent.scene == nullptr)
+		{
+			state.stack_push_nil();
+		}
+		else
+		{
+			LUA_CLASS_PUSH(state, rn_impl_entity, ent);
+		}
+		return 1;
+	}
+
 	int rn_impl_scene::get_renderer(tz::lua::state& state)
 	{
 		using namespace game::render;

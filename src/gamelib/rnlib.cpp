@@ -8,6 +8,7 @@
 #include "tz/lua/api.hpp"
 #include <memory>
 
+#include ImportedTextHeader(combat, lua)
 #include ImportedTextHeader(equipment, lua)
 #include ImportedTextHeader(item, lua)
 
@@ -125,6 +126,10 @@ namespace game
 			state.assign_func("rn.scene", LUA_FN_NAME(rn_impl_get_scene));
 			state.assign_func("rn.texture_manager", LUA_FN_NAME(rn_impl_get_texture_manager));
 
+			{
+				std::string str{ImportedTextData(combat, lua)};
+				state.execute(str.c_str());
+			}
 			{
 				std::string str{ImportedTextData(equipment, lua)};
 				state.execute(str.c_str());

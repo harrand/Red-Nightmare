@@ -67,9 +67,13 @@ rn.entity_handler[id] =
 		end
 
 		rn.for_each_collision(ent, function(ent2)
-			if not data.collided_this_update and rn.get_relationship(ent, ent2) == "hostile" then
+			if not data.collided_this_update and not ent2:is_dead() and rn.get_relationship(ent, ent2) == "hostile" then
 				data.collided_this_update = true
-				ent2:get_element():play_animation(7, false)
+				local evt = rn.entity_damage_entity_event:new()
+				evt.damager = ent:uid()
+				evt.damagee = ent2:uid()
+				evt.value = 20
+				rn.combat.process_event(evt)
 			end
 		end)
 

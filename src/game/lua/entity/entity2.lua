@@ -14,6 +14,9 @@ rn.entity_handler[id] =
 	preinit = function(ent)
 		ent:set_name("Zombie (Melistra)")
 		ent:set_model(rn.model.humanoid)
+		local stats = ent:get_base_stats()
+		stats:set_maximum_health(50)
+		ent:set_base_stats(stats)
 		rn.entity.data[ent:uid()] =
 		{
 

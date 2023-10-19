@@ -68,6 +68,7 @@ namespace game::entity
 		int get_collision_count(tz::lua::state& state);
 		int get_collision(tz::lua::state& state);
 		int get(tz::lua::state& state);
+		int get_uid(tz::lua::state& state);
 		int get_renderer(tz::lua::state& state);
 		int size(tz::lua::state& state);
 	};
@@ -80,6 +81,7 @@ namespace game::entity
 			LUA_METHOD(rn_impl_scene, get_collision_count)
 			LUA_METHOD(rn_impl_scene, get_collision)
 			LUA_METHOD(rn_impl_scene, get)
+			LUA_METHOD(rn_impl_scene, get_uid)
 			LUA_METHOD(rn_impl_scene, get_renderer)
 			LUA_METHOD(rn_impl_scene, size)
 		LUA_CLASS_METHODS_END
