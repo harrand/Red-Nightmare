@@ -22,6 +22,7 @@ function rn.combat.base_on_death(ent, evt)
 		local success = handler.on_death(ent, evt)
 		if success ~= nil and not success then return end
 	end
+	rn.unequip_and_drop_all(ent)
 	ent:get_element():play_animation(7, false)
 end
 
