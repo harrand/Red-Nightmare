@@ -37,5 +37,9 @@ rn.entity_handler[id] =
 	end,
 	update = function(ent)
 
+	end,
+	on_death = function(ent, evt)
+		local x, y = ent:get_element():get_position()
+		rn.drop_item_at("Steel Chainmail", x, y)
 	end
 }

@@ -16,7 +16,12 @@ function rn.entity_damage_entity_event:new(o)
 end
 
 function rn.combat.base_on_death(ent, evt)
-	print(ent:get_name() .. "oh noes i dieded :(")
+	-- call on_death if it exists
+	local handler = rn.entity_handler[ent:get_type()]
+	if handler.on_death ~= nil then
+		local success = handler.on_death(ent, evt)
+		if success ~= nil and not success then return end
+	end
 	ent:get_element():play_animation(7, false)
 end
 
@@ -24,16 +29,31 @@ end
 function rn.combat.base_on_struck(ent, evt)
 	local hp = ent:get_health()
 	local new_hp = ent:get_health() - evt.value
+
+	-- call on_struck if it exists
+	local handler = rn.entity_handler[ent:get_type()]
+	if handler.on_struck ~= nil then
+		local success = handler.on_struck(ent, evt)
+		if success ~= nil and not success then return end
+	end
+
 	if new_hp <= 0 then
 		new_hp = 0
 		if not ent:is_dead() then
 			rn.combat.base_on_death(ent, evt)
 		end
 	end
+	tz.assert(handler ~= nil)
 	ent:set_health(new_hp)
 end
 
-function rn.combat.base_on_hit(ent, dmg)
+function rn.combat.base_on_hit(ent, evt)
+	-- call on_hit if it exists
+	local handler = rn.entity_handler[ent:get_type()]
+	if handler.on_hit ~= nil then
+		local success = handler.on_hit(ent, evt)
+		if success ~= nil and not success then return end
+	end
 	-- bleh
 end
 
