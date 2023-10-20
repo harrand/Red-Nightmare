@@ -201,34 +201,45 @@ rn.update = function()
 	tracy.ZoneEnd()
 end
 
-rn.entity_move = function(ent, dir, movement_anim_id)
+rn.entity_move = function(arg)
+	local ent = arg.ent or nil
+	tz.assert(ent ~= nil)
+	local dir = arg.dir
+	local movement_anim_id = arg.movement_anim_id
+	local face_in_direction = arg.face_in_direction
+	if face_in_direction == nil then face_in_direction = true end
+	print("direction = " .. dir)
 	local e = ent:get_element()
 	-- get normalised movement vector
 	local xdiff = 0
 	local ydiff = 0
 	if dir == "forward" then
-		ydiff = ydiff + 1
-	elseif dir == "backward" then
 		ydiff = ydiff - 1
+	elseif dir == "backward" then
+		ydiff = ydiff + 1
 	elseif dir == "right" then
 		xdiff = xdiff + 1
 	elseif dir == "left" then
 		xdiff = xdiff - 1
+	else
+		tz.assert(false)
 	end
 
 	-- set face direction
-	if xdiff == 0 then
-		if ydiff > 0 then
-			e:face_forward()
-		elseif ydiff < 0 then
-			e:face_backward()
-		else
-			e:face_forward()
+	if face_in_direction then
+		if xdiff == 0 then
+			if ydiff > 0 then
+				e:face_forward()
+			elseif ydiff < 0 then
+				e:face_backward()
+			else
+				e:face_forward()
+			end
+		elseif xdiff > 0 then
+			e:face_right()
+		elseif xdiff < 0 then
+			e:face_left()
 		end
-	elseif xdiff > 0 then
-		e:face_right()
-	elseif xdiff < 0 then
-		e:face_left()
 	end
 
 	if (xdiff ~= 0 or ydiff ~= 0) then
@@ -244,7 +255,7 @@ rn.entity_move = function(ent, dir, movement_anim_id)
 		e:set_position(x, y)
 		e:set_animation_speed(math.sqrt(movement_speed / 3.0))
 
-		if movement_anim_id ~= nil and e:get_playing_animation_id() ~= movement_anim_id or not e:is_animation_playing() then
+		if movement_anim_id ~= nil and (e:get_playing_animation_id() ~= movement_anim_id or not e:is_animation_playing()) then
 			e:play_animation(movement_anim_id, false)
 		end
 	end

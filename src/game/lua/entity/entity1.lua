@@ -45,20 +45,7 @@ rn.entity_handler[id] =
 		local x, y = ent:get_element():get_position()
 
 		tz.assert(data.shoot_dir ~= nil)
-		local movement_speed = ent:get_stats():get_movement_speed()
-		if data.shoot_dir == "right" then
-			x = x + movement_speed * rn.delta_time
-		elseif data.shoot_dir == "left" then
-			x = x - movement_speed * rn.delta_time
-		elseif data.shoot_dir == "forward" then
-			y = y - movement_speed * rn.delta_time
-		elseif data.shoot_dir == "backward" then
-			y = y + movement_speed * rn.delta_time
-		else
-			tz.assert(false)
-		end
-
-		ent:get_element():set_position(x, y)
+		rn.entity_move({ent = ent, dir = data.shoot_dir, face_in_direction = false})
 
 		-- we only live for 5 seconds
 		if data.spawned_at + 5000 <= tz.time() then

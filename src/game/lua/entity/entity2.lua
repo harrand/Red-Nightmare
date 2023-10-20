@@ -41,7 +41,7 @@ rn.entity_handler[id] =
 	end,
 	update = function(ent)
 		if not ent:is_dead() then
-			rn.entity_move(ent, "right", 12)
+			rn.entity_move{ent = ent, dir = "right", movement_anim_id = 12}
 		end
 	end
 }
