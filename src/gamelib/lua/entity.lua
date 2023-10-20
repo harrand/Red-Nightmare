@@ -31,7 +31,7 @@ rn.relationship =
 
 rn.entity = {}
 rn.entity.type = {}
-rn.entity.living = {}
+rn.entity.resident = {}
 rn.entity.data = {}
 
 rn.entity_handler = {}
@@ -94,7 +94,7 @@ rn.entity_preinit = function(type)
 	if handler.preinit ~= nil then
 		handler.preinit(ent)
 	end
-	rn.entity.living[ent:uid()] = true
+	rn.entity.resident[ent:uid()] = true
 	tracy.ZoneEnd()
 end
 
@@ -136,7 +136,7 @@ rn.entity_deinit = function()
 	-- assume variable exists in global `rn_impl_dead_entity`
 	tz.assert(rn_impl_dead_entity ~= nil)
 	local uid = rn_impl_dead_entity:uid()
-	rn.entity.living[uid] = false
+	rn.entity.resident[uid] = false
 	rn.entity.data[uid] = {}
 end
 
@@ -193,10 +193,60 @@ rn.update = function()
 	if sc:size() > 0 then
 		for i=0,sc:size()-1,1 do
 			local ent = sc:get(i)
-			if rn.entity.living[ent:uid()] == true then
+			if rn.entity.resident[ent:uid()] == true then
 				rn.entity_update(ent)
 			end
 		end
 	end
 	tracy.ZoneEnd()
+end
+
+rn.entity_move = function(ent, dir, movement_anim_id)
+	local e = ent:get_element()
+	-- get normalised movement vector
+	local xdiff = 0
+	local ydiff = 0
+	if dir == "forward" then
+		ydiff = ydiff + 1
+	elseif dir == "backward" then
+		ydiff = ydiff - 1
+	elseif dir == "right" then
+		xdiff = xdiff + 1
+	elseif dir == "left" then
+		xdiff = xdiff - 1
+	end
+
+	-- set face direction
+	if xdiff == 0 then
+		if ydiff > 0 then
+			e:face_forward()
+		elseif ydiff < 0 then
+			e:face_backward()
+		else
+			e:face_forward()
+		end
+	elseif xdiff > 0 then
+		e:face_right()
+	elseif xdiff < 0 then
+		e:face_left()
+	end
+
+	if (xdiff ~= 0 or ydiff ~= 0) then
+		-- do movement
+		local x, y = e:get_position()
+		local hypot = math.sqrt(xdiff*xdiff + ydiff*ydiff)
+		xdiff = xdiff / hypot
+		ydiff = ydiff / hypot
+		local stats = ent:get_stats()
+		local movement_speed = stats:get_movement_speed()
+		x = x + xdiff * movement_speed * rn.delta_time
+		y = y + ydiff * movement_speed * rn.delta_time
+		e:set_position(x, y)
+		e:set_animation_speed(math.sqrt(movement_speed / 3.0))
+
+		if movement_anim_id ~= nil and e:get_playing_animation_id() ~= movement_anim_id or not e:is_animation_playing() then
+			e:play_animation(movement_anim_id, false)
+		end
+	end
+
 end

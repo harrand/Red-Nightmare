@@ -34,8 +34,14 @@ rn.entity_handler[id] =
 
 		ent:get_element():play_animation(12, true)
 		ent:set_faction(rn.faction_id.player_enemy)
+
+		local stats = ent:get_base_stats()
+		stats:set_movement_speed(1.0)
+		ent:set_base_stats(stats)
 	end,
 	update = function(ent)
-
+		if not ent:is_dead() then
+			rn.entity_move(ent, "right", 12)
+		end
 	end
 }
