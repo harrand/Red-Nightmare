@@ -6,7 +6,7 @@ rn.abilities[id] =
 {
 	base_cast_time = 1000,
 	magic_colour_r = 1.0,
-	magic_colour_g = 1.0,
+	magic_colour_g = 0.85,
 	magic_colour_b = 0.4,
 	on_cast = function(ent)
 		local evt = rn.entity_heal_entity_event:new()

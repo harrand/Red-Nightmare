@@ -143,7 +143,7 @@ rn.entity_update = function(ent)
 	local e = ent:get_element()
 	local idle_anim_id = 6
 	if not data.impl.is_casting and not data.impl.is_moving then
-		if e:get_playing_animation_id() ~= idle_anim_id or not e:is_animation_playing() then
+		if (ent:get_model() == rn.model.humanoid) and (e:get_playing_animation_id() ~= idle_anim_id or not e:is_animation_playing()) then
 			e:play_animation(idle_anim_id, false)
 		end
 	end

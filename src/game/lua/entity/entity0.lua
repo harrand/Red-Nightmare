@@ -68,5 +68,9 @@ rn.entity_handler[id] =
 		elseif rn.is_key_down("d") then
 			rn.entity_move({ent = ent, dir = "right", movement_anim_id = 8})
 		end
+
+		if rn.is_key_down("esc") and rn.is_casting(ent) then
+			rn.cancel_cast(ent)
+		end
 	end
 }

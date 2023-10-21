@@ -43,7 +43,7 @@ rn.cast_spell = function(arg)
 	-- if its an instant cast spell, no need to set these, just send it instantly. (note: no animation in this case)
 	if ability.base_cast_time == 0 then
 		-- just instantly send it
-		ability.on_cast(ent)
+		rn.complete_cast(ent)
 		return
 	end
 
@@ -53,6 +53,43 @@ rn.cast_spell = function(arg)
 	print(ent:get_name() .. " - BEGAN CASTING " .. ability_name)
 
 	ent:get_element():play_animation(rn._impl_cast_type_to_animation_id[cast_type], false)
+
+	-- casting effect
+	entdata.impl.cast_effects = {nil, nil}
+	-- right hand = 1, left hand = 2
+	if true then
+		entdata.impl.cast_effects[1] = rn.scene():get(rn.scene():add(4))
+		local rhdata = rn.entity.data[entdata.impl.cast_effects[1]:uid()]
+		rhdata.target_entity = ent
+		rhdata.subobject = 21
+		-- play flipbook 2 times per cast.
+		rhdata.cast_duration = ability.base_cast_time * 0.5
+		rhdata.colour_r = ability.magic_colour_r
+		rhdata.colour_g = ability.magic_colour_g
+		rhdata.colour_b = ability.magic_colour_b
+	end
+end
+
+rn.complete_cast = function(ent)
+	local entdata = rn.entity_get_data(ent)
+	local ability = rn.abilities[rn.ability.type[entdata.impl.cast]]
+	tz.assert(ability ~= nil)
+	ability.on_cast(ent)
+	print(ent:get_name() .. " - FINISHED CASTING " .. entdata.impl.cast)
+	rn.cancel_cast(ent)
+end
+
+rn.cancel_cast = function(ent)
+	local entdata = rn.entity_get_data(ent)
+	entdata.impl.is_casting = false
+	entdata.impl.cast_begin = nil
+	entdata.impl.cast = nil
+	for i=1,2,1 do
+		if entdata.impl.cast_effects[i] ~= nil then
+			rn.scene():remove_uid(entdata.impl.cast_effects[i]:uid())
+			entdata.impl.cast_effects[i] = nil
+		end
+	end
 end
 
 rn.casting_advance = function(ent)
@@ -63,12 +100,7 @@ rn.casting_advance = function(ent)
 	tz.assert(ability ~= nil)
 	local t = tz.time()
 	if t > (entdata.impl.cast_begin + ability.base_cast_time) then
-		-- cast finished!
-		ability.on_cast(ent)
-		entdata.impl.is_casting = false
-		entdata.impl.cast_begin = nil
-		print(ent:get_name() .. " - FINISHED CASTING " .. entdata.impl.cast)
-		entdata.impl.cast = nil
+		rn.complete_cast(ent)
 	end
 end
 
