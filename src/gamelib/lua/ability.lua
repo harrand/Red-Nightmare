@@ -10,6 +10,7 @@ rn.cast.type =
 	spell_1h_omni = 2,
 	spell_2h_directed = 3,
 	spell_2h_omni = 4,
+	melee_1h_horizontal = 5
 }
 
 rn._impl_cast_type_to_animation_id =
@@ -17,12 +18,14 @@ rn._impl_cast_type_to_animation_id =
 	2,
 	3,
 	4,
-	5
+	5,
+	1
 }
 
 -- Include all abilities here.
 require "ability0"
 require "ability1"
+require "ability2"
 
 rn.cast_spell = function(arg)
 	-- check argument sanity
@@ -68,7 +71,8 @@ rn.cast_spell = function(arg)
 	-- casting effect
 	entdata.impl.cast_effects = {nil, nil}
 	-- right hand = 1, left hand = 2
-	if true then
+	local has_magic_visual = ability.magic_colour_r and ability.magic_colour_g and ability.magic_colour_b
+	if true and has_magic_visual then
 		entdata.impl.cast_effects[1] = rn.scene():get(rn.scene():add(4))
 		local rhdata = rn.entity.data[entdata.impl.cast_effects[1]:uid()]
 		rhdata.target_entity = ent

@@ -50,6 +50,7 @@ require "entity1"
 require "entity2"
 require "entity3"
 require "entity4"
+require "entity5"
 
 rn.get_entity_type_name = function()
 	_tmp_type_name = nil
@@ -107,12 +108,14 @@ rn.entity_postinit = function(type)
 	ent:set_health(ent:get_stats():get_maximum_health())
 
 	local mod = ent:get_model()
+	local e = ent:get_element()
 	if mod == rn.model.humanoid then
-		local e = ent:get_element()
 		e:object_set_visibility(4, false)
 		e:object_set_visibility(6, false)
 		e:face_forward()
 		rn.entity_get_data(ent).impl.dir = "forward"
+	elseif mod == rn.model.quad then
+		e:object_set_visibility(1, true)
 	end
 
 	local handler = rn.entity_handler[type]

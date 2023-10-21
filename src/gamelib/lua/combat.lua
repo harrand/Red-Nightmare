@@ -48,6 +48,7 @@ function rn.combat.base_on_struck(ent, evt)
 
 	-- call on_struck if it exists
 	local handler = rn.entity_handler[ent:get_type()]
+	tz.assert(handler ~= nil)
 	if handler.on_struck ~= nil then
 		local success = handler.on_struck(ent, evt)
 		if success ~= nil and not success then return end

@@ -36,7 +36,7 @@ namespace game::entity
 	struct entity
 	{
 		static std::size_t uid_global_counter;
-		std::size_t type = 0;
+		std::size_t type = std::numeric_limits<std::size_t>::max();
 		std::size_t uid = uid_global_counter++;
 		faction allegience = faction::pure_neutral;
 		std::string name = "Untitled Entity";
@@ -76,6 +76,7 @@ namespace game::entity
 
 		entity& get();
 
+		int is_valid(tz::lua::state& state);
 		int get_type(tz::lua::state& state);
 		int uid(tz::lua::state& state);
 		int get_name(tz::lua::state& state);
@@ -99,6 +100,7 @@ namespace game::entity
 
 	LUA_CLASS_BEGIN(rn_impl_entity)
 		LUA_CLASS_METHODS_BEGIN
+			LUA_METHOD(rn_impl_entity, is_valid)
 			LUA_METHOD(rn_impl_entity, get_type)
 			LUA_METHOD(rn_impl_entity, uid)
 			LUA_METHOD(rn_impl_entity, get_name)

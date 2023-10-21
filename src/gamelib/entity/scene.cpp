@@ -322,7 +322,6 @@ namespace game::entity
 		pos[1] /= windims[1];
 		pos *= 2.0f;
 		pos -= tz::vec2::filled(1.0f);
-		pos[0] *= (static_cast<float>(windims[0]) / windims[1]);
 		// multiply by view bounds
 		const tz::vec2 vb = this->sc->get_renderer().get_view_bounds();
 		pos[0] *= vb[0];

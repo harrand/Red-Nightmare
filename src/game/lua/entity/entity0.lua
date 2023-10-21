@@ -21,14 +21,6 @@ rn.entity_handler[id] =
 		tracy.ZoneBeginN(typestr .. " - preinit")
 		ent:set_name("Lady Melistra")
 		ent:set_model(rn.model.humanoid)
-		rn.entity.data[ent:uid()] =
-		{
-			cast_id = nil,
-			cast_begin = nil,
-			face_dir = "forward",
-			counter = 0,
-			cast_effect_right = nil
-		}
 
 		local bstats = ent:get_base_stats()
 		bstats:set_maximum_health(100)
@@ -51,7 +43,6 @@ rn.entity_handler[id] =
 	end,
 	update = function(ent)
 		local data = rn.entity_get_data(ent)
-		data.counter = data.counter + rn.delta_time * 2.8957
 		tz.assert(ent:get_name() == "Lady Melistra")
 
 		if rn.is_casting(ent) then
@@ -60,7 +51,9 @@ rn.entity_handler[id] =
 			-- we want vector, so mouse pos - ent pos
 			local vecx = entx - mousex
 			local vecy = enty - mousey
-			data.impl.cast_dir_x = vecx
+			local w, h = tz.window():get_dimensions()
+			local aspect_ratio = w / h
+			data.impl.cast_dir_x = vecx * aspect_ratio
 			data.impl.cast_dir_y = vecy
 		end
 		
@@ -68,7 +61,7 @@ rn.entity_handler[id] =
 		if not rn.is_casting(ent) and wnd:is_mouse_down("left") then
 			rn.cast_spell({ent = ent, ability_name = "Fireball", face_cast_direction = true})
 		elseif not rn.is_casting(ent) and wnd:is_mouse_down("right") then
-			rn.cast_spell({ent = ent, ability_name = "Heal"})
+			rn.cast_spell({ent = ent, ability_name = "Melee", face_cast_direction = true})
 		end
 
 		if rn.is_key_down("w") then

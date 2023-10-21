@@ -56,11 +56,12 @@ rn.entity_handler[id] =
 		-- we only live for 5 seconds
 		if data.spawned_at + 5000 <= tz.time() then
 			-- WE DIE NOW :)
+			print("FIREBALL GO DEATH BYE BYE")
 			rn.scene():remove_uid(ent:uid())
 		end
 
 		rn.for_each_collision(ent, function(ent2)
-			if not data.collided_this_update and not ent2:is_dead() and rn.get_relationship(ent, ent2) == "hostile" then
+			if not data.collided_this_update and ent2:is_valid() and not ent2:is_dead() and rn.get_relationship(ent, ent2) == "hostile" then
 				data.collided_this_update = true
 				local evt = rn.entity_damage_entity_event:new()
 				evt.damager = ent:uid()
@@ -71,6 +72,7 @@ rn.entity_handler[id] =
 		end)
 
 		if data.collided_this_update then
+			print("FIREBALL GO DEATH BYE BYE")
 			rn.scene():remove_uid(ent:uid())
 		end
 	end

@@ -173,6 +173,12 @@ namespace game::entity
 	{
 		return this->scene->get(this->entity_hanval);
 	}
+	
+	int rn_impl_entity::is_valid(tz::lua::state& state)
+	{
+		state.stack_push_bool(this->get().type != std::numeric_limits<std::size_t>::max());
+		return 1;
+	}
 
 	int rn_impl_entity::get_type(tz::lua::state& state)
 	{
