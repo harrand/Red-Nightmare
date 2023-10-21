@@ -108,7 +108,12 @@ function rn.combat.process_event(evt)
 		local damagee = rn.scene():get_uid(evt.damagee)
 		rn.combat.base_on_struck(damagee, evt)
 		rn.combat.base_on_hit(damager, evt)
-		print(damager:get_name() .. " hurts " .. damagee:get_name() .. " for " .. evt.value .. " damage.")
+		local ability_name = rn.entity_get_data(damager).impl.cast
+		local ability_str = ""
+		if ability_name ~= nil then
+			ability_str = " with " .. ability_name 
+		end
+		print(damager:get_name() .. " hurts " .. damagee:get_name() .. ability_str .. " for " .. evt.value .. " damage.")
 	end
 	if evt.tag == "entity_heal_entity" then
 		local healer = rn.scene():get_uid(evt.healer)

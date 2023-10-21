@@ -20,6 +20,7 @@ rn.abilities[id] =
 		local entdata = rn.entity_get_data(ent)
 		local projdata = rn.entity_get_data(proj)
 		projdata.shoot_direct = entdata.impl.face_cast_direction
+		projdata.owner = ent
 		if projdata.shoot_direct then
 			-- shoot directly in the cast direction
 			projdata.shoot_vec_x = entdata.impl.cast_dir_x
