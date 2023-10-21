@@ -24,6 +24,7 @@ rn._impl_cast_type_to_animation_id =
 require "ability0"
 
 rn.cast_spell = function(arg)
+	-- check argument sanity
 	local ent = arg.ent
 	tz.assert(ent ~= nil)
 	local ability_name = arg.ability_name
@@ -31,12 +32,15 @@ rn.cast_spell = function(arg)
 	local cast_type = arg.type
 	if cast_type == nil then cast_type = rn.cast.type.spell_1h_directed end
 
+	-- figure out which ability we wanna cast
 	local ability = rn.abilities[rn.ability.type[ability_name]]
 	tz.assert(ability ~= nil)
 
+	-- if we're casting something else, early-out.
 	local entdata = rn.entity_get_data(ent)
 	if entdata.impl.is_casting == true then return end
 
+	-- if its an instant cast spell, no need to set these, just send it instantly. (note: no animation in this case)
 	if ability.base_cast_time == 0 then
 		-- just instantly send it
 		ability.on_cast(ent)
@@ -69,5 +73,10 @@ rn.casting_advance = function(ent)
 end
 
 rn.is_casting = function(ent)
+	return rn.entity_get_data(ent).impl.is_casting == true
+end
 
+rn.get_current_cast = function(ent)
+	if rn.is_casting(ent) then return rn.entity_get_data(ent).impl.cast end
+	return nil
 end
