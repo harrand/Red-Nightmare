@@ -22,6 +22,7 @@ rn._impl_cast_type_to_animation_id =
 
 -- Include all abilities here.
 require "ability0"
+require "ability1"
 
 rn.cast_spell = function(arg)
 	-- check argument sanity

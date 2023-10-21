@@ -56,13 +56,15 @@ rn.entity_handler[id] =
 		
 		local wnd = tz.window()
 		if wnd:is_mouse_down("left") then
+			rn.cast_spell({ent = ent, ability_name = "Fireball"})
+		elseif wnd:is_mouse_down("right") then
 			rn.cast_spell({ent = ent, ability_name = "Heal"})
 		end
 
 		if rn.is_key_down("w") then
-			rn.entity_move({ent = ent, dir = "forward", movement_anim_id = 8})
-		elseif rn.is_key_down("s") then
 			rn.entity_move({ent = ent, dir = "backward", movement_anim_id = 8})
+		elseif rn.is_key_down("s") then
+			rn.entity_move({ent = ent, dir = "forward", movement_anim_id = 8})
 		elseif rn.is_key_down("a") then
 			rn.entity_move({ent = ent, dir = "left", movement_anim_id = 8})
 		elseif rn.is_key_down("d") then

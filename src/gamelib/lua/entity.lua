@@ -111,6 +111,8 @@ rn.entity_postinit = function(type)
 		local e = ent:get_element()
 		e:object_set_visibility(4, false)
 		e:object_set_visibility(6, false)
+		e:face_forward()
+		rn.entity_get_data(ent).impl.dir = "forward"
 	end
 
 	local handler = rn.entity_handler[type]
@@ -142,7 +144,7 @@ rn.entity_update = function(ent)
 
 	local e = ent:get_element()
 	local idle_anim_id = 6
-	if not data.impl.is_casting and not data.impl.is_moving then
+	if not ent:is_dead() and not data.impl.is_casting and not data.impl.is_moving then
 		if (ent:get_model() == rn.model.humanoid) and (e:get_playing_animation_id() ~= idle_anim_id or not e:is_animation_playing()) then
 			e:play_animation(idle_anim_id, false)
 		end
@@ -241,9 +243,9 @@ rn.entity_move = function(arg)
 	local xdiff = 0
 	local ydiff = 0
 	if dir == "forward" then
-		ydiff = ydiff + 1
-	elseif dir == "backward" then
 		ydiff = ydiff - 1
+	elseif dir == "backward" then
+		ydiff = ydiff + 1
 	elseif dir == "right" then
 		xdiff = xdiff + 1
 	elseif dir == "left" then
@@ -257,13 +259,17 @@ rn.entity_move = function(arg)
 		if xdiff == 0 then
 			if ydiff > 0 then
 				e:face_backward()
+				entdata.impl.dir = "backward"
 			elseif ydiff < 0 then
 				e:face_forward()
+				entdata.impl.dir = "forward"
 			end
 		elseif xdiff > 0 then
 			e:face_right()
+			entdata.impl.dir = "right"
 		elseif xdiff < 0 then
 			e:face_left()
+			entdata.impl.dir = "left"
 		end
 	end
 
