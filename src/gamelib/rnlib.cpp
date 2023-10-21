@@ -110,6 +110,7 @@ namespace game
 		tz::lua::for_all_states([](tz::lua::state& state)
 		{
 			TZ_PROFZONE("rnlib - lua single state init", 0xFF00AAFF);
+			state.execute("math.randomseed(os.time())");
 			state.assign_emptytable("rn");
 			std::string cwd = std::filesystem::current_path().string();
 			state.stack_push_string(cwd);
