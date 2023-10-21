@@ -126,8 +126,26 @@ rn.entity_update = function(ent)
 	tz.assert(ent ~= nil)
 	local handler = rn.entity_handler[ent:get_type()]
 	tz.assert(handler ~= nil)
+	local data = rn.entity_get_data(ent)
+
+	data.impl.is_moving = false
+
 	if handler.update ~= nil then
 		handler.update(ent)
+	end
+
+	-- deal with casts.
+	if data.impl.is_casting == true then
+		-- is the cast finished?
+		rn.casting_advance(ent)
+	end
+
+	local e = ent:get_element()
+	local idle_anim_id = 6
+	if not data.impl.is_casting and not data.impl.is_moving then
+		if e:get_playing_animation_id() ~= idle_anim_id or not e:is_animation_playing() then
+			e:play_animation(idle_anim_id, false)
+		end
 	end
 	tracy.ZoneEnd()
 end
@@ -183,6 +201,12 @@ rn.advance_key_state = function()
 	end
 end
 
+rn.entity_get_data = function(ent)
+	rn.entity.data[ent:uid()] = rn.entity.data[ent:uid()] or {}
+	rn.entity.data[ent:uid()].impl = rn.entity.data[ent:uid()].impl or {}
+	return rn.entity.data[ent:uid()]
+end
+
 rn.update = function()
 	tracy.ZoneBegin()
 
@@ -208,15 +232,18 @@ rn.entity_move = function(arg)
 	local movement_anim_id = arg.movement_anim_id
 	local face_in_direction = arg.face_in_direction
 	if face_in_direction == nil then face_in_direction = true end
-	print("direction = " .. dir)
+
+	local entdata = rn.entity_get_data(ent)
+	entdata.impl = entdata.impl or {}
+
 	local e = ent:get_element()
 	-- get normalised movement vector
 	local xdiff = 0
 	local ydiff = 0
 	if dir == "forward" then
-		ydiff = ydiff - 1
-	elseif dir == "backward" then
 		ydiff = ydiff + 1
+	elseif dir == "backward" then
+		ydiff = ydiff - 1
 	elseif dir == "right" then
 		xdiff = xdiff + 1
 	elseif dir == "left" then
@@ -229,10 +256,8 @@ rn.entity_move = function(arg)
 	if face_in_direction then
 		if xdiff == 0 then
 			if ydiff > 0 then
-				e:face_forward()
-			elseif ydiff < 0 then
 				e:face_backward()
-			else
+			elseif ydiff < 0 then
 				e:face_forward()
 			end
 		elseif xdiff > 0 then
@@ -242,8 +267,9 @@ rn.entity_move = function(arg)
 		end
 	end
 
-	if (xdiff ~= 0 or ydiff ~= 0) then
+	if (xdiff ~= 0 or ydiff ~= 0) and not entdata.impl.is_casting then
 		-- do movement
+		entdata.impl.is_moving = true
 		local x, y = e:get_position()
 		local hypot = math.sqrt(xdiff*xdiff + ydiff*ydiff)
 		xdiff = xdiff / hypot
