@@ -18,6 +18,7 @@ rn.entity_handler[id] =
 	end,
 	postinit = function(ent)
 		ent:get_element():object_set_visibility(1, false)
+		ent:get_element():set_uniform_scale(ent:get_element():get_uniform_scale() * 2)
 		local data = rn.entity_get_data(ent)
 		-- live for 0.5 seconds
 		data.duration_remaining = 1.0

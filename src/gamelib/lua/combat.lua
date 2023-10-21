@@ -62,6 +62,13 @@ function rn.combat.base_on_struck(ent, evt)
 	end
 	tz.assert(handler ~= nil)
 	ent:set_health(new_hp)
+
+	-- blood splatter
+	local splatter = rn.scene():get(rn.scene():add(6))
+	local splatterdata = rn.entity_get_data(splatter)
+	splatterdata.target_entity = ent
+	splatterdata.subobject = 9
+	splatterdata.duration = 500
 end
 
 -- ent was affected by a entity_heal_entity_event
