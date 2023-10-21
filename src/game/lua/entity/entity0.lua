@@ -56,6 +56,8 @@ rn.entity_handler[id] =
 		
 		local wnd = tz.window()
 		if wnd:is_mouse_down("left") then
+			local mousex, mousey = rn.scene():get_mouse_position_ws()
+			print("mouse at {" .. mousex .. ", " .. mousey .. "}")
 			rn.cast_spell({ent = ent, ability_name = "Fireball"})
 		elseif wnd:is_mouse_down("right") then
 			rn.cast_spell({ent = ent, ability_name = "Heal"})

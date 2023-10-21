@@ -61,6 +61,8 @@ namespace game::render
 		scene_element get_element(entry e);
 		entry entry_at(std::size_t idx) const;
 		std::size_t entry_count() const;
+		const tz::vec2& get_view_bounds() const;
+		tz::vec2 get_camera_position() const;
 		void update(float delta);
 		void dbgui();
 

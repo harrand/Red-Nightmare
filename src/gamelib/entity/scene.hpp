@@ -71,6 +71,7 @@ namespace game::entity
 		int get_uid(tz::lua::state& state);
 		int get_renderer(tz::lua::state& state);
 		int size(tz::lua::state& state);
+		int get_mouse_position_ws(tz::lua::state& state);
 	};
 
 	LUA_CLASS_BEGIN(rn_impl_scene)
@@ -84,6 +85,7 @@ namespace game::entity
 			LUA_METHOD(rn_impl_scene, get_uid)
 			LUA_METHOD(rn_impl_scene, get_renderer)
 			LUA_METHOD(rn_impl_scene, size)
+			LUA_METHOD(rn_impl_scene, get_mouse_position_ws)
 		LUA_CLASS_METHODS_END
 	LUA_CLASS_END
 }

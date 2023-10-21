@@ -100,6 +100,16 @@ namespace game::render
 		return this->entries.size();
 	}
 
+	const tz::vec2& scene_renderer::get_view_bounds() const
+	{
+		return this->view_bounds;
+	}
+
+	tz::vec2 scene_renderer::get_camera_position() const
+	{
+		return this->renderer.get_camera_transform().translate.swizzle<0, 1>();
+	}
+
 	void scene_renderer::update(float delta)
 	{
 		TZ_PROFZONE("scene renderer - update", 0xFFFF4488);
