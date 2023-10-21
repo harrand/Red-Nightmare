@@ -56,7 +56,7 @@ rn.entity_handler[id] =
 		
 		local wnd = tz.window()
 		if wnd:is_mouse_down("left") then
-			rn.cast_spell({ent = ent, ability_name = "Heal", type = rn.cast.type.spell_1h_omni})
+			rn.cast_spell({ent = ent, ability_name = "Heal"})
 		end
 
 		if rn.is_key_down("w") then

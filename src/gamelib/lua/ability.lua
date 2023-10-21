@@ -29,12 +29,15 @@ rn.cast_spell = function(arg)
 	tz.assert(ent ~= nil)
 	local ability_name = arg.ability_name
 	tz.assert(ability_name ~= nil)
-	local cast_type = arg.type
-	if cast_type == nil then cast_type = rn.cast.type.spell_1h_directed end
 
 	-- figure out which ability we wanna cast
 	local ability = rn.abilities[rn.ability.type[ability_name]]
 	tz.assert(ability ~= nil)
+
+	local cast_type = ability.cast_type
+	if cast_type == nil then
+		cast_type = rn.cast.type.spell_1h_directed
+	end
 
 	-- if we're casting something else, early-out.
 	local entdata = rn.entity_get_data(ent)
@@ -111,4 +114,12 @@ end
 rn.get_current_cast = function(ent)
 	if rn.is_casting(ent) then return rn.entity_get_data(ent).impl.cast end
 	return nil
+end
+
+rn.get_ability_id = function(name)
+	return rn.ability.type[name]
+end
+
+rn.get_ability_name = function(id)
+	return rn.abilities[id].name
 end
