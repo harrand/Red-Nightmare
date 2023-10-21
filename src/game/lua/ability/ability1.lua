@@ -18,17 +18,27 @@ rn.abilities[id] =
 		proj:get_element():set_position(x, y)
 		local entdata = rn.entity_get_data(ent)
 		local projdata = rn.entity_get_data(proj)
-		projdata.shoot_dir = entdata.impl.dir
-		if projdata.shoot_dir == "right" then
-			-- do nothing
-		elseif projdata.shoot_dir == "left" then
-			proj:get_element():rotate(3.14159)
-		elseif projdata.shoot_dir == "forward" then
-			proj:get_element():rotate(-1.5708)
-		elseif projdata.shoot_dir == "backward" then
-			proj:get_element():rotate(1.5708)
+		projdata.shoot_direct = entdata.impl.face_cast_direction
+		if projdata.shoot_direct then
+			-- shoot directly in the cast direction
+			projdata.shoot_vec_x = entdata.impl.cast_dir_x
+			projdata.shoot_vec_y = entdata.impl.cast_dir_y
+			-- math.atan2 is removed, instead just use math.atan with 2 args
+			proj:get_element():rotate(3.14159 + math.atan(projdata.shoot_vec_y, projdata.shoot_vec_x))
 		else
-			tz.assert(false)
+			-- shoot in the general direction (right/left/up/down)
+			projdata.shoot_dir = entdata.impl.dir
+			if projdata.shoot_dir == "right" then
+				-- do nothing
+			elseif projdata.shoot_dir == "left" then
+				proj:get_element():rotate(3.14159)
+			elseif projdata.shoot_dir == "forward" then
+				proj:get_element():rotate(-1.5708)
+			elseif projdata.shoot_dir == "backward" then
+				proj:get_element():rotate(1.5708)
+			else
+				tz.assert(false)
+			end
 		end
 
 		local ability = rn.abilities[id]

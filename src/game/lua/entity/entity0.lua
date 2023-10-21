@@ -53,13 +53,21 @@ rn.entity_handler[id] =
 		local data = rn.entity_get_data(ent)
 		data.counter = data.counter + rn.delta_time * 2.8957
 		tz.assert(ent:get_name() == "Lady Melistra")
+
+		if rn.is_casting(ent) then
+			local mousex, mousey = rn.scene():get_mouse_position_ws()
+			local entx, enty = ent:get_element():get_position()
+			-- we want vector, so mouse pos - ent pos
+			local vecx = entx - mousex
+			local vecy = enty - mousey
+			data.impl.cast_dir_x = vecx
+			data.impl.cast_dir_y = vecy
+		end
 		
 		local wnd = tz.window()
-		if wnd:is_mouse_down("left") then
-			local mousex, mousey = rn.scene():get_mouse_position_ws()
-			print("mouse at {" .. mousex .. ", " .. mousey .. "}")
-			rn.cast_spell({ent = ent, ability_name = "Fireball"})
-		elseif wnd:is_mouse_down("right") then
+		if not rn.is_casting(ent) and wnd:is_mouse_down("left") then
+			rn.cast_spell({ent = ent, ability_name = "Fireball", face_cast_direction = true})
+		elseif not rn.is_casting(ent) and wnd:is_mouse_down("right") then
 			rn.cast_spell({ent = ent, ability_name = "Heal"})
 		end
 

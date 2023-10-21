@@ -47,8 +47,11 @@ rn.entity_handler[id] =
 		end
 		local x, y = ent:get_element():get_position()
 
-		tz.assert(data.shoot_dir ~= nil)
-		rn.entity_move({ent = ent, dir = data.shoot_dir, face_in_direction = false})
+		if not data.shoot_direct then
+			rn.entity_move({ent = ent, dir = data.shoot_dir, face_in_direction = false})
+		else
+			rn.entity_move({ent = ent, vecdir_x = data.shoot_vec_x, vecdir_y = data.shoot_vec_y, face_in_direction = false})
+		end
 
 		-- we only live for 5 seconds
 		if data.spawned_at + 5000 <= tz.time() then

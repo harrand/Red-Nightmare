@@ -231,6 +231,8 @@ rn.entity_move = function(arg)
 	local ent = arg.ent or nil
 	tz.assert(ent ~= nil)
 	local dir = arg.dir
+	local vecdir_x = arg.vecdir_x
+	local vecdir_y = arg.vecdir_y
 	local movement_anim_id = arg.movement_anim_id
 	local face_in_direction = arg.face_in_direction
 	if face_in_direction == nil then face_in_direction = true end
@@ -242,16 +244,23 @@ rn.entity_move = function(arg)
 	-- get normalised movement vector
 	local xdiff = 0
 	local ydiff = 0
-	if dir == "forward" then
-		ydiff = ydiff - 1
-	elseif dir == "backward" then
-		ydiff = ydiff + 1
-	elseif dir == "right" then
-		xdiff = xdiff + 1
-	elseif dir == "left" then
-		xdiff = xdiff - 1
+	if vecdir_x == nil or vecdir_y == nil then
+		-- move in an axis-aligned direction
+		if dir == "forward" then
+			ydiff = ydiff - 1
+		elseif dir == "backward" then
+			ydiff = ydiff + 1
+		elseif dir == "right" then
+			xdiff = xdiff + 1
+		elseif dir == "left" then
+			xdiff = xdiff - 1
+		else
+			tz.assert(false)
+		end
 	else
-		tz.assert(false)
+		-- move in direction of an arbitrary angle
+		xdiff = -vecdir_x
+		ydiff = -vecdir_y
 	end
 
 	-- set face direction

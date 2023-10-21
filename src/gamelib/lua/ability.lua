@@ -35,6 +35,12 @@ rn.cast_spell = function(arg)
 	local ability = rn.abilities[rn.ability.type[ability_name]]
 	tz.assert(ability ~= nil)
 
+	local face_cast_direction = arg.face_cast_direction
+	-- should the entity face the direction of the cast?
+	if face_cast_direction == nil then
+		face_cast_direction = false
+	end
+
 	local cast_type = ability.cast_type
 	if cast_type == nil then
 		cast_type = rn.cast.type.spell_1h_directed
@@ -44,6 +50,7 @@ rn.cast_spell = function(arg)
 	local entdata = rn.entity_get_data(ent)
 	if entdata.impl.is_casting == true then return end
 
+	entdata.impl.face_cast_direction = face_cast_direction
 	-- if its an instant cast spell, no need to set these, just send it instantly. (note: no animation in this case)
 	if ability.base_cast_time == 0 then
 		-- just instantly send it
@@ -105,6 +112,29 @@ rn.casting_advance = function(ent)
 	local t = tz.time()
 	if t > (entdata.impl.cast_begin + ability.base_cast_time) then
 		rn.complete_cast(ent)
+	end
+
+	if entdata.impl.face_cast_direction then
+		local e = ent:get_element()
+		local vecx = entdata.impl.cast_dir_x
+		local vecy = entdata.impl.cast_dir_y
+		vecx = vecx or 0
+		vecy = vecy or 0
+		if vecx > math.abs(vecy) then
+			e:face_left()
+			entdata.impl.dir = "left"
+		elseif vecx < 0 then
+			e:face_right()
+			entdata.impl.dir = "right"
+		else
+			if vecy > 0 then
+				e:face_forward()				
+				entdata.impl.dir = "forward"
+			else
+				e:face_backward()
+				entdata.impl.dir = "backward"
+			end
+		end
 	end
 end
 
