@@ -120,6 +120,11 @@ namespace game::render
 		this->pixelate_pass.handle_resize(this->renderer.get_render_pass());
 	}
 
+	void scene_renderer::block()
+	{
+		this->renderer.block();
+	}
+
 	void scene_renderer::dbgui()
 	{
 		if(ImGui::BeginTabBar("animation-renderer"))
@@ -317,6 +322,11 @@ namespace game::render
 	void scene_element::skip_animation()
 	{
 		this->renderer->get_renderer().animated_object_skip_animation(this->entry.obj);
+	}
+
+	void scene_element::skip_all_animations()
+	{
+		this->renderer->get_renderer().animated_object_skip_all_animations(this->entry.obj);
 	}
 
 	void scene_element::halt_animation()
@@ -631,6 +641,13 @@ namespace game::render
 		TZ_PROFZONE("scene element - play animation", 0xFFFFAAEE);
 		auto [_, anim_id, loop] = tz::lua::parse_args<tz::lua::nil, unsigned int, bool>(state);
 		this->elem.play_animation(anim_id, loop);
+		return 0;
+	}
+
+	int impl_rn_scene_element::skip_all_animations(tz::lua::state& state)
+	{
+		TZ_PROFZONE("scene element - skip all animations", 0xFFFFAAEE);
+		this->elem.skip_all_animations();
 		return 0;
 	}
 

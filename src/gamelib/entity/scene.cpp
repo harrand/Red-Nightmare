@@ -88,7 +88,6 @@ namespace game::entity
 			return;
 		}
 		this->free_list.push_back(e);
-		this->renderer.remove_model(this->entities[hanval].elem.entry);
 		std::string cmd = "rn.entity.data[" + std::to_string(this->entities[hanval].uid) + "] = nil";
 		tz::lua::get_state().execute(cmd.c_str());
 		this->deinitialise_entity(static_cast<tz::hanval>(hanval), this->entities[hanval].uid);
@@ -189,7 +188,7 @@ namespace game::entity
 		state.execute(cmd.c_str());
 		// note: this doesnt work. something to do with re-using gltfs im pretty sure.
 		// todo: fix this engine-side, as draw count never stops increasing even when we recycle stuff :(
-		//this->get_renderer().remove_model(ent.elem.entry);
+		this->get_renderer().remove_model(ent.elem.entry);
 	}
 
 	void scene::rebuild_quadtree()

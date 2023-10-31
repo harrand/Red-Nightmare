@@ -64,6 +64,7 @@ namespace game::render
 		const tz::vec2& get_view_bounds() const;
 		tz::vec2 get_camera_position() const;
 		void update(float delta);
+		void block();
 		void dbgui();
 
 		tz::ren::animation_renderer2& get_renderer();
@@ -113,6 +114,7 @@ namespace game::render
 		void play_animation(std::size_t anim_id, bool loop = false);
 		void queue_animation(std::size_t anim_id, bool loop = false);
 		void skip_animation();
+		void skip_all_animations();
 		void halt_animation();
 	};
 
@@ -172,6 +174,7 @@ namespace game::render
 		int play_animation(tz::lua::state& state);
 		int queue_animation(tz::lua::state& state);
 		int skip_animation(tz::lua::state& state);
+		int skip_all_animations(tz::lua::state& state);
 		int halt_animation(tz::lua::state& state);
 	};
 
@@ -207,6 +210,7 @@ namespace game::render
 			LUA_METHOD(impl_rn_scene_element, play_animation)
 			LUA_METHOD(impl_rn_scene_element, queue_animation)
 			LUA_METHOD(impl_rn_scene_element, skip_animation)
+			LUA_METHOD(impl_rn_scene_element, skip_all_animations)
 			LUA_METHOD(impl_rn_scene_element, halt_animation)
 		LUA_CLASS_METHODS_END
 	LUA_CLASS_END

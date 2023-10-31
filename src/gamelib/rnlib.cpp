@@ -49,7 +49,6 @@ namespace game
 	{
 		TZ_PROFZONE("rnlib - update", 0xFF00AAFF);
 		float delta_seconds = delta_micros / 1000000.0f;
-		game_system->scene.update(delta_seconds);
 
 		if(game_system->dbgui.display_scene)
 		{
@@ -73,11 +72,19 @@ namespace game
 			tz::lua::get_state().assign_float("rn.delta_time", delta_seconds);
 			tz::lua::get_state().execute("if rn.update ~= nil then rn.update() end");
 		}
+		game_system->scene.update(delta_seconds);
 		tz::gl::get_device().render();
 	}
 
 	void fixed_update(std::uint64_t delta_micros, std::uint64_t unprocessed)
 	{
+		static std::uint64_t counter = 0;
+		counter += delta_micros;
+		if(counter > 2500000)
+		{
+			game_system->scene.add(2);
+			counter = 0;
+		}
 	}
 
 	void dbgui()
