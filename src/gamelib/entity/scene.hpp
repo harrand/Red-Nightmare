@@ -34,6 +34,7 @@ namespace game::entity
 		std::size_t size() const;
 
 		void update(float delta_seconds);
+		void block();
 		void dbgui();
 		void dbgui_game_bar();
 

@@ -127,6 +127,11 @@ namespace game::entity
 		this->rebuild_quadtree();
 	}
 
+	void scene::block()
+	{
+		this->renderer.block();
+	}
+
 	void scene::dbgui()
 	{
 		this->dbgui_impl();
