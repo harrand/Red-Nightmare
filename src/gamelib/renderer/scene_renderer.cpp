@@ -24,12 +24,12 @@ namespace game::render
 		}
 	}},
 	renderer
-	(
-		128u,
-		{tz::gl::renderer_option::no_present},
-		ImportedShaderSource(scene_renderer, fragment),
-		&this->output
-	)
+	({
+		.custom_fragment_spirv = ImportedShaderSource(scene_renderer, fragment),
+		.custom_options = {tz::gl::renderer_option::no_present},
+		.texture_capacity = 128u,
+		.output = &this->output
+})
 	{
 		TZ_PROFZONE("scene renderer - create", 0xFFFF4488);
 		this->renderer.append_to_render_graph();
@@ -39,49 +39,39 @@ namespace game::render
 		this->root = this->renderer.add_object
 		({
 			.mesh = tz::nullhand,
-			.bound_textures = {},
 			.parent = tz::nullhand,
+			.bound_textures = {},
 		});
+		
+		for(int i = 0; i < static_cast<int>(model::_count); i++)
+		{
+			this->renderer.add_gltf(this->get_model(static_cast<model>(i)));
+		}
 	}
 
 	scene_renderer::entry scene_renderer::add_model(model m)
 	{
 		TZ_PROFZONE("scene renderer - add model", 0xFFFF4488);
 		auto mid = static_cast<int>(m);	
-		if(this->base_models[mid].objects.empty())
-		{
-			// no base model exists, create a new one.
-			this->base_models[mid] = this->renderer.add_gltf(scene_renderer::get_model(m), this->root);
-			this->entries.push_back({.pkg = this->base_models[mid], .m = m});
-		}
-		else
-		{
-			tz::ren::animation_renderer::override_package opkg;	
-			opkg.overrides = {tz::ren::animation_renderer::override_flag::mesh, tz::ren::animation_renderer::override_flag::texture};
-			opkg.pkg = this->base_models[mid];
-
-			this->entries.push_back({.pkg = this->renderer.add_gltf(scene_renderer::get_model(m), this->root, opkg), .m = m});
-		}
-		auto handle = this->entries.back().pkg.objects.front();
+		tz::ren::animation_renderer2::animated_objects_handle aoh = this->renderer.add_animated_objects
+		({
+			.gltf = static_cast<tz::hanval>(m),
+			.parent = this->root
+		});
+		this->entries.push_back({.obj = aoh, .m = m});
 		// human is way bigger than quad, so cut it down a size a bit.
 		if(m == model::humanoid)
 		{
-			tz::trs trs = this->renderer.get_object_base_transform(handle);
+			tz::trs trs = this->renderer.animated_object_get_local_transform(aoh);
 			trs.scale *= 0.25f;
-			this->renderer.set_object_base_transform(handle, trs);
+			this->renderer.animated_object_set_local_transform(aoh, trs);
 		}
 		return this->entries.back();
 	}
 
 	void scene_renderer::remove_model(entry e)
 	{
-		if(this->base_models[static_cast<int>(e.m)] == e.pkg)
-		{
-			// this is the base model. gotta remove it somehow :(
-			// we could set base model to empty here, but it means the next time this model is added, the mesh data is added again
-			// so we cannot do anything until we delete the actual meshes and textures.
-		}
-		this->renderer.remove_objects(e.pkg, tz::ren::animation_renderer::transform_hierarchy::remove_strategy::remove_children);
+		this->renderer.remove_animated_objects(e.obj);
 	}
 
 	scene_element scene_renderer::get_element(entry e)
@@ -132,10 +122,14 @@ namespace game::render
 
 	void scene_renderer::dbgui()
 	{
-		this->renderer.dbgui();
+		if(ImGui::BeginTabBar("animation-renderer"))
+		{
+			this->renderer.dbgui();
+			ImGui::EndTabBar();
+		}
 	}
 
-	tz::ren::animation_renderer& scene_renderer::get_renderer()
+	tz::ren::animation_renderer2& scene_renderer::get_renderer()
 	{
 		return this->renderer;
 	}
@@ -260,25 +254,25 @@ namespace game::render
 
 	std::size_t scene_element::get_object_count() const
 	{
-		return this->entry.pkg.objects.size();
+		return this->renderer->get_renderer().animated_object_get_subobjects(this->entry.obj).size();
 	}
 
-	tz::ren::texture_locator scene_element::object_get_texture(tz::ren::animation_renderer::object_handle h, std::size_t bound_texture_id) const
+	tz::ren::animation_renderer2::texture_locator scene_element::object_get_texture(tz::ren::animation_renderer2::object_handle h, std::size_t bound_texture_id) const
 	{
 		return this->renderer->get_renderer().object_get_texture(h, bound_texture_id);
 	}
 
-	void scene_element::object_set_texture(tz::ren::animation_renderer::object_handle h, std::size_t bound_texture_id, tz::ren::texture_locator tloc)
+	void scene_element::object_set_texture(tz::ren::animation_renderer2::object_handle h, std::size_t bound_texture_id, tz::ren::animation_renderer2::texture_locator tloc)
 	{
 		this->renderer->get_renderer().object_set_texture(h, bound_texture_id, tloc);
 	}
 
-	bool scene_element::object_get_visibility(tz::ren::animation_renderer::object_handle h) const
+	bool scene_element::object_get_visibility(tz::ren::animation_renderer2::object_handle h) const
 	{
 		return this->renderer->get_renderer().object_get_visible(h);
 	}
 
-	void scene_element::object_set_visibility(tz::ren::animation_renderer::object_handle h, bool visible)
+	void scene_element::object_set_visibility(tz::ren::animation_renderer2::object_handle h, bool visible)
 	{
 		this->renderer->get_renderer().object_set_visible(h, visible);
 	}
@@ -290,37 +284,44 @@ namespace game::render
 
 	std::size_t scene_element::get_animation_count() const
 	{
-		return this->renderer->get_renderer().get_animation_count(this->entry.pkg);
+		auto gltfh = this->renderer->get_renderer().animated_object_get_gltf(this->entry.obj);
+		return this->renderer->get_renderer().gltf_get_animation_count(gltfh);
 	}
 
 	std::optional<std::size_t> scene_element::get_playing_animation_id() const
 	{
-		return this->renderer->get_renderer().get_playing_animation(this->entry.pkg);
+		auto anims = this->renderer->get_renderer().animated_object_get_playing_animations(this->entry.obj);
+		if(anims.size())
+		{
+			return anims.front().animation_id;
+		}
+		return std::nullopt;
 	}
 
 	std::string_view scene_element::get_animation_name(std::size_t anim_id) const
 	{
-		return this->renderer->get_renderer().get_animation_name(this->entry.pkg, anim_id);
+		auto gltfh = this->renderer->get_renderer().animated_object_get_gltf(this->entry.obj);
+		return this->renderer->get_renderer().gltf_get_animation_name(gltfh, anim_id);
 	}
 
 	void scene_element::play_animation(std::size_t anim_id, bool loop)
 	{
-		this->renderer->get_renderer().play_animation(this->entry.pkg, anim_id, loop);
+		this->renderer->get_renderer().animated_object_play_animation(this->entry.obj, {.animation_id = anim_id, .loop = loop});
 	}
 
 	void scene_element::queue_animation(std::size_t anim_id, bool loop)
 	{
-		this->renderer->get_renderer().queue_animation(this->entry.pkg, anim_id, loop);
+		this->renderer->get_renderer().animated_object_queue_animation(this->entry.obj, {.animation_id = anim_id, .loop = loop});
 	}
 
 	void scene_element::skip_animation()
 	{
-		this->renderer->get_renderer().skip_animation(this->entry.pkg);
+		this->renderer->get_renderer().animated_object_skip_animation(this->entry.obj);
 	}
 
 	void scene_element::halt_animation()
 	{
-		this->renderer->get_renderer().halt_animation(this->entry.pkg);
+		this->renderer->get_renderer().animated_object_skip_animation(this->entry.obj);
 	}
 
 	// LUA API
@@ -361,7 +362,7 @@ namespace game::render
 	int impl_rn_scene_element::object_get_texture(tz::lua::state& state)
 	{
 		auto [_, oh, bound_texture_id] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int>(state);
-		auto objh = this->elem.entry.pkg.objects[oh];
+		auto objh = this->elem.renderer->get_renderer().animated_object_get_subobjects(this->elem.entry.obj)[oh];
 		LUA_CLASS_PUSH(state, impl_rn_scene_texture_locator, {.tloc = this->elem.object_get_texture(objh, bound_texture_id)});
 		return 1;
 	}
@@ -370,8 +371,8 @@ namespace game::render
 	{
 		TZ_PROFZONE("scene element - object set texture tint", 0xFFFFAAEE);
 		auto [_, oh, bound_texture_id, r, g, b] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int, float, float, float>(state);
-		auto objh = this->elem.entry.pkg.objects[oh];
-		tz::ren::texture_locator tloc = this->elem.object_get_texture(objh, bound_texture_id);
+		auto objh = this->elem.renderer->get_renderer().animated_object_get_subobjects(this->elem.entry.obj)[oh];
+		tz::ren::animation_renderer2::texture_locator tloc = this->elem.object_get_texture(objh, bound_texture_id);
 		tloc.colour_tint = {r, g, b};
 		this->elem.object_set_texture(objh, bound_texture_id, tloc);
 		return 0;
@@ -381,8 +382,8 @@ namespace game::render
 	{
 		TZ_PROFZONE("scene element - object set texture handle", 0xFFFFAAEE);
 		auto [_, oh, bound_texture_id, texhandle] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int, unsigned int>(state);
-		auto objh = this->elem.entry.pkg.objects[oh];
-		tz::ren::texture_locator tloc = this->elem.object_get_texture(objh, bound_texture_id);
+		auto objh = this->elem.renderer->get_renderer().animated_object_get_subobjects(this->elem.entry.obj)[oh];
+		tz::ren::animation_renderer2::texture_locator tloc = this->elem.object_get_texture(objh, bound_texture_id);
 		tloc.texture = static_cast<tz::hanval>(texhandle);
 		this->elem.object_set_texture(objh, bound_texture_id, tloc);
 		return 0;
@@ -391,8 +392,8 @@ namespace game::render
 	int impl_rn_scene_element::object_get_colour_tint(tz::lua::state& state)
 	{
 		auto [_, oh] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
-		auto objh = this->elem.entry.pkg.objects[oh];
-		tz::vec3 ret = this->elem.renderer->get_renderer().object_get_colour(objh);
+		auto objh = this->elem.renderer->get_renderer().animated_object_get_subobjects(this->elem.entry.obj)[oh];
+		tz::vec3 ret = this->elem.renderer->get_renderer().get_object(objh).colour_tint;
 		state.stack_push_float(ret[0]);
 		state.stack_push_float(ret[1]);
 		state.stack_push_float(ret[2]);
@@ -402,8 +403,8 @@ namespace game::render
 	int impl_rn_scene_element::object_set_colour_tint(tz::lua::state& state)
 	{
 		auto [_, oh, r, g, b] = tz::lua::parse_args<tz::lua::nil, unsigned int, float, float, float>(state);
-		auto objh = this->elem.entry.pkg.objects[oh];
-		this->elem.renderer->get_renderer().object_set_colour(objh, {r, g, b});
+		auto objh = this->elem.renderer->get_renderer().animated_object_get_subobjects(this->elem.entry.obj)[oh];
+		this->elem.renderer->get_renderer().get_object(objh).colour_tint = {r, g, b};
 		return 0;
 	}
 	
@@ -411,7 +412,7 @@ namespace game::render
 	{
 		TZ_PROFZONE("scene element - object get visibility", 0xFFFFAAEE);
 		auto [_, oh] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
-		auto objh = this->elem.entry.pkg.objects[oh];
+		auto objh = this->elem.renderer->get_renderer().animated_object_get_subobjects(this->elem.entry.obj)[oh];
 		state.stack_push_bool(this->elem.object_get_visibility(objh));
 		return 1;
 	}
@@ -420,7 +421,7 @@ namespace game::render
 	{
 		TZ_PROFZONE("scene element - object set visibility", 0xFFFFAAEE);
 		auto [_, oh, visible] = tz::lua::parse_args<tz::lua::nil, unsigned int, bool>(state);
-		auto objh = this->elem.entry.pkg.objects[oh];
+		auto objh = this->elem.renderer->get_renderer().animated_object_get_subobjects(this->elem.entry.obj)[oh];
 		this->elem.object_set_visibility(objh, visible);
 		return 0;
 	}
@@ -428,22 +429,20 @@ namespace game::render
 	int impl_rn_scene_element::face_forward(tz::lua::state& state)
 	{
 		TZ_PROFZONE("scene element - face forward", 0xFFFFAAEE);
-		auto objh = this->elem.entry.pkg.objects.front();
 		auto& ren = this->elem.renderer->get_renderer();
-		auto transform = ren.get_object_base_transform(objh);
+		auto transform = ren.animated_object_get_local_transform(this->elem.entry.obj);
 		transform.rotate = tz::quat::from_axis_angle({1.0f, 0.0f, 0.0f}, 0.3f);
-		ren.set_object_base_transform(objh, transform);
+		ren.animated_object_set_local_transform(this->elem.entry.obj, transform);
 		return 0;
 	}
 
 	int impl_rn_scene_element::face_backward(tz::lua::state& state)
 	{
 		TZ_PROFZONE("scene element - face backward", 0xFFFFAAEE);
-		auto objh = this->elem.entry.pkg.objects.front();
 		auto& ren = this->elem.renderer->get_renderer();
-		auto transform = ren.get_object_base_transform(objh);
+		auto transform = ren.animated_object_get_local_transform(this->elem.entry.obj);
 		transform.rotate = tz::quat::from_axis_angle({0.0f, 1.0f, 0.2f}, 3.14159f);
-		ren.set_object_base_transform(objh, transform);
+		ren.animated_object_set_local_transform(this->elem.entry.obj, transform);
 		return 0;
 	}
 
@@ -451,22 +450,20 @@ namespace game::render
 	int impl_rn_scene_element::face_left(tz::lua::state& state)
 	{
 		TZ_PROFZONE("scene element - face left", 0xFFFFAAEE);
-		auto objh = this->elem.entry.pkg.objects.front();
 		auto& ren = this->elem.renderer->get_renderer();
-		tz::trs transform = ren.get_object_base_transform(objh);
+		tz::trs transform = ren.animated_object_get_local_transform(this->elem.entry.obj);
 		transform.rotate = tz::quat::from_axis_angle({-0.2f, 1.0f, 0.2f}, -1.5708f);
-		ren.set_object_base_transform(objh, transform);
+		ren.animated_object_set_local_transform(this->elem.entry.obj, transform);
 		return 0;
 	}
 
 	int impl_rn_scene_element::face_right(tz::lua::state& state)
 	{
 		TZ_PROFZONE("scene element - face right", 0xFFFFAAEE);
-		auto objh = this->elem.entry.pkg.objects.front();
 		auto& ren = this->elem.renderer->get_renderer();
-		tz::trs transform = ren.get_object_base_transform(objh);
+		tz::trs transform = ren.animated_object_get_local_transform(this->elem.entry.obj);
 		transform.rotate = tz::quat::from_axis_angle({0.2f, 1.0f, 0.2f}, 1.5708f);
-		ren.set_object_base_transform(objh, transform);
+		ren.animated_object_set_local_transform(this->elem.entry.obj, transform);
 		return 0;
 	}
 
@@ -474,20 +471,18 @@ namespace game::render
 	{
 		TZ_PROFZONE("scene element - rotate", 0xFFFFAAEE);
 		auto [_, angle] = tz::lua::parse_args<tz::lua::nil, float>(state);
-		auto objh  = this->elem.entry.pkg.objects.front();
 		auto& ren = this->elem.renderer->get_renderer();
-		tz::trs transform = ren.get_object_base_transform(objh);
+		tz::trs transform = ren.animated_object_get_local_transform(this->elem.entry.obj);
 		transform.rotate.combine(tz::quat::from_axis_angle({0.0f, 0.0f, 1.0f}, angle));
-		ren.set_object_base_transform(objh, transform);
+		ren.animated_object_set_local_transform(this->elem.entry.obj, transform);
 		return 0;
 	}
 
 	int impl_rn_scene_element::get_position(tz::lua::state& state)
 	{
 		TZ_PROFZONE("scene element - get position", 0xFFFFAAEE);
-		auto objh = this->elem.entry.pkg.objects.front();
 		auto& ren = this->elem.renderer->get_renderer();
-		tz::trs transform = ren.get_object_base_transform(objh);
+		tz::trs transform = ren.animated_object_get_local_transform(this->elem.entry.obj);
 		state.stack_push_float(transform.translate[0]);
 		state.stack_push_float(transform.translate[1]);
 		return 2;
@@ -497,12 +492,11 @@ namespace game::render
 	{
 		TZ_PROFZONE("scene element - set position", 0xFFFFAAEE);
 		auto [_, x, y] = tz::lua::parse_args<tz::lua::nil, float, float>(state);
-		auto objh = this->elem.entry.pkg.objects.front();
 		auto& ren = this->elem.renderer->get_renderer();
-		tz::trs transform = ren.get_object_base_transform(objh);
+		tz::trs transform = ren.animated_object_get_local_transform(this->elem.entry.obj);
 		transform.translate[0] = x;
 		transform.translate[1] = y;
-		ren.set_object_base_transform(objh, transform);
+		ren.animated_object_set_local_transform(this->elem.entry.obj, transform);
 		return 0;
 	}
 
@@ -510,9 +504,9 @@ namespace game::render
 	{
 		TZ_PROFZONE("scene element - get position", 0xFFFFAAEE);
 		auto [_, oid] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
-		auto objh = this->elem.entry.pkg.objects[oid];
+		auto objh = this->elem.renderer->get_renderer().animated_object_get_subobjects(this->elem.entry.obj)[oid];
 		auto& ren = this->elem.renderer->get_renderer();
-		tz::trs transform = ren.get_object_global_transform(objh);
+		tz::trs transform = ren.object_get_global_transform(objh);
 		state.stack_push_float(transform.translate[0]);
 		state.stack_push_float(transform.translate[1]);
 		return 2;
@@ -521,9 +515,8 @@ namespace game::render
 	int impl_rn_scene_element::get_scale(tz::lua::state& state)
 	{
 		TZ_PROFZONE("scene element - get scale", 0xFFFFAAEE);
-		auto objh = this->elem.entry.pkg.objects.front();
 		auto& ren = this->elem.renderer->get_renderer();
-		tz::trs transform = ren.get_object_base_transform(objh);
+		tz::trs transform = ren.animated_object_get_local_transform(this->elem.entry.obj);
 		state.stack_push_float(transform.scale[0]);
 		state.stack_push_float(transform.scale[1]);
 		return 2;
@@ -533,21 +526,19 @@ namespace game::render
 	{
 		TZ_PROFZONE("scene element - set scale", 0xFFFFAAEE);
 		auto [_, x, y] = tz::lua::parse_args<tz::lua::nil, float, float>(state);
-		auto objh = this->elem.entry.pkg.objects.front();
 		auto& ren = this->elem.renderer->get_renderer();
-		tz::trs transform = ren.get_object_base_transform(objh);
+		tz::trs transform = ren.animated_object_get_local_transform(this->elem.entry.obj);
 		transform.scale[0] = x;
 		transform.scale[1] = y;
-		ren.set_object_base_transform(objh, transform);
+		ren.animated_object_set_local_transform(this->elem.entry.obj, transform);
 		return 0;
 	}
 
 	int impl_rn_scene_element::get_uniform_scale(tz::lua::state& state)
 	{
 		TZ_PROFZONE("scene element - get uniform scale", 0xFFFFAAEE);
-		auto objh = this->elem.entry.pkg.objects.front();
 		auto& ren = this->elem.renderer->get_renderer();
-		tz::trs transform = ren.get_object_base_transform(objh);
+		tz::trs transform = ren.animated_object_get_local_transform(this->elem.entry.obj);
 		tz::assert(transform.scale[0] == transform.scale[1] && transform.scale[1] && transform.scale[2]);
 		state.stack_push_float(transform.scale[0]);
 		return 1;
@@ -557,11 +548,10 @@ namespace game::render
 	{
 		TZ_PROFZONE("scene element - set uniform scale", 0xFFFFAAEE);
 		auto [_, s] = tz::lua::parse_args<tz::lua::nil, float>(state);
-		auto objh = this->elem.entry.pkg.objects.front();
 		auto& ren = this->elem.renderer->get_renderer();
-		tz::trs transform = ren.get_object_base_transform(objh);
+		tz::trs transform = ren.animated_object_get_local_transform(this->elem.entry.obj);
 		transform.scale = tz::vec3::filled(s);
-		ren.set_object_base_transform(objh, transform);
+		ren.animated_object_set_local_transform(this->elem.entry.obj, transform);
 		return 0;
 	}
 
@@ -597,13 +587,7 @@ namespace game::render
 	int impl_rn_scene_element::is_animation_playing(tz::lua::state& state)
 	{
 		TZ_PROFZONE("scene element - is animation playing", 0xFFFFAAEE);
-		bool playing = this->elem.get_playing_animation_id().has_value();
-		if(playing)
-		{
-			const float progress = this->elem.renderer->get_renderer().get_playing_animation_progress(this->elem.entry.pkg);
-			playing &= (progress < 1.0f);
-		}
-		state.stack_push_bool(playing);
+		state.stack_push_bool(this->elem.renderer->get_renderer().animated_object_get_playing_animations(this->elem.entry.obj).size());
 		return 1;
 	}
 
@@ -618,7 +602,14 @@ namespace game::render
 	int impl_rn_scene_element::get_animation_speed(tz::lua::state& state)
 	{
 		TZ_PROFZONE("scene element - get animation speed", 0xFFFFAAEE);
-		state.stack_push_float(this->elem.renderer->get_renderer().get_animation_speed(this->elem.entry.pkg));
+		if(this->elem.renderer->get_renderer().animated_object_get_playing_animations(this->elem.entry.obj).empty())
+		{
+			state.stack_push_float(1.0f);
+		}
+		else
+		{
+			state.stack_push_float(this->elem.renderer->get_renderer().animated_object_get_playing_animations(this->elem.entry.obj).front().time_warp);
+		}
 		return 1;
 	}
 
@@ -626,7 +617,12 @@ namespace game::render
 	{
 		TZ_PROFZONE("scene element - set animation speed", 0xFFFFAAEE);
 		auto [_, anim_speed] = tz::lua::parse_args<tz::lua::nil, float>(state);
-		this->elem.renderer->get_renderer().set_animation_speed(this->elem.entry.pkg, anim_speed);
+		auto anims = this->elem.renderer->get_renderer().animated_object_get_playing_animations(this->elem.entry.obj);
+		if(anims.empty())
+		{
+			return 0;
+		}
+		anims.front().time_warp = anim_speed;
 		return 0;
 	}
 
@@ -684,7 +680,7 @@ namespace game::render
 	{
 		TZ_PROFZONE("scene element - load texture from disk", 0xFFFFAAEE);
 		auto [_, path] = tz::lua::parse_args<tz::lua::nil, std::string>(state);
-		tz::ren::animation_renderer::texture_handle rethan = this->renderer->get_renderer().add_texture(tz::io::image::load_from_file(path));
+		tz::ren::animation_renderer2::texture_handle rethan = this->renderer->get_renderer().add_texture(tz::io::image::load_from_file(path));
 		state.stack_push_uint(static_cast<std::size_t>(static_cast<tz::hanval>(rethan)));
 		return 1;
 	}

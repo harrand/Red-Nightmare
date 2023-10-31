@@ -128,12 +128,11 @@ namespace game::entity
 		ImGui::Text("Type: %zu (%s)", this->type, type_name.c_str());
 		ImGui::Text("Name: %s", this->name.c_str());
 		ImGui::Spacing();
-		auto oh = this->elem.entry.pkg.objects.front();
-		tz::trs trs = this->elem.renderer->get_renderer().get_object_base_transform(oh);
+		tz::trs trs = this->elem.renderer->get_renderer().animated_object_get_local_transform(this->elem.entry.obj);
 		ImGui::Text("Position");
 		if(ImGui::InputFloat2("##pos", trs.translate.data().data()))
 		{
-			this->elem.renderer->get_renderer().set_object_base_transform(oh, trs);
+			this->elem.renderer->get_renderer().animated_object_set_local_transform(this->elem.entry.obj, trs);
 		}
 		const float max_hp = this->get_stats().maximum_health;
 		ImGui::SliderInt("Health", reinterpret_cast<int*>(&this->current_health), 0u, max_hp);

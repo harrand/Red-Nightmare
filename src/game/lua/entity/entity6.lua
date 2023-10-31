@@ -25,13 +25,13 @@ rn.entity_handler[id] =
 	end,
 	postinit = function(ent)
 		local texh = rn.texture_manager():get_texture(typestr .. ".sprite0")
-		ent:get_element():object_set_texture_handle(1, 0, texh)
+		ent:get_element():object_set_texture_handle(2, 0, texh)
 		ent:get_element():face_right()
 		ent:get_element():rotate(-1.5708)
 	end,
 	update = function(ent)
 		local data = rn.entity.data[ent:uid()]
-		ent:get_element():object_set_texture_tint(1, 0, 0.85, 0.1, 0.1)
+		ent:get_element():object_set_texture_tint(2, 0, 0.85, 0.1, 0.1)
 		tz.assert(data.target_entity ~= nil)
 		local xtar, ytar = data.target_entity:get_element():get_subobject_position(data.subobject)
 		ent:get_element():set_position(xtar, ytar)
@@ -43,7 +43,7 @@ rn.entity_handler[id] =
 		if data.reverse then
 			frame_id = 6 - frame_id
 		end
-		ent:get_element():object_set_texture_handle(1, 0, rn.texture_manager():get_texture(typestr .. ".sprite" .. frame_id))
+		ent:get_element():object_set_texture_handle(2, 0, rn.texture_manager():get_texture(typestr .. ".sprite" .. frame_id))
 		if cast_progress > 1 then
 			rn.scene():remove_uid(ent:uid())
 		end

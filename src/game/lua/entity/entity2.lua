@@ -24,11 +24,11 @@ rn.entity_handler[id] =
 	end,
 	postinit = function(ent)
 		local texh = rn.texture_manager():get_texture(typestr .. ".skin")
-		ent:get_element():object_set_texture_handle(2, 0, texh)
+		ent:get_element():object_set_texture_handle(3, 0, texh)
 		local bodytexh = rn.texture_manager():get_texture(typestr .. ".body")
-		ent:get_element():object_set_texture_handle(4, 0, bodytexh)
+		ent:get_element():object_set_texture_handle(5, 0, bodytexh)
 		local helmtexh = rn.texture_manager():get_texture(typestr .. ".helm")
-		ent:get_element():object_set_texture_handle(6, 0, helmtexh)
+		ent:get_element():object_set_texture_handle(7, 0, helmtexh)
 		local sc = ent:get_element():get_uniform_scale()
 		ent:get_element():set_uniform_scale(sc * 0.5)
 

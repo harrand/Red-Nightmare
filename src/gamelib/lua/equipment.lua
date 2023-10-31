@@ -13,8 +13,8 @@ rn._internal_equipment_slot_object_mapping =
 {
 	nil,
 	nil,
-	6,
-	4,
+	7,
+	5,
 	nil
 }
 

@@ -1,6 +1,6 @@
 #ifndef RN_GAMELIB_RENDERER_SCENE_RENDERER_HPP
 #define RN_GAMELIB_RENDERER_SCENE_RENDERER_HPP
-#include "tz/ren/animation.hpp"
+#include "tz/ren/animation2.hpp"
 #include "tz/io/gltf.hpp"
 #include "tz/gl/output.hpp"
 #include "tz/core/debug.hpp"
@@ -36,7 +36,7 @@ namespace game::render
 
 		struct entry
 		{
-			tz::ren::animation_renderer::asset_package pkg;
+			tz::ren::animation_renderer2::animated_objects_handle obj;
 			model m;
 		};
 
@@ -66,7 +66,7 @@ namespace game::render
 		void update(float delta);
 		void dbgui();
 
-		tz::ren::animation_renderer& get_renderer();
+		tz::ren::animation_renderer2& get_renderer();
 		void lua_initialise(tz::lua::state& state);
 	private:
 		void update_camera(float delta);
@@ -89,12 +89,11 @@ namespace game::render
 
 		pixelate_pass_t pixelate_pass;
 		tz::gl::image_output output;
-		tz::ren::animation_renderer renderer;
+		tz::ren::animation_renderer2 renderer;
 		int impl_mouse_scroll_delta = 0;
-		tz::ren::animation_renderer::object_handle root = tz::nullhand;
+		tz::ren::animation_renderer2::object_handle root = tz::nullhand;
 		tz::vec2 view_bounds = {64.0f, 64.0f};
 		std::vector<entry> entries = {};
-		std::array<tz::ren::animation_renderer::asset_package, static_cast<int>(model::_count)> base_models = {};
 	};
 
 	struct scene_element
@@ -103,10 +102,10 @@ namespace game::render
 		scene_renderer::entry entry = {};
 
 		std::size_t get_object_count() const;
-		tz::ren::texture_locator object_get_texture(tz::ren::animation_renderer::object_handle oh, std::size_t bound_texture_id) const;
-		void object_set_texture(tz::ren::animation_renderer::object_handle h, std::size_t bound_texture_id, tz::ren::texture_locator tloc);
-		bool object_get_visibility(tz::ren::animation_renderer::object_handle h) const;
-		void object_set_visibility(tz::ren::animation_renderer::object_handle, bool visibility);
+		tz::ren::animation_renderer2::texture_locator object_get_texture(tz::ren::animation_renderer2::object_handle oh, std::size_t bound_texture_id) const;
+		void object_set_texture(tz::ren::animation_renderer2::object_handle h, std::size_t bound_texture_id, tz::ren::animation_renderer2::texture_locator tloc);
+		bool object_get_visibility(tz::ren::animation_renderer2::object_handle h) const;
+		void object_set_visibility(tz::ren::animation_renderer2::object_handle, bool visibility);
 		scene_renderer::model get_model() const;
 		std::size_t get_animation_count() const;
 		std::optional<std::size_t> get_playing_animation_id() const;
@@ -121,7 +120,7 @@ namespace game::render
 
 	struct impl_rn_scene_texture_locator
 	{
-		tz::ren::texture_locator tloc;
+		tz::ren::animation_renderer2::texture_locator tloc;
 		int get_colour_tint(tz::lua::state& state);
 		int set_colour_tint(tz::lua::state& state);
 		int get_texture_handle(tz::lua::state& state);

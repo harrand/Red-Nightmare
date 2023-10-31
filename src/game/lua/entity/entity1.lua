@@ -27,7 +27,7 @@ rn.entity_handler[id] =
 	end,
 	postinit = function(ent)
 		local texh = rn.texture_manager():get_texture(typestr .. ".sprite0")
-		ent:get_element():object_set_texture_handle(1, 0, texh)
+		ent:get_element():object_set_texture_handle(2, 0, texh)
 		ent:get_element():face_right()
 		ent:get_element():rotate(-1.5708)
 		local stats = ent:get_base_stats()
@@ -36,14 +36,14 @@ rn.entity_handler[id] =
 	end,
 	update = function(ent)
 		local data = rn.entity.data[ent:uid()]
-		ent:get_element():object_set_texture_tint(1, 0, data.colour_r, data.colour_g, data.colour_b)
+		ent:get_element():object_set_texture_tint(2, 0, data.colour_r, data.colour_g, data.colour_b)
 		data.flipbook_timer = data.flipbook_timer + rn.delta_time
 		-- when flipbook timer hits a threshold (fps / 4), advance to the next frame
 		if data.flipbook_timer > 0.1 then
 			data.flipbook_timer = 0
 			data.cur_texture_id = (data.cur_texture_id + 1) % 4
 			local texh = rn.texture_manager():get_texture(typestr .. ".sprite" .. data.cur_texture_id)
-			ent:get_element():object_set_texture_handle(1, 0, texh)
+			ent:get_element():object_set_texture_handle(2, 0, texh)
 		end
 		local x, y = ent:get_element():get_position()
 

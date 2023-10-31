@@ -16,7 +16,7 @@ rn.entity_handler[id] =
 	postinit = function(ent)
 		local sc = ent:get_element():get_uniform_scale()
 		ent:get_element():set_uniform_scale(sc * 0.3)
-		ent:get_element():object_set_visibility(2, false)
+		ent:get_element():object_set_visibility(3, false)
 		ent:get_element():face_forward()
 	end,
 	update = function(ent)

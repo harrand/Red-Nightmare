@@ -31,7 +31,7 @@ rn.entity_handler[id] =
 		tracy.ZoneBeginN(typestr .. " - postinit")
 		tz.assert(rn.texture_manager():has_texture(typestr .. ".skin"))
 		local texh = rn.texture_manager():get_texture(typestr .. ".skin")
-		ent:get_element():object_set_texture_handle(2, 0, texh)
+		ent:get_element():object_set_texture_handle(3, 0, texh)
 
 		rn.equip(ent, "Iron Sallet")
 

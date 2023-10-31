@@ -111,12 +111,12 @@ rn.entity_postinit = function(type)
 	local mod = ent:get_model()
 	local e = ent:get_element()
 	if mod == rn.model.humanoid then
-		e:object_set_visibility(4, false)
-		e:object_set_visibility(6, false)
+		e:object_set_visibility(5, false)
+		e:object_set_visibility(7, false)
 		e:face_forward()
 		rn.entity_get_data(ent).impl.dir = "forward"
 	elseif mod == rn.model.quad then
-		e:object_set_visibility(1, true)
+		e:object_set_visibility(2, true)
 	end
 
 	local handler = rn.entity_handler[type]

@@ -12,7 +12,7 @@ namespace game::entity
 		// get first object, represent its scale and position as a very basic aabb
 
 		auto& ren = elem.renderer->get_renderer();
-		tz::trs transform = ren.get_object_base_transform(elem.entry.pkg.objects.front());
+		tz::trs transform = ren.animated_object_get_local_transform(elem.entry.obj);
 		tz::vec2 position = transform.translate.swizzle<0, 1>();
 		tz::vec2 half_scale = transform.scale.swizzle<0, 1>() * 0.5f;
 		if(elem.get_model() == game::render::scene_renderer::model::humanoid)
