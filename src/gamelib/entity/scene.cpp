@@ -115,7 +115,6 @@ namespace game::entity
 
 	void scene::update(float delta_seconds)
 	{
-		this->renderer.update(delta_seconds);
 		for(std::size_t i = 0; i < this->size(); i++)
 		{
 			auto hanval = static_cast<tz::hanval>(i);
@@ -125,6 +124,7 @@ namespace game::entity
 			}
 		}
 		this->rebuild_quadtree();
+		this->renderer.update(delta_seconds);
 	}
 
 	void scene::block()
