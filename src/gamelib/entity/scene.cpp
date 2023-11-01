@@ -12,13 +12,14 @@ namespace game::entity
 		// get first object, represent its scale and position as a very basic aabb
 
 		auto& ren = elem.renderer->get_renderer();
-		tz::trs transform = ren.animated_object_get_local_transform(elem.entry.obj);
+		tz::trs transform = ren.animated_object_get_global_transform(elem.entry.obj);
 		tz::vec2 position = transform.translate.swizzle<0, 1>();
-		tz::vec2 half_scale = transform.scale.swizzle<0, 1>() * 0.5f;
+		tz::vec2 half_scale = transform.scale.swizzle<0, 1>();// * 0.5f; // half seems a bit off. keep it as-is.
 		if(elem.get_model() == game::render::scene_renderer::model::humanoid)
 		{
-			// humanoid has implicit internal scale of 0.001. multiply by 1000 to offset
-			half_scale *= 1000.0f;
+			// humanoid needs a little correction.
+			position[1] += half_scale[1];
+			half_scale *= tz::vec2{8.0f, 5.0f};
 		}
 		// min is position - half_scale
 		// max is position + half_scale
