@@ -50,6 +50,21 @@ namespace game
 		TZ_PROFZONE("rnlib - update", 0xFF00AAFF);
 		float delta_seconds = delta_micros / 1000000.0f;
 		game_system->scene.update(delta_seconds);
+		// SCENE UPDATE STARTS ASYNC WORK (ANIMATION ADVANCE)
+		// im about to specify a begin and end comment label in this code.
+		// for the duration of this region, this async work is still going on, as a result its evil to touch any of the stuff its working on.
+		// within this region, it is unsafe to do the following:
+		// - read/write animation renderer object data (specifically global transform)
+		// - read/write scene *position* data (non-position stuff is okay, like buffs!)
+		// BEGIN UNSAFE REGION
+
+		// what else could go here...
+		// extra actor logic? buffs etc are already here.
+		// audio stuffs! (btw add audio at some point)
+		// NETWORKING PACKET STUFF!?!? i need to go to bed.
+
+		// additional note: in debug it would be a big perf gain to actually render the dbgui at this point aswell.
+		// however, that is hard-coded by the engine to happen at the end of the frame, which we cant move around.
 
 		if(game_system->dbgui.display_scene)
 		{
@@ -68,19 +83,26 @@ namespace game
 				ImGui::End();
 			}
 		}
+		// rendering uses the global transform object data. that's already been handled by now, and isnt touched during animation advance.
+		// as a result it's safe to render now while the animation advance is going on. bussin
+		tz::gl::get_device().render();
+		// END UNSAFE REGION
+		// note that lua update must wait till animation advance is done - it uses local transforms constantly, aswell as potentially adding/removing from the scene.
 		{
 			TZ_PROFZONE("rnlib - lua update", 0xFF00AAFF);
 			tz::lua::get_state().assign_float("rn.delta_time", delta_seconds);
 			game_system->scene.block();
 			tz::lua::get_state().execute("if rn.update ~= nil then rn.update() end");
 		}
-		tz::gl::get_device().render();
 	}
 
 	void fixed_update(std::uint64_t delta_micros, std::uint64_t unprocessed)
 	{
 		static std::uint64_t counter = 0;
 		counter += delta_micros;
+		// todo: remove.
+		// adds a zombie to the scene every 2.5 seconds
+		// useful for stress-testing in release/profile where there's no dbgui/lua console
 		if(counter > 2500000)
 		{
 			game_system->scene.add(2);
