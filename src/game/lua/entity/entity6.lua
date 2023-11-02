@@ -12,6 +12,7 @@ rn.entity_handler[id] =
 	preinit = function(ent)
 		ent:set_name("Blood Splatter")
 		ent:set_model(rn.model.quad)
+		ent:set_collideable(false)
 
 		rn.entity.data[ent:uid()] =
 		{

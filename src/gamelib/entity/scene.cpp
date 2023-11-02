@@ -212,7 +212,8 @@ namespace game::entity
 		for(std::size_t i = 0; i < this->size(); i++)
 		{
 			auto hanval = static_cast<tz::hanval>(i);
-			if(this->is_valid(hanval))
+			const auto& entity = this->get(hanval);
+			if(this->is_valid(hanval) && !entity.flags.contains(flag::no_collide))
 			{
 				this->quadtree.add({.sc = this, .entity_hanval = hanval});
 			}

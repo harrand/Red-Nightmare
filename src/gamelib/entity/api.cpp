@@ -314,4 +314,25 @@ namespace game::entity
 		LUA_CLASS_PUSH(state, impl_rn_scene_element, {.elem = this->get().elem});
 		return 1;
 	}
+
+	int rn_impl_entity::is_collideable(tz::lua::state& state)
+	{
+		state.stack_push_bool(!this->get().flags.contains(flag::no_collide));
+		return 1;
+	}
+
+	int rn_impl_entity::set_collideable(tz::lua::state& state)
+	{
+		auto [_, is_collideable] = tz::lua::parse_args<tz::lua::nil, bool>(state);
+		auto& ent = this->get();
+		if(is_collideable)
+		{
+			ent.flags.remove(flag::no_collide);
+		}
+		else
+		{
+			ent.flags |= flag::no_collide;
+		}
+		return 0;
+	}
 }

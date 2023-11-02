@@ -2,6 +2,7 @@
 #define RN_GAMELIB_ENTITY_API_HPP
 #include "gamelib/renderer/scene_renderer.hpp"
 #include "gamelib/logic/stats.hpp"
+#include "tz/core/data/enum_field.hpp"
 
 namespace game::entity
 {
@@ -33,6 +34,11 @@ namespace game::entity
 		neutral,
 		hostile
 	};
+	enum class flag
+	{
+		no_collide
+	};
+	using flags_t = tz::enum_field<flag>;
 	struct entity
 	{
 		static std::size_t uid_global_counter;
@@ -45,6 +51,7 @@ namespace game::entity
 		std::uint8_t level = 1u;
 		std::unordered_map<std::string, game::logic::buff> buffs = {};
 		game::render::scene_element elem = {};
+		flags_t flags = {};
 
 		game::logic::stats get_stats() const;
 		relationship get_relationship(const entity& rhs) const;
@@ -96,6 +103,9 @@ namespace game::entity
 		int get_model(tz::lua::state& state);
 		int set_model(tz::lua::state& state);
 		int get_element(tz::lua::state& state);
+
+		int is_collideable(tz::lua::state& state);
+		int set_collideable(tz::lua::state& state);
 	};
 
 	LUA_CLASS_BEGIN(rn_impl_entity)
@@ -120,6 +130,9 @@ namespace game::entity
 			LUA_METHOD(rn_impl_entity, get_model)
 			LUA_METHOD(rn_impl_entity, set_model)
 			LUA_METHOD(rn_impl_entity, get_element)
+
+			LUA_METHOD(rn_impl_entity, is_collideable)
+			LUA_METHOD(rn_impl_entity, set_collideable)
 		LUA_CLASS_METHODS_END
 	LUA_CLASS_END
 }
