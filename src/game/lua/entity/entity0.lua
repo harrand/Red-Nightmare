@@ -33,7 +33,7 @@ rn.entity_handler[id] =
 		local texh = rn.texture_manager():get_texture(typestr .. ".skin")
 		ent:get_element():object_set_texture_handle(3, 0, texh)
 
-		rn.equip(ent, "Iron Sallet")
+		rn.equip(ent, "White Cloth Headband")
 
 		local sc = ent:get_element():get_uniform_scale()
 		ent:get_element():set_uniform_scale(sc * 0.5)

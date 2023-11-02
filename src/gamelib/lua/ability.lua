@@ -44,6 +44,12 @@ rn.cast_spell = function(arg)
 		face_cast_direction = false
 	end
 
+	local instant_cast_override = arg.instant_cast_override
+	if instant_cast_override == nil then
+		instant_cast_override = false
+	end
+
+
 	local cast_type = ability.cast_type
 	if cast_type == nil then
 		cast_type = rn.cast.type.spell_1h_directed
@@ -55,8 +61,10 @@ rn.cast_spell = function(arg)
 
 	entdata.impl.face_cast_direction = face_cast_direction
 	-- if its an instant cast spell, no need to set these, just send it instantly. (note: no animation in this case)
-	if ability.base_cast_time == 0 then
+	if ability.base_cast_time == 0 or instant_cast_override then
+		print("INSTANT CAST DETECTED")
 		-- just instantly send it
+		entdata.impl.cast = ability_name
 		rn.complete_cast(ent)
 		return
 	end
@@ -99,10 +107,12 @@ rn.cancel_cast = function(ent)
 	entdata.impl.is_casting = false
 	entdata.impl.cast_begin = nil
 	entdata.impl.cast = nil
-	for i=1,2,1 do
-		if entdata.impl.cast_effects[i] ~= nil then
-			rn.scene():remove_uid(entdata.impl.cast_effects[i]:uid())
-			entdata.impl.cast_effects[i] = nil
+	if entdata.impl.cast_effects ~= nil then
+		for i=1,2,1 do
+			if entdata.impl.cast_effects[i] ~= nil then
+				rn.scene():remove_uid(entdata.impl.cast_effects[i]:uid())
+				entdata.impl.cast_effects[i] = nil
+			end
 		end
 	end
 end
