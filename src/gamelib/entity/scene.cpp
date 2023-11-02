@@ -162,6 +162,8 @@ namespace game::entity
 			ImGui::Text("Attack Power: %llu", stats.attack_power);
 			ImGui::SameLine();
 			ImGui::Text("Spell Power: %llu", stats.spell_power);
+			ImGui::SameLine();
+			ImGui::Text("Defence: %llu", stats.defence_rating);
 		}
 	}
 

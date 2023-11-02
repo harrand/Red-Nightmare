@@ -109,12 +109,27 @@ function rn.combat.base_on_heal(ent, evt)
 	end
 end
 
+function rn.combat.process_damage_mitigation(evt)
+	if evt.damage_type == "Physical" then
+		-- mit by defence.
+		local damagee = rn.scene():get_uid(evt.damagee)
+		local damager = rn.scene():get_uid(evt.damager)
+		local victim_defence_rating = damagee:get_stats():get_defence_rating()
+		-- DR% = Armor / (Armor + 400 + 85 * AttackerLevel)
+		local dr = victim_defence_rating / (victim_defence_rating + 10 + 5 * damager:get_level())
+		print("defence DR = " .. dr * 100 .. "%")
+		evt.value = math.ceil(evt.value * (1.0 - dr));
+	end
+	return evt
+end
+
 function rn.combat.process_event(evt)
 	tz.assert(evt ~= nil)
 	tz.assert(evt.tag ~= nil)
 	if evt.tag == "entity_damage_entity" then
 		local damager = rn.scene():get_uid(evt.damager)
 		local damagee = rn.scene():get_uid(evt.damagee)
+		evt = rn.combat.process_damage_mitigation(evt)
 		rn.combat.base_on_struck(damagee, evt)
 		rn.combat.base_on_hit(damager, evt)
 		local ability_name = rn.entity_get_data(damager).impl.cast

@@ -13,6 +13,8 @@ namespace game::logic
 		cpy.amplified_attack_power *= amplification;
 		cpy.increased_spell_power *= amplification;
 		cpy.amplified_spell_power *= amplification;
+		cpy.increased_defence_rating *= amplification;
+		cpy.amplified_defence_rating *= amplification;
 		return cpy;
 	}
 
@@ -26,6 +28,8 @@ namespace game::logic
 		cpy.attack_power += rhs.increased_attack_power;
 		cpy.spell_power *= rhs.amplified_spell_power;
 		cpy.spell_power += rhs.increased_spell_power;
+		cpy.defence_rating *= rhs.amplified_defence_rating;
+		cpy.defence_rating += rhs.increased_defence_rating;
 		return cpy;
 	}
 
@@ -123,6 +127,32 @@ namespace game::logic
 		return 0;
 	}
 
+	int rn_impl_buff::get_increased_defence_rating(tz::lua::state& state)
+	{
+		state.stack_push_uint(this->b.increased_defence_rating);
+		return 1;
+	}
+
+	int rn_impl_buff::set_increased_defence_rating(tz::lua::state& state)
+	{
+		auto [_, def] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+		this->b.increased_defence_rating = def;
+		return 0;
+	}
+
+	int rn_impl_buff::get_amplified_defence_rating(tz::lua::state& state)
+	{
+		state.stack_push_float(this->b.amplified_defence_rating);
+		return 1;
+	}
+
+	int rn_impl_buff::set_amplified_defence_rating(tz::lua::state& state)
+	{
+		auto [_, xdef] = tz::lua::parse_args<tz::lua::nil, float>(state);
+		this->b.amplified_defence_rating = xdef;
+		return 0;
+	}
+
 	int rn_impl_buff::get_time_remaining(tz::lua::state& state)
 	{
 		if(this->b.time_remaining_seconds.has_value())
@@ -194,6 +224,19 @@ namespace game::logic
 	{
 		auto [_, ap] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
 		this->s.spell_power = ap;
+		return 0;
+	}
+
+	int rn_impl_stats::get_defence_rating(tz::lua::state& state)
+	{
+		state.stack_push_uint(this->s.defence_rating);
+		return 1;
+	}
+
+	int rn_impl_stats::set_defence_rating(tz::lua::state& state)
+	{
+		auto [_, def] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+		this->s.defence_rating = def;
 		return 0;
 	}
 

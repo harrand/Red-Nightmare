@@ -67,6 +67,7 @@ rn.entity_handler[id] =
 				evt.damager = ent:uid()
 				evt.damagee = ent2:uid()
 				evt.value = ent:get_stats():get_spell_power()
+				evt.damage_type = "Magic"
 				rn.combat.process_event(evt)
 			end
 		end)

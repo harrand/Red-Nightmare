@@ -23,6 +23,9 @@ namespace game::logic
 		std::uint64_t increased_spell_power = 0u;
 		float amplified_spell_power = 1.0f;
 
+		std::uint64_t increased_defence_rating = 0u;
+		float amplified_defence_rating = 1.0f;
+
 		std::optional<float> time_remaining_seconds = std::nullopt;
 
 		buff operator*(float amplification) const;
@@ -45,6 +48,10 @@ namespace game::logic
 		int set_increased_spell_power(tz::lua::state& state);
 		int get_amplified_spell_power(tz::lua::state& state);
 		int set_amplified_spell_power(tz::lua::state& state);
+		int get_increased_defence_rating(tz::lua::state& state);
+		int set_increased_defence_rating(tz::lua::state& state);
+		int get_amplified_defence_rating(tz::lua::state& state);
+		int set_amplified_defence_rating(tz::lua::state& state);
 		int get_time_remaining(tz::lua::state& state);
 		int set_time_remaining(tz::lua::state& state);
 	};
@@ -65,6 +72,10 @@ namespace game::logic
 			LUA_METHOD(rn_impl_buff, set_increased_spell_power)
 			LUA_METHOD(rn_impl_buff, get_amplified_spell_power)
 			LUA_METHOD(rn_impl_buff, set_amplified_spell_power)
+			LUA_METHOD(rn_impl_buff, get_increased_defence_rating)
+			LUA_METHOD(rn_impl_buff, set_increased_defence_rating)
+			LUA_METHOD(rn_impl_buff, get_amplified_defence_rating)
+			LUA_METHOD(rn_impl_buff, set_amplified_defence_rating)
 			LUA_METHOD(rn_impl_buff, get_time_remaining)
 			LUA_METHOD(rn_impl_buff, set_time_remaining)
 		LUA_CLASS_METHODS_END
@@ -76,6 +87,7 @@ namespace game::logic
 		float movement_speed = 3.0f;
 		std::uint64_t attack_power = 1;
 		std::uint64_t spell_power = 1;
+		std::uint64_t defence_rating = 0;
 
 		stats operator+(const buff& rhs) const;
 	};
@@ -91,6 +103,8 @@ namespace game::logic
 		int set_attack_power(tz::lua::state& state);
 		int get_spell_power(tz::lua::state& state);
 		int set_spell_power(tz::lua::state& state);
+		int get_defence_rating(tz::lua::state& state);
+		int set_defence_rating(tz::lua::state& state);
 	};
 
 	LUA_CLASS_BEGIN(rn_impl_stats)
@@ -103,6 +117,8 @@ namespace game::logic
 			LUA_METHOD(rn_impl_stats, set_attack_power)
 			LUA_METHOD(rn_impl_stats, get_spell_power)
 			LUA_METHOD(rn_impl_stats, set_spell_power)
+			LUA_METHOD(rn_impl_stats, get_defence_rating)
+			LUA_METHOD(rn_impl_stats, set_defence_rating)
 		LUA_CLASS_METHODS_END
 	LUA_CLASS_END
 	
