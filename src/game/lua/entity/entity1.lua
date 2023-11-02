@@ -66,7 +66,7 @@ rn.entity_handler[id] =
 				local evt = rn.entity_damage_entity_event:new()
 				evt.damager = ent:uid()
 				evt.damagee = ent2:uid()
-				evt.value = 20
+				evt.value = ent:get_stats():get_spell_power()
 				rn.combat.process_event(evt)
 			end
 		end)

@@ -17,6 +17,12 @@ namespace game::logic
 		// increased movement speed (as a percentage). e.g + 15% increased movement speed.
 		unsigned int increased_movement_speed = 0u;
 
+		std::uint64_t increased_attack_power = 0u;
+		float amplified_attack_power = 1.0f;
+
+		std::uint64_t increased_spell_power = 0u;
+		float amplified_spell_power = 1.0f;
+
 		std::optional<float> time_remaining_seconds = std::nullopt;
 
 		buff operator*(float amplification) const;
@@ -29,7 +35,16 @@ namespace game::logic
 		int set_name(tz::lua::state& state);
 		int set_increased_health(tz::lua::state& state);
 		int set_amplified_health(tz::lua::state& state);
+		int get_increased_movement_speed(tz::lua::state& state);
 		int set_increased_movement_speed(tz::lua::state& state);
+		int get_increased_attack_power(tz::lua::state& state);
+		int set_increased_attack_power(tz::lua::state& state);
+		int get_amplified_attack_power(tz::lua::state& state);
+		int set_amplified_attack_power(tz::lua::state& state);
+		int get_increased_spell_power(tz::lua::state& state);
+		int set_increased_spell_power(tz::lua::state& state);
+		int get_amplified_spell_power(tz::lua::state& state);
+		int set_amplified_spell_power(tz::lua::state& state);
 		int get_time_remaining(tz::lua::state& state);
 		int set_time_remaining(tz::lua::state& state);
 	};
@@ -40,7 +55,16 @@ namespace game::logic
 			LUA_METHOD(rn_impl_buff, set_name)
 			LUA_METHOD(rn_impl_buff, set_increased_health)
 			LUA_METHOD(rn_impl_buff, set_amplified_health)
+			LUA_METHOD(rn_impl_buff, get_increased_movement_speed)
 			LUA_METHOD(rn_impl_buff, set_increased_movement_speed)
+			LUA_METHOD(rn_impl_buff, get_increased_attack_power)
+			LUA_METHOD(rn_impl_buff, set_increased_attack_power)
+			LUA_METHOD(rn_impl_buff, get_amplified_attack_power)
+			LUA_METHOD(rn_impl_buff, set_amplified_attack_power)
+			LUA_METHOD(rn_impl_buff, get_increased_spell_power)
+			LUA_METHOD(rn_impl_buff, set_increased_spell_power)
+			LUA_METHOD(rn_impl_buff, get_amplified_spell_power)
+			LUA_METHOD(rn_impl_buff, set_amplified_spell_power)
 			LUA_METHOD(rn_impl_buff, get_time_remaining)
 			LUA_METHOD(rn_impl_buff, set_time_remaining)
 		LUA_CLASS_METHODS_END
@@ -50,6 +74,8 @@ namespace game::logic
 	{
 		std::uint64_t maximum_health = 0;
 		float movement_speed = 3.0f;
+		std::uint64_t attack_power = 1;
+		std::uint64_t spell_power = 1;
 
 		stats operator+(const buff& rhs) const;
 	};
@@ -61,6 +87,10 @@ namespace game::logic
 		int set_maximum_health(tz::lua::state& state);
 		int get_movement_speed(tz::lua::state& state);
 		int set_movement_speed(tz::lua::state& state);
+		int get_attack_power(tz::lua::state& state);
+		int set_attack_power(tz::lua::state& state);
+		int get_spell_power(tz::lua::state& state);
+		int set_spell_power(tz::lua::state& state);
 	};
 
 	LUA_CLASS_BEGIN(rn_impl_stats)
@@ -69,6 +99,10 @@ namespace game::logic
 			LUA_METHOD(rn_impl_stats, set_maximum_health)
 			LUA_METHOD(rn_impl_stats, get_movement_speed)
 			LUA_METHOD(rn_impl_stats, set_movement_speed)
+			LUA_METHOD(rn_impl_stats, get_attack_power)
+			LUA_METHOD(rn_impl_stats, set_attack_power)
+			LUA_METHOD(rn_impl_stats, get_spell_power)
+			LUA_METHOD(rn_impl_stats, set_spell_power)
 		LUA_CLASS_METHODS_END
 	LUA_CLASS_END
 	

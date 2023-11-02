@@ -9,6 +9,10 @@ namespace game::logic
 		buff cpy = *this;
 		cpy.increased_health *= amplification;
 		cpy.amplified_health *= amplification;
+		cpy.increased_attack_power *= amplification;
+		cpy.amplified_attack_power *= amplification;
+		cpy.increased_spell_power *= amplification;
+		cpy.amplified_spell_power *= amplification;
 		return cpy;
 	}
 
@@ -18,6 +22,10 @@ namespace game::logic
 		cpy.maximum_health *= rhs.amplified_health;
 		cpy.maximum_health += rhs.increased_health;
 		cpy.movement_speed *= (100.0f + rhs.increased_movement_speed) / 100.0f;
+		cpy.attack_power *= rhs.amplified_attack_power;
+		cpy.attack_power += rhs.increased_attack_power;
+		cpy.spell_power *= rhs.amplified_spell_power;
+		cpy.spell_power += rhs.increased_spell_power;
 		return cpy;
 	}
 
@@ -50,10 +58,68 @@ namespace game::logic
 		return 0;
 	}
 
+	int rn_impl_buff::get_increased_movement_speed(tz::lua::state& state)
+	{
+		state.stack_push_uint(this->b.increased_movement_speed);
+		return 1;
+	}
+
 	int rn_impl_buff::set_increased_movement_speed(tz::lua::state& state)
 	{
 		auto [_, speed] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
 		this->b.increased_movement_speed = speed;
+		return 0;
+	}
+
+	int rn_impl_buff::get_increased_attack_power(tz::lua::state& state)
+	{
+		state.stack_push_uint(this->b.increased_attack_power);
+		return 1;
+	}
+
+	int rn_impl_buff::set_increased_attack_power(tz::lua::state& state)
+	{
+		auto [_, ap] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+		this->b.increased_attack_power = ap;
+		return 0;
+	}
+
+	int rn_impl_buff::get_amplified_attack_power(tz::lua::state& state)
+	{
+		state.stack_push_float(this->b.amplified_attack_power);
+		return 1;
+	}
+
+	int rn_impl_buff::set_amplified_attack_power(tz::lua::state& state)
+	{
+		auto [_, xap] = tz::lua::parse_args<tz::lua::nil, float>(state);
+		this->b.amplified_attack_power = xap;
+		return 0;
+	}
+
+	int rn_impl_buff::get_increased_spell_power(tz::lua::state& state)
+	{
+		state.stack_push_uint(this->b.increased_spell_power);
+		return 1;
+	}
+
+	int rn_impl_buff::set_increased_spell_power(tz::lua::state& state)
+	{
+		auto [_, sp] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+		this->b.increased_spell_power = sp;
+		return 0;
+	}
+
+	int rn_impl_buff::get_amplified_spell_power(tz::lua::state& state)
+	{
+		state.stack_push_float(this->b.amplified_spell_power);
+		return 1;
+	}
+
+	int rn_impl_buff::set_amplified_spell_power(tz::lua::state& state)
+	{
+		auto [_, xsp] = tz::lua::parse_args<tz::lua::nil, float>(state);
+		this->b.amplified_spell_power = xsp;
 		return 0;
 	}
 
@@ -102,6 +168,32 @@ namespace game::logic
 	{
 		auto [_, speed] = tz::lua::parse_args<tz::lua::nil, float>(state);
 		this->s.movement_speed = speed;
+		return 0;
+	}
+
+	int rn_impl_stats::get_attack_power(tz::lua::state& state)
+	{
+		state.stack_push_uint(this->s.attack_power);
+		return 1;
+	}
+
+	int rn_impl_stats::set_attack_power(tz::lua::state& state)
+	{
+		auto [_, ap] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+		this->s.attack_power = ap;
+		return 0;
+	}
+
+	int rn_impl_stats::get_spell_power(tz::lua::state& state)
+	{
+		state.stack_push_uint(this->s.spell_power);
+		return 1;
+	}
+
+	int rn_impl_stats::set_spell_power(tz::lua::state& state)
+	{
+		auto [_, ap] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+		this->s.spell_power = ap;
 		return 0;
 	}
 

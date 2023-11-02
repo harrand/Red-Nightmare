@@ -1,6 +1,7 @@
 local id = 0
 local typestr = "Heal"
 rn.ability.type[typestr] = id
+-- entity heals itself for 100% of spell power
 
 rn.abilities[id] =
 {
@@ -14,7 +15,7 @@ rn.abilities[id] =
 		local evt = rn.entity_heal_entity_event:new()
 		evt.healer = ent:uid()
 		evt.healee = ent:uid()
-		evt.value = 50
+		evt.value = ent:get_stats().get_spell_power()
 		rn.combat.process_event(evt)
 	end
 }

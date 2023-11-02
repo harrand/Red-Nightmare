@@ -155,6 +155,13 @@ namespace game::entity
 		{
 			ImGui::SameLine();
 			ImGui::Text("%s %llu/%llu hp (%.1f%%)", iter->name.c_str(), iter->current_health, iter->get_stats().maximum_health, 100.0f * iter->current_health / iter->get_stats().maximum_health);
+			auto stats = iter->get_stats();
+			ImGui::SameLine();
+			ImGui::Text("Speed: %.2f", stats.movement_speed);
+			ImGui::SameLine();
+			ImGui::Text("Attack Power: %llu", stats.attack_power);
+			ImGui::SameLine();
+			ImGui::Text("Spell Power: %llu", stats.spell_power);
 		}
 	}
 

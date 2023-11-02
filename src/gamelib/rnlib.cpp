@@ -100,14 +100,6 @@ namespace game
 	{
 		static std::uint64_t counter = 0;
 		counter += delta_micros;
-		// todo: remove.
-		// adds a zombie to the scene every 2.5 seconds
-		// useful for stress-testing in release/profile where there's no dbgui/lua console
-		if(counter > 2500000)
-		{
-			game_system->scene.add(2);
-			counter = 0;
-		}
 	}
 
 	void dbgui()

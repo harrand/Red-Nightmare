@@ -1,6 +1,7 @@
 local id = 1
 local typestr = "Fireball"
 rn.ability.type[typestr] = id
+-- entity spawns a fireball that deals 100% of spellpower as damage.
 
 rn.abilities[id] =
 {
@@ -19,6 +20,12 @@ rn.abilities[id] =
 		proj:get_element():set_position(x, y)
 		local entdata = rn.entity_get_data(ent)
 		local projdata = rn.entity_get_data(proj)
+		-- fireball base stats is a snapshot of the caster's current stats.
+		local bstats = ent:get_stats()
+		-- this means it will benefit for example from a spellpower buff at the point of casting (snapshotting)
+		-- however it has its own movement speed
+		bstats:set_movement_speed(6)
+		proj:set_base_stats(bstats)
 		projdata.shoot_direct = entdata.impl.face_cast_direction
 		projdata.owner = ent
 		if projdata.shoot_direct then

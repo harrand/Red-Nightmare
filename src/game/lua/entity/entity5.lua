@@ -36,7 +36,7 @@ rn.entity_handler[id] =
 				local evt = rn.entity_damage_entity_event:new()
 				evt.damager = owner:uid()
 				evt.damagee = ent2:uid()
-				evt.value = 200 -- placeholder. make this equal to owner's attack power
+				evt.value = ent:get_stats():get_attack_power()
 				rn.combat.process_event(evt)
 				data.hit_enemies[ent2:uid()] = true
 			end
