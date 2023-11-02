@@ -47,6 +47,9 @@ rn.entity_handler[id] =
 	update = function(ent)
 		local data = rn.entity_get_data(ent)
 		tz.assert(ent:get_name() == "Lady Melistra")
+		if ent:is_dead() then
+			return
+		end
 
 		if rn.is_casting(ent) then
 			local mousex, mousey = rn.scene():get_mouse_position_ws()

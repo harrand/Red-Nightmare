@@ -33,10 +33,21 @@ rn.entity_handler[id] =
 
 		local stats = ent:get_base_stats()
 		stats:set_movement_speed(1.0)
+		stats:set_attack_power(10)
 		ent:set_base_stats(stats)
+
 	end,
 	update = function(ent)
-		if not ent:is_dead() then
+		local data = rn.entity_get_data(ent)
+		data.collided_this_update = false
+		-- attempt to attack any enemy nearby
+		rn.for_each_collision(ent, function(ent2)
+			if not ent:is_dead() and not data.collided_this_update and ent2:is_valid() and not ent2:is_dead() and rn.get_relationship(ent, ent2) == "hostile" then
+				data.collided_this_update = true
+				rn.cast_spell({ent = ent, ability_name = "Melee", cast_type_override = rn.cast.type.melee_unarmed_lunge})
+			end
+		end)
+		if not rn.is_casting(ent) and not ent:is_dead() then
 			rn.entity_move{ent = ent, dir = "right", movement_anim_id = 12}
 		end
 	end

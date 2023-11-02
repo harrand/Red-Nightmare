@@ -10,7 +10,8 @@ rn.cast.type =
 	spell_1h_omni = 2,
 	spell_2h_directed = 3,
 	spell_2h_omni = 4,
-	melee_1h_horizontal = 5
+	melee_1h_horizontal = 5,
+	melee_unarmed_lunge = 6
 }
 
 rn._impl_cast_type_to_animation_id =
@@ -19,7 +20,8 @@ rn._impl_cast_type_to_animation_id =
 	3,
 	4,
 	5,
-	1
+	1,
+	11
 }
 
 -- Include all abilities here.
@@ -49,10 +51,13 @@ rn.cast_spell = function(arg)
 		instant_cast_override = false
 	end
 
-
 	local cast_type = ability.cast_type
 	if cast_type == nil then
 		cast_type = rn.cast.type.spell_1h_directed
+	end
+
+	if arg.cast_type_override ~= nil then
+		cast_type = arg.cast_type_override
 	end
 
 	-- if we're casting something else, early-out.
