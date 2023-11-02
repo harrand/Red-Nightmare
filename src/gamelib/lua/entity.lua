@@ -153,6 +153,23 @@ rn.entity_update = function(ent)
 			e:play_animation(idle_anim_id, false)
 		end
 	end
+
+	-- deal with despawning dead entities.
+	if ent:is_dead() then
+		-- if entity didnt specify a custom despawn timer, default to 45 seconds.
+		if data.impl.custom_despawn_timer == nil then
+			data.impl.custom_despawn_timer = 45000
+		end
+		-- if custom despawn timer is -1, it never despawns.
+		-- if it is though... let's despawn it if it needs to
+		if data.impl.custom_despawn_timer ~= -1 and data.impl.death_time ~= nil then
+			local now = tz.time()
+			if data.impl.death_time + data.impl.custom_despawn_timer <= tz.time() then
+				rn.scene():remove_uid(ent:uid())
+			end
+		end
+
+	end
 	tracy.ZoneEnd()
 end
 

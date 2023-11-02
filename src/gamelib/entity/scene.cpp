@@ -89,6 +89,7 @@ namespace game::entity
 			return;
 		}
 		this->free_list.push_back(e);
+		// set the lua entity data table to nil, or it will never be gc'd
 		std::string cmd = "rn.entity.data[" + std::to_string(this->entities[hanval].uid) + "] = nil";
 		tz::lua::get_state().execute(cmd.c_str());
 		this->deinitialise_entity(static_cast<tz::hanval>(hanval), this->entities[hanval].uid);

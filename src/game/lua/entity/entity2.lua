@@ -17,10 +17,6 @@ rn.entity_handler[id] =
 		local stats = ent:get_base_stats()
 		stats:set_maximum_health(50)
 		ent:set_base_stats(stats)
-		rn.entity.data[ent:uid()] =
-		{
-
-		}
 	end,
 	postinit = function(ent)
 		local texh = rn.texture_manager():get_texture(typestr .. ".skin")

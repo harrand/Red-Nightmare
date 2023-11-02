@@ -39,6 +39,8 @@ function rn.combat.base_on_death(ent, evt)
 	end
 	rn.unequip_and_drop_all(ent)
 	ent:get_element():play_animation(7, false)
+	local data = rn.entity_get_data(ent)
+	data.impl.death_time = tz.time()
 end
 
 -- ent was hit by a entity_damage_entity_event
