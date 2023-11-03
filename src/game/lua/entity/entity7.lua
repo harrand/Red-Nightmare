@@ -40,8 +40,14 @@ rn.entity_handler[id] =
 
 		local casted_time = tz.time() - data.spawned_at
 		local cast_progress = casted_time / data.duration
-		-- scale should vary between 0.9 and 1.1
-		ent:get_element():set_uniform_scale(1.25 + 0.05 * math.sin(cast_progress * 250.0))
+		local average_size = 1.25
+		local pct_time_till_full_growth = 0.02
+		if cast_progress < pct_time_till_full_growth then
+			ent:get_element():set_uniform_scale(average_size * (1.0 / pct_time_till_full_growth) * cast_progress)
+			return
+		end
+		-- scale should vary between avg-0.05 and avg+0.05
+		ent:get_element():set_uniform_scale(average_size + 0.05 * math.sin(cast_progress * 250.0))
 		if cast_progress > 0.8 then
 			-- quickly flicker the effect on-and-off to signify the effect ends soon.
 			ent:get_element():object_set_visibility(2, not ent:get_element():object_get_visibility(2))	
