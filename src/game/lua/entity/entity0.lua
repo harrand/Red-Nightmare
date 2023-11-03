@@ -68,7 +68,8 @@ rn.entity_handler[id] =
 		if not rn.is_casting(ent) and wnd:is_mouse_down("left") then
 			rn.cast_spell({ent = ent, ability_name = "Fireball", face_cast_direction = true})
 		elseif not rn.is_casting(ent) and wnd:is_mouse_down("right") then
-			rn.cast_spell({ent = ent, ability_name = "Melee", face_cast_direction = true})
+			rn.cast_spell({ent = ent, ability_name = "Divine Barrier"})
+			--rn.cast_spell({ent = ent, ability_name = "Melee", face_cast_direction = true})
 		end
 
 		if rn.is_key_down("w") then

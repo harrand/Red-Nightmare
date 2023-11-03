@@ -52,6 +52,7 @@ require "entity3"
 require "entity4"
 require "entity5"
 require "entity6"
+require "entity7"
 
 rn.get_entity_type_name = function()
 	_tmp_type_name = nil
