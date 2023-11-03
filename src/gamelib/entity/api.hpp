@@ -50,6 +50,7 @@ namespace game::entity
 		std::uint64_t current_health = 0u;
 		std::uint8_t level = 1u;
 		std::unordered_map<std::string, game::logic::buff> buffs = {};
+		game::logic::buff equipment_buff = {};
 		game::render::scene_element elem = {};
 		flags_t flags = {};
 
@@ -99,6 +100,7 @@ namespace game::entity
 		int get_level(tz::lua::state& state);
 		int set_level(tz::lua::state& state);
 		int is_dead(tz::lua::state& state);
+		int impl_set_equipment_buff(tz::lua::state& state);
 		int apply_buff(tz::lua::state& state);
 		int get_model(tz::lua::state& state);
 		int set_model(tz::lua::state& state);
@@ -126,6 +128,7 @@ namespace game::entity
 			LUA_METHOD(rn_impl_entity, get_level)
 			LUA_METHOD(rn_impl_entity, set_level)
 			LUA_METHOD(rn_impl_entity, is_dead)
+			LUA_METHOD(rn_impl_entity, impl_set_equipment_buff)
 			LUA_METHOD(rn_impl_entity, apply_buff)
 			LUA_METHOD(rn_impl_entity, get_model)
 			LUA_METHOD(rn_impl_entity, set_model)

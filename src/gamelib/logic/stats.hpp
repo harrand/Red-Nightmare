@@ -29,6 +29,7 @@ namespace game::logic
 		std::optional<float> time_remaining_seconds = std::nullopt;
 
 		buff operator*(float amplification) const;
+		buff operator+(const buff& rhs) const;
 	};
 
 	struct rn_impl_buff
@@ -54,6 +55,8 @@ namespace game::logic
 		int set_amplified_defence_rating(tz::lua::state& state);
 		int get_time_remaining(tz::lua::state& state);
 		int set_time_remaining(tz::lua::state& state);
+
+		int combine(tz::lua::state& state);
 	};
 
 	LUA_CLASS_BEGIN(rn_impl_buff)
@@ -78,6 +81,7 @@ namespace game::logic
 			LUA_METHOD(rn_impl_buff, set_amplified_defence_rating)
 			LUA_METHOD(rn_impl_buff, get_time_remaining)
 			LUA_METHOD(rn_impl_buff, set_time_remaining)
+			LUA_METHOD(rn_impl_buff, combine)
 		LUA_CLASS_METHODS_END
 	LUA_CLASS_END
 
@@ -90,6 +94,7 @@ namespace game::logic
 		std::uint64_t defence_rating = 0;
 
 		stats operator+(const buff& rhs) const;
+		stats operator*(float amplification) const;
 	};
 
 	struct rn_impl_stats

@@ -18,6 +18,21 @@ namespace game::logic
 		return cpy;
 	}
 
+	buff buff::operator+(const buff& rhs) const
+	{
+		buff cpy = *this;
+		cpy.increased_health += rhs.increased_health;
+		cpy.amplified_health *= rhs.amplified_health;
+		cpy.increased_movement_speed += rhs.increased_movement_speed;
+		cpy.increased_attack_power += rhs.increased_attack_power;
+		cpy.amplified_attack_power *= rhs.amplified_attack_power;
+		cpy.increased_spell_power += rhs.increased_spell_power;
+		cpy.amplified_spell_power *= rhs.amplified_spell_power;
+		cpy.increased_defence_rating += rhs.increased_defence_rating;
+		cpy.amplified_defence_rating *= rhs.amplified_defence_rating;
+		return cpy;
+	}
+
 	stats stats::operator+(const buff& rhs) const
 	{
 		stats cpy = *this;
@@ -30,6 +45,16 @@ namespace game::logic
 		cpy.spell_power += rhs.increased_spell_power;
 		cpy.defence_rating *= rhs.amplified_defence_rating;
 		cpy.defence_rating += rhs.increased_defence_rating;
+		return cpy;
+	}
+
+	stats stats::operator*(float amplification) const
+	{
+		stats cpy = *this;
+		cpy.maximum_health *= amplification;
+		cpy.attack_power *= amplification;
+		cpy.spell_power *= amplification;
+		cpy.defence_rating *= amplification;
 		return cpy;
 	}
 
@@ -171,6 +196,13 @@ namespace game::logic
 		auto [_, duration] = tz::lua::parse_args<tz::lua::nil, float>(state);
 		this->b.time_remaining_seconds = duration;
 		return 0;
+	}
+
+	int rn_impl_buff::combine(tz::lua::state& state)
+	{
+		auto& buff = state.stack_get_userdata<rn_impl_buff>(2);
+		LUA_CLASS_PUSH(state, rn_impl_buff, {.b = buff.b + this->b});
+		return 1;
 	}
 	
 	/////////////////

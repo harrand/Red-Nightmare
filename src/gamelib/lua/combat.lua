@@ -116,7 +116,7 @@ function rn.combat.process_damage_mitigation(evt)
 		local damager = rn.scene():get_uid(evt.damager)
 		local victim_defence_rating = damagee:get_stats():get_defence_rating()
 		-- DR% = Armor / (Armor + 400 + 85 * AttackerLevel)
-		local dr = victim_defence_rating / (victim_defence_rating + 10 + 5 * damager:get_level())
+		local dr = victim_defence_rating / (victim_defence_rating + 40 + 15 * damager:get_level())
 		print("defence DR = " .. dr * 100 .. "%")
 		evt.value = math.ceil(evt.value * (1.0 - dr));
 	end

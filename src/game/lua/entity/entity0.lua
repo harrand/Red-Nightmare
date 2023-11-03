@@ -26,7 +26,7 @@ rn.entity_handler[id] =
 		bstats:set_maximum_health(100)
 		bstats:set_attack_power(0)
 		bstats:set_spell_power(25)
-		bstats:set_defence_rating(1000)
+		bstats:set_defence_rating(10)
 		ent:set_base_stats(bstats)
 		rn.entity_get_data(ent).impl.custom_despawn_timer = -1
 		tracy.ZoneEnd()

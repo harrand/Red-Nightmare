@@ -8,7 +8,8 @@ rn.item =
 	-- might be a way to do it properly, but separate members for the components works fine.
 	texture_tint_r = 1,
 	texture_tint_g = 1,
-	texture_tint_b = 1
+	texture_tint_b = 1,
+	equipment_buff = nil
 }
 rn.items = {}
 
@@ -59,6 +60,14 @@ function rn.item:set_texture_tint(r, g, b)
 	self.texture_tint_r = r
 	self.texture_tint_g = g
 	self.texture_tint_b = b
+end
+
+function rn.item:set_buff(buff)
+	self.equipment_buff = buff
+end
+
+function rn.item:get_buff()
+	return self.equipment_buff
 end
 
 rn.items = {}

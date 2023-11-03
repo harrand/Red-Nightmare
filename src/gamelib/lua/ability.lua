@@ -67,7 +67,6 @@ rn.cast_spell = function(arg)
 	entdata.impl.face_cast_direction = face_cast_direction
 	-- if its an instant cast spell, no need to set these, just send it instantly. (note: no animation in this case)
 	if ability.base_cast_time == 0 or instant_cast_override then
-		print("INSTANT CAST DETECTED")
 		-- just instantly send it
 		entdata.impl.cast = ability_name
 		rn.complete_cast(ent)
@@ -77,7 +76,6 @@ rn.cast_spell = function(arg)
 	entdata.impl.is_casting = true
 	entdata.impl.cast_begin = tz.time()
 	entdata.impl.cast = ability_name
-	print(ent:get_name() .. " - BEGAN CASTING " .. ability_name)
 
 	ent:get_element():play_animation(rn._impl_cast_type_to_animation_id[cast_type], false)
 
@@ -103,7 +101,6 @@ rn.complete_cast = function(ent)
 	local ability = rn.abilities[rn.ability.type[entdata.impl.cast]]
 	tz.assert(ability ~= nil)
 	ability.on_cast(ent)
-	print(ent:get_name() .. " - FINISHED CASTING " .. entdata.impl.cast)
 	rn.cancel_cast(ent)
 end
 

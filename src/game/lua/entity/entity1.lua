@@ -56,7 +56,6 @@ rn.entity_handler[id] =
 		-- we only live for 5 seconds
 		if data.spawned_at + 5000 <= tz.time() then
 			-- WE DIE NOW :)
-			print("FIREBALL GO DEATH BYE BYE")
 			rn.scene():remove_uid(ent:uid())
 		end
 
@@ -73,7 +72,6 @@ rn.entity_handler[id] =
 		end)
 
 		if data.collided_this_update then
-			print("FIREBALL GO DEATH BYE BYE")
 			rn.scene():remove_uid(ent:uid())
 		end
 	end

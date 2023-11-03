@@ -12,7 +12,6 @@ rn.abilities[id] =
 	magic_colour_b = 0.05,
 	cast_type = rn.cast.type.spell_1h_directed,
 	on_cast = function(ent)
-		print("FIREBALL GO WOOSH!")
 		local sc = rn.scene()
 		local proj = sc:get(sc:add(1))
 		proj:set_faction(ent:get_faction())

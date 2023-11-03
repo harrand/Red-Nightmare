@@ -11,8 +11,9 @@ namespace game::entity
 		game::logic::stats ret = this->base_stats;
 		// level increases stats too.
 		// 5% max health per level up.
-		ret.maximum_health *= 1.0f + ((this->level - 1.0f) * 0.05f);
+		ret = ret * (1.0f + ((this->level - 1.0f) * 0.05f));
 
+		ret = ret + this->equipment_buff;
 		for(const auto&[_, buff] : this->buffs)
 		{
 			ret = ret + buff;
@@ -285,6 +286,14 @@ namespace game::entity
 	{
 		state.stack_push_bool(this->get().current_health == 0);
 		return 1;
+	}
+
+	int rn_impl_entity::impl_set_equipment_buff(tz::lua::state& state)
+	{
+		using namespace game::logic;
+		auto& buff = state.stack_get_userdata<rn_impl_buff>(2);
+		this->get().equipment_buff = buff.b;
+		return 0;
 	}
 
 	int rn_impl_entity::apply_buff(tz::lua::state& state)
