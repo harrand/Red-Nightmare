@@ -363,6 +363,19 @@ namespace game::render
 		return 0;
 	}
 
+	int impl_rn_scene_texture_locator::get_texture_scale(tz::lua::state& state)
+	{
+		state.stack_push_float(this->tloc.texture_scale);
+		return 1;
+	}
+
+	int impl_rn_scene_texture_locator::set_texture_scale(tz::lua::state& state)
+	{
+		auto [_, sc] = tz::lua::parse_args<tz::lua::nil, float>(state);
+		this->tloc.texture_scale = sc;
+		return 0;
+	}
+
 	int impl_rn_scene_element::get_object_count(tz::lua::state& state)
 	{
 		state.stack_push_uint(elem.get_object_count());
@@ -395,6 +408,17 @@ namespace game::render
 		auto objh = this->elem.renderer->get_renderer().animated_object_get_subobjects(this->elem.entry.obj)[oh];
 		tz::ren::animation_renderer2::texture_locator tloc = this->elem.object_get_texture(objh, bound_texture_id);
 		tloc.texture = static_cast<tz::hanval>(texhandle);
+		this->elem.object_set_texture(objh, bound_texture_id, tloc);
+		return 0;
+	}
+
+	int impl_rn_scene_element::object_set_texture_scale(tz::lua::state& state)
+	{
+		TZ_PROFZONE("scene element - object set texture scale", 0xFFFFAAEE);
+		auto [_, oh, bound_texture_id, sc] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int, float>(state);
+		auto objh = this->elem.renderer->get_renderer().animated_object_get_subobjects(this->elem.entry.obj)[oh];
+		tz::ren::animation_renderer2::texture_locator tloc = this->elem.object_get_texture(objh, bound_texture_id);
+		tloc.texture_scale = sc;
 		this->elem.object_set_texture(objh, bound_texture_id, tloc);
 		return 0;
 	}
@@ -477,6 +501,16 @@ namespace game::render
 		return 0;
 	}
 
+	int impl_rn_scene_element::face_forward2d(tz::lua::state& state)
+	{
+		TZ_PROFZONE("scene element - face forward 2d", 0xFFFFAAEE);
+		auto& ren = this->elem.renderer->get_renderer();
+		tz::trs transform = ren.animated_object_get_local_transform(this->elem.entry.obj);
+		transform.rotate = tz::quat::from_axis_angle({0.0f, 1.0f, 0.0f}, 1.5708f);
+		ren.animated_object_set_local_transform(this->elem.entry.obj, transform);
+		return 0;
+	}
+
 	int impl_rn_scene_element::rotate(tz::lua::state& state)
 	{
 		TZ_PROFZONE("scene element - rotate", 0xFFFFAAEE);
@@ -506,6 +540,26 @@ namespace game::render
 		tz::trs transform = ren.animated_object_get_local_transform(this->elem.entry.obj);
 		transform.translate[0] = x;
 		transform.translate[1] = y;
+		ren.animated_object_set_local_transform(this->elem.entry.obj, transform);
+		return 0;
+	}
+
+	int impl_rn_scene_element::get_depth(tz::lua::state& state)
+	{
+		TZ_PROFZONE("scene element - get depth", 0xFFFFAAEE);
+		auto& ren = this->elem.renderer->get_renderer();
+		tz::trs transform = ren.animated_object_get_local_transform(this->elem.entry.obj);
+		state.stack_push_float(transform.translate[2]);
+		return 1;
+	}
+
+	int impl_rn_scene_element::set_depth(tz::lua::state& state)
+	{
+		TZ_PROFZONE("scene element - set depth", 0xFFFFAAEE);
+		auto [_, z] = tz::lua::parse_args<tz::lua::nil, float>(state);
+		auto& ren = this->elem.renderer->get_renderer();
+		tz::trs transform = ren.animated_object_get_local_transform(this->elem.entry.obj);
+		transform.translate[2] = z;
 		ren.animated_object_set_local_transform(this->elem.entry.obj, transform);
 		return 0;
 	}

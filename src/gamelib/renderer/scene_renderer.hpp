@@ -127,6 +127,8 @@ namespace game::render
 		int set_colour_tint(tz::lua::state& state);
 		int get_texture_handle(tz::lua::state& state);
 		int set_texture_handle(tz::lua::state& state);
+		int get_texture_scale(tz::lua::state& state);
+		int set_texture_scale(tz::lua::state& state);
 	};
 
 	LUA_CLASS_BEGIN(impl_rn_scene_texture_locator)
@@ -135,6 +137,8 @@ namespace game::render
 			LUA_METHOD(impl_rn_scene_texture_locator, set_colour_tint)
 			LUA_METHOD(impl_rn_scene_texture_locator, get_texture_handle)
 			LUA_METHOD(impl_rn_scene_texture_locator, set_texture_handle)
+			LUA_METHOD(impl_rn_scene_texture_locator, get_texture_scale)
+			LUA_METHOD(impl_rn_scene_texture_locator, set_texture_scale)
 		LUA_CLASS_METHODS_END
 	LUA_CLASS_END
 
@@ -147,6 +151,7 @@ namespace game::render
 		// if you want to just affect this specific object, use object_set_colour_tint
 		int object_set_texture_tint(tz::lua::state& state);
 		int object_set_texture_handle(tz::lua::state& state);
+		int object_set_texture_scale(tz::lua::state& state);
 		// get/set colour tint for this specific object only. does not affect any other object, even if they use the same texture id.
 		int object_get_colour_tint(tz::lua::state& state);
 		int object_set_colour_tint(tz::lua::state& state);
@@ -156,9 +161,12 @@ namespace game::render
 		int face_backward(tz::lua::state& state);
 		int face_left(tz::lua::state& state);
 		int face_right(tz::lua::state& state);
+		int face_forward2d(tz::lua::state& state);
 		int rotate(tz::lua::state& state);
 		int get_position(tz::lua::state& state);
 		int set_position(tz::lua::state& state);
+		int get_depth(tz::lua::state& state);
+		int set_depth(tz::lua::state& state);
 		int get_subobject_position(tz::lua::state& state);
 		int get_scale(tz::lua::state& state);
 		int set_scale(tz::lua::state& state);
@@ -184,6 +192,7 @@ namespace game::render
 			LUA_METHOD(impl_rn_scene_element, object_get_texture)
 			LUA_METHOD(impl_rn_scene_element, object_set_texture_tint)
 			LUA_METHOD(impl_rn_scene_element, object_set_texture_handle)
+			LUA_METHOD(impl_rn_scene_element, object_set_texture_scale)
 			LUA_METHOD(impl_rn_scene_element, object_get_colour_tint)
 			LUA_METHOD(impl_rn_scene_element, object_set_colour_tint)
 			LUA_METHOD(impl_rn_scene_element, object_get_visibility)
@@ -192,9 +201,12 @@ namespace game::render
 			LUA_METHOD(impl_rn_scene_element, face_backward)
 			LUA_METHOD(impl_rn_scene_element, face_left)
 			LUA_METHOD(impl_rn_scene_element, face_right)
+			LUA_METHOD(impl_rn_scene_element, face_forward2d)
 			LUA_METHOD(impl_rn_scene_element, rotate)
 			LUA_METHOD(impl_rn_scene_element, get_position)
 			LUA_METHOD(impl_rn_scene_element, set_position)
+			LUA_METHOD(impl_rn_scene_element, get_depth)
+			LUA_METHOD(impl_rn_scene_element, set_depth)
 			LUA_METHOD(impl_rn_scene_element, get_subobject_position)
 			LUA_METHOD(impl_rn_scene_element, get_scale)
 			LUA_METHOD(impl_rn_scene_element, set_scale)

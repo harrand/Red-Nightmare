@@ -53,6 +53,7 @@ require "entity4"
 require "entity5"
 require "entity6"
 require "entity7"
+require "entity8"
 
 rn.get_entity_type_name = function()
 	_tmp_type_name = nil
@@ -118,6 +119,8 @@ rn.entity_postinit = function(type)
 		rn.entity_get_data(ent).impl.dir = "forward"
 	elseif mod == rn.model.quad then
 		e:object_set_visibility(2, true)
+		e:face_forward2d()
+		e:rotate(1.5708)
 	end
 
 	local handler = rn.entity_handler[type]

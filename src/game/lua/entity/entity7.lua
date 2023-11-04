@@ -26,8 +26,6 @@ rn.entity_handler[id] =
 	postinit = function(ent)
 		local texh = rn.texture_manager():get_texture(typestr .. ".sprite")
 		ent:get_element():object_set_texture_handle(2, 0, texh)
-		ent:get_element():face_right()
-		ent:get_element():rotate(-1.5708)
 	end,
 	update = function(ent)
 		local data = rn.entity.data[ent:uid()]

@@ -32,13 +32,13 @@ rn.abilities[id] =
 			projdata.shoot_vec_x = entdata.impl.cast_dir_x
 			projdata.shoot_vec_y = entdata.impl.cast_dir_y
 			-- math.atan2 is removed, instead just use math.atan with 2 args
-			proj:get_element():rotate(3.14159 + math.atan(projdata.shoot_vec_y, projdata.shoot_vec_x))
+			proj:get_element():rotate(math.atan(projdata.shoot_vec_y, projdata.shoot_vec_x))
 		else
 			-- shoot in the general direction (right/left/up/down)
 			projdata.shoot_dir = entdata.impl.dir
-			if projdata.shoot_dir == "right" then
+			if projdata.shoot_dir == "left" then
 				-- do nothing
-			elseif projdata.shoot_dir == "left" then
+			elseif projdata.shoot_dir == "right" then
 				proj:get_element():rotate(3.14159)
 			elseif projdata.shoot_dir == "forward" then
 				proj:get_element():rotate(-1.5708)
