@@ -255,7 +255,7 @@ namespace game::entity
 		tz::vec2 player_pos = player_trs.translate.swizzle<0, 1>();
 
 		tz::vec2 diff = player_pos - this->renderer.get_camera_position();
-		constexpr float cam_dist_move_diff = 2.0f;
+		constexpr float cam_dist_move_diff = 8.0f;
 		if(diff.length() >= cam_dist_move_diff)
 		{
 			tz::vec2 new_cam_pos = this->renderer.get_camera_position() + (diff * delta_seconds);

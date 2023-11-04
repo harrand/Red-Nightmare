@@ -38,15 +38,16 @@ namespace game
 
 		game_system->scene.add(0);
 		tz::lua::get_state().execute(R"(
-		rn.texture_manager():register_texture("grassy.background", "./res/images/scenery/backgrounds/background_grassy.png")
+		rn.texture_manager():register_texture("blanchfield_cemetary.background", "./res/images/scenery/backgrounds/background_grassy.png")
 		rn.texture_manager():register_texture("blanchfield_cemetary.foreground", "./res/images/scenery/foregrounds/foreground_blanchfield_cemetary.png")
 		bg = rn.scene():get(rn.scene():add(8))
 		fg = rn.scene():get(rn.scene():add(8))
 
 		local bgdata = rn.entity_get_data(bg)
 		bgdata.dynamic_texture_scale = true
-		bg:get_element():set_uniform_scale(128)
-		bg:get_element():object_set_texture_handle(2, 0, rn.texture_manager():get_texture("grassy.background"))
+		bgdata.texture_scale_zoom = 16.0
+		bg:get_element():set_uniform_scale(64)
+		bg:get_element():object_set_texture_handle(2, 0, rn.texture_manager():get_texture("blanchfield_cemetary.background"))
 
 		bg:get_element():set_depth(-2.5)
 
