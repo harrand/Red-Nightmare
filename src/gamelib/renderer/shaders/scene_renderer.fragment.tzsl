@@ -10,16 +10,20 @@ struct texture_locator
 };
 
 output(id = 0) vec4 out::colour;
+output(id = 1) vec4 out::pixelated_colour;
 input(id = 0) vec2 in::texcoord;
 input(id = 1) vec3 in::normal;
 input(id = 2) vec3 in::colour;
-input(id = 3, flat) texture_locator in::textures[MAX_TEX_COUNT];
+input(id = 3, flat) uvec2 in::joint_suffix;
+input(id = 4, flat) texture_locator in::textures[MAX_TEX_COUNT];
 resource(id = 4) const texture res::textures[];
 
 void main()
 {
-	out::colour = vec4(vec3(0.0f), 1.0f);
+	vec4 outcol = vec4(vec3(0.0f), 1.0f);
+	//out::colour = vec4(vec3(0.0f), 1.0f);
 	//bool any_texture_applied = false;
+	bool should_pixelate = bool(in::joint_suffix.x);
 
 	// TODO: use correct texcoords. we have the data, it should be stored in texture-locator maybe? for now we always use texcoord 0 which is wrong.
 	// we have MAX_TEX_COUNT slots.
@@ -30,7 +34,7 @@ void main()
 	if(base_colour.texture_id == BADU)
 	{
 		// use solid red.
-		out::colour = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+		outcol = vec4(1.0f, 1.0f, 1.0f, 1.0f);
 	}
 	else
 	{
@@ -43,7 +47,7 @@ void main()
 			discard;
 			return;
 		}
-		out::colour.xyz = col.xyz * base_colour.colour_tint;
+		outcol.xyz = col.xyz * base_colour.colour_tint;
 	}
 	texture_locator metallic_roughness = in::textures[1];
 	if(metallic_roughness.texture_id != BADU)
@@ -54,7 +58,18 @@ void main()
 		float metallicness = mrsample.b;
 		// TODO: pbr magic!
 	}
-	out::colour.xyz *= in::colour;
+	outcol.xyz *= in::colour;
+
+	if(should_pixelate)
+	{
+		out::colour = vec4(0.0);
+		out::pixelated_colour = outcol;
+	}
+	else
+	{
+		out::colour = outcol;
+		out::pixelated_colour = vec4(0.0);
+	}
 
 	//for(uint i = 0; i < MAX_TEX_COUNT; i++)
 	//{

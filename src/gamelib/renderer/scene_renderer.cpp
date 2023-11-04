@@ -65,6 +65,11 @@ namespace game::render
 			tz::trs trs = this->renderer.animated_object_get_local_transform(aoh);
 			trs.scale *= 0.25f;
 			this->renderer.animated_object_set_local_transform(aoh, trs);
+			for(tz::ren::animation_renderer2::object_handle oh : this->renderer.animated_object_get_subobjects(aoh))
+			{
+				// mark all these objects as pixelated.
+				this->renderer.get_object(oh).unused2[2] = true;
+			}
 		}
 		return this->entries.back();
 	}
