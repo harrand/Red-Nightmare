@@ -28,12 +28,12 @@ rn.entity_handler[id] =
 	postinit = function(ent)
 		local texh = rn.texture_manager():get_texture(typestr .. ".sprite0")
 		ent:get_element():object_set_texture_handle(2, 0, texh)
-		local stats = ent:get_base_stats()
-		stats:set_movement_speed(stats:get_movement_speed() * 2.0)
-		ent:set_base_stats(stats)
 	end,
 	update = function(ent)
 		local data = rn.entity.data[ent:uid()]
+		local stats = ent:get_base_stats()
+		stats:set_movement_speed(12.0)
+		ent:set_base_stats(stats)
 		ent:get_element():object_set_texture_tint(2, 0, data.colour_r, data.colour_g, data.colour_b)
 		data.flipbook_timer = data.flipbook_timer + rn.delta_time
 		-- when flipbook timer hits a threshold (fps / 4), advance to the next frame
