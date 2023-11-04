@@ -100,6 +100,14 @@ namespace game::render
 		return this->renderer.get_camera_transform().translate.swizzle<0, 1>();
 	}
 
+	void scene_renderer::set_camera_position(tz::vec2 cam_pos)
+	{
+		tz::trs trs = this->renderer.get_camera_transform();
+		trs.translate[0] = cam_pos[0];
+		trs.translate[1] = cam_pos[1];
+		this->renderer.set_camera_transform(trs);
+	}
+
 	void scene_renderer::update(float delta)
 	{
 		TZ_PROFZONE("scene renderer - update", 0xFFFF4488);

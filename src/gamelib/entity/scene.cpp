@@ -126,6 +126,7 @@ namespace game::entity
 			}
 		}
 		this->rebuild_quadtree();
+		this->advance_camera(delta_seconds);
 		this->renderer.update(delta_seconds);
 	}
 
@@ -144,18 +145,14 @@ namespace game::entity
 		ImGui::Text("Scene size: %zu", this->size());
 		ImGui::SameLine();
 		ImGui::Text("| %zu intersections | ", this->debug_get_intersection_count());
-		auto iter = std::find_if(this->entities.begin(), this->entities.end(),
-		[](const entity& ent)
-		{
-			// player melistra
-			return ent.type == 0;
-		});
+		entity_handle player = this->try_find_player();
 
-		if(iter != this->entities.end())
+		if(player != tz::nullhand)
 		{
+			auto& p = this->get(player);
 			ImGui::SameLine();
-			ImGui::Text("%s %llu/%llu hp (%.1f%%)", iter->name.c_str(), iter->current_health, iter->get_stats().maximum_health, 100.0f * iter->current_health / iter->get_stats().maximum_health);
-			auto stats = iter->get_stats();
+			ImGui::Text("%s %llu/%llu hp (%.1f%%)", p.name.c_str(), p.current_health, p.get_stats().maximum_health, 100.0f * p.current_health / p.get_stats().maximum_health);
+			auto stats = p.get_stats();
 			ImGui::SameLine();
 			ImGui::Text("Speed: %.2f", stats.movement_speed);
 			ImGui::SameLine();
@@ -207,6 +204,22 @@ namespace game::entity
 		this->get_renderer().remove_model(ent.elem.entry);
 	}
 
+	scene::entity_handle scene::try_find_player() const
+	{
+		auto iter = std::find_if(this->entities.begin(), this->entities.end(),
+		[](const entity& ent)
+		{
+			// player melistra
+			return ent.type == 0;
+		});
+
+		if(iter == this->entities.end())
+		{
+			return tz::nullhand;
+		}
+		return static_cast<tz::hanval>(std::distance(this->entities.begin(), iter));
+	}
+
 	void scene::rebuild_quadtree()
 	{
 		this->quadtree.clear();
@@ -227,6 +240,26 @@ namespace game::entity
 			auto uid_b = this->get(node_b.entity_hanval).uid;
 			this->collision_data[uid_a].insert(node_b.entity_hanval);
 			this->collision_data[uid_b].insert(node_a.entity_hanval);
+		}
+	}
+
+	void scene::advance_camera(float delta_seconds)
+	{
+		entity_handle player = this->try_find_player();
+		if(player == tz::nullhand)
+		{
+			return;
+		}
+		auto& p = this->get(player);
+		tz::trs player_trs = this->renderer.get_renderer().animated_object_get_local_transform(p.elem.entry.obj);
+		tz::vec2 player_pos = player_trs.translate.swizzle<0, 1>();
+
+		tz::vec2 diff = player_pos - this->renderer.get_camera_position();
+		constexpr float cam_dist_move_diff = 2.0f;
+		if(diff.length() >= cam_dist_move_diff)
+		{
+			tz::vec2 new_cam_pos = this->renderer.get_camera_position() + (diff * delta_seconds);
+			this->renderer.set_camera_position(new_cam_pos);
 		}
 	}
 
@@ -430,6 +463,12 @@ namespace game::entity
 			{
 				entity_id--;
 			}
+		}
+
+		tz::vec2 cam_pos = this->renderer.get_camera_position();
+		if(ImGui::SliderFloat2("Camera Position", cam_pos.data().data(), -2.0f, 2.0f))
+		{
+			this->renderer.set_camera_position(cam_pos);
 		}
 	}
 }

@@ -48,7 +48,9 @@ namespace game::entity
 	private:
 		void initialise_entity(tz::hanval entity_hanval, std::size_t type);
 		void deinitialise_entity(tz::hanval entity_hanval, std::size_t uid);
+		entity_handle try_find_player() const;
 		void rebuild_quadtree();
+		void advance_camera(float delta_seconds);
 		bool is_valid(tz::hanval entity_hanval) const;
 		void dbgui_impl();
 		std::vector<entity> entities = {};
