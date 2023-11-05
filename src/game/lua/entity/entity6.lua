@@ -32,7 +32,12 @@ rn.entity_handler[id] =
 		local data = rn.entity.data[ent:uid()]
 		ent:get_element():object_set_texture_tint(2, 0, 0.85, 0.1, 0.1)
 		tz.assert(data.target_entity ~= nil)
-		local xtar, ytar = data.target_entity:get_element():get_subobject_position(data.subobject)
+		local xtar, ytar
+		if data.subobject == nil then
+			xtar, ytar = data.target_entity:get_element():get_position()
+		else
+			xtar, ytar = data.target_entity:get_element():get_subobject_position(data.subobject)
+		end
 		ent:get_element():set_position(xtar, ytar)
 
 		local casted_time = tz.time() - data.spawned_at

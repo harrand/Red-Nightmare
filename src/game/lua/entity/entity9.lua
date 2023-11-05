@@ -11,6 +11,7 @@ rn.entity_handler[id] =
 		ent:set_collideable(true)
 		ent:set_immoveable(true)
 		ent:set_model(rn.model.quad)
+		ent:set_faction(rn.faction_id.pure_enemy)
 		local stats = ent:get_base_stats()
 		stats:set_maximum_health(1)
 		ent:set_base_stats(stats)

@@ -224,6 +224,7 @@ namespace game::entity
 
 	void scene::rebuild_quadtree()
 	{
+		TZ_PROFZONE("scene - rebuild quadtree", 0xFF99CC44);
 		this->quadtree.clear();
 		this->collision_data.clear();
 		for(std::size_t i = 0; i < this->size(); i++)
@@ -247,6 +248,7 @@ namespace game::entity
 
 	void scene::collision_response(float delta_seconds)
 	{
+		TZ_PROFZONE("scene - collision response", 0xFF99CC44);
 		for(const auto& [node_a, node_b] : this->intersection_state)
 		{
 			tz::hanval enta = node_a.entity_hanval;
@@ -258,6 +260,7 @@ namespace game::entity
 
 	void scene::resolve_collision(entity_handle ah, entity_handle bh, float delta_seconds)
 	{
+		TZ_PROFZONE("scene - resolve collision", 0xFF99CC44);
 		entity& a = this->get(ah);
 		entity& b = this->get(bh);
 		if(a.current_health == 0 || b.current_health == 0)
