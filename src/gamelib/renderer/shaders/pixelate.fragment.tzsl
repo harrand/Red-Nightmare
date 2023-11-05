@@ -27,7 +27,7 @@ void main()
 
 	out::frag_colour = texture(res::textures[1], coord);
 	vec4 unpixelised_colour = texture(res::textures[0], uv);
-	if(unpixelised_colour.a > 0.1)
+	if(out::frag_colour == vec4(0.0))
 	{
 		out::frag_colour = unpixelised_colour;
 	}

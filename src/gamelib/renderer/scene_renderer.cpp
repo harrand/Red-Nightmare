@@ -26,7 +26,7 @@ namespace game::render
 	renderer
 	({
 		.custom_fragment_spirv = ImportedShaderSource(scene_renderer, fragment),
-		.custom_options = {tz::gl::renderer_option::no_present},
+		.custom_options = {tz::gl::renderer_option::no_present, tz::gl::renderer_option::alpha_blending},
 		.texture_capacity = 128u,
 		.output = &this->output
 })

@@ -7,6 +7,9 @@ rn.entity_handler[id] =
 		local tm = rn.texture_manager()
 		--tm:register_texture("grassy.background", "./res/images/scenery/backgrounds/background_grassy.png")
 	end,
+	preinit = function(ent)
+		ent:set_collideable(false)
+	end,
 	postinit = function(ent)
 		ent:set_name("Scenery")
 
