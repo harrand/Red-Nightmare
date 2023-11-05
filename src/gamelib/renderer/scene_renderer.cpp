@@ -316,6 +316,17 @@ namespace game::render
 		return std::nullopt;
 	}
 
+	std::string scene_element::get_playing_animation_name() const
+	{
+		auto maybe_id = this->get_playing_animation_id();
+		if(!maybe_id.has_value())
+		{
+			return "";
+		}
+		tz::ren::animation_renderer2::gltf_handle gltfh = this->renderer->get_renderer().animated_object_get_gltf(this->entry.obj);
+		return std::string{this->renderer->get_renderer().gltf_get_animation_name(gltfh, maybe_id.value())};
+	}
+
 	std::string_view scene_element::get_animation_name(std::size_t anim_id) const
 	{
 		auto gltfh = this->renderer->get_renderer().animated_object_get_gltf(this->entry.obj);
@@ -327,9 +338,19 @@ namespace game::render
 		this->renderer->get_renderer().animated_object_play_animation(this->entry.obj, {.animation_id = anim_id, .loop = loop});
 	}
 
+	bool scene_element::play_animation_by_name(std::string_view name, bool loop)
+	{
+		return this->renderer->get_renderer().animated_object_play_animation_by_name(this->entry.obj, name, {.loop = loop});
+	}
+
 	void scene_element::queue_animation(std::size_t anim_id, bool loop)
 	{
 		this->renderer->get_renderer().animated_object_queue_animation(this->entry.obj, {.animation_id = anim_id, .loop = loop});
+	}
+
+	bool scene_element::queue_animation_by_name(std::string_view name, bool loop)
+	{
+		return this->renderer->get_renderer().animated_object_queue_animation_by_name(this->entry.obj, name, {.loop = loop});
 	}
 
 	void scene_element::skip_animation()
@@ -648,7 +669,7 @@ namespace game::render
 
 	int impl_rn_scene_element::get_playing_animation_id(tz::lua::state& state)
 	{
-		TZ_PROFZONE("scene element - get animation", 0xFFFFAAEE);
+		TZ_PROFZONE("scene element - get playing animation id", 0xFFFFAAEE);
 		auto maybe_id = this->elem.get_playing_animation_id();
 		if(maybe_id.has_value())
 		{
@@ -657,6 +678,21 @@ namespace game::render
 		else
 		{
 			state.stack_push_uint(std::numeric_limits<std::uint64_t>::max());
+		}
+		return 1;
+	}
+
+	int impl_rn_scene_element::get_playing_animation_name(tz::lua::state& state)
+	{
+		TZ_PROFZONE("scene element - get playing animation name", 0xFFFFAAEE);
+		std::string str = this->elem.get_playing_animation_name();
+		if(str.empty())
+		{
+			state.stack_push_nil();
+		}
+		else
+		{
+			state.stack_push_string(str);
 		}
 		return 1;
 	}
@@ -711,6 +747,15 @@ namespace game::render
 		return 0;
 	}
 
+	int impl_rn_scene_element::play_animation_by_name(tz::lua::state& state)
+	{
+		TZ_PROFZONE("scene element - play animation by name", 0xFFFFAAEE);
+		auto [_, name, loop] = tz::lua::parse_args<tz::lua::nil, std::string, bool>(state);
+		bool ret = this->elem.play_animation_by_name(name, loop);
+		state.stack_push_bool(ret);
+		return 1;
+	}
+
 	int impl_rn_scene_element::skip_all_animations(tz::lua::state& state)
 	{
 		TZ_PROFZONE("scene element - skip all animations", 0xFFFFAAEE);
@@ -724,6 +769,15 @@ namespace game::render
 		auto [_, anim_id, loop] = tz::lua::parse_args<tz::lua::nil, unsigned int, bool>(state);
 		this->elem.queue_animation(anim_id, loop);
 		return 0;
+	}
+
+	int impl_rn_scene_element::queue_animation_by_name(tz::lua::state& state)
+	{
+		TZ_PROFZONE("scene element - queue animation by name", 0xFFFFAAEE);
+		auto [_, name, loop] = tz::lua::parse_args<tz::lua::nil, std::string, bool>(state);
+		bool ret = this->elem.queue_animation_by_name(name, loop);
+		state.stack_push_bool(ret);
+		return 1;
 	}
 
 	int impl_rn_scene_element::skip_animation(tz::lua::state& state)

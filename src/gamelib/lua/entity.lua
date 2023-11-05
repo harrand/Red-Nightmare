@@ -151,10 +151,9 @@ rn.entity_update = function(ent)
 	end
 
 	local e = ent:get_element()
-	local idle_anim_id = 6
 	if not ent:is_dead() and not data.impl.is_casting and not data.impl.is_moving then
-		if (ent:get_model() == rn.model.humanoid) and (e:get_playing_animation_id() ~= idle_anim_id or not e:is_animation_playing()) then
-			e:play_animation(idle_anim_id, false)
+		if (ent:get_model() == rn.model.humanoid) and (e:get_playing_animation_name() ~= "CastIdle" or not e:is_animation_playing()) then
+			e:play_animation_by_name("CastIdle", false)
 		end
 	end
 
@@ -297,7 +296,7 @@ rn.entity_move_to_location = function(arg, locx, locy)
 	end
 	-- if we're not on them, move
 	if not rawequal(next(new_dir), nil) then
-		rn.entity_move{ent = ent, dir = new_dir, movement_anim_id = 12}
+		rn.entity_move{ent = ent, dir = new_dir, movement_anim_name = arg.movement_anim_name}
 	end
 
 	if math.abs(vecy) > math.abs(vecx) then
@@ -320,7 +319,7 @@ rn.entity_move = function(arg)
 	end
 	local vecdir_x = arg.vecdir_x
 	local vecdir_y = arg.vecdir_y
-	local movement_anim_id = arg.movement_anim_id
+	local movement_anim_name = arg.movement_anim_name
 	local face_in_direction = arg.face_in_direction
 	if face_in_direction == nil then face_in_direction = true end
 
@@ -385,8 +384,8 @@ rn.entity_move = function(arg)
 		e:set_position(x, y)
 		e:set_animation_speed(math.sqrt(movement_speed / 3.0))
 
-		if movement_anim_id ~= nil and (e:get_playing_animation_id() ~= movement_anim_id or not e:is_animation_playing()) then
-			e:play_animation(movement_anim_id, false)
+		if movement_anim_name ~= nil and (e:get_playing_animation_name() ~= movement_anim_name or not e:is_animation_playing()) then
+			e:play_animation_by_name(movement_anim_name, false)
 		end
 	end
 

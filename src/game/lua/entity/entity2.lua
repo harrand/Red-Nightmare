@@ -62,11 +62,11 @@ rn.entity_handler[id] =
 		end)
 		if not rn.is_casting(ent) and not ent:is_dead() then
 			if data.target ~= nil then
-				rn.entity_move_to_entity({ent = ent, movement_anim_id = 12}, data.target)
+				rn.entity_move_to_entity({ent = ent, movement_anim_name = "ZombieWalk"}, data.target)
 			else
 				-- otherwise just move right forever???
 				-- todo: wander around aimlessly
-				rn.entity_move{ent = ent, dir = "right", movement_anim_id = 12}
+				rn.entity_move{ent = ent, dir = "right", movement_anim_name = "ZombieWalk"}
 			end
 		end
 	end

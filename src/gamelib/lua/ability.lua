@@ -14,6 +14,16 @@ rn.cast.type =
 	melee_unarmed_lunge = 6
 }
 
+rn._impl_cast_type_to_animation_name =
+{
+	"Cast1H_Directed",
+	"Cast1H_Omni",
+	"Cast2H_Directed",
+	"Cast2H_Omni",
+	"Attack1H_Horizontal",
+	"ZombiePunch"
+}
+
 rn._impl_cast_type_to_animation_id =
 {
 	2,
@@ -78,7 +88,7 @@ rn.cast_spell = function(arg)
 	entdata.impl.cast_begin = tz.time()
 	entdata.impl.cast = ability_name
 
-	ent:get_element():play_animation(rn._impl_cast_type_to_animation_id[cast_type], false)
+	ent:get_element():play_animation_by_name(rn._impl_cast_type_to_animation_name[cast_type], false)
 
 	-- casting effect
 	entdata.impl.cast_effects = {nil, nil}

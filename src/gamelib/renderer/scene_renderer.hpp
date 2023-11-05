@@ -111,9 +111,12 @@ namespace game::render
 		scene_renderer::model get_model() const;
 		std::size_t get_animation_count() const;
 		std::optional<std::size_t> get_playing_animation_id() const;
+		std::string get_playing_animation_name() const;
 		std::string_view get_animation_name(std::size_t anim_id) const;
 		void play_animation(std::size_t anim_id, bool loop = false);
+		bool play_animation_by_name(std::string_view name, bool loop = false);
 		void queue_animation(std::size_t anim_id, bool loop = false);
+		bool queue_animation_by_name(std::string_view name, bool loop = false);
 		void skip_animation();
 		void skip_all_animations();
 		void halt_animation();
@@ -176,12 +179,15 @@ namespace game::render
 		int get_model(tz::lua::state& state);
 		int get_animation_count(tz::lua::state& state);
 		int get_playing_animation_id(tz::lua::state& state);
+		int get_playing_animation_name(tz::lua::state& state);
 		int is_animation_playing(tz::lua::state& state);
 		int get_animation_name(tz::lua::state& state);
 		int get_animation_speed(tz::lua::state& state);
 		int set_animation_speed(tz::lua::state& state);
 		int play_animation(tz::lua::state& state);
+		int play_animation_by_name(tz::lua::state& state);
 		int queue_animation(tz::lua::state& state);
+		int queue_animation_by_name(tz::lua::state& state);
 		int skip_animation(tz::lua::state& state);
 		int skip_all_animations(tz::lua::state& state);
 		int halt_animation(tz::lua::state& state);
@@ -216,12 +222,15 @@ namespace game::render
 			LUA_METHOD(impl_rn_scene_element, get_model)
 			LUA_METHOD(impl_rn_scene_element, get_animation_count)
 			LUA_METHOD(impl_rn_scene_element, get_playing_animation_id)
+			LUA_METHOD(impl_rn_scene_element, get_playing_animation_name)
 			LUA_METHOD(impl_rn_scene_element, is_animation_playing)
 			LUA_METHOD(impl_rn_scene_element, get_animation_name)
 			LUA_METHOD(impl_rn_scene_element, get_animation_speed)
 			LUA_METHOD(impl_rn_scene_element, set_animation_speed)
 			LUA_METHOD(impl_rn_scene_element, play_animation)
+			LUA_METHOD(impl_rn_scene_element, play_animation_by_name)
 			LUA_METHOD(impl_rn_scene_element, queue_animation)
+			LUA_METHOD(impl_rn_scene_element, queue_animation_by_name)
 			LUA_METHOD(impl_rn_scene_element, skip_animation)
 			LUA_METHOD(impl_rn_scene_element, skip_all_animations)
 			LUA_METHOD(impl_rn_scene_element, halt_animation)

@@ -2,12 +2,6 @@ local id = 0
 local typestr = "player_lady_melistra"
 rn.entity.type[typestr] = id
 
-function keep_playing_animation(e, anim_id, loop)
-	if e:get_playing_animation_id() ~= anim_id or not e:is_animation_playing() then
-		e:play_animation(anim_id, loop)
-	end
-end
-
 rn.entity_handler[id] =
 {
 	-- invoked exactly once during game initialisation.
@@ -86,7 +80,7 @@ rn.entity_handler[id] =
 			table.insert(dir, "right")
 		end
 		if not rawequal(next(dir), nil) then
-			rn.entity_move({ent = ent, dir = dir, movement_anim_id = 8})
+			rn.entity_move({ent = ent, dir = dir, movement_anim_name = "Run"})
 		end
 
 		if rn.is_key_down("esc") and rn.is_casting(ent) then
