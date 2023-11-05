@@ -267,6 +267,49 @@ rn.update = function()
 	tracy.ZoneEnd()
 end
 
+rn.entity_move_to_entity = function(arg, ent2)
+	local locx, locy = ent2:get_element():get_position()
+	rn.entity_move_to_location(arg, locx, locy)
+end
+
+rn.entity_move_to_location = function(arg, locx, locy)
+	local ent = arg.ent or nil
+	tz.assert(ent ~= nil)
+	local ourx, oury = ent:get_element():get_position()
+	local vecx = locx - ourx
+	local vecy = locy - oury
+	local speed = ent:get_stats():get_movement_speed() * rn.delta_time * 0.5
+
+	local new_dir = {}
+	if vecx >= speed then
+		-- move right
+		table.insert(new_dir, "right")
+	elseif vecx <= -speed then
+		-- move left
+		table.insert(new_dir, "left")
+	end
+	if vecy >= speed then
+		-- move up
+		table.insert(new_dir, "backward")
+	elseif vecy <= -speed then
+		-- move down
+		table.insert(new_dir, "forward")
+	end
+	-- if we're not on them, move
+	if not rawequal(next(new_dir), nil) then
+		rn.entity_move{ent = ent, dir = new_dir, movement_anim_id = 12}
+	end
+
+	if math.abs(vecy) > math.abs(vecx) then
+		-- face vertically if we need to (entity_move default face direction is bad)
+		if vecy > 0 then
+			ent:get_element():face_backward()
+		else
+			ent:get_element():face_forward()
+		end
+	end
+end
+
 rn.entity_move = function(arg)
 	local ent = arg.ent or nil
 	tz.assert(ent ~= nil)

@@ -28,11 +28,10 @@ rn.entity_handler[id] =
 		local sc = ent:get_element():get_uniform_scale()
 		ent:get_element():set_uniform_scale(sc * 0.5)
 
-		ent:get_element():play_animation(12, true)
 		ent:set_faction(rn.faction_id.player_enemy)
 
 		local stats = ent:get_base_stats()
-		stats:set_movement_speed(1.0)
+		stats:set_movement_speed(1.75)
 		stats:set_attack_power(10)
 		ent:set_base_stats(stats)
 
@@ -46,7 +45,6 @@ rn.entity_handler[id] =
 				local ent2 = rn.scene():get(i)	
 				if not ent:is_dead() and ent2:is_valid() and not ent2:is_dead() and rn.get_relationship(ent, ent2) == "hostile" then
 					data.target = ent2
-					print("zombie has found " .. ent2:get_name() .. " to attack!")
 				end
 			end
 		else
@@ -64,32 +62,7 @@ rn.entity_handler[id] =
 		end)
 		if not rn.is_casting(ent) and not ent:is_dead() then
 			if data.target ~= nil then
-				-- if we have a target, chase them
-				-- move in their general direction
-				local tarx, tary = data.target:get_element():get_position()
-				local ourx, oury = ent:get_element():get_position()
-				local vecx = tarx - ourx
-				local vecy = tary - oury
-				local speed = ent:get_stats():get_movement_speed()
-				local new_dir = {}
-				if vecx >= speed then
-					-- move right
-					table.insert(new_dir, "right")
-				elseif vecx <= -speed then
-					-- move left
-					table.insert(new_dir, "left")
-				end
-				if vecy >= speed then
-					-- move up
-					table.insert(new_dir, "backward")
-				elseif vecy <= -speed then
-					-- move down
-					table.insert(new_dir, "forward")
-				end
-				-- if we're not on them, move
-				if not rawequal(next(new_dir), nil) then
-					rn.entity_move{ent = ent, dir = new_dir, movement_anim_id = 12}
-				end
+				rn.entity_move_to_entity({ent = ent, movement_anim_id = 12}, data.target)
 			else
 				-- otherwise just move right forever???
 				-- todo: wander around aimlessly
