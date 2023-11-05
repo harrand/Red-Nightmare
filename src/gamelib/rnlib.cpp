@@ -36,7 +36,6 @@ namespace game
 		game_system = std::make_unique<game_system_t>();
 		lua_initialise();
 
-		game_system->scene.add(0);
 		tz::lua::get_state().execute(R"(
 		rn.texture_manager():register_texture("blanchfield_cemetary.background", "./res/images/scenery/backgrounds/background_grassy.png")
 		rn.texture_manager():register_texture("blanchfield_cemetary.foreground", "./res/images/scenery/foregrounds/foreground_blanchfield_cemetary.png")
@@ -54,8 +53,9 @@ namespace game
 		fg:get_element():object_set_texture_handle(2, 0, rn.texture_manager():get_texture("blanchfield_cemetary.foreground"))
 		fg:get_element():set_uniform_scale(64)
 		fg:get_element():set_depth(-2)
+
+		rn.scene():add(0)
 		)");
-		// lua equivalent: rn.scene():add(0)
 	}
 
 	void terminate()

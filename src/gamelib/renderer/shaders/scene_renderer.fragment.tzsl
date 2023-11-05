@@ -66,7 +66,7 @@ void main()
 		// if we assume in::fragment_coord.z is between 0 and 1, we make our depth between 0.999-1.0, but still preserving depth order.
 		// this means that the fragment we write into the unpixelated colour is almost *certainly* gonna be overwritten by something else.
 		// however, the pixelated buffer will *only* contain fragments with this depth operation applied, so the depth test is preserved (if way less accurate. we're a 2d game, who cares???)
-		out::fragment_depth = 0.999f + (in::fragment_coord.z / 1000.0f);
+		//out::fragment_depth = 0.999f + (in::fragment_coord.z / 1000.0f);
 		out::colour = vec4(0.0);
 		out::pixelated_colour = outcol;
 	}
@@ -74,7 +74,7 @@ void main()
 	{
 		// stupid rule if any path writes to depth, all must do.
 		// just write what the depth was gonna be anyway.
-		out::fragment_depth = in::fragment_coord.z;
+		//out::fragment_depth = in::fragment_coord.z;
 		out::colour = outcol;
 		out::pixelated_colour = vec4(0.0);
 	}
