@@ -40,6 +40,21 @@ rn.entity_handler[id] =
 	update = function(ent)
 		local data = rn.entity_get_data(ent)
 		data.collided_this_update = false
+		if data.target == nil then
+			for i=1,rn.scene():size()-1,1 do
+				-- attempt to find a new enemy to chase.
+				local ent2 = rn.scene():get(i)	
+				if not ent:is_dead() and ent2:is_valid() and not ent2:is_dead() and rn.get_relationship(ent, ent2) == "hostile" then
+					data.target = ent2
+					print("zombie has found " .. ent2:get_name() .. " to attack!")
+				end
+			end
+		else
+			if data.target:is_dead() or not data.target:is_valid() then
+				-- set target to nil so we choose one.
+				data.target = nil
+			end
+		end
 		-- attempt to attack any enemy nearby
 		rn.for_each_collision(ent, function(ent2)
 			if not ent:is_dead() and not data.collided_this_update and ent2:is_valid() and not ent2:is_dead() and rn.get_relationship(ent, ent2) == "hostile" then
@@ -48,7 +63,38 @@ rn.entity_handler[id] =
 			end
 		end)
 		if not rn.is_casting(ent) and not ent:is_dead() then
-			rn.entity_move{ent = ent, dir = "right", movement_anim_id = 12}
+			if data.target ~= nil then
+				-- if we have a target, chase them
+				-- move in their general direction
+				local tarx, tary = data.target:get_element():get_position()
+				local ourx, oury = ent:get_element():get_position()
+				local vecx = tarx - ourx
+				local vecy = tary - oury
+				local speed = ent:get_stats():get_movement_speed()
+				local new_dir = {}
+				if vecx >= speed then
+					-- move right
+					table.insert(new_dir, "right")
+				elseif vecx <= -speed then
+					-- move left
+					table.insert(new_dir, "left")
+				end
+				if vecy >= speed then
+					-- move up
+					table.insert(new_dir, "backward")
+				elseif vecy <= -speed then
+					-- move down
+					table.insert(new_dir, "forward")
+				end
+				-- if we're not on them, move
+				if not rawequal(next(new_dir), nil) then
+					rn.entity_move{ent = ent, dir = new_dir, movement_anim_id = 12}
+				end
+			else
+				-- otherwise just move right forever???
+				-- todo: wander around aimlessly
+				rn.entity_move{ent = ent, dir = "right", movement_anim_id = 12}
+			end
 		end
 	end
 }
