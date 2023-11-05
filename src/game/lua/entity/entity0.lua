@@ -72,14 +72,21 @@ rn.entity_handler[id] =
 			--rn.cast_spell({ent = ent, ability_name = "Melee", face_cast_direction = true})
 		end
 
+		dir = {}
 		if rn.is_key_down("w") then
-			rn.entity_move({ent = ent, dir = "backward", movement_anim_id = 8})
-		elseif rn.is_key_down("s") then
-			rn.entity_move({ent = ent, dir = "forward", movement_anim_id = 8})
-		elseif rn.is_key_down("a") then
-			rn.entity_move({ent = ent, dir = "left", movement_anim_id = 8})
-		elseif rn.is_key_down("d") then
-			rn.entity_move({ent = ent, dir = "right", movement_anim_id = 8})
+			table.insert(dir, "backward")
+		end
+		if rn.is_key_down("s") then
+			table.insert(dir, "forward")
+		end
+		if rn.is_key_down("a") then
+			table.insert(dir, "left")
+		end
+		if rn.is_key_down("d") then
+			table.insert(dir, "right")
+		end
+		if not rawequal(next(dir), nil) then
+			rn.entity_move({ent = ent, dir = dir, movement_anim_id = 8})
 		end
 
 		if rn.is_key_down("esc") and rn.is_casting(ent) then

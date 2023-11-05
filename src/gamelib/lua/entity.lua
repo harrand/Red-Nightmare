@@ -271,6 +271,10 @@ rn.entity_move = function(arg)
 	local ent = arg.ent or nil
 	tz.assert(ent ~= nil)
 	local dir = arg.dir
+	-- dir needs to be a table. if its a string just convert it into a table with a string inside.
+	if type(dir) == "string" then
+		dir = {dir}
+	end
 	local vecdir_x = arg.vecdir_x
 	local vecdir_y = arg.vecdir_y
 	local movement_anim_id = arg.movement_anim_id
@@ -285,17 +289,19 @@ rn.entity_move = function(arg)
 	local xdiff = 0
 	local ydiff = 0
 	if vecdir_x == nil or vecdir_y == nil then
-		-- move in an axis-aligned direction
-		if dir == "forward" then
-			ydiff = ydiff - 1
-		elseif dir == "backward" then
-			ydiff = ydiff + 1
-		elseif dir == "right" then
-			xdiff = xdiff + 1
-		elseif dir == "left" then
-			xdiff = xdiff - 1
-		else
-			tz.assert(false)
+		for i, d in pairs(dir) do
+			-- move in an axis-aligned direction
+			if d == "forward" then
+				ydiff = ydiff - 1
+			elseif d == "backward" then
+				ydiff = ydiff + 1
+			elseif d == "right" then
+				xdiff = xdiff + 1
+			elseif d == "left" then
+				xdiff = xdiff - 1
+			else
+				tz.assert(false)
+			end
 		end
 	else
 		-- move in direction of an arbitrary angle
