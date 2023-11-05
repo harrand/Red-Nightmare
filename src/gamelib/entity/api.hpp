@@ -36,7 +36,8 @@ namespace game::entity
 	};
 	enum class flag
 	{
-		no_collide
+		no_collide,
+		immoveable_collide
 	};
 	using flags_t = tz::enum_field<flag>;
 	struct entity
@@ -108,6 +109,8 @@ namespace game::entity
 
 		int is_collideable(tz::lua::state& state);
 		int set_collideable(tz::lua::state& state);
+		int is_immoveable(tz::lua::state& state);
+		int set_immoveable(tz::lua::state& state);
 	};
 
 	LUA_CLASS_BEGIN(rn_impl_entity)
@@ -136,6 +139,8 @@ namespace game::entity
 
 			LUA_METHOD(rn_impl_entity, is_collideable)
 			LUA_METHOD(rn_impl_entity, set_collideable)
+			LUA_METHOD(rn_impl_entity, is_immoveable)
+			LUA_METHOD(rn_impl_entity, set_immoveable)
 		LUA_CLASS_METHODS_END
 	LUA_CLASS_END
 }

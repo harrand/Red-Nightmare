@@ -344,4 +344,25 @@ namespace game::entity
 		}
 		return 0;
 	}
+
+	int rn_impl_entity::is_immoveable(tz::lua::state& state)
+	{
+		state.stack_push_bool(this->get().flags.contains(flag::immoveable_collide));
+		return 1;
+	}
+
+	int rn_impl_entity::set_immoveable(tz::lua::state& state)
+	{
+		auto [_, is_immoveable] = tz::lua::parse_args<tz::lua::nil, bool>(state);
+		auto& ent = this->get();
+		if(is_immoveable)
+		{
+			ent.flags |= flag::immoveable_collide;
+		}
+		else
+		{
+			ent.flags.remove(flag::immoveable_collide);
+		}
+		return 0;
+	}
 }

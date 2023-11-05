@@ -15,7 +15,7 @@ namespace game::entity
 		auto& ren = elem.renderer->get_renderer();
 		tz::trs transform = ren.animated_object_get_global_transform(elem.entry.obj);
 		tz::vec2 position = transform.translate.swizzle<0, 1>();
-		tz::vec2 half_scale = transform.scale.swizzle<0, 1>() * 0.5f; // half seems a bit off. keep it as-is.
+		tz::vec2 half_scale = transform.scale.swizzle<0, 1>();// * 0.5f; // half seems a bit off. keep it as-is.
 		if(elem.get_model() == game::render::scene_renderer::model::humanoid)
 		{
 			// humanoid needs a little correction.
@@ -279,8 +279,12 @@ namespace game::entity
 		game::physics::aabb b_box = scene_quadtree_node{.sc = this, .entity_hanval = static_cast<tz::hanval>(bh)}.get_aabb();
 		float overlap_x = calculate_overlap(b_box.get_left(), b_box.get_right(), a_box.get_left(), a_box.get_right());
 		float overlap_y = calculate_overlap(b_box.get_bottom(), b_box.get_top(), a_box.get_bottom(), a_box.get_top());
-		float correction = std::min(overlap_x, overlap_y) * 10.0f * delta_seconds;
-		if(overlap_x > overlap_y)
+		float correction = std::min(overlap_x, overlap_y) * 0.01f;
+		if(b.flags.contains(flag::immoveable_collide))
+		{
+			return;
+		}
+		if(overlap_x < overlap_y)
 		{
 			if(b_box.get_centre()[0] > a_box.get_centre()[0])
 			{
