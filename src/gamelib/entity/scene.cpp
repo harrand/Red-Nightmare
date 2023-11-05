@@ -1,4 +1,5 @@
 #include "gamelib/entity/scene.hpp"
+#include "gamelib/entity/api.hpp"
 #include "tz/core/imported_text.hpp"
 
 #include ImportedTextHeader(entity, lua)
@@ -14,7 +15,7 @@ namespace game::entity
 		auto& ren = elem.renderer->get_renderer();
 		tz::trs transform = ren.animated_object_get_global_transform(elem.entry.obj);
 		tz::vec2 position = transform.translate.swizzle<0, 1>();
-		tz::vec2 half_scale = transform.scale.swizzle<0, 1>();// * 0.5f; // half seems a bit off. keep it as-is.
+		tz::vec2 half_scale = transform.scale.swizzle<0, 1>() * 0.5f; // half seems a bit off. keep it as-is.
 		if(elem.get_model() == game::render::scene_renderer::model::humanoid)
 		{
 			// humanoid needs a little correction.
@@ -126,6 +127,7 @@ namespace game::entity
 			}
 		}
 		this->rebuild_quadtree();
+		this->collision_response(delta_seconds);
 		this->advance_camera(delta_seconds);
 		this->renderer.update(delta_seconds);
 	}
@@ -243,6 +245,77 @@ namespace game::entity
 		}
 	}
 
+	void scene::collision_response(float delta_seconds)
+	{
+		for(const auto& [node_a, node_b] : this->intersection_state)
+		{
+			tz::hanval enta = node_a.entity_hanval;
+			tz::hanval entb = node_b.entity_hanval;
+			this->resolve_collision(enta, entb, delta_seconds);
+			this->resolve_collision(entb, enta, delta_seconds);
+		}
+	}
+
+	void scene::resolve_collision(entity_handle ah, entity_handle bh, float delta_seconds)
+	{
+		entity& a = this->get(ah);
+		entity& b = this->get(bh);
+		if(a.current_health == 0 || b.current_health == 0)
+		{
+			return;
+		}
+		auto calculate_overlap = [](float min1, float max1, float min2, float max2)
+		{
+			if(max1 <= min2 || max2 <= min1)
+			{
+				return 0.0f;
+			}
+			else
+			{
+				return std::min(max1, max2) - std::max(min1, min2);
+			}
+		};
+		game::physics::aabb a_box = scene_quadtree_node{.sc = this, .entity_hanval = static_cast<tz::hanval>(ah)}.get_aabb();
+		game::physics::aabb b_box = scene_quadtree_node{.sc = this, .entity_hanval = static_cast<tz::hanval>(bh)}.get_aabb();
+		float overlap_x = calculate_overlap(b_box.get_left(), b_box.get_right(), a_box.get_left(), a_box.get_right());
+		float overlap_y = calculate_overlap(b_box.get_bottom(), b_box.get_top(), a_box.get_bottom(), a_box.get_top());
+		float correction = std::min(overlap_x, overlap_y) * 10.0f * delta_seconds;
+		if(overlap_x > overlap_y)
+		{
+			if(b_box.get_centre()[0] > a_box.get_centre()[0])
+			{
+				// move bx by +correction
+				tz::trs trs = this->renderer.get_renderer().animated_object_get_local_transform(b.elem.entry.obj);
+				trs.translate[0] += correction;
+				this->renderer.get_renderer().animated_object_set_local_transform(b.elem.entry.obj, trs);
+			}
+			else
+			{
+				// move bx by -correction
+				tz::trs trs = this->renderer.get_renderer().animated_object_get_local_transform(b.elem.entry.obj);
+				trs.translate[0] -= correction;
+				this->renderer.get_renderer().animated_object_set_local_transform(b.elem.entry.obj, trs);
+			}
+		}
+		else
+		{
+			if(b_box.get_centre()[1] > a_box.get_centre()[1])
+			{
+				// move by by +correction
+				tz::trs trs = this->renderer.get_renderer().animated_object_get_local_transform(b.elem.entry.obj);
+				trs.translate[1] += correction;
+				this->renderer.get_renderer().animated_object_set_local_transform(b.elem.entry.obj, trs);
+			}
+			else
+			{
+				// move by by -correction
+				tz::trs trs = this->renderer.get_renderer().animated_object_get_local_transform(b.elem.entry.obj);
+				trs.translate[1] -= correction;
+				this->renderer.get_renderer().animated_object_set_local_transform(b.elem.entry.obj, trs);
+			}
+		}
+	}
+
 	void scene::advance_camera(float delta_seconds)
 	{
 		entity_handle player = this->try_find_player();
@@ -258,7 +331,7 @@ namespace game::entity
 		constexpr float cam_dist_move_diff = 8.0f;
 		if(diff.length() >= cam_dist_move_diff)
 		{
-			tz::vec2 new_cam_pos = this->renderer.get_camera_position() + (diff * delta_seconds);
+			tz::vec2 new_cam_pos = this->renderer.get_camera_position() + (diff * 0.01f);
 			this->renderer.set_camera_position(new_cam_pos);
 		}
 	}
