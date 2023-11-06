@@ -57,6 +57,7 @@ rn.director.on_second_pass = function()
 			omegabuff:set_increased_movement_speed(100)
 			omegabuff:set_amplified_attack_power(2.0)
 			zomb:apply_buff(omegabuff)
+			zomb:set_health(zomb:get_stats():get_maximum_health())
 			zomb:get_element():set_uniform_scale(zomb:get_element():get_uniform_scale() * 1.3)
 			rn.director.spawn_cooldown = 25
 		end
