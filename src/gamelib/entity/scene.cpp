@@ -282,7 +282,7 @@ namespace game::entity
 		game::physics::aabb b_box = scene_quadtree_node{.sc = this, .entity_hanval = static_cast<tz::hanval>(bh)}.get_aabb();
 		float overlap_x = calculate_overlap(b_box.get_left(), b_box.get_right(), a_box.get_left(), a_box.get_right());
 		float overlap_y = calculate_overlap(b_box.get_bottom(), b_box.get_top(), a_box.get_bottom(), a_box.get_top());
-		float correction = std::min(overlap_x, overlap_y) * 0.01f;
+		float correction = std::min(overlap_x, overlap_y) * 0.02f;
 		if(b.flags.contains(flag::immoveable_collide))
 		{
 			return;
@@ -443,6 +443,7 @@ namespace game::entity
 	int rn_impl_scene::get_mouse_position_ws(tz::lua::state& state)
 	{
 		auto windims = tz::window().get_dimensions();
+		const float ar = static_cast<float>(windims[0]) / windims[1];
 		auto pos = static_cast<tz::vec2>(tz::window().get_mouse_state().mouse_position);
 		// invert y
 		pos[1] = windims[1] - pos[1];
@@ -453,7 +454,7 @@ namespace game::entity
 		pos -= tz::vec2::filled(1.0f);
 		// multiply by view bounds
 		const tz::vec2 vb = this->sc->get_renderer().get_view_bounds();
-		pos[0] *= vb[0];
+		pos[0] *= vb[0] * 1.1f;
 		pos[1] *= vb[1];
 		// now translate by camera position
 		const tz::vec2 campos = this->sc->get_renderer().get_camera_position();

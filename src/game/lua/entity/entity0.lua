@@ -48,7 +48,12 @@ rn.entity_handler[id] =
 
 		if rn.is_casting(ent) then
 			local mousex, mousey = rn.scene():get_mouse_position_ws()
-			local entx, enty = ent:get_element():get_position()
+			local entx, enty
+			if ent:get_model() == rn.model.humanoid then
+				entx, enty = ent:get_element():get_subobject_position(21)
+			else
+				entx, enty = ent:get_element():get_position()
+			end
 			-- we want vector, so mouse pos - ent pos
 			local vecx = entx - mousex
 			local vecy = enty - mousey

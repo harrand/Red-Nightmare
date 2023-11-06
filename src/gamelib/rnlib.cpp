@@ -56,7 +56,7 @@ namespace game
 
 		rn.scene():add(0)
 
-		for i=0,15,1 do
+		for i=0,4,1 do
 			local e = rn.scene():get(rn.scene():add(2))
 			e:get_element():set_position(-15, 0)
 		end
