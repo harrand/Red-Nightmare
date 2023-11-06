@@ -1,6 +1,7 @@
 #include "gamelib/entity/scene.hpp"
 #include "gamelib/entity/api.hpp"
 #include "tz/core/imported_text.hpp"
+#include "tz/wsi/monitor.hpp"
 
 #include ImportedTextHeader(entity, lua)
 
@@ -443,7 +444,8 @@ namespace game::entity
 	int rn_impl_scene::get_mouse_position_ws(tz::lua::state& state)
 	{
 		auto windims = tz::window().get_dimensions();
-		const float ar = static_cast<float>(windims[0]) / windims[1];
+		auto mondims = tz::wsi::get_monitors().front().dimensions;
+		const float ar = static_cast<float>(mondims[0]) / mondims[1];
 		auto pos = static_cast<tz::vec2>(tz::window().get_mouse_state().mouse_position);
 		// invert y
 		pos[1] = windims[1] - pos[1];
@@ -454,14 +456,14 @@ namespace game::entity
 		pos -= tz::vec2::filled(1.0f);
 		// multiply by view bounds
 		const tz::vec2 vb = this->sc->get_renderer().get_view_bounds();
-		pos[0] *= vb[0] * 1.1f;
-		pos[1] *= vb[1];
+		pos[0] *= vb[0];
+		pos[1] *= vb[1] / ar;
 		// now translate by camera position
 		const tz::vec2 campos = this->sc->get_renderer().get_camera_position();
 		pos += campos;
 
-		state.stack_push_int(pos[0]);
-		state.stack_push_int(pos[1]);
+		state.stack_push_float(pos[0]);
+		state.stack_push_float(pos[1]);
 		return 2;
 	}
 

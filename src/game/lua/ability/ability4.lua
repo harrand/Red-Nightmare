@@ -30,12 +30,14 @@ rn.abilities[id] =
 		local vecx = mousex - bx
 		local vecy = mousey - by
 		local hypot = math.sqrt(vecx*vecx + vecy*vecy)
-		vecx = vecx / hypot
-		vecy = vecy / hypot
-		-- maximum length of min(hypot, MY_MAX)
-		local dist_travel = math.min(hypot, 10)
-		local destx = bx + (dist_travel * vecx)
-		local desty = by + (dist_travel * vecy)
-		ent:get_element():set_position(destx, desty)
+		if hypot > 0.0 then
+			vecx = vecx / hypot
+			vecy = vecy / hypot
+			-- maximum length of min(hypot, MY_MAX)
+			local dist_travel = math.min(hypot, 10)
+			local destx = bx + (dist_travel * vecx)
+			local desty = by + (dist_travel * vecy)
+			ent:get_element():set_position(destx, desty)
+		end
 	end
 }

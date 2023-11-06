@@ -61,11 +61,19 @@ rn.entity_handler[id] =
 			if not data.collided_this_update and ent2:is_valid() and not ent2:is_dead() and rn.get_relationship(ent, ent2) == "hostile" then
 				data.collided_this_update = true
 				local evt = rn.entity_damage_entity_event:new()
-				evt.damager = ent:uid()
+				evt.damager = data.owner:uid()
 				evt.damagee = ent2:uid()
 				evt.value = ent:get_stats():get_spell_power()
 				evt.damage_type = "Magic"
 				rn.combat.process_event(evt)
+
+				-- powerup: dire fireball (on by default)
+				-- each unique enemy you hit with fireball increases your spellpower by 20% for 10 seconds.
+				local spbuff = rn.new_buff()
+				spbuff:set_name("Dire Fireball" .. ent2:uid())
+				spbuff:set_time_remaining(10)
+				spbuff:set_amplified_spell_power(1.2)
+				data.owner:apply_buff(spbuff)
 			end
 		end)
 

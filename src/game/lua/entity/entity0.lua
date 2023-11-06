@@ -57,9 +57,7 @@ rn.entity_handler[id] =
 			-- we want vector, so mouse pos - ent pos
 			local vecx = entx - mousex
 			local vecy = enty - mousey
-			local w, h = tz.window():get_dimensions()
-			local aspect_ratio = w / h
-			data.impl.cast_dir_x = vecx * aspect_ratio
+			data.impl.cast_dir_x = vecx
 			data.impl.cast_dir_y = vecy
 		end
 		
