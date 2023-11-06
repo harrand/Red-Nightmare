@@ -39,6 +39,7 @@ require "ability0"
 require "ability1"
 require "ability2"
 require "ability3"
+require "ability4"
 
 rn.cast_spell = function(arg)
 	-- check argument sanity
@@ -104,6 +105,17 @@ rn.cast_spell = function(arg)
 		rhdata.colour_r = ability.magic_colour_r
 		rhdata.colour_g = ability.magic_colour_g
 		rhdata.colour_b = ability.magic_colour_b
+		if ability.dual_wield_cast then
+			entdata.impl.cast_effects[2] = rn.scene():get(rn.scene():add(4))
+			local lhdata = rn.entity.data[entdata.impl.cast_effects[2]:uid()]
+			lhdata.target_entity = ent
+			lhdata.subobject = 17
+			-- play flipbook 2 times per cast.
+			lhdata.cast_duration = ability.base_cast_time * 0.5
+			lhdata.colour_r = ability.magic_colour_r
+			lhdata.colour_g = ability.magic_colour_g
+			lhdata.colour_b = ability.magic_colour_b
+		end
 	end
 end
 

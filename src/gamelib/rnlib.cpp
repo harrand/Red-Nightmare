@@ -56,9 +56,12 @@ namespace game
 
 		rn.scene():add(0)
 
-		for i=0,4,1 do
+		for i=0,6,1 do
 			local e = rn.scene():get(rn.scene():add(2))
 			e:get_element():set_position(-15, 0)
+			local bstats = e:get_base_stats()
+			bstats:set_movement_speed(bstats:get_movement_speed() * 0.01 * math.random(90, 110))
+			e:set_base_stats(bstats)
 		end
 		)");
 	}
