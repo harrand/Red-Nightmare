@@ -43,10 +43,19 @@ function rn.combat.base_on_death(ent, evt)
 	data.impl.death_time = tz.time()
 end
 
+function rn.combat.base_on_kill(ent, evt)
+	-- call on_kill if it exists
+	local handler = rn.entity_handler[ent:get_type()]
+	if handler.on_kill ~= nil then
+		handler.on_kill(ent, evt)
+	end
+end
+
 -- ent was hit by a entity_damage_entity_event
 function rn.combat.base_on_struck(ent, evt)
 	local hp = ent:get_health()
 	local new_hp = ent:get_health() - evt.value
+	local damager = rn.scene():get_uid(evt.damager)
 
 	-- call on_struck if it exists
 	local handler = rn.entity_handler[ent:get_type()]
@@ -60,6 +69,7 @@ function rn.combat.base_on_struck(ent, evt)
 		new_hp = 0
 		if not ent:is_dead() then
 			rn.combat.base_on_death(ent, evt)
+			rn.combat.base_on_kill(damager, evt)
 		end
 	end
 	tz.assert(handler ~= nil)

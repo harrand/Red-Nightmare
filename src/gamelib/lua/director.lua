@@ -44,6 +44,14 @@ rn.director.on_second_pass = function()
 			rn.director.spawn_cooldown = 15
 		end
 
+		-- cost 25: banshee
+		if rn.director.credit > 25 then
+			local credit_cost = 25
+			rn.director.credit = rn.director.credit - credit_cost
+			rn.scene():add(11)
+			rn.director.spawn_cooldown = 15
+		end
+
 		-- cost 200: OMEGA zombie
 		if rn.director.credit > 100 then
 			local credit_cost = 100
@@ -62,5 +70,4 @@ rn.director.on_second_pass = function()
 			rn.director.spawn_cooldown = 25
 		end
 	end
-	print("director credits: " .. rn.director.credit)
 end

@@ -282,6 +282,12 @@ namespace game::entity
 		return 0;
 	}
 
+	int rn_impl_entity::level_up(tz::lua::state& state)
+	{
+		this->get().level_up();
+		return 0;
+	}
+
 	int rn_impl_entity::is_dead(tz::lua::state& state)
 	{
 		state.stack_push_bool(this->get().current_health == 0);

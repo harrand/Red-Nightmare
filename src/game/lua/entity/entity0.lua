@@ -89,5 +89,22 @@ rn.entity_handler[id] =
 		if rn.is_key_down("esc") and rn.is_casting(ent) then
 			rn.cancel_cast(ent)
 		end
+	end,
+	on_kill = function(ent, evt)
+		-- player killed someone
+		local data = rn.entity_get_data(ent)
+		if data.impl.exp == nil then
+			data.impl.exp = 0
+		end
+		local killed_thing = rn.scene():get_uid(evt.damagee)
+		local gained_exp = killed_thing:get_level()
+		print(killed_thing:get_name() .. " dies, " .. ent:get_name() .. " gains " .. tostring(gained_exp) .. " exp.")
+		data.impl.exp = data.impl.exp + killed_thing:get_level()
+		if data.impl.exp >= ent:get_level() * 20 then
+			-- level up!
+			print("DING!")
+			data.impl.exp = 0
+			ent:level_up()
+		end
 	end
 }

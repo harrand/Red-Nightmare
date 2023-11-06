@@ -12,12 +12,14 @@ rn.abilities[id] =
 	magic_colour_b = 0.05,
 	cast_type = rn.cast.type.spell_1h_directed,
 	on_cast = function(ent)
-		local sc = rn.scene()
-		local proj = sc:get(sc:add(1))
+		local entdata = rn.entity_get_data(ent)
+
+		local ability = rn.abilities[rn.ability.type[entdata.impl.cast]]
+
+		local proj = rn.scene():get(rn.scene():add(1))
 		proj:set_faction(ent:get_faction())
 		local x, y = ent:get_element():get_subobject_position(21)
 		proj:get_element():set_position(x, y)
-		local entdata = rn.entity_get_data(ent)
 		local projdata = rn.entity_get_data(proj)
 		-- fireball base stats is a snapshot of the caster's current stats.
 		local bstats = ent:get_stats()
@@ -49,7 +51,6 @@ rn.abilities[id] =
 			end
 		end
 
-		local ability = rn.abilities[id]
 		projdata.colour_r = ability.magic_colour_r
 		projdata.colour_g = ability.magic_colour_g
 		projdata.colour_b = ability.magic_colour_b

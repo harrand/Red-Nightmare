@@ -58,6 +58,12 @@ rn.entity_handler[id] =
 		end
 
 		rn.for_each_collision(ent, function(ent2)
+			if ent2:is_valid() and ent2:get_type() == ent:get_type() then
+				-- if two fireballs collide, cancel them both
+				rn.scene():remove_uid(ent:uid())
+				rn.scene():remove_uid(ent2:uid())
+				return false
+			end
 			if not data.collided_this_update and ent2:is_valid() and not ent2:is_dead() and rn.get_relationship(ent, ent2) == "hostile" then
 				data.collided_this_update = true
 				local evt = rn.entity_damage_entity_event:new()
@@ -67,13 +73,15 @@ rn.entity_handler[id] =
 				evt.damage_type = "Magic"
 				rn.combat.process_event(evt)
 
-				-- powerup: dire fireball (on by default)
-				-- each unique enemy you hit with fireball increases your spellpower by 20% for 10 seconds.
-				local spbuff = rn.new_buff()
-				spbuff:set_name("Dire Fireball" .. ent2:uid())
-				spbuff:set_time_remaining(10)
-				spbuff:set_amplified_spell_power(1.2)
-				data.owner:apply_buff(spbuff)
+				if data.owner ~= nil and data.owner:is_valid() then
+					-- powerup: dire fireball (on by default)
+					-- each unique enemy you hit with fireball increases your spellpower by 20% for 10 seconds.
+					local spbuff = rn.new_buff()
+					spbuff:set_name("Dire Fireball" .. ent2:uid())
+					spbuff:set_time_remaining(10)
+					spbuff:set_amplified_spell_power(1.2)
+					data.owner:apply_buff(spbuff)
+				end
 			end
 		end)
 

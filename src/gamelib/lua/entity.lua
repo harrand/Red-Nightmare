@@ -56,6 +56,7 @@ require "entity7"
 require "entity8"
 require "entity9"
 require "entity10"
+require "entity11"
 
 rn.get_entity_type_name = function()
 	_tmp_type_name = nil
@@ -211,7 +212,10 @@ rn.for_each_collision = function(ent, fn)
 	for i=0,collision_count-1,1 do
 		local colliding_entity_id = rn.scene():get_collision(ent:uid(), i)
 		local colliding_entity = rn.scene():get(colliding_entity_id)
-		fn(colliding_entity)
+		local ret = fn(colliding_entity)
+		if ret ~= nil and ret == false then
+			return true
+		end
 	end
 	return true
 end

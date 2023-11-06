@@ -100,6 +100,7 @@ namespace game::entity
 		int set_health(tz::lua::state& state);
 		int get_level(tz::lua::state& state);
 		int set_level(tz::lua::state& state);
+		int level_up(tz::lua::state& state);
 		int is_dead(tz::lua::state& state);
 		int impl_set_equipment_buff(tz::lua::state& state);
 		int apply_buff(tz::lua::state& state);
@@ -130,6 +131,7 @@ namespace game::entity
 			LUA_METHOD(rn_impl_entity, set_health)
 			LUA_METHOD(rn_impl_entity, get_level)
 			LUA_METHOD(rn_impl_entity, set_level)
+			LUA_METHOD(rn_impl_entity, level_up)
 			LUA_METHOD(rn_impl_entity, is_dead)
 			LUA_METHOD(rn_impl_entity, impl_set_equipment_buff)
 			LUA_METHOD(rn_impl_entity, apply_buff)
