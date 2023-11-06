@@ -71,6 +71,7 @@ add_text(
 		res/models/plane.glb
 		src/gamelib/lua/ability.lua
 		src/gamelib/lua/combat.lua
+		src/gamelib/lua/director.lua
 		src/gamelib/lua/entity.lua
 		src/gamelib/lua/equipment.lua
 		src/gamelib/lua/item.lua

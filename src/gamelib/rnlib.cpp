@@ -10,6 +10,7 @@
 
 #include ImportedTextHeader(ability, lua)
 #include ImportedTextHeader(combat, lua)
+#include ImportedTextHeader(director, lua)
 #include ImportedTextHeader(equipment, lua)
 #include ImportedTextHeader(item, lua)
 
@@ -124,8 +125,9 @@ namespace game
 
 	void fixed_update(std::uint64_t delta_micros, std::uint64_t unprocessed)
 	{
-		static std::uint64_t counter = 0;
-		counter += delta_micros;
+		float delta_seconds = delta_micros / 1000000.0f;
+		tz::lua::get_state().assign_float("rn.fixed_delta_time", delta_seconds);
+		tz::lua::get_state().execute("if rn.fixed_update ~= nil then rn.fixed_update() end");
 	}
 
 	void dbgui()
@@ -183,6 +185,10 @@ namespace game
 			}
 			{
 				std::string str{ImportedTextData(combat, lua)};
+				state.execute(str.c_str());
+			}
+			{
+				std::string str{ImportedTextData(director, lua)};
 				state.execute(str.c_str());
 			}
 			{
