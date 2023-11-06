@@ -73,7 +73,7 @@ rn.entity_handler[id] =
 				evt.damage_type = "Magic"
 				rn.combat.process_event(evt)
 
-				if data.owner ~= nil and data.owner:is_valid() then
+				if data.owner ~= nil and data.owner:is_valid() and data.owner:get_type() == 0 then
 					-- powerup: dire fireball (on by default)
 					-- each unique enemy you hit with fireball increases your spellpower by 20% for 10 seconds.
 					local spbuff = rn.new_buff()

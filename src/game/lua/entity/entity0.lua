@@ -97,10 +97,10 @@ rn.entity_handler[id] =
 			data.impl.exp = 0
 		end
 		local killed_thing = rn.scene():get_uid(evt.damagee)
-		local gained_exp = killed_thing:get_level()
+		local gained_exp = killed_thing:get_level() * killed_thing:get_type()
 		print(killed_thing:get_name() .. " dies, " .. ent:get_name() .. " gains " .. tostring(gained_exp) .. " exp.")
 		data.impl.exp = data.impl.exp + killed_thing:get_level()
-		if data.impl.exp >= ent:get_level() * 20 then
+		if data.impl.exp >= (ent:get_level() * 4) + 16 then
 			-- level up!
 			print("DING!")
 			data.impl.exp = 0
