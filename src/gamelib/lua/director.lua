@@ -2,7 +2,7 @@
 rn.director = {}
 rn.director.credit = 0
 rn.director.second_timeout = 0
-rn.director.spawn_cooldown = 0
+rn.director.spawn_cooldown = 10
 rn.director.paused = false
 rn.director.rate_counter = 0
 rn.director.rate = 1
