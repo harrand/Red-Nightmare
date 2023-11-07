@@ -39,7 +39,7 @@ int main()
 			tz::end_frame();
 			const std::uint64_t millis_this_frame = (tz::system_time() - fps_limiter).millis<std::uint64_t>();
 			constexpr std::uint64_t min_millis_this_frame = 1000 / 120;
-			if(millis_this_frame < min_millis_this_frame)
+			if(!TZ_PROFILE && millis_this_frame < min_millis_this_frame)
 			{
 				TZ_PROFZONE("FPS Limit Wait", 0xFF333333);
 				using namespace std::chrono_literals;
