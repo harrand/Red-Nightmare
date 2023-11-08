@@ -23,6 +23,7 @@ rn.entity_handler[id] =
 		local data = rn.entity_get_data(ent)
 		if data.dynamic_texture_scale then
 			ent:get_element():object_set_texture_scale(2, 0, ent:get_element():get_uniform_scale() / data.texture_scale_zoom)
+			ent:get_element():object_set_texture_scale(2, 1, ent:get_element():get_uniform_scale() / data.texture_scale_zoom)
 		end
 	end
 }

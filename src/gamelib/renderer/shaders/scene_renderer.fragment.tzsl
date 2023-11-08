@@ -45,16 +45,12 @@ float diffuse(point_light_data l, vec3 normal, bool is_2d)
 	{
 		lightDir.z = 0.0f;
 	}
-	float distance = length(lightDir);
+	float distance = length(lightDir) + 1.0f;
 	lightDir = normalize(lightDir);
 
 	// Calculate the diffuse lighting component using the Phong diffuse lighting model
 	float diffuse = max(dot(vec3(0.0f, 0.0f, 1.0f), normal), 0.0);
-	if(is_2d)
-	{
-		diffuse = 1.0f;
-	}
-	diffuse = l.power * 0.5f * diffuse / tz::math::pow(distance, 2.0f);
+	diffuse = l.power * 0.5f * diffuse / tz::math::pow(distance, 1.0f);
 	return diffuse;
 }
 
@@ -66,21 +62,18 @@ float specular(point_light_data l, vec3 normal, bool is_2d)
 	{
 		light_dir.z = 0.0f;
 	}
-	float distance = length(light_dir);
+	float distance = length(light_dir) + 1.0f;
 	light_dir = normalize(light_dir);
 
 	float specular = pow(max(dot(normal, vec3(0.0f, 0.0f, 1.0f)), 0.0), 8);
-	if(is_2d)
-	{
-		specular = 1.0f;
-	}
-	specular = l.power * specular / tz::math::pow(distance, 2.0f);
+	specular = l.power * specular / tz::math::pow(distance, 1.0f);
 	return specular;
 }
 
 void main()
 {
 	vec4 outcol = vec4(vec3(0.0f), 1.0f);
+	vec3 normal = in::normal;
 	bool should_pixelate = bool(in::joint_suffix.x);
 
 	texture_locator base_colour = in::textures[0];
@@ -99,19 +92,23 @@ void main()
 		}
 		outcol.xyz = col.xyz * base_colour.colour_tint;
 	}
-	texture_locator metallic_roughness = in::textures[1];
-	if(metallic_roughness.texture_id != BADU)
+	texture_locator normaltex = in::textures[1];
+	if(normaltex.texture_id != BADU)
 	{
 		// green contains roughness values, blue contains metalness values.
-		vec3 mrsample = texture(res::textures[metallic_roughness.texture_id], in::texcoord * metallic_roughness.texture_scale).xyz * metallic_roughness.colour_tint;
-		float roughness = mrsample.g;
-		float metallicness = mrsample.b;
-		// TODO: pbr magic!
+		vec3 sampled_normal = (255.0f / 128.0f * texture(res::textures[normaltex.texture_id], in::texcoord * normaltex.texture_scale).rgb) - 1;
+		normal = sampled_normal;
+	}
+	else if(!should_pixelate)
+	{
+		// we dont have a normal map applied, but we shouldnt pixelate (i.e we're a 2d sprite)
+		// hardcode normal to smooth 0, 0, 1
+		normal = vec3(0.0f, 0.0f, 1.0f);
 	}
 	outcol.xyz *= in::colour;
 	outcol.xyz *= light.ambient_light_colour;
 
-	vec3 normal = normalize(in::normal);
+	normal = normalize(normal);
 	for(uint i = 0; i < light.point_light_count; i++)
 	{
 		point_light_data l = light.point_lights[i];
