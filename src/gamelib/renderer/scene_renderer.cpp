@@ -28,8 +28,9 @@ namespace game::render
 		.custom_fragment_spirv = ImportedShaderSource(scene_renderer, fragment),
 		.custom_options = {tz::gl::renderer_option::no_present, tz::gl::renderer_option::alpha_blending},
 		.texture_capacity = 128u,
-		.output = &this->output
-})
+		.extra_buffers = evaluate_extra_buffers(),
+		.output = &this->output,
+	})
 	{
 		TZ_PROFZONE("scene renderer - create", 0xFFFF4488);
 		this->renderer.append_to_render_graph();
@@ -147,9 +148,37 @@ namespace game::render
 		}
 	}
 
+	std::span<const scene_renderer::point_light_data> scene_renderer::get_point_lights() const
+	{
+		tz::gl::resource_handle light_buf_handle = this->renderer.get_extra_buffer(1);
+		std::span<const std::byte> bufdata = tz::gl::get_device().get_renderer(this->renderer.get_render_pass()).get_resource(light_buf_handle)->data();
+		std::uint32_t point_light_count = *reinterpret_cast<const std::uint32_t*>(bufdata.data() + sizeof(tz::vec3));
+		const auto* point_lights_start = reinterpret_cast<const point_light_data*>(bufdata.data() + sizeof(tz::vec3) + sizeof(std::uint32_t));
+		return {point_lights_start, point_light_count};
+	}
+
+	std::span<scene_renderer::point_light_data> scene_renderer::get_point_lights()
+	{
+		tz::gl::resource_handle light_buf_handle = this->renderer.get_extra_buffer(1);
+		std::span<std::byte> bufdata = tz::gl::get_device().get_renderer(this->renderer.get_render_pass()).get_resource(light_buf_handle)->data();
+		std::uint32_t point_light_count = *reinterpret_cast<const std::uint32_t*>(bufdata.data() + sizeof(tz::vec3));
+		auto* point_lights_start = reinterpret_cast<point_light_data*>(bufdata.data() + sizeof(tz::vec3) + sizeof(std::uint32_t));
+		return {point_lights_start, point_light_count};
+	}
+
 	tz::ren::animation_renderer2& scene_renderer::get_renderer()
 	{
 		return this->renderer;
+	}
+
+	/*static*/ std::vector<tz::gl::buffer_resource> scene_renderer::evaluate_extra_buffers()
+	{
+		std::vector<tz::gl::buffer_resource> ret = {};
+		ret.push_back(tz::gl::buffer_resource::from_one(light_data{},
+		{
+			.access = tz::gl::resource_access::dynamic_access
+		}));	
+		return ret;
 	}
 
 	void scene_renderer::update_camera(float delta)

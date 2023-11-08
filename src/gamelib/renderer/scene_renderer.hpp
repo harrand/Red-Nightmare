@@ -18,6 +18,20 @@ namespace game::render
 	public:
 		scene_renderer();
 
+		struct point_light_data
+		{
+			tz::vec3 position = tz::vec3::filled(std::numeric_limits<float>::max());
+			float pad0[1] = {};
+			tz::vec3 colour = {1.0f, 1.0f, 1.0f};
+			float power = 0.0f;
+		};
+		struct light_data
+		{
+			tz::vec3 ambient_light_colour{0.3f, 0.3f, 0.3f};
+			std::uint32_t point_light_count = 64u;
+			std::array<point_light_data, 64> point_lights = {};
+		};
+
 		enum class model
 		{
 			quad,
@@ -68,9 +82,13 @@ namespace game::render
 		void block();
 		void dbgui();
 
+		std::span<const point_light_data> get_point_lights() const;
+		std::span<point_light_data> get_point_lights();
+
 		tz::ren::animation_renderer2& get_renderer();
 		void lua_initialise(tz::lua::state& state);
 	private:
+		static std::vector<tz::gl::buffer_resource> evaluate_extra_buffers();
 		void update_camera(float delta);
 
 		struct pixelate_pass_t

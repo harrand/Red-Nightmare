@@ -332,8 +332,15 @@ namespace game::entity
 			return;
 		}
 		auto& p = this->get(player);
+
 		tz::trs player_trs = this->renderer.get_renderer().animated_object_get_local_transform(p.elem.entry.obj);
 		tz::vec2 player_pos = player_trs.translate.swizzle<0, 1>();
+
+		auto& point_light = this->renderer.get_point_lights().front();
+		auto oh = this->renderer.get_renderer().animated_object_get_subobjects(p.elem.entry.obj)[22];
+		point_light.position = this->renderer.get_renderer().object_get_global_transform(oh).translate;
+		point_light.colour = {1.0f, 0.4f, 0.1f};
+		point_light.power = 0.1f;
 
 		tz::vec2 diff = player_pos - this->renderer.get_camera_position();
 		constexpr float cam_dist_move_diff = 8.0f;
