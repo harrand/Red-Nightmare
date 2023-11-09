@@ -28,8 +28,8 @@ namespace game::render
 		struct light_data
 		{
 			tz::vec3 ambient_light_colour{0.3f, 0.3f, 0.3f};
-			std::uint32_t point_light_count = 64u;
-			std::array<point_light_data, 64> point_lights = {};
+			std::uint32_t point_light_count = 32u;
+			std::array<point_light_data, 32u> point_lights = {};
 		};
 
 		enum class model
