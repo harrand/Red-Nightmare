@@ -38,11 +38,13 @@ namespace game
 		lua_initialise();
 
 		tz::lua::get_state().execute(R"(
-		rn.texture_manager():register_texture("blanchfield_cemetary.background", "./res/images/scenery/backgrounds/background_grassy.png")
-		rn.texture_manager():register_texture("blanchfield_cemetary.background_normals", "./res/images/scenery/backgrounds/background_grassy_normals.png")
+		rn.texture_manager():register_texture("blanchfield_cemetary.background", "./res/images/scenery/backgrounds/background_snowy.png")
+		rn.texture_manager():register_texture("blanchfield_cemetary.background_normals", "./res/images/scenery/backgrounds/background_snowy_normals.png")
 		rn.texture_manager():register_texture("blanchfield_cemetary.foreground", "./res/images/scenery/foregrounds/foreground_blanchfield_cemetary.png")
 		bg = rn.scene():get(rn.scene():add(8))
 		fg = rn.scene():get(rn.scene():add(8))
+
+		rn.scene():get_renderer():set_ambient_light(0.15, 0.2, 0.4)
 
 		local bgdata = rn.entity_get_data(bg)
 		bgdata.dynamic_texture_scale = true

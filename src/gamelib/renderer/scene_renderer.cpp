@@ -148,6 +148,20 @@ namespace game::render
 		}
 	}
 
+	tz::vec3 scene_renderer::get_ambient_light() const
+	{
+		tz::gl::resource_handle light_buf_handle = this->renderer.get_extra_buffer(1);
+		std::span<const std::byte> bufdata = tz::gl::get_device().get_renderer(this->renderer.get_render_pass()).get_resource(light_buf_handle)->data();
+		return *reinterpret_cast<const tz::vec3*>(bufdata.data());
+	}
+
+	void scene_renderer::set_ambient_light(tz::vec3 rgb_light)
+	{
+		tz::gl::resource_handle light_buf_handle = this->renderer.get_extra_buffer(1);
+		std::span<std::byte> bufdata = tz::gl::get_device().get_renderer(this->renderer.get_render_pass()).get_resource(light_buf_handle)->data();
+		*reinterpret_cast<tz::vec3*>(bufdata.data()) = rgb_light;
+	}
+
 	std::span<const scene_renderer::point_light_data> scene_renderer::get_point_lights() const
 	{
 		tz::gl::resource_handle light_buf_handle = this->renderer.get_extra_buffer(1);
@@ -828,6 +842,22 @@ namespace game::render
 		auto mod = static_cast<scene_renderer::model>(modelval);
 		LUA_CLASS_PUSH(state, impl_rn_scene_element, {.elem = renderer->get_element(renderer->add_model(mod))});
 		return 1;	
+	}
+
+	int impl_rn_scene_renderer::get_ambient_light(tz::lua::state& state)
+	{
+		tz::vec3 l = this->renderer->get_ambient_light();
+		state.stack_push_float(l[0]);
+		state.stack_push_float(l[1]);
+		state.stack_push_float(l[2]);
+		return 3;
+	}
+
+	int impl_rn_scene_renderer::set_ambient_light(tz::lua::state& state)
+	{
+		auto [_, r, g, b] = tz::lua::parse_args<tz::lua::nil, float, float, float>(state);
+		this->renderer->set_ambient_light({r, g, b});
+		return 0;
 	}
 
 	int impl_rn_scene_renderer::get_element(tz::lua::state& state)

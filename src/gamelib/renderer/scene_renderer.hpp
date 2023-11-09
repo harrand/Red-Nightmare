@@ -27,7 +27,7 @@ namespace game::render
 		};
 		struct light_data
 		{
-			tz::vec3 ambient_light_colour{0.3f, 0.3f, 0.3f};
+			tz::vec3 ambient_light_colour{1.0f, 1.0f, 1.0f};
 			std::uint32_t point_light_count = 32u;
 			std::array<point_light_data, 32u> point_lights = {};
 		};
@@ -82,6 +82,8 @@ namespace game::render
 		void block();
 		void dbgui();
 
+		tz::vec3 get_ambient_light() const;
+		void set_ambient_light(tz::vec3 rgb_light);
 		std::span<const point_light_data> get_point_lights() const;
 		std::span<point_light_data> get_point_lights();
 
@@ -259,6 +261,8 @@ namespace game::render
 	{
 		scene_renderer* renderer = nullptr;
 		int add_model(tz::lua::state& state);
+		int get_ambient_light(tz::lua::state& state);
+		int set_ambient_light(tz::lua::state& state);
 		int get_element(tz::lua::state& state);
 		int element_count(tz::lua::state& state);
 		int load_texture_from_disk(tz::lua::state& state);
@@ -267,6 +271,8 @@ namespace game::render
 	LUA_CLASS_BEGIN(impl_rn_scene_renderer)
 		LUA_CLASS_METHODS_BEGIN
 			LUA_METHOD(impl_rn_scene_renderer, add_model)
+			LUA_METHOD(impl_rn_scene_renderer, get_ambient_light)
+			LUA_METHOD(impl_rn_scene_renderer, set_ambient_light)
 			LUA_METHOD(impl_rn_scene_renderer, get_element)
 			LUA_METHOD(impl_rn_scene_renderer, element_count)
 			LUA_METHOD(impl_rn_scene_renderer, load_texture_from_disk)
