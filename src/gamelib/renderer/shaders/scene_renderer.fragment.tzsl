@@ -113,7 +113,7 @@ void main()
 	{
 		point_light_data l = light.point_lights[i];
 		vec4 light_contribution = vec4(l.colour * diffuse(l, normal, !should_pixelate) * specular(l, normal, !should_pixelate), 0.0f); 
-		outcol += light_contribution;
+		outcol.xyz += light_contribution.xyz;
 	}
 
 	if(should_pixelate)

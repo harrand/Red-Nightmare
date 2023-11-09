@@ -22,12 +22,16 @@ rn.entity_handler[id] =
 		local data = rn.entity_get_data(ent)
 		data.impl.light = rn.scene():add_light()
 		data.impl.light:set_power(0.4)
+		data.impl.counter = 0
 	end,
 	deinit = function(ent)
 		rn.scene():remove_light(rn.entity_get_data(ent).impl.light)
 	end,
 	update = function(ent)
 		local data = rn.entity.data[ent:uid()]
+		data.impl.counter = data.impl.counter + rn.delta_time
+		ent:get_element():face_forward()
+		ent:get_element():vrotate(data.impl.counter * 2.2)
 		data.impl.light:set_position(ent:get_element():get_subobject_position(7))
 		rn.for_each_collision(ent, function(ent2)
 			if not data.collided_this_update and ent2:get_model() == rn.model.humanoid and ent2:get_type() ~= ent:get_type() and not ent2:is_dead() then

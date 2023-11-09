@@ -20,7 +20,7 @@ namespace game::render
 
 		struct point_light_data
 		{
-			tz::vec3 position = tz::vec3::filled(std::numeric_limits<float>::max());
+			tz::vec3 position = {std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), 1.0f};
 			float pad0[1] = {};
 			tz::vec3 colour = {1.0f, 1.0f, 1.0f};
 			float power = 0.0f;
@@ -187,6 +187,7 @@ namespace game::render
 		int face_right(tz::lua::state& state);
 		int face_forward2d(tz::lua::state& state);
 		int rotate(tz::lua::state& state);
+		int vrotate(tz::lua::state& state);
 		int get_position(tz::lua::state& state);
 		int set_position(tz::lua::state& state);
 		int get_depth(tz::lua::state& state);
@@ -230,6 +231,7 @@ namespace game::render
 			LUA_METHOD(impl_rn_scene_element, face_right)
 			LUA_METHOD(impl_rn_scene_element, face_forward2d)
 			LUA_METHOD(impl_rn_scene_element, rotate)
+			LUA_METHOD(impl_rn_scene_element, vrotate)
 			LUA_METHOD(impl_rn_scene_element, get_position)
 			LUA_METHOD(impl_rn_scene_element, set_position)
 			LUA_METHOD(impl_rn_scene_element, get_depth)
