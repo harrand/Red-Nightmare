@@ -28,6 +28,16 @@ rn.entity_handler[id] =
 	postinit = function(ent)
 		local texh = rn.texture_manager():get_texture(typestr .. ".sprite0")
 		ent:get_element():object_set_texture_handle(2, 0, texh)
+
+		local data = rn.entity_get_data(ent)
+		data.impl.light = rn.scene():add_light();
+		data.impl.light:set_power(2.0)
+		data.impl.light:set_colour(1.0, 0.4, 0.1)
+	end,
+	deinit = function(ent)
+		local data = rn.entity_get_data(ent)
+		tz.assert(data.impl.light ~= nil)
+		rn.scene():remove_light(data.impl.light)
 	end,
 	update = function(ent)
 		local data = rn.entity.data[ent:uid()]
@@ -44,6 +54,8 @@ rn.entity_handler[id] =
 			ent:get_element():object_set_texture_handle(2, 0, texh)
 		end
 		local x, y = ent:get_element():get_position()
+
+		data.impl.light:set_position(x, y)
 
 		if not data.shoot_direct then
 			rn.entity_move({ent = ent, dir = data.shoot_dir, face_in_direction = false})

@@ -91,9 +91,6 @@ namespace game::entity
 			return;
 		}
 		this->free_list.push_back(e);
-		// set the lua entity data table to nil, or it will never be gc'd
-		std::string cmd = "rn.entity.data[" + std::to_string(this->entities[hanval].uid) + "] = nil";
-		tz::lua::get_state().execute(cmd.c_str());
 		this->deinitialise_entity(static_cast<tz::hanval>(hanval), this->entities[hanval].uid);
 		this->entities[hanval] = {.type = std::numeric_limits<std::size_t>::max()};
 	}
@@ -115,6 +112,43 @@ namespace game::entity
 	std::size_t scene::size() const
 	{
 		return this->entities.size();
+	}
+
+	scene::light_handle scene::add_light(render::scene_renderer::point_light_data d)
+	{
+		std::size_t hanval = this->light_cursor;
+		if(this->light_free_list.size())
+		{
+			hanval = static_cast<std::size_t>(static_cast<tz::hanval>(this->light_free_list.front()));
+			this->light_free_list.pop_front();
+		}
+		else
+		{
+			this->light_cursor++;
+		}
+		tz::assert(hanval < this->renderer.get_point_lights().size(), "Ran outta lights innit");
+		this->renderer.get_point_lights()[hanval] = d;
+		return static_cast<tz::hanval>(hanval);
+	}
+
+	void scene::remove_light(light_handle l)
+	{
+		auto hanval = static_cast<std::size_t>(static_cast<tz::hanval>(l));
+		tz::assert(std::find(this->light_free_list.begin(), this->light_free_list.end(), l) == this->light_free_list.end(), "Double-free on light handle %zu", l);
+		this->light_free_list.push_back(l);
+		this->renderer.get_point_lights()[hanval] = {};
+	}
+	
+	const render::scene_renderer::point_light_data& scene::get_light(light_handle l) const
+	{
+		auto hanval = static_cast<std::size_t>(static_cast<tz::hanval>(l));
+		return this->renderer.get_point_lights()[hanval];
+	}
+
+	render::scene_renderer::point_light_data& scene::get_light(light_handle l) 
+	{
+		auto hanval = static_cast<std::size_t>(static_cast<tz::hanval>(l));
+		return this->renderer.get_point_lights()[hanval];
 	}
 
 	void scene::update(float delta_seconds)
@@ -173,6 +207,7 @@ namespace game::entity
 		this->get_renderer().lua_initialise(state);
 		state.new_type("rn_impl_entity", LUA_CLASS_NAME(rn_impl_entity)::registers);
 		state.new_type("rn_impl_scene", LUA_CLASS_NAME(rn_impl_scene)::registers);
+		state.new_type("rn_impl_light", LUA_CLASS_NAME(rn_impl_light)::registers);
 		
 		std::string str{ImportedTextData(entity, lua)};
 		state.execute(str.c_str());
@@ -335,20 +370,6 @@ namespace game::entity
 
 		tz::trs player_trs = this->renderer.get_renderer().animated_object_get_local_transform(p.elem.entry.obj);
 		tz::vec2 player_pos = player_trs.translate.swizzle<0, 1>();
-
-		int fireball_count = 0;
-		for(const entity& e : this->entities)
-		{
-			if(e.type != 1)
-			{
-				continue;
-			}
-			auto& point_light = this->renderer.get_point_lights()[fireball_count++];
-			point_light.position = this->renderer.get_renderer().animated_object_get_global_transform(e.elem.entry.obj).translate;
-			point_light.colour = {1.0f, 0.4f, 0.1f};
-			point_light.power = 2.0f;
-		}
-
 		tz::vec2 diff = player_pos - this->renderer.get_camera_position();
 		constexpr float cam_dist_move_diff = 8.0f;
 		if(diff.length() >= cam_dist_move_diff)
@@ -373,6 +394,16 @@ namespace game::entity
 		return 1;
 	}
 
+	int rn_impl_scene::add_light(tz::lua::state& state)
+	{
+		scene::light_handle l = this->sc->add_light
+		({
+		});
+		rn_impl_light light{.sc = this->sc, .l = l};
+		LUA_CLASS_PUSH(state, rn_impl_light, light);
+		return 1;
+	}
+
 	int rn_impl_scene::remove(tz::lua::state& state)
 	{
 		auto [_, eh] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
@@ -392,6 +423,13 @@ namespace game::entity
 				break;
 			}
 		}
+		return 0;
+	}
+
+	int rn_impl_scene::remove_light(tz::lua::state& state)
+	{
+		auto& light = state.stack_get_userdata<rn_impl_light>(2);
+		this->sc->remove_light(light.l);
 		return 0;
 	}
 
@@ -479,6 +517,57 @@ namespace game::entity
 		state.stack_push_float(pos[0]);
 		state.stack_push_float(pos[1]);
 		return 2;
+	}
+
+	int rn_impl_light::get_position(tz::lua::state& state)
+	{
+		const auto& light = this->sc->get_light(this->l);
+		state.stack_push_float(light.position[0]);
+		state.stack_push_float(light.position[1]);
+		return 2;
+	}
+
+	int rn_impl_light::set_position(tz::lua::state& state)
+	{
+		auto [_, x, y] = tz::lua::parse_args<tz::lua::nil, float, float>(state);
+		auto& light = this->sc->get_light(this->l);
+		light.position[0] = x;
+		light.position[1] = y;
+		return 0;
+	}
+
+	int rn_impl_light::get_colour(tz::lua::state& state)
+	{
+		const auto& light = this->sc->get_light(this->l);
+		state.stack_push_float(light.colour[0]);
+		state.stack_push_float(light.colour[1]);
+		state.stack_push_float(light.colour[2]);
+		return 3;
+	}
+
+	int rn_impl_light::set_colour(tz::lua::state& state)
+	{
+		auto [_, r, g, b] = tz::lua::parse_args<tz::lua::nil, float, float, float>(state);
+		auto& light = this->sc->get_light(this->l);
+		light.colour[0] = r;
+		light.colour[1] = g;
+		light.colour[2] = b;
+		return 0;
+	}
+
+	int rn_impl_light::get_power(tz::lua::state& state)
+	{
+		const auto& light = this->sc->get_light(this->l);
+		state.stack_push_float(light.power);
+		return 1;
+	}
+
+	int rn_impl_light::set_power(tz::lua::state& state)
+	{
+		auto [_, power] = tz::lua::parse_args<tz::lua::nil, float>(state);
+		auto& light = this->sc->get_light(this->l);
+		light.power = power;
+		return 0;
 	}
 
 	// dbgui

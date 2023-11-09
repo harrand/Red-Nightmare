@@ -197,9 +197,16 @@ end
 rn.entity_deinit = function()
 	-- assume variable exists in global `rn_impl_dead_entity`
 	tz.assert(rn_impl_dead_entity ~= nil)
+
+	local handler = rn.entity_handler[rn_impl_dead_entity:get_type()]
+	tz.assert(handler ~= nil)
+	if handler.deinit ~= nil then
+		handler.deinit(rn_impl_dead_entity)
+	end
+
 	local uid = rn_impl_dead_entity:uid()
 	rn.entity.resident[uid] = false
-	rn.entity.data[uid] = {}
+	rn.entity.data[uid] = nil
 end
 
 rn.internal_key_state = {}

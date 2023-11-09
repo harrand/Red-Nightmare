@@ -26,12 +26,18 @@ namespace game::entity
 	public:
 		scene() = default;
 		using entity_handle = tz::handle<entity>;
+		using light_handle = tz::handle<render::scene_renderer::light_data>;
 
 		entity_handle add(std::size_t type);
 		void remove(entity_handle e);
 		const entity& get(entity_handle e) const;
 		entity& get(entity_handle e);
 		std::size_t size() const;
+
+		light_handle add_light(render::scene_renderer::point_light_data d = {});
+		void remove_light(light_handle l);
+		const render::scene_renderer::point_light_data& get_light(light_handle l) const;
+		render::scene_renderer::point_light_data& get_light(light_handle l);
 
 		void update(float delta_seconds);
 		void block();
@@ -57,6 +63,8 @@ namespace game::entity
 		void dbgui_impl();
 		std::vector<entity> entities = {};
 		std::deque<entity_handle> free_list = {};
+		std::deque<light_handle> light_free_list = {};
+		std::size_t light_cursor = 0;
 		scene_quadtree quadtree{game::physics::aabb{tz::vec2{-1.0f, -1.0f} * scene_quadtree_initial_size, tz::vec2{1.0f, 1.0f} * scene_quadtree_initial_size}};
 		scene_quadtree::intersection_state_t intersection_state = {};
 		// uid maps to a set of entity handles. i know that seems inconsistent but its cheapest for the lua to use.
@@ -68,8 +76,10 @@ namespace game::entity
 	{
 		scene* sc;
 		int add(tz::lua::state& state);
+		int add_light(tz::lua::state& state);
 		int remove(tz::lua::state& state);
 		int remove_uid(tz::lua::state& state);
+		int remove_light(tz::lua::state& state);
 		int get_collision_count(tz::lua::state& state);
 		int get_collision(tz::lua::state& state);
 		int get(tz::lua::state& state);
@@ -82,8 +92,10 @@ namespace game::entity
 	LUA_CLASS_BEGIN(rn_impl_scene)
 		LUA_CLASS_METHODS_BEGIN
 			LUA_METHOD(rn_impl_scene, add)
+			LUA_METHOD(rn_impl_scene, add_light)
 			LUA_METHOD(rn_impl_scene, remove)
 			LUA_METHOD(rn_impl_scene, remove_uid)
+			LUA_METHOD(rn_impl_scene, remove_light)
 			LUA_METHOD(rn_impl_scene, get_collision_count)
 			LUA_METHOD(rn_impl_scene, get_collision)
 			LUA_METHOD(rn_impl_scene, get)
@@ -91,6 +103,30 @@ namespace game::entity
 			LUA_METHOD(rn_impl_scene, get_renderer)
 			LUA_METHOD(rn_impl_scene, size)
 			LUA_METHOD(rn_impl_scene, get_mouse_position_ws)
+		LUA_CLASS_METHODS_END
+	LUA_CLASS_END
+
+	struct rn_impl_light
+	{
+		scene* sc;
+		scene::light_handle l = tz::nullhand;
+
+		int get_position(tz::lua::state& state);
+		int set_position(tz::lua::state& state);
+		int get_colour(tz::lua::state& state);
+		int set_colour(tz::lua::state& state);
+		int get_power(tz::lua::state& state);
+		int set_power(tz::lua::state& state);
+	};
+
+	LUA_CLASS_BEGIN(rn_impl_light)
+		LUA_CLASS_METHODS_BEGIN
+			LUA_METHOD(rn_impl_light, get_position)
+			LUA_METHOD(rn_impl_light, set_position)
+			LUA_METHOD(rn_impl_light, get_colour)
+			LUA_METHOD(rn_impl_light, set_colour)
+			LUA_METHOD(rn_impl_light, get_power)
+			LUA_METHOD(rn_impl_light, set_power)
 		LUA_CLASS_METHODS_END
 	LUA_CLASS_END
 }
