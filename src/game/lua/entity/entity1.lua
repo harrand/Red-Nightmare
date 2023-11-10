@@ -32,7 +32,7 @@ rn.entity_handler[id] =
 		local data = rn.entity_get_data(ent)
 		data.impl.light = rn.scene():add_light();
 		data.impl.light:set_power(2.0)
-		data.impl.light:set_colour(1.0, 0.4, 0.1)
+		data.impl.light:set_colour(rn.damage_type_get_colour("Fire"))
 	end,
 	deinit = function(ent)
 		local data = rn.entity_get_data(ent)
@@ -82,7 +82,7 @@ rn.entity_handler[id] =
 				evt.damager = data.owner:uid()
 				evt.damagee = ent2:uid()
 				evt.value = ent:get_stats():get_spell_power()
-				evt.damage_type = "Magic"
+				evt.damage_type = "Fire"
 				rn.combat.process_event(evt)
 
 				if data.owner ~= nil and data.owner:is_valid() and data.owner:get_type() == 0 then

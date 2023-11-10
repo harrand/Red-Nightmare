@@ -8,6 +8,14 @@ rn.entity_damage_entity_event =
 	damage_type = "Physical"
 }
 
+rn.damage_type_get_colour = function(damage_type)
+	if damage_type == "Physical" then return nil end
+
+	if damage_type == "Fire" then return 1.0, 0.4, 0.1 end
+
+	tz.assert(false)
+end
+
 function rn.entity_damage_entity_event:new(o)
 	o = o or {}
 	setmetatable(o, self)
@@ -79,6 +87,7 @@ function rn.combat.base_on_struck(ent, evt)
 	local splatter = rn.scene():get(rn.scene():add(6))
 	local splatterdata = rn.entity_get_data(splatter)
 	splatterdata.target_entity = ent
+	splatterdata.damage_type = evt.damage_type
 	if ent:get_model() == rn.model.humanoid then
 		splatterdata.subobject = 9
 	end

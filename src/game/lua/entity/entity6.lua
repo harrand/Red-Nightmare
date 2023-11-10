@@ -28,8 +28,23 @@ rn.entity_handler[id] =
 		local texh = rn.texture_manager():get_texture(typestr .. ".sprite0")
 		ent:get_element():object_set_texture_handle(2, 0, texh)
 	end,
+	deinit = function(ent)
+		local data = rn.entity_get_data(ent)
+		if data.impl.light ~= nil then
+			rn.scene():remove_light(data.impl.light)
+		end
+	end,
 	update = function(ent)
 		local data = rn.entity.data[ent:uid()]
+
+		if data.damage_type ~= "Physical" and data.impl.light == nil then
+			-- spawn our light -.-
+			local r, g, b = rn.damage_type_get_colour(data.damage_type)
+			data.impl.light = rn.scene():add_light()
+			data.impl.light:set_power(1.0)
+			data.impl.light:set_colour(r, g, b)
+		end
+
 		ent:get_element():object_set_texture_tint(2, 0, 0.85, 0.1, 0.1)
 		tz.assert(data.target_entity ~= nil)
 		local xtar, ytar
@@ -46,6 +61,11 @@ rn.entity_handler[id] =
 		local frame_id = math.floor(cast_progress * 6) % 7
 		if data.reverse then
 			frame_id = 6 - frame_id
+		end
+
+		if data.impl.light ~= nil then
+			data.impl.light:set_position(xtar, ytar)
+			data.impl.light:set_power(math.sqrt(1.0 - cast_progress))
 		end
 		ent:get_element():object_set_texture_handle(2, 0, rn.texture_manager():get_texture(typestr .. ".sprite" .. frame_id))
 		if cast_progress > 1 then
