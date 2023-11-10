@@ -3,7 +3,7 @@
 
 namespace game::render
 {
-	texture_manager::texture_manager(tz::ren::animation_renderer2& anim_ren):
+	texture_manager::texture_manager(tz::ren::animation_renderer& anim_ren):
 	anim_ren(&anim_ren)
 	{
 	}
@@ -23,7 +23,7 @@ namespace game::render
 		this->stored_textures[name] = texh;
 	}
 
-	tz::ren::animation_renderer2::texture_handle texture_manager::get_texture(const std::string& name) const
+	tz::ren::animation_renderer::texture_handle texture_manager::get_texture(const std::string& name) const
 	{
 		TZ_PROFZONE("texture manager - get texture", 0xFF11CC88);
 		auto iter = this->stored_textures.find(name);
@@ -50,7 +50,7 @@ namespace game::render
 	int impl_rn_texture_manager::get_texture(tz::lua::state& state)
 	{
 		auto [_, name] = tz::lua::parse_args<tz::lua::nil, std::string>(state);
-		tz::ren::animation_renderer2::texture_handle texh = this->texmgr->get_texture(name);
+		tz::ren::animation_renderer::texture_handle texh = this->texmgr->get_texture(name);
 		state.stack_push_uint(static_cast<std::size_t>(static_cast<tz::hanval>(texh)));
 		return 1;
 	}

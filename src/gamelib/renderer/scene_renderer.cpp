@@ -1,6 +1,5 @@
 #include "gamelib/renderer/scene_renderer.hpp"
 #include "tz/core/profile.hpp"
-#include "tz/ren/animation.hpp"
 #include "tz/wsi/monitor.hpp"
 #include "tz/gl/resource.hpp"
 #include "tz/lua/api.hpp"
@@ -54,7 +53,7 @@ namespace game::render
 	{
 		TZ_PROFZONE("scene renderer - add model", 0xFFFF4488);
 		auto mid = static_cast<int>(m);	
-		tz::ren::animation_renderer2::animated_objects_handle aoh = this->renderer.add_animated_objects
+		tz::ren::animation_renderer::animated_objects_handle aoh = this->renderer.add_animated_objects
 		({
 			.gltf = static_cast<tz::hanval>(m),
 			.parent = this->root
@@ -66,7 +65,7 @@ namespace game::render
 			tz::trs trs = this->renderer.animated_object_get_local_transform(aoh);
 			trs.scale *= 0.25f;
 			this->renderer.animated_object_set_local_transform(aoh, trs);
-			for(tz::ren::animation_renderer2::object_handle oh : this->renderer.animated_object_get_subobjects(aoh))
+			for(tz::ren::animation_renderer::object_handle oh : this->renderer.animated_object_get_subobjects(aoh))
 			{
 				// mark all these objects as pixelated.
 				this->renderer.get_object(oh).unused2[2] = true;
@@ -180,7 +179,7 @@ namespace game::render
 		return {point_lights_start, point_light_count};
 	}
 
-	tz::ren::animation_renderer2& scene_renderer::get_renderer()
+	tz::ren::animation_renderer& scene_renderer::get_renderer()
 	{
 		return this->renderer;
 	}
@@ -318,22 +317,22 @@ namespace game::render
 		return this->renderer->get_renderer().animated_object_get_subobjects(this->entry.obj).size();
 	}
 
-	tz::ren::animation_renderer2::texture_locator scene_element::object_get_texture(tz::ren::animation_renderer2::object_handle h, std::size_t bound_texture_id) const
+	tz::ren::animation_renderer::texture_locator scene_element::object_get_texture(tz::ren::animation_renderer::object_handle h, std::size_t bound_texture_id) const
 	{
 		return this->renderer->get_renderer().object_get_texture(h, bound_texture_id);
 	}
 
-	void scene_element::object_set_texture(tz::ren::animation_renderer2::object_handle h, std::size_t bound_texture_id, tz::ren::animation_renderer2::texture_locator tloc)
+	void scene_element::object_set_texture(tz::ren::animation_renderer::object_handle h, std::size_t bound_texture_id, tz::ren::animation_renderer::texture_locator tloc)
 	{
 		this->renderer->get_renderer().object_set_texture(h, bound_texture_id, tloc);
 	}
 
-	bool scene_element::object_get_visibility(tz::ren::animation_renderer2::object_handle h) const
+	bool scene_element::object_get_visibility(tz::ren::animation_renderer::object_handle h) const
 	{
 		return this->renderer->get_renderer().object_get_visible(h);
 	}
 
-	void scene_element::object_set_visibility(tz::ren::animation_renderer2::object_handle h, bool visible)
+	void scene_element::object_set_visibility(tz::ren::animation_renderer::object_handle h, bool visible)
 	{
 		this->renderer->get_renderer().object_set_visible(h, visible);
 	}
@@ -366,7 +365,7 @@ namespace game::render
 		{
 			return "";
 		}
-		tz::ren::animation_renderer2::gltf_handle gltfh = this->renderer->get_renderer().animated_object_get_gltf(this->entry.obj);
+		tz::ren::animation_renderer::gltf_handle gltfh = this->renderer->get_renderer().animated_object_get_gltf(this->entry.obj);
 		return std::string{this->renderer->get_renderer().gltf_get_animation_name(gltfh, maybe_id.value())};
 	}
 
@@ -472,7 +471,7 @@ namespace game::render
 		TZ_PROFZONE("scene element - object set texture tint", 0xFFFFAAEE);
 		auto [_, oh, bound_texture_id, r, g, b] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int, float, float, float>(state);
 		auto objh = this->elem.renderer->get_renderer().animated_object_get_subobjects(this->elem.entry.obj)[oh];
-		tz::ren::animation_renderer2::texture_locator tloc = this->elem.object_get_texture(objh, bound_texture_id);
+		tz::ren::animation_renderer::texture_locator tloc = this->elem.object_get_texture(objh, bound_texture_id);
 		tloc.colour_tint = {r, g, b};
 		this->elem.object_set_texture(objh, bound_texture_id, tloc);
 		return 0;
@@ -483,7 +482,7 @@ namespace game::render
 		TZ_PROFZONE("scene element - object set texture handle", 0xFFFFAAEE);
 		auto [_, oh, bound_texture_id, texhandle] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int, unsigned int>(state);
 		auto objh = this->elem.renderer->get_renderer().animated_object_get_subobjects(this->elem.entry.obj)[oh];
-		tz::ren::animation_renderer2::texture_locator tloc = this->elem.object_get_texture(objh, bound_texture_id);
+		tz::ren::animation_renderer::texture_locator tloc = this->elem.object_get_texture(objh, bound_texture_id);
 		tloc.texture = static_cast<tz::hanval>(texhandle);
 		this->elem.object_set_texture(objh, bound_texture_id, tloc);
 		return 0;
@@ -494,7 +493,7 @@ namespace game::render
 		TZ_PROFZONE("scene element - object set texture scale", 0xFFFFAAEE);
 		auto [_, oh, bound_texture_id, sc] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int, float>(state);
 		auto objh = this->elem.renderer->get_renderer().animated_object_get_subobjects(this->elem.entry.obj)[oh];
-		tz::ren::animation_renderer2::texture_locator tloc = this->elem.object_get_texture(objh, bound_texture_id);
+		tz::ren::animation_renderer::texture_locator tloc = this->elem.object_get_texture(objh, bound_texture_id);
 		tloc.texture_scale = sc;
 		this->elem.object_set_texture(objh, bound_texture_id, tloc);
 		return 0;
@@ -888,7 +887,7 @@ namespace game::render
 	{
 		TZ_PROFZONE("scene element - load texture from disk", 0xFFFFAAEE);
 		auto [_, path] = tz::lua::parse_args<tz::lua::nil, std::string>(state);
-		tz::ren::animation_renderer2::texture_handle rethan = this->renderer->get_renderer().add_texture(tz::io::image::load_from_file(path));
+		tz::ren::animation_renderer::texture_handle rethan = this->renderer->get_renderer().add_texture(tz::io::image::load_from_file(path));
 		state.stack_push_uint(static_cast<std::size_t>(static_cast<tz::hanval>(rethan)));
 		return 1;
 	}
