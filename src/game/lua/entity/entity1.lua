@@ -71,7 +71,21 @@ rn.entity_handler[id] =
 
 		rn.for_each_collision(ent, function(ent2)
 			if ent2:is_valid() and ent2:get_type() == ent:get_type() then
-				-- if two fireballs collide, cancel them both
+				-- if two fireballs collide:
+				-- find the midpoint between the two fireballs
+				local mx, my = ent:get_element():get_position()
+				local m2x, m2y = ent2:get_element():get_position()
+				mx = (mx + m2x) * 0.5
+				my = (my + m2y) * 0.5
+				-- spawn a large explosion there that is dangerous to everyone
+				local explosion = rn.scene():get(rn.scene():add(10))
+				local explosiondata = rn.entity_get_data(explosion)
+				explosion:set_base_stats(ent:get_stats())
+				explosion:set_faction(rn.faction_id.pure_enemy)
+				explosion:get_element():set_position(mx, my)
+				-- no owner!
+				explosiondata.owner = nil
+				-- despawn both fireballs
 				rn.scene():remove_uid(ent:uid())
 				rn.scene():remove_uid(ent2:uid())
 				return false
