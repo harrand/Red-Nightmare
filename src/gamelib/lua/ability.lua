@@ -159,15 +159,42 @@ rn.casting_advance = function(ent)
 		local vecy = entdata.impl.cast_dir_y
 		vecx = vecx or 0
 		vecy = vecy or 0
-		if vecx > math.abs(vecy) then
-			e:face_left()
-			entdata.impl.dir = "left"
-		elseif vecx < 0 then
-			e:face_right()
-			entdata.impl.dir = "right"
+		if(vecx < 0.0) then
+			-- could be left
+			if math.abs(vecx) > math.abs(vecy) then
+				-- definitely right
+				e:face_right()
+				entdata.impl.dir = "right"
+			else
+				-- abs(vecx) <= abs(vecy)
+				-- meaning could be up or down
+				if vecy >= 0.0 then
+					e:face_forward()
+					entdata.impl.dir = "forward"
+				else
+					e:face_backward()
+					entdata.impl.dir = "backward"
+				end
+			end
+		elseif vecx > 0.0 then
+			-- could be left
+			if vecx > math.abs(vecy) then
+				-- definitely left
+				e:face_left()
+				entdata.impl.dir = "left"
+			else
+				if vecy >= 0.0 then
+					e:face_forward()
+					entdata.impl.dir = "forward"
+				else
+					e:face_backward()
+					entdata.impl.dir = "backward"
+				end
+			end
 		else
-			if vecy > 0 then
-				e:face_forward()				
+			-- vecx == 0.0
+			if vecy >= 0.0 then
+				e:face_forward()
 				entdata.impl.dir = "forward"
 			else
 				e:face_backward()
