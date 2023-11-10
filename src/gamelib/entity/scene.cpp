@@ -23,6 +23,10 @@ namespace game::entity
 			position[1] += half_scale[1];
 			half_scale *= tz::vec2{8.0f, 5.0f};
 		}
+		else if(elem.get_model() == game::render::scene_renderer::model::quad)
+		{
+			half_scale *= {0.5f, 0.5f};
+		}
 		// min is position - half_scale
 		// max is position + half_scale
 		return {position - half_scale, position + half_scale};
@@ -318,7 +322,7 @@ namespace game::entity
 		game::physics::aabb b_box = scene_quadtree_node{.sc = this, .entity_hanval = static_cast<tz::hanval>(bh)}.get_aabb();
 		float overlap_x = calculate_overlap(b_box.get_left(), b_box.get_right(), a_box.get_left(), a_box.get_right());
 		float overlap_y = calculate_overlap(b_box.get_bottom(), b_box.get_top(), a_box.get_bottom(), a_box.get_top());
-		float correction = std::min(overlap_x, overlap_y) * 0.02f;
+		float correction = std::min(overlap_x, overlap_y) * 0.5f;
 		if(b.flags.contains(flag::immoveable_collide))
 		{
 			return;
