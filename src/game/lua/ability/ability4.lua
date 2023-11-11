@@ -6,9 +6,7 @@ rn.abilities[id] =
 {
 	name = typestr,
 	base_cast_time = 1250,
-	magic_colour_r = 1.0,
-	magic_colour_g = 0.35,
-	magic_colour_b = 0.05,
+	magic_type = "Fire",
 	cast_type = rn.cast.type.spell_2h_omni,
 	dual_wield_cast = true,
 	on_cast = function(ent)

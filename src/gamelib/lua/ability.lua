@@ -94,17 +94,20 @@ rn.cast_spell = function(arg)
 	-- casting effect
 	entdata.impl.cast_effects = {nil, nil}
 	-- right hand = 1, left hand = 2
-	local has_magic_visual = ability.magic_colour_r and ability.magic_colour_g and ability.magic_colour_b
-	if true and has_magic_visual then
+	tz.assert(ability.magic_type ~= nil)
+	local has_magic_visual = ability.magic_type ~= "Physical"
+	if has_magic_visual then
 		entdata.impl.cast_effects[1] = rn.scene():get(rn.scene():add(4))
 		local rhdata = rn.entity.data[entdata.impl.cast_effects[1]:uid()]
 		rhdata.target_entity = ent
 		rhdata.subobject = 21
 		-- play flipbook 2 times per cast.
 		rhdata.cast_duration = ability.base_cast_time * 0.5
-		rhdata.colour_r = ability.magic_colour_r
-		rhdata.colour_g = ability.magic_colour_g
-		rhdata.colour_b = ability.magic_colour_b
+		local r, g, b = rn.damage_type_get_colour(ability.magic_type)
+		rhdata.colour_r = r
+		rhdata.colour_g = g
+		rhdata.colour_b = b
+
 		if ability.dual_wield_cast then
 			entdata.impl.cast_effects[2] = rn.scene():get(rn.scene():add(4))
 			local lhdata = rn.entity.data[entdata.impl.cast_effects[2]:uid()]
@@ -112,9 +115,9 @@ rn.cast_spell = function(arg)
 			lhdata.subobject = 17
 			-- play flipbook 2 times per cast.
 			lhdata.cast_duration = ability.base_cast_time * 0.5
-			lhdata.colour_r = ability.magic_colour_r
-			lhdata.colour_g = ability.magic_colour_g
-			lhdata.colour_b = ability.magic_colour_b
+			lhdata.colour_r = r
+			lhdata.colour_g = g
+			lhdata.colour_b = b
 		end
 	end
 end

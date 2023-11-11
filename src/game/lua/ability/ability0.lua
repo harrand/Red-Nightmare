@@ -7,9 +7,7 @@ rn.abilities[id] =
 {
 	name = typestr,
 	base_cast_time = 1000,
-	magic_colour_r = 1.0,
-	magic_colour_g = 0.85,
-	magic_colour_b = 0.4,
+	magic_type = "Divine",
 	cast_type = rn.cast.type.spell_1h_omni,
 	on_cast = function(ent)
 		local evt = rn.entity_heal_entity_event:new()

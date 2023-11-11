@@ -7,9 +7,7 @@ rn.abilities[id] =
 {
 	name = typestr,
 	base_cast_time = 1000,
-	magic_colour_r = 1.0,
-	magic_colour_g = 0.35,
-	magic_colour_b = 0.05,
+	magic_type = "Fire",
 	cast_type = rn.cast.type.spell_1h_directed,
 	on_cast = function(ent)
 		local entdata = rn.entity_get_data(ent)
@@ -51,8 +49,6 @@ rn.abilities[id] =
 			end
 		end
 
-		projdata.colour_r = ability.magic_colour_r
-		projdata.colour_g = ability.magic_colour_g
-		projdata.colour_b = ability.magic_colour_b
+		projdata.magic_type = ability.magic_type
 	end
 }

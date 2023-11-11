@@ -6,9 +6,7 @@ rn.abilities[id] =
 {
 	name = typestr,
 	base_cast_time = 1250,
-	magic_colour_r = 1.0,
-	magic_colour_g = 1.0,
-	magic_colour_b = 0.4,
+	magic_type = "Divine",
 	cast_type = rn.cast.type.spell_1h_omni,
 	on_cast = function(ent)
 		local barrier = rn.scene():get(rn.scene():add(7))

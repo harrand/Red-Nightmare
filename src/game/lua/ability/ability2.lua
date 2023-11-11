@@ -6,6 +6,7 @@ rn.abilities[id] =
 {
 	name = typestr,
 	base_cast_time = 650,
+	magic_type = "Physical",
 	cast_type = rn.cast.type.melee_1h_horizontal,
 	on_cast = function(ent)
 		local swing = rn.scene():get(rn.scene():add(5))

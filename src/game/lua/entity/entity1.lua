@@ -20,9 +20,7 @@ rn.entity_handler[id] =
 			shoot_dir = nil,
 			spawned_at = tz.time(),
 			collided_this_update = false,
-			colour_r,
-			colour_g,
-			colour_b
+			magic_type = nil
 		}
 	end,
 	postinit = function(ent)
@@ -32,7 +30,6 @@ rn.entity_handler[id] =
 		local data = rn.entity_get_data(ent)
 		data.impl.light = rn.scene():add_light();
 		data.impl.light:set_power(2.0)
-		data.impl.light:set_colour(rn.damage_type_get_colour("Fire"))
 	end,
 	deinit = function(ent)
 		local data = rn.entity_get_data(ent)
@@ -44,7 +41,8 @@ rn.entity_handler[id] =
 		local stats = ent:get_base_stats()
 		stats:set_movement_speed(12.0)
 		ent:set_base_stats(stats)
-		ent:get_element():object_set_texture_tint(2, 0, data.colour_r, data.colour_g, data.colour_b)
+		local r, g, b = rn.damage_type_get_colour(data.magic_type)
+		ent:get_element():object_set_texture_tint(2, 0, r, g, b)
 		data.flipbook_timer = data.flipbook_timer + rn.delta_time
 		-- when flipbook timer hits a threshold (fps / 4), advance to the next frame
 		if data.flipbook_timer > 0.1 then
@@ -56,6 +54,7 @@ rn.entity_handler[id] =
 		local x, y = ent:get_element():get_position()
 
 		data.impl.light:set_position(x, y)
+		data.impl.light:set_colour(r, g, b)
 
 		if not data.shoot_direct then
 			rn.entity_move({ent = ent, dir = data.shoot_dir, face_in_direction = false})
@@ -85,6 +84,7 @@ rn.entity_handler[id] =
 				explosion:get_element():set_position(mx, my)
 				-- no owner!
 				explosiondata.owner = nil
+				-- todo: set magic_type of explosiondata (currently only supports fire)
 				-- despawn both fireballs
 				rn.scene():remove_uid(ent:uid())
 				rn.scene():remove_uid(ent2:uid())
@@ -96,7 +96,7 @@ rn.entity_handler[id] =
 				evt.damager = data.owner:uid()
 				evt.damagee = ent2:uid()
 				evt.value = ent:get_stats():get_spell_power()
-				evt.damage_type = "Fire"
+				evt.damage_type = data.magic_type
 				rn.combat.process_event(evt)
 
 				if data.owner ~= nil and data.owner:is_valid() and data.owner:get_type() == 0 then

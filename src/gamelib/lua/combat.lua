@@ -9,11 +9,14 @@ rn.entity_damage_entity_event =
 }
 
 rn.damage_type_get_colour = function(damage_type)
-	if damage_type == "Physical" then return nil end
+	if damage_type == "Physical" then return nil, nil, nil end
 
 	if damage_type == "Fire" then return 1.0, 0.4, 0.1 end
+	if damage_type == "Frost" then return 0.1, 0.4, 1.0 end
+	if damage_type == "Shadow" then return 0.2, 0.0, 0.4 end
+	if damage_type == "Divine" then return 1.0, 0.85, 0.4 end
 
-	tz.assert(false)
+	return 0.0, 0.0, 0.0
 end
 
 function rn.entity_damage_entity_event:new(o)
@@ -138,7 +141,6 @@ function rn.combat.process_damage_mitigation(evt)
 		local victim_defence_rating = damagee:get_stats():get_defence_rating()
 		-- DR% = Armor / (Armor + 400 + 85 * AttackerLevel)
 		local dr = victim_defence_rating / (victim_defence_rating + 40 + 15 * damager:get_level())
-		print("defence DR = " .. dr * 100 .. "%")
 		evt.value = math.ceil(evt.value * (1.0 - dr));
 	end
 	return evt
@@ -158,13 +160,12 @@ function rn.combat.process_event(evt)
 		if ability_name ~= nil then
 			ability_str = " with " .. ability_name 
 		end
-		print(damager:get_name() .. " hurts " .. damagee:get_name() .. ability_str .. " for " .. evt.value .. " damage.")
+		print(damager:get_name() .. " hurts " .. damagee:get_name() .. ability_str .. " for " .. evt.value .. " " .. evt.damage_type .. ".")
 	end
 	if evt.tag == "entity_heal_entity" then
 		local healer = rn.scene():get_uid(evt.healer)
 		local healee = rn.scene():get_uid(evt.healee)
 		rn.combat.base_on_healed(healee, evt)
 		rn.combat.base_on_heal(healer, evt)
-		print(healer:get_name() .. " heals " .. healee:get_name() .. " for " .. evt.value)
 	end
 end
