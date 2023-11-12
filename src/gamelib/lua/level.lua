@@ -44,9 +44,6 @@ rn.load_level = function(args)
 		handler.on_load()
 	end
 
-	-- todo: remove
-	rn.director.paused = true
-
 	rn.old_level_cache = args
 end
 
