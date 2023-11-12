@@ -81,7 +81,7 @@ rn.entity_handler[id] =
 		end
 
 		if data.fireball_cd <= 0.0 and data.target ~= nil then
-			rn.cast_spell({ent = ent, ability_name = "Fireball", face_cast_direction = true})
+			rn.cast_spell({ent = ent, ability_name = "Frostbolt", face_cast_direction = true})
 			data.fireball_cd = 4
 		end
 

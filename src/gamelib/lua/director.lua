@@ -1,11 +1,22 @@
 -- responsible for spawning enemies, collectables etc in the world
 rn.director = {}
+-- how many credits does the director currently have?
 rn.director.credit = 0
+-- impl detail. used to call on_second_pass every second
 rn.director.second_timeout = 0
+-- initial cooldown (in seconds) before enemies start spawning
 rn.director.spawn_cooldown = 10
+-- whether paused or not. if true, director won't spawn stuff nor gain credits.
 rn.director.paused = false
-rn.director.rate_counter = 0
-rn.director.rate = 1
+-- impl detail. used to increase spawn credit_rate over time. don't touch.
+rn.director.credit_rate_counter = 0
+-- multiplier for a threshold value the credit_rate counter must reach before the director gets more aggressive.
+-- higher means lower difficulty. 0 is an invalid value.
+rn.director.credit_rate_increase_threshold = 120
+-- how many credits should the director obtain every second? scales with spawn credit_rate.
+rn.director.credit_rate = 1
+-- controls general credit_rate of increase of spawn credit_rate. higher difficulty means spawn credit_rate increases more often.
+rn.director.difficulty = 1
 
 rn.fixed_update = function()
 	tracy.ZoneBegin()
@@ -24,13 +35,13 @@ end
 rn.director.on_second_pass = function()
 	-- director gains 1 credit per second
 	if rn.director.paused then return end
-	rn.director.credit = rn.director.credit + rn.director.rate
-	rn.director.rate_counter = rn.director.rate_counter + 1
+	rn.director.credit = rn.director.credit + rn.director.credit_rate
+	rn.director.credit_rate_counter = rn.director.credit_rate_counter + 1
 
-	-- every 30 seconds, rate increases
-	if rn.director.rate_counter >= 30 then
-		rn.director.rate = rn.director.rate + 1
-		rn.director.rate_counter = 0
+	-- every 30 seconds, credit_rate increases
+	if rn.director.credit_rate_counter >= 120 / rn.director.difficulty then
+		rn.director.credit_rate = rn.director.credit_rate + 1
+		rn.director.credit_rate_counter = 0
 	end
 	rn.director.spawn_cooldown = rn.director.spawn_cooldown - 1
 
