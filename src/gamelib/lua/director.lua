@@ -51,13 +51,14 @@ rn.director.on_second_pass = function()
 		rn.director.credit_rate_counter = 0
 	end
 	rn.director.spawn_cooldown = rn.director.spawn_cooldown - 1
+	local spawn_result = nil
 
 	if rn.director.spawn_cooldown <= 0 then
 		-- cost 5: zombie
 		if rn.director.credit > 5 then
 			local credit_cost = 5
 			rn.director.credit = rn.director.credit - credit_cost
-			rn.scene():add(2)
+			spawn_result = rn.scene():get(rn.scene():add(2))
 			rn.director.spawn_cooldown = 5
 		end
 
@@ -68,20 +69,21 @@ rn.director.on_second_pass = function()
 			local zomb = rn.scene():get(rn.scene():add(2))
 			rn.equip(zomb, "Steel Chainmail")
 			rn.equip(zomb, "Iron Sallet")
+			spawn_result = zomb
 			rn.director.spawn_cooldown = 15
 		end
 
 		-- cost 50: banshee
-		if rn.director.credit > 50 then
-			local credit_cost = 50
+		if rn.director.credit > 90 then
+			local credit_cost = 90
 			rn.director.credit = rn.director.credit - credit_cost
-			rn.scene():add(11)
-			rn.director.spawn_cooldown = 15
+			spawn_result = rn.scene():get(rn.scene():add(11))
+			rn.director.spawn_cooldown = 30
 		end
 
 		-- cost 100: horde of rushers
-		if rn.director.credit > 100 then
-			local credit_cost = 100
+		if rn.director.credit > 200 then
+			local credit_cost = 200
 			rn.director.credit = rn.director.credit - credit_cost
 			for i=0,3,1 do
 				local zomb = rn.scene():get(rn.scene():add(2))
@@ -90,13 +92,14 @@ rn.director.on_second_pass = function()
 				speedy:set_increased_movement_speed(150)
 				zomb:apply_buff(speedy)
 				zomb:get_element():set_uniform_scale(zomb:get_element():get_uniform_scale() * 0.7)
+				spawn_result = zomb
 			end
 			rn.director.spawn_cooldown = 7
 		end
 
 		-- cost 200: OMEGA zombie
-		if rn.director.credit > 100 then
-			local credit_cost = 100
+		if rn.director.credit > 150 then
+			local credit_cost = 150
 			rn.director.credit = rn.director.credit - credit_cost
 			local zomb = rn.scene():get(rn.scene():add(2))
 			rn.equip(zomb, "Steel Chainmail")
@@ -109,7 +112,21 @@ rn.director.on_second_pass = function()
 			zomb:apply_buff(omegabuff)
 			zomb:set_health(zomb:get_stats():get_maximum_health())
 			zomb:get_element():set_uniform_scale(zomb:get_element():get_uniform_scale() * 1.3)
+			spawn_result = zomb
 			rn.director.spawn_cooldown = 25
+		end
+
+		-- where should this guy live?
+		-- if we dont know of a player, just put them in the centre
+		if spawn_result ~= nil then
+			if rn.player == nil then
+				spawn_result:get_element():set_position(0.0, 0.0)
+			else
+				local x, y = rn.player:get_element():get_position()
+				x = x + (((math.random() * 5) - 2.5) * 10.0)
+				y = y + (((math.random() * 5) - 2.5) * 10.0)
+				spawn_result:get_element():set_position(x, y)
+			end
 		end
 	end
 end
