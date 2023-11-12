@@ -44,7 +44,11 @@ namespace game::entity
 		void dbgui();
 		void dbgui_game_bar();
 
+		const render::scene_renderer& get_renderer() const;
 		render::scene_renderer& get_renderer();
+
+		tz::vec2 get_mouse_position_ws() const;
+
 		std::size_t debug_get_intersection_count() const;
 		std::size_t get_collision_count(entity_handle e) const;
 		std::size_t get_collision_count(std::size_t uid) const;

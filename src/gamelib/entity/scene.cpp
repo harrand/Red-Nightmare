@@ -32,9 +32,38 @@ namespace game::entity
 		return {position - half_scale, position + half_scale};
 	}
 
+	const render::scene_renderer& scene::get_renderer() const
+	{
+		return this->renderer;
+	}
+
 	render::scene_renderer& scene::get_renderer()
 	{
 		return this->renderer;
+	}
+
+	tz::vec2 scene::get_mouse_position_ws() const
+	{
+		auto windims = tz::window().get_dimensions();
+		auto mondims = tz::wsi::get_monitors().front().dimensions;
+		const float ar = static_cast<float>(mondims[0]) / mondims[1];
+		auto pos = static_cast<tz::vec2>(tz::window().get_mouse_state().mouse_position);
+		// invert y
+		pos[1] = windims[1] - pos[1];
+		// transform to 0.0-1.0
+		pos[0] /= windims[0];
+		pos[1] /= windims[1];
+		pos *= 2.0f;
+		pos -= tz::vec2::filled(1.0f);
+		// multiply by view bounds
+		const tz::vec2 vb = this->get_renderer().get_view_bounds();
+		pos[0] *= vb[0];
+		pos[1] *= vb[1] / ar;
+		// now translate by camera position
+		const tz::vec2 campos = this->get_renderer().get_camera_position();
+		pos += campos;
+
+		return pos;
 	}
 
 	std::size_t scene::debug_get_intersection_count() const
@@ -184,6 +213,9 @@ namespace game::entity
 	void scene::dbgui_game_bar()
 	{
 		ImGui::Text("Scene size: %zu", this->size());
+		ImGui::SameLine();
+		tz::vec2 pos = this->get_mouse_position_ws();
+		ImGui::Text("| mouse %.1f, %.1f | ", pos[0], pos[1]);
 		ImGui::SameLine();
 		ImGui::Text("| %zu intersections | ", this->debug_get_intersection_count());
 		entity_handle player = this->try_find_player();
@@ -499,25 +531,7 @@ namespace game::entity
 
 	int rn_impl_scene::get_mouse_position_ws(tz::lua::state& state)
 	{
-		auto windims = tz::window().get_dimensions();
-		auto mondims = tz::wsi::get_monitors().front().dimensions;
-		const float ar = static_cast<float>(mondims[0]) / mondims[1];
-		auto pos = static_cast<tz::vec2>(tz::window().get_mouse_state().mouse_position);
-		// invert y
-		pos[1] = windims[1] - pos[1];
-		// transform to 0.0-1.0
-		pos[0] /= windims[0];
-		pos[1] /= windims[1];
-		pos *= 2.0f;
-		pos -= tz::vec2::filled(1.0f);
-		// multiply by view bounds
-		const tz::vec2 vb = this->sc->get_renderer().get_view_bounds();
-		pos[0] *= vb[0];
-		pos[1] *= vb[1] / ar;
-		// now translate by camera position
-		const tz::vec2 campos = this->sc->get_renderer().get_camera_position();
-		pos += campos;
-
+		tz::vec2 pos = this->sc->get_mouse_position_ws();	
 		state.stack_push_float(pos[0]);
 		state.stack_push_float(pos[1]);
 		return 2;
