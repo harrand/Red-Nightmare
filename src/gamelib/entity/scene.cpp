@@ -147,6 +147,18 @@ namespace game::entity
 		this->collision_data = {};
 	}
 
+	void scene::clear_except_players()
+	{
+		for(std::size_t i = 0; i < this->entities.size(); i++)
+		{
+			auto hanval = static_cast<tz::hanval>(i);
+			if(this->is_valid(hanval) && this->entities[i].type != 0)
+			{
+				this->remove(hanval);
+			}
+		}
+	}
+
 	const entity& scene::get(entity_handle e) const
 	{
 		auto hanval = static_cast<std::size_t>(static_cast<tz::hanval>(e));
@@ -485,6 +497,18 @@ namespace game::entity
 	{
 		auto& light = state.stack_get_userdata<rn_impl_light>(2);
 		this->sc->remove_light(light.l);
+		return 0;
+	}
+
+	int rn_impl_scene::clear(tz::lua::state& state)
+	{
+		this->sc->clear();
+		return 0;
+	}
+
+	int rn_impl_scene::clear_except_players(tz::lua::state& state)
+	{
+		this->sc->clear_except_players();
 		return 0;
 	}
 

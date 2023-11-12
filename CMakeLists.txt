@@ -75,4 +75,5 @@ add_text(
 		src/gamelib/lua/entity.lua
 		src/gamelib/lua/equipment.lua
 		src/gamelib/lua/item.lua
+		src/gamelib/lua/level.lua
 )

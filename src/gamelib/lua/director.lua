@@ -24,6 +24,13 @@ rn.fixed_update = function()
 	tracy.ZoneEnd()
 end
 
+rn.director.restart = function()
+	rn.director.credit = 0
+	rn.director.credit_rate = 1
+	rn.director.spawn_cooldown = 10
+	rn.director.paused = false
+end
+
 rn.director.advance = function()
 	rn.director.second_timeout = rn.director.second_timeout + rn.fixed_delta_time	
 	if rn.director.second_timeout >= 1.0 then

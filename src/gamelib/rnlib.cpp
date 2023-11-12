@@ -13,6 +13,7 @@
 #include ImportedTextHeader(director, lua)
 #include ImportedTextHeader(equipment, lua)
 #include ImportedTextHeader(item, lua)
+#include ImportedTextHeader(level, lua)
 
 namespace game
 {
@@ -38,28 +39,11 @@ namespace game
 		lua_initialise();
 
 		tz::lua::get_state().execute(R"(
-		rn.texture_manager():register_texture("blanchfield_cemetary.background", "./res/images/scenery/backgrounds/background_snowy.png")
-		rn.texture_manager():register_texture("blanchfield_cemetary.background_normals", "./res/images/scenery/backgrounds/background_snowy_normals.png")
+		rn.texture_manager():register_texture("blanchfield_cemetary.background", "./res/images/scenery/backgrounds/background_grassy.png")
+		rn.texture_manager():register_texture("blanchfield_cemetary.background_normals", "./res/images/scenery/backgrounds/background_grassy_normals.png")
 		rn.texture_manager():register_texture("blanchfield_cemetary.foreground", "./res/images/scenery/foregrounds/foreground_blanchfield_cemetary.png")
-		bg = rn.scene():get(rn.scene():add(8))
-		fg = rn.scene():get(rn.scene():add(8))
 
-		rn.scene():get_renderer():set_ambient_light(0.15, 0.2, 0.4)
-
-		local bgdata = rn.entity_get_data(bg)
-		bgdata.dynamic_texture_scale = true
-		bgdata.texture_scale_zoom = 16.0
-		bg:get_element():set_uniform_scale(64)
-		bg:get_element():object_set_texture_handle(2, 0, rn.texture_manager():get_texture("blanchfield_cemetary.background"))
-		bg:get_element():object_set_texture_handle(2, 1, rn.texture_manager():get_texture("blanchfield_cemetary.background_normals"))
-
-		bg:get_element():set_depth(-2.5)
-
-		fg:get_element():object_set_texture_handle(2, 0, rn.texture_manager():get_texture("blanchfield_cemetary.foreground"))
-		fg:get_element():set_uniform_scale(64)
-		fg:get_element():set_depth(-2)
-
-		rn.scene():add(0)
+		rn.load_level{name = "blanchfield"}
 		)");
 	}
 
@@ -193,6 +177,10 @@ namespace game
 			}
 			{
 				std::string str{ImportedTextData(item, lua)};
+				state.execute(str.c_str());
+			}
+			{
+				std::string str{ImportedTextData(level, lua)};
 				state.execute(str.c_str());
 			}
 		});
