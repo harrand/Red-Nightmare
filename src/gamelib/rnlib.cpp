@@ -152,6 +152,7 @@ namespace game
 			state.execute("package.path = package.path .. \";\" .. rn.rootdir .. \"\\\\entity\\\\?.lua\"");
 			state.execute("package.path = package.path .. \";\" .. rn.rootdir .. \"\\\\item\\\\?.lua\"");
 			state.execute("package.path = package.path .. \";\" .. rn.rootdir .. \"\\\\ability\\\\?.lua\"");
+			state.execute("package.path = package.path .. \";\" .. rn.rootdir .. \"\\\\levels\\\\?.lua\"");
 
 			game_system->scene.lua_initialise(state);
 			game_system->texmgr.lua_initialise(state);

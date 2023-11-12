@@ -1,3 +1,7 @@
+rn.level = {}
+rn.level.type = {}
+rn.level_handler = {}
+
 rn.load_level = function(args)
 	if args.name == nil then
 		args.name = "blanchfield"
@@ -33,9 +37,18 @@ rn.load_level = function(args)
 			rn.player:get_element():set_position(0, 0)
 		end
 	end
+
+	local handler = rn.level_handler[rn.level.type[args.name]]
+	tz.assert(handler ~= nil)
+	if handler.on_load ~= nil then
+		handler.on_load()
+	end
+
 	rn.old_level_cache = args
 end
 
 rn.restart_level = function()
 	rn.load_level(rn.old_level_cache)
 end
+
+require "level0"

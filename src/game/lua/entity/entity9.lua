@@ -6,6 +6,7 @@ rn.entity_handler[id] =
 	static_init = function()
 		local tm = rn.texture_manager()
 		--tm:register_texture("grassy.background", "./res/images/scenery/backgrounds/background_grassy.png")
+		tm:register_texture("scenery.tree0", "./res/images/scenery/foliage/tree0.png")
 	end,
 	preinit = function(ent)
 		ent:set_collideable(true)
@@ -16,9 +17,12 @@ rn.entity_handler[id] =
 		stats:set_maximum_health(1)
 		ent:set_base_stats(stats)
 	end,
+	on_death = function(ent)
+		ent:get_element():object_set_visibility(2, false)
+	end,
 	postinit = function(ent)
 		ent:set_name("Obstacle")
-		ent:get_element():object_set_texture_tint(2, 0, 1, 1, 0);
+		ent:get_element():object_set_texture_tint(2, 0, 1, 1, 1);
 	end,
 	update = function(ent)
 	end
