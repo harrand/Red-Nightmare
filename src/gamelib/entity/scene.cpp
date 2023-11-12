@@ -128,6 +128,25 @@ namespace game::entity
 		this->entities[hanval] = {.type = std::numeric_limits<std::size_t>::max()};
 	}
 
+	void scene::clear()
+	{
+		for(std::size_t eid = 0; eid < this->entities.size(); eid++)
+		{
+			auto hv = static_cast<tz::hanval>(eid);
+			if(this->is_valid(hv))
+			{
+				this->deinitialise_entity(hv, this->entities[eid].uid);
+			}
+		}
+		this->entities.clear();
+		this->free_list.clear();
+		this->light_free_list.clear();
+		this->light_cursor = 0;
+		this->quadtree.clear();
+		this->intersection_state = {};
+		this->collision_data = {};
+	}
+
 	const entity& scene::get(entity_handle e) const
 	{
 		auto hanval = static_cast<std::size_t>(static_cast<tz::hanval>(e));
@@ -594,6 +613,11 @@ namespace game::entity
 	{
 		ImGui::TextColored(ImVec4{1.0f, 0.3f, 0.3f, 1.0f}, "ENTITIES LIST");
 		ImGui::Spacing();
+		if(ImGui::Button("Clear"))
+		{
+			this->clear();
+			return;
+		}
 		
 		std::size_t resident_count = std::count_if(this->entities.begin(), this->entities.end(),
 		[](const entity& ent)
@@ -604,6 +628,10 @@ namespace game::entity
 		ImGui::Text("%zu entities (%zu resident, %zu free-list)", this->size(), resident_count, this->size() - resident_count);
 		constexpr float slider_height = 160.0f;
 		static int entity_id = 0;
+		if(this->entities.empty())
+		{
+			return;
+		}
 		if(ImGui::Button("+"))
 		{
 			entity_id = std::min(entity_id + 1, static_cast<int>(this->size()) - 1);

@@ -30,6 +30,7 @@ namespace game::entity
 
 		entity_handle add(std::size_t type);
 		void remove(entity_handle e);
+		void clear();
 		const entity& get(entity_handle e) const;
 		entity& get(entity_handle e);
 		std::size_t size() const;
