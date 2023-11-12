@@ -52,7 +52,7 @@ rn.entity_handler[id] =
 		-- this lasts for multiple frames. we dont want to hit the same person twice.
 		-- so each person we hit we add their uid. and if we collide with that uid again dont hit.
 		rn.for_each_collision(ent, function(ent2)
-			if not data.hit_enemies[ent2:uid()] and ent2:is_valid() and not ent2:is_dead() and rn.get_relationship(ent, ent2) == "hostile" then
+			if not data.hit_enemies[ent2:uid()] and ent2:is_valid() and not ent2:is_dead() and rn.get_relationship(ent, ent2) == "hostile" and rn.entity_get_data(ent2).impl.projectile_skip ~= true then
 				local evt = rn.entity_damage_entity_event:new()
 				evt.damager = ent:uid()
 				if owner ~= nil then

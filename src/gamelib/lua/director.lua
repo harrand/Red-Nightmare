@@ -7,7 +7,7 @@ rn.director.second_timeout = 0
 -- initial cooldown (in seconds) before enemies start spawning
 rn.director.spawn_cooldown = 10
 -- whether paused or not. if true, director won't spawn stuff nor gain credits.
-rn.director.paused = false
+rn.director.paused = true
 -- impl detail. used to increase spawn credit_rate over time. don't touch.
 rn.director.credit_rate_counter = 0
 -- multiplier for a threshold value the credit_rate counter must reach before the director gets more aggressive.
