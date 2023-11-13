@@ -23,7 +23,5 @@ rn.entity_handler[id] =
 	postinit = function(ent)
 		ent:set_name("Obstacle")
 		ent:get_element():object_set_texture_tint(2, 0, 1, 1, 1);
-	end,
-	update = function(ent)
 	end
 }

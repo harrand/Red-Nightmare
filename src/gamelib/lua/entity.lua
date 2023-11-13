@@ -178,6 +178,7 @@ rn.entity_update = function(ent)
 	end
 
 	-- deal with the equipment buff.
+	tracy.ZoneBegin()
 	local eqbuff = rn.new_buff()
 	for i=1,rn.equipment.slot._count-1,1 do
 		local eq = rn.get_equipped_item(ent, i)
@@ -190,6 +191,7 @@ rn.entity_update = function(ent)
 		end
 	end
 	ent:impl_set_equipment_buff(eqbuff)
+	tracy.ZoneEnd()
 
 	tracy.ZoneEnd()
 end
