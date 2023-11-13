@@ -33,6 +33,7 @@ rn.entity = {}
 rn.entity.type = {}
 rn.entity.resident = {}
 rn.entity.data = {}
+rn.player_credits = 0
 
 rn.entity_handler = {}
 

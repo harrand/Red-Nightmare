@@ -49,6 +49,9 @@ namespace game::entity
 		const render::scene_renderer& get_renderer() const;
 		render::scene_renderer& get_renderer();
 
+		unsigned int get_player_credits() const;
+		void set_player_credits(unsigned int credits);
+
 		tz::vec2 get_mouse_position_ws() const;
 
 		std::size_t debug_get_intersection_count() const;
@@ -76,6 +79,7 @@ namespace game::entity
 		// uid maps to a set of entity handles. i know that seems inconsistent but its cheapest for the lua to use.
 		mutable std::unordered_map<std::size_t, std::unordered_set<tz::hanval>> collision_data = {};
 		render::scene_renderer renderer;
+		unsigned int player_credits = 0;
 	};
 
 	struct rn_impl_scene

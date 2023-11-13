@@ -1,6 +1,7 @@
 #include "gamelib/entity/scene.hpp"
 #include "gamelib/entity/api.hpp"
 #include "tz/core/imported_text.hpp"
+#include "tz/lua/state.hpp"
 #include "tz/wsi/monitor.hpp"
 
 #include ImportedTextHeader(entity, lua)
@@ -40,6 +41,16 @@ namespace game::entity
 	render::scene_renderer& scene::get_renderer()
 	{
 		return this->renderer;
+	}
+
+	unsigned int scene::get_player_credits() const
+	{
+		return tz::lua::get_state().get_uint("rn.player_credits").value_or(0u);
+	}
+
+	void scene::set_player_credits(unsigned int credits)
+	{
+		tz::lua::get_state().assign_uint("rn.player_credits", credits);
 	}
 
 	tz::vec2 scene::get_mouse_position_ws() const
@@ -266,6 +277,9 @@ namespace game::entity
 			ImGui::SameLine();
 			ImGui::Text("Defence: %llu", stats.defence_rating);
 		}
+
+		ImGui::SameLine();
+		ImGui::Text("| Credits: %u", this->get_player_credits());
 	}
 
 	void scene::lua_initialise(tz::lua::state& state)
