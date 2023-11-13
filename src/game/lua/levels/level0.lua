@@ -16,6 +16,20 @@ local spawn_tree = function(x, y)
 	entdata.impl.targetable = false
 end
 
+local spawn_loot_chest = function(x, y)
+	local ent = rn.scene():get(rn.scene():add(12))
+	ent:get_element():set_position(x, y)
+	local data = rn.entity_get_data(ent)
+	
+	local itemset = {}
+	for k in pairs(rn.items) do
+		table.insert(itemset, k)
+	end
+
+	local item_name = itemset[math.random(#itemset)]
+	data.loot = item_name
+end
+
 local spawn_invisible_wall = function(x, y, sc)
 	sc = sc or 1.0
 	local ent = rn.scene():get(rn.scene():add(9))	
@@ -38,6 +52,11 @@ rn.level_handler[id] =
 		for i=-63,63,3 do
 			local y = math.random(0, 126) - 63
 			spawn_tree(i, y)
+		end
+
+		for i=-63,63, 9 do
+			local y = math.random(0, 126) - 63
+			spawn_loot_chest(i, y)
 		end
 		spawn_invisible_wall(-7.0, -7.0)
 		spawn_invisible_wall(-7.0, -10.0)
