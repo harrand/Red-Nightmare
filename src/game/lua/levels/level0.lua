@@ -35,6 +35,10 @@ end
 rn.level_handler[id] =
 {
 	on_load = function()
+		for i=-63,63,3 do
+			local y = math.random(0, 126) - 63
+			spawn_tree(i, y)
+		end
 		spawn_invisible_wall(-7.0, -7.0)
 		spawn_invisible_wall(-7.0, -10.0)
 
