@@ -10,6 +10,12 @@ rn.abilities[id] =
 	cast_type = rn.cast.type.spell_2h_omni,
 	dual_wield_cast = true,
 	on_cast = function(ent)
+		-- spawn nova and a friendly fire elemental
+		local ele = rn.scene():get(rn.scene():add(13))
+		local eledata = rn.entity_get_data(ele)
+		ele:set_faction(rn.faction_id.player_ally)
+		eledata.magic_type = "Fire"
+
 		local nova = rn.scene():get(rn.scene():add(10))
 		nova:set_faction(ent:get_faction())
 		local x, y = ent:get_element():get_subobject_position(21)
@@ -17,6 +23,7 @@ rn.abilities[id] =
 		x = (x + x2) / 2.0
 		y = (y + y2) / 2.0
 		nova:get_element():set_position(x, y)
+		ele:get_element():set_position(x, y)
 		local entdata = rn.entity_get_data(ent)
 		local novadata = rn.entity_get_data(nova)
 		-- fireball base stats is a snapshot of the caster's current stats.
