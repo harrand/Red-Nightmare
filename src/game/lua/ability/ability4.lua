@@ -12,6 +12,7 @@ rn.abilities[id] =
 	on_cast = function(ent)
 		-- spawn nova and a friendly fire elemental
 		local ele = rn.scene():get(rn.scene():add(13))
+		rn.equipment_copy(ent, ele)
 		local eledata = rn.entity_get_data(ele)
 		ele:set_faction(rn.faction_id.player_ally)
 		eledata.magic_type = "Fire"

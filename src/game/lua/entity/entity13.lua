@@ -34,6 +34,7 @@ rn.entity_handler[id] =
 		ent:set_faction(rn.faction_id.player_enemy)
 
 		local data = rn.entity_get_data(ent)
+		data.impl.drop_items_on_death = false
 		data.fireball_cd = 1
 
 		-- elemental has 6 lights.
