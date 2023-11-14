@@ -201,6 +201,12 @@ namespace game::entity
 		{
 			this->light_cursor++;
 		}
+		if(hanval >= this->renderer.get_point_lights().size())
+		{
+			// ran out of lights. uhhh
+			// re-use the last one (bad)
+			hanval = this->renderer.get_point_lights().size() - 1;
+		}
 		tz::assert(hanval < this->renderer.get_point_lights().size(), "Ran outta lights innit");
 		this->renderer.get_point_lights()[hanval] = d;
 		return static_cast<tz::hanval>(hanval);
