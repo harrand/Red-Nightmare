@@ -77,7 +77,7 @@ rn.director.on_second_pass = function()
 		if rn.director.credit > 90 then
 			local credit_cost = 90
 			rn.director.credit = rn.director.credit - credit_cost
-			spawn_result = rn.scene():get(rn.scene():add(11))
+			spawn_result = rn.scene():get(rn.scene():add(13))
 			rn.director.spawn_cooldown = 30
 		end
 
