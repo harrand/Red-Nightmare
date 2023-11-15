@@ -41,6 +41,7 @@ require "ability2"
 require "ability3"
 require "ability4"
 require "ability5"
+require "ability6"
 
 rn.cast_spell = function(arg)
 	-- check argument sanity

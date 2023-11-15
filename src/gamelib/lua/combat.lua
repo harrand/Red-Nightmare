@@ -13,7 +13,8 @@ rn.damage_type_get_colour = function(damage_type)
 
 	if damage_type == "Fire" then return 1.0, 0.4, 0.1 end
 	if damage_type == "Frost" then return 0.1, 0.4, 1.0 end
-	if damage_type == "Shadow" then return 0.2, 0.0, 0.4 end
+	--if damage_type == "Shadow" then return 0.2, 0.0, 0.4 end
+	if damage_type == "Shadow" then return -0.17, -0.15, -0.17 end
 	if damage_type == "Divine" then return 1.0, 0.85, 0.4 end
 
 	return 0.0, 0.0, 0.0

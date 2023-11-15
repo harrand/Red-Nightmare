@@ -116,9 +116,13 @@ rn.entity_handler[id] =
 		end
 
 		if data.fireball_cd <= 0.0 and data.target ~= nil then
-			local spell_name = "Frostbolt"
+			local spell_name = nil
 			if data.magic_type == "Fire" then
 				spell_name = "Fireball"
+			elseif data.magic_type == "Shadow" then
+				spell_name = "Shadowbolt"
+			elseif data.magic_type == "Frost" then
+				spell_name = "Frostbolt"
 			end
 			rn.cast_spell({ent = ent, ability_name = spell_name, face_cast_direction = true})
 			data.fireball_cd = 4
