@@ -179,6 +179,32 @@ namespace game::render
 		return {point_lights_start, point_light_count};
 	}
 
+	void scene_renderer::set_point_light_capacity(unsigned int num_point_lights)
+	{
+		tz::gl::resource_handle light_buf_handle = this->renderer.get_extra_buffer(1);
+		std::size_t old_size = sizeof(tz::vec3) + sizeof(std::uint32_t) + sizeof(point_light_data) * this->get_point_lights().size();
+		std::size_t new_size = sizeof(tz::vec3) + sizeof(std::uint32_t) + sizeof(point_light_data) * num_point_lights;
+		if(old_size == new_size)
+		{
+			return;
+		}
+		auto& ren = tz::gl::get_device().get_renderer(this->renderer.get_render_pass());
+		// resize buffer
+		ren.edit
+		({
+			tz::gl::RendererEditBuilder{}
+			.buffer_resize
+			({
+				.buffer_handle = light_buf_handle,
+				.size = new_size
+			})
+			.build()
+		});
+		// write new count.
+		// we're sorted.
+		*reinterpret_cast<std::uint32_t*>(ren.get_resource(light_buf_handle)->data().data() + sizeof(tz::vec3)) = num_point_lights;
+	}
+
 	tz::ren::animation_renderer& scene_renderer::get_renderer()
 	{
 		return this->renderer;

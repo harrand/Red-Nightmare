@@ -49,12 +49,12 @@ end
 rn.level_handler[id] =
 {
 	on_load = function()
-		for i=-63,63,3 do
+		for i=-63,63,6 do
 			local y = math.random(0, 126) - 63
 			spawn_tree(i, y)
 		end
 
-		for i=-63,63, 9 do
+		for i=-63,63,12 do
 			local y = math.random(0, 126) - 63
 			spawn_loot_chest(i, y)
 		end

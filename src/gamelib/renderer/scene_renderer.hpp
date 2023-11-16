@@ -86,6 +86,7 @@ namespace game::render
 		void set_ambient_light(tz::vec3 rgb_light);
 		std::span<const point_light_data> get_point_lights() const;
 		std::span<point_light_data> get_point_lights();
+		void set_point_light_capacity(unsigned int num_point_lights);
 
 		tz::ren::animation_renderer& get_renderer();
 		void lua_initialise(tz::lua::state& state);

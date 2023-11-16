@@ -205,7 +205,10 @@ namespace game::entity
 		{
 			// ran out of lights. uhhh
 			// re-use the last one (bad)
-			hanval = this->renderer.get_point_lights().size() - 1;
+			// double the capacity.
+			std::size_t old_cap = this->renderer.get_point_lights().size();
+			std::size_t new_cap = old_cap * 2;
+			this->renderer.set_point_light_capacity(new_cap);
 		}
 		tz::assert(hanval < this->renderer.get_point_lights().size(), "Ran outta lights innit");
 		this->renderer.get_point_lights()[hanval] = d;
