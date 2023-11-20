@@ -156,7 +156,7 @@ end
 -- called straight after the entity has finished initialisation. you can
 -- do pretty much whatever you want at this point.
 rn.entity_postinit = function(type)
-	tracy.ZoneBegin()
+	local o <close> = tz.create_profiling_object()
 	tz.assert(rn_impl_new_entity ~= nil)
 	local ent = rn_impl_new_entity
 	ent:set_health(ent:get_stats():get_maximum_health())
@@ -179,19 +179,25 @@ rn.entity_postinit = function(type)
 	if handler.postinit ~= nil then
 		handler.postinit(ent)
 	end
-	tracy.ZoneEnd()
 end
 
 rn.entity_update = function(ent)
-	tracy.ZoneBegin()
+	local obj <close> = tz.profzone_obj:new()
+	obj:set_text("Entity Update - " .. ent:get_name())
+	obj:set_name("Lua Entity Update")
+
 	tz.assert(ent ~= nil)
+	tracy.ZoneBeginN("Entity Handler Overhead")
 	local handler = rn.entity_handler[ent:get_type()]
+	tracy.ZoneEnd()
 	tz.assert(handler ~= nil)
 	local data = rn.entity_get_data(ent)
 
 	data.impl.is_moving = false
 
 	if handler.update ~= nil then
+		local obj2 <close> = tz.profzone_obj:new()
+		obj2:set_name("Update " .. ent:get_name() .. " (type " .. ent:get_type() .. ")")
 		handler.update(ent)
 	end
 
@@ -226,7 +232,6 @@ rn.entity_update = function(ent)
 	end
 
 	-- deal with the equipment buff.
-	tracy.ZoneBegin()
 	local eqbuff = rn.new_buff()
 	for i=1,rn.equipment.slot._count-1,1 do
 		local eq = rn.get_equipped_item(ent, i)
@@ -239,9 +244,6 @@ rn.entity_update = function(ent)
 		end
 	end
 	ent:impl_set_equipment_buff(eqbuff)
-	tracy.ZoneEnd()
-
-	tracy.ZoneEnd()
 end
 
 rn.entity_deinit = function()
@@ -306,13 +308,16 @@ rn.advance_key_state = function()
 end
 
 rn.entity_get_data = function(ent)
+	local obj <close> = tz.profzone_obj:new()
+	obj:set_name("entity_get_data")
 	rn.entity.data[ent:uid()] = rn.entity.data[ent:uid()] or {}
 	rn.entity.data[ent:uid()].impl = rn.entity.data[ent:uid()].impl or {}
 	return rn.entity.data[ent:uid()]
 end
 
 rn.update = function()
-	tracy.ZoneBegin()
+	local obj <close> = tz.profzone_obj:new()
+	obj:set_name("Lua Update")
 
 	rn.empty_key_state()
 	rn.advance_key_state()
@@ -326,7 +331,6 @@ rn.update = function()
 			end
 		end
 	end
-	tracy.ZoneEnd()
 end
 
 rn.entity_move_to_entity = function(arg, ent2)

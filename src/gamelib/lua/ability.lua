@@ -44,6 +44,9 @@ require "ability5"
 require "ability6"
 
 rn.cast_spell = function(arg)
+	local obj <close> = tz.profzone_obj:new()
+	obj:set_name("Cast Spell")
+	obj:set_text("Spell: " .. arg.ability_name)
 	-- check argument sanity
 	local ent = arg.ent
 	tz.assert(ent ~= nil)
@@ -125,14 +128,21 @@ rn.cast_spell = function(arg)
 end
 
 rn.complete_cast = function(ent)
+	local obj <close> = tz.profzone_obj:new()
+	obj:set_name("Complete Cast")
 	local entdata = rn.entity_get_data(ent)
 	local ability = rn.abilities[rn.ability.type[entdata.impl.cast]]
+
+	obj:set_text("Cast - " .. entdata.impl.cast)
+
 	tz.assert(ability ~= nil)
 	ability.on_cast(ent)
 	rn.cancel_cast(ent)
 end
 
 rn.cancel_cast = function(ent)
+	local obj <close> = tz.profzone_obj:new()
+	obj:set_name("Cancel Cast")
 	local entdata = rn.entity_get_data(ent)
 	entdata.impl.is_casting = false
 	entdata.impl.cast_begin = nil
@@ -148,9 +158,12 @@ rn.cancel_cast = function(ent)
 end
 
 rn.casting_advance = function(ent)
+	local obj <close> = tz.profzone_obj:new()
+	obj:set_name("Casting Advance")
 	-- entity is currently casting a spell.
 	local entdata = rn.entity_get_data(ent)
 	tz.assert(entdata.impl.cast ~= nil)
+	obj:set_text("Casting Advance - " .. entdata.impl.cast)
 	local ability = rn.abilities[rn.ability.type[entdata.impl.cast]]
 	tz.assert(ability ~= nil)
 	local t = tz.time()
