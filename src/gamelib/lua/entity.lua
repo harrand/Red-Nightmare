@@ -37,6 +37,51 @@ rn.player_credits = 0
 
 rn.entity_handler = {}
 
+rn.entity_distance = function(ent, ent2)
+	local x, y = ent:get_element():get_position()
+	local x2, y2 = ent2:get_element():get_position()
+	local xdiff = x2 - x
+	local ydiff = y2 - y
+	return math.sqrt(xdiff*xdiff + ydiff*ydiff)
+end
+
+rn.impl_entity_entity_valid_target = function(ent, args, ent2)
+	local aggro_range = args.aggro_range or 12
+	local can_target_dead = false
+	if args.can_target_dead ~= nil then
+		can_target_dead = args.can_target_dead
+	end
+	if not ent2:is_valid() then
+		return false
+	end
+	if rn.entity_distance(ent, ent2) > aggro_range then
+		return false
+	end
+	if can_target_dead == false and ent2:is_dead() then
+		return false
+	end
+	if args.target_relationship ~= nil then
+		if rn.get_relationship(ent, ent2) ~= args.target_relationship then
+			return false
+		end
+	end
+	if rn.entity_get_data(ent2).impl.targetable == false then
+		return false
+	end
+	return true
+end
+
+rn.entity_target_entity = function(ent, args)
+	-- find a new target
+	for i=1,rn.scene():size()-1,1 do
+		local ent2 = rn.scene():get(i)
+		if rn.impl_entity_entity_valid_target(ent, args, ent2) then
+			return ent2
+		end
+	end
+	return nil
+end
+
 rn.get_faction = function(ent)
 	return rn.faction[ent:get_faction() + 1]
 end

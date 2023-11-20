@@ -84,17 +84,12 @@ rn.entity_handler[id] =
 
 		data.fireball_cd = data.fireball_cd - rn.delta_time
 
+		aggro_range = 25
+		local target_args = {aggro_range = aggro_range, target_relationship = "hostile"}
 		if data.target == nil then
-			for i=1,rn.scene():size()-1,1 do
-				-- attempt to find a new enemy to chase.
-				local ent2 = rn.scene():get(i)	
-				if not ent:is_dead() and ent2:is_valid() and not ent2:is_dead() and rn.get_relationship(ent, ent2) == "hostile" and rn.entity_get_data(ent2).impl.targetable ~= false then
-					data.target = ent2
-				end
-			end
+			data.target = rn.entity_target_entity(ent, target_args)
 		else
-			if data.target:is_dead() or not data.target:is_valid() then
-				-- set target to nil so we choose one.
+			if not rn.impl_entity_entity_valid_target(ent, target_args, data.target) then
 				data.target = nil
 			end
 		end
@@ -148,7 +143,7 @@ rn.entity_handler[id] =
 			else
 				-- otherwise just move right forever???
 				-- todo: wander around aimlessly
-				rn.entity_move{ent = ent, dir = "right", movement_anim_name = "Run"}
+				--rn.entity_move{ent = ent, dir = "right", movement_anim_name = "Run"}
 			end
 		end
 	end

@@ -36,20 +36,19 @@ rn.entity_handler[id] =
 		ent:set_base_stats(stats)
 
 	end,
+	on_struck = function(ent, evt)
+		local damager = rn.scene():get_uid(evt.damager)
+		rn.entity_get_data(ent).target = damager
+	end,
 	update = function(ent)
 		local data = rn.entity_get_data(ent)
 		data.collided_this_update = false
+		local target_args = {aggro_range = 20, target_relationship = "hostile"}
+		local target_args2 = {aggro_range = target_args.aggro_range * 2, target_relationship = "hostile"}
 		if data.target == nil then
-			for i=1,rn.scene():size()-1,1 do
-				-- attempt to find a new enemy to chase.
-				local ent2 = rn.scene():get(i)	
-				if not ent:is_dead() and ent2:is_valid() and not ent2:is_dead() and rn.get_relationship(ent, ent2) == "hostile" and rn.entity_get_data(ent2).impl.targetable ~= false then
-					data.target = ent2
-				end
-			end
+			data.target = rn.entity_target_entity(ent, target_args)
 		else
-			if data.target:is_dead() or not data.target:is_valid() then
-				-- set target to nil so we choose one.
+			if not rn.impl_entity_entity_valid_target(ent, target_args2, data.target) then
 				data.target = nil
 			end
 		end
@@ -66,7 +65,7 @@ rn.entity_handler[id] =
 			else
 				-- otherwise just move right forever???
 				-- todo: wander around aimlessly
-				rn.entity_move{ent = ent, dir = "right", movement_anim_name = "ZombieWalk"}
+				--rn.entity_move{ent = ent, dir = "right", movement_anim_name = "ZombieWalk"}
 			end
 		end
 	end
