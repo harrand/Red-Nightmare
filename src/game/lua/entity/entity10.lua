@@ -60,6 +60,7 @@ rn.entity_handler[id] =
 				end
 				evt.damagee = ent2:uid()
 				evt.value = ent:get_stats():get_spell_power()
+				evt.damage_type = "Fire"
 				rn.combat.process_event(evt)
 				data.hit_enemies[ent2:uid()] = true
 

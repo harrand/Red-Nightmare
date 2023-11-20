@@ -124,6 +124,12 @@ rn.entity_handler[id] =
 			data.collided_this_second = false
 		end
 
+		local health_pct = ent:get_health() / ent:get_stats():get_maximum_health()
+		-- fire elemental: cast fiery detonation when 20% hp or under.
+		if data.magic_type == "Fire" and not rn.is_casting(ent) and health_pct <= 0.2 then
+			rn.cast_spell({ent = ent, ability_name = "Fiery Detonation"})
+		end
+
 		-- attempt to attack any enemy nearby
 		rn.for_each_collision(ent, function(ent2)
 			if not ent:is_dead() and not data.collided_this_second and ent2:is_valid() and not ent2:is_dead() and rn.get_relationship(ent, ent2) == "hostile" and rn.entity_get_data(ent2).impl.projectile_skip ~= true then
