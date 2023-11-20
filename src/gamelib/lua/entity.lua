@@ -54,9 +54,6 @@ rn.impl_entity_entity_valid_target = function(ent, args, ent2)
 	if not ent2:is_valid() then
 		return false
 	end
-	if rn.entity_distance(ent, ent2) > aggro_range then
-		return false
-	end
 	if can_target_dead == false and ent2:is_dead() then
 		return false
 	end
@@ -66,6 +63,9 @@ rn.impl_entity_entity_valid_target = function(ent, args, ent2)
 		end
 	end
 	if rn.entity_get_data(ent2).impl.targetable == false then
+		return false
+	end
+	if rn.entity_distance(ent, ent2) > aggro_range then
 		return false
 	end
 	return true
@@ -188,14 +188,17 @@ rn.entity_update = function(ent)
 	obj:set_name("Lua Entity Update")
 
 	tz.assert(ent ~= nil)
+	local data = rn.entity_get_data(ent)
+	if data.impl.trivial then
+		return
+	end
+
+	data.impl.is_moving = false
+
 	tracy.ZoneBeginN("Entity Handler Overhead")
 	local handler = rn.entity_handler[ent:get_type()]
 	tracy.ZoneEnd()
 	tz.assert(handler ~= nil)
-	local data = rn.entity_get_data(ent)
-
-	data.impl.is_moving = false
-
 	if handler.update ~= nil then
 		local obj2 <close> = tz.profzone_obj:new()
 		obj2:set_name("Update " .. ent:get_name() .. " (type " .. ent:get_type() .. ")")
