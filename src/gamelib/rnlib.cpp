@@ -46,6 +46,7 @@ namespace game
 		rn.texture_manager():register_texture("blackrock_dungeon.background_normals", "./res/images/scenery/backgrounds/background_blackrock_normals.png")
 
 		rn.load_level{name = "blackrock_dungeon"}
+		--rn.load_level{name = "blanchfield"}
 		)");
 	}
 

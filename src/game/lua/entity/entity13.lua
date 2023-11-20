@@ -99,6 +99,7 @@ rn.entity_handler[id] =
 		end
 
 		if rn.is_casting(ent) and data.target ~= nil then
+			tz.assert(data.target:is_valid())
 			local tarx, tary = data.target:get_element():get_position()
 			--local mousex, mousey = rn.scene():get_mouse_position_ws()
 			local entx, enty
@@ -118,7 +119,7 @@ rn.entity_handler[id] =
 			local spell_name = nil
 			if data.magic_type == "Fire" then
 				spell_name = "Fireball"
-			elseif data.magic_type == "Shadow" then
+			elseif data.magic_type == "Shadow" or data.magic_type == "Anthir" then
 				spell_name = "Shadowbolt"
 			elseif data.magic_type == "Frost" then
 				spell_name = "Frostbolt"

@@ -34,7 +34,9 @@ rn.entity_handler[id] =
 		local texh = rn.texture_manager():get_texture(typestr .. ".sprite0")
 		ent:get_element():object_set_texture_handle(2, 0, texh)
 
-		rn.entity_get_data(ent).impl.light = rn.scene():add_light()
+		local data = rn.entity_get_data(ent)
+		data.impl.light = rn.scene():add_light()
+		data.impl.projectile_skip = true
 	end,
 	deinit = function(ent)
 		rn.scene():remove_light(rn.entity_get_data(ent).impl.light)

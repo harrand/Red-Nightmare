@@ -16,6 +16,5 @@ rn.abilities[id] =
 		swing:set_base_stats(ent:get_base_stats())
 		local swingdata = rn.entity_get_data(swing)
 		swingdata.owner = ent
-		print(ent:get_name() .. " swings their mighty weapon!")
 	end
 }

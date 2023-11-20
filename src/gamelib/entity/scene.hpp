@@ -34,6 +34,7 @@ namespace game::entity
 		void clear_except_players();
 		const entity& get(entity_handle e) const;
 		entity& get(entity_handle e);
+		bool is_valid(entity_handle e) const;
 		std::size_t size() const;
 
 		light_handle add_light(render::scene_renderer::point_light_data d = {});

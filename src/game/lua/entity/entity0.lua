@@ -67,6 +67,8 @@ rn.entity_handler[id] =
 		elseif not rn.is_casting(ent) and wnd:is_mouse_down("right") then
 			rn.cast_spell({ent = ent, ability_name = "Allure of Flame", face_cast_direction = true})
 			--rn.cast_spell({ent = ent, ability_name = "Melee", face_cast_direction = true})
+		elseif not rn.is_casting(ent) and wnd:is_mouse_down("middle") then
+			rn.cast_spell({ent = ent, ability_name = "Touch of Death", face_cast_direction = true})
 		end
 
 		dir = {}
@@ -97,7 +99,7 @@ rn.entity_handler[id] =
 			data.impl.exp = 0
 		end
 		local killed_thing = rn.scene():get_uid(evt.damagee)
-		print(killed_thing:get_name() .. " dies, " .. ent:get_name() .. " gains " .. tostring(killed_thing:get_level()) .. " exp.")
+		--print(killed_thing:get_name() .. " dies, " .. ent:get_name() .. " gains " .. tostring(killed_thing:get_level()) .. " exp.")
 		data.impl.exp = data.impl.exp + killed_thing:get_level()
 		if data.impl.exp >= (ent:get_level() * 4) + 16 then
 			-- level up!

@@ -43,6 +43,7 @@ require "ability4"
 require "ability5"
 require "ability6"
 require "ability7"
+require "ability8"
 
 rn.cast_spell = function(arg)
 	local obj <close> = tz.profzone_obj:new()
@@ -131,6 +132,7 @@ end
 rn.complete_cast = function(ent)
 	local obj <close> = tz.profzone_obj:new()
 	obj:set_name("Complete Cast")
+	tz.assert(ent:is_valid())
 	local entdata = rn.entity_get_data(ent)
 	local ability = rn.abilities[rn.ability.type[entdata.impl.cast]]
 

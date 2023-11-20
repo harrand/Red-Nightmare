@@ -184,6 +184,11 @@ namespace game::entity
 		return this->entities[hanval];
 	}
 
+	bool scene::is_valid(entity_handle e) const
+	{
+		return this->is_valid(static_cast<tz::hanval>(e));
+	}
+
 	std::size_t scene::size() const
 	{
 		return this->entities.size();

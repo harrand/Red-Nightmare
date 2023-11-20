@@ -326,6 +326,7 @@ namespace game::entity
 	int rn_impl_entity::get_element(tz::lua::state& state)
 	{
 		using namespace game::render;
+		std::string traceback = state.print_traceback();
 		LUA_CLASS_PUSH(state, impl_rn_scene_element, {.elem = this->get().elem});
 		return 1;
 	}

@@ -15,6 +15,7 @@ rn.damage_type_get_colour = function(damage_type)
 	if damage_type == "Frost" then return 0.1, 0.4, 1.0 end
 	--if damage_type == "Shadow" then return 0.2, 0.0, 0.4 end
 	if damage_type == "Shadow" then return -0.17, -0.15, -0.17 end
+	if damage_type == "Anthir" then return 0.2, 0.0, 0.4 end
 	if damage_type == "Divine" then return 1.0, 0.85, 0.4 end
 
 	return 0.0, 0.0, 0.0
@@ -162,7 +163,7 @@ function rn.combat.process_event(evt)
 		if ability_name ~= nil then
 			ability_str = " with " .. ability_name 
 		end
-		print(damager:get_name() .. " hurts " .. damagee:get_name() .. ability_str .. " for " .. evt.value .. " " .. evt.damage_type .. ".")
+		--print(damager:get_name() .. " hurts " .. damagee:get_name() .. ability_str .. " for " .. evt.value .. " " .. evt.damage_type .. ".")
 	end
 	if evt.tag == "entity_heal_entity" then
 		local healer = rn.scene():get_uid(evt.healer)

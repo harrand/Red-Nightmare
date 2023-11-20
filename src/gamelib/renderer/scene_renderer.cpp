@@ -638,6 +638,12 @@ namespace game::render
 	int impl_rn_scene_element::get_position(tz::lua::state& state)
 	{
 		TZ_PROFZONE("scene element - get position", 0xFFFFAAEE);
+		if(this->elem.renderer == nullptr)
+		{
+			std::string traceback = state.print_traceback();
+			tz::report("%s", traceback.c_str());
+			tz::error();
+		}
 		auto& ren = this->elem.renderer->get_renderer();
 		tz::trs transform = ren.animated_object_get_local_transform(this->elem.entry.obj);
 		state.stack_push_float(transform.translate[0]);

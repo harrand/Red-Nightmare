@@ -105,6 +105,7 @@ require "entity10"
 require "entity11"
 require "entity12"
 require "entity13"
+require "entity14"
 
 rn.get_entity_type_name = function()
 	_tmp_type_name = nil
@@ -205,6 +206,10 @@ rn.entity_update = function(ent)
 	if data.impl.is_casting == true then
 		-- is the cast finished?
 		rn.casting_advance(ent)
+	end
+
+	if not ent:is_valid() then
+		return
 	end
 
 	local e = ent:get_element()
@@ -326,7 +331,7 @@ rn.update = function()
 	if sc:size() > 0 then
 		for i=0,sc:size()-1,1 do
 			local ent = sc:get(i)
-			if rn.entity.resident[ent:uid()] == true then
+			if rn.entity.resident[ent:uid()] == true and ent:is_valid() then
 				rn.entity_update(ent)
 			end
 		end
