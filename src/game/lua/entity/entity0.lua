@@ -107,5 +107,9 @@ rn.entity_handler[id] =
 		end
 
 		rn.player_credits = rn.player_credits + killed_thing:get_level() * killed_thing:get_type() * 2
+	end,
+	on_death = function(ent, evt)
+		rn.director.paused = true
+		print("U GOT REKT.")
 	end
 }

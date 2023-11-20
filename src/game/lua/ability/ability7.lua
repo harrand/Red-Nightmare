@@ -14,7 +14,7 @@ rn.abilities[id] =
 		nova:set_faction(rn.faction_id.pure_enemy)
 		-- spellpower equal to current health (aka ent kills itself too)
 		local bstats = nova:get_base_stats()
-		bstats:set_spell_power(ent:get_health())
+		bstats:set_spell_power(ent:get_health() + ent:get_stats():get_spell_power())
 		nova:set_base_stats(bstats)
 		local x, y = ent:get_element():get_subobject_position(21)
 		local x2, y2 = ent:get_element():get_subobject_position(17)

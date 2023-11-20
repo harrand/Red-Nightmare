@@ -55,6 +55,10 @@ rn.entity_handler[id] =
 
 		tracy.ZoneEnd()
 	end,
+	on_struck = function(ent, evt)
+		local damager = rn.scene():get_uid(evt.damager)
+		rn.entity_get_data(ent).target = damager
+	end,
 	on_death = function(ent)
 		local data = rn.entity_get_data(ent)
 		for i=1,2,1 do
