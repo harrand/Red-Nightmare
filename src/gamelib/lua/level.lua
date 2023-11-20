@@ -38,6 +38,30 @@ rn.load_level = function(args)
 		end
 	end
 
+	if args.name == "blackrock_dungeon" then
+		rn.level_bg = rn.scene():get(rn.scene():add(8))
+
+		--rn.scene():get_renderer():set_ambient_light(0.15, 0.2, 0.4) -- snowy
+		rn.scene():get_renderer():set_ambient_light(0.5, 0.5, 0.5)
+
+		local bgdata = rn.entity_get_data(rn.level_bg)
+
+		bgdata.dynamic_texture_scale = true
+		bgdata.texture_scale_zoom = 16.0
+		rn.level_bg:get_element():set_uniform_scale(64)
+		rn.level_bg:get_element():object_set_texture_handle(2, 0, rn.texture_manager():get_texture("blackrock_dungeon.background"))
+		rn.level_bg:get_element():object_set_texture_handle(2, 1, rn.texture_manager():get_texture("blackrock_dungeon.background_normals"))
+		rn.level_bg:get_element():set_depth(-2.5)
+
+		rn.director.restart()
+
+		if rn.player == nil then
+			rn.player = rn.scene():get(rn.scene():add(0))
+		else
+			rn.player:get_element():set_position(0, 0)
+		end
+	end
+
 	local handler = rn.level_handler[rn.level.type[args.name]]
 	tz.assert(handler ~= nil)
 	if handler.on_load ~= nil then
@@ -52,3 +76,4 @@ rn.restart_level = function()
 end
 
 require "level0"
+require "level1"

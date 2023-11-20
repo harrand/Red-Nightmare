@@ -42,8 +42,10 @@ namespace game
 		rn.texture_manager():register_texture("blanchfield_cemetary.background", "./res/images/scenery/backgrounds/background_grassy.png")
 		rn.texture_manager():register_texture("blanchfield_cemetary.background_normals", "./res/images/scenery/backgrounds/background_grassy_normals.png")
 		rn.texture_manager():register_texture("blanchfield_cemetary.foreground", "./res/images/scenery/foregrounds/foreground_blanchfield_cemetary.png")
+		rn.texture_manager():register_texture("blackrock_dungeon.background", "./res/images/scenery/backgrounds/background_blackrock.png")
+		rn.texture_manager():register_texture("blackrock_dungeon.background_normals", "./res/images/scenery/backgrounds/background_blackrock_normals.png")
 
-		rn.load_level{name = "blanchfield"}
+		rn.load_level{name = "blackrock_dungeon"}
 		)");
 	}
 
