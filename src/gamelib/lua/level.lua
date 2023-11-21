@@ -20,6 +20,8 @@ rn.load_level = function(args)
 
 		bgdata.dynamic_texture_scale = true
 		bgdata.texture_scale_zoom = 16.0
+		bgdata.impl.targetable = false
+		bgdata.impl.projectile_skip = true
 		rn.level_bg:get_element():set_uniform_scale(64)
 		rn.level_bg:get_element():object_set_texture_handle(2, 0, rn.texture_manager():get_texture("blanchfield_cemetary.background"))
 		rn.level_bg:get_element():object_set_texture_handle(2, 1, rn.texture_manager():get_texture("blanchfield_cemetary.background_normals"))
@@ -28,6 +30,8 @@ rn.load_level = function(args)
 		rn.level_fg:get_element():object_set_texture_handle(2, 0, rn.texture_manager():get_texture("blanchfield_cemetary.foreground"))
 		rn.level_fg:get_element():set_uniform_scale(64)
 		rn.level_fg:get_element():set_depth(-2)
+		fgdata.impl.targetable = false
+		fgdata.impl.projectile_skip = true
 
 		rn.director.restart()
 
@@ -48,6 +52,8 @@ rn.load_level = function(args)
 
 		bgdata.dynamic_texture_scale = true
 		bgdata.texture_scale_zoom = 16.0
+		bgdata.impl.targetable = false
+		bgdata.impl.projectile_skip = true
 		rn.level_bg:get_element():set_uniform_scale(64)
 		rn.level_bg:get_element():object_set_texture_handle(2, 0, rn.texture_manager():get_texture("blackrock_dungeon.background"))
 		rn.level_bg:get_element():object_set_texture_handle(2, 1, rn.texture_manager():get_texture("blackrock_dungeon.background_normals"))

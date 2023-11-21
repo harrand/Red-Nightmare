@@ -4,6 +4,7 @@ rn.level.type[levelstr] = id
 
 local spawn_tree = function(x, y)
 	local ent = rn.scene():get(rn.scene():add(9))	
+	ent:set_name("Tree")
 	ent:get_element():object_set_texture_handle(2, 0, rn.texture_manager():get_texture("scenery.tree0"))
 	ent:get_element():set_position(x, y)
 	ent:get_element():set_uniform_scale(2.0)
@@ -18,6 +19,7 @@ end
 
 local spawn_loot_chest = function(x, y)
 	local ent = rn.scene():get(rn.scene():add(12))
+	ent:set_name("Loot Chest")
 	ent:get_element():set_position(x, y)
 	local data = rn.entity_get_data(ent)
 	
@@ -28,11 +30,13 @@ local spawn_loot_chest = function(x, y)
 
 	local item_name = itemset[math.random(#itemset)]
 	data.loot = item_name
+	data.impl.targetable = false
 end
 
 local spawn_invisible_wall = function(x, y, sc)
 	sc = sc or 1.0
 	local ent = rn.scene():get(rn.scene():add(9))	
+	ent:set_name("Invisible Wall")
 	ent:get_element():set_position(x, y)
 	ent:get_element():set_uniform_scale(2.0 * sc)
 	ent:get_element():object_set_visibility(2, false)

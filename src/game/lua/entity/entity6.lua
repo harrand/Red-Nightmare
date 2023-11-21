@@ -27,6 +27,9 @@ rn.entity_handler[id] =
 	postinit = function(ent)
 		local texh = rn.texture_manager():get_texture(typestr .. ".sprite0")
 		ent:get_element():object_set_texture_handle(2, 0, texh)
+		local data = rn.entity_get_data(ent)
+		data.impl.targetable = false
+		data.impl.projectile_skip = true
 	end,
 	deinit = function(ent)
 		local data = rn.entity_get_data(ent)
@@ -46,7 +49,11 @@ rn.entity_handler[id] =
 		end
 
 		ent:get_element():object_set_texture_tint(2, 0, 0.85, 0.1, 0.1)
-		tz.assert(data.target_entity ~= nil)
+
+		if data.target_entity == nil or not data.target_entity:is_valid() then
+			rn.scene():remove_uid(ent:uid())
+			return
+		end
 		local xtar, ytar
 		if data.subobject == nil then
 			xtar, ytar = data.target_entity:get_element():get_position()

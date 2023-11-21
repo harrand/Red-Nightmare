@@ -73,12 +73,20 @@ rn.director.on_second_pass = function()
 			rn.director.spawn_cooldown = 15
 		end
 
-		-- cost 50: banshee
+		-- cost 50: frost elemental
 		if rn.director.credit > 90 then
 			local credit_cost = 90
 			rn.director.credit = rn.director.credit - credit_cost
 			spawn_result = rn.scene():get(rn.scene():add(13))
 			rn.director.spawn_cooldown = 30
+		end
+
+		-- cost 50: necromancer
+		if rn.director.credit > 150 then
+			local credit_cost = 150
+			rn.director.credit = rn.director.credit - credit_cost
+			spawn_result = rn.scene():get(rn.scene():add(15))
+			rn.director.spawn_cooldown = 20
 		end
 
 		-- cost 100: horde of rushers

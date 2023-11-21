@@ -54,15 +54,26 @@ rn.impl_entity_entity_valid_target = function(ent, args, ent2)
 	if not ent2:is_valid() then
 		return false
 	end
-	if can_target_dead == false and ent2:is_dead() then
-		return false
+	if ent2:is_dead() then
+		if can_target_dead == false and not args.only_target_dead then
+			return false
+		end
+	else
+		-- not dead
+		if args.only_target_dead then
+			return false
+		end
 	end
 	if args.target_relationship ~= nil then
 		if rn.get_relationship(ent, ent2) ~= args.target_relationship then
 			return false
 		end
 	end
-	if rn.entity_get_data(ent2).impl.targetable == false then
+	local data2 = rn.entity_get_data(ent2)
+	if data2.impl.targetable == false or data2.impl.projectile_skip then
+		return false
+	end
+	if args.no_undead and data2.impl.undead then
 		return false
 	end
 	if rn.entity_distance(ent, ent2) > aggro_range then
@@ -106,6 +117,7 @@ require "entity11"
 require "entity12"
 require "entity13"
 require "entity14"
+require "entity15"
 
 rn.get_entity_type_name = function()
 	_tmp_type_name = nil
