@@ -6,8 +6,6 @@ rn.director.credit = 0
 rn.director.second_timeout = 0
 -- initial cooldown (in seconds) before enemies start spawning
 rn.director.spawn_cooldown = 10
--- whether paused or not. if true, director won't spawn stuff nor gain credits.
-rn.director.paused = true
 -- impl detail. used to increase spawn credit_rate over time. don't touch.
 rn.director.credit_rate_counter = 0
 -- multiplier for a threshold value the credit_rate counter must reach before the director gets more aggressive.
@@ -28,7 +26,7 @@ rn.director.restart = function()
 	rn.director.credit = 0
 	rn.director.credit_rate = 1
 	rn.director.spawn_cooldown = 10
-	rn.director.paused = false
+	rn.data_store():add("director.paused", false)
 end
 
 rn.director.advance = function()
@@ -41,7 +39,8 @@ end
 
 rn.director.on_second_pass = function()
 	-- director gains 1 credit per second
-	if rn.director.paused then return end
+	if rn.data_store():read("director.paused") then return end
+	print("E")
 	rn.director.credit = rn.director.credit + rn.director.credit_rate
 	rn.director.credit_rate_counter = rn.director.credit_rate_counter + 1
 

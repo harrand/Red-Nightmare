@@ -84,6 +84,12 @@ namespace game
 		{
 			if(ImGui::Begin("Scene", &game_system->dbgui.display_scene))
 			{
+				bool director_paused = game_system->data_store.read<bool>("director.paused");
+				if(ImGui::Checkbox("Director Paused", &director_paused))
+				{
+					game_system->data_store.edit({.key = "director.paused", .val = director_paused});
+				}
+
 				game_system->scene.dbgui();
 				ImGui::End();
 			}
