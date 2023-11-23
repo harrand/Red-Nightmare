@@ -77,6 +77,35 @@ rn.entity_data_read = function(ent, keyname)
 	return ret
 end
 
+rn.entity_data_read_some = function(ent, ...)
+	local args = table.pack(...)
+	local amended_args = {}
+	for i,key in pairs(args) do
+		if type(i) == 'number' then
+			key = "ent." .. string.format("%.0f", ent:uid()) .. ".data." .. key
+			table.insert(amended_args, key)
+		end
+	end
+	return rn.data_store():read_some(table.unpack(amended_args))
+end
+
+rn.entity_data_write_some = function(ent, ...)
+	-- args: ent, {key1, value1, key2, value2}
+	-- so if even, we're a key
+	local args = table.pack(...)
+	local amended_args = {}
+	local counter=0
+	for i,key_or_val in pairs(args) do
+		if counter % 2 == 0 then
+			-- even. we're a key and we want to amend our name
+			key_or_val = "ent." .. string.format("%.0f", ent:uid()) .. ".data." .. key_or_val
+		end
+		counter = counter + 1
+		table.insert(amended_args, key_or_val)
+	end
+	rn.data_store():edit_some(table.unpack(amended_args))
+end
+
 rn.entity_data_clear = function(ent)
 	tracy.ZoneBegin()
 	rn.data_store():remove_all_of("ent." .. string.format("%.0f", ent:uid()) .. ".data")
