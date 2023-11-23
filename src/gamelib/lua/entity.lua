@@ -45,6 +45,33 @@ rn.entity_distance = function(ent, ent2)
 	return math.sqrt(xdiff*xdiff + ydiff*ydiff)
 end
 
+rn.datastore_internal_write_table = function(table_name, tbl)
+	local ds = rn.data_store()
+	for k, v in pairs(tbl) do
+		local name = table_name .. "." .. k
+		if type(v) == 'table' then
+			rn.datastore_internal_write_table(name, v)
+		else
+			ds:add(name, v)
+		end
+	end
+end
+
+rn.entity_data_write = function(ent, keyname, val)
+	local name = "ent." .. string.format("%.0f", ent:uid()) .. ".data"
+	if keyname ~= nil then name = name .. "." .. keyname end
+	if type(val) == 'table' then
+		rn.datastore_internal_write_table(name, val)
+	else
+		rn.data_store():add(name, val)
+	end
+end
+
+rn.entity_data_read = function(ent, keyname)
+	local name = "ent." .. string.format("%.0f", ent:uid()) .. ".data"
+	return rn.data_store():read(name .. "." .. keyname)
+end
+
 rn.impl_entity_entity_valid_target = function(ent, args, ent2)
 	local aggro_range = args.aggro_range or 12
 	local can_target_dead = false

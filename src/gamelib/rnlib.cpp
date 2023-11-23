@@ -5,6 +5,7 @@
 #include "tz/core/debug.hpp"
 #include "tz/core/profile.hpp"
 #include "tz/core/imported_text.hpp"
+#include "tz/core/data/data_store.hpp"
 #include "tz/lua/api.hpp"
 #include <memory>
 
@@ -27,6 +28,7 @@ namespace game
 	{
 		game::entity::scene scene;
 		game::render::texture_manager texmgr{scene.get_renderer().get_renderer()};
+		tz::data_store data_store;
 		dbgui_data_t dbgui;
 	};
 
@@ -134,7 +136,13 @@ namespace game
 
 	LUA_BEGIN(rn_impl_get_texture_manager)
 		using namespace game::render;
-		LUA_CLASS_PUSH(state, impl_rn_texture_manager, {.texmgr = &game_system->texmgr})
+		LUA_CLASS_PUSH(state, impl_rn_texture_manager, {.texmgr = &game_system->texmgr});
+		return 1;
+	LUA_END
+
+	LUA_BEGIN(rn_impl_get_data_store)
+		using namespace tz;
+		LUA_CLASS_PUSH(state, tz_lua_data_store, {.ds = &game_system->data_store});
 		return 1;
 	LUA_END
 
@@ -164,6 +172,7 @@ namespace game
 			game::logic::stats_static_initialise(state);
 			state.assign_func("rn.scene", LUA_FN_NAME(rn_impl_get_scene));
 			state.assign_func("rn.texture_manager", LUA_FN_NAME(rn_impl_get_texture_manager));
+			state.assign_func("rn.data_store", LUA_FN_NAME(rn_impl_get_data_store));
 
 			{
 				std::string str{ImportedTextData(ability, lua)};
