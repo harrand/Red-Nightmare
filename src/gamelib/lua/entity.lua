@@ -58,6 +58,7 @@ rn.datastore_internal_write_table = function(table_name, tbl)
 end
 
 rn.entity_data_write = function(ent, keyname, val)
+	tracy.ZoneBegin()
 	local name = "ent." .. string.format("%.0f", ent:uid()) .. ".data"
 	if keyname ~= nil then name = name .. "." .. keyname end
 	if type(val) == 'table' then
@@ -65,11 +66,21 @@ rn.entity_data_write = function(ent, keyname, val)
 	else
 		rn.data_store():add(name, val)
 	end
+	tracy.ZoneEnd()
 end
 
 rn.entity_data_read = function(ent, keyname)
+	tracy.ZoneBegin()
 	local name = "ent." .. string.format("%.0f", ent:uid()) .. ".data"
-	return rn.data_store():read(name .. "." .. keyname)
+	local ret = rn.data_store():read(name .. "." .. keyname)
+	tracy.ZoneEnd()
+	return ret
+end
+
+rn.entity_data_clear = function(ent)
+	tracy.ZoneBegin()
+	rn.data_store():remove_all_of("ent." .. string.format("%.0f", ent:uid()) .. ".data")
+	tracy.ZoneEnd()
 end
 
 rn.impl_entity_entity_valid_target = function(ent, args, ent2)
@@ -219,6 +230,8 @@ rn.entity_postinit = function(type)
 	if handler.postinit ~= nil then
 		handler.postinit(ent)
 	end
+
+	rn.entity_data_write(ent, nil, rn.entity_get_data(ent))
 end
 
 rn.entity_update = function(ent)
@@ -306,6 +319,7 @@ rn.entity_deinit = function()
 	local uid = rn_impl_dead_entity:uid()
 	rn.entity.resident[uid] = false
 	rn.entity.data[uid] = nil
+	rn.entity_data_clear(rn_impl_dead_entity)
 end
 
 rn.internal_key_state = {}
