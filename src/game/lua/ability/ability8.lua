@@ -29,8 +29,7 @@ rn.abilities[id] =
 		projdata.owner = ent
 		if projdata.shoot_direct then
 			-- shoot directly in the cast direction
-			projdata.shoot_vec_x = entdata.impl.cast_dir_x
-			projdata.shoot_vec_y = entdata.impl.cast_dir_y
+			projdata.shoot_vec_x, projdata.shoot_vec_y = rn.entity_data_read_some(ent, "impl.cast_dir_x", "impl.cast_dir_y")
 			-- math.atan2 is removed, instead just use math.atan with 2 args
 			proj:get_element():rotate(math.atan(projdata.shoot_vec_y, projdata.shoot_vec_x))
 		else

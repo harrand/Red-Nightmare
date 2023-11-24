@@ -111,8 +111,7 @@ rn.entity_handler[id] =
 			-- we want vector, so mouse pos - ent pos
 			local vecx = entx - tarx
 			local vecy = enty - tary
-			data.impl.cast_dir_x = vecx
-			data.impl.cast_dir_y = vecy
+			rn.entity_data_write_some(ent, "impl.cast_dir_x", vecx, "impl.cast_dir_y", vecy)
 		end
 
 		if data.fireball_cd <= 0.0 and data.target ~= nil then
