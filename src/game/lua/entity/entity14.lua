@@ -95,7 +95,7 @@ rn.entity_handler[id] =
 				else
 					-- undead things despawn very fast.
 					ent2data.impl.undead = true
-					ent2data.impl.custom_despawn_timer = 5000
+					rn.entity_data_write(ent2, "impl.custom_despawn_timer", 5000)
 				end
 			end
 		end)

@@ -22,7 +22,7 @@ rn.entity_handler[id] =
 		bstats:set_spell_power(25)
 		bstats:set_defence_rating(10)
 		ent:set_base_stats(bstats)
-		rn.entity_get_data(ent).impl.custom_despawn_timer = -1
+		rn.entity_data_write(ent, "impl.custom_despawn_timer", -1)
 		tracy.ZoneEnd()
 	end,
 	postinit = function(ent)
@@ -109,7 +109,7 @@ rn.entity_handler[id] =
 		rn.player_credits = rn.player_credits + killed_thing:get_level() * killed_thing:get_type() * 2
 	end,
 	on_death = function(ent, evt)
-		rn.director.paused = true
+		rn.data_store():edit("director.paused", true)
 		print("U GOT REKT.")
 	end
 }
