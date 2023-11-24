@@ -137,7 +137,7 @@ rn.impl_entity_entity_valid_target = function(ent, args, ent2)
 		end
 	end
 	local data2 = rn.entity_get_data(ent2)
-	if data2.impl.targetable == false or data2.impl.projectile_skip then
+	if rn.entity_data_read(ent2, "impl.targetable") == false or data2.impl.projectile_skip then
 		return false
 	end
 	if args.no_undead and data2.impl.undead then

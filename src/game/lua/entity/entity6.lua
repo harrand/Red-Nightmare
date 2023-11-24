@@ -28,7 +28,7 @@ rn.entity_handler[id] =
 		local texh = rn.texture_manager():get_texture(typestr .. ".sprite0")
 		ent:get_element():object_set_texture_handle(2, 0, texh)
 		local data = rn.entity_get_data(ent)
-		data.impl.targetable = false
+		rn.entity_data_write(ent, "impl.targetable", false)
 		data.impl.projectile_skip = true
 	end,
 	deinit = function(ent)

@@ -40,7 +40,6 @@ rn.entity_handler[id] =
 		tracy.ZoneEnd()
 	end,
 	update = function(ent)
-		local data = rn.entity_get_data(ent)
 		tz.assert(ent:get_name() == "Lady Melistra")
 		if ent:is_dead() then
 			return

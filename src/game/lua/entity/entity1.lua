@@ -30,7 +30,7 @@ rn.entity_handler[id] =
 		local data = rn.entity_get_data(ent)
 		data.impl.light = rn.scene():add_light();
 		data.impl.light:set_power(2.0)
-		data.impl.targetable = false
+		rn.entity_data_write(ent, "impl.targetable", false)
 	end,
 	deinit = function(ent)
 		local data = rn.entity_get_data(ent)

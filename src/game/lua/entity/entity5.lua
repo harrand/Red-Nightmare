@@ -24,7 +24,7 @@ rn.entity_handler[id] =
 		data.duration_remaining = 1.0
 		data.hit_enemies = {}
 		data.impl.projectile_skip = true
-		data.impl.targetable = false
+		rn.entity_data_write(ent, "impl.targetable", false)
 	end,
 	update = function(ent)
 		-- for each enemy colliding with us, hit them for damage.
@@ -34,7 +34,7 @@ rn.entity_handler[id] =
 		-- this lasts for multiple frames. we dont want to hit the same person twice.
 		-- so each person we hit we add their uid. and if we collide with that uid again dont hit.
 		rn.for_each_collision(ent, function(ent2)
-			if not data.hit_enemies[ent2:uid()] and ent2:is_valid() and not ent2:is_dead() and rn.get_relationship(ent, ent2) == "hostile" and rn.entity_get_data(ent2).impl.targetable ~= false then
+			if not data.hit_enemies[ent2:uid()] and ent2:is_valid() and not ent2:is_dead() and rn.get_relationship(ent, ent2) == "hostile" and rn.entity_data_read(ent2, "impl.targetable") ~= false then
 				local evt = rn.entity_damage_entity_event:new()
 				evt.damager = owner:uid()
 				evt.damagee = ent2:uid()

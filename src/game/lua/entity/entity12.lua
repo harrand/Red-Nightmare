@@ -36,7 +36,7 @@ rn.entity_handler[id] =
 		ent:get_element():object_set_texture_tint(2, 0, 1, 1, 1);
 		ent:get_element():set_uniform_scale(0.75)
 		local data = rn.entity_get_data(ent)
-		data.impl.targetable = false
+		rn.entity_data_write(ent, "impl.targetable", false)
 		data.impl.trivial = true
 	end
 }

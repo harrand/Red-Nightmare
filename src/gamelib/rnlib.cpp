@@ -109,9 +109,9 @@ namespace game
 		// END UNSAFE REGION
 		// note that lua update must wait till animation advance is done - it uses local transforms constantly, aswell as potentially adding/removing from the scene.
 		{
+			game_system->scene.block();
 			TZ_PROFZONE("rnlib - lua update", 0xFF00AAFF);
 			tz::lua::get_state().assign_float("rn.delta_time", delta_seconds);
-			game_system->scene.block();
 			tz::lua::get_state().execute("if rn.update ~= nil then rn.update() end");
 		}
 	}
