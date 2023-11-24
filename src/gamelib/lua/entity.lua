@@ -313,9 +313,10 @@ rn.entity_update = function(ent)
 		end
 		-- if custom despawn timer is -1, it never despawns.
 		-- if it is though... let's despawn it if it needs to
-		if timer ~= -1 and data.impl.death_time ~= nil then
+		local death_time = rn.entity_data_read(ent, "impl.death_time")
+		if timer ~= -1 and death_time ~= nil then
 			local now = tz.time()
-			if data.impl.death_time + timer <= tz.time() then
+			if death_time + timer <= tz.time() then
 				rn.scene():remove_uid(ent:uid())
 			end
 		end

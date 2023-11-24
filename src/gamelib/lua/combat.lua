@@ -53,8 +53,7 @@ function rn.combat.base_on_death(ent, evt)
 	rn.unequip_and_drop_all(ent)
 	rn.cancel_cast(ent)
 	ent:get_element():play_animation_by_name("Death", false)
-	local data = rn.entity_get_data(ent)
-	data.impl.death_time = tz.time()
+	rn.entity_data_write(ent, "impl.death_time", tz.time())
 end
 
 function rn.combat.base_on_kill(ent, evt)
