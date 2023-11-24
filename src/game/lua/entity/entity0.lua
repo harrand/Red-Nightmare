@@ -109,6 +109,5 @@ rn.entity_handler[id] =
 	end,
 	on_death = function(ent, evt)
 		rn.data_store():edit("director.paused", true)
-		print("U GOT REKT.")
 	end
 }

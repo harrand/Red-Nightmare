@@ -45,7 +45,7 @@ rn.entity_handler[id] =
 		-- right foot
 		-- left foot
 		data.impl.lights = {}
-		data.magic_type = "Frost"
+		rn.entity_data_write(ent, "magic_type", "Frost")
 		for i=1,2,1 do
 			data.impl.lights[i] = rn.scene():add_light()
 			data.impl.lights[i]:set_power(0.8)
@@ -74,7 +74,8 @@ rn.entity_handler[id] =
 			return
 		end
 
-		local r, g, b = rn.damage_type_get_colour(data.magic_type)
+		local magic_type = rn.entity_data_read(ent, "magic_type")
+		local r, g, b = rn.damage_type_get_colour(magic_type)
 		r = r * 2
 		g = g * 2
 		b = b * 2
@@ -116,11 +117,11 @@ rn.entity_handler[id] =
 
 		if data.fireball_cd <= 0.0 and data.target ~= nil then
 			local spell_name = nil
-			if data.magic_type == "Fire" then
+			if magic_type == "Fire" then
 				spell_name = "Fireball"
-			elseif data.magic_type == "Shadow" or data.magic_type == "Anthir" then
+			elseif magic_type == "Shadow" or magic_type == "Anthir" then
 				spell_name = "Shadowbolt"
-			elseif data.magic_type == "Frost" then
+			elseif magic_type == "Frost" then
 				spell_name = "Frostbolt"
 			end
 			rn.cast_spell({ent = ent, ability_name = spell_name, face_cast_direction = true})
@@ -130,7 +131,7 @@ rn.entity_handler[id] =
 
 		local health_pct = ent:get_health() / ent:get_stats():get_maximum_health()
 		-- fire elemental: cast fiery detonation when 20% hp or under.
-		if data.magic_type == "Fire" and not rn.is_casting(ent) and health_pct <= 0.2 then
+		if magic_type == "Fire" and not rn.is_casting(ent) and health_pct <= 0.2 then
 			rn.cast_spell({ent = ent, ability_name = "Fiery Detonation"})
 		end
 
@@ -143,7 +144,7 @@ rn.entity_handler[id] =
 				evt.damager = ent:uid()
 				evt.damagee = ent2:uid()
 				evt.value = ent:get_stats():get_spell_power() * 0.2
-				evt.damage_type = data.magic_type
+				evt.damage_type = magic_type
 				rn.combat.process_event(evt)
 			end
 		end)

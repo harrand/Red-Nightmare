@@ -42,7 +42,8 @@ rn.entity_handler[id] =
 		local stats = ent:get_base_stats()
 		stats:set_movement_speed(12.0)
 		ent:set_base_stats(stats)
-		local r, g, b = rn.damage_type_get_colour(data.magic_type)
+		local magic_type = rn.entity_data_read(ent, "magic_type")
+		local r, g, b = rn.damage_type_get_colour(magic_type)
 		ent:get_element():object_set_texture_tint(2, 0, r, g, b)
 		data.flipbook_timer = data.flipbook_timer + rn.delta_time
 		-- when flipbook timer hits a threshold (fps / 4), advance to the next frame
@@ -98,7 +99,7 @@ rn.entity_handler[id] =
 				evt.damager = data.owner:uid()
 				evt.damagee = ent2:uid()
 				evt.value = ent:get_stats():get_spell_power()
-				evt.damage_type = data.magic_type
+				evt.damage_type = magic_type
 				rn.combat.process_event(evt)
 
 				if data.owner ~= nil and data.owner:is_valid() and data.owner:get_type() == 0 then

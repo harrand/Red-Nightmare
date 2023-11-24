@@ -15,7 +15,7 @@ rn.abilities[id] =
 		rn.equipment_copy(ent, ele)
 		local eledata = rn.entity_get_data(ele)
 		ele:set_faction(rn.faction_id.player_ally)
-		eledata.magic_type = "Fire"
+		rn.entity_data_write(ele, "magic_type", "Fire")
 
 		local nova = rn.scene():get(rn.scene():add(10))
 		nova:set_faction(ent:get_faction())

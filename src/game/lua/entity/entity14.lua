@@ -41,7 +41,8 @@ rn.entity_handler[id] =
 		local stats = ent:get_base_stats()
 		stats:set_movement_speed(12.0)
 		ent:set_base_stats(stats)
-		local r, g, b = rn.damage_type_get_colour(data.magic_type)
+		local magic_type = rn.entity_data_read(ent, "magic_type")
+		local r, g, b = rn.damage_type_get_colour(magic_type)
 		ent:get_element():object_set_texture_tint(2, 0, r, g, b)
 		data.flipbook_timer = data.flipbook_timer + rn.delta_time
 		-- when flipbook timer hits a threshold (fps / 4), advance to the next frame
@@ -78,7 +79,7 @@ rn.entity_handler[id] =
 				end
 				-- set his texture tint to be darker.
 				if ent2:get_model() == rn.model.humanoid then
-					ent2:get_element():object_set_texture_tint(3, 0, rn.damage_type_get_colour(data.magic_type))
+					ent2:get_element():object_set_texture_tint(3, 0, rn.damage_type_get_colour(magic_type))
 				end
 				ent2:set_health(ent2:get_stats():get_maximum_health())
 				rn.entity_data_write(ent2, "impl.death_time", nil)
@@ -86,7 +87,7 @@ rn.entity_handler[id] =
 				if ent2:get_type() == 13 then
 					-- its an elemental. set its type to our magic type.
 					local eledata = rn.entity_get_data(ent2)
-					eledata.magic_type = data.magic_type
+					rn.entity_data_write(ent2, "magic_type", magic_type)
 					-- turn all its lights back on too!
 					for i=1,2,1 do
 						eledata.impl.lights[i] = rn.scene():add_light()

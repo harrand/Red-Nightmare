@@ -48,6 +48,6 @@ rn.abilities[id] =
 			end
 		end
 
-		projdata.magic_type = ability.magic_type
+		rn.entity_data_write(proj, "magic_type", ability.magic_type)
 	end
 }
