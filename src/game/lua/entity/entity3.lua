@@ -23,8 +23,7 @@ rn.entity_handler[id] =
 		data.impl.light = rn.scene():add_light()
 		data.impl.light:set_power(0.4)
 		data.impl.counter = 0
-		data.impl.projectile_skip = true
-		rn.entity_data_write(ent, "impl.targetable", false)
+		rn.entity_data_write(ent, "impl.targetable", false, "impl.projectile_skip", true)
 	end,
 	deinit = function(ent)
 		rn.scene():remove_light(rn.entity_get_data(ent).impl.light)

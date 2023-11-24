@@ -23,8 +23,7 @@ rn.entity_handler[id] =
 		-- live for 0.5 seconds
 		data.duration_remaining = 1.0
 		data.hit_enemies = {}
-		data.impl.projectile_skip = true
-		rn.entity_data_write(ent, "impl.targetable", false)
+		rn.entity_data_write(ent, "impl.targetable", false, "impl.projectile_skip", true)
 	end,
 	update = function(ent)
 		-- for each enemy colliding with us, hit them for damage.

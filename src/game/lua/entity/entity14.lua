@@ -70,7 +70,7 @@ rn.entity_handler[id] =
 
 		rn.for_each_collision(ent, function(ent2)
 			local ent2data = rn.entity_get_data(ent2)
-			if not data.collided_this_update and ent2:is_valid() and ent2:is_dead() and ent2data.impl.projectile_skip ~= true and not ent2data.impl.undead then
+			if not data.collided_this_update and ent2:is_valid() and ent2:is_dead() and rn.entity_data_read(ent2, "impl.projectile_skip") ~= true and not ent2data.impl.undead then
 				-- bring the dead bloke back to life. set him to our faction.
 				data.collided_this_update = true
 				if data.owner ~= nil and data.owner:is_valid() then

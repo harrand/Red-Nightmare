@@ -111,7 +111,7 @@ rn.entity_handler[id] =
 			-- we want vector, so mouse pos - ent pos
 			local vecx = entx - tarx
 			local vecy = enty - tary
-			rn.entity_data_write_some(ent, "impl.cast_dir_x", vecx, "impl.cast_dir_y", vecy)
+			rn.entity_data_write(ent, "impl.cast_dir_x", vecx, "impl.cast_dir_y", vecy)
 		end
 
 		if data.fireball_cd <= 0.0 and data.target ~= nil then
@@ -136,7 +136,7 @@ rn.entity_handler[id] =
 
 		-- attempt to attack any enemy nearby
 		rn.for_each_collision(ent, function(ent2)
-			if not ent:is_dead() and not data.collided_this_second and ent2:is_valid() and not ent2:is_dead() and rn.get_relationship(ent, ent2) == "hostile" and rn.entity_get_data(ent2).impl.projectile_skip ~= true then
+			if not ent:is_dead() and not data.collided_this_second and ent2:is_valid() and not ent2:is_dead() and rn.get_relationship(ent, ent2) == "hostile" and rn.entity_data_read(ent2, "impl.projectile_skip") ~= true then
 				-- deal magic damage to colliding enemies
 				data.collided_this_second = true
 				local evt = rn.entity_damage_entity_event:new()

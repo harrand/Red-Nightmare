@@ -44,9 +44,7 @@ local spawn_invisible_wall = function(x, y, sc)
 	bstats:set_defence_rating(999999)
 	ent:set_base_stats(bstats)
 	ent:set_health(ent:get_stats():get_maximum_health())
-	local entdata = rn.entity_get_data(ent)
-	rn.entity_data_write(ent, "impl.targetable", false)
-	entdata.impl.projectile_skip = true
+	rn.entity_data_write(ent, "impl.targetable", false, "impl.projectile_skip", true)
 end
 
 rn.level_handler[id] =

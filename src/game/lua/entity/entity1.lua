@@ -91,7 +91,8 @@ rn.entity_handler[id] =
 				rn.scene():remove_uid(ent2:uid())
 				return false
 			end
-			if not data.collided_this_update and ent2:is_valid() and not ent2:is_dead() and rn.get_relationship(ent, ent2) == "hostile" and rn.entity_get_data(ent2).impl.projectile_skip ~= true then
+			local target_projectile_skip = rn.entity_data_read(ent2, "impl.projectile_skip")
+			if not data.collided_this_update and ent2:is_valid() and not ent2:is_dead() and rn.get_relationship(ent, ent2) == "hostile" and target_projectile_skip ~= true then
 				data.collided_this_update = true
 				local evt = rn.entity_damage_entity_event:new()
 				evt.damager = data.owner:uid()

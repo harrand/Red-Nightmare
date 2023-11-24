@@ -57,27 +57,7 @@ rn.datastore_internal_write_table = function(table_name, tbl)
 	end
 end
 
-rn.entity_data_write = function(ent, keyname, val)
-	tracy.ZoneBegin()
-	local name = "ent." .. string.format("%.0f", ent:uid()) .. ".data"
-	if keyname ~= nil then name = name .. "." .. keyname end
-	if type(val) == 'table' then
-		rn.datastore_internal_write_table(name, val)
-	else
-		rn.data_store():add(name, val)
-	end
-	tracy.ZoneEnd()
-end
-
-rn.entity_data_read = function(ent, keyname)
-	tracy.ZoneBegin()
-	local name = "ent." .. string.format("%.0f", ent:uid()) .. ".data"
-	local ret = rn.data_store():read(name .. "." .. keyname)
-	tracy.ZoneEnd()
-	return ret
-end
-
-rn.entity_data_read_some = function(ent, ...)
+rn.entity_data_read = function(ent, ...)
 	local args = table.pack(...)
 	local amended_args = {}
 	for i,key in pairs(args) do
@@ -89,7 +69,7 @@ rn.entity_data_read_some = function(ent, ...)
 	return rn.data_store():read_some(table.unpack(amended_args))
 end
 
-rn.entity_data_write_some = function(ent, ...)
+rn.entity_data_write = function(ent, ...)
 	-- args: ent, {key1, value1, key2, value2}
 	-- so if even, we're a key
 	local args = table.pack(...)
@@ -137,7 +117,8 @@ rn.impl_entity_entity_valid_target = function(ent, args, ent2)
 		end
 	end
 	local data2 = rn.entity_get_data(ent2)
-	if rn.entity_data_read(ent2, "impl.targetable") == false or data2.impl.projectile_skip then
+	local targetable, projectile_skip = rn.entity_data_read(ent2, "impl.targetable", "impl.projectile_skip")
+	if targetable == false or projectile_skip then
 		return false
 	end
 	if args.no_undead and data2.impl.undead then
@@ -259,8 +240,6 @@ rn.entity_postinit = function(type)
 	if handler.postinit ~= nil then
 		handler.postinit(ent)
 	end
-
-	rn.entity_data_write(ent, nil, rn.entity_get_data(ent))
 end
 
 rn.entity_update = function(ent)

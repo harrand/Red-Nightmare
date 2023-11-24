@@ -176,7 +176,7 @@ rn.casting_advance = function(ent)
 
 	if entdata.impl.face_cast_direction then
 		local e = ent:get_element()
-		local vecx, vecy = rn.entity_data_read_some(ent, "impl.cast_dir_x", "impl.cast_dir_y")
+		local vecx, vecy = rn.entity_data_read(ent, "impl.cast_dir_x", "impl.cast_dir_y")
 		vecx = vecx or 0
 		vecy = vecy or 0
 		if(vecx < 0.0) then
