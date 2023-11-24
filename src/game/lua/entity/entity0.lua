@@ -93,20 +93,19 @@ rn.entity_handler[id] =
 	end,
 	on_kill = function(ent, evt)
 		-- player killed someone
-		local data = rn.entity_get_data(ent)
-		if data.impl.exp == nil then
-			data.impl.exp = 0
-		end
+		local xp = rn.entity_data_read(ent, "impl.exp")
+		xp = xp or 0
 		local killed_thing = rn.scene():get_uid(evt.damagee)
 		--print(killed_thing:get_name() .. " dies, " .. ent:get_name() .. " gains " .. tostring(killed_thing:get_level()) .. " exp.")
-		data.impl.exp = data.impl.exp + killed_thing:get_level()
-		if data.impl.exp >= (ent:get_level() * 4) + 16 then
+		xp = xp + killed_thing:get_level()
+		if xp >= (ent:get_level() * 4) + 16 then
 			-- level up!
 			print("DING!")
-			data.impl.exp = 0
+			xp = 0
 			ent:level_up()
 		end
 
+		rn.entity_data_write(ent, "impl.exp", xp)
 		rn.player_credits = rn.player_credits + killed_thing:get_level() * killed_thing:get_type() * 2
 	end,
 	on_death = function(ent, evt)
