@@ -252,7 +252,7 @@ rn.entity_update = function(ent)
 		return
 	end
 
-	data.impl.is_moving = false
+	rn.entity_data_write(ent, "impl.is_moving", false)
 
 	tracy.ZoneBeginN("Entity Handler Overhead")
 	local handler = rn.entity_handler[ent:get_type()]
@@ -265,7 +265,7 @@ rn.entity_update = function(ent)
 	end
 
 	-- deal with casts.
-	local casting = rn.entity_data_read(ent, "impl.is_casting")
+	local casting, is_moving = rn.entity_data_read(ent, "impl.is_casting", "impl.is_moving")
 	if casting == true then
 		-- is the cast finished?
 		rn.casting_advance(ent)
@@ -276,7 +276,7 @@ rn.entity_update = function(ent)
 	end
 
 	local e = ent:get_element()
-	if not ent:is_dead() and not casting and not data.impl.is_moving then
+	if not ent:is_dead() and not casting and not is_moving then
 		if (ent:get_model() == rn.model.humanoid) and (e:get_playing_animation_name() ~= "CastIdle" or not e:is_animation_playing()) then
 			e:play_animation_by_name("CastIdle", false)
 		end
@@ -513,7 +513,7 @@ rn.entity_move = function(arg)
 
 	if (xdiff ~= 0 or ydiff ~= 0) and not rn.entity_data_read(ent, "impl.is_casting") then
 		-- do movement
-		entdata.impl.is_moving = true
+		rn.entity_data_write(ent, "impl.is_moving", true)
 		local x, y = e:get_position()
 		local hypot = math.sqrt(xdiff*xdiff + ydiff*ydiff)
 		xdiff = xdiff / hypot
