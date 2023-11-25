@@ -21,10 +21,10 @@ rn.entity_handler[id] =
 	on_death = function(ent)
 		-- todo: chest open animation
 		ent:get_element():object_set_visibility(2, false)
-		local data = rn.entity_get_data(ent)
-		if data.loot ~= nil then
+		local loot = rn.entity_data_read(ent, "loot")
+		if loot ~= nil then
 			local x, y = ent:get_element():get_position()
-			rn.drop_item_at(data.loot, x, y)
+			rn.drop_item_at(loot, x, y)
 		else
 			tz.report("no loot. sadgers :(")
 		end
