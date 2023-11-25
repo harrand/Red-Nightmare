@@ -16,12 +16,7 @@ rn.entity_handler[id] =
 		ent:set_model(rn.model.quad)
 		ent:set_collideable(false)
 
-		rn.entity.data[ent:uid()] =
-		{
-			flipbook_timer = 0,
-			cur_texture_id = 0,
-			spawned_at = tz.time(),
-		}
+		rn.entity_data_write(ent, "spawned_at", tz.time())
 	end,
 	postinit = function(ent)
 		local texh = rn.texture_manager():get_texture(typestr .. ".sprite0")
@@ -34,7 +29,7 @@ rn.entity_handler[id] =
 	end,
 	update = function(ent)
 		local data = rn.entity.data[ent:uid()]
-		local target_entity_uid, subobject, cast_duration, magic_type = rn.entity_data_read(ent, "target_entity", "subobject", "cast_duration", "magic_type")
+		local target_entity_uid, subobject, cast_duration, magic_type, spawned_at = rn.entity_data_read(ent, "target_entity", "subobject", "cast_duration", "magic_type", "spawned_at")
 		tz.assert(target_entity_uid ~= nil and type(target_entity_uid) == 'number')
 		local target_entity = rn.scene():get_uid(target_entity_uid)
 		local r, g, b = rn.damage_type_get_colour(magic_type)
@@ -47,7 +42,7 @@ rn.entity_handler[id] =
 		light:set_position(xtar, ytar)
 		light:set_colour(r, g, b)
 
-		local casted_time = tz.time() - data.spawned_at
+		local casted_time = tz.time() - spawned_at
 		local cast_progress = casted_time / cast_duration
 		-- frame count = 7
 		local frame_id = math.floor(cast_progress * 6) % 7
