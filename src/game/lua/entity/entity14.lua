@@ -72,8 +72,8 @@ rn.entity_handler[id] =
 		end
 
 		rn.for_each_collision(ent, function(ent2)
-			local ent2data = rn.entity_get_data(ent2)
-			if not data.collided_this_update and ent2:is_valid() and ent2:is_dead() and rn.entity_data_read(ent2, "impl.projectile_skip") ~= true and not ent2data.impl.undead then
+			local projectile_skip, undead = rn.entity_data_read(ent2, "impl.projectile_skip", "impl.undead")
+			if not data.collided_this_update and ent2:is_valid() and ent2:is_dead() and projectile_skip ~= true and not undead then
 				-- bring the dead bloke back to life. set him to our faction.
 				data.collided_this_update = true
 				if data.owner ~= nil and data.owner:is_valid() then
@@ -98,8 +98,7 @@ rn.entity_handler[id] =
 					end
 				else
 					-- undead things despawn very fast.
-					ent2data.impl.undead = true
-					rn.entity_data_write(ent2, "impl.custom_despawn_timer", 5000)
+					rn.entity_data_write(ent2, "impl.custom_despawn_timer", 5000, "impl.undead", true)
 				end
 			end
 		end)

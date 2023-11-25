@@ -37,7 +37,7 @@ rn.entity_handler[id] =
 
 		local data = rn.entity_get_data(ent)
 		data.fireball_cd = 7
-		data.impl.undead = true
+		rn.entity_data_write(ent, "impl.undead", true)
 
 		tracy.ZoneEnd()
 	end,

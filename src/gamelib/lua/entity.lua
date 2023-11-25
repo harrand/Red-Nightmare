@@ -116,12 +116,11 @@ rn.impl_entity_entity_valid_target = function(ent, args, ent2)
 			return false
 		end
 	end
-	local data2 = rn.entity_get_data(ent2)
-	local targetable, projectile_skip = rn.entity_data_read(ent2, "impl.targetable", "impl.projectile_skip")
+	local targetable, projectile_skip, undead = rn.entity_data_read(ent2, "impl.targetable", "impl.projectile_skip", "impl.undead")
 	if targetable == false or projectile_skip then
 		return false
 	end
-	if args.no_undead and data2.impl.undead then
+	if args.no_undead and undead then
 		return false
 	end
 	if rn.entity_distance(ent, ent2) > aggro_range then
