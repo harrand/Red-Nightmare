@@ -27,22 +27,22 @@ rn.entity_handler[id] =
 		local texh = rn.texture_manager():get_texture(typestr .. ".sprite0")
 		ent:get_element():object_set_texture_handle(2, 0, texh)
 
-		local data = rn.entity_get_data(ent)
-		data.impl.light = rn.scene():add_light();
-		local light = rn.scene():get_light(data.impl.light)
+		local light_id = rn.scene():add_light()
+		local light = rn.scene():get_light(light_id)
 		light:set_power(2.0)
+		rn.entity_data_write(ent, "impl.light", light_id)
 	end,
 	deinit = function(ent)
-		local data = rn.entity_get_data(ent)
-		tz.assert(data.impl.light ~= nil)
-		rn.scene():remove_light(data.impl.light)
+		local light_id = rn.entity_data_read(ent, "impl.light")
+		tz.assert(light_id ~= nil)
+		rn.scene():remove_light(light_id)
 	end,
 	update = function(ent)
 		local data = rn.entity.data[ent:uid()]
 		local stats = ent:get_base_stats()
 		stats:set_movement_speed(12.0)
 		ent:set_base_stats(stats)
-		local magic_type = rn.entity_data_read(ent, "magic_type")
+		local magic_type, light_id = rn.entity_data_read(ent, "magic_type", "impl.light")
 		local r, g, b = rn.damage_type_get_colour(magic_type)
 		ent:get_element():object_set_texture_tint(2, 0, r, g, b)
 		data.flipbook_timer = data.flipbook_timer + rn.delta_time
@@ -55,7 +55,7 @@ rn.entity_handler[id] =
 		end
 		local x, y = ent:get_element():get_position()
 
-		local light = rn.scene():get_light(data.impl.light)
+		local light = rn.scene():get_light(light_id)
 		light:set_position(x, y)
 		light:set_colour(r, g, b)
 
