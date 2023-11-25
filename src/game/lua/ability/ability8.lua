@@ -12,7 +12,7 @@ rn.abilities[id] =
 	on_cast = function(ent)
 		local entdata = rn.entity_get_data(ent)
 
-		local ability = rn.abilities[rn.ability.type[entdata.impl.cast]]
+		local ability = rn.abilities[rn.ability.type[rn.entity_data_read(ent, "impl.cast")]]
 
 		local proj = rn.scene():get(rn.scene():add(14))
 		proj:set_faction(ent:get_faction())

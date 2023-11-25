@@ -87,14 +87,13 @@ rn.cast_spell = function(arg)
 	-- if its an instant cast spell, no need to set these, just send it instantly. (note: no animation in this case)
 	if ability.base_cast_time == 0 or instant_cast_override then
 		-- just instantly send it
-		entdata.impl.cast = ability_name
+		rn.entity_data_write(ent, "impl.cast", ability_name)
 		rn.complete_cast(ent)
 		return
 	end
 
 	entdata.impl.is_casting = true
-	entdata.impl.cast_begin = tz.time()
-	entdata.impl.cast = ability_name
+	rn.entity_data_write(ent, "impl.cast", ability_name, "impl.cast_begin", tz.time())
 
 	ent:get_element():play_animation_by_name(rn._impl_cast_type_to_animation_name[cast_type], false)
 
@@ -134,9 +133,10 @@ rn.complete_cast = function(ent)
 	obj:set_name("Complete Cast")
 	tz.assert(ent:is_valid())
 	local entdata = rn.entity_get_data(ent)
-	local ability = rn.abilities[rn.ability.type[entdata.impl.cast]]
+	local cast = rn.entity_data_read(ent, "impl.cast")
+	local ability = rn.abilities[rn.ability.type[cast]]
 
-	obj:set_text("Cast - " .. entdata.impl.cast)
+	obj:set_text("Cast - " .. cast)
 
 	tz.assert(ability ~= nil)
 	ability.on_cast(ent)
@@ -148,8 +148,7 @@ rn.cancel_cast = function(ent)
 	obj:set_name("Cancel Cast")
 	local entdata = rn.entity_get_data(ent)
 	entdata.impl.is_casting = false
-	entdata.impl.cast_begin = nil
-	entdata.impl.cast = nil
+	rn.entity_data_write(ent, "impl.cast", nil, "impl.cast_begin", nil)
 	if entdata.impl.cast_effects ~= nil then
 		for i=1,2,1 do
 			if entdata.impl.cast_effects[i] ~= nil then
@@ -165,12 +164,13 @@ rn.casting_advance = function(ent)
 	obj:set_name("Casting Advance")
 	-- entity is currently casting a spell.
 	local entdata = rn.entity_get_data(ent)
-	tz.assert(entdata.impl.cast ~= nil)
-	obj:set_text("Casting Advance - " .. entdata.impl.cast)
-	local ability = rn.abilities[rn.ability.type[entdata.impl.cast]]
+	local cast, cast_begin = rn.entity_data_read(ent, "impl.cast", "impl.cast_begin")
+	tz.assert(cast ~= nil)
+	obj:set_text("Casting Advance - " .. cast)
+	local ability = rn.abilities[rn.ability.type[cast]]
 	tz.assert(ability ~= nil)
 	local t = tz.time()
-	if t > (entdata.impl.cast_begin + ability.base_cast_time) then
+	if t > (cast_begin + ability.base_cast_time) then
 		rn.complete_cast(ent)
 	end
 
@@ -229,7 +229,9 @@ rn.is_casting = function(ent)
 end
 
 rn.get_current_cast = function(ent)
-	if rn.is_casting(ent) then return rn.entity_get_data(ent).impl.cast end
+	if rn.is_casting(ent) then
+		return rn.entity_data_read(ent, "impl.cast")
+	end
 	return nil
 end
 

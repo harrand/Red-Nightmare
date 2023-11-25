@@ -157,7 +157,7 @@ function rn.combat.process_event(evt)
 		evt = rn.combat.process_damage_mitigation(evt)
 		rn.combat.base_on_struck(damagee, evt)
 		rn.combat.base_on_hit(damager, evt)
-		local ability_name = rn.entity_get_data(damager).impl.cast
+		local ability_name = rn.entity_data_read(damager, "impl.cast")
 		local ability_str = ""
 		if ability_name ~= nil then
 			ability_str = " with " .. ability_name 
