@@ -40,7 +40,6 @@ end
 rn.director.on_second_pass = function()
 	-- director gains 1 credit per second
 	if rn.data_store():read("director.paused") then return end
-	print("E")
 	rn.director.credit = rn.director.credit + rn.director.credit_rate
 	rn.director.credit_rate_counter = rn.director.credit_rate_counter + 1
 

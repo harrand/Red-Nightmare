@@ -227,7 +227,7 @@ rn.entity_postinit = function(type)
 		e:object_set_visibility(5, false)
 		e:object_set_visibility(7, false)
 		e:face_forward()
-		rn.entity_get_data(ent).impl.dir = "forward"
+		rn.entity_data_write(ent, "impl.dir", "forward")
 	elseif mod == rn.model.quad then
 		e:object_set_visibility(2, true)
 		e:face_forward2d()

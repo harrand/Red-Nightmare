@@ -58,7 +58,7 @@ rn.unequip_and_drop = function(ent, slot_id)
 end
 
 rn.unequip_and_drop_all = function(ent)
-	if rn.entity_get_data(ent).impl.drop_items_on_death == false then return end
+	if rn.entity_data_read(ent, "impl.drop_items_on_death") == false then return end
 	local x, y = ent:get_element():get_position()
 	for i=1,rn.equipment.slot._count-1,1 do
 		rn.entity_equipment[ent:uid()] = rn.entity_equipment[ent:uid()] or {}
