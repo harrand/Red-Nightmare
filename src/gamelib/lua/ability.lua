@@ -102,27 +102,12 @@ rn.cast_spell = function(arg)
 	if has_magic_visual then
 		local cast_effect_l = rn.scene():get(rn.scene():add(4))
 		cast_effect_l_uid = cast_effect_l:uid()
-		local rhdata = rn.entity.data[cast_effect_l_uid]
-		rhdata.target_entity = ent
-		rhdata.subobject = 21
-		-- play flipbook 2 times per cast.
-		rhdata.cast_duration = ability.base_cast_time * 0.5
-		local r, g, b = rn.damage_type_get_colour(ability.magic_type)
-		rhdata.colour_r = r
-		rhdata.colour_g = g
-		rhdata.colour_b = b
+		rn.entity_data_write(cast_effect_l, "target_entity", ent:uid(), "subobject", 21, "cast_duration", ability.base_cast_time * 0.5, "magic_type", ability.magic_type)
 
 		if ability.dual_wield_cast then
 			local cast_effect_r = rn.scene():get(rn.scene():add(4))
 			cast_effect_r_uid = cast_effect_r:uid()
-			local lhdata = rn.entity.data[cast_effect_r_uid]
-			lhdata.target_entity = ent
-			lhdata.subobject = 17
-			-- play flipbook 2 times per cast.
-			lhdata.cast_duration = ability.base_cast_time * 0.5
-			lhdata.colour_r = r
-			lhdata.colour_g = g
-			lhdata.colour_b = b
+			rn.entity_data_write(cast_effect_r, "target_entity", ent:uid(), "subobject", 17, "cast_duration", ability.base_cast_time * 0.5, "magic_type", ability.magic_type)
 		end
 	end
 

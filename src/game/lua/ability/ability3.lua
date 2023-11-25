@@ -10,12 +10,9 @@ rn.abilities[id] =
 	cast_type = rn.cast.type.spell_1h_omni,
 	on_cast = function(ent)
 		local barrier = rn.scene():get(rn.scene():add(7))
-		local barrierdata = rn.entity_get_data(barrier)
 		local duration = 10000
 		local ability = rn.abilities[id]
 		rn.entity_data_write(barrier, "target_entity", ent:uid(), "duration", duration, "magic_type", ability.magic_type)
-		--barrierdata.target_entity = ent
-		--barrierdata.duration = 10000
 
 		local immune_buff = rn.new_buff()
 		immune_buff:set_time_remaining(duration / 1000)
