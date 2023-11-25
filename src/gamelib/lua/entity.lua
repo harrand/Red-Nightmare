@@ -72,16 +72,18 @@ end
 rn.entity_data_write = function(ent, ...)
 	-- args: ent, {key1, value1, key2, value2}
 	-- so if even, we're a key
-	local args = table.pack(...)
+	local args = {...}
 	local amended_args = {}
 	local counter=0
 	for i,key_or_val in pairs(args) do
-		if counter % 2 == 0 then
-			-- even. we're a key and we want to amend our name
-			key_or_val = "ent." .. string.format("%.0f", ent:uid()) .. ".data." .. key_or_val
+		if type(i) == 'number' then
+			if counter % 2 == 0 then
+				-- even. we're a key and we want to amend our name
+				key_or_val = "ent." .. string.format("%.0f", ent:uid()) .. ".data." .. key_or_val
+			end
+			counter = counter + 1
+			table.insert(amended_args, key_or_val)
 		end
-		counter = counter + 1
-		table.insert(amended_args, key_or_val)
 	end
 	rn.data_store():edit_some(table.unpack(amended_args))
 end

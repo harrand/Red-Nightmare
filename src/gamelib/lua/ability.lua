@@ -93,18 +93,17 @@ rn.cast_spell = function(arg)
 		return
 	end
 
-	rn.entity_data_write(ent, "impl.cast", ability_name, "impl.cast_begin", tz.time(), "impl.is_casting", true)
-
 	ent:get_element():play_animation_by_name(rn._impl_cast_type_to_animation_name[cast_type], false)
 
 	-- casting effect
-	entdata.impl.cast_effects = {nil, nil}
+	local cast_effect_l_uid, cast_effect_r_uid = rn.entity_data_read(ent, "impl.cast_effect_lhs", "impl.cast_effect_rhs")
 	-- right hand = 1, left hand = 2
 	tz.assert(ability.magic_type ~= nil)
 	local has_magic_visual = ability.magic_type ~= "Physical"
 	if has_magic_visual then
-		entdata.impl.cast_effects[1] = rn.scene():get(rn.scene():add(4))
-		local rhdata = rn.entity.data[entdata.impl.cast_effects[1]:uid()]
+		local cast_effect_l = rn.scene():get(rn.scene():add(4))
+		cast_effect_l_uid = cast_effect_l:uid()
+		local rhdata = rn.entity.data[cast_effect_l_uid]
 		rhdata.target_entity = ent
 		rhdata.subobject = 21
 		-- play flipbook 2 times per cast.
@@ -115,8 +114,9 @@ rn.cast_spell = function(arg)
 		rhdata.colour_b = b
 
 		if ability.dual_wield_cast then
-			entdata.impl.cast_effects[2] = rn.scene():get(rn.scene():add(4))
-			local lhdata = rn.entity.data[entdata.impl.cast_effects[2]:uid()]
+			local cast_effect_r = rn.scene():get(rn.scene():add(4))
+			cast_effect_r_uid = cast_effect_r:uid()
+			local lhdata = rn.entity.data[cast_effect_r_uid]
 			lhdata.target_entity = ent
 			lhdata.subobject = 17
 			-- play flipbook 2 times per cast.
@@ -126,6 +126,14 @@ rn.cast_spell = function(arg)
 			lhdata.colour_b = b
 		end
 	end
+
+	if cast_effect_l_uid == nil then
+		cast_effect_l_uid = fakenil
+	end
+	if cast_effect_r_uid == nil then
+		cast_effect_r_uid = fakenil
+	end
+	rn.entity_data_write(ent, "impl.cast", ability_name, "impl.cast_begin", tz.time(), "impl.is_casting", true, "impl.cast_effect_lhs", cast_effect_l_uid, "impl.cast_effect_rhs", cast_effect_r_uid)
 end
 
 rn.complete_cast = function(ent)
@@ -147,15 +155,14 @@ rn.cancel_cast = function(ent)
 	local obj <close> = tz.profzone_obj:new()
 	obj:set_name("Cancel Cast")
 	local entdata = rn.entity_get_data(ent)
-	rn.entity_data_write(ent, "impl.cast", nil, "impl.cast_begin", nil, "impl.is_casting", false)
-	if entdata.impl.cast_effects ~= nil then
-		for i=1,2,1 do
-			if entdata.impl.cast_effects[i] ~= nil then
-				rn.scene():remove_uid(entdata.impl.cast_effects[i]:uid())
-				entdata.impl.cast_effects[i] = nil
-			end
-		end
+	local cast_effect_l, cast_effect_r = rn.entity_data_read(ent, "impl.cast_effect_lhs", "impl.cast_effect_rhs")
+	if cast_effect_l ~= nil and cast_effect_l ~= fakenil then
+		rn.scene():remove_uid(cast_effect_l)
 	end
+	if cast_effect_r ~= nil and cast_effect_r ~= fakenil then
+		rn.scene():remove_uid(cast_effect_r)
+	end
+	rn.entity_data_write(ent, "impl.cast", fakenil, "impl.cast_begin", fakenil, "impl.is_casting", false, "impl.cast_effect_lhs", fakenil, "impl.cast_effect_rhs", fakenil)
 end
 
 rn.casting_advance = function(ent)

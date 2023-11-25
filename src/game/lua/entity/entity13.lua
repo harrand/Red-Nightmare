@@ -66,7 +66,7 @@ rn.entity_handler[id] =
 			local light_id = rn.entity_data_read(ent, "impl.lights[" .. i .. "]")
 			if light_id ~= nil then
 				rn.scene():remove_light(light_id)
-				rn.entity_data_write(ent, "impl.lights[" .. i .. "]", nil)
+				rn.entity_data_write(ent, "impl.lights[" .. i .. "]", fakenil)
 			end
 		end
 	end,
