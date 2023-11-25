@@ -265,7 +265,8 @@ rn.entity_update = function(ent)
 	end
 
 	-- deal with casts.
-	if data.impl.is_casting == true then
+	local casting = rn.entity_data_read(ent, "impl.is_casting")
+	if casting == true then
 		-- is the cast finished?
 		rn.casting_advance(ent)
 	end
@@ -275,7 +276,7 @@ rn.entity_update = function(ent)
 	end
 
 	local e = ent:get_element()
-	if not ent:is_dead() and not data.impl.is_casting and not data.impl.is_moving then
+	if not ent:is_dead() and not casting and not data.impl.is_moving then
 		if (ent:get_model() == rn.model.humanoid) and (e:get_playing_animation_name() ~= "CastIdle" or not e:is_animation_playing()) then
 			e:play_animation_by_name("CastIdle", false)
 		end
@@ -508,7 +509,7 @@ rn.entity_move = function(arg)
 		end
 	end
 
-	if (xdiff ~= 0 or ydiff ~= 0) and not entdata.impl.is_casting then
+	if (xdiff ~= 0 or ydiff ~= 0) and not rn.entity_data_read(ent, "impl.is_casting") then
 		-- do movement
 		entdata.impl.is_moving = true
 		local x, y = e:get_position()

@@ -81,7 +81,8 @@ rn.cast_spell = function(arg)
 
 	-- if we're casting something else, early-out.
 	local entdata = rn.entity_get_data(ent)
-	if entdata.impl.is_casting == true then return end
+	local casting = rn.entity_data_read(ent, "impl.is_casting")
+	if casting == true then return end
 
 	entdata.impl.face_cast_direction = face_cast_direction
 	-- if its an instant cast spell, no need to set these, just send it instantly. (note: no animation in this case)
@@ -92,8 +93,7 @@ rn.cast_spell = function(arg)
 		return
 	end
 
-	entdata.impl.is_casting = true
-	rn.entity_data_write(ent, "impl.cast", ability_name, "impl.cast_begin", tz.time())
+	rn.entity_data_write(ent, "impl.cast", ability_name, "impl.cast_begin", tz.time(), "impl.is_casting", true)
 
 	ent:get_element():play_animation_by_name(rn._impl_cast_type_to_animation_name[cast_type], false)
 
@@ -147,8 +147,7 @@ rn.cancel_cast = function(ent)
 	local obj <close> = tz.profzone_obj:new()
 	obj:set_name("Cancel Cast")
 	local entdata = rn.entity_get_data(ent)
-	entdata.impl.is_casting = false
-	rn.entity_data_write(ent, "impl.cast", nil, "impl.cast_begin", nil)
+	rn.entity_data_write(ent, "impl.cast", nil, "impl.cast_begin", nil, "impl.is_casting", false)
 	if entdata.impl.cast_effects ~= nil then
 		for i=1,2,1 do
 			if entdata.impl.cast_effects[i] ~= nil then
@@ -225,7 +224,7 @@ rn.casting_advance = function(ent)
 end
 
 rn.is_casting = function(ent)
-	return rn.entity_get_data(ent).impl.is_casting == true
+	return rn.entity_data_read(ent, "impl.is_casting") == true
 end
 
 rn.get_current_cast = function(ent)
