@@ -48,7 +48,8 @@ rn.entity_handler[id] =
 		rn.entity_data_write(ent, "magic_type", "Frost")
 		for i=1,2,1 do
 			data.impl.lights[i] = rn.scene():add_light()
-			data.impl.lights[i]:set_power(0.8)
+			local light = rn.scene():get_light(data.impl.lights[i])
+			light:set_power(0.8)
 		end
 
 		rn.equip(ent, "Lightning Crown")
@@ -81,11 +82,12 @@ rn.entity_handler[id] =
 		b = b * 2
 		ent:get_element():object_set_texture_tint(3, 0, r, g, b)
 		for i=1,2,1 do
-			data.impl.lights[i]:set_colour(r, g, b)
+			local light = rn.scene():get_light(data.impl.lights[i])
+			light:set_colour(r, g, b)
 		end
 
-		data.impl.lights[1]:set_position(ent:get_element():get_subobject_position(21))
-		data.impl.lights[2]:set_position(ent:get_element():get_subobject_position(17))
+		rn.scene():get_light(data.impl.lights[1]):set_position(ent:get_element():get_subobject_position(21))
+		rn.scene():get_light(data.impl.lights[2]):set_position(ent:get_element():get_subobject_position(17))
 
 		data.fireball_cd = data.fireball_cd - rn.delta_time
 

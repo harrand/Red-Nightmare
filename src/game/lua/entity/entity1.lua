@@ -29,7 +29,8 @@ rn.entity_handler[id] =
 
 		local data = rn.entity_get_data(ent)
 		data.impl.light = rn.scene():add_light();
-		data.impl.light:set_power(2.0)
+		local light = rn.scene():get_light(data.impl.light)
+		light:set_power(2.0)
 		rn.entity_data_write(ent, "impl.targetable", false)
 	end,
 	deinit = function(ent)
@@ -55,8 +56,9 @@ rn.entity_handler[id] =
 		end
 		local x, y = ent:get_element():get_position()
 
-		data.impl.light:set_position(x, y)
-		data.impl.light:set_colour(r, g, b)
+		local light = rn.scene():get_light(data.impl.light)
+		light:set_position(x, y)
+		light:set_colour(r, g, b)
 
 		if not data.shoot_direct then
 			rn.entity_move({ent = ent, dir = data.shoot_dir, face_in_direction = false})

@@ -495,7 +495,7 @@ namespace game::entity
 		({
 		});
 		rn_impl_light light{.sc = this->sc, .l = l};
-		LUA_CLASS_PUSH(state, rn_impl_light, light);
+		state.stack_push_uint(static_cast<std::size_t>(static_cast<tz::hanval>(l)));
 		return 1;
 	}
 
@@ -523,9 +523,17 @@ namespace game::entity
 
 	int rn_impl_scene::remove_light(tz::lua::state& state)
 	{
-		auto& light = state.stack_get_userdata<rn_impl_light>(2);
-		this->sc->remove_light(light.l);
+		auto [_, light_id] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+		this->sc->remove_light(static_cast<tz::hanval>(light_id));
 		return 0;
+	}
+
+	int rn_impl_scene::get_light(tz::lua::state& state)
+	{
+		auto [_, light_id] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+		rn_impl_light light{.sc = this->sc, .l = static_cast<tz::hanval>(light_id)};
+		LUA_CLASS_PUSH(state, rn_impl_light, light);
+		return 1;
 	}
 
 	int rn_impl_scene::clear(tz::lua::state& state)

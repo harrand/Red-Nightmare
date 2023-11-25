@@ -42,8 +42,9 @@ rn.entity_handler[id] =
 			-- spawn our light -.-
 			local r, g, b = rn.damage_type_get_colour(data.damage_type)
 			data.impl.light = rn.scene():add_light()
-			data.impl.light:set_power(1.0)
-			data.impl.light:set_colour(r, g, b)
+			local light = rn.scene():get_light(data.impl.light)
+			light:set_power(1.0)
+			light:set_colour(r, g, b)
 		end
 
 		ent:get_element():object_set_texture_tint(2, 0, 0.85, 0.1, 0.1)
@@ -69,8 +70,9 @@ rn.entity_handler[id] =
 		end
 
 		if data.impl.light ~= nil then
-			data.impl.light:set_position(xtar, ytar)
-			data.impl.light:set_power(math.sqrt(1.0 - cast_progress))
+			local light = rn.scene():get_light(data.impl.light)
+			light:set_position(xtar, ytar)
+			light:set_power(math.sqrt(1.0 - cast_progress))
 		end
 		ent:get_element():object_set_texture_handle(2, 0, rn.texture_manager():get_texture(typestr .. ".sprite" .. frame_id))
 		if cast_progress > 1 then

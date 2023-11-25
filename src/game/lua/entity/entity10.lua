@@ -30,8 +30,9 @@ rn.entity_handler[id] =
 		data.hit_enemies = {}
 
 		data.impl.light = rn.scene():add_light();
-		data.impl.light:set_power(3.5)
-		data.impl.light:set_colour(rn.damage_type_get_colour("Fire"))
+		local light = rn.scene():get_light(data.impl.light)
+		light:set_power(3.5)
+		light:set_colour(rn.damage_type_get_colour("Fire"))
 	end,
 	deinit = function(ent)
 		local data = rn.entity_get_data(ent)
@@ -47,7 +48,8 @@ rn.entity_handler[id] =
 		local x, y = ent:get_element():get_position()
 		x = x + 0.5
 		y = y + 0.5
-		data.impl.light:set_position(x, y)
+		local light = rn.scene():get_light(data.impl.light)
+		light:set_position(x, y)
 		local owner = data.owner
 		-- this lasts for multiple frames. we dont want to hit the same person twice.
 		-- so each person we hit we add their uid. and if we collide with that uid again dont hit.
@@ -78,7 +80,7 @@ rn.entity_handler[id] =
 		if data.flipbook_timer > 0.1 then
 			data.flipbook_timer = 0
 			data.cur_texture_id = data.cur_texture_id + 1
-			data.impl.light:set_power(data.impl.light:get_power() * (5.0/6.0))
+			light:set_power(light:get_power() * (5.0/6.0))
 
 			if data.cur_texture_id > 6 then
 				rn.scene():remove_uid(ent:uid())

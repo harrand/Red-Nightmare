@@ -49,8 +49,9 @@ rn.entity_handler[id] =
 		local xtar, ytar = data.target_entity:get_element():get_subobject_position(data.subobject)
 		ent:get_element():set_position(xtar, ytar)
 
-		data.impl.light:set_position(xtar, ytar)
-		data.impl.light:set_colour(data.colour_r, data.colour_g, data.colour_b)
+		local light = rn.scene():get_light(data.impl.light)
+		light:set_position(xtar, ytar)
+		light:set_colour(data.colour_r, data.colour_g, data.colour_b)
 
 		local casted_time = tz.time() - data.spawned_at
 		local cast_progress = casted_time / data.cast_duration
@@ -59,7 +60,7 @@ rn.entity_handler[id] =
 		if data.reverse then
 			frame_id = 6 - frame_id
 		end
-		data.impl.light:set_power(0.7 * cast_progress)
+		light:set_power(0.7 * cast_progress)
 		ent:get_element():object_set_texture_handle(2, 0, rn.texture_manager():get_texture(typestr .. ".sprite" .. frame_id))
 	end
 }
