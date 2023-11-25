@@ -33,8 +33,7 @@ rn.entity_handler[id] =
 		ent:get_element():set_uniform_scale(sc * 0.5)
 		ent:set_faction(rn.faction_id.player_enemy)
 
-		local data = rn.entity_get_data(ent)
-		data.fireball_cd = 1
+		rn.entity_data_write(ent, "last_fireball_shot", tz.time())
 
 		-- elemental has 6 lights.
 		-- torso
@@ -68,7 +67,6 @@ rn.entity_handler[id] =
 		end
 	end,
 	update = function(ent)
-		local data = rn.entity_get_data(ent)
 		if ent:is_dead() then
 			return
 		end
@@ -90,12 +88,10 @@ rn.entity_handler[id] =
 		rn.scene():get_light(light1):set_position(ent:get_element():get_subobject_position(21))
 		rn.scene():get_light(light2):set_position(ent:get_element():get_subobject_position(17))
 
-		data.fireball_cd = data.fireball_cd - rn.delta_time
-
 		aggro_range = 25
 		local target_args = {aggro_range = aggro_range, target_relationship = "hostile"}
 
-		local target_uid = rn.entity_data_read(ent, "target")
+		local target_uid, collided_this_shot = rn.entity_data_read(ent, "target", "collided_this_shot")
 		local target = nil
 		if target_uid ~= nil and target_uid ~= fakenil then
 			target = rn.scene():get_uid(target_uid)
@@ -125,7 +121,12 @@ rn.entity_handler[id] =
 			rn.entity_data_write(ent, "impl.cast_dir_x", vecx, "impl.cast_dir_y", vecy)
 		end
 
-		if data.fireball_cd <= 0.0 and target ~= nil then
+		local last_shot = rn.entity_data_read(ent, "last_fireball_shot")
+		local t = tz.time()
+		if t >= last_shot + 4000 and target ~= nil then
+			-- do a shoot.
+			collided_this_shot = false
+			rn.entity_data_write(ent, "last_fireball_shot", t, "collided_this_shot", false)
 			local spell_name = nil
 			if magic_type == "Fire" then
 				spell_name = "Fireball"
@@ -135,8 +136,6 @@ rn.entity_handler[id] =
 				spell_name = "Frostbolt"
 			end
 			rn.cast_spell({ent = ent, ability_name = spell_name, face_cast_direction = true})
-			data.fireball_cd = 4
-			data.collided_this_second = false
 		end
 
 		local health_pct = ent:get_health() / ent:get_stats():get_maximum_health()
@@ -147,9 +146,9 @@ rn.entity_handler[id] =
 
 		-- attempt to attack any enemy nearby
 		rn.for_each_collision(ent, function(ent2)
-			if not ent:is_dead() and not data.collided_this_second and ent2:is_valid() and not ent2:is_dead() and rn.get_relationship(ent, ent2) == "hostile" and rn.entity_data_read(ent2, "impl.projectile_skip") ~= true then
+			if not ent:is_dead() and not collided_this_shot and ent2:is_valid() and not ent2:is_dead() and rn.get_relationship(ent, ent2) == "hostile" and rn.entity_data_read(ent2, "impl.projectile_skip") ~= true then
 				-- deal magic damage to colliding enemies
-				data.collided_this_second = true
+				rn.entity_data_write(ent, "collided_this_shot", true)
 				local evt = rn.entity_damage_entity_event:new()
 				evt.damager = ent:uid()
 				evt.damagee = ent2:uid()
