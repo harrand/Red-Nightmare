@@ -36,9 +36,6 @@ rn.entity_handler[id] =
 		ent:get_element():set_uniform_scale(sc * 0.5)
 		ent:set_faction(rn.faction_id.player_enemy)
 
-		local data = rn.entity_get_data(ent)
-		data.fireball_cd = 10
-
 		tracy.ZoneEnd()
 	end
 }
