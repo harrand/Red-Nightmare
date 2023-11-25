@@ -28,7 +28,9 @@ rn.entity_handler[id] =
 	update = function(ent)
 		-- for each enemy colliding with us, hit them for damage.
 		local data = rn.entity_get_data(ent)
-		local owner = data.owner
+		local owner_uid = rn.entity_data_read(ent, "owner")
+		tz.assert(owner_uid ~= nil)
+		local owner = rn.scene():get_uid(owner_uid)
 		tz.assert(owner ~= nil)
 		-- this lasts for multiple frames. we dont want to hit the same person twice.
 		-- so each person we hit we add their uid. and if we collide with that uid again dont hit.

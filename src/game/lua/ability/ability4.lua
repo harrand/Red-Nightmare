@@ -24,10 +24,9 @@ rn.abilities[id] =
 		y = (y + y2) / 2.0
 		nova:get_element():set_position(x, y)
 		ele:get_element():set_position(x, y)
-		local novadata = rn.entity_get_data(nova)
 		-- fireball base stats is a snapshot of the caster's current stats.
 		nova:set_base_stats(ent:get_stats())
-		novadata.owner = ent
+		rn.entity_data_write(nova, "owner", ent:uid())
 
 		local mousex, mousey = rn.scene():get_mouse_position_ws()	
 		local bx, by = ent:get_element():get_position()

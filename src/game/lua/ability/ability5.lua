@@ -24,8 +24,7 @@ rn.abilities[id] =
 		-- however it has its own movement speed
 		bstats:set_movement_speed(6)
 		proj:set_base_stats(bstats)
-		rn.entity_data_write(proj, "shoot_direct", face_cast_direction)
-		projdata.owner = ent
+		rn.entity_data_write(proj, "shoot_direct", face_cast_direction, "owner", ent:uid())
 		if face_cast_direction then
 			-- shoot directly in the cast direction
 			local shoot_vec_x, shoot_vec_y = rn.entity_data_read(ent, "impl.cast_dir_x", "impl.cast_dir_y")

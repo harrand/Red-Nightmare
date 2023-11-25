@@ -75,8 +75,12 @@ rn.entity_handler[id] =
 			if not data.collided_this_update and ent2:is_valid() and ent2:is_dead() and projectile_skip ~= true and not undead then
 				-- bring the dead bloke back to life. set him to our faction.
 				data.collided_this_update = true
-				if data.owner ~= nil and data.owner:is_valid() then
-					ent2:set_faction(data.owner:get_faction())
+				local owner_id = rn.entity_data_read(ent, "owner")
+				if owner_id ~= nil then
+					local owner = rn.scene():get_uid(owner_id)
+					if owner:is_valid() then
+						ent2:set_faction(owner:get_faction())
+					end
 				end
 				-- set his texture tint to be darker.
 				if ent2:get_model() == rn.model.humanoid then

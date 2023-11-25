@@ -81,14 +81,10 @@ rn.entity_handler[id] =
 				my = (my + m2y) * 0.5
 				-- spawn a large explosion there that is dangerous to everyone
 				local explosion = rn.scene():get(rn.scene():add(10))
-				local explosiondata = rn.entity_get_data(explosion)
 				explosion:set_base_stats(ent:get_stats())
 				explosion:set_faction(rn.faction_id.pure_enemy)
 				explosion:get_element():set_position(mx, my)
-				-- no owner!
-				explosiondata.owner = nil
-				-- todo: set magic_type of explosiondata (currently only supports fire)
-				-- despawn both fireballs
+
 				rn.scene():remove_uid(ent:uid())
 				rn.scene():remove_uid(ent2:uid())
 				return false
@@ -97,20 +93,23 @@ rn.entity_handler[id] =
 			if not data.collided_this_update and ent2:is_valid() and not ent2:is_dead() and rn.get_relationship(ent, ent2) == "hostile" and target_projectile_skip ~= true then
 				data.collided_this_update = true
 				local evt = rn.entity_damage_entity_event:new()
-				evt.damager = data.owner:uid()
+				evt.damager = rn.entity_data_read(ent, "owner")
 				evt.damagee = ent2:uid()
 				evt.value = ent:get_stats():get_spell_power()
 				evt.damage_type = magic_type
 				rn.combat.process_event(evt)
 
-				if data.owner ~= nil and data.owner:is_valid() and data.owner:get_type() == 0 then
-					-- powerup: dire fireball (on by default)
-					-- each unique enemy you hit with fireball increases your spellpower by 20% for 10 seconds.
-					local spbuff = rn.new_buff()
-					spbuff:set_name("Dire Fireball" .. ent2:uid())
-					spbuff:set_time_remaining(10)
-					spbuff:set_amplified_spell_power(1.2)
-					data.owner:apply_buff(spbuff)
+				if evt.damager ~= nil then
+					local damager = rn.scene():get_uid(evt.damager)
+					if damager:is_valid() and damager:get_type() == 0 then
+						-- powerup: dire fireball (on by default)
+						-- each unique enemy you hit with fireball increases your spellpower by 20% for 10 seconds.
+						local spbuff = rn.new_buff()
+						spbuff:set_name("Dire Fireball" .. ent2:uid())
+						spbuff:set_time_remaining(10)
+						spbuff:set_amplified_spell_power(1.2)
+						damager:apply_buff(spbuff)
+					end
 				end
 			end
 		end)
