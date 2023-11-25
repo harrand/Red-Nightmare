@@ -17,7 +17,6 @@ rn.entity_handler[id] =
 		{
 			flipbook_timer = 0,
 			cur_texture_id = 0,
-			shoot_dir = nil,
 			spawned_at = tz.time(),
 			collided_this_update = false,
 			magic_type = nil
@@ -55,13 +54,13 @@ rn.entity_handler[id] =
 		end
 		local x, y = ent:get_element():get_position()
 
-		local light_id, shoot_direct, shoot_vec_x, shoot_vec_y = rn.entity_data_read(ent, "impl.light", "shoot_direct", "shoot_vec_x", "shoot_vec_y")
+		local light_id, shoot_direct, shoot_vec_x, shoot_vec_y, shoot_dir = rn.entity_data_read(ent, "impl.light", "shoot_direct", "shoot_vec_x", "shoot_vec_y", "shoot_dir")
 		local light = rn.scene():get_light(light_id)
 		light:set_position(x, y)
 		light:set_colour(r, g, b)
 
 		if not shoot_direct then
-			rn.entity_move({ent = ent, dir = data.shoot_dir, face_in_direction = false})
+			rn.entity_move({ent = ent, dir = shoot_dir, face_in_direction = false})
 		else
 			rn.entity_move({ent = ent, vecdir_x = shoot_vec_x, vecdir_y = shoot_vec_y, face_in_direction = false})
 		end

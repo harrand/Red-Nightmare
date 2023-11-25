@@ -34,14 +34,15 @@ rn.abilities[id] =
 			proj:get_element():rotate(math.atan(shoot_vec_y, shoot_vec_x))
 		else
 			-- shoot in the general direction (right/left/up/down)
-			projdata.shoot_dir = rn.entity_data_read(ent, "impl.dir")
-			if projdata.shoot_dir == "left" then
+			local shoot_dir = rn.entity_data_read(ent, "impl.dir")
+			rn.entity_data_write(proj, "shoot_dir", shoot_dir)
+			if shoot_dir == "left" then
 				-- do nothing
-			elseif projdata.shoot_dir == "right" then
+			elseif shoot_dir == "right" then
 				proj:get_element():rotate(3.14159)
-			elseif projdata.shoot_dir == "forward" then
+			elseif shoot_dir == "forward" then
 				proj:get_element():rotate(-1.5708)
-			elseif projdata.shoot_dir == "backward" then
+			elseif shoot_dir == "backward" then
 				proj:get_element():rotate(1.5708)
 			else
 				tz.assert(false)
