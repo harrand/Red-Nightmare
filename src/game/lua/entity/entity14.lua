@@ -84,7 +84,6 @@ rn.entity_handler[id] =
 					ent2:get_element():object_set_texture_tint(3, 0, rn.damage_type_get_colour(magic_type))
 				end
 				ent2:set_health(ent2:get_stats():get_maximum_health())
-				rn.entity_data_write(ent2, "impl.death_time", fakenil)
 
 				if ent2:get_type() == 13 then
 					-- its an elemental. set its type to our magic type.
