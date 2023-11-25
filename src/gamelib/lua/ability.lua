@@ -80,7 +80,6 @@ rn.cast_spell = function(arg)
 	end
 
 	-- if we're casting something else, early-out.
-	local entdata = rn.entity_get_data(ent)
 	local casting = rn.entity_data_read(ent, "impl.is_casting")
 	if casting == true then return end
 
@@ -140,7 +139,6 @@ rn.complete_cast = function(ent)
 	local obj <close> = tz.profzone_obj:new()
 	obj:set_name("Complete Cast")
 	tz.assert(ent:is_valid())
-	local entdata = rn.entity_get_data(ent)
 	local cast = rn.entity_data_read(ent, "impl.cast")
 	local ability = rn.abilities[rn.ability.type[cast]]
 
@@ -154,7 +152,6 @@ end
 rn.cancel_cast = function(ent)
 	local obj <close> = tz.profzone_obj:new()
 	obj:set_name("Cancel Cast")
-	local entdata = rn.entity_get_data(ent)
 	local cast_effect_l, cast_effect_r = rn.entity_data_read(ent, "impl.cast_effect_lhs", "impl.cast_effect_rhs")
 	if cast_effect_l ~= nil and cast_effect_l ~= fakenil then
 		rn.scene():remove_uid(cast_effect_l)
@@ -169,7 +166,6 @@ rn.casting_advance = function(ent)
 	local obj <close> = tz.profzone_obj:new()
 	obj:set_name("Casting Advance")
 	-- entity is currently casting a spell.
-	local entdata = rn.entity_get_data(ent)
 	local cast, cast_begin, face_cast_direction = rn.entity_data_read(ent, "impl.cast", "impl.cast_begin", "impl.face_cast_direction")
 	tz.assert(cast ~= nil)
 	obj:set_text("Casting Advance - " .. cast)

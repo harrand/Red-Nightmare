@@ -19,7 +19,6 @@ rn.entity_handler[id] =
 		ent:get_element():object_set_visibility(3, false)
 		ent:get_element():face_forward()
 
-		local data = rn.entity_get_data(ent)
 		local light_id = rn.scene():add_light()
 		local light = rn.scene():get_light(light_id)
 		light:set_power(0.4)

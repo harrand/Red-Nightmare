@@ -33,7 +33,6 @@ rn.entity_handler[id] =
 		rn.entity_data_write(ent, "impl.targetable", false, "impl.light", light_id)
 	end,
 	deinit = function(ent)
-		local data = rn.entity_get_data(ent)
 		local light_id = rn.entity_data_read(ent, "impl.light")
 		tz.assert(light_id ~= nil)
 		rn.scene():remove_light(light_id)

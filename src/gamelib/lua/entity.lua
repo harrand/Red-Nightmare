@@ -249,7 +249,6 @@ rn.entity_update = function(ent)
 	obj:set_name("Lua Entity Update")
 
 	tz.assert(ent ~= nil)
-	local data = rn.entity_get_data(ent)
 	if rn.entity_data_read(ent, "impl.trivial") then
 		return
 	end

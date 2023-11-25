@@ -10,8 +10,6 @@ rn.abilities[id] =
 	magic_type = "Frost",
 	cast_type = rn.cast.type.spell_1h_directed,
 	on_cast = function(ent)
-		local entdata = rn.entity_get_data(ent)
-
 		local cast, face_cast_direction = rn.entity_data_read(ent, "impl.cast", "impl.face_cast_direction")
 		local ability = rn.abilities[rn.ability.type[cast]]
 

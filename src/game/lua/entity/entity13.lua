@@ -61,7 +61,6 @@ rn.entity_handler[id] =
 		rn.entity_get_data(ent).target = damager
 	end,
 	on_death = function(ent)
-		local data = rn.entity_get_data(ent)
 		for i=1,2,1 do
 			local light_id = rn.entity_data_read(ent, "impl.lights[" .. i .. "]")
 			if light_id ~= nil then
