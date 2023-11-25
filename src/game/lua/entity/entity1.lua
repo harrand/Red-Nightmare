@@ -55,11 +55,12 @@ rn.entity_handler[id] =
 		end
 		local x, y = ent:get_element():get_position()
 
-		local light = rn.scene():get_light(rn.entity_data_read(ent, "impl.light"))
+		local light_id, shoot_direct = rn.entity_data_read(ent, "impl.light", "shoot_direct")
+		local light = rn.scene():get_light(light_id)
 		light:set_position(x, y)
 		light:set_colour(r, g, b)
 
-		if not data.shoot_direct then
+		if not shoot_direct then
 			rn.entity_move({ent = ent, dir = data.shoot_dir, face_in_direction = false})
 		else
 			rn.entity_move({ent = ent, vecdir_x = data.shoot_vec_x, vecdir_y = data.shoot_vec_y, face_in_direction = false})

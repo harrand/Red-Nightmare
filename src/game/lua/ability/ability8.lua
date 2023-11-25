@@ -24,9 +24,9 @@ rn.abilities[id] =
 		-- however it has its own movement speed
 		bstats:set_movement_speed(6)
 		proj:set_base_stats(bstats)
-		projdata.shoot_direct = face_cast_direction
+		rn.entity_data_write(proj, "shoot_direct", face_cast_direction)
 		projdata.owner = ent
-		if projdata.shoot_direct then
+		if face_cast_direction then
 			-- shoot directly in the cast direction
 			projdata.shoot_vec_x, projdata.shoot_vec_y = rn.entity_data_read(ent, "impl.cast_dir_x", "impl.cast_dir_y")
 			-- math.atan2 is removed, instead just use math.atan with 2 args
