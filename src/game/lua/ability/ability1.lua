@@ -34,7 +34,7 @@ rn.abilities[id] =
 			proj:get_element():rotate(math.atan(projdata.shoot_vec_y, projdata.shoot_vec_x))
 		else
 			-- shoot in the general direction (right/left/up/down)
-			projdata.shoot_dir = entdata.impl.dir
+			projdata.shoot_dir = rn.entity_data_read(ent, "impl.dir")
 			if projdata.shoot_dir == "left" then
 				-- do nothing
 			elseif projdata.shoot_dir == "right" then

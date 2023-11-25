@@ -492,21 +492,23 @@ rn.entity_move = function(arg)
 
 	-- set face direction
 	if face_in_direction then
+		local dir = nil
 		if xdiff == 0 then
 			if ydiff > 0 then
 				e:face_backward()
-				entdata.impl.dir = "backward"
+				dir = "backward"
 			elseif ydiff < 0 then
 				e:face_forward()
-				entdata.impl.dir = "forward"
+				dir = "forward"
 			end
 		elseif xdiff > 0 then
 			e:face_right()
-			entdata.impl.dir = "right"
+			dir = "right"
 		elseif xdiff < 0 then
 			e:face_left()
-			entdata.impl.dir = "left"
+			dir = "left"
 		end
+		rn.entity_data_write(ent, "impl.dir", dir)
 	end
 
 	if (xdiff ~= 0 or ydiff ~= 0) and not rn.entity_data_read(ent, "impl.is_casting") then

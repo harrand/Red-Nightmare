@@ -178,21 +178,22 @@ rn.casting_advance = function(ent)
 		local vecx, vecy = rn.entity_data_read(ent, "impl.cast_dir_x", "impl.cast_dir_y")
 		vecx = vecx or 0
 		vecy = vecy or 0
+		local dir = nil
 		if(vecx < 0.0) then
 			-- could be left
 			if math.abs(vecx) > math.abs(vecy) then
 				-- definitely right
 				e:face_right()
-				entdata.impl.dir = "right"
+				dir = "right"
 			else
 				-- abs(vecx) <= abs(vecy)
 				-- meaning could be up or down
 				if vecy >= 0.0 then
 					e:face_forward()
-					entdata.impl.dir = "forward"
+					dir = "forward"
 				else
 					e:face_backward()
-					entdata.impl.dir = "backward"
+					dir = "backward"
 				end
 			end
 		elseif vecx > 0.0 then
@@ -200,26 +201,27 @@ rn.casting_advance = function(ent)
 			if vecx > math.abs(vecy) then
 				-- definitely left
 				e:face_left()
-				entdata.impl.dir = "left"
+				dir = "left"
 			else
 				if vecy >= 0.0 then
 					e:face_forward()
-					entdata.impl.dir = "forward"
+					dir = "forward"
 				else
 					e:face_backward()
-					entdata.impl.dir = "backward"
+					dir = "backward"
 				end
 			end
 		else
 			-- vecx == 0.0
 			if vecy >= 0.0 then
 				e:face_forward()
-				entdata.impl.dir = "forward"
+				dir = "forward"
 			else
 				e:face_backward()
-				entdata.impl.dir = "backward"
+				dir = "backward"
 			end
 		end
+		rn.entity_data_write(ent, "impl.dir", dir)
 	end
 end
 
