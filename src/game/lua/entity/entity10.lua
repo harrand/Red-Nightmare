@@ -52,7 +52,10 @@ rn.entity_handler[id] =
 		local light = rn.scene():get_light(rn.entity_data_read(ent, "impl.light"))
 		light:set_position(x, y)
 		local owner_id = rn.entity_data_read(ent, "owner")
-		local owner = rn.scene():get_uid(owner_id)
+		local owner = nil
+		if owner_id ~= nil then
+			owner = rn.scene():get_uid(owner_id)
+		end
 		-- this lasts for multiple frames. we dont want to hit the same person twice.
 		-- so each person we hit we add their uid. and if we collide with that uid again dont hit.
 		rn.for_each_collision(ent, function(ent2)

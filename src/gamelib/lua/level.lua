@@ -15,11 +15,7 @@ rn.load_level = function(args)
 		--rn.scene():get_renderer():set_ambient_light(0.15, 0.2, 0.4) -- snowy
 		rn.scene():get_renderer():set_ambient_light(0.5, 0.5, 0.5)
 
-		local bgdata = rn.entity_get_data(rn.level_bg)
-
-		bgdata.dynamic_texture_scale = true
-		bgdata.texture_scale_zoom = 16.0
-		rn.entity_data_write(rn.level_bg, "impl.targetable", false, "impl.projectile_skip", true)
+		rn.entity_data_write(rn.level_bg, "dynamic_texture_scale", true, "texture_scale_zoom", 16.0, "impl.targetable", false, "impl.projectile_skip", true)
 		rn.level_bg:get_element():set_uniform_scale(64)
 		rn.level_bg:get_element():object_set_texture_handle(2, 0, rn.texture_manager():get_texture("blanchfield_cemetary.background"))
 		rn.level_bg:get_element():object_set_texture_handle(2, 1, rn.texture_manager():get_texture("blanchfield_cemetary.background_normals"))
@@ -45,11 +41,7 @@ rn.load_level = function(args)
 		--rn.scene():get_renderer():set_ambient_light(0.15, 0.2, 0.4) -- snowy
 		rn.scene():get_renderer():set_ambient_light(0.5, 0.5, 0.5)
 
-		local bgdata = rn.entity_get_data(rn.level_bg)
-
-		bgdata.dynamic_texture_scale = true
-		bgdata.texture_scale_zoom = 16.0
-		rn.entity_data_write(rn.level_bg, "impl.targetable", false, "impl.projectile_skip", true)
+		rn.entity_data_write(rn.level_bg, "dynamic_texture_scale", true, "texture_scale_zoom", 16.0, "impl.targetable", false, "impl.projectile_skip", true)
 		rn.level_bg:get_element():set_uniform_scale(64)
 		rn.level_bg:get_element():object_set_texture_handle(2, 0, rn.texture_manager():get_texture("blackrock_dungeon.background"))
 		rn.level_bg:get_element():object_set_texture_handle(2, 1, rn.texture_manager():get_texture("blackrock_dungeon.background_normals"))
@@ -70,11 +62,11 @@ rn.load_level = function(args)
 		handler.on_load()
 	end
 
-	rn.old_level_cache = args
+	rn.data_store():add("old_level_cache", args.name)
 end
 
 rn.restart_level = function()
-	rn.load_level(rn.old_level_cache)
+	rn.load_level({name = rn.data_store():read("old_level_cache")})
 end
 
 require "level0"
