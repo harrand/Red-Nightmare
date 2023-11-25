@@ -57,8 +57,7 @@ rn.entity_handler[id] =
 		tracy.ZoneEnd()
 	end,
 	on_struck = function(ent, evt)
-		local damager = rn.scene():get_uid(evt.damager)
-		rn.entity_get_data(ent).target = damager
+		rn.entity_data_write(ent, "target", evt.damager)
 	end,
 	on_death = function(ent)
 		for i=1,2,1 do
@@ -95,17 +94,24 @@ rn.entity_handler[id] =
 
 		aggro_range = 25
 		local target_args = {aggro_range = aggro_range, target_relationship = "hostile"}
-		if data.target == nil then
-			data.target = rn.entity_target_entity(ent, target_args)
+
+		local target_uid = rn.entity_data_read(ent, "target")
+		local target = nil
+		if target_uid ~= nil and target_uid ~= fakenil then
+			target = rn.scene():get_uid(target_uid)
+		end
+
+		if target == nil then
+			target = rn.entity_target_entity(ent, target_args)
 		else
-			if not rn.impl_entity_entity_valid_target(ent, target_args, data.target) then
-				data.target = nil
+			if not rn.impl_entity_entity_valid_target(ent, target_args, target) then
+				target = nil
 			end
 		end
 
-		if rn.is_casting(ent) and data.target ~= nil then
-			tz.assert(data.target:is_valid())
-			local tarx, tary = data.target:get_element():get_position()
+		if rn.is_casting(ent) and target ~= nil then
+			tz.assert(target:is_valid())
+			local tarx, tary = target:get_element():get_position()
 			--local mousex, mousey = rn.scene():get_mouse_position_ws()
 			local entx, enty
 			if ent:get_model() == rn.model.humanoid then
@@ -119,7 +125,7 @@ rn.entity_handler[id] =
 			rn.entity_data_write(ent, "impl.cast_dir_x", vecx, "impl.cast_dir_y", vecy)
 		end
 
-		if data.fireball_cd <= 0.0 and data.target ~= nil then
+		if data.fireball_cd <= 0.0 and target ~= nil then
 			local spell_name = nil
 			if magic_type == "Fire" then
 				spell_name = "Fireball"
@@ -153,13 +159,19 @@ rn.entity_handler[id] =
 			end
 		end)
 		if not rn.is_casting(ent) and not ent:is_dead() then
-			if data.target ~= nil then
-				rn.entity_move_to_entity({ent = ent, movement_anim_name = "Run"}, data.target)
+			if target ~= nil then
+				rn.entity_move_to_entity({ent = ent, movement_anim_name = "Run"}, target)
 			else
 				-- otherwise just move right forever???
 				-- todo: wander around aimlessly
 				--rn.entity_move{ent = ent, dir = "right", movement_anim_name = "Run"}
 			end
 		end
+
+		local target_result = fakenil
+		if target ~= nil then
+			target_result = target:uid()
+		end
+		rn.entity_data_write(ent, "target", target_result)
 	end
 }
