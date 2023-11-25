@@ -28,9 +28,10 @@ rn.abilities[id] =
 		projdata.owner = ent
 		if face_cast_direction then
 			-- shoot directly in the cast direction
-			projdata.shoot_vec_x, projdata.shoot_vec_y = rn.entity_data_read(ent, "impl.cast_dir_x", "impl.cast_dir_y")
+			local shoot_vec_x, shoot_vec_y = rn.entity_data_read(ent, "impl.cast_dir_x", "impl.cast_dir_y")
+			rn.entity_data_write(proj, "shoot_vec_x", shoot_vec_x, "shoot_vec_y", shoot_vec_y)
 			-- math.atan2 is removed, instead just use math.atan with 2 args
-			proj:get_element():rotate(math.atan(projdata.shoot_vec_y, projdata.shoot_vec_x))
+			proj:get_element():rotate(math.atan(shoot_vec_y, shoot_vec_x))
 		else
 			-- shoot in the general direction (right/left/up/down)
 			projdata.shoot_dir = rn.entity_data_read(ent, "impl.dir")

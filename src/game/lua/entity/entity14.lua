@@ -42,7 +42,7 @@ rn.entity_handler[id] =
 		local stats = ent:get_base_stats()
 		stats:set_movement_speed(12.0)
 		ent:set_base_stats(stats)
-		local magic_type, light_id, shoot_direct = rn.entity_data_read(ent, "magic_type", "impl.light", "shoot_direct")
+		local magic_type, light_id, shoot_direct, shoot_vec_x, shoot_vec_y = rn.entity_data_read(ent, "magic_type", "impl.light", "shoot_direct", "shoot_vec_x", "shoot_vec_y")
 		local r, g, b = rn.damage_type_get_colour(magic_type)
 		ent:get_element():object_set_texture_tint(2, 0, r, g, b)
 		data.flipbook_timer = data.flipbook_timer + rn.delta_time
@@ -62,7 +62,7 @@ rn.entity_handler[id] =
 		if not shoot_direct then
 			rn.entity_move({ent = ent, dir = data.shoot_dir, face_in_direction = false})
 		else
-			rn.entity_move({ent = ent, vecdir_x = data.shoot_vec_x, vecdir_y = data.shoot_vec_y, face_in_direction = false})
+			rn.entity_move({ent = ent, vecdir_x = shoot_vec_x, vecdir_y = shoot_vec_y, face_in_direction = false})
 		end
 
 		-- we only live for 5 seconds
