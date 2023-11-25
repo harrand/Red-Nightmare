@@ -37,19 +37,25 @@ rn.entity_handler[id] =
 
 	end,
 	on_struck = function(ent, evt)
-		local damager = rn.scene():get_uid(evt.damager)
-		rn.entity_get_data(ent).target = damager
+		rn.entity_data_write(ent, "target", evt.damager)
 	end,
 	update = function(ent)
 		local data = rn.entity_get_data(ent)
 		data.collided_this_update = false
 		local target_args = {aggro_range = 20, target_relationship = "hostile"}
 		local target_args2 = {aggro_range = target_args.aggro_range * 2, target_relationship = "hostile"}
-		if data.target == nil then
-			data.target = rn.entity_target_entity(ent, target_args)
+
+		local target_uid = rn.entity_data_read(ent, "target")
+		local target = nil
+		if target_uid ~= nil and target_uid ~= fakenil then
+			target = rn.scene():get_uid(target_uid)
+		end
+
+		if target == nil then
+			target = rn.entity_target_entity(ent, target_args)
 		else
-			if not rn.impl_entity_entity_valid_target(ent, target_args2, data.target) then
-				data.target = nil
+			if not rn.impl_entity_entity_valid_target(ent, target_args2, target) then
+				target = nil
 			end
 		end
 		-- attempt to attack any enemy nearby
@@ -60,13 +66,18 @@ rn.entity_handler[id] =
 			end
 		end)
 		if not rn.is_casting(ent) and not ent:is_dead() then
-			if data.target ~= nil then
-				rn.entity_move_to_entity({ent = ent, movement_anim_name = "ZombieWalk"}, data.target)
+			if target ~= nil then
+				rn.entity_move_to_entity({ent = ent, movement_anim_name = "ZombieWalk"}, target)
 			else
 				-- otherwise just move right forever???
 				-- todo: wander around aimlessly
 				--rn.entity_move{ent = ent, dir = "right", movement_anim_name = "ZombieWalk"}
 			end
 		end
+		local target_result = fakenil
+		if target ~= nil then
+			target_result = target:uid()
+		end
+		rn.entity_data_write(ent, "target", target_result)
 	end
 }
