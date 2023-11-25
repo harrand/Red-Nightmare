@@ -248,7 +248,7 @@ rn.entity_update = function(ent)
 
 	tz.assert(ent ~= nil)
 	local data = rn.entity_get_data(ent)
-	if data.impl.trivial then
+	if rn.entity_data_read(ent, "impl.trivial") then
 		return
 	end
 
