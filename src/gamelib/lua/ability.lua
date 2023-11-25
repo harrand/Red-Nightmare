@@ -84,7 +84,7 @@ rn.cast_spell = function(arg)
 	local casting = rn.entity_data_read(ent, "impl.is_casting")
 	if casting == true then return end
 
-	entdata.impl.face_cast_direction = face_cast_direction
+	rn.entity_data_write(ent, "impl.face_cast_direction", face_cast_direction)
 	-- if its an instant cast spell, no need to set these, just send it instantly. (note: no animation in this case)
 	if ability.base_cast_time == 0 or instant_cast_override then
 		-- just instantly send it
@@ -163,7 +163,7 @@ rn.casting_advance = function(ent)
 	obj:set_name("Casting Advance")
 	-- entity is currently casting a spell.
 	local entdata = rn.entity_get_data(ent)
-	local cast, cast_begin = rn.entity_data_read(ent, "impl.cast", "impl.cast_begin")
+	local cast, cast_begin, face_cast_direction = rn.entity_data_read(ent, "impl.cast", "impl.cast_begin", "impl.face_cast_direction")
 	tz.assert(cast ~= nil)
 	obj:set_text("Casting Advance - " .. cast)
 	local ability = rn.abilities[rn.ability.type[cast]]
@@ -173,7 +173,7 @@ rn.casting_advance = function(ent)
 		rn.complete_cast(ent)
 	end
 
-	if entdata.impl.face_cast_direction then
+	if face_cast_direction then
 		local e = ent:get_element()
 		local vecx, vecy = rn.entity_data_read(ent, "impl.cast_dir_x", "impl.cast_dir_y")
 		vecx = vecx or 0

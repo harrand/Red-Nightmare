@@ -12,7 +12,8 @@ rn.abilities[id] =
 	on_cast = function(ent)
 		local entdata = rn.entity_get_data(ent)
 
-		local ability = rn.abilities[rn.ability.type[rn.entity_data_read(ent, "impl.cast")]]
+		local cast, face_cast_direction = rn.entity_data_read(ent, "impl.cast", "impl.face_cast_direction")
+		local ability = rn.abilities[rn.ability.type[cast]]
 
 		local proj = rn.scene():get(rn.scene():add(1))
 		proj:set_faction(ent:get_faction())
@@ -25,7 +26,7 @@ rn.abilities[id] =
 		-- however it has its own movement speed
 		bstats:set_movement_speed(6)
 		proj:set_base_stats(bstats)
-		projdata.shoot_direct = entdata.impl.face_cast_direction
+		projdata.shoot_direct = face_cast_direction
 		projdata.owner = ent
 		if projdata.shoot_direct then
 			-- shoot directly in the cast direction
