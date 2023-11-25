@@ -30,21 +30,23 @@ rn.entity_handler[id] =
 		rn.entity_data_write(ent, "impl.targetable", false, "impl.projectile_skip", true)
 	end,
 	deinit = function(ent)
-		local data = rn.entity_get_data(ent)
-		if data.impl.light ~= nil then
-			rn.scene():remove_light(data.impl.light)
+		local light_id = rn.entity_data_read(ent, "impl.light")
+		if light_id ~= nil then
+			rn.scene():remove_light(light_id)
 		end
 	end,
 	update = function(ent)
 		local data = rn.entity.data[ent:uid()]
 
-		if data.damage_type ~= "Physical" and data.impl.light == nil then
+		local light_id = rn.entity_data_read(ent, "impl.light")
+		if data.damage_type ~= "Physical" and light_id == nil then
 			-- spawn our light -.-
 			local r, g, b = rn.damage_type_get_colour(data.damage_type)
-			data.impl.light = rn.scene():add_light()
-			local light = rn.scene():get_light(data.impl.light)
+			light_id = rn.scene():add_light()
+			local light = rn.scene():get_light(light_id)
 			light:set_power(1.0)
 			light:set_colour(r, g, b)
+			rn.entity_data_write(ent, "impl.light", light_id)
 		end
 
 		ent:get_element():object_set_texture_tint(2, 0, 0.85, 0.1, 0.1)
@@ -69,8 +71,8 @@ rn.entity_handler[id] =
 			frame_id = 6 - frame_id
 		end
 
-		if data.impl.light ~= nil then
-			local light = rn.scene():get_light(data.impl.light)
+		if light_id ~= nil then
+			local light = rn.scene():get_light(light_id)
 			light:set_position(xtar, ytar)
 			light:set_power(math.sqrt(1.0 - cast_progress))
 		end

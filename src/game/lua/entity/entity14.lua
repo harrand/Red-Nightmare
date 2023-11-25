@@ -88,13 +88,13 @@ rn.entity_handler[id] =
 
 				if ent2:get_type() == 13 then
 					-- its an elemental. set its type to our magic type.
-					local eledata = rn.entity_get_data(ent2)
 					rn.entity_data_write(ent2, "magic_type", magic_type)
 					-- turn all its lights back on too!
 					for i=1,2,1 do
-						eledata.impl.lights[i] = rn.scene():add_light()
-						local light = rn.scene():get_light(eledata.impl.lights[i])
+						local light_id = rn.scene():add_light()
+						local light = rn.scene():get_light(light_id)
 						light:set_power(0.8)
+						rn.entity_data_write(ent2, "impl.lights[" .. i .. "]", light_id)
 					end
 				else
 					-- undead things despawn very fast.

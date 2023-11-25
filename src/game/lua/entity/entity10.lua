@@ -29,15 +29,17 @@ rn.entity_handler[id] =
 		ent:get_element():object_set_texture_handle(2, 0, texh)
 		data.hit_enemies = {}
 
-		data.impl.light = rn.scene():add_light();
-		local light = rn.scene():get_light(data.impl.light)
+		local light_id = rn.scene():add_light()
+		local light = rn.scene():get_light(light_id)
 		light:set_power(3.5)
 		light:set_colour(rn.damage_type_get_colour("Fire"))
+		rn.entity_data_write(ent, "impl.light", light_id)
 	end,
 	deinit = function(ent)
 		local data = rn.entity_get_data(ent)
-		tz.assert(data.impl.light ~= nil)
-		rn.scene():remove_light(data.impl.light)
+		local light_id = rn.entity_data_read(ent, "impl.light")
+		tz.assert(light_id ~= nil)
+		rn.scene():remove_light(light_id)
 	end,
 	update = function(ent)
 		-- for each enemy colliding with us, hit them for damage.
@@ -48,7 +50,7 @@ rn.entity_handler[id] =
 		local x, y = ent:get_element():get_position()
 		x = x + 0.5
 		y = y + 0.5
-		local light = rn.scene():get_light(data.impl.light)
+		local light = rn.scene():get_light(rn.entity_data_read(ent, "impl.light"))
 		light:set_position(x, y)
 		local owner = data.owner
 		-- this lasts for multiple frames. we dont want to hit the same person twice.

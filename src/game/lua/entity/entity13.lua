@@ -44,13 +44,14 @@ rn.entity_handler[id] =
 		-- left hand
 		-- right foot
 		-- left foot
-		data.impl.lights = {}
-		rn.entity_data_write(ent, "magic_type", "Frost")
 		for i=1,2,1 do
-			data.impl.lights[i] = rn.scene():add_light()
-			local light = rn.scene():get_light(data.impl.lights[i])
+			local light_id = rn.scene():add_light()
+			local light = rn.scene():get_light(light_id)
 			light:set_power(0.8)
+			rn.entity_data_write(ent, "impl.lights[" .. i .. "]", light_id)
 		end
+		-- attempted optimisation. unpack might not work this way.
+		rn.entity_data_write(ent, "magic_type", "Frost")
 
 		rn.equip(ent, "Lightning Crown")
 
@@ -63,9 +64,10 @@ rn.entity_handler[id] =
 	on_death = function(ent)
 		local data = rn.entity_get_data(ent)
 		for i=1,2,1 do
-			if data.impl.lights[i] ~= nil then
-				rn.scene():remove_light(data.impl.lights[i])
-				data.impl.lights[i] = nil
+			local light_id = rn.entity_data_read(ent, "impl.lights[" .. i .. "]")
+			if light_id ~= nil then
+				rn.scene():remove_light(light_id)
+				rn.entity_data_write(ent, "impl.lights[" .. i .. "]", nil)
 			end
 		end
 	end,
@@ -82,12 +84,15 @@ rn.entity_handler[id] =
 		b = b * 2
 		ent:get_element():object_set_texture_tint(3, 0, r, g, b)
 		for i=1,2,1 do
-			local light = rn.scene():get_light(data.impl.lights[i])
+			local light_id = rn.entity_data_read(ent, "impl.lights[" .. i .. "]")
+			tz.assert(light_id ~= nil)
+			local light = rn.scene():get_light(light_id)
 			light:set_colour(r, g, b)
 		end
 
-		rn.scene():get_light(data.impl.lights[1]):set_position(ent:get_element():get_subobject_position(21))
-		rn.scene():get_light(data.impl.lights[2]):set_position(ent:get_element():get_subobject_position(17))
+		local light1, light2 = rn.entity_data_read(ent, "impl.lights[1]", "impl.lights[2]")
+		rn.scene():get_light(light1):set_position(ent:get_element():get_subobject_position(21))
+		rn.scene():get_light(light2):set_position(ent:get_element():get_subobject_position(17))
 
 		data.fireball_cd = data.fireball_cd - rn.delta_time
 

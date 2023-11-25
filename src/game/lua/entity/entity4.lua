@@ -34,12 +34,10 @@ rn.entity_handler[id] =
 		local texh = rn.texture_manager():get_texture(typestr .. ".sprite0")
 		ent:get_element():object_set_texture_handle(2, 0, texh)
 
-		local data = rn.entity_get_data(ent)
-		data.impl.light = rn.scene():add_light()
-		rn.entity_data_write(ent, "impl.targetable", false, "impl.projectile_skip", true)
+		rn.entity_data_write(ent, "impl.targetable", false, "impl.projectile_skip", true, "impl.light", rn.scene():add_light())
 	end,
 	deinit = function(ent)
-		rn.scene():remove_light(rn.entity_get_data(ent).impl.light)
+		rn.scene():remove_light(rn.entity_data_read(ent, "impl.light"))
 	end,
 	update = function(ent)
 		local data = rn.entity.data[ent:uid()]
@@ -49,7 +47,7 @@ rn.entity_handler[id] =
 		local xtar, ytar = data.target_entity:get_element():get_subobject_position(data.subobject)
 		ent:get_element():set_position(xtar, ytar)
 
-		local light = rn.scene():get_light(data.impl.light)
+		local light = rn.scene():get_light(rn.entity_data_read(ent, "impl.light"))
 		light:set_position(xtar, ytar)
 		light:set_colour(data.colour_r, data.colour_g, data.colour_b)
 

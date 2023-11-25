@@ -20,21 +20,21 @@ rn.entity_handler[id] =
 		ent:get_element():face_forward()
 
 		local data = rn.entity_get_data(ent)
-		data.impl.light = rn.scene():add_light()
-		local light = rn.scene():get_light(data.impl.light)
+		local light_id = rn.scene():add_light()
+		local light = rn.scene():get_light(light_id)
 		light:set_power(0.4)
 		data.impl.counter = 0
-		rn.entity_data_write(ent, "impl.targetable", false, "impl.projectile_skip", true)
+		rn.entity_data_write(ent, "impl.targetable", false, "impl.projectile_skip", true, "impl.light", light_id)
 	end,
 	deinit = function(ent)
-		rn.scene():remove_light(rn.entity_get_data(ent).impl.light)
+		rn.scene():remove_light(rn.entity_data_read(ent, "impl.light"))
 	end,
 	update = function(ent)
 		local data = rn.entity.data[ent:uid()]
 		data.impl.counter = data.impl.counter + rn.delta_time
 		ent:get_element():face_forward()
 		ent:get_element():vrotate(data.impl.counter * 2.2)
-		local light = rn.scene():get_light(data.impl.light)
+		local light = rn.scene():get_light(rn.entity_data_read(ent, "impl.light"))
 		light:set_position(ent:get_element():get_subobject_position(7))
 		rn.for_each_collision(ent, function(ent2)
 			if not data.collided_this_update and ent2:get_model() == rn.model.humanoid and ent2:get_type() ~= ent:get_type() and not ent2:is_dead() then
