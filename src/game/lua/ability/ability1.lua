@@ -17,7 +17,6 @@ rn.abilities[id] =
 		proj:set_faction(ent:get_faction())
 		local x, y = ent:get_element():get_subobject_position(21)
 		proj:get_element():set_position(x, y)
-		local projdata = rn.entity_get_data(proj)
 		-- fireball base stats is a snapshot of the caster's current stats.
 		local bstats = ent:get_stats()
 		-- this means it will benefit for example from a spellpower buff at the point of casting (snapshotting)
