@@ -90,13 +90,11 @@ function rn.combat.base_on_struck(ent, evt)
 
 	-- blood splatter
 	local splatter = rn.scene():get(rn.scene():add(6))
-	local splatterdata = rn.entity_get_data(splatter)
-	splatterdata.target_entity = ent
-	splatterdata.damage_type = evt.damage_type
+	local desired_subobject = fakenil
 	if ent:get_model() == rn.model.humanoid then
-		splatterdata.subobject = 9
+		desired_subobject = 9
 	end
-	splatterdata.duration = 500
+	rn.entity_data_write(splatter, "subobject", desired_subobject, "target_entity", ent:uid(), "damage_type", evt.damage_type, "duration", 500)
 end
 
 -- ent was affected by a entity_heal_entity_event
