@@ -28,7 +28,6 @@ rn.entity_handler[id] =
 		rn.scene():remove_light(light_id)
 	end,
 	update = function(ent)
-		local data = rn.entity.data[ent:uid()]
 		local stats = ent:get_base_stats()
 		stats:set_movement_speed(12.0)
 		ent:set_base_stats(stats)

@@ -13,22 +13,14 @@ rn.entity_handler[id] =
 		ent:set_name("Magic Barrier")
 		ent:set_model(rn.model.quad)
 		ent:set_collideable(false)
-
-		rn.entity.data[ent:uid()] =
-		{
-			spawned_at = tz.time(),
-			colour_r = 1.0,
-			colour_g = 1.0,
-			colour_b = 1.0,
-		}
 	end,
 	postinit = function(ent)
 		local texh = rn.texture_manager():get_texture(typestr .. ".sprite")
 		ent:get_element():object_set_texture_handle(2, 0, texh)
+		rn.entity_data_write(ent, "spawned_at", tz.time())
 	end,
 	update = function(ent)
-		local data = rn.entity.data[ent:uid()]
-		local target_entity_uid, duration, magic_type = rn.entity_data_read(ent, "target_entity", "duration", "magic_type")
+		local target_entity_uid, duration, magic_type, spawned_at = rn.entity_data_read(ent, "target_entity", "duration", "magic_type", "spawned_at")
 		tz.assert(target_entity_uid ~= nil)
 		local target_entity = rn.scene():get_uid(target_entity_uid)
 		ent:get_element():object_set_texture_tint(2, 0, rn.damage_type_get_colour(magic_type))
@@ -36,8 +28,7 @@ rn.entity_handler[id] =
 		ytar = ytar + 7.5 * target_entity:get_element():get_uniform_scale()
 		ent:get_element():set_position(xtar, ytar)
 
-
-		local casted_time = tz.time() - data.spawned_at
+		local casted_time = tz.time() - spawned_at
 		local cast_progress = casted_time / duration
 		local average_size = 1.25
 		local pct_time_till_full_growth = 0.02
