@@ -31,8 +31,6 @@ rn.relationship =
 
 rn.entity = {}
 rn.entity.type = {}
-rn.entity.resident = {}
-rn.entity.data = {}
 rn.player_credits = 0
 
 rn.entity_handler = {}
@@ -211,7 +209,6 @@ rn.entity_preinit = function(type)
 	if handler.preinit ~= nil then
 		handler.preinit(ent)
 	end
-	rn.entity.resident[ent:uid()] = true
 	tracy.ZoneEnd()
 end
 
@@ -329,8 +326,6 @@ rn.entity_deinit = function()
 	end
 
 	local uid = rn_impl_dead_entity:uid()
-	rn.entity.resident[uid] = false
-	rn.entity.data[uid] = nil
 	rn.entity_data_clear(rn_impl_dead_entity)
 end
 
@@ -380,14 +375,6 @@ rn.advance_key_state = function()
 	end
 end
 
-rn.entity_get_data = function(ent)
-	local obj <close> = tz.profzone_obj:new()
-	obj:set_name("entity_get_data")
-	rn.entity.data[ent:uid()] = rn.entity.data[ent:uid()] or {}
-	rn.entity.data[ent:uid()].impl = rn.entity.data[ent:uid()].impl or {}
-	return rn.entity.data[ent:uid()]
-end
-
 rn.update = function()
 	local obj <close> = tz.profzone_obj:new()
 	obj:set_name("Lua Update")
@@ -399,7 +386,7 @@ rn.update = function()
 	if sc:size() > 0 then
 		for i=0,sc:size()-1,1 do
 			local ent = sc:get(i)
-			if rn.entity.resident[ent:uid()] == true and ent:is_valid() then
+			if ent:is_valid() then
 				rn.entity_update(ent)
 			end
 		end
@@ -462,9 +449,6 @@ rn.entity_move = function(arg)
 	local movement_anim_name = arg.movement_anim_name
 	local face_in_direction = arg.face_in_direction
 	if face_in_direction == nil then face_in_direction = true end
-
-	local entdata = rn.entity_get_data(ent)
-	entdata.impl = entdata.impl or {}
 
 	local e = ent:get_element()
 	-- get normalised movement vector
