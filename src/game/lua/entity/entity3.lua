@@ -8,10 +8,6 @@ rn.entity_handler[id] =
 	preinit = function(ent)
 		ent:set_name("Dropped Item")
 		ent:set_model(rn.model.humanoid)
-		rn.entity.data[ent:uid()] =
-		{
-			collided_this_update = false
-		}
 	end,
 	postinit = function(ent)
 		local sc = ent:get_element():get_uniform_scale()
@@ -28,16 +24,17 @@ rn.entity_handler[id] =
 		rn.scene():remove_light(rn.entity_data_read(ent, "impl.light"))
 	end,
 	update = function(ent)
-		local data = rn.entity.data[ent:uid()]
-		local counter = rn.entity_data_read(ent, "impl.counter")
+		local counter, light_id = rn.entity_data_read(ent, "impl.counter", "impl.light")
+		tz.assert(light_id ~= nil)
+		local light = rn.scene():get_light(light_id)
 		counter = counter + rn.delta_time
 		rn.entity_data_write(ent, "impl.counter", counter)
 		ent:get_element():face_forward()
 		ent:get_element():vrotate(counter * 2.2)
-		local light = rn.scene():get_light(rn.entity_data_read(ent, "impl.light"))
 		light:set_position(ent:get_element():get_subobject_position(7))
+		local collided_this_update = false
 		rn.for_each_collision(ent, function(ent2)
-			if not data.collided_this_update and ent2:get_model() == rn.model.humanoid and ent2:get_type() ~= ent:get_type() and not ent2:is_dead() then
+			if not collided_this_update and ent2:get_model() == rn.model.humanoid and ent2:get_type() ~= ent:get_type() and not ent2:is_dead() then
 				-- equip whatever we're wearing onto ent2
 				-- iterate through each slot
 				for i=1,rn.equipment.slot._count-1,1 do
@@ -52,10 +49,10 @@ rn.entity_handler[id] =
 					end
 				end
 				-- then we die :)
-				data.collided_this_update = true
+				collided_this_update = true
 			end
 		end)
-		if data.collided_this_update then
+		if collided_this_update then
 			rn.scene():remove_uid(ent:uid())
 		end
 	end
