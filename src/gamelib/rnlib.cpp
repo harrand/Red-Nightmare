@@ -51,6 +51,9 @@ namespace game
 		rn.load_level{name = "blanchfield"}
 
 		rn.scene():add(15)
+		for i=0,12,1 do
+			rn.scene():add(2)
+		end
 		)");
 	}
 
@@ -111,8 +114,35 @@ namespace game
 		{
 			game_system->scene.block();
 			TZ_PROFZONE("rnlib - lua update", 0xFF00AAFF);
-			tz::lua::get_state().assign_float("rn.delta_time", delta_seconds);
-			tz::lua::get_state().execute("if rn.update ~= nil then rn.update() end");
+
+			std::size_t job_count = std::thread::hardware_concurrency();
+			std::size_t objects_per_job = game_system->scene.size() / job_count;
+			std::size_t remainder_objects = game_system->scene.size() % job_count;
+			tz::assert((objects_per_job * job_count) + remainder_objects == game_system->scene.size());
+			std::vector<tz::job_handle> jobs;
+			if(objects_per_job > 0)
+			{
+				for(std::size_t i = 0; i < job_count; i++)
+				{
+					jobs.push_back(tz::job_system().execute([delta_seconds, offset = i * objects_per_job, object_count = objects_per_job]()
+					{
+						auto& state = tz::lua::get_state();
+						state.assign_float("rn.delta_time", delta_seconds);
+						std::string cmd = "rn.update_partial(" + std::to_string(offset) + ", " + std::to_string(object_count-1) + ")";
+						state.execute(cmd.c_str());
+					}));
+				}
+			}
+			auto& state = tz::lua::get_state();
+			state.assign_float("rn.delta_time", delta_seconds);
+			std::string cmd = "rn.update_partial(" + std::to_string(game_system->scene.size() - remainder_objects - 1) + ", " + std::to_string(remainder_objects) + ")";
+			state.execute(cmd.c_str());
+			for(tz::job_handle jh : jobs)
+			{
+				tz::job_system().block(jh);
+			}
+			//tz::lua::get_state().assign_float("rn.delta_time", delta_seconds);
+			//tz::lua::get_state().execute("if rn.update ~= nil then rn.update() end");
 		}
 	}
 

@@ -6,7 +6,6 @@
 #include <deque>
 #include <unordered_map>
 #include <unordered_set>
-
 namespace game::entity
 {
 	struct scene_quadtree_node

@@ -375,6 +375,20 @@ rn.advance_key_state = function()
 	end
 end
 
+rn.update_partial = function(index, count)
+	local sc = rn.scene()
+	rn.empty_key_state()
+	rn.advance_key_state()
+
+	tz.assert(sc:size() >= index + count)
+	for i=index,index+count,1 do
+		local ent = sc:get(i)
+		if ent:is_valid() then
+			rn.entity_update(ent)
+		end
+	end
+end
+
 rn.update = function()
 	local obj <close> = tz.profzone_obj:new()
 	obj:set_name("Lua Update")
