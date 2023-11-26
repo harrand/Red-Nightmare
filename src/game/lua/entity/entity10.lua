@@ -13,27 +13,17 @@ rn.entity_handler[id] =
 	preinit = function(ent)
 		ent:set_name("Fire Nova")
 		ent:set_model(rn.model.quad)
-
-		rn.entity.data[ent:uid()] =
-		{
-			flipbook_timer = 0,
-			cur_texture_id = 0,
-			spawned_at = tz.time(),
-			owner = nil,
-		}
 	end,
 	postinit = function(ent)
 		ent:get_element():set_uniform_scale(ent:get_element():get_uniform_scale() * 4)
-		local data = rn.entity_get_data(ent)
 		local texh = rn.texture_manager():get_texture(typestr .. ".sprite0")
 		ent:get_element():object_set_texture_handle(2, 0, texh)
-		data.hit_enemies = {}
 
 		local light_id = rn.scene():add_light()
 		local light = rn.scene():get_light(light_id)
 		light:set_power(3.5)
 		light:set_colour(rn.damage_type_get_colour("Fire"))
-		rn.entity_data_write(ent, "impl.light", light_id)
+		rn.entity_data_write(ent, "impl.light", light_id, "flipbook_timer", 0, "cur_texture_id", 0, "hit_enemy_count", 0)
 	end,
 	deinit = function(ent)
 		local light_id = rn.entity_data_read(ent, "impl.light")
@@ -42,7 +32,13 @@ rn.entity_handler[id] =
 	end,
 	update = function(ent)
 		-- for each enemy colliding with us, hit them for damage.
-		local data = rn.entity_get_data(ent)
+		local flipbook_timer, cur_texture_id, hit_enemy_count = rn.entity_data_read(ent, "flipbook_timer", "cur_texture_id", "hit_enemy_count")
+
+		local hit_enemies = {}
+		for i=1,hit_enemy_count,1 do
+			local cur = rn.entity_data_read(ent, "hit_enemy." .. i)	
+			hit_enemies[i] = cur
+		end
 
 		-- the explosion texture is very slightly off-center.
 		-- until we fix it, use this dodgy offset.
@@ -59,7 +55,14 @@ rn.entity_handler[id] =
 		-- this lasts for multiple frames. we dont want to hit the same person twice.
 		-- so each person we hit we add their uid. and if we collide with that uid again dont hit.
 		rn.for_each_collision(ent, function(ent2)
-			if not data.hit_enemies[ent2:uid()] and ent2:is_valid() and not ent2:is_dead() and rn.get_relationship(ent, ent2) == "hostile" and rn.entity_data_read(ent2, "impl.projectile_skip") ~= true then
+			local found = false
+			for i=1,hit_enemy_count,1 do
+				if hit_enemies[i] == ent2:uid() then
+					found = true
+				end
+			end
+
+			if not found and ent2:is_valid() and not ent2:is_dead() and rn.get_relationship(ent, ent2) == "hostile" and rn.entity_data_read(ent2, "impl.projectile_skip") ~= true then
 				local evt = rn.entity_damage_entity_event:new()
 				evt.damager = ent:uid()
 				if owner ~= nil then
@@ -69,7 +72,9 @@ rn.entity_handler[id] =
 				evt.value = ent:get_stats():get_spell_power()
 				evt.damage_type = "Fire"
 				rn.combat.process_event(evt)
-				data.hit_enemies[ent2:uid()] = true
+				hit_enemy_count = hit_enemy_count + 1
+				hit_enemies[hit_enemy_count] = ent2:uid()
+				rn.entity_data_write(ent, "hit_enemy." .. string.format("%.0f", hit_enemy_count), ent2:uid(), "hit_enemy_count", hit_enemy_count)
 
 				-- buff owner's speed
 				if owner ~= nil then
@@ -81,19 +86,20 @@ rn.entity_handler[id] =
 			end
 		end)
 
-		data.flipbook_timer = data.flipbook_timer + rn.delta_time
-		if data.flipbook_timer > 0.1 then
-			data.flipbook_timer = 0
-			data.cur_texture_id = data.cur_texture_id + 1
+		flipbook_timer = flipbook_timer + rn.delta_time
+		if flipbook_timer > 0.1 then
+			flipbook_timer = 0
+			cur_texture_id = cur_texture_id + 1
 			light:set_power(light:get_power() * (5.0/6.0))
 
-			if data.cur_texture_id > 6 then
+			if cur_texture_id > 6 then
 				rn.scene():remove_uid(ent:uid())
 				return
 			end
 
-			local texh = rn.texture_manager():get_texture(typestr .. ".sprite" .. data.cur_texture_id)
+			local texh = rn.texture_manager():get_texture(typestr .. ".sprite" .. string.format("%.0f", cur_texture_id))
 			ent:get_element():object_set_texture_handle(2, 0, texh)
 		end
+		rn.entity_data_write(ent, "flipbook_timer", flipbook_timer, "cur_texture_id", cur_texture_id)
 	end
 }
