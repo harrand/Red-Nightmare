@@ -14,6 +14,7 @@ rn.abilities[id] =
 		local x, y = ent:get_element():get_subobject_position(21)
 		swing:get_element():set_position(x, y)
 		swing:set_base_stats(ent:get_base_stats())
-		rn.entity_data_write(swing, "owner", ent:uid())
+		local swingdata = rn.entity_get_data(swing)
+		swingdata.owner = ent
 	end
 }

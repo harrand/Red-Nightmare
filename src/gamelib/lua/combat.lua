@@ -53,7 +53,8 @@ function rn.combat.base_on_death(ent, evt)
 	rn.unequip_and_drop_all(ent)
 	rn.cancel_cast(ent)
 	ent:get_element():play_animation_by_name("Death", false)
-	rn.entity_data_write(ent, "impl.death_time", tz.time())
+	local data = rn.entity_get_data(ent)
+	data.impl.death_time = tz.time()
 end
 
 function rn.combat.base_on_kill(ent, evt)
@@ -90,11 +91,13 @@ function rn.combat.base_on_struck(ent, evt)
 
 	-- blood splatter
 	local splatter = rn.scene():get(rn.scene():add(6))
-	local desired_subobject = fakenil
+	local splatterdata = rn.entity_get_data(splatter)
+	splatterdata.target_entity = ent
+	splatterdata.damage_type = evt.damage_type
 	if ent:get_model() == rn.model.humanoid then
-		desired_subobject = 9
+		splatterdata.subobject = 9
 	end
-	rn.entity_data_write(splatter, "subobject", desired_subobject, "target_entity", ent:uid(), "damage_type", evt.damage_type, "duration", 500)
+	splatterdata.duration = 500
 end
 
 -- ent was affected by a entity_heal_entity_event
@@ -155,7 +158,7 @@ function rn.combat.process_event(evt)
 		evt = rn.combat.process_damage_mitigation(evt)
 		rn.combat.base_on_struck(damagee, evt)
 		rn.combat.base_on_hit(damager, evt)
-		local ability_name = rn.entity_data_read(damager, "impl.cast")
+		local ability_name = rn.entity_get_data(damager).impl.cast
 		local ability_str = ""
 		if ability_name ~= nil then
 			ability_str = " with " .. ability_name 

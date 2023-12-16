@@ -44,7 +44,6 @@ add_shader(
 		src/gamelib/renderer/shaders/pixelate.vertex.tzsl	
 		src/gamelib/renderer/shaders/pixelate.fragment.tzsl	
 )
-target_link_libraries(rednightmare_gamelib PUBLIC shared_recursive_mutex)
 target_include_directories(rednightmare_gamelib PUBLIC ${PROJECT_SOURCE_DIR}/src)
 
 #add_shader(

@@ -13,58 +13,66 @@ rn.entity_handler[id] =
 		ent:set_name("Blood Splatter")
 		ent:set_model(rn.model.quad)
 		ent:set_collideable(false)
+
+		rn.entity.data[ent:uid()] =
+		{
+			flipbook_timer = 0,
+			cur_texture_id = 0,
+			spawned_at = tz.time(),
+			target_entity = nil,
+			duration = nil,
+			subobject = nil
+		}
 	end,
 	postinit = function(ent)
 		local texh = rn.texture_manager():get_texture(typestr .. ".sprite0")
 		ent:get_element():object_set_texture_handle(2, 0, texh)
-		rn.entity_data_write(ent, "impl.targetable", false, "impl.projectile_skip", true, "spawned_at", tz.time())
+		local data = rn.entity_get_data(ent)
+		data.impl.targetable = false
+		data.impl.projectile_skip = true
 	end,
 	deinit = function(ent)
-		local light_id = rn.entity_data_read(ent, "impl.light")
-		if light_id ~= nil then
-			rn.scene():remove_light(light_id)
+		local data = rn.entity_get_data(ent)
+		if data.impl.light ~= nil then
+			rn.scene():remove_light(data.impl.light)
 		end
 	end,
 	update = function(ent)
-		local light_id, damage_type, target_uid, subobject, duration, spawned_at = rn.entity_data_read(ent, "impl.light", "damage_type", "target_entity", "subobject", "duration", "spawned_at")
-		local target_entity = nil
-		if target_uid ~= nil then
-			target_entity = rn.scene():get_uid(target_uid)
-		end
+		local data = rn.entity.data[ent:uid()]
 
-		if damage_type ~= "Physical" and light_id == nil then
+		if data.damage_type ~= "Physical" and data.impl.light == nil then
 			-- spawn our light -.-
-			local r, g, b = rn.damage_type_get_colour(damage_type)
-			light_id = rn.scene():add_light()
-			local light = rn.scene():get_light(light_id)
-			light:set_power(1.0)
-			light:set_colour(r, g, b)
-			rn.entity_data_write(ent, "impl.light", light_id)
+			local r, g, b = rn.damage_type_get_colour(data.damage_type)
+			data.impl.light = rn.scene():add_light()
+			data.impl.light:set_power(1.0)
+			data.impl.light:set_colour(r, g, b)
 		end
 
 		ent:get_element():object_set_texture_tint(2, 0, 0.85, 0.1, 0.1)
 
-		if target_entity == nil or not target_entity:is_valid() then
+		if data.target_entity == nil or not data.target_entity:is_valid() then
 			rn.scene():remove_uid(ent:uid())
 			return
 		end
 		local xtar, ytar
-		if subobject == fakenil then
-			xtar, ytar = target_entity:get_element():get_position()
+		if data.subobject == nil then
+			xtar, ytar = data.target_entity:get_element():get_position()
 		else
-			xtar, ytar = target_entity:get_element():get_subobject_position(subobject)
+			xtar, ytar = data.target_entity:get_element():get_subobject_position(data.subobject)
 		end
 		ent:get_element():set_position(xtar, ytar)
 
-		local casted_time = tz.time() - spawned_at
-		local cast_progress = casted_time / duration
+		local casted_time = tz.time() - data.spawned_at
+		local cast_progress = casted_time / data.duration
 		-- frame count = 7
 		local frame_id = math.floor(cast_progress * 6) % 7
+		if data.reverse then
+			frame_id = 6 - frame_id
+		end
 
-		if light_id ~= nil then
-			local light = rn.scene():get_light(light_id)
-			light:set_position(xtar, ytar)
-			light:set_power(math.sqrt(1.0 - cast_progress))
+		if data.impl.light ~= nil then
+			data.impl.light:set_position(xtar, ytar)
+			data.impl.light:set_power(math.sqrt(1.0 - cast_progress))
 		end
 		ent:get_element():object_set_texture_handle(2, 0, rn.texture_manager():get_texture(typestr .. ".sprite" .. frame_id))
 		if cast_progress > 1 then

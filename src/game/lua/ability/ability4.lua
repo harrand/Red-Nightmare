@@ -13,8 +13,9 @@ rn.abilities[id] =
 		-- spawn nova and a friendly fire elemental
 		local ele = rn.scene():get(rn.scene():add(13))
 		rn.equipment_copy(ent, ele)
+		local eledata = rn.entity_get_data(ele)
 		ele:set_faction(rn.faction_id.player_ally)
-		rn.entity_data_write(ele, "magic_type", "Fire")
+		eledata.magic_type = "Fire"
 
 		local nova = rn.scene():get(rn.scene():add(10))
 		nova:set_faction(ent:get_faction())
@@ -24,9 +25,11 @@ rn.abilities[id] =
 		y = (y + y2) / 2.0
 		nova:get_element():set_position(x, y)
 		ele:get_element():set_position(x, y)
+		local entdata = rn.entity_get_data(ent)
+		local novadata = rn.entity_get_data(nova)
 		-- fireball base stats is a snapshot of the caster's current stats.
 		nova:set_base_stats(ent:get_stats())
-		rn.entity_data_write(nova, "owner", ent:uid())
+		novadata.owner = ent
 
 		local mousex, mousey = rn.scene():get_mouse_position_ws()	
 		local bx, by = ent:get_element():get_position()

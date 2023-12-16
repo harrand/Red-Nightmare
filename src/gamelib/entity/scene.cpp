@@ -3,7 +3,6 @@
 #include "tz/core/imported_text.hpp"
 #include "tz/lua/state.hpp"
 #include "tz/wsi/monitor.hpp"
-#include "shared_recursive_mutex/shared_recursive_mutex.hpp"
 
 #include ImportedTextHeader(entity, lua)
 
@@ -485,7 +484,6 @@ namespace game::entity
 	int rn_impl_scene::add(tz::lua::state& state)
 	{
 		auto [_, type] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
-		std::unique_lock ulock{mtx::shared_recursive_global_mutex::instance()};
 		scene::entity_handle e = this->sc->add(type);
 		state.stack_push_uint(static_cast<std::size_t>(static_cast<tz::hanval>(e)));
 		return 1;
@@ -493,19 +491,17 @@ namespace game::entity
 
 	int rn_impl_scene::add_light(tz::lua::state& state)
 	{
-		std::unique_lock ulock{mtx::shared_recursive_global_mutex::instance()};
 		scene::light_handle l = this->sc->add_light
 		({
 		});
 		rn_impl_light light{.sc = this->sc, .l = l};
-		state.stack_push_uint(static_cast<std::size_t>(static_cast<tz::hanval>(l)));
+		LUA_CLASS_PUSH(state, rn_impl_light, light);
 		return 1;
 	}
 
 	int rn_impl_scene::remove(tz::lua::state& state)
 	{
 		auto [_, eh] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
-		std::unique_lock ulock{mtx::shared_recursive_global_mutex::instance()};
 		this->sc->remove(static_cast<tz::hanval>(eh));
 		return 0;
 	}
@@ -513,7 +509,6 @@ namespace game::entity
 	int rn_impl_scene::remove_uid(tz::lua::state& state)
 	{
 		auto [_, uid] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
-		std::unique_lock ulock{mtx::shared_recursive_global_mutex::instance()};
 		for(std::size_t i = 0; i < this->sc->size(); i++)
 		{
 			auto hv = static_cast<tz::hanval>(i);
@@ -528,31 +523,19 @@ namespace game::entity
 
 	int rn_impl_scene::remove_light(tz::lua::state& state)
 	{
-		std::unique_lock ulock{mtx::shared_recursive_global_mutex::instance()};
-		auto [_, light_id] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
-		this->sc->remove_light(static_cast<tz::hanval>(light_id));
+		auto& light = state.stack_get_userdata<rn_impl_light>(2);
+		this->sc->remove_light(light.l);
 		return 0;
-	}
-
-	int rn_impl_scene::get_light(tz::lua::state& state)
-	{
-		std::shared_lock slock{mtx::shared_recursive_global_mutex::instance()};
-		auto [_, light_id] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
-		rn_impl_light light{.sc = this->sc, .l = static_cast<tz::hanval>(light_id)};
-		LUA_CLASS_PUSH(state, rn_impl_light, light);
-		return 1;
 	}
 
 	int rn_impl_scene::clear(tz::lua::state& state)
 	{
-		std::unique_lock ulock{mtx::shared_recursive_global_mutex::instance()};
 		this->sc->clear();
 		return 0;
 	}
 
 	int rn_impl_scene::clear_except_players(tz::lua::state& state)
 	{
-		std::unique_lock ulock{mtx::shared_recursive_global_mutex::instance()};
 		this->sc->clear_except_players();
 		return 0;
 	}
@@ -574,7 +557,6 @@ namespace game::entity
 
 	int rn_impl_scene::get(tz::lua::state& state)
 	{
-		std::shared_lock slock{mtx::shared_recursive_global_mutex::instance()};
 		auto [_, eh] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
 		rn_impl_entity ent{.scene = this->sc, .entity_hanval = static_cast<tz::hanval>(eh)};
 		LUA_CLASS_PUSH(state, rn_impl_entity, ent);
@@ -583,7 +565,6 @@ namespace game::entity
 
 	int rn_impl_scene::get_uid(tz::lua::state& state)
 	{
-		std::shared_lock slock{mtx::shared_recursive_global_mutex::instance()};
 		auto [_, uid] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
 		rn_impl_entity ent{};
 		for(std::size_t i = 0; i < this->sc->size(); i++)
@@ -615,7 +596,6 @@ namespace game::entity
 
 	int rn_impl_scene::size(tz::lua::state& state)
 	{
-		std::shared_lock slock{mtx::shared_recursive_global_mutex::instance()};
 		state.stack_push_uint(this->sc->size());
 		return 1;
 	}
@@ -630,7 +610,6 @@ namespace game::entity
 
 	int rn_impl_light::get_position(tz::lua::state& state)
 	{
-		std::shared_lock slock{mtx::shared_recursive_global_mutex::instance()};
 		const auto& light = this->sc->get_light(this->l);
 		state.stack_push_float(light.position[0]);
 		state.stack_push_float(light.position[1]);
@@ -639,7 +618,6 @@ namespace game::entity
 
 	int rn_impl_light::set_position(tz::lua::state& state)
 	{
-		std::unique_lock ulock{mtx::shared_recursive_global_mutex::instance()};
 		auto [_, x, y] = tz::lua::parse_args<tz::lua::nil, float, float>(state);
 		auto& light = this->sc->get_light(this->l);
 		light.position[0] = x;
@@ -649,7 +627,6 @@ namespace game::entity
 
 	int rn_impl_light::get_colour(tz::lua::state& state)
 	{
-		std::shared_lock slock{mtx::shared_recursive_global_mutex::instance()};
 		const auto& light = this->sc->get_light(this->l);
 		state.stack_push_float(light.colour[0]);
 		state.stack_push_float(light.colour[1]);
@@ -659,7 +636,6 @@ namespace game::entity
 
 	int rn_impl_light::set_colour(tz::lua::state& state)
 	{
-		std::unique_lock ulock{mtx::shared_recursive_global_mutex::instance()};
 		auto [_, r, g, b] = tz::lua::parse_args<tz::lua::nil, float, float, float>(state);
 		auto& light = this->sc->get_light(this->l);
 		light.colour[0] = r;
@@ -670,7 +646,6 @@ namespace game::entity
 
 	int rn_impl_light::get_power(tz::lua::state& state)
 	{
-		std::shared_lock slock{mtx::shared_recursive_global_mutex::instance()};
 		const auto& light = this->sc->get_light(this->l);
 		state.stack_push_float(light.power);
 		return 1;
@@ -678,7 +653,6 @@ namespace game::entity
 
 	int rn_impl_light::set_power(tz::lua::state& state)
 	{
-		std::unique_lock ulock{mtx::shared_recursive_global_mutex::instance()};
 		auto [_, power] = tz::lua::parse_args<tz::lua::nil, float>(state);
 		auto& light = this->sc->get_light(this->l);
 		light.power = power;

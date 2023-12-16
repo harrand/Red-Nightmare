@@ -37,46 +37,36 @@ rn.entity_handler[id] =
 
 	end,
 	on_struck = function(ent, evt)
-		rn.entity_data_write(ent, "target", evt.damager)
+		local damager = rn.scene():get_uid(evt.damager)
+		rn.entity_get_data(ent).target = damager
 	end,
 	update = function(ent)
+		local data = rn.entity_get_data(ent)
+		data.collided_this_update = false
 		local target_args = {aggro_range = 20, target_relationship = "hostile"}
 		local target_args2 = {aggro_range = target_args.aggro_range * 2, target_relationship = "hostile"}
-
-		local collided_this_update = false
-		local target_uid = rn.entity_data_read(ent, "target")
-		local target = nil
-		if target_uid ~= nil and target_uid ~= fakenil then
-			target = rn.scene():get_uid(target_uid)
-		end
-
-		if target == nil then
-			target = rn.entity_target_entity(ent, target_args)
+		if data.target == nil then
+			data.target = rn.entity_target_entity(ent, target_args)
 		else
-			if not rn.impl_entity_entity_valid_target(ent, target_args2, target) then
-				target = nil
+			if not rn.impl_entity_entity_valid_target(ent, target_args2, data.target) then
+				data.target = nil
 			end
 		end
 		-- attempt to attack any enemy nearby
 		rn.for_each_collision(ent, function(ent2)
-			if not ent:is_dead() and not collided_this_update and ent2:is_valid() and not ent2:is_dead() and rn.get_relationship(ent, ent2) == "hostile" and rn.entity_data_read(ent2, "impl.targetable") ~= false then
-				collided_this_update = true
+			if not ent:is_dead() and not data.collided_this_update and ent2:is_valid() and not ent2:is_dead() and rn.get_relationship(ent, ent2) == "hostile" and rn.entity_get_data(ent2).impl.targetable ~= false then
+				data.collided_this_update = true
 				rn.cast_spell({ent = ent, ability_name = "Melee", cast_type_override = rn.cast.type.melee_unarmed_lunge})
 			end
 		end)
 		if not rn.is_casting(ent) and not ent:is_dead() then
-			if target ~= nil then
-				rn.entity_move_to_entity({ent = ent, movement_anim_name = "ZombieWalk"}, target)
+			if data.target ~= nil then
+				rn.entity_move_to_entity({ent = ent, movement_anim_name = "ZombieWalk"}, data.target)
 			else
 				-- otherwise just move right forever???
 				-- todo: wander around aimlessly
 				--rn.entity_move{ent = ent, dir = "right", movement_anim_name = "ZombieWalk"}
 			end
 		end
-		local target_result = fakenil
-		if target ~= nil then
-			target_result = target:uid()
-		end
-		rn.entity_data_write(ent, "target", target_result)
 	end
 }

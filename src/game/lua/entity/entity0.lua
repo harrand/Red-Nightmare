@@ -22,7 +22,7 @@ rn.entity_handler[id] =
 		bstats:set_spell_power(25)
 		bstats:set_defence_rating(10)
 		ent:set_base_stats(bstats)
-		rn.entity_data_write(ent, "impl.custom_despawn_timer", -1)
+		rn.entity_get_data(ent).impl.custom_despawn_timer = -1
 		tracy.ZoneEnd()
 	end,
 	postinit = function(ent)
@@ -40,6 +40,7 @@ rn.entity_handler[id] =
 		tracy.ZoneEnd()
 	end,
 	update = function(ent)
+		local data = rn.entity_get_data(ent)
 		tz.assert(ent:get_name() == "Lady Melistra")
 		if ent:is_dead() then
 			return
@@ -56,7 +57,8 @@ rn.entity_handler[id] =
 			-- we want vector, so mouse pos - ent pos
 			local vecx = entx - mousex
 			local vecy = enty - mousey
-			rn.entity_data_write(ent, "impl.cast_dir_x", vecx, "impl.cast_dir_y", vecy)
+			data.impl.cast_dir_x = vecx
+			data.impl.cast_dir_y = vecy
 		end
 		
 		local wnd = tz.window()
@@ -66,7 +68,7 @@ rn.entity_handler[id] =
 			rn.cast_spell({ent = ent, ability_name = "Allure of Flame", face_cast_direction = true})
 			--rn.cast_spell({ent = ent, ability_name = "Melee", face_cast_direction = true})
 		elseif not rn.is_casting(ent) and wnd:is_mouse_down("middle") then
-			rn.cast_spell({ent = ent, ability_name = "Divine Barrier", face_cast_direction = false})
+			rn.cast_spell({ent = ent, ability_name = "Touch of Death", face_cast_direction = true})
 		end
 
 		dir = {}
@@ -92,22 +94,24 @@ rn.entity_handler[id] =
 	end,
 	on_kill = function(ent, evt)
 		-- player killed someone
-		local xp = rn.entity_data_read(ent, "impl.exp")
-		xp = xp or 0
+		local data = rn.entity_get_data(ent)
+		if data.impl.exp == nil then
+			data.impl.exp = 0
+		end
 		local killed_thing = rn.scene():get_uid(evt.damagee)
 		--print(killed_thing:get_name() .. " dies, " .. ent:get_name() .. " gains " .. tostring(killed_thing:get_level()) .. " exp.")
-		xp = xp + killed_thing:get_level()
-		if xp >= (ent:get_level() * 4) + 16 then
+		data.impl.exp = data.impl.exp + killed_thing:get_level()
+		if data.impl.exp >= (ent:get_level() * 4) + 16 then
 			-- level up!
 			print("DING!")
-			xp = 0
+			data.impl.exp = 0
 			ent:level_up()
 		end
 
-		rn.entity_data_write(ent, "impl.exp", xp)
 		rn.player_credits = rn.player_credits + killed_thing:get_level() * killed_thing:get_type() * 2
 	end,
 	on_death = function(ent, evt)
-		rn.data_store():edit("director.paused", true)
+		rn.director.paused = true
+		print("U GOT REKT.")
 	end
 }

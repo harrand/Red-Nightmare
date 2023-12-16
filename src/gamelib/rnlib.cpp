@@ -5,7 +5,6 @@
 #include "tz/core/debug.hpp"
 #include "tz/core/profile.hpp"
 #include "tz/core/imported_text.hpp"
-#include "tz/core/data/data_store.hpp"
 #include "tz/lua/api.hpp"
 #include <memory>
 
@@ -28,7 +27,6 @@ namespace game
 	{
 		game::entity::scene scene;
 		game::render::texture_manager texmgr{scene.get_renderer().get_renderer()};
-		tz::data_store data_store;
 		dbgui_data_t dbgui;
 	};
 
@@ -49,6 +47,8 @@ namespace game
 
 		--rn.load_level{name = "blackrock_dungeon"}
 		rn.load_level{name = "blanchfield"}
+
+		rn.scene():add(15)
 		)");
 	}
 
@@ -82,12 +82,6 @@ namespace game
 		{
 			if(ImGui::Begin("Scene", &game_system->dbgui.display_scene))
 			{
-				bool director_paused = game_system->data_store.read<bool>("director.paused");
-				if(ImGui::Checkbox("Director Paused", &director_paused))
-				{
-					game_system->data_store.edit({.key = "director.paused", .val = director_paused});
-				}
-
 				game_system->scene.dbgui();
 				ImGui::End();
 			}
@@ -107,37 +101,10 @@ namespace game
 		// END UNSAFE REGION
 		// note that lua update must wait till animation advance is done - it uses local transforms constantly, aswell as potentially adding/removing from the scene.
 		{
-			game_system->scene.block();
 			TZ_PROFZONE("rnlib - lua update", 0xFF00AAFF);
-
-			std::size_t job_count = std::thread::hardware_concurrency();
-			std::size_t objects_per_job = game_system->scene.size() / job_count;
-			std::size_t remainder_objects = game_system->scene.size() % job_count;
-			tz::assert((objects_per_job * job_count) + remainder_objects == game_system->scene.size());
-			std::vector<tz::job_handle> jobs;
-			if(objects_per_job > 0)
-			{
-				for(std::size_t i = 0; i < job_count; i++)
-				{
-					jobs.push_back(tz::job_system().execute([delta_seconds, offset = i * objects_per_job, object_count = objects_per_job]()
-					{
-						auto& state = tz::lua::get_state();
-						state.assign_float("rn.delta_time", delta_seconds);
-						std::string cmd = "rn.update_partial(" + std::to_string(offset) + ", " + std::to_string(object_count-1) + ")";
-						state.execute(cmd.c_str());
-					}));
-				}
-			}
-			auto& state = tz::lua::get_state();
-			state.assign_float("rn.delta_time", delta_seconds);
-			std::string cmd = "rn.update_partial(" + std::to_string(game_system->scene.size() - remainder_objects - 1) + ", " + std::to_string(remainder_objects) + ")";
-			state.execute(cmd.c_str());
-			for(tz::job_handle jh : jobs)
-			{
-				tz::job_system().block(jh);
-			}
-			//tz::lua::get_state().assign_float("rn.delta_time", delta_seconds);
-			//tz::lua::get_state().execute("if rn.update ~= nil then rn.update() end");
+			tz::lua::get_state().assign_float("rn.delta_time", delta_seconds);
+			game_system->scene.block();
+			tz::lua::get_state().execute("if rn.update ~= nil then rn.update() end");
 		}
 	}
 
@@ -167,13 +134,7 @@ namespace game
 
 	LUA_BEGIN(rn_impl_get_texture_manager)
 		using namespace game::render;
-		LUA_CLASS_PUSH(state, impl_rn_texture_manager, {.texmgr = &game_system->texmgr});
-		return 1;
-	LUA_END
-
-	LUA_BEGIN(rn_impl_get_data_store)
-		using namespace tz;
-		LUA_CLASS_PUSH(state, tz_lua_data_store, {.ds = &game_system->data_store});
+		LUA_CLASS_PUSH(state, impl_rn_texture_manager, {.texmgr = &game_system->texmgr})
 		return 1;
 	LUA_END
 
@@ -203,7 +164,6 @@ namespace game
 			game::logic::stats_static_initialise(state);
 			state.assign_func("rn.scene", LUA_FN_NAME(rn_impl_get_scene));
 			state.assign_func("rn.texture_manager", LUA_FN_NAME(rn_impl_get_texture_manager));
-			state.assign_func("rn.data_store", LUA_FN_NAME(rn_impl_get_data_store));
 
 			{
 				std::string str{ImportedTextData(ability, lua)};

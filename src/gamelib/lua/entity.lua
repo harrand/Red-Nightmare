@@ -31,6 +31,8 @@ rn.relationship =
 
 rn.entity = {}
 rn.entity.type = {}
+rn.entity.resident = {}
+rn.entity.data = {}
 rn.player_credits = 0
 
 rn.entity_handler = {}
@@ -41,55 +43,6 @@ rn.entity_distance = function(ent, ent2)
 	local xdiff = x2 - x
 	local ydiff = y2 - y
 	return math.sqrt(xdiff*xdiff + ydiff*ydiff)
-end
-
-rn.datastore_internal_write_table = function(table_name, tbl)
-	local ds = rn.data_store()
-	for k, v in pairs(tbl) do
-		local name = table_name .. "." .. k
-		if type(v) == 'table' then
-			rn.datastore_internal_write_table(name, v)
-		else
-			ds:add(name, v)
-		end
-	end
-end
-
-rn.entity_data_read = function(ent, ...)
-	local args = table.pack(...)
-	local amended_args = {}
-	for i,key in pairs(args) do
-		if type(i) == 'number' then
-			key = "ent." .. string.format("%.0f", ent:uid()) .. ".data." .. key
-			table.insert(amended_args, key)
-		end
-	end
-	return rn.data_store():read_some(table.unpack(amended_args))
-end
-
-rn.entity_data_write = function(ent, ...)
-	-- args: ent, {key1, value1, key2, value2}
-	-- so if even, we're a key
-	local args = {...}
-	local amended_args = {}
-	local counter=0
-	for i,key_or_val in pairs(args) do
-		if type(i) == 'number' then
-			if counter % 2 == 0 then
-				-- even. we're a key and we want to amend our name
-				key_or_val = "ent." .. string.format("%.0f", ent:uid()) .. ".data." .. key_or_val
-			end
-			counter = counter + 1
-			table.insert(amended_args, key_or_val)
-		end
-	end
-	rn.data_store():edit_some(table.unpack(amended_args))
-end
-
-rn.entity_data_clear = function(ent)
-	tracy.ZoneBegin()
-	rn.data_store():remove_all_of("ent." .. string.format("%.0f", ent:uid()) .. ".data")
-	tracy.ZoneEnd()
 end
 
 rn.impl_entity_entity_valid_target = function(ent, args, ent2)
@@ -116,11 +69,11 @@ rn.impl_entity_entity_valid_target = function(ent, args, ent2)
 			return false
 		end
 	end
-	local targetable, projectile_skip, undead = rn.entity_data_read(ent2, "impl.targetable", "impl.projectile_skip", "impl.undead")
-	if targetable == false or projectile_skip then
+	local data2 = rn.entity_get_data(ent2)
+	if data2.impl.targetable == false or data2.impl.projectile_skip then
 		return false
 	end
-	if args.no_undead and undead then
+	if args.no_undead and data2.impl.undead then
 		return false
 	end
 	if rn.entity_distance(ent, ent2) > aggro_range then
@@ -209,6 +162,7 @@ rn.entity_preinit = function(type)
 	if handler.preinit ~= nil then
 		handler.preinit(ent)
 	end
+	rn.entity.resident[ent:uid()] = true
 	tracy.ZoneEnd()
 end
 
@@ -226,7 +180,7 @@ rn.entity_postinit = function(type)
 		e:object_set_visibility(5, false)
 		e:object_set_visibility(7, false)
 		e:face_forward()
-		rn.entity_data_write(ent, "impl.dir", "forward")
+		rn.entity_get_data(ent).impl.dir = "forward"
 	elseif mod == rn.model.quad then
 		e:object_set_visibility(2, true)
 		e:face_forward2d()
@@ -246,11 +200,12 @@ rn.entity_update = function(ent)
 	obj:set_name("Lua Entity Update")
 
 	tz.assert(ent ~= nil)
-	if rn.entity_data_read(ent, "impl.trivial") then
+	local data = rn.entity_get_data(ent)
+	if data.impl.trivial then
 		return
 	end
 
-	rn.entity_data_write(ent, "impl.is_moving", false)
+	data.impl.is_moving = false
 
 	tracy.ZoneBeginN("Entity Handler Overhead")
 	local handler = rn.entity_handler[ent:get_type()]
@@ -263,8 +218,7 @@ rn.entity_update = function(ent)
 	end
 
 	-- deal with casts.
-	local casting, is_moving = rn.entity_data_read(ent, "impl.is_casting", "impl.is_moving")
-	if casting == true then
+	if data.impl.is_casting == true then
 		-- is the cast finished?
 		rn.casting_advance(ent)
 	end
@@ -274,7 +228,7 @@ rn.entity_update = function(ent)
 	end
 
 	local e = ent:get_element()
-	if not ent:is_dead() and not casting and not is_moving then
+	if not ent:is_dead() and not data.impl.is_casting and not data.impl.is_moving then
 		if (ent:get_model() == rn.model.humanoid) and (e:get_playing_animation_name() ~= "CastIdle" or not e:is_animation_playing()) then
 			e:play_animation_by_name("CastIdle", false)
 		end
@@ -283,17 +237,14 @@ rn.entity_update = function(ent)
 	-- deal with despawning dead entities.
 	if ent:is_dead() then
 		-- if entity didnt specify a custom despawn timer, default to 45 seconds.
-		local timer = rn.entity_data_read(ent, "impl.custom_despawn_timer")
-		if timer == nil then
-			timer = 45000
-			rn.entity_data_write(ent, "impl.custom_despawn_timer", timer)
+		if data.impl.custom_despawn_timer == nil then
+			data.impl.custom_despawn_timer = 45000
 		end
 		-- if custom despawn timer is -1, it never despawns.
 		-- if it is though... let's despawn it if it needs to
-		local death_time = rn.entity_data_read(ent, "impl.death_time")
-		if timer ~= -1 and death_time ~= nil then
+		if data.impl.custom_despawn_timer ~= -1 and data.impl.death_time ~= nil then
 			local now = tz.time()
-			if death_time + timer <= tz.time() then
+			if data.impl.death_time + data.impl.custom_despawn_timer <= tz.time() then
 				rn.scene():remove_uid(ent:uid())
 			end
 		end
@@ -326,7 +277,8 @@ rn.entity_deinit = function()
 	end
 
 	local uid = rn_impl_dead_entity:uid()
-	rn.entity_data_clear(rn_impl_dead_entity)
+	rn.entity.resident[uid] = false
+	rn.entity.data[uid] = nil
 end
 
 rn.internal_key_state = {}
@@ -375,18 +327,12 @@ rn.advance_key_state = function()
 	end
 end
 
-rn.update_partial = function(index, count)
-	local sc = rn.scene()
-	rn.empty_key_state()
-	rn.advance_key_state()
-
-	tz.assert(sc:size() >= index + count)
-	for i=index,index+count,1 do
-		local ent = sc:get(i)
-		if ent:is_valid() then
-			rn.entity_update(ent)
-		end
-	end
+rn.entity_get_data = function(ent)
+	local obj <close> = tz.profzone_obj:new()
+	obj:set_name("entity_get_data")
+	rn.entity.data[ent:uid()] = rn.entity.data[ent:uid()] or {}
+	rn.entity.data[ent:uid()].impl = rn.entity.data[ent:uid()].impl or {}
+	return rn.entity.data[ent:uid()]
 end
 
 rn.update = function()
@@ -400,7 +346,7 @@ rn.update = function()
 	if sc:size() > 0 then
 		for i=0,sc:size()-1,1 do
 			local ent = sc:get(i)
-			if ent:is_valid() then
+			if rn.entity.resident[ent:uid()] == true and ent:is_valid() then
 				rn.entity_update(ent)
 			end
 		end
@@ -464,6 +410,9 @@ rn.entity_move = function(arg)
 	local face_in_direction = arg.face_in_direction
 	if face_in_direction == nil then face_in_direction = true end
 
+	local entdata = rn.entity_get_data(ent)
+	entdata.impl = entdata.impl or {}
+
 	local e = ent:get_element()
 	-- get normalised movement vector
 	local xdiff = 0
@@ -491,28 +440,26 @@ rn.entity_move = function(arg)
 
 	-- set face direction
 	if face_in_direction then
-		local dir = nil
 		if xdiff == 0 then
 			if ydiff > 0 then
 				e:face_backward()
-				dir = "backward"
+				entdata.impl.dir = "backward"
 			elseif ydiff < 0 then
 				e:face_forward()
-				dir = "forward"
+				entdata.impl.dir = "forward"
 			end
 		elseif xdiff > 0 then
 			e:face_right()
-			dir = "right"
+			entdata.impl.dir = "right"
 		elseif xdiff < 0 then
 			e:face_left()
-			dir = "left"
+			entdata.impl.dir = "left"
 		end
-		rn.entity_data_write(ent, "impl.dir", dir)
 	end
 
-	if (xdiff ~= 0 or ydiff ~= 0) and not rn.entity_data_read(ent, "impl.is_casting") then
+	if (xdiff ~= 0 or ydiff ~= 0) and not entdata.impl.is_casting then
 		-- do movement
-		rn.entity_data_write(ent, "impl.is_moving", true)
+		entdata.impl.is_moving = true
 		local x, y = e:get_position()
 		local hypot = math.sqrt(xdiff*xdiff + ydiff*ydiff)
 		xdiff = xdiff / hypot

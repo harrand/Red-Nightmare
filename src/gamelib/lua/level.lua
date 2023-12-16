@@ -15,7 +15,13 @@ rn.load_level = function(args)
 		--rn.scene():get_renderer():set_ambient_light(0.15, 0.2, 0.4) -- snowy
 		rn.scene():get_renderer():set_ambient_light(0.5, 0.5, 0.5)
 
-		rn.entity_data_write(rn.level_bg, "dynamic_texture_scale", true, "texture_scale_zoom", 16.0, "impl.targetable", false, "impl.projectile_skip", true)
+		local bgdata = rn.entity_get_data(rn.level_bg)
+		local fgdata = rn.entity_get_data(rn.level_fg)
+
+		bgdata.dynamic_texture_scale = true
+		bgdata.texture_scale_zoom = 16.0
+		bgdata.impl.targetable = false
+		bgdata.impl.projectile_skip = true
 		rn.level_bg:get_element():set_uniform_scale(64)
 		rn.level_bg:get_element():object_set_texture_handle(2, 0, rn.texture_manager():get_texture("blanchfield_cemetary.background"))
 		rn.level_bg:get_element():object_set_texture_handle(2, 1, rn.texture_manager():get_texture("blanchfield_cemetary.background_normals"))
@@ -24,7 +30,8 @@ rn.load_level = function(args)
 		rn.level_fg:get_element():object_set_texture_handle(2, 0, rn.texture_manager():get_texture("blanchfield_cemetary.foreground"))
 		rn.level_fg:get_element():set_uniform_scale(64)
 		rn.level_fg:get_element():set_depth(-2)
-		rn.entity_data_write(rn.level_fg, "impl.targetable", false, "impl.projectile_skip", true)
+		fgdata.impl.targetable = false
+		fgdata.impl.projectile_skip = true
 
 		rn.director.restart()
 
@@ -41,7 +48,12 @@ rn.load_level = function(args)
 		--rn.scene():get_renderer():set_ambient_light(0.15, 0.2, 0.4) -- snowy
 		rn.scene():get_renderer():set_ambient_light(0.5, 0.5, 0.5)
 
-		rn.entity_data_write(rn.level_bg, "dynamic_texture_scale", true, "texture_scale_zoom", 16.0, "impl.targetable", false, "impl.projectile_skip", true)
+		local bgdata = rn.entity_get_data(rn.level_bg)
+
+		bgdata.dynamic_texture_scale = true
+		bgdata.texture_scale_zoom = 16.0
+		bgdata.impl.targetable = false
+		bgdata.impl.projectile_skip = true
 		rn.level_bg:get_element():set_uniform_scale(64)
 		rn.level_bg:get_element():object_set_texture_handle(2, 0, rn.texture_manager():get_texture("blackrock_dungeon.background"))
 		rn.level_bg:get_element():object_set_texture_handle(2, 1, rn.texture_manager():get_texture("blackrock_dungeon.background_normals"))
@@ -62,11 +74,11 @@ rn.load_level = function(args)
 		handler.on_load()
 	end
 
-	rn.data_store():add("old_level_cache", args.name)
+	rn.old_level_cache = args
 end
 
 rn.restart_level = function()
-	rn.load_level({name = rn.data_store():read("old_level_cache")})
+	rn.load_level(rn.old_level_cache)
 end
 
 require "level0"

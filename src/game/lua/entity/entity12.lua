@@ -21,10 +21,10 @@ rn.entity_handler[id] =
 	on_death = function(ent)
 		-- todo: chest open animation
 		ent:get_element():object_set_visibility(2, false)
-		local loot = rn.entity_data_read(ent, "loot")
-		if loot ~= nil then
+		local data = rn.entity_get_data(ent)
+		if data.loot ~= nil then
 			local x, y = ent:get_element():get_position()
-			rn.drop_item_at(loot, x, y)
+			rn.drop_item_at(data.loot, x, y)
 		else
 			tz.report("no loot. sadgers :(")
 		end
@@ -35,6 +35,8 @@ rn.entity_handler[id] =
 		ent:get_element():object_set_texture_handle(2, 1, rn.texture_manager():get_texture("chest.basic0_normals"))
 		ent:get_element():object_set_texture_tint(2, 0, 1, 1, 1);
 		ent:get_element():set_uniform_scale(0.75)
-		rn.entity_data_write(ent, "impl.targetable", false, "impl.trivial", true)
+		local data = rn.entity_get_data(ent)
+		data.impl.targetable = false
+		data.impl.trivial = true
 	end
 }

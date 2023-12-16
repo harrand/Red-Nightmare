@@ -5,6 +5,7 @@ rn.level.type[levelstr] = id
 local spawn_loot_chest = function(x, y)
 	local ent = rn.scene():get(rn.scene():add(12))
 	ent:get_element():set_position(x, y)
+	local data = rn.entity_get_data(ent)
 	
 	local itemset = {}
 	for k in pairs(rn.items) do
@@ -12,7 +13,7 @@ local spawn_loot_chest = function(x, y)
 	end
 
 	local item_name = itemset[math.random(#itemset)]
-	rn.entity_data_write(ent, "impl.targetable", false, "loot", item_name)
+	data.loot = item_name
 end
 
 local spawn_invisible_wall = function(x, y, sc)
@@ -26,7 +27,9 @@ local spawn_invisible_wall = function(x, y, sc)
 	bstats:set_defence_rating(999999)
 	ent:set_base_stats(bstats)
 	ent:set_health(ent:get_stats():get_maximum_health())
-	rn.entity_data_write(ent, "impl.targetable", false, "impl.projectile_skip", true)
+	local entdata = rn.entity_get_data(ent)
+	entdata.impl.targetable = false
+	entdata.impl.projectile_skip = true
 end
 
 rn.level_handler[id] =

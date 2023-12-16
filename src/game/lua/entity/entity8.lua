@@ -12,12 +12,18 @@ rn.entity_handler[id] =
 	end,
 	postinit = function(ent)
 		ent:set_name("Scenery")
+
+		rn.entity.data[ent:uid()] =
+		{
+			dynamic_texture_scale = false,
+			texture_scale_zoom = 1
+		}
 	end,
 	update = function(ent)
-		local dynamic_texture_scale, texture_scale_zoom = rn.entity_data_read(ent, "dynamic_texture_scale", "texture_scale_zoom")
-		if dynamic_texture_scale then
-			ent:get_element():object_set_texture_scale(2, 0, ent:get_element():get_uniform_scale() / texture_scale_zoom)
-			ent:get_element():object_set_texture_scale(2, 1, ent:get_element():get_uniform_scale() / texture_scale_zoom)
+		local data = rn.entity_get_data(ent)
+		if data.dynamic_texture_scale then
+			ent:get_element():object_set_texture_scale(2, 0, ent:get_element():get_uniform_scale() / data.texture_scale_zoom)
+			ent:get_element():object_set_texture_scale(2, 1, ent:get_element():get_uniform_scale() / data.texture_scale_zoom)
 		end
 	end
 }

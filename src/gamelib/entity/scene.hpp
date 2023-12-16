@@ -6,6 +6,7 @@
 #include <deque>
 #include <unordered_map>
 #include <unordered_set>
+
 namespace game::entity
 {
 	struct scene_quadtree_node
@@ -90,7 +91,6 @@ namespace game::entity
 		int remove(tz::lua::state& state);
 		int remove_uid(tz::lua::state& state);
 		int remove_light(tz::lua::state& state);
-		int get_light(tz::lua::state& state);
 		int clear(tz::lua::state& state);
 		int clear_except_players(tz::lua::state& state);
 		int get_collision_count(tz::lua::state& state);
@@ -109,7 +109,6 @@ namespace game::entity
 			LUA_METHOD(rn_impl_scene, remove)
 			LUA_METHOD(rn_impl_scene, remove_uid)
 			LUA_METHOD(rn_impl_scene, remove_light)
-			LUA_METHOD(rn_impl_scene, get_light)
 			LUA_METHOD(rn_impl_scene, clear)
 			LUA_METHOD(rn_impl_scene, clear_except_players)
 			LUA_METHOD(rn_impl_scene, get_collision_count)

@@ -80,54 +80,63 @@ rn.cast_spell = function(arg)
 	end
 
 	-- if we're casting something else, early-out.
-	local casting = rn.entity_data_read(ent, "impl.is_casting")
-	if casting == true then return end
+	local entdata = rn.entity_get_data(ent)
+	if entdata.impl.is_casting == true then return end
 
-	rn.entity_data_write(ent, "impl.face_cast_direction", face_cast_direction)
+	entdata.impl.face_cast_direction = face_cast_direction
 	-- if its an instant cast spell, no need to set these, just send it instantly. (note: no animation in this case)
 	if ability.base_cast_time == 0 or instant_cast_override then
 		-- just instantly send it
-		rn.entity_data_write(ent, "impl.cast", ability_name)
+		entdata.impl.cast = ability_name
 		rn.complete_cast(ent)
 		return
 	end
 
+	entdata.impl.is_casting = true
+	entdata.impl.cast_begin = tz.time()
+	entdata.impl.cast = ability_name
+
 	ent:get_element():play_animation_by_name(rn._impl_cast_type_to_animation_name[cast_type], false)
 
 	-- casting effect
-	local cast_effect_l_uid, cast_effect_r_uid = rn.entity_data_read(ent, "impl.cast_effect_lhs", "impl.cast_effect_rhs")
+	entdata.impl.cast_effects = {nil, nil}
 	-- right hand = 1, left hand = 2
 	tz.assert(ability.magic_type ~= nil)
 	local has_magic_visual = ability.magic_type ~= "Physical"
 	if has_magic_visual then
-		local cast_effect_l = rn.scene():get(rn.scene():add(4))
-		cast_effect_l_uid = cast_effect_l:uid()
-		rn.entity_data_write(cast_effect_l, "target_entity", ent:uid(), "subobject", 21, "cast_duration", ability.base_cast_time * 0.5, "magic_type", ability.magic_type)
+		entdata.impl.cast_effects[1] = rn.scene():get(rn.scene():add(4))
+		local rhdata = rn.entity.data[entdata.impl.cast_effects[1]:uid()]
+		rhdata.target_entity = ent
+		rhdata.subobject = 21
+		-- play flipbook 2 times per cast.
+		rhdata.cast_duration = ability.base_cast_time * 0.5
+		local r, g, b = rn.damage_type_get_colour(ability.magic_type)
+		rhdata.colour_r = r
+		rhdata.colour_g = g
+		rhdata.colour_b = b
 
 		if ability.dual_wield_cast then
-			local cast_effect_r = rn.scene():get(rn.scene():add(4))
-			cast_effect_r_uid = cast_effect_r:uid()
-			rn.entity_data_write(cast_effect_r, "target_entity", ent:uid(), "subobject", 17, "cast_duration", ability.base_cast_time * 0.5, "magic_type", ability.magic_type)
+			entdata.impl.cast_effects[2] = rn.scene():get(rn.scene():add(4))
+			local lhdata = rn.entity.data[entdata.impl.cast_effects[2]:uid()]
+			lhdata.target_entity = ent
+			lhdata.subobject = 17
+			-- play flipbook 2 times per cast.
+			lhdata.cast_duration = ability.base_cast_time * 0.5
+			lhdata.colour_r = r
+			lhdata.colour_g = g
+			lhdata.colour_b = b
 		end
 	end
-
-	if cast_effect_l_uid == nil then
-		cast_effect_l_uid = fakenil
-	end
-	if cast_effect_r_uid == nil then
-		cast_effect_r_uid = fakenil
-	end
-	rn.entity_data_write(ent, "impl.cast", ability_name, "impl.cast_begin", tz.time(), "impl.is_casting", true, "impl.cast_effect_lhs", cast_effect_l_uid, "impl.cast_effect_rhs", cast_effect_r_uid)
 end
 
 rn.complete_cast = function(ent)
 	local obj <close> = tz.profzone_obj:new()
 	obj:set_name("Complete Cast")
 	tz.assert(ent:is_valid())
-	local cast = rn.entity_data_read(ent, "impl.cast")
-	local ability = rn.abilities[rn.ability.type[cast]]
+	local entdata = rn.entity_get_data(ent)
+	local ability = rn.abilities[rn.ability.type[entdata.impl.cast]]
 
-	obj:set_text("Cast - " .. cast)
+	obj:set_text("Cast - " .. entdata.impl.cast)
 
 	tz.assert(ability ~= nil)
 	ability.on_cast(ent)
@@ -137,51 +146,55 @@ end
 rn.cancel_cast = function(ent)
 	local obj <close> = tz.profzone_obj:new()
 	obj:set_name("Cancel Cast")
-	local cast_effect_l, cast_effect_r = rn.entity_data_read(ent, "impl.cast_effect_lhs", "impl.cast_effect_rhs")
-	if cast_effect_l ~= nil and cast_effect_l ~= fakenil then
-		rn.scene():remove_uid(cast_effect_l)
+	local entdata = rn.entity_get_data(ent)
+	entdata.impl.is_casting = false
+	entdata.impl.cast_begin = nil
+	entdata.impl.cast = nil
+	if entdata.impl.cast_effects ~= nil then
+		for i=1,2,1 do
+			if entdata.impl.cast_effects[i] ~= nil then
+				rn.scene():remove_uid(entdata.impl.cast_effects[i]:uid())
+				entdata.impl.cast_effects[i] = nil
+			end
+		end
 	end
-	if cast_effect_r ~= nil and cast_effect_r ~= fakenil then
-		rn.scene():remove_uid(cast_effect_r)
-	end
-	rn.entity_data_write(ent, "impl.cast", fakenil, "impl.cast_begin", fakenil, "impl.is_casting", false, "impl.cast_effect_lhs", fakenil, "impl.cast_effect_rhs", fakenil)
 end
 
 rn.casting_advance = function(ent)
 	local obj <close> = tz.profzone_obj:new()
 	obj:set_name("Casting Advance")
 	-- entity is currently casting a spell.
-	local cast, cast_begin, face_cast_direction = rn.entity_data_read(ent, "impl.cast", "impl.cast_begin", "impl.face_cast_direction")
-	tz.assert(cast ~= nil)
-	obj:set_text("Casting Advance - " .. cast)
-	local ability = rn.abilities[rn.ability.type[cast]]
+	local entdata = rn.entity_get_data(ent)
+	tz.assert(entdata.impl.cast ~= nil)
+	obj:set_text("Casting Advance - " .. entdata.impl.cast)
+	local ability = rn.abilities[rn.ability.type[entdata.impl.cast]]
 	tz.assert(ability ~= nil)
 	local t = tz.time()
-	if t > (cast_begin + ability.base_cast_time) then
+	if t > (entdata.impl.cast_begin + ability.base_cast_time) then
 		rn.complete_cast(ent)
 	end
 
-	if face_cast_direction then
+	if entdata.impl.face_cast_direction then
 		local e = ent:get_element()
-		local vecx, vecy = rn.entity_data_read(ent, "impl.cast_dir_x", "impl.cast_dir_y")
+		local vecx = entdata.impl.cast_dir_x
+		local vecy = entdata.impl.cast_dir_y
 		vecx = vecx or 0
 		vecy = vecy or 0
-		local dir = nil
 		if(vecx < 0.0) then
 			-- could be left
 			if math.abs(vecx) > math.abs(vecy) then
 				-- definitely right
 				e:face_right()
-				dir = "right"
+				entdata.impl.dir = "right"
 			else
 				-- abs(vecx) <= abs(vecy)
 				-- meaning could be up or down
 				if vecy >= 0.0 then
 					e:face_forward()
-					dir = "forward"
+					entdata.impl.dir = "forward"
 				else
 					e:face_backward()
-					dir = "backward"
+					entdata.impl.dir = "backward"
 				end
 			end
 		elseif vecx > 0.0 then
@@ -189,38 +202,35 @@ rn.casting_advance = function(ent)
 			if vecx > math.abs(vecy) then
 				-- definitely left
 				e:face_left()
-				dir = "left"
+				entdata.impl.dir = "left"
 			else
 				if vecy >= 0.0 then
 					e:face_forward()
-					dir = "forward"
+					entdata.impl.dir = "forward"
 				else
 					e:face_backward()
-					dir = "backward"
+					entdata.impl.dir = "backward"
 				end
 			end
 		else
 			-- vecx == 0.0
 			if vecy >= 0.0 then
 				e:face_forward()
-				dir = "forward"
+				entdata.impl.dir = "forward"
 			else
 				e:face_backward()
-				dir = "backward"
+				entdata.impl.dir = "backward"
 			end
 		end
-		rn.entity_data_write(ent, "impl.dir", dir)
 	end
 end
 
 rn.is_casting = function(ent)
-	return rn.entity_data_read(ent, "impl.is_casting") == true
+	return rn.entity_get_data(ent).impl.is_casting == true
 end
 
 rn.get_current_cast = function(ent)
-	if rn.is_casting(ent) then
-		return rn.entity_data_read(ent, "impl.cast")
-	end
+	if rn.is_casting(ent) then return rn.entity_get_data(ent).impl.cast end
 	return nil
 end
 

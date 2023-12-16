@@ -1,3 +1,0 @@
-set(shared_recursive_mutex_OPT_BUILD_EXAMPLES OFF)
-set(shared_recursive_mutex_OPT_BUILD_TESTS OFF)
-add_subdirectory(shared_recursive_mutex)
