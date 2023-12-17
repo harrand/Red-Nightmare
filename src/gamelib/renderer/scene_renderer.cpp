@@ -10,6 +10,8 @@
 #include ImportedShaderHeader(pixelate, fragment)
 #include ImportedShaderHeader(scene_renderer, fragment)
 
+#include ImportedTextHeader(ProggyClean, ttf)
+
 namespace game::render
 {
 	scene_renderer::scene_renderer():
@@ -29,13 +31,21 @@ namespace game::render
 		.texture_capacity = 128u,
 		.extra_buffers = evaluate_extra_buffers(),
 		.output = &this->output,
-	})
+	}),
+	text_renderer(1024u, tz::gl::renderer_options{tz::gl::renderer_option::no_clear_output, tz::gl::renderer_option::no_depth_testing})
 	{
 		TZ_PROFZONE("scene renderer - create", 0xFFFF4488);
 		this->renderer.append_to_render_graph();
 		// add pixelate pass to render graph, and then make sure it depends on animation renderer.
 		tz::gl::get_device().render_graph().timeline.push_back(static_cast<tz::gl::eid_t>(static_cast<tz::hanval>(this->pixelate_pass.handle)));
+
+		this->text_renderer.append_to_render_graph();
+
+		auto fh = this->text_renderer.add_font(tz::io::ttf::from_memory(ImportedTextData(ProggyClean, ttf)));
+		this->text_renderer.add_string(fh, {.scale = tz::vec3::filled(20.0f)}, "test");
+
 		tz::gl::get_device().render_graph().add_dependencies(this->pixelate_pass.handle, this->renderer.get_render_pass());
+		tz::gl::get_device().render_graph().add_dependencies(this->text_renderer.get_render_pass(), this->pixelate_pass.handle);
 		this->root = this->renderer.add_object
 		({
 			.mesh = tz::nullhand,
@@ -254,6 +264,7 @@ namespace game::render
 		rinfo.state().graphics.tri_count = 1;
 		rinfo.shader().set_shader(tz::gl::shader_stage::vertex, ImportedShaderSource(pixelate, vertex));
 		rinfo.shader().set_shader(tz::gl::shader_stage::fragment, ImportedShaderSource(pixelate, fragment));
+		rinfo.set_options({tz::gl::renderer_option::no_depth_testing, tz::gl::renderer_option::no_present});
 		//auto mondims = tz::wsi::get_monitors().front().dimensions;
 		auto mondims = tz::window().get_dimensions();
 		std::array<float, 2> dimension_buffer_data;

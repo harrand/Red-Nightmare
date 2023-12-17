@@ -1,6 +1,7 @@
 #ifndef RN_GAMELIB_RENDERER_SCENE_RENDERER_HPP
 #define RN_GAMELIB_RENDERER_SCENE_RENDERER_HPP
 #include "tz/ren/animation.hpp"
+#include "tz/ren/text.hpp"
 #include "tz/io/gltf.hpp"
 #include "tz/gl/output.hpp"
 #include "tz/core/debug.hpp"
@@ -113,6 +114,7 @@ namespace game::render
 		pixelate_pass_t pixelate_pass;
 		tz::gl::image_output output;
 		tz::ren::animation_renderer renderer;
+		tz::ren::text_renderer text_renderer;
 		int impl_mouse_scroll_delta = 0;
 		tz::ren::animation_renderer::object_handle root = tz::nullhand;
 		tz::vec2 view_bounds = {64.0f, 64.0f};

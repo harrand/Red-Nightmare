@@ -67,6 +67,7 @@ add_text(
 	INPUT_DIR ${PROJECT_SOURCE_DIR}
 	OUTPUT_DIR ${PROJECT_BINARY_DIR}
 	TEXT_FILES
+		res/fonts/ProggyClean.ttf
 		res/models/human_animated_textured.glb
 		res/models/plane.glb
 		src/gamelib/lua/ability.lua
