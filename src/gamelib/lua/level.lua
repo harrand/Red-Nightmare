@@ -34,7 +34,7 @@ rn.load_level = function(args)
 		fgdata.impl.projectile_skip = true
 	end
 
-	if args.name == "blackrock_dungeon" then
+	if args.name == "blackrock_dungeon" or args.name == "startscreen" then
 		rn.level_bg = rn.scene():get(rn.scene():add(8))
 
 		--rn.scene():get_renderer():set_ambient_light(0.15, 0.2, 0.4) -- snowy
@@ -55,6 +55,8 @@ rn.load_level = function(args)
 	if args.name ~= "startscreen" then
 		rn.director.restart()
 	end
+	print("Loading level " .. args.name)
+	rn.scene():get_renderer():clear_strings()
 	if rn.player == nil then
 		rn.player = rn.scene():get(rn.scene():add(0))
 	else

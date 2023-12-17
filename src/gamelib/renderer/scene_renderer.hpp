@@ -18,6 +18,7 @@ namespace game::render
 	{
 	public:
 		scene_renderer();
+		using string_handle = tz::ren::text_renderer::string_handle;
 
 		struct point_light_data
 		{
@@ -76,6 +77,10 @@ namespace game::render
 		scene_element get_element(entry e);
 		entry entry_at(std::size_t idx) const;
 		std::size_t entry_count() const;
+
+		const tz::ren::text_renderer& get_text_renderer() const;
+		tz::ren::text_renderer& get_text_renderer();
+
 		const tz::vec2& get_view_bounds() const;
 		tz::vec2 get_camera_position() const;
 		void set_camera_position(tz::vec2 cam_pos);
@@ -262,6 +267,21 @@ namespace game::render
 		LUA_CLASS_METHODS_END
 	LUA_CLASS_END
 
+	struct impl_rn_rendered_text
+	{
+		scene_renderer* renderer = nullptr;
+		scene_renderer::string_handle sh;
+		tz::trs trs;
+
+		int set_position(tz::lua::state& state);
+	};
+
+	LUA_CLASS_BEGIN(impl_rn_rendered_text)
+		LUA_CLASS_METHODS_BEGIN
+			LUA_METHOD(impl_rn_rendered_text, set_position)
+		LUA_CLASS_METHODS_END
+	LUA_CLASS_END
+
 	struct impl_rn_scene_renderer
 	{
 		scene_renderer* renderer = nullptr;
@@ -271,6 +291,10 @@ namespace game::render
 		int get_element(tz::lua::state& state);
 		int element_count(tz::lua::state& state);
 		int load_texture_from_disk(tz::lua::state& state);
+
+		int add_string(tz::lua::state& state);
+		int remove_string(tz::lua::state& state);
+		int clear_strings(tz::lua::state& state);
 	};
 
 	LUA_CLASS_BEGIN(impl_rn_scene_renderer)
@@ -281,6 +305,9 @@ namespace game::render
 			LUA_METHOD(impl_rn_scene_renderer, get_element)
 			LUA_METHOD(impl_rn_scene_renderer, element_count)
 			LUA_METHOD(impl_rn_scene_renderer, load_texture_from_disk)
+			LUA_METHOD(impl_rn_scene_renderer, add_string)
+			LUA_METHOD(impl_rn_scene_renderer, remove_string)
+			LUA_METHOD(impl_rn_scene_renderer, clear_strings)
 		LUA_CLASS_METHODS_END
 	LUA_CLASS_END
 }

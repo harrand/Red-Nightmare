@@ -105,6 +105,16 @@ namespace game::render
 		return this->entries.size();
 	}
 
+	const tz::ren::text_renderer& scene_renderer::get_text_renderer() const
+	{
+		return this->text_renderer;
+	}
+
+	tz::ren::text_renderer& scene_renderer::get_text_renderer()
+	{
+		return this->text_renderer;
+	}
+
 	const tz::vec2& scene_renderer::get_view_bounds() const
 	{
 		return this->view_bounds;
@@ -888,6 +898,15 @@ namespace game::render
 		return 0;
 	}
 
+	int impl_rn_rendered_text::set_position(tz::lua::state& state)
+	{
+		auto [_, posx, posy] = tz::lua::parse_args<tz::lua::nil, float, float>(state);
+		this->trs.translate[0] = posx;
+		this->trs.translate[1] = posy;
+		this->renderer->get_text_renderer().string_set_transform(this->sh, this->trs);
+		return 0;
+	}
+
 	int impl_rn_scene_renderer::add_model(tz::lua::state& state)
 	{
 		TZ_PROFZONE("scene element - add model", 0xFFFFAAEE);
@@ -933,6 +952,30 @@ namespace game::render
 		tz::ren::animation_renderer::texture_handle rethan = this->renderer->get_renderer().add_texture(tz::io::image::load_from_file(path));
 		state.stack_push_uint(static_cast<std::size_t>(static_cast<tz::hanval>(rethan)));
 		return 1;
+	}
+
+	int impl_rn_scene_renderer::add_string(tz::lua::state& state)
+	{
+		TZ_PROFZONE("scene renderer - add string", 0xFFFFAAEE);
+		auto [_, posx, posy, size, str, r, g, b] = tz::lua::parse_args<tz::lua::nil, float, float, float, std::string, float, float, float>(state);
+		tz::trs trs{.translate = {posx, posy, 0.0f}, .scale = tz::vec3::filled(size)};
+		auto stringh = this->renderer->get_text_renderer().add_string(static_cast<tz::hanval>(0), trs, str, {r, g, b});
+		impl_rn_rendered_text ret{.renderer = this->renderer, .sh = stringh, .trs = trs};
+		LUA_CLASS_PUSH(state, impl_rn_rendered_text, ret);
+		return 1;
+	}
+
+	int impl_rn_scene_renderer::remove_string(tz::lua::state& state)
+	{
+		auto& text = state.stack_get_userdata<impl_rn_rendered_text>(2);
+		this->renderer->get_text_renderer().remove_string(text.sh);
+		return 0;
+	}
+
+	int impl_rn_scene_renderer::clear_strings(tz::lua::state& state)
+	{
+		this->renderer->get_text_renderer().clear_strings();
+		return 0;
 	}
 
 	LUA_BEGIN(impl_rn_scene_renderer_get_model_name)
