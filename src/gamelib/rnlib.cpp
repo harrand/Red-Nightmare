@@ -47,8 +47,9 @@ namespace game
 
 		--rn.load_level{name = "blackrock_dungeon"}
 		rn.load_level{name = "blanchfield"}
+		--rn.load_level{name = "startscreen"}
 
-		rn.scene():add(15)
+		--rn.scene():add(15)
 		)");
 	}
 

@@ -32,14 +32,6 @@ rn.load_level = function(args)
 		rn.level_fg:get_element():set_depth(-2)
 		fgdata.impl.targetable = false
 		fgdata.impl.projectile_skip = true
-
-		rn.director.restart()
-
-		if rn.player == nil then
-			rn.player = rn.scene():get(rn.scene():add(0))
-		else
-			rn.player:get_element():set_position(0, 0)
-		end
 	end
 
 	if args.name == "blackrock_dungeon" then
@@ -58,14 +50,15 @@ rn.load_level = function(args)
 		rn.level_bg:get_element():object_set_texture_handle(2, 0, rn.texture_manager():get_texture("blackrock_dungeon.background"))
 		rn.level_bg:get_element():object_set_texture_handle(2, 1, rn.texture_manager():get_texture("blackrock_dungeon.background_normals"))
 		rn.level_bg:get_element():set_depth(-2.5)
+	end
 
+	if args.name ~= "startscreen" then
 		rn.director.restart()
-
-		if rn.player == nil then
-			rn.player = rn.scene():get(rn.scene():add(0))
-		else
-			rn.player:get_element():set_position(0, 0)
-		end
+	end
+	if rn.player == nil then
+		rn.player = rn.scene():get(rn.scene():add(0))
+	else
+		rn.player:get_element():set_position(0, 0)
 	end
 
 	local handler = rn.level_handler[rn.level.type[args.name]]
@@ -81,5 +74,6 @@ rn.restart_level = function()
 	rn.load_level(rn.old_level_cache)
 end
 
+require "startscreen"
 require "level0"
 require "level1"
