@@ -96,9 +96,6 @@ namespace game
 				ImGui::End();
 			}
 		}
-		// rendering uses the global transform object data. that's already been handled by now, and isnt touched during animation advance.
-		// as a result it's safe to render now while the animation advance is going on. bussin
-		tz::gl::get_device().render();
 		// END UNSAFE REGION
 		// note that lua update must wait till animation advance is done - it uses local transforms constantly, aswell as potentially adding/removing from the scene.
 		{
@@ -107,6 +104,9 @@ namespace game
 			game_system->scene.block();
 			tz::lua::get_state().execute("if rn.update ~= nil then rn.update() end");
 		}
+		// rendering uses the global transform object data. that's already been handled by now, and isnt touched during animation advance.
+		// as a result it's safe to render now while the animation advance is going on. bussin
+		tz::gl::get_device().render();
 	}
 
 	void fixed_update(std::uint64_t delta_micros, std::uint64_t unprocessed)
