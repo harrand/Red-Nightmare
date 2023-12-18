@@ -87,6 +87,9 @@ rn.entity_handler[id] =
 		if rn.is_key_down("d") and not data.keyboard_suppressed then
 			table.insert(dir, "right")
 		end
+		if data.direction_force ~= nil then
+			dir = {data.direction_force}
+		end
 		if not rawequal(next(dir), nil) then
 			rn.entity_move({ent = ent, dir = dir, movement_anim_name = "Run"})
 		end

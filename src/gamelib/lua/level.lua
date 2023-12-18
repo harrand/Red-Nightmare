@@ -65,6 +65,7 @@ rn.load_level = function(args)
 	local pd = rn.entity_get_data(rn.player)
 	rn.entity_get_data(rn.player).keyboard_suppressed = false
 	rn.entity_get_data(rn.player).mouse_suppressed = false
+	rn.entity_get_data(rn.player).direction_force = nil
 
 	local handler = rn.level_handler[rn.level.type[args.name]]
 	tz.assert(handler ~= nil)

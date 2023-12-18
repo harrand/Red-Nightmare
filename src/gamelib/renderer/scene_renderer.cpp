@@ -994,6 +994,7 @@ namespace game::render
 		TZ_PROFZONE("scene renderer - lua initialise", 0xFFFF4488);
 		state.new_type("impl_rn_scene_texture_locator", LUA_CLASS_NAME(impl_rn_scene_texture_locator)::registers);
 		state.new_type("impl_rn_scene_element", LUA_CLASS_NAME(impl_rn_scene_element)::registers);
+		state.new_type("impl_rn_rendered_text", LUA_CLASS_NAME(impl_rn_rendered_text::registers));
 		state.new_type("impl_rn_scene_renderer", LUA_CLASS_NAME(impl_rn_scene_renderer)::registers);
 		state.assign_uint("badu", std::numeric_limits<std::uint64_t>::max());
 		state.assign_func("rn.get_model_name", LUA_FN_NAME(impl_rn_scene_renderer_get_model_name));

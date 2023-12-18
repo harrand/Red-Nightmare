@@ -351,6 +351,14 @@ rn.update = function()
 			end
 		end
 	end
+
+	if rn.old_level_cache ~= nil then
+		-- attempt to invoke level update
+		local handler = rn.level_handler[rn.level.type[rn.old_level_cache.name]]
+		if handler.on_update ~= nil then
+			handler.on_update()
+		end
+	end
 end
 
 rn.entity_move_to_entity = function(arg, ent2)
