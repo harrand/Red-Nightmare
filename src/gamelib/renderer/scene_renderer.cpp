@@ -959,6 +959,13 @@ namespace game::render
 		return 1;
 	}
 
+	int impl_rn_scene_renderer::set_camera_position(tz::lua::state& state)
+	{
+		auto [_, x, y] = tz::lua::parse_args<tz::lua::nil, float, float>(state);
+		this->renderer->set_camera_position({x, y});
+		return 0;
+	}
+
 	int impl_rn_scene_renderer::add_string(tz::lua::state& state)
 	{
 		TZ_PROFZONE("scene renderer - add string", 0xFFFFAAEE);

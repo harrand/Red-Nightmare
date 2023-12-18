@@ -292,6 +292,8 @@ namespace game::render
 		int element_count(tz::lua::state& state);
 		int load_texture_from_disk(tz::lua::state& state);
 
+		int set_camera_position(tz::lua::state& state);
+
 		int add_string(tz::lua::state& state);
 		int remove_string(tz::lua::state& state);
 		int clear_strings(tz::lua::state& state);
@@ -305,6 +307,7 @@ namespace game::render
 			LUA_METHOD(impl_rn_scene_renderer, get_element)
 			LUA_METHOD(impl_rn_scene_renderer, element_count)
 			LUA_METHOD(impl_rn_scene_renderer, load_texture_from_disk)
+			LUA_METHOD(impl_rn_scene_renderer, set_camera_position)
 			LUA_METHOD(impl_rn_scene_renderer, add_string)
 			LUA_METHOD(impl_rn_scene_renderer, remove_string)
 			LUA_METHOD(impl_rn_scene_renderer, clear_strings)

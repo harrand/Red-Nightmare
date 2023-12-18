@@ -118,6 +118,6 @@ rn.entity_handler[id] =
 	end,
 	on_death = function(ent, evt)
 		rn.director.paused = true
-		print("U GOT REKT.")
+		rn.game_over()
 	end
 }

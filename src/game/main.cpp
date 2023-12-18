@@ -5,6 +5,8 @@
 #include "tz/core/profile.hpp"
 #include "tz/core/time.hpp"
 
+#include <iostream>
+
 int main()
 {
 	tz::initialise

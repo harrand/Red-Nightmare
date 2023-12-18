@@ -359,6 +359,10 @@ rn.update = function()
 			handler.on_update()
 		end
 	end
+
+	if rn.game_is_over then
+		rn.game_over_update()
+	end
 end
 
 rn.entity_move_to_entity = function(arg, ent2)
@@ -483,5 +487,21 @@ rn.entity_move = function(arg)
 			e:play_animation_by_name(movement_anim_name, false)
 		end
 	end
+end
 
+rn.game_over = function()
+	rn.game_is_over = true
+	rn.game_over_string1 = rn.scene():get_renderer():add_string(0.0, 0.0, 10, "OWNED LMAO", 1.0, 1.0, 1.0)
+	rn.game_over_string2 = rn.scene():get_renderer():add_string(0.0, 0.0, 10, "Press [Esc] to restart.", 1.0, 1.0, 1.0)
+end
+
+rn.game_over_update = function()
+	local w, h = tz.window():get_dimensions()
+	rn.game_over_string1:set_position(w / 2 - 30.0, h * 0.6)
+	rn.game_over_string2:set_position(w / 2 - 110.0, h * 0.2)
+
+	if rn.is_key_down("esc") then
+		rn.game_is_over = false
+		rn.load_level{name = "startscreen"}
+	end
 end

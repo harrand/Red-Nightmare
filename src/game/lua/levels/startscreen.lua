@@ -29,7 +29,6 @@ rn.level_handler[id] =
 
 		if rn.is_key_down("enter") then
 			rn.load_level{name = "blanchfield"}
-			return
 		end
 	end
 }

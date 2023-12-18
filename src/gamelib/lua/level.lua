@@ -61,7 +61,9 @@ rn.load_level = function(args)
 		rn.player = rn.scene():get(rn.scene():add(0))
 	else
 		rn.player:get_element():set_position(0, 0)
+		rn.player:set_health(rn.player:get_stats():get_maximum_health())
 	end
+	rn.scene():get_renderer():set_camera_position(0.0, 0.0)
 	local pd = rn.entity_get_data(rn.player)
 	rn.entity_get_data(rn.player).keyboard_suppressed = false
 	rn.entity_get_data(rn.player).mouse_suppressed = false
