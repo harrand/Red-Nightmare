@@ -142,6 +142,7 @@ namespace game::render
 		TZ_PROFZONE("scene renderer - update", 0xFFFF4488);
 		this->update_camera(delta);
 		this->renderer.update(delta);
+		this->text_renderer.update();
 		const tz::vec2ui mondims = tz::wsi::get_monitors().front().dimensions;
 		const float aspect_ratio = static_cast<float>(mondims[0]) / mondims[1];
 		this->renderer.camera_orthographic
