@@ -22,7 +22,10 @@ rn.entity_handler[id] =
 		bstats:set_spell_power(25)
 		bstats:set_defence_rating(10)
 		ent:set_base_stats(bstats)
-		rn.entity_get_data(ent).impl.custom_despawn_timer = -1
+		local data = rn.entity_get_data(ent)
+		data.impl.custom_despawn_timer = -1
+		data.mouse_suppressed = false
+		data.keyboard_suppressed = false
 		tracy.ZoneEnd()
 	end,
 	postinit = function(ent)
@@ -62,33 +65,33 @@ rn.entity_handler[id] =
 		end
 		
 		local wnd = tz.window()
-		if not rn.is_casting(ent) and wnd:is_mouse_down("left") then
+		if not rn.is_casting(ent) and wnd:is_mouse_down("left") and not data.mouse_suppressed then
 			rn.cast_spell({ent = ent, ability_name = "Fireball", face_cast_direction = true})
-		elseif not rn.is_casting(ent) and wnd:is_mouse_down("right") then
+		elseif not rn.is_casting(ent) and wnd:is_mouse_down("right") and not data.mouse_suppressed then
 			rn.cast_spell({ent = ent, ability_name = "Allure of Flame", face_cast_direction = true})
 			--rn.cast_spell({ent = ent, ability_name = "Melee", face_cast_direction = true})
-		elseif not rn.is_casting(ent) and wnd:is_mouse_down("middle") then
+		elseif not rn.is_casting(ent) and wnd:is_mouse_down("middle") and not data.mouse_suppressed then
 			rn.cast_spell({ent = ent, ability_name = "Touch of Death", face_cast_direction = true})
 		end
 
 		dir = {}
-		if rn.is_key_down("w") then
+		if rn.is_key_down("w") and not data.keyboard_suppressed then
 			table.insert(dir, "backward")
 		end
-		if rn.is_key_down("s") then
+		if rn.is_key_down("s") and not data.keyboard_suppressed then
 			table.insert(dir, "forward")
 		end
-		if rn.is_key_down("a") then
+		if rn.is_key_down("a") and not data.keyboard_suppressed then
 			table.insert(dir, "left")
 		end
-		if rn.is_key_down("d") then
+		if rn.is_key_down("d") and not data.keyboard_suppressed then
 			table.insert(dir, "right")
 		end
 		if not rawequal(next(dir), nil) then
 			rn.entity_move({ent = ent, dir = dir, movement_anim_name = "Run"})
 		end
 
-		if rn.is_key_down("esc") and rn.is_casting(ent) then
+		if rn.is_key_down("esc") and rn.is_casting(ent) and not data.keyboard_suppressed then
 			rn.cancel_cast(ent)
 		end
 	end,

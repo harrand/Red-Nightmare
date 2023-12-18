@@ -62,6 +62,9 @@ rn.load_level = function(args)
 	else
 		rn.player:get_element():set_position(0, 0)
 	end
+	local pd = rn.entity_get_data(rn.player)
+	rn.entity_get_data(rn.player).keyboard_suppressed = false
+	rn.entity_get_data(rn.player).mouse_suppressed = false
 
 	local handler = rn.level_handler[rn.level.type[args.name]]
 	tz.assert(handler ~= nil)

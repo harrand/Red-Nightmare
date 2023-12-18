@@ -57,6 +57,10 @@ namespace game::render
 		{
 			this->renderer.add_gltf(this->get_model(static_cast<model>(i)));
 		}
+
+		constexpr float initial_zoom = 4.0f;
+		this->view_bounds /= initial_zoom;
+		this->pixelate_pass.zoom_amount() /= initial_zoom;
 	}
 
 	scene_renderer::entry scene_renderer::add_model(model m)
