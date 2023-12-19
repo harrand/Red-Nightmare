@@ -70,7 +70,7 @@ rn.entity_handler[id] =
 
 		rn.for_each_collision(ent, function(ent2)
 			local ent2data = rn.entity_get_data(ent2)
-			if not data.collided_this_update and ent2:is_valid() and ent2:is_dead() and ent2data.impl.projectile_skip ~= true and not ent2data.impl.undead then
+			if not data.collided_this_update and ent2:is_valid() and ent2:is_dead() and ent2data.impl.projectile_skip ~= true and not ent2data.impl.undead and not ent2data.impl.undead_immune then
 				-- bring the dead bloke back to life. set him to our faction.
 				data.collided_this_update = true
 				if data.owner ~= nil and data.owner:is_valid() then
@@ -80,23 +80,12 @@ rn.entity_handler[id] =
 				if ent2:get_model() == rn.model.humanoid then
 					ent2:get_element():object_set_texture_tint(3, 0, rn.damage_type_get_colour(data.magic_type))
 				end
-				ent2:set_health(ent2:get_stats():get_maximum_health())
-				rn.entity_get_data(ent2).impl.death_time = nil
-
-				if ent2:get_type() == 13 then
-					-- its an elemental. set its type to our magic type.
-					local eledata = rn.entity_get_data(ent2)
-					eledata.magic_type = data.magic_type
-					-- turn all its lights back on too!
-					for i=1,2,1 do
-						eledata.impl.lights[i] = rn.scene():add_light()
-						eledata.impl.lights[i]:set_power(0.8)
-					end
-				else
-					-- undead things despawn very fast.
-					ent2data.impl.undead = true
-					ent2data.impl.custom_despawn_timer = 5000
-				end
+				rn.cast_spell({ent = ent2, ability_name = "Reanimate"})
+				ent2:get_element():play_animation_by_name("Death", false, -1.5)
+				-- set to be undead immune. we dont want to be able to hit an enemy with touch of death a 2nd time while its reanimating!
+				ent2data.impl.undead_immune = true
+				--ent2:set_health(ent2:get_stats():get_maximum_health())
+				--rn.entity_get_data(ent2).impl.death_time = nil
 			end
 		end)
 

@@ -11,7 +11,8 @@ rn.cast.type =
 	spell_2h_directed = 3,
 	spell_2h_omni = 4,
 	melee_1h_horizontal = 5,
-	melee_unarmed_lunge = 6
+	melee_unarmed_lunge = 6,
+	none = 7
 }
 
 rn._impl_cast_type_to_animation_name =
@@ -44,6 +45,7 @@ require "ability5"
 require "ability6"
 require "ability7"
 require "ability8"
+require "ability9"
 
 rn.cast_spell = function(arg)
 	local obj <close> = tz.profzone_obj:new()
@@ -96,7 +98,9 @@ rn.cast_spell = function(arg)
 	entdata.impl.cast_begin = tz.time()
 	entdata.impl.cast = ability_name
 
-	ent:get_element():play_animation_by_name(rn._impl_cast_type_to_animation_name[cast_type], false)
+	if cast_type ~= rn.cast.type.none then
+		ent:get_element():play_animation_by_name(rn._impl_cast_type_to_animation_name[cast_type], false)
+	end
 
 	-- casting effect
 	entdata.impl.cast_effects = {nil, nil}

@@ -141,10 +141,10 @@ namespace game::render
 		std::optional<std::size_t> get_playing_animation_id() const;
 		std::string get_playing_animation_name() const;
 		std::string_view get_animation_name(std::size_t anim_id) const;
-		void play_animation(std::size_t anim_id, bool loop = false);
-		bool play_animation_by_name(std::string_view name, bool loop = false);
-		void queue_animation(std::size_t anim_id, bool loop = false);
-		bool queue_animation_by_name(std::string_view name, bool loop = false);
+		void play_animation(std::size_t anim_id, bool loop = false, float time_warp = 1.0f);
+		bool play_animation_by_name(std::string_view name, bool loop = false, float time_warp = 1.0f);
+		void queue_animation(std::size_t anim_id, bool loop = false, float time_warp = 1.0f);
+		bool queue_animation_by_name(std::string_view name, bool loop = false, float time_warp = 1.0f);
 		void skip_animation();
 		void skip_all_animations();
 		void halt_animation();

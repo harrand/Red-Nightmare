@@ -427,24 +427,24 @@ namespace game::render
 		return this->renderer->get_renderer().gltf_get_animation_name(gltfh, anim_id);
 	}
 
-	void scene_element::play_animation(std::size_t anim_id, bool loop)
+	void scene_element::play_animation(std::size_t anim_id, bool loop, float time_warp)
 	{
-		this->renderer->get_renderer().animated_object_play_animation(this->entry.obj, {.animation_id = anim_id, .loop = loop});
+		this->renderer->get_renderer().animated_object_play_animation(this->entry.obj, {.animation_id = anim_id, .loop = loop, .time_warp = time_warp});
 	}
 
-	bool scene_element::play_animation_by_name(std::string_view name, bool loop)
+	bool scene_element::play_animation_by_name(std::string_view name, bool loop, float time_warp)
 	{
-		return this->renderer->get_renderer().animated_object_play_animation_by_name(this->entry.obj, name, {.loop = loop});
+		return this->renderer->get_renderer().animated_object_play_animation_by_name(this->entry.obj, name, {.loop = loop, .time_warp = time_warp});
 	}
 
-	void scene_element::queue_animation(std::size_t anim_id, bool loop)
+	void scene_element::queue_animation(std::size_t anim_id, bool loop, float time_warp)
 	{
-		this->renderer->get_renderer().animated_object_queue_animation(this->entry.obj, {.animation_id = anim_id, .loop = loop});
+		this->renderer->get_renderer().animated_object_queue_animation(this->entry.obj, {.animation_id = anim_id, .loop = loop, .time_warp = time_warp});
 	}
 
-	bool scene_element::queue_animation_by_name(std::string_view name, bool loop)
+	bool scene_element::queue_animation_by_name(std::string_view name, bool loop, float time_warp)
 	{
-		return this->renderer->get_renderer().animated_object_queue_animation_by_name(this->entry.obj, name, {.loop = loop});
+		return this->renderer->get_renderer().animated_object_queue_animation_by_name(this->entry.obj, name, {.loop = loop, .time_warp = time_warp});
 	}
 
 	void scene_element::skip_animation()
@@ -854,7 +854,13 @@ namespace game::render
 	{
 		TZ_PROFZONE("scene element - play animation", 0xFFFFAAEE);
 		auto [_, anim_id, loop] = tz::lua::parse_args<tz::lua::nil, unsigned int, bool>(state);
-		this->elem.play_animation(anim_id, loop);
+		tz::lua::lua_generic maybe_time_warp = state.stack_get_generic(4);
+		float time_warp = 1.0f;
+		if(std::holds_alternative<double>(maybe_time_warp))
+		{
+			time_warp = std::get<double>(maybe_time_warp);
+		}
+		this->elem.play_animation(anim_id, loop, time_warp);
 		return 0;
 	}
 
@@ -862,7 +868,13 @@ namespace game::render
 	{
 		TZ_PROFZONE("scene element - play animation by name", 0xFFFFAAEE);
 		auto [_, name, loop] = tz::lua::parse_args<tz::lua::nil, std::string, bool>(state);
-		bool ret = this->elem.play_animation_by_name(name, loop);
+		tz::lua::lua_generic maybe_time_warp = state.stack_get_generic(4);
+		float time_warp = 1.0f;
+		if(std::holds_alternative<double>(maybe_time_warp))
+		{
+			time_warp = std::get<double>(maybe_time_warp);
+		}
+		bool ret = this->elem.play_animation_by_name(name, loop, time_warp);
 		state.stack_push_bool(ret);
 		return 1;
 	}
