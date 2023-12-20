@@ -39,6 +39,7 @@ rn.entity_handler[id] =
 			if not data.collided_this_update and ent2:get_model() == rn.model.humanoid and ent2:get_type() ~= ent:get_type() and not ent2:is_dead() then
 				-- equip whatever we're wearing onto ent2
 				-- iterate through each slot
+				rn.play_sound("pickup.wav")
 				for i=1,rn.equipment.slot._count-1,1 do
 					-- not all slots are implemented, so skip thsoe	
 					if rn._internal_equipment_slot_object_mapping[i] ~= nil then

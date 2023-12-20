@@ -57,6 +57,7 @@ rn.load_level = function(args)
 	end
 	print("Loading level " .. args.name)
 	rn.scene():get_renderer():clear_strings()
+	rn.stop_music(0)
 	if rn.player == nil then
 		rn.player = rn.scene():get(rn.scene():add(0))
 	else

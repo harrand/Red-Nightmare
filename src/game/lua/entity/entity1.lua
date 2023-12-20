@@ -83,6 +83,7 @@ rn.entity_handler[id] =
 				explosion:set_base_stats(ent:get_stats())
 				explosion:set_faction(rn.faction_id.pure_enemy)
 				explosion:get_element():set_position(mx, my)
+				rn.play_sound("fire_nova.mp3")
 				-- no owner!
 				explosiondata.owner = nil
 				-- todo: set magic_type of explosiondata (currently only supports fire)

@@ -1,5 +1,6 @@
 #ifndef REDNIGHTMARE_GAMELIB_AUDIO_HPP
 #define REDNIGHTMARE_GAMELIB_AUDIO_HPP
+#include <cstddef>
 
 namespace game
 {
@@ -7,6 +8,8 @@ namespace game
 	void audio_terminate();
 	void audio_lua_initialise();
 	void play_sound(const char* path, float volume = 1.0f);
+	void play_music(const char* path, std::size_t track_id, float volume = 1.0f);
+	void stop_music(std::size_t track_id);
 }
 
 #endif // REDNIGHTMARE_GAMELIB_AUDIO_HPP

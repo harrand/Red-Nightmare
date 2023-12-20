@@ -113,6 +113,12 @@ rn.director.on_second_pass = function()
 			rn.equip(zomb, "Steel Chainmail")
 			rn.equip(zomb, "White Cloth Headband")
 
+			-- this is a boss, so play boss music.
+			rn.stop_music(0)
+			rn.play_music("soundtrack2.mp3", 0, 0.8)
+			-- no more mobs after this boss.
+			rn.director.paused = true
+
 			local omegabuff = rn.new_buff()
 			omegabuff:set_increased_health(1500)
 			omegabuff:set_increased_movement_speed(100)

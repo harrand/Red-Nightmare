@@ -35,6 +35,7 @@ end
 rn.level_handler[id] =
 {
 	on_load = function()
+		rn.play_music("soundtrack2.mp3", 0, 0.8)
 		for i=-63,63,12 do
 			local y = math.random(0, 126) - 63
 			spawn_loot_chest(i, y)
