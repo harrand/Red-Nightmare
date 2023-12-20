@@ -31,6 +31,8 @@ rn.abilities[id] =
 		nova:set_base_stats(ent:get_stats())
 		novadata.owner = ent
 
+		rn.play_sound("fire_nova.mp3")
+
 		local mousex, mousey = rn.scene():get_mouse_position_ws()	
 		local bx, by = ent:get_element():get_position()
 		local vecx = mousex - bx

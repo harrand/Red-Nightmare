@@ -14,6 +14,8 @@ rn.level_handler[id] =
 		pdata.keyboard_suppressed = true
 		pdata.mouse_suppressed = true
 		pdata.direction_force = "forward"
+
+		rn.play_sound("soundtrack0.mp3", 0.8)
 	end,
 	on_update = function()
 		local w, h = tz.window():get_dimensions()

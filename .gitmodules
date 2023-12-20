@@ -1,3 +1,6 @@
 [submodule "engine"]
 	path = engine
 	url = https://github.com/Harrand/Topaz
+[submodule "lib/soloud"]
+	path = lib/soloud
+	url = https://github.com/jarikomppa/soloud

@@ -41,6 +41,7 @@ rn.entity_handler[id] =
 				evt.value = ent:get_stats():get_attack_power()
 				rn.combat.process_event(evt)
 				data.hit_enemies[ent2:uid()] = true
+				rn.play_sound("melee.mp3", 0.4)
 			end
 		end)
 

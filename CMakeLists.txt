@@ -33,6 +33,8 @@ tz_add_library(
 		src/gamelib/renderer/texture_manager.cpp
 		src/gamelib/renderer/texture_manager.hpp
 
+		src/gamelib/audio.cpp
+		src/gamelib/audio.hpp
 		src/gamelib/rnlib.cpp
 		src/gamelib/rnlib.hpp
 		src/gamelib/config.hpp
@@ -53,6 +55,7 @@ target_include_directories(rednightmare_gamelib PUBLIC ${PROJECT_SOURCE_DIR}/src
 #)
 
 target_compile_definitions(rednightmare_gamelib PUBLIC -DGAME_VERSION=0x${PROJECT_VERSION_MAJOR}${PROJECT_VERSION_MINOR}${PROJECT_VERSION_PATCH}${PROJECT_VERSION_TWEAK})
+target_link_libraries(rednightmare_gamelib PUBLIC soloud)
 
 tz_add_executable(
 	TARGET rednightmare

@@ -21,5 +21,6 @@ rn.abilities[id] =
 		x = (x + x2) / 2.0
 		y = (y + y2) / 2.0
 		nova:get_element():set_position(x, y)
+		rn.play_sound("fire_nova.mp3")
 	end
 }

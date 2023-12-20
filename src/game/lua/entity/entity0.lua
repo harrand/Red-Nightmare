@@ -110,6 +110,7 @@ rn.entity_handler[id] =
 		if data.impl.exp >= (ent:get_level() * 4) + 16 then
 			-- level up!
 			print("DING!")
+			rn.play_sound("level_up.mp3")
 			data.impl.exp = 0
 			ent:level_up()
 		end
@@ -119,5 +120,11 @@ rn.entity_handler[id] =
 	on_death = function(ent, evt)
 		rn.director.paused = true
 		rn.game_over()
+		rn.play_sound("player_death.mp3")
+	end,
+	on_struck = function(ent, evt)
+		if ent:get_health() > evt.value then
+			rn.play_sound("player_hurt.mp3")
+		end
 	end
 }

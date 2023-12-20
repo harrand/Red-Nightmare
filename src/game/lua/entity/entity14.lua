@@ -81,6 +81,7 @@ rn.entity_handler[id] =
 					ent2:get_element():object_set_texture_tint(3, 0, rn.damage_type_get_colour(data.magic_type))
 				end
 				rn.cast_spell({ent = ent2, ability_name = "Reanimate"})
+				rn.play_sound("zombify.mp3")
 				ent2:get_element():play_animation_by_name("Death", false, -1.5)
 				-- set to be undead immune. we dont want to be able to hit an enemy with touch of death a 2nd time while its reanimating!
 				ent2data.impl.undead_immune = true

@@ -1,4 +1,5 @@
 #include "gamelib/rnlib.hpp"
+#include "gamelib/audio.hpp"
 #include "gamelib/logic/stats.hpp"
 #include "gamelib/entity/scene.hpp"
 #include "gamelib/renderer/texture_manager.hpp"
@@ -37,6 +38,7 @@ namespace game
 		TZ_PROFZONE("rnlib - initialise", 0xFF00AAFF);
 		game_system = std::make_unique<game_system_t>();
 		lua_initialise();
+		audio_initialise();
 
 		tz::lua::get_state().execute(R"(
 		rn.texture_manager():register_texture("blanchfield_cemetary.background", "./res/images/scenery/backgrounds/background_grassy.png")
@@ -55,6 +57,7 @@ namespace game
 
 	void terminate()
 	{
+		audio_terminate();
 		game_system = nullptr;
 	}
 
@@ -191,6 +194,7 @@ namespace game
 				state.execute(str.c_str());
 			}
 		});
+		audio_lua_initialise();
 
 		TZ_PROFZONE("rnlib - lua entity static init", 0xFF00AAFF);
 		tz::lua::get_state().execute("rn.entity_static_init()");
