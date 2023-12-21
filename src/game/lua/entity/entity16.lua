@@ -71,14 +71,15 @@ rn.entity_handler[id] =
 			frostbolt:get_element():set_position(ent:get_element():get_position())
 			local fbdata = rn.entity_get_data(frostbolt)
 			fbdata.shoot_direct = true
-			local angular_rate = 1.2
+			local angular_rate = 0.9
 			fbdata.shoot_vec_x = math.sin(data.frostbolt_count * angular_rate)
 			fbdata.shoot_vec_y = math.cos(data.frostbolt_count * angular_rate)
 			frostbolt:get_element():rotate(math.atan(fbdata.shoot_vec_y, fbdata.shoot_vec_x))
 			fbdata.owner = data.owner
+			fbdata.self_collide = false
 
 			local bstats = ent:get_stats()
-			bstats:set_movement_speed(bstats:get_movement_speed() + 3.0)
+			bstats:set_movement_speed(bstats:get_movement_speed() + 6.0)
 			frostbolt:set_base_stats(bstats)
 			fbdata.magic_type = "Frost"
 
