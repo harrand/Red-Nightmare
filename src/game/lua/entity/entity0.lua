@@ -26,6 +26,7 @@ rn.entity_handler[id] =
 		data.impl.custom_despawn_timer = -1
 		data.mouse_suppressed = false
 		data.keyboard_suppressed = false
+		data.impl.drop_items_on_death = false
 		tracy.ZoneEnd()
 	end,
 	postinit = function(ent)
@@ -121,6 +122,8 @@ rn.entity_handler[id] =
 		rn.director.paused = true
 		rn.game_over()
 		rn.play_sound("player_death.mp3")
+		rn.stop_music(0)
+		rn.play_music("soundtrack_sad.mp3", 0, 0.8)
 	end,
 	on_struck = function(ent, evt)
 		if ent:get_health() > evt.value then
