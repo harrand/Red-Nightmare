@@ -494,6 +494,9 @@ rn.entity_move = function(arg)
 end
 
 rn.combat_text_advance = function()
+	if rn.game_is_over then
+		return
+	end
 	local count = 0
 	for i, textdata in pairs(rn.combat_texts) do
 		local text = textdata.text
@@ -513,6 +516,8 @@ end
 
 rn.game_over = function()
 	rn.game_is_over = true
+	rn.scene():get_renderer():clear_strings()
+	rn.combat_texts = {}
 	rn.game_over_string1 = rn.scene():get_renderer():add_string(0.0, 0.0, 10, "OWNED LMAO", 1.0, 1.0, 1.0)
 	rn.game_over_string2 = rn.scene():get_renderer():add_string(0.0, 0.0, 10, "Press [Esc] to restart.", 1.0, 1.0, 1.0)
 end

@@ -126,7 +126,8 @@ function rn.combat.base_on_hit(ent, evt)
 		if success ~= nil and not success then return end
 	end
 
-	if ent:get_faction() == rn.faction_id.player_ally then
+	local damagee = rn.scene():get_uid(evt.damagee)
+	if rn.get_relationship(ent, damagee) == "hostile" and not rn.game_is_over then
 		local str = tostring(math.tointeger(evt.value) or evt.value)
 		local r, g, b = rn.damage_type_get_colour(evt.damage_type)
 		if evt.damage_type == "Physical" then
@@ -134,8 +135,12 @@ function rn.combat.base_on_hit(ent, evt)
 			g = 1.0
 			b = 1.0
 		end
+		if damagee:get_faction() == rn.faction_id.player_ally then
+			r = 1.0
+			g = 0.0
+			b = 0.0
+		end
 		local text = rn.scene():get_renderer():add_string(0.0, 0.0, 10, str, r, g, b)
-		local damagee = rn.scene():get_uid(evt.damagee)
 		local x, y = damagee:get_element():get_position()
 		table.insert(rn.combat_texts, {text = text, initialx = x, initialy = y, timer = 0})
 	end
