@@ -46,6 +46,7 @@ require "ability6"
 require "ability7"
 require "ability8"
 require "ability9"
+require "ability10"
 
 rn.cast_spell = function(arg)
 	local obj <close> = tz.profzone_obj:new()
