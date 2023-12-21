@@ -70,7 +70,7 @@ rn.entity_handler[id] =
 			rn.cast_spell({ent = ent, ability_name = "Fireball", face_cast_direction = true})
 		elseif not rn.is_casting(ent) and wnd:is_mouse_down("right") and not data.mouse_suppressed then
 			--rn.cast_spell({ent = ent, ability_name = "Allure of Flame", face_cast_direction = true})
-			rn.cast_spell({ent = ent, ability_name = "Frozen Orb", face_cast_direction = true})
+			rn.cast_spell({ent = ent, ability_name = "Consecrate"})
 			--rn.cast_spell({ent = ent, ability_name = "Melee", face_cast_direction = true})
 		elseif not rn.is_casting(ent) and wnd:is_mouse_down("middle") and not data.mouse_suppressed then
 			rn.cast_spell({ent = ent, ability_name = "Touch of Death", face_cast_direction = true})

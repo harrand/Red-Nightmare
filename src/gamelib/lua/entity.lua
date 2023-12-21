@@ -121,6 +121,7 @@ require "entity13"
 require "entity14"
 require "entity15"
 require "entity16"
+require "entity17"
 
 rn.get_entity_type_name = function()
 	_tmp_type_name = nil

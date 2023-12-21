@@ -70,7 +70,7 @@ rn.entity_handler[id] =
 		end
 
 		rn.for_each_collision(ent, function(ent2)
-			if ent2:is_valid() and ent2:get_type() == ent:get_type() and rn.entity_get_data(ent2).self_collide and entdata.self_collide then
+			if ent2:is_valid() and ent2:get_type() == ent:get_type() and rn.entity_get_data(ent2).self_collide and entdata.self_collide ~= false then
 				-- if two fireballs collide:
 				-- find the midpoint between the two fireballs
 				local mx, my = ent:get_element():get_position()
