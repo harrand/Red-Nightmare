@@ -54,6 +54,7 @@ namespace game::entity
 		void set_player_credits(unsigned int credits);
 
 		tz::vec2 get_mouse_position_ws() const;
+		tz::vec2 world_to_screen_space(tz::vec2 ws) const;
 
 		std::size_t debug_get_intersection_count() const;
 		std::size_t get_collision_count(entity_handle e) const;
@@ -100,6 +101,7 @@ namespace game::entity
 		int get_renderer(tz::lua::state& state);
 		int size(tz::lua::state& state);
 		int get_mouse_position_ws(tz::lua::state& state);
+		int world_to_screen_space(tz::lua::state& state);
 	};
 
 	LUA_CLASS_BEGIN(rn_impl_scene)
@@ -118,6 +120,7 @@ namespace game::entity
 			LUA_METHOD(rn_impl_scene, get_renderer)
 			LUA_METHOD(rn_impl_scene, size)
 			LUA_METHOD(rn_impl_scene, get_mouse_position_ws)
+			LUA_METHOD(rn_impl_scene, world_to_screen_space)
 		LUA_CLASS_METHODS_END
 	LUA_CLASS_END
 

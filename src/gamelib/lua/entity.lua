@@ -4,6 +4,8 @@ rn.model =
 	humanoid = 1
 }
 
+rn.combat_texts = {}
+
 rn.faction =
 {
 	"pure friend",
@@ -363,6 +365,8 @@ rn.update = function()
 	if rn.game_is_over then
 		rn.game_over_update()
 	end
+
+	rn.combat_text_advance()
 end
 
 rn.entity_move_to_entity = function(arg, ent2)
@@ -486,6 +490,24 @@ rn.entity_move = function(arg)
 		if movement_anim_name ~= nil and (e:get_playing_animation_name() ~= movement_anim_name or not e:is_animation_playing()) then
 			e:play_animation_by_name(movement_anim_name, false)
 		end
+	end
+end
+
+rn.combat_text_advance = function()
+	local count = 0
+	for i, textdata in pairs(rn.combat_texts) do
+		local text = textdata.text
+		local x = textdata.initialx
+		local y = textdata.initialy + (textdata.timer * 2)
+		textdata.timer = textdata.timer + rn.delta_time
+		-- convert from world space to screen space
+		x, y = rn.scene():world_to_screen_space(x, y)
+		text:set_position(x, y)	
+		count = count + 1
+	end
+	if count > 32 then
+		rn.scene():get_renderer():clear_strings()
+		rn.combat_texts = {}
 	end
 end
 

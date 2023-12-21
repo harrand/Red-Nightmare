@@ -77,6 +77,27 @@ namespace game::entity
 		return pos;
 	}
 
+	tz::vec2 scene::world_to_screen_space(tz::vec2 ws) const
+	{
+		tz::vec2 pos = ws;
+		// opposite of get_mouse_position_ws
+		pos -= this->get_renderer().get_camera_position();
+		const tz::vec2 vb = this->get_renderer().get_view_bounds();
+		auto windims = tz::window().get_dimensions();
+		auto mondims = tz::wsi::get_monitors().front().dimensions;
+		const float ar = static_cast<float>(mondims[0]) / mondims[1];
+
+		pos[1] /= (vb[1] / ar);
+		pos[0] /= vb[0];
+
+		pos += tz::vec2::filled(1.0f);
+		pos /= 2.0f;
+		pos[0] *= windims[0];
+		pos[1] *= windims[1];
+		//pos[1] = windims[1] - pos[1];
+		return pos;
+	}
+
 	std::size_t scene::debug_get_intersection_count() const
 	{
 		return this->intersection_state.size();
@@ -603,6 +624,16 @@ namespace game::entity
 	int rn_impl_scene::get_mouse_position_ws(tz::lua::state& state)
 	{
 		tz::vec2 pos = this->sc->get_mouse_position_ws();	
+		state.stack_push_float(pos[0]);
+		state.stack_push_float(pos[1]);
+		return 2;
+	}
+
+	int rn_impl_scene::world_to_screen_space(tz::lua::state& state)
+	{
+		auto [_, x, y] = tz::lua::parse_args<tz::lua::nil, float, float>(state);
+		tz::vec2 pos{x, y};
+		pos = this->sc->world_to_screen_space(pos);
 		state.stack_push_float(pos[0]);
 		state.stack_push_float(pos[1]);
 		return 2;
