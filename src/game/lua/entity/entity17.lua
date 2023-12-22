@@ -80,7 +80,7 @@ rn.entity_handler[id] =
 		local x, y = ent:get_element():get_position()
 
 		data.impl.light:set_position(x, y)
-		data.impl.light:set_power(ent:get_element():get_uniform_scale() * 1.5)
+		data.impl.light:set_power(ent:get_element():get_uniform_scale() * 2)
 		data.impl.light:set_colour(r, g, b)
 
 		if data.duration_remaining < 0.0 then

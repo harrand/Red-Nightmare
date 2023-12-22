@@ -26,6 +26,7 @@ rn.entity_handler[id] =
 	postinit = function(ent)
 		local texh = rn.texture_manager():get_texture(typestr .. ".sprite0")
 		ent:get_element():object_set_texture_handle(2, 0, texh)
+		rn.play_sound("shoot.mp3")
 
 		local data = rn.entity_get_data(ent)
 		data.impl.light = rn.scene():add_light();
@@ -101,7 +102,7 @@ rn.entity_handler[id] =
 				evt.damage_type = data.magic_type
 				rn.combat.process_event(evt)
 
-				rn.play_sound("fireball_hit.wav")
+				rn.play_sound("fireball_hit.mp3")
 
 				if data.owner ~= nil and data.owner:is_valid() and data.owner:get_type() == 0 then
 					-- powerup: dire fireball (on by default)

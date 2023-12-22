@@ -109,7 +109,7 @@ rn.entity_handler[id] =
 				evt.damage_type = data.magic_type
 				rn.combat.process_event(evt)
 
-				rn.play_sound("fireball_hit.wav")
+				rn.play_sound("fireball_hit.mp3")
 			end
 		end)
 	end
