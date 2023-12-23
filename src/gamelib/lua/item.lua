@@ -80,6 +80,7 @@ require "item4"
 require "item5"
 require "item6"
 require "item7"
+require "item8"
 
 rn.drop_item_at = function(item_name, x, y)
 	local mannequin_id = 3

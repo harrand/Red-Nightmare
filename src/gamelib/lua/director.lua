@@ -69,6 +69,7 @@ rn.director.on_second_pass = function()
 			local zomb = rn.scene():get(rn.scene():add(2))
 			rn.equip(zomb, "Steel Chainmail")
 			rn.equip(zomb, "Iron Sallet")
+			rn.equip(zomb, "Iron Legplates")
 			spawn_result = zomb
 			rn.director.spawn_cooldown = 15
 		end
@@ -90,8 +91,8 @@ rn.director.on_second_pass = function()
 		end
 
 		-- cost 100: horde of rushers
-		if rn.director.credit > 200 then
-			local credit_cost = 200
+		if rn.director.credit > 175 then
+			local credit_cost = 175
 			rn.director.credit = rn.director.credit - credit_cost
 			for i=0,3,1 do
 				local zomb = rn.scene():get(rn.scene():add(2))
@@ -106,12 +107,13 @@ rn.director.on_second_pass = function()
 		end
 
 		-- cost 200: OMEGA zombie
-		if rn.director.credit > 150 then
-			local credit_cost = 150
+		if rn.director.credit > 300 then
+			local credit_cost = 300
 			rn.director.credit = rn.director.credit - credit_cost
 			local zomb = rn.scene():get(rn.scene():add(2))
-			rn.equip(zomb, "Steel Chainmail")
-			rn.equip(zomb, "White Cloth Headband")
+			rn.equip(zomb, "White Legion Platebody")
+			rn.equip(zomb, "White Legion Helmet")
+			rn.equip(zomb, "White Legion Platelegs")
 
 			-- this is a boss, so play boss music.
 			rn.stop_music(0)

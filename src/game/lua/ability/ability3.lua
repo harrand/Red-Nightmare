@@ -14,9 +14,10 @@ rn.abilities[id] =
 		barrierdata.target_entity = ent
 		barrierdata.duration = 10000
 		local ability = rn.abilities[id]
-		barrierdata.colour_r = ability.magic_colour_r
-		barrierdata.colour_g = ability.magic_colour_g
-		barrierdata.colour_b = ability.magic_colour_b
+		local r, g, b = rn.damage_type_get_colour(ability.magic_type)
+		barrierdata.colour_r = r
+		barrierdata.colour_g = g
+		barrierdata.colour_b = b
 
 		local immune_buff = rn.new_buff()
 		immune_buff:set_time_remaining(barrierdata.duration / 1000)
