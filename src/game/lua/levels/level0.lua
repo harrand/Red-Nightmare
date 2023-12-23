@@ -61,7 +61,7 @@ rn.level_handler[id] =
 
 		for i=-63,63,12 do
 			local y = math.random(0, 126) - 63
-			spawn_loot_chest(i, y)
+			spawn_loot_chest(i / 10, y / 10)
 		end
 		spawn_invisible_wall(-7.0, -7.0)
 		spawn_invisible_wall(-7.0, -10.0)

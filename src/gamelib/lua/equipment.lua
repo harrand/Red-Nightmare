@@ -5,8 +5,9 @@ rn.equipment.slot =
 	off_hand = 2,
 	helm = 3,
 	body_armour = 4,
-	aura = 5,
-	_count = 6
+	legs = 5,
+	aura = 6,
+	_count = 7
 }
 
 rn._internal_equipment_slot_object_mapping =
@@ -15,6 +16,7 @@ rn._internal_equipment_slot_object_mapping =
 	nil,
 	7,
 	5,
+	9,
 	nil
 }
 

@@ -183,6 +183,7 @@ rn.entity_postinit = function(type)
 	if mod == rn.model.humanoid then
 		e:object_set_visibility(5, false)
 		e:object_set_visibility(7, false)
+		e:object_set_visibility(9, false)
 		e:face_forward()
 		rn.entity_get_data(ent).impl.dir = "forward"
 	elseif mod == rn.model.quad then
