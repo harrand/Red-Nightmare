@@ -9,4 +9,5 @@ local eqb = rn.new_buff()
 eqb:set_increased_movement_speed(40)
 eqb:set_amplified_spell_power(1.4)
 item:set_buff(eqb)
+item:set_rarity("epic")
 rn.items[name] = item

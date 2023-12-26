@@ -9,9 +9,19 @@ rn.item =
 	texture_tint_r = 1,
 	texture_tint_g = 1,
 	texture_tint_b = 1,
-	equipment_buff = nil
+	equipment_buff = nil,
+	rarity = "common"
 }
 rn.items = {}
+
+rn.rarity_get_colour = function(rarity)
+	if rarity == "common" then return 0.57735, 0.57735, 0.57735 end
+	if rarity == "uncommon" then return 0.331295, 0.883452, 0.331295 end
+	if rarity == "rare" then return 0.251498, 0.402396, 0.880242 end
+	if rarity == "epic" then return 0.699127, 0.149813, 0.699127 end
+	if rarity == "legendary" then return 0.991228, 0.0, 0.132164 end
+	return 0.0, 0.0, 0.0
+end
 
 function rn.item:new(o)
 	o = o or {}
@@ -68,6 +78,14 @@ end
 
 function rn.item:get_buff()
 	return self.equipment_buff
+end
+
+function rn.item:get_rarity()
+	return self.rarity
+end
+
+function rn.item:set_rarity(rarity)
+	self.rarity = rarity
 end
 
 rn.items = {}

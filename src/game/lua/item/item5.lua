@@ -10,4 +10,5 @@ eqb:set_increased_spell_power(40)
 eqb:set_increased_defence_rating(200)
 eqb:set_increased_attack_power(50)
 item:set_buff(eqb)
+item:set_rarity("legendary")
 rn.items[name] = item

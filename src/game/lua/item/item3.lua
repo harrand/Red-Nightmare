@@ -9,4 +9,5 @@ local eqb = rn.new_buff()
 eqb:set_increased_defence_rating(25)
 eqb:set_increased_movement_speed(20)
 item:set_buff(eqb)
+item:set_rarity("rare")
 rn.items[name] = item
