@@ -20,10 +20,17 @@ rn.entity_handler[id] =
 		}
 	end,
 	update = function(ent)
+		local obj <close> = tz.profzone_obj:new()
+		obj:set_name("Scenery Update")
 		local data = rn.entity_get_data(ent)
 		if data.dynamic_texture_scale then
-			ent:get_element():object_set_texture_scale(2, 0, ent:get_element():get_uniform_scale() / data.texture_scale_zoom)
-			ent:get_element():object_set_texture_scale(2, 1, ent:get_element():get_uniform_scale() / data.texture_scale_zoom)
+			local obj2 <close> = tz.profzone_obj:new()
+			obj2:set_name("Dynamic Texture Scale Compute")
+			local scale = ent:get_element():get_uniform_scale() / data.texture_scale_zoom
+			local obj3 <close> = tz.profzone_obj:new()
+			obj3:set_name("Dynamic Texture Scale Set")
+			ent:get_element():object_set_texture_scale(2, 0, scale)
+			ent:get_element():object_set_texture_scale(2, 1, scale)
 		end
 	end
 }

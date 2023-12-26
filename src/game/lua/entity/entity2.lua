@@ -27,6 +27,7 @@ rn.entity_handler[id] =
 		ent:get_element():object_set_texture_handle(7, 0, helmtexh)
 		local sc = ent:get_element():get_uniform_scale()
 		ent:get_element():set_uniform_scale(sc * 0.5)
+		rn.entity_get_data(ent).impl.drop_items_on_death = false
 
 		ent:set_faction(rn.faction_id.player_enemy)
 
