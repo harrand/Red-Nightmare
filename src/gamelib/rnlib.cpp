@@ -8,6 +8,7 @@
 #include "tz/core/imported_text.hpp"
 #include "tz/lua/api.hpp"
 #include <memory>
+#include <filesystem>
 
 #include ImportedTextHeader(ability, lua)
 #include ImportedTextHeader(combat, lua)

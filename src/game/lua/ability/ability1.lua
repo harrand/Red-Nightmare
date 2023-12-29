@@ -32,7 +32,7 @@ rn.abilities[id] =
 			projdata.shoot_vec_x = entdata.impl.cast_dir_x
 			projdata.shoot_vec_y = entdata.impl.cast_dir_y
 			-- math.atan2 is removed, instead just use math.atan with 2 args
-			proj:get_element():rotate(math.atan(projdata.shoot_vec_y, projdata.shoot_vec_x))
+			proj:get_element():rotate(math.atan(projdata.shoot_vec_y, projdata.shoot_vec_x) + 3.14159)
 		else
 			-- shoot in the general direction (right/left/up/down)
 			projdata.shoot_dir = entdata.impl.dir

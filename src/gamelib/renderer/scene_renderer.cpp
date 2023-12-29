@@ -634,7 +634,8 @@ namespace game::render
 		TZ_PROFZONE("scene element - face forward 2d", 0xFFFFAAEE);
 		auto& ren = this->elem.renderer->get_renderer();
 		tz::trs transform = ren.animated_object_get_local_transform(this->elem.entry.obj);
-		transform.rotate = tz::quat::from_axis_angle({0.0f, 1.0f, 0.0f}, 1.5708f);
+		transform.rotate = tz::quat::from_axis_angle({0.0f, 1.0f, 0.0f}, -1.5708f);
+		transform.rotate.combine(tz::quat::from_axis_angle({0.0f, 0.0f, 1.0f}, -3.14159f));
 		ren.animated_object_set_local_transform(this->elem.entry.obj, transform);
 		return 0;
 	}
