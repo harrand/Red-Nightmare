@@ -510,10 +510,11 @@ rn.combat_text_advance = function()
 		x, y = rn.scene():world_to_screen_space(x, y)
 		text:set_position(x, y)	
 		count = count + 1
-	end
-	if count > 32 then
-		rn.scene():get_renderer():clear_strings()
-		rn.combat_texts = {}
+
+		if textdata.timer >= 2.5 then
+			rn.scene():get_renderer():remove_string(text)
+			table.remove(rn.combat_texts, i)
+		end
 	end
 end
 
