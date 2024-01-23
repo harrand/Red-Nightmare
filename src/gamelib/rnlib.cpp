@@ -10,6 +10,9 @@
 #include <memory>
 #include <filesystem>
 
+// new stuff.
+#include "gamelib/messaging/scene.hpp"
+
 #include ImportedTextHeader(ability, lua)
 #include ImportedTextHeader(combat, lua)
 #include ImportedTextHeader(director, lua)
@@ -107,6 +110,7 @@ namespace game
 			tz::lua::get_state().assign_float("rn.delta_time", delta_seconds);
 			game_system->scene.block();
 			tz::lua::get_state().execute("if rn.update ~= nil then rn.update() end");
+			game::messaging::scene_messaging_update();
 		}
 		// rendering uses the global transform object data. that's already been handled by now, and isnt touched during animation advance.
 		// as a result it's safe to render now while the animation advance is going on. bussin
@@ -196,6 +200,7 @@ namespace game
 			}
 		});
 		audio_lua_initialise();
+		game::messaging::scene_messaging_lua_initialise();
 
 		TZ_PROFZONE("rnlib - lua entity static init", 0xFF00AAFF);
 		tz::lua::get_state().execute("rn.entity_static_init()");

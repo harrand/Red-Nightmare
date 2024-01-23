@@ -20,6 +20,9 @@ tz_add_library(
 		src/gamelib/entity/scene.cpp
 		src/gamelib/entity/scene.hpp
 
+		src/gamelib/messaging/scene.cpp
+		src/gamelib/messaging/scene.hpp
+
 		src/gamelib/logic/stats.cpp
 		src/gamelib/logic/stats.hpp
 
