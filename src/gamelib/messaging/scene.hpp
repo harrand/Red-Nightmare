@@ -10,7 +10,8 @@ namespace game::messaging
 
 	enum class scene_operation
 	{
-		add_entity
+		add_entity,
+		remove_entity
 	};
 
 	struct scene_message

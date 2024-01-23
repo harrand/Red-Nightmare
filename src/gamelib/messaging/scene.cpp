@@ -55,11 +55,23 @@ namespace game::messaging
 			state.stack_push_uint(entity_id);
 			return 1;
 		}
+
+		int remove_entity(tz::lua::state& state)
+		{
+			auto [_, entity_id] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+			local_scene_receiver.send_message
+			({
+				.operation = scene_operation::remove_entity,
+				.uuid = entity_id
+			});
+			return 0;
+		}
 	};
 
 	LUA_CLASS_BEGIN(lua_local_scene_message_receiver)
 		LUA_CLASS_METHODS_BEGIN
 			LUA_METHOD(lua_local_scene_message_receiver, add_entity)
+			LUA_METHOD(lua_local_scene_message_receiver, remove_entity)
 		LUA_CLASS_METHODS_END
 	LUA_CLASS_END
 
