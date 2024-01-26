@@ -1,39 +1,20 @@
 #include "gamelib/messaging/scene.hpp"
+#include "gamelib/messaging/system.hpp"
 #include "tz/core/profile.hpp"
+
+#include <iostream>
 
 namespace game::messaging
 {
-	// messaging boilerplate.
-	class thread_local_scene_message_receiver : public tz::message_passer<scene_message, false>
+	void on_scene_process_message(const scene_message& msg)
 	{
-	public:
-		void update()
-		{
-			this->process_messages();
-		}
+		std::cout << "scene mc message detected: " << static_cast<int>(msg.operation) << "\n";
+	}
 
-	};
-
-	class global_scene_message_receiver : public tz::message_receiver<scene_message, true>
-	{
-	public:
-		void update()
-		{
-			this->process_messages();
-		}
-
-		virtual void process_message(const scene_message& msg) override final
-		{
-			TZ_PROFZONE("scene - process message", 0xFF99CC44);
-			// all messages passed on all threads this update come through here.
-			// todo: handle the message. you can assume this is on the main thread.
-		}
-	};
-
-	global_scene_message_receiver global_scene_receiver;
-	thread_local thread_local_scene_message_receiver local_scene_receiver;
+	REGISTER_MESSAGING_SYSTEM(scene_message, scene, on_scene_process_message);
 
 	// lua api boilerplate.
+	// yes, this is rn.current_scene()
 
 	struct lua_local_scene_message_receiver
 	{
