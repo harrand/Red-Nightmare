@@ -11,13 +11,14 @@ namespace game::messaging
 	void on_scene_process_message(const scene_message& msg)
 	{
 		std::cout << "scene mc message detected: " << static_cast<int>(msg.operation) << "\n";
+		tz::assert(sc != nullptr);
 		switch(msg.operation)
 		{
 			case scene_operation::add_entity:
-				
+				sc->add_entity(msg.uuid);	
 			break;
 			case scene_operation::remove_entity:
-
+				sc->remove_entity(msg.uuid);
 			break;
 		}
 	}
@@ -81,6 +82,7 @@ namespace game::messaging
 			// set the local message passer to target the global receiver. otherwise all its messages will be dropped.
 			local_scene_receiver.set_target(global_scene_receiver);
 			// expose the class api
+			state.execute("rn = rn or {}");
 			state.new_type("lua_local_scene_message_receiver", LUA_CLASS_NAME(lua_local_scene_message_receiver)::registers);
 			state.assign_func("rn.current_scene", LUA_FN_NAME(rn_current_scene));
 			// rn.current_scene:add_entity(...) is now a thing.
