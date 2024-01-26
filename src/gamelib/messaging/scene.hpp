@@ -19,7 +19,7 @@ namespace game::messaging
 	struct scene_message
 	{
 		scene_operation operation;
-		std::uint_fast64_t uuid;
+		entity_uuid uuid;
 		std::any value = {};
 	};
 }

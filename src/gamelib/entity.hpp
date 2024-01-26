@@ -5,11 +5,12 @@
 
 namespace game
 {
-	constexpr std::uint_fast64_t null_uuid = std::numeric_limits<std::uint_fast64_t>::max();
+	using entity_uuid = std::uint_fast64_t;
+	constexpr entity_uuid null_uuid = std::numeric_limits<entity_uuid>::max();
 
 	struct entity
 	{
-		std::uint_fast64_t uuid;
+		entity_uuid uuid;
 
 		static entity null()
 		{

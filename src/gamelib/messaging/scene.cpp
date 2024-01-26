@@ -36,7 +36,7 @@ namespace game::messaging
 			// caller now knows the entity id, even though it doesnt exist yet.
 			// subsequent messages that use the id *should* be processed after this one, making the whole thing safe.
 			static std::atomic_uint_fast64_t entity_uuid_counter = 0;
-			std::uint_fast64_t entity_id = entity_uuid_counter.fetch_add(1);
+			auto entity_id = static_cast<entity_uuid>(entity_uuid_counter.fetch_add(1));
 			local_scene_receiver.send_message
 			({
 				.operation = scene_operation::add_entity,
@@ -55,7 +55,7 @@ namespace game::messaging
 			local_scene_receiver.send_message
 			({
 				.operation = scene_operation::remove_entity,
-				.uuid = entity_id
+				.uuid = static_cast<entity_uuid>(entity_id)
 			});
 			return 0;
 		}

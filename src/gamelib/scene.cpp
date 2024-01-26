@@ -4,7 +4,7 @@
 
 namespace game
 {
-	scene::entity_handle scene::add_entity(std::uint_fast64_t uuid)
+	scene::entity_handle scene::add_entity(entity_uuid uuid)
 	{
 		TZ_PROFZONE("scene - add entity", 0xFF99CC44);
 		// add to entity list.
@@ -22,7 +22,7 @@ namespace game
 		this->uuid_entity_map.erase(uuid);
 	}
 
-	void scene::remove_entity(std::uint_fast64_t uuid)
+	void scene::remove_entity(entity_uuid uuid)
 	{
 		// find entity handle using uuid,
 		// then remove by entity handle.

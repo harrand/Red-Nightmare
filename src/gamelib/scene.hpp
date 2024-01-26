@@ -27,15 +27,15 @@ namespace game
 		scene() = default;
 		using entity_handle = tz::free_list<scene_entity_data>::handle;
 
-		entity_handle add_entity(std::uint_fast64_t uuid);
+		entity_handle add_entity(entity_uuid uuid);
 		void remove_entity(entity_handle e);
-		void remove_entity(std::uint_fast64_t uuid);
+		void remove_entity(entity_uuid uuid);
 		void clear();
 	private:
 		// free list gives handle stability, which we want.
 		// hashmap gives fast lookup for those who want to index by uuid (which everyone will want to do)
 		tz::free_list<scene_entity_data> entities = {};
-		std::unordered_map<std::uint_fast64_t, entity_handle> uuid_entity_map = {};
+		std::unordered_map<entity_uuid, entity_handle> uuid_entity_map = {};
 	};
 }
 
