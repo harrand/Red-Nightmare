@@ -1,12 +1,14 @@
 #ifndef REDNIGHTMARE_GAMELIB_MESSAGING_SCENE_HPP
 #define REDNIGHTMARE_GAMELIB_MESSAGING_SCENE_HPP
+#include "gamelib/scene.hpp"
 #include "tz/core/messaging.hpp"
 #include "tz/lua/api.hpp"
+#include <any>
 
 namespace game::messaging
 {
 	void scene_messaging_lua_initialise();
-	void scene_messaging_update();
+	void scene_messaging_update(game::scene& scene);
 
 	enum class scene_operation
 	{
@@ -17,7 +19,8 @@ namespace game::messaging
 	struct scene_message
 	{
 		scene_operation operation;
-		std::uint64_t uuid;
+		std::uint_fast64_t uuid;
+		std::any value = {};
 	};
 }
 

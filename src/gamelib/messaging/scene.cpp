@@ -6,9 +6,20 @@
 
 namespace game::messaging
 {
+	game::scene* sc = nullptr;
+
 	void on_scene_process_message(const scene_message& msg)
 	{
 		std::cout << "scene mc message detected: " << static_cast<int>(msg.operation) << "\n";
+		switch(msg.operation)
+		{
+			case scene_operation::add_entity:
+				
+			break;
+			case scene_operation::remove_entity:
+
+			break;
+		}
 	}
 
 	REGISTER_MESSAGING_SYSTEM(scene_message, scene, on_scene_process_message);
@@ -24,7 +35,7 @@ namespace game::messaging
 			// caller now knows the entity id, even though it doesnt exist yet.
 			// subsequent messages that use the id *should* be processed after this one, making the whole thing safe.
 			static std::atomic_uint_fast64_t entity_uuid_counter = 0;
-			std::uint64_t entity_id = entity_uuid_counter.fetch_add(1);
+			std::uint_fast64_t entity_id = entity_uuid_counter.fetch_add(1);
 			local_scene_receiver.send_message
 			({
 				.operation = scene_operation::add_entity,
@@ -76,7 +87,7 @@ namespace game::messaging
 		});
 	}
 
-	void scene_messaging_update()
+	void scene_messaging_update(game::scene& scene)
 	{
 		tz::lua::for_all_states([](tz::lua::state& state)
 		{
@@ -89,6 +100,7 @@ namespace game::messaging
 		// global receiver will now have all the messages ready.
 		// we can finally process them all.
 		TZ_PROFZONE("scene - process all messages", 0xFF99CC44);
+		sc = &scene;
 		global_scene_receiver.update();
 	}
 }

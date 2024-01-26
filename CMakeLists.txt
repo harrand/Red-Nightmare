@@ -15,41 +15,27 @@ add_subdirectory(lib)
 tz_add_library(
 	TARGET rednightmare_gamelib
 	SOURCES
-	 	src/gamelib/entity/api.cpp
-	 	src/gamelib/entity/api.hpp
-		src/gamelib/entity/scene.cpp
-		src/gamelib/entity/scene.hpp
-
 		src/gamelib/messaging/scene.cpp
 		src/gamelib/messaging/scene.hpp
 		src/gamelib/messaging/system.hpp
-
-		src/gamelib/logic/stats.cpp
-		src/gamelib/logic/stats.hpp
-
-		src/gamelib/physics/aabb.cpp
-		src/gamelib/physics/aabb.hpp
-		src/gamelib/physics/quadtree.cpp
-		src/gamelib/physics/quadtree.hpp
-
-		src/gamelib/renderer/scene_renderer.cpp
-		src/gamelib/renderer/scene_renderer.hpp
-		src/gamelib/renderer/texture_manager.cpp
-		src/gamelib/renderer/texture_manager.hpp
 
 		src/gamelib/audio.cpp
 		src/gamelib/audio.hpp
 		src/gamelib/rnlib.cpp
 		src/gamelib/rnlib.hpp
+		src/gamelib/scene.cpp
+		src/gamelib/scene.hpp
+		src/gamelib/entity.cpp
+		src/gamelib/entity.hpp
 		src/gamelib/config.hpp
 )
-add_shader(
-	TARGET rednightmare_gamelib
-	SHADERS
-		src/gamelib/renderer/shaders/scene_renderer.fragment.tzsl	
-		src/gamelib/renderer/shaders/pixelate.vertex.tzsl	
-		src/gamelib/renderer/shaders/pixelate.fragment.tzsl	
-)
+#add_shader(
+#	TARGET rednightmare_gamelib
+#	SHADERS
+#		src/gamelib/renderer/shaders/scene_renderer.fragment.tzsl	
+#		src/gamelib/renderer/shaders/pixelate.vertex.tzsl	
+#		src/gamelib/renderer/shaders/pixelate.fragment.tzsl	
+#)
 target_include_directories(rednightmare_gamelib PUBLIC ${PROJECT_SOURCE_DIR}/src)
 
 #add_shader(
@@ -77,11 +63,4 @@ add_text(
 		res/fonts/ProggyClean.ttf
 		res/models/human_animated_textured.glb
 		res/models/plane.glb
-		src/gamelib/lua/ability.lua
-		src/gamelib/lua/combat.lua
-		src/gamelib/lua/director.lua
-		src/gamelib/lua/entity.lua
-		src/gamelib/lua/equipment.lua
-		src/gamelib/lua/item.lua
-		src/gamelib/lua/level.lua
 )
