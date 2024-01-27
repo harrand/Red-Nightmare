@@ -1,7 +1,10 @@
 #ifndef REDNIGHTMARE_GAMELIB_ENTITY_HPP
 #define REDNIGHTMARE_GAMELIB_ENTITY_HPP
+#include "tz/lua/state.hpp"
 #include <limits>
 #include <cstdint>
+#include <string>
+#include <unordered_map>
 
 namespace game
 {
@@ -11,6 +14,7 @@ namespace game
 	struct entity
 	{
 		entity_uuid uuid;
+		std::unordered_map<std::string, tz::lua::lua_generic> internal_variables = {};
 
 		static entity null()
 		{

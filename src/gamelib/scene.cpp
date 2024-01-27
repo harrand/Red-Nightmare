@@ -37,4 +37,28 @@ namespace game
 		this->entities.clear();
 		this->uuid_entity_map.clear();
 	}
+
+	const game::entity& scene::get_entity(entity_handle e) const
+	{
+		return this->entities[e].ent;
+	}
+
+	game::entity& scene::get_entity(entity_handle e)
+	{
+		return this->entities[e].ent;
+	}
+
+	const game::entity& scene::get_entity(entity_uuid uuid) const
+	{
+		auto iter = this->uuid_entity_map.find(uuid);
+		tz::assert(iter != this->uuid_entity_map.end(), "No entity exists with uuid %llu", uuid);
+		return this->get_entity(iter->second);
+	}
+
+	game::entity& scene::get_entity(entity_uuid uuid)
+	{
+		auto iter = this->uuid_entity_map.find(uuid);
+		tz::assert(iter != this->uuid_entity_map.end(), "No entity exists with uuid %llu", uuid);
+		return this->get_entity(iter->second);
+	}
 }

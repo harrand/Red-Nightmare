@@ -31,6 +31,11 @@ namespace game
 		void remove_entity(entity_handle e);
 		void remove_entity(entity_uuid uuid);
 		void clear();
+
+		const game::entity& get_entity(entity_handle e) const;
+		game::entity& get_entity(entity_handle e);
+		const game::entity& get_entity(entity_uuid uuid) const;
+		game::entity& get_entity(entity_uuid uuid);
 	private:
 		// free list gives handle stability, which we want.
 		// hashmap gives fast lookup for those who want to index by uuid (which everyone will want to do)
