@@ -94,6 +94,7 @@ namespace game
 	{
 		TZ_PROFZONE("rnlib - lua initialise", 0xFF00AAFF);
 		audio_lua_initialise();
-		game::messaging::scene_messaging_lua_initialise();
+		game::messaging::scene_messaging_lua_initialise(); // rn.current_scene()
+		game::entity_lua_initialise(); // rn.entity.*
 	}
 }

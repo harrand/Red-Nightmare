@@ -45,6 +45,8 @@ namespace game
 			this->internal_variables[varname] = val; 
 		}
 	};
+
+	void entity_lua_initialise();
 }
 
 #endif // REDNIGHTMARE_GAMELIB_ENTITY_HPP

@@ -63,4 +63,5 @@ add_text(
 		res/fonts/ProggyClean.ttf
 		res/models/human_animated_textured.glb
 		res/models/plane.glb
+		src/gamelib/lua/entity.lua
 )

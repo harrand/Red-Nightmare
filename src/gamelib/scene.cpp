@@ -11,6 +11,15 @@ namespace game
 		entity_handle ret = this->entities.push_back({.ent = {.uuid = uuid}});
 		// map uuid to entity handle (for fast lookup times)
 		this->uuid_entity_map[uuid] = ret;
+		
+		std::string preinit_lua;
+		preinit_lua += "rn.entity.preinit(" + std::to_string(uuid) + ")";
+		tz::lua::get_state().execute(preinit_lua.c_str());
+		// initialise scene element. model etc has been chosen by now.
+		
+		std::string init_lua;
+		init_lua += "rn.entity.init(" + std::to_string(uuid) + ")";
+		tz::lua::get_state().execute(init_lua.c_str());
 		return ret;
 	}
 
