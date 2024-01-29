@@ -201,6 +201,7 @@ namespace game::messaging
 
 	void scene_messaging_update(game::scene& scene)
 	{
+		TZ_PROFZONE("scene - update messages", 0xFFAAAACC);
 		sc = &scene;
 		tz::lua::for_all_states([](tz::lua::state& state)
 		{

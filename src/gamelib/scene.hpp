@@ -2,6 +2,7 @@
 #define REDNIGHTMARE_GAMELIB_SCENE_HPP
 #include "gamelib/entity.hpp"
 #include "tz/core/data/free_list.hpp"
+#include "tz/core/job/job.hpp"
 #include <unordered_map>
 
 namespace game
@@ -33,7 +34,11 @@ namespace game
 		void remove_entity(entity_handle e);
 		void remove_entity(entity_uuid uuid);
 		void clear();
+		void update(float delta_seconds);
+		void fixed_update(float delta_seconds, std::uint64_t unprocessed);
+		void block();
 
+		std::size_t entity_count() const;
 		const game::entity& get_entity(entity_handle e) const;
 		game::entity& get_entity(entity_handle e);
 		const game::entity& get_entity(entity_uuid uuid) const;
@@ -43,6 +48,7 @@ namespace game
 		// hashmap gives fast lookup for those who want to index by uuid (which everyone will want to do)
 		tz::free_list<scene_entity_data> entities = {};
 		std::unordered_map<entity_uuid, entity_handle> uuid_entity_map = {};
+		std::vector<tz::job_handle> entity_update_jobs = {};
 	};
 }
 

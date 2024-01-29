@@ -66,6 +66,71 @@ namespace game
 		this->uuid_entity_map.clear();
 	}
 
+	constexpr std::size_t single_threaded_update_limit = 16u;
+
+	void scene::update(float delta_seconds)
+	{
+		TZ_PROFZONE("scene - update", 0xFFCCAACC);
+
+		auto count = this->entity_count();
+		std::size_t job_count = std::thread::hardware_concurrency();
+		std::size_t objects_per_job = count / job_count;
+
+		if(count == 0)
+		{
+			return;
+		}
+		if(count <= single_threaded_update_limit || objects_per_job == 0)
+		{
+			std::string lua_str;
+			for(const scene_entity_data& ed : this->entities)
+			{
+				lua_str += "rn.entity.update(" + std::to_string(ed.ent.uuid) + ")";
+			}
+			tz::lua::get_state().execute(lua_str.c_str());
+			return;
+		}
+
+		// do a multi-threaded update.
+		std::size_t remainder_objects = count % job_count;
+		tz::assert((objects_per_job * job_count) + remainder_objects == count);
+		this->entity_update_jobs.resize(job_count);
+		for(std::size_t i = 0; i < job_count; i++)
+		{
+			this->entity_update_jobs[i] = tz::job_system().execute([this, delta_seconds, offset = i * objects_per_job, object_count = objects_per_job]
+			{
+				TZ_PROFZONE("scene - update some", 0xFFCCAACC);
+				std::string lua_str;
+				auto begin = this->entities.begin();
+				for(std::size_t j = offset; j < offset + object_count; j++)
+				{
+					lua_str += "rn.entity.update(" + std::to_string((*(begin + j)).ent.uuid) + ")";
+				}
+				tz::lua::get_state().execute(lua_str.c_str());
+			});
+		}
+		
+	}
+
+	void scene::fixed_update(float delta_seconds, std::uint64_t unprocessed)
+	{
+
+	}
+
+	void scene::block()
+	{
+		for(tz::job_handle jh : this->entity_update_jobs)
+		{
+			tz::job_system().block(jh);
+		}
+		this->entity_update_jobs.clear();
+	}
+
+	std::size_t scene::entity_count() const
+	{
+		return this->entities.size();
+	}
+
 	const game::entity& scene::get_entity(entity_handle e) const
 	{
 		return this->entities[e].ent;

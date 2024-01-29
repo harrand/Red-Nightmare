@@ -38,6 +38,11 @@ namespace game
 
 		// need to render something...
 		game_system->placeholder_renderer.append_to_render_graph();
+
+		for(std::size_t i = 0; i < 16192; i++)
+		{
+			game_system->scene2.add_entity(i);
+		}
 	}
 
 	void terminate()
@@ -69,13 +74,16 @@ namespace game
 			}
 		}
 		game::messaging::scene_messaging_update(game_system->scene2);
+		game_system->scene2.update(delta_seconds);
+		game_system->scene2.block();
 		tz::gl::get_device().render();
 	}
 
 	void fixed_update(std::uint64_t delta_micros, std::uint64_t unprocessed)
 	{
 		float delta_seconds = delta_micros / 1000000.0f;
-		(void)delta_seconds;
+
+		game_system->scene2.fixed_update(delta_seconds, unprocessed);
 	}
 
 	void dbgui()
