@@ -68,20 +68,21 @@ namespace game
 	}
 
 	constexpr std::size_t single_threaded_update_limit = 128u;
+	constexpr std::size_t aggressive_entity_count = 2048;
 
 	void scene::update(float delta_seconds)
 	{
 		TZ_PROFZONE("scene - update", 0xFFCCAACC);
 
 		auto count = this->entity_count();
-		std::size_t job_count = std::thread::hardware_concurrency();
+		std::size_t job_count = tz::job_system().worker_count();
 		std::size_t objects_per_job = count / job_count;
 
 		if(count == 0)
 		{
 			return;
 		}
-		if(count <= single_threaded_update_limit || objects_per_job == 0)
+		if(count <= single_threaded_update_limit || objects_per_job == 0 || job_count == 1)
 		{
 			// do a single threaded update. poor use of CPU resources, but means no latency sending thread-local messages. this means very low cpu usage (or massive fps number if uncapped)
 			std::string lua_str;
@@ -93,6 +94,11 @@ namespace game
 			return;
 		}
 
+		// this could be potentially super expensive for large scenes.
+		// so we will give the job system an indication as to how rough this is going to get.
+		// square it. this means low counts will give really low aggression, and aggression wont get super high unless we really hit the water mark.
+		float aggro = static_cast<float>(count) / aggressive_entity_count;
+		tz::job_system().set_aggression(aggro);
 		// do a multi-threaded update.
 		std::size_t remainder_objects = count % job_count;
 		tz::assert((objects_per_job * job_count) + remainder_objects == count);
@@ -103,10 +109,10 @@ namespace game
 			{
 				TZ_PROFZONE("scene - update some", 0xFFCCAACC);
 				std::string lua_str;
-				auto begin = this->entities.begin();
-				for(std::size_t j = offset; j < offset + object_count; j++)
+				auto begin = std::next(this->uuid_entity_map.begin(), offset);
+				for(std::size_t j = 0; j < object_count; j++)
 				{
-					lua_str += std::format("rn.entity.update({})", (*(begin + j)).ent.uuid);
+					lua_str += std::format("rn.entity.update({})", this->entities[(begin++)->second].ent.uuid);
 				}
 				tz::lua::get_state().execute(lua_str.c_str());
 			});
