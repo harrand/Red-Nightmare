@@ -75,6 +75,9 @@ namespace game
 		TZ_PROFZONE("scene - update", 0xFFCCAACC);
 
 		auto count = this->entity_count();
+		float aggro = static_cast<float>(count) / aggressive_entity_count;
+		tz::job_system().set_aggression(aggro);
+
 		std::size_t job_count = tz::job_system().worker_count();
 		std::size_t objects_per_job = count / job_count;
 
@@ -91,14 +94,14 @@ namespace game
 				lua_str += std::format("rn.entity.update({})", ed.ent.uuid);
 			}
 			tz::lua::get_state().execute(lua_str.c_str());
+			this->sent_jobs_last_time = false;
 			return;
 		}
+		this->sent_jobs_last_time = true;
 
 		// this could be potentially super expensive for large scenes.
 		// so we will give the job system an indication as to how rough this is going to get.
 		// square it. this means low counts will give really low aggression, and aggression wont get super high unless we really hit the water mark.
-		float aggro = static_cast<float>(count) / aggressive_entity_count;
-		tz::job_system().set_aggression(aggro);
 		// do a multi-threaded update.
 		std::size_t remainder_objects = count % job_count;
 		tz::assert((objects_per_job * job_count) + remainder_objects == count);
@@ -109,6 +112,7 @@ namespace game
 			{
 				TZ_PROFZONE("scene - update some", 0xFFCCAACC);
 				std::string lua_str;
+				lua_str.reserve(sizeof("rn.entity.update(XXXX)") * object_count);
 				auto begin = std::next(this->uuid_entity_map.begin(), offset);
 				for(std::size_t j = 0; j < object_count; j++)
 				{
@@ -127,7 +131,7 @@ namespace game
 
 	bool scene::needs_block() const
 	{
-		return this->entity_update_jobs.size();
+		return this->sent_jobs_last_time;
 	}
 
 	void scene::block()

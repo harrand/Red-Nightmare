@@ -185,8 +185,9 @@ namespace game::messaging
 
 	// implementation.
 
-	void scene_messaging_lua_initialise()
+	void scene_messaging_lua_initialise(game::scene& scene)
 	{
+		sc = &scene;
 		tz::lua::for_all_states([](tz::lua::state& state)
 		{
 			// set the local message passer to target the global receiver. otherwise all its messages will be dropped.
@@ -212,7 +213,7 @@ namespace game::messaging
 				// for each state, invoke update() on its local scene receiver.
 				// this passes all its messages to the global scene receiver.
 				local_scene_receiver.update();
-			});
+			}, false);
 		}
 		// if not... well only this main thread's local receiver needs to pass its message. no jobs needed.
 		else

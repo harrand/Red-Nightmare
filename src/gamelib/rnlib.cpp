@@ -39,7 +39,7 @@ namespace game
 		// need to render something...
 		game_system->placeholder_renderer.append_to_render_graph();
 
-		for(std::size_t i = 0; i < 256/*16192*/; i++)
+		for(std::size_t i = 0; i < 512/*16192*/; i++)
 		{
 			game_system->scene2.add_entity(i);
 		}
@@ -73,10 +73,10 @@ namespace game
 				ImGui::End();
 			}
 		}
-		game::messaging::scene_messaging_update(game_system->scene2);
+		tz::gl::get_device().render();
 		game_system->scene2.update(delta_seconds);
 		game_system->scene2.block();
-		tz::gl::get_device().render();
+		game::messaging::scene_messaging_update(game_system->scene2);
 	}
 
 	void fixed_update(std::uint64_t delta_micros, std::uint64_t unprocessed)
@@ -102,7 +102,7 @@ namespace game
 	{
 		TZ_PROFZONE("rnlib - lua initialise", 0xFF00AAFF);
 		audio_lua_initialise();
-		game::messaging::scene_messaging_lua_initialise(); // rn.current_scene()
+		game::messaging::scene_messaging_lua_initialise(game_system->scene2); // rn.current_scene()
 		game::entity_lua_initialise(); // rn.entity.*
 	}
 }

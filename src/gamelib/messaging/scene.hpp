@@ -7,7 +7,7 @@
 
 namespace game::messaging
 {
-	void scene_messaging_lua_initialise();
+	void scene_messaging_lua_initialise(game::scene& scene);
 	void scene_messaging_update(game::scene& scene);
 
 	enum class scene_operation
