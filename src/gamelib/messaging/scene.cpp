@@ -203,13 +203,22 @@ namespace game::messaging
 	{
 		TZ_PROFZONE("scene - update messages", 0xFFAAAACC);
 		sc = &scene;
-		tz::lua::for_all_states([](tz::lua::state& state)
+		// if a multi-threaded update was done, tell all the threads to stop and collaborate.
+		if(scene.needs_block())
 		{
-			TZ_PROFZONE("scene - pass local messages", 0xFF99CC44);
-			// for each state, invoke update() on its local scene receiver.
-			// this passes all its messages to the global scene receiver.
+			tz::lua::for_all_states([](tz::lua::state& state)
+			{
+				TZ_PROFZONE("scene - pass local messages", 0xFF99CC44);
+				// for each state, invoke update() on its local scene receiver.
+				// this passes all its messages to the global scene receiver.
+				local_scene_receiver.update();
+			});
+		}
+		// if not... well only this main thread's local receiver needs to pass its message. no jobs needed.
+		else
+		{
 			local_scene_receiver.update();
-		});
+		}
 
 		// global receiver will now have all the messages ready.
 		// we can finally process them all.

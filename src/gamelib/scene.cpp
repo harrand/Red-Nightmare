@@ -1,6 +1,7 @@
 #include "gamelib/scene.hpp"
 #include "tz/core/debug.hpp"
 #include "tz/core/profile.hpp"
+#include <format>
 
 namespace game
 {
@@ -66,7 +67,7 @@ namespace game
 		this->uuid_entity_map.clear();
 	}
 
-	constexpr std::size_t single_threaded_update_limit = 16u;
+	constexpr std::size_t single_threaded_update_limit = 128u;
 
 	void scene::update(float delta_seconds)
 	{
@@ -82,10 +83,11 @@ namespace game
 		}
 		if(count <= single_threaded_update_limit || objects_per_job == 0)
 		{
+			// do a single threaded update. poor use of CPU resources, but means no latency sending thread-local messages. this means very low cpu usage (or massive fps number if uncapped)
 			std::string lua_str;
 			for(const scene_entity_data& ed : this->entities)
 			{
-				lua_str += "rn.entity.update(" + std::to_string(ed.ent.uuid) + ")";
+				lua_str += std::format("rn.entity.update({})", ed.ent.uuid);
 			}
 			tz::lua::get_state().execute(lua_str.c_str());
 			return;
@@ -104,7 +106,7 @@ namespace game
 				auto begin = this->entities.begin();
 				for(std::size_t j = offset; j < offset + object_count; j++)
 				{
-					lua_str += "rn.entity.update(" + std::to_string((*(begin + j)).ent.uuid) + ")";
+					lua_str += std::format("rn.entity.update({})", (*(begin + j)).ent.uuid);
 				}
 				tz::lua::get_state().execute(lua_str.c_str());
 			});
@@ -115,6 +117,11 @@ namespace game
 	void scene::fixed_update(float delta_seconds, std::uint64_t unprocessed)
 	{
 
+	}
+
+	bool scene::needs_block() const
+	{
+		return this->entity_update_jobs.size();
 	}
 
 	void scene::block()

@@ -36,6 +36,7 @@ namespace game
 		void clear();
 		void update(float delta_seconds);
 		void fixed_update(float delta_seconds, std::uint64_t unprocessed);
+		bool needs_block() const;
 		void block();
 
 		std::size_t entity_count() const;

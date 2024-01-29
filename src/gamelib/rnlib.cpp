@@ -39,7 +39,7 @@ namespace game
 		// need to render something...
 		game_system->placeholder_renderer.append_to_render_graph();
 
-		for(std::size_t i = 0; i < 16192; i++)
+		for(std::size_t i = 0; i < /*1024*/16192; i++)
 		{
 			game_system->scene2.add_entity(i);
 		}
