@@ -1,18 +1,22 @@
 rn = rn or {}
 rn.entity = rn.entity or {}
 
-rn.entity.preinit = function(uuid)
+rn.entity.pre_instantiate = function(uuid, prefab_name)
 	local obj <close> = tz.profzone_obj:new()
-	obj:set_text("Entity Preinit - " .. tostring(uuid))
-	obj:set_name("Lua Entity Preinit")
+	obj:set_text(tostring(uuid))
+	obj:set_name("Pre-Instantiate - \"" .. prefab_name .. "\"")
 
-	tz.report("preinit " .. tostring(uuid))
+	tz.report("pre_instantiate " .. tostring(uuid) .. " from \"" .. prefab_name .. "\"")
+
+	rn.current_scene():entity_set_name(uuid, prefab_name)
 end
 
-rn.entity.init = function(uuid)
+rn.entity.instantiate = function(uuid, prefab_name)
 	local obj <close> = tz.profzone_obj:new()
-	obj:set_text("Entity Init - " .. tostring(uuid))
-	obj:set_name("Lua Entity Preinit")
+	obj:set_text(tostring(uuid))
+	obj:set_name("Instantiate - \"" .. prefab_name .. "\"")
 
-	tz.report("init " .. tostring(uuid))
+	tz.report("instantiate " .. tostring(uuid) .. " from \"" .. prefab_name .. "\"")
+
+	rn.current_scene():entity_write(uuid, ".prefab", prefab_name);
 end

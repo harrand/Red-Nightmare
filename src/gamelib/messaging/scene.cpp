@@ -26,14 +26,43 @@ namespace game::messaging
 		switch(msg.operation)
 		{
 			case scene_operation::add_entity:
-				sc->add_entity(msg.uuid);	
+			{
+				auto val = std::any_cast<tz::lua::lua_generic>(msg.value);
+				std::visit([&msg](auto&& arg)
+				{
+					using T = std::decay_t<decltype(arg)>;
+					if constexpr(std::is_same_v<T, std::string>) // add_entity(prefab_name) (instantiate from prefab)
+					{
+						tz::report("init from prefab \"%s\"", arg.c_str());
+						sc->add_entity_from_prefab(msg.uuid, arg);
+					}
+					else if constexpr(std::is_same_v<T, std::int64_t>) // add entity(uuid) (entity copy)
+					{
+						tz::report("init from uuid %llu", arg);
+						sc->add_entity_from_existing(msg.uuid, arg);
+					}
+					else if constexpr(std::is_same_v<T, tz::lua::nil>) // add entity() (empty entity)
+					{
+						sc->add_entity(msg.uuid);
+					}
+					else // some cursed shit.
+					{
+						tz::error("add_entity(arg) invoked with invalid argument type. Argument must be string (prefab name) or int (uuid)");
+					}
+				}, val);
+			}
 			break;
 			case scene_operation::remove_entity:
 				sc->remove_entity(msg.uuid);
 			break;
 			case scene_operation::entity_write:
+			{
 				const auto& [varname, lua_value] = std::any_cast<std::pair<std::string, tz::lua::lua_generic>>(msg.value);
 				sc->get_entity(msg.uuid).internal_variables[varname] = lua_value;
+			}
+			break;
+			case scene_operation::entity_set_name:
+				sc->get_entity(msg.uuid).name = std::any_cast<std::string>(msg.value);
 			break;
 		}
 	}
@@ -48,6 +77,11 @@ namespace game::messaging
 		int add_entity(tz::lua::state& state)
 		{
 			TZ_PROFZONE("scene - add entity", 0xFF99CC44);
+			tz::lua::lua_generic arg = tz::lua::nil{};
+			if(state.stack_size() > 1)
+			{
+				arg = state.stack_get_generic(2);
+			}
 			// entity uuid is created *now* and instantly returned.
 			// caller now knows the entity id, even though it doesnt exist yet.
 			// subsequent messages that use the id *should* be processed after this one, making the whole thing safe.
@@ -57,7 +91,8 @@ namespace game::messaging
 			({
 				.operation = scene_operation::add_entity,
 				// add new entity. its uuid is `entity_id`
-				.uuid = entity_id
+				.uuid = entity_id,
+				.value = arg
 			});
 			// return the id as a uint.
 			// TODO: wrap userdata around this?
@@ -109,6 +144,27 @@ namespace game::messaging
 			state.stack_push_generic(ret);
 			return 1;
 		}
+
+		int entity_set_name(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity set name", 0xFF99CC44);
+			auto [_, entity_id, name] = tz::lua::parse_args<tz::lua::nil, unsigned int, std::string>(state);
+			local_scene_receiver.send_message
+			({
+				.operation = scene_operation::entity_set_name,
+				.uuid = static_cast<entity_uuid>(entity_id),
+				.value = name
+			});
+			return 0;
+		}
+
+		int entity_get_name(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity get name", 0xFF99CC44);
+			auto [_, entity_id] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+			state.stack_push_string(sc->get_entity(entity_id).name);	
+			return 1;
+		}
 	};
 
 	LUA_CLASS_BEGIN(lua_local_scene_message_receiver)
@@ -117,6 +173,8 @@ namespace game::messaging
 			LUA_METHOD(lua_local_scene_message_receiver, remove_entity)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_write)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_read)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_set_name)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_get_name)
 		LUA_CLASS_METHODS_END
 	LUA_CLASS_END
 

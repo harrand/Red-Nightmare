@@ -15,6 +15,7 @@ namespace game::messaging
 		add_entity,
 		remove_entity,
 		entity_write,
+		entity_set_name,
 	};
 
 	struct scene_message

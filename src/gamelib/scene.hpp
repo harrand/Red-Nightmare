@@ -28,6 +28,8 @@ namespace game
 		using entity_handle = tz::free_list<scene_entity_data>::handle;
 
 		entity_handle add_entity(entity_uuid uuid);
+		entity_handle add_entity_from_prefab(entity_uuid uuid, const std::string& prefab_name);
+		entity_handle add_entity_from_existing(entity_uuid uuid, entity_uuid existing);
 		void remove_entity(entity_handle e);
 		void remove_entity(entity_uuid uuid);
 		void clear();

@@ -5,6 +5,16 @@
 
 namespace game
 {
+	/*static*/ entity entity::null()
+	{
+		return {.uuid = null_uuid};
+	}
+
+	bool entity::is_null() const
+	{
+		return this->uuid == null_uuid;
+	}
+
 	void entity_lua_initialise()
 	{
 		tz::lua::for_all_states([](tz::lua::state& state)

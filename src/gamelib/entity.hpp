@@ -15,17 +15,11 @@ namespace game
 	struct entity
 	{
 		entity_uuid uuid;
+		std::string name = "";
 		std::unordered_map<std::string, tz::lua::lua_generic> internal_variables = {};
 
-		static entity null()
-		{
-			return {.uuid = null_uuid};
-		}
-
-		bool is_null() const
-		{
-			return this->uuid == null_uuid;
-		}
+		static entity null();
+		bool is_null() const;
 
 		// set an internal variable. if the variable doesnt exist, also returns nil.
 		template<typename T>

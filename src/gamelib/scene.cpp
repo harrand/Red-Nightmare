@@ -11,15 +11,34 @@ namespace game
 		entity_handle ret = this->entities.push_back({.ent = {.uuid = uuid}});
 		// map uuid to entity handle (for fast lookup times)
 		this->uuid_entity_map[uuid] = ret;
-		
+
+		// todo: associate with a single empty object in an animation_renderer. as it needs to be a part of the transform hierarchy.
+		return ret;
+	}
+
+	scene::entity_handle scene::add_entity_from_prefab(entity_uuid uuid, const std::string& prefab_name)
+	{
+		TZ_PROFZONE("scene - add entity from prefab", 0xFF99CC44);
+
 		std::string preinit_lua;
-		preinit_lua += "rn.entity.preinit(" + std::to_string(uuid) + ")";
+		preinit_lua += "rn.entity.pre_instantiate(" + std::to_string(uuid) + ", \"" + prefab_name + "\")";
 		tz::lua::get_state().execute(preinit_lua.c_str());
 		// initialise scene element. model etc has been chosen by now.
 		
 		std::string init_lua;
-		init_lua += "rn.entity.init(" + std::to_string(uuid) + ")";
+		init_lua += "rn.entity.instantiate(" + std::to_string(uuid) + ", \"" + prefab_name + "\")";
 		tz::lua::get_state().execute(init_lua.c_str());
+		return this->add_entity(uuid);
+	}
+
+	scene::entity_handle scene::add_entity_from_existing(entity_uuid uuid, entity_uuid existing)
+	{
+		TZ_PROFZONE("scene - add entity from existing", 0xFF99CC44);
+		// add to entity list.
+		entity_handle ret = this->add_entity(uuid);
+		auto& ent = this->entities[ret].ent;
+		ent = this->get_entity(existing);
+		ent.internal_variables.clear();
 		return ret;
 	}
 
