@@ -69,7 +69,6 @@ namespace game
 	}
 
 	constexpr std::size_t single_threaded_update_limit = 128u;
-	constexpr std::size_t aggressive_entity_count = 1024u;
 
 	void scene::update(float delta_seconds)
 	{
@@ -93,10 +92,9 @@ namespace game
 				lua_str += std::format("rn.entity.update({})", ed.ent.uuid);
 			}
 			tz::lua::get_state().execute(lua_str.c_str());
-			this->sent_jobs_last_time = false;
+			game::messaging::scene_messaging_local_dispatch();
 			return;
 		}
-		this->sent_jobs_last_time = true;
 
 		// do a multi-threaded update.
 		std::size_t remainder_objects = count % job_count;
@@ -119,7 +117,7 @@ namespace game
 				// those entity updates probably generated a bunch of messages.
 				// as the global message receiver is completely thread-safe, we can concurrently send them over with other threads.
 				// there will be some lock contention, but very minor - as there is a single lock per worker, no matter how many messages it generates.
-				game::messaging::scene_messaging_local_dispatch(*this);
+				game::messaging::scene_messaging_local_dispatch();
 			});
 		}
 		
@@ -128,11 +126,6 @@ namespace game
 	void scene::fixed_update(float delta_seconds, std::uint64_t unprocessed)
 	{
 
-	}
-
-	bool scene::needs_block() const
-	{
-		return this->sent_jobs_last_time;
 	}
 
 	void scene::block()
