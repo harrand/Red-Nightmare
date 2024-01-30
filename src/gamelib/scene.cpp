@@ -68,15 +68,13 @@ namespace game
 	}
 
 	constexpr std::size_t single_threaded_update_limit = 128u;
-	constexpr std::size_t aggressive_entity_count = 2048;
+	constexpr std::size_t aggressive_entity_count = 1024u;
 
 	void scene::update(float delta_seconds)
 	{
 		TZ_PROFZONE("scene - update", 0xFFCCAACC);
 
 		auto count = this->entity_count();
-		float aggro = static_cast<float>(count) / aggressive_entity_count;
-		tz::job_system().set_aggression(aggro);
 
 		std::size_t job_count = tz::job_system().worker_count();
 		std::size_t objects_per_job = count / job_count;
@@ -99,9 +97,6 @@ namespace game
 		}
 		this->sent_jobs_last_time = true;
 
-		// this could be potentially super expensive for large scenes.
-		// so we will give the job system an indication as to how rough this is going to get.
-		// square it. this means low counts will give really low aggression, and aggression wont get super high unless we really hit the water mark.
 		// do a multi-threaded update.
 		std::size_t remainder_objects = count % job_count;
 		tz::assert((objects_per_job * job_count) + remainder_objects == count);

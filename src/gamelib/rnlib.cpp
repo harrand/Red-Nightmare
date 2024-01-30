@@ -33,13 +33,14 @@ namespace game
 	{
 		TZ_PROFZONE("rnlib - initialise", 0xFF00AAFF);
 		game_system = std::make_unique<game_system_t>();
+		//tz::gl::get_device().set_vsync_enabled(true);
 		lua_initialise();
 		audio_initialise();
 
 		// need to render something...
 		game_system->placeholder_renderer.append_to_render_graph();
 
-		for(std::size_t i = 0; i < 512/*16192*/; i++)
+		for(std::size_t i = 0; i < 4096; i++)
 		{
 			game_system->scene2.add_entity(i);
 		}
@@ -73,8 +74,8 @@ namespace game
 				ImGui::End();
 			}
 		}
-		tz::gl::get_device().render();
 		game_system->scene2.update(delta_seconds);
+		tz::gl::get_device().render();
 		game_system->scene2.block();
 		game::messaging::scene_messaging_update(game_system->scene2);
 	}
