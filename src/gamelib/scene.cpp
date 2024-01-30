@@ -1,4 +1,5 @@
 #include "gamelib/scene.hpp"
+#include "gamelib/messaging/scene.hpp"
 #include "tz/core/debug.hpp"
 #include "tz/core/profile.hpp"
 #include <format>
@@ -113,7 +114,12 @@ namespace game
 				{
 					lua_str += std::format("rn.entity.update({})", this->entities[(begin++)->second].ent.uuid);
 				}
+				// execute update on all entities
 				tz::lua::get_state().execute(lua_str.c_str());
+				// those entity updates probably generated a bunch of messages.
+				// as the global message receiver is completely thread-safe, we can concurrently send them over with other threads.
+				// there will be some lock contention, but very minor - as there is a single lock per worker, no matter how many messages it generates.
+				game::messaging::scene_messaging_local_dispatch(*this);
 			});
 		}
 		

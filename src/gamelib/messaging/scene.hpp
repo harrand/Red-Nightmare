@@ -7,8 +7,15 @@
 
 namespace game::messaging
 {
+	// initialise lua api for passing messages. call on main thread.
 	void scene_messaging_lua_initialise(game::scene& scene);
-	void scene_messaging_update(game::scene& scene);
+	// carry out all messages received from local dispatches. call on main thread.
+	void scene_messaging_update();
+	// send all local messages from lua advance to the global message receiver. call on any thread.
+	void scene_messaging_local_dispatch();
+	// force all job worker threads to do a local dispatch and block the current thread till they're all done. call on any thread (you probably want main thread tho)
+	// this is poor performance and you should avoid caLLing this on the hot path. just make sure all job workers that run lua invoke their local_dispatch above before scene_messaging_update is invoked and then you can forget this function exists.
+	void scene_messaging_force_dispatches();
 
 	enum class scene_operation
 	{

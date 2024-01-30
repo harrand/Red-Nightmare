@@ -200,30 +200,34 @@ namespace game::messaging
 		});
 	}
 
-	void scene_messaging_update(game::scene& scene)
+	void scene_messaging_update()
 	{
 		TZ_PROFZONE("scene - update messages", 0xFFAAAACC);
-		sc = &scene;
-		// if a multi-threaded update was done, tell all the threads to stop and collaborate.
-		if(scene.needs_block())
-		{
-			tz::lua::for_all_states([](tz::lua::state& state)
-			{
-				TZ_PROFZONE("scene - pass local messages", 0xFF99CC44);
-				// for each state, invoke update() on its local scene receiver.
-				// this passes all its messages to the global scene receiver.
-				local_scene_receiver.update();
-			});
-		}
-		// if not... well only this main thread's local receiver needs to pass its message. no jobs needed.
-		else
-		{
-			local_scene_receiver.update();
-		}
+		// main thread might also have messages to pass on.
+		local_scene_receiver.update();
 
 		// global receiver will now have all the messages ready.
 		// we can finally process them all.
 		TZ_PROFZONE("scene - process all messages", 0xFF99CC44);
 		global_scene_receiver.update();
+	}
+
+	void scene_messaging_local_dispatch()
+	{
+		TZ_PROFZONE("scene - pass local messages", 0xFF99CC44);
+		local_scene_receiver.update();
+	}
+
+	void scene_messaging_force_dispatches()
+	{
+		TZ_PROFZONE("scene - force local dispatches", 0xFF99CC44);
+		tz::lua::for_all_states([](tz::lua::state& state)
+		{
+			// for each state, invoke update() on its local scene receiver.
+			// this passes all its messages to the global scene receiver.
+			scene_messaging_local_dispatch();
+		});
+		// do this thread too. main thread could also have messages.
+		scene_messaging_local_dispatch();
 	}
 }
