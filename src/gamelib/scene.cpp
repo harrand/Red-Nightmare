@@ -21,16 +21,15 @@ namespace game
 	scene::entity_handle scene::add_entity_from_prefab(entity_uuid uuid, const std::string& prefab_name)
 	{
 		TZ_PROFZONE("scene - add entity from prefab", 0xFF99CC44);
+		entity_handle ret = this->add_entity(uuid);
 
-		std::string preinit_lua;
-		preinit_lua += "rn.entity.pre_instantiate(" + std::to_string(uuid) + ", \"" + prefab_name + "\")";
+		std::string preinit_lua = std::format("rn.entity.pre_instantiate({}, \"{}\")", uuid, prefab_name);
 		tz::lua::get_state().execute(preinit_lua.c_str());
 		// initialise scene element. model etc has been chosen by now.
 		
-		std::string init_lua;
-		init_lua += "rn.entity.instantiate(" + std::to_string(uuid) + ", \"" + prefab_name + "\")";
+		std::string init_lua = std::format("rn.entity.instantiate({}, \"{}\")", uuid, prefab_name);
 		tz::lua::get_state().execute(init_lua.c_str());
-		return this->add_entity(uuid);
+		return ret;
 	}
 
 	scene::entity_handle scene::add_entity_from_existing(entity_uuid uuid, entity_uuid existing)
@@ -40,7 +39,11 @@ namespace game
 		entity_handle ret = this->add_entity(uuid);
 		auto& ent = this->entities[ret].ent;
 		ent = this->get_entity(existing);
-		ent.internal_variables.clear();
+		std::erase_if(ent.internal_variables, [](const auto& iter)
+		{
+			const auto& [varname, value] = iter;
+			return !varname.starts_with('.');
+		});
 		return ret;
 	}
 
