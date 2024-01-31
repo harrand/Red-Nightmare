@@ -1,5 +1,6 @@
 #include "gamelib/scene.hpp"
 #include "gamelib/messaging/scene.hpp"
+#include "gamelib/render/scene_renderer.hpp"
 #include "tz/core/debug.hpp"
 #include "tz/core/profile.hpp"
 #include <format>
@@ -13,6 +14,9 @@ namespace game
 		entity_handle ret = this->entities.push_back({.ent = {.uuid = uuid}});
 		// map uuid to entity handle (for fast lookup times)
 		this->uuid_entity_map[uuid] = ret;
+
+		auto entry = this->renderer.add_model(game::render::scene_renderer::model::humanoid);
+		this->renderer.get_element(entry).play_animation_by_name("Run", true);
 
 		// todo: associate with a single empty object in an animation_renderer. as it needs to be a part of the transform hierarchy.
 		return ret;
@@ -76,6 +80,7 @@ namespace game
 	void scene::update(float delta_seconds)
 	{
 		TZ_PROFZONE("scene - update", 0xFFCCAACC);
+		this->renderer.update(delta_seconds);	
 
 		auto count = this->entity_count();
 
@@ -123,7 +128,6 @@ namespace game
 				game::messaging::scene_messaging_local_dispatch();
 			});
 		}
-		
 	}
 
 	void scene::fixed_update(float delta_seconds, std::uint64_t unprocessed)
@@ -138,6 +142,7 @@ namespace game
 			tz::job_system().block(jh);
 		}
 		this->entity_update_jobs.clear();
+		this->renderer.block();
 	}
 
 	std::size_t scene::entity_count() const

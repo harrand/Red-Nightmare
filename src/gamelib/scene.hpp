@@ -1,6 +1,7 @@
 #ifndef REDNIGHTMARE_GAMELIB_SCENE_HPP
 #define REDNIGHTMARE_GAMELIB_SCENE_HPP
 #include "gamelib/entity.hpp"
+#include "gamelib/render/scene_renderer.hpp"
 #include "tz/core/data/free_list.hpp"
 #include "tz/core/job/job.hpp"
 #include <unordered_map>
@@ -49,6 +50,7 @@ namespace game
 		tz::free_list<scene_entity_data> entities = {};
 		std::unordered_map<entity_uuid, entity_handle> uuid_entity_map = {};
 		std::vector<tz::job_handle> entity_update_jobs = {};
+		game::render::scene_renderer renderer;
 	};
 }
 

@@ -19,6 +19,9 @@ tz_add_library(
 		src/gamelib/messaging/scene.hpp
 		src/gamelib/messaging/system.hpp
 
+		src/gamelib/render/scene_renderer.cpp
+		src/gamelib/render/scene_renderer.hpp
+
 		src/gamelib/audio.cpp
 		src/gamelib/audio.hpp
 		src/gamelib/rnlib.cpp
@@ -29,13 +32,13 @@ tz_add_library(
 		src/gamelib/entity.hpp
 		src/gamelib/config.hpp
 )
-#add_shader(
-#	TARGET rednightmare_gamelib
-#	SHADERS
-#		src/gamelib/renderer/shaders/scene_renderer.fragment.tzsl	
-#		src/gamelib/renderer/shaders/pixelate.vertex.tzsl	
-#		src/gamelib/renderer/shaders/pixelate.fragment.tzsl	
-#)
+add_shader(
+	TARGET rednightmare_gamelib
+	SHADERS
+		src/gamelib/render/shaders/scene_renderer.fragment.tzsl	
+		src/gamelib/render/shaders/pixelate.vertex.tzsl	
+		src/gamelib/render/shaders/pixelate.fragment.tzsl	
+)
 target_include_directories(rednightmare_gamelib PUBLIC ${PROJECT_SOURCE_DIR}/src)
 
 #add_shader(

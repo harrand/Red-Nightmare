@@ -23,8 +23,6 @@ namespace game
 	{
 		game::scene scene2;
 		dbgui_data_t dbgui;
-
-		tz::ren::mesh_renderer placeholder_renderer;
 	};
 
 	std::unique_ptr<game_system_t> game_system = nullptr;
@@ -33,14 +31,11 @@ namespace game
 	{
 		TZ_PROFZONE("rnlib - initialise", 0xFF00AAFF);
 		game_system = std::make_unique<game_system_t>();
-		tz::gl::get_device().set_vsync_enabled(true);
+		//tz::gl::get_device().set_vsync_enabled(true);
 		lua_initialise();
 		audio_initialise();
 
-		// need to render something...
-		game_system->placeholder_renderer.append_to_render_graph();
-
-		for(std::size_t i = 0; i < 128; i++)
+		for(std::size_t i = 0; i < 150; i++)
 		{
 			game_system->scene2.add_entity(i);
 		}
