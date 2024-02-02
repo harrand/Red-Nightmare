@@ -98,11 +98,30 @@ namespace game
 	void lua_initialise()
 	{
 		TZ_PROFZONE("rnlib - lua initialise", 0xFF00AAFF);
-		tz::lua::for_all_states([](tz::lua::state& state)
+
+		// generate lua code to include all mods.
+		std::string lua_require_cmd = "";
+		#if TZ_DEBUG
+			std::string cwd = std::filesystem::current_path().string();
+			tz::assert(std::filesystem::exists("./mods"), "./mods directory not found. Current path: \"%s\"", cwd.c_str());
+		#endif
+		for(const auto& entry : std::filesystem::recursive_directory_iterator("./mods"))
+		{
+			// stem is just filename without extension (which is what require likes)
+			std::string path = entry.path().stem().string();
+			lua_require_cmd += std::format("require(\"{}\")", path);
+		}
+
+		tz::lua::for_all_states([&lua_require_cmd](tz::lua::state& state)
 		{
 			game::audio_lua_initialise(state);
 			game::messaging::scene_messaging_lua_initialise(state);
 			game::entity_lua_initialise(state); // rn.entity.*
+
+			// add require/dofile access to mods/
+			state.execute("package.path = package.path .. \";./mods/?.lua\"");
+			// iterate over /mods and require everything.
+			state.execute(lua_require_cmd.c_str());
 		});
 	}
 }

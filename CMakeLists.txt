@@ -56,6 +56,12 @@ tz_add_executable(
 		src/game/main.cpp
 )
 
+# TODO: Do this whenever any of the mods directory changes. Right now, this only updates/runs if rednightmare.exe is rebuilt. Otherwise they stay out-of-sync.
+# Copy mods directory to wherever rednightmare.exe is put.
+add_custom_command(TARGET rednightmare POST_BUILD
+	COMMAND ${CMAKE_COMMAND} -E copy_directory ${PROJECT_SOURCE_DIR}/mods $<TARGET_FILE_DIR:rednightmare>/mods/
+)
+
 target_link_libraries(rednightmare PRIVATE rednightmare_gamelib)
 
 add_text(
