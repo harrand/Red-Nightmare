@@ -11,6 +11,9 @@
 #include "tz/ren/mesh.hpp"
 #include "gamelib/messaging/scene.hpp"
 
+#include "tz/core/imported_text.hpp"
+#include ImportedTextHeader(plane, glb)
+
 namespace game
 {
 	void lua_initialise();
@@ -35,6 +38,10 @@ namespace game
 		game::messaging::set_current_scene(game_system->scene2);
 		lua_initialise();
 		audio_initialise();
+
+		// add default models...
+		// try not to add too many. mods should be responsible for adding the models they need. default models should only be for the most obvious things (like a plane for a 2d sprite)
+		game_system->scene2.get_renderer().add_model("plane", tz::io::gltf::from_memory(ImportedTextData(plane, glb)));
 
 		for(std::size_t i = 0; i < 512; i++)
 		{

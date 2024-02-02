@@ -45,6 +45,9 @@ namespace game
 		game::entity& get_entity(entity_handle e);
 		const game::entity& get_entity(entity_uuid uuid) const;
 		game::entity& get_entity(entity_uuid uuid);
+
+		const game::render::scene_renderer& get_renderer() const;
+		game::render::scene_renderer& get_renderer();
 	private:
 		void initialise_renderer_component(entity_uuid uuid);
 		// free list gives handle stability, which we want.

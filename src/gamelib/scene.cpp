@@ -32,10 +32,15 @@ namespace game
 			)", uuid, prefab_name);
 		tz::lua::get_state().execute(preinit_lua.c_str());
 		std::string model_name = tz::lua::get_state().get_string("last_model").value_or("");
-		(void)model_name;
-		// initialise scene element. model etc has been chosen by now.
 
-		this->initialise_renderer_component(uuid);
+		// initialise scene element, if a model was selected.
+		if(model_name.size())
+		{
+			auto& ent = this->entities[ret];
+			ent.ren.model_name = model_name;
+
+			this->initialise_renderer_component(uuid);
+		}
 		
 		std::string init_lua = std::format("rn.entity.instantiate({}, \"{}\")", uuid, prefab_name);
 		tz::lua::get_state().execute(init_lua.c_str());
@@ -67,7 +72,7 @@ namespace game
 		// if it has renderer component - it needs to be destroyed.
 		if(ent.ren.obj != tz::nullhand)
 		{
-			this->renderer.remove_model(ent.ren);
+			this->renderer.remove_entry(ent.ren);
 		}
 
 		auto uuid = ent.ent.uuid;
@@ -190,10 +195,20 @@ namespace game
 		return this->get_entity(iter->second);
 	}
 
+	const game::render::scene_renderer& scene::get_renderer() const
+	{
+		return this->renderer;
+	}
+
+	game::render::scene_renderer& scene::get_renderer()
+	{
+		return this->renderer;
+	}
+
 	void scene::initialise_renderer_component(entity_uuid uuid)
 	{
 		auto& ent = this->entities[this->uuid_entity_map.at(uuid)];
 		tz::assert(ent.ren.obj == tz::nullhand, "initialise_render_component(ent) - already has an animated_objects handle!");
-		ent.ren = this->renderer.add_model(ent.ren.m);
+		ent.ren = this->renderer.add_entry(ent.ren.model_name);
 	}
 }

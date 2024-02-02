@@ -53,27 +53,43 @@ namespace game::render
 			.bound_textures = {},
 		});
 		
-		for(int i = 0; i < static_cast<int>(model::_count); i++)
-		{
-			this->renderer.add_gltf(this->get_model(static_cast<model>(i)));
-		}
+		//for(int i = 0; i < static_cast<int>(model::_count); i++)
+		//{
+		//	this->renderer.add_gltf(this->get_model(static_cast<model>(i)));
+		//}
 
 		constexpr float initial_zoom = 4.0f;
 		this->view_bounds /= initial_zoom;
 		this->pixelate_pass.zoom_amount() /= initial_zoom;
 	}
 
-	scene_renderer::entry scene_renderer::add_model(model m)
+	void scene_renderer::add_model(std::string model_name, tz::io::gltf model)
+	{
+		if(this->registered_models.contains(model_name))
+		{
+			tz::report("Warning: Attempted to register model \"%s\", but a model was already registered with that name", model_name.c_str());
+		}
+		this->registered_models[model_name] = this->renderer.add_gltf(model);
+	}
+
+	void scene_renderer::remove_model(std::string model_name)
+	{
+		this->registered_models.erase(model_name);
+	}
+
+	scene_renderer::entry scene_renderer::add_entry(std::string model_name)
 	{
 		TZ_PROFZONE("scene renderer - add model", 0xFFFF4488);
-		auto mid = static_cast<int>(m);	
+		auto model_iter = this->registered_models.find(model_name);
+		tz::assert(model_iter != this->registered_models.end(), "No model \"%s\" exists. Did you forget to register it?", model_name.c_str());
 		tz::ren::animation_renderer::animated_objects_handle aoh = this->renderer.add_animated_objects
 		({
-			.gltf = static_cast<tz::hanval>(m),
+			.gltf = model_iter->second,
 			.parent = this->root
 		});
-		this->entries.push_back({.obj = aoh, .m = m});
+		this->entries.push_back({.obj = aoh, .model_name = model_name});
 		// human is way bigger than quad, so cut it down a size a bit.
+		/*
 		if(m == model::humanoid)
 		{
 			tz::trs trs = this->renderer.animated_object_get_local_transform(aoh);
@@ -85,10 +101,11 @@ namespace game::render
 				this->renderer.get_object(oh).unused2[2] = true;
 			}
 		}
+		*/
 		return this->entries.back();
 	}
 
-	void scene_renderer::remove_model(entry e)
+	void scene_renderer::remove_entry(entry e)
 	{
 		this->renderer.remove_animated_objects(e.obj);
 	}
@@ -387,11 +404,6 @@ namespace game::render
 	void scene_element::object_set_visibility(tz::ren::animation_renderer::object_handle h, bool visible)
 	{
 		this->renderer->get_renderer().object_set_visible(h, visible);
-	}
-
-	scene_renderer::model scene_element::get_model() const
-	{
-		return this->entry.m;
 	}
 
 	std::size_t scene_element::get_animation_count() const
@@ -765,13 +777,6 @@ namespace game::render
 		return 0;
 	}
 
-	int impl_rn_scene_element::get_model(tz::lua::state& state)
-	{
-		TZ_PROFZONE("scene element - get model", 0xFFFFAAEE);
-		state.stack_push_int(static_cast<int>(this->elem.get_model()));
-		return 1;
-	}
-
 	int impl_rn_scene_element::get_animation_count(tz::lua::state& state)
 	{
 		TZ_PROFZONE("scene element - get animation count", 0xFFFFAAEE);
@@ -925,15 +930,6 @@ namespace game::render
 		return 0;
 	}
 
-	int impl_rn_scene_renderer::add_model(tz::lua::state& state)
-	{
-		TZ_PROFZONE("scene element - add model", 0xFFFFAAEE);
-		auto [_, modelval] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
-		auto mod = static_cast<scene_renderer::model>(modelval);
-		LUA_CLASS_PUSH(state, impl_rn_scene_element, {.elem = renderer->get_element(renderer->add_model(mod))});
-		return 1;	
-	}
-
 	int impl_rn_scene_renderer::get_ambient_light(tz::lua::state& state)
 	{
 		tz::vec3 l = this->renderer->get_ambient_light();
@@ -1003,12 +999,6 @@ namespace game::render
 		return 0;
 	}
 
-	LUA_BEGIN(impl_rn_scene_renderer_get_model_name)
-		auto [modelval] = tz::lua::parse_args<int>(state);
-		state.stack_push_string(scene_renderer::get_model_name(static_cast<scene_renderer::model>(modelval)));
-		return 1;
-	LUA_END
-
 	void scene_renderer::lua_initialise(tz::lua::state& state)
 	{
 		TZ_PROFZONE("scene renderer - lua initialise", 0xFFFF4488);
@@ -1017,7 +1007,6 @@ namespace game::render
 		state.new_type("impl_rn_rendered_text", LUA_CLASS_NAME(impl_rn_rendered_text::registers));
 		state.new_type("impl_rn_scene_renderer", LUA_CLASS_NAME(impl_rn_scene_renderer)::registers);
 		state.assign_uint("badu", std::numeric_limits<std::uint64_t>::max());
-		state.assign_func("rn.get_model_name", LUA_FN_NAME(impl_rn_scene_renderer_get_model_name));
 	}
 
 }

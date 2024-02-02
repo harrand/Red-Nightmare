@@ -7,10 +7,6 @@
 #include "tz/core/debug.hpp"
 #include "tz/lua/api.hpp"
 
-#include "tz/core/imported_text.hpp"
-#include ImportedTextHeader(plane, glb)
-#include ImportedTextHeader(human_animated_textured, glb)
-
 namespace game::render
 {
 	struct scene_element;
@@ -34,46 +30,17 @@ namespace game::render
 			std::array<point_light_data, 32u> point_lights = {};
 		};
 
-		enum class model
-		{
-			quad,
-			humanoid,
-			_count
-		};
-
-		static constexpr const char* get_model_name(model m)
-		{
-			return std::array<const char*, static_cast<int>(model::_count)>
-			{
-				"quad",
-				"humanoid"
-			}[static_cast<int>(m)];
-		}
-
 		struct entry
 		{
 			tz::ren::animation_renderer::animated_objects_handle obj;
-			model m;
+			std::string model_name;
 		};
 
-		static tz::io::gltf get_model(model m)
-		{
-			switch(m)
-			{
-				case model::quad:
-					return tz::io::gltf::from_memory(ImportedTextData(plane, glb));
-				break;
-				case model::humanoid:
-					return tz::io::gltf::from_memory(ImportedTextData(human_animated_textured, glb));
-				break;
-				default:
-					tz::error("Unsupported model");
-					return {};
-				break;
-			}
-		}
-		entry add_model(model m);
-		void remove_model(entry e);
+		void add_model(std::string model_name, tz::io::gltf model);
+		void remove_model(std::string model_name);
+
+		entry add_entry(std::string model_name);
+		void remove_entry(entry e);
 		scene_element get_element(entry e);
 		entry entry_at(std::size_t idx) const;
 		std::size_t entry_count() const;
@@ -124,6 +91,7 @@ namespace game::render
 		tz::ren::animation_renderer::object_handle root = tz::nullhand;
 		tz::vec2 view_bounds = {64.0f, 64.0f};
 		std::vector<entry> entries = {};
+		std::unordered_map<std::string, tz::ren::animation_renderer::gltf_handle> registered_models = {};
 	};
 
 	struct scene_element
@@ -136,7 +104,6 @@ namespace game::render
 		void object_set_texture(tz::ren::animation_renderer::object_handle h, std::size_t bound_texture_id, tz::ren::animation_renderer::texture_locator tloc);
 		bool object_get_visibility(tz::ren::animation_renderer::object_handle h) const;
 		void object_set_visibility(tz::ren::animation_renderer::object_handle, bool visibility);
-		scene_renderer::model get_model() const;
 		std::size_t get_animation_count() const;
 		std::optional<std::size_t> get_playing_animation_id() const;
 		std::string get_playing_animation_name() const;
@@ -205,7 +172,6 @@ namespace game::render
 		int set_scale(tz::lua::state& state);
 		int get_uniform_scale(tz::lua::state& state);
 		int set_uniform_scale(tz::lua::state& state);
-		int get_model(tz::lua::state& state);
 		int get_animation_count(tz::lua::state& state);
 		int get_playing_animation_id(tz::lua::state& state);
 		int get_playing_animation_name(tz::lua::state& state);
@@ -249,7 +215,6 @@ namespace game::render
 			LUA_METHOD(impl_rn_scene_element, set_scale)
 			LUA_METHOD(impl_rn_scene_element, get_uniform_scale)
 			LUA_METHOD(impl_rn_scene_element, set_uniform_scale)
-			LUA_METHOD(impl_rn_scene_element, get_model)
 			LUA_METHOD(impl_rn_scene_element, get_animation_count)
 			LUA_METHOD(impl_rn_scene_element, get_playing_animation_id)
 			LUA_METHOD(impl_rn_scene_element, get_playing_animation_name)
@@ -285,7 +250,6 @@ namespace game::render
 	struct impl_rn_scene_renderer
 	{
 		scene_renderer* renderer = nullptr;
-		int add_model(tz::lua::state& state);
 		int get_ambient_light(tz::lua::state& state);
 		int set_ambient_light(tz::lua::state& state);
 		int get_element(tz::lua::state& state);
@@ -301,7 +265,6 @@ namespace game::render
 
 	LUA_CLASS_BEGIN(impl_rn_scene_renderer)
 		LUA_CLASS_METHODS_BEGIN
-			LUA_METHOD(impl_rn_scene_renderer, add_model)
 			LUA_METHOD(impl_rn_scene_renderer, get_ambient_light)
 			LUA_METHOD(impl_rn_scene_renderer, set_ambient_light)
 			LUA_METHOD(impl_rn_scene_renderer, get_element)
