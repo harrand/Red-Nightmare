@@ -11,10 +11,11 @@ namespace game
 	struct scene_entity_data
 	{
 		game::entity ent;
+		game::render::scene_renderer::entry ren;
 
 		static scene_entity_data null()
 		{
-			return {.ent = game::entity::null()};
+			return {.ent = game::entity::null(), .ren = {.obj = tz::nullhand}};
 		}
 
 		bool is_null() const
@@ -45,6 +46,7 @@ namespace game
 		const game::entity& get_entity(entity_uuid uuid) const;
 		game::entity& get_entity(entity_uuid uuid);
 	private:
+		void initialise_renderer_component(entity_uuid uuid);
 		// free list gives handle stability, which we want.
 		// hashmap gives fast lookup for those who want to index by uuid (which everyone will want to do)
 		tz::free_list<scene_entity_data> entities = {};

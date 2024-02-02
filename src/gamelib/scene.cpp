@@ -15,8 +15,8 @@ namespace game
 		// map uuid to entity handle (for fast lookup times)
 		this->uuid_entity_map[uuid] = ret;
 
-		auto entry = this->renderer.add_model(game::render::scene_renderer::model::humanoid);
-		this->renderer.get_element(entry).play_animation_by_name("Run", true);
+		//auto entry = this->renderer.add_model(game::render::scene_renderer::model::humanoid);
+		//this->renderer.get_element(entry).play_animation_by_name("Run", true);
 
 		// todo: associate with a single empty object in an animation_renderer. as it needs to be a part of the transform hierarchy.
 		return ret;
@@ -30,6 +30,8 @@ namespace game
 		std::string preinit_lua = std::format("rn.entity.pre_instantiate({}, \"{}\")", uuid, prefab_name);
 		tz::lua::get_state().execute(preinit_lua.c_str());
 		// initialise scene element. model etc has been chosen by now.
+
+		this->initialise_renderer_component(uuid);
 		
 		std::string init_lua = std::format("rn.entity.instantiate({}, \"{}\")", uuid, prefab_name);
 		tz::lua::get_state().execute(init_lua.c_str());
@@ -48,13 +50,23 @@ namespace game
 			const auto& [varname, value] = iter;
 			return !varname.starts_with('.');
 		});
+
+		this->initialise_renderer_component(uuid);
 		return ret;
 	}
 
 	void scene::remove_entity(entity_handle e)
 	{
 		TZ_PROFZONE("scene - remove entity", 0xFF99CC44);
-		auto uuid = this->entities[e].ent.uuid;
+		const auto& ent = this->entities[e];
+
+		// if it has renderer component - it needs to be destroyed.
+		if(ent.ren.obj != tz::nullhand)
+		{
+			this->renderer.remove_model(ent.ren);
+		}
+
+		auto uuid = ent.ent.uuid;
 		this->entities.erase(e);
 		this->uuid_entity_map.erase(uuid);
 	}
@@ -172,5 +184,12 @@ namespace game
 		auto iter = this->uuid_entity_map.find(uuid);
 		tz::assert(iter != this->uuid_entity_map.end(), "No entity exists with uuid %llu", uuid);
 		return this->get_entity(iter->second);
+	}
+
+	void scene::initialise_renderer_component(entity_uuid uuid)
+	{
+		auto& ent = this->entities[this->uuid_entity_map.at(uuid)];
+		tz::assert(ent.ren.obj == tz::nullhand, "initialise_render_component(ent) - already has an animated_objects handle!");
+		ent.ren = this->renderer.add_model(ent.ren.m);
 	}
 }
