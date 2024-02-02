@@ -1,17 +1,15 @@
+#include "gamelib/messaging/scene.hpp"
 #include "gamelib/rnlib.hpp"
 #include "gamelib/audio.hpp"
+#include "tz/ren/mesh.hpp"
+#include "tz/lua/api.hpp"
 #include "tz/core/debug.hpp"
 #include "tz/core/profile.hpp"
 #include "tz/core/imported_text.hpp"
-#include "tz/lua/api.hpp"
+#include "tz/core/imported_text.hpp"
 #include <memory>
 #include <filesystem>
 
-// new stuff.
-#include "tz/ren/mesh.hpp"
-#include "gamelib/messaging/scene.hpp"
-
-#include "tz/core/imported_text.hpp"
 #include ImportedTextHeader(plane, glb)
 
 namespace game
@@ -34,7 +32,7 @@ namespace game
 	{
 		TZ_PROFZONE("rnlib - initialise", 0xFF00AAFF);
 		game_system = std::make_unique<game_system_t>();
-		//tz::gl::get_device().set_vsync_enabled(true);
+		tz::gl::get_device().set_vsync_enabled(true);
 		game::messaging::set_current_scene(game_system->scene2);
 		lua_initialise();
 		audio_initialise();
@@ -42,11 +40,6 @@ namespace game
 		// add default models...
 		// try not to add too many. mods should be responsible for adding the models they need. default models should only be for the most obvious things (like a plane for a 2d sprite)
 		game_system->scene2.get_renderer().add_model("plane", tz::io::gltf::from_memory(ImportedTextData(plane, glb)));
-
-		for(std::size_t i = 0; i < 512; i++)
-		{
-			game_system->scene2.add_entity(i);
-		}
 	}
 
 	void terminate()

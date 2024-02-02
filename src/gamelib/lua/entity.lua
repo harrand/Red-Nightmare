@@ -50,10 +50,10 @@ rn.entity.update = function(uuid)
 	obj:set_name("Entity Update")
 
 	-- temp code
-	local counter = rn.current_scene():entity_read(uuid, ".counter")
+	local counter = rn.current_scene():entity_read(uuid, "counter")
 	counter = counter or 0
 	counter = counter + 1
-	rn.current_scene():entity_write(uuid, ".counter", counter)
+	rn.current_scene():entity_write(uuid, "counter", counter)
 
 	local prefab_name = rn.current_scene():entity_read(uuid, ".prefab")
 	if prefab_name ~= nil then
