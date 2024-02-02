@@ -15,12 +15,9 @@ namespace game
 		return this->uuid == null_uuid;
 	}
 
-	void entity_lua_initialise()
+	void entity_lua_initialise(tz::lua::state& state)
 	{
-		tz::lua::for_all_states([](tz::lua::state& state)
-		{
-			std::string entity_lua_src{ImportedTextData(entity, lua)};
-			state.execute(entity_lua_src.c_str());
-		});
+		std::string entity_lua_src{ImportedTextData(entity, lua)};
+		state.execute(entity_lua_src.c_str());
 	}
 }

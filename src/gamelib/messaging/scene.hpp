@@ -7,8 +7,10 @@
 
 namespace game::messaging
 {
+	// what should rn.current_scene() refer to?
+	void set_current_scene(game::scene& scene);
 	// initialise lua api for passing messages. call on main thread.
-	void scene_messaging_lua_initialise(game::scene& scene);
+	void scene_messaging_lua_initialise(tz::lua::state& state);
 	// carry out all messages received from local dispatches. call on main thread.
 	void scene_messaging_update();
 	// send all local messages from lua advance to the global message receiver. call on any thread.

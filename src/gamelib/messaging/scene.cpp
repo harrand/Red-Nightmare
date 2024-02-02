@@ -19,6 +19,11 @@ namespace game::messaging
 
 	game::scene* sc = nullptr;
 
+	void set_current_scene(game::scene& scene)
+	{
+		sc = &scene;
+	}
+
 	void on_scene_process_message(const scene_message& msg)
 	{
 		TZ_PROFZONE("scene message", 0xFF99CC44);
@@ -185,19 +190,15 @@ namespace game::messaging
 
 	// implementation.
 
-	void scene_messaging_lua_initialise(game::scene& scene)
+	void scene_messaging_lua_initialise(tz::lua::state& state)
 	{
-		sc = &scene;
-		tz::lua::for_all_states([](tz::lua::state& state)
-		{
-			// set the local message passer to target the global receiver. otherwise all its messages will be dropped.
-			local_scene_receiver.set_target(global_scene_receiver);
-			// expose the class api
-			state.execute("rn = rn or {}");
-			state.new_type("lua_local_scene_message_receiver", LUA_CLASS_NAME(lua_local_scene_message_receiver)::registers);
-			state.assign_func("rn.current_scene", LUA_FN_NAME(rn_current_scene));
-			// rn.current_scene:add_entity(...) is now a thing.
-		});
+		// set the local message passer to target the global receiver. otherwise all its messages will be dropped.
+		local_scene_receiver.set_target(global_scene_receiver);
+		// expose the class api
+		state.execute("rn = rn or {}");
+		state.new_type("lua_local_scene_message_receiver", LUA_CLASS_NAME(lua_local_scene_message_receiver)::registers);
+		state.assign_func("rn.current_scene", LUA_FN_NAME(rn_current_scene));
+		// rn.current_scene:add_entity(...) is now a thing.
 	}
 
 	void scene_messaging_update()

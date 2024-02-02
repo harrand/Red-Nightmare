@@ -61,14 +61,11 @@ namespace game
 		return 0;
 	LUA_END
 
-	void audio_lua_initialise()
+	void audio_lua_initialise(tz::lua::state& state)
 	{
-		tz::lua::for_all_states([](tz::lua::state& state)
-		{
-			state.assign_func("rn.play_sound", LUA_FN_NAME(lua_play_sound));
-			state.assign_func("rn.play_music", LUA_FN_NAME(lua_play_music));
-			state.assign_func("rn.stop_music", LUA_FN_NAME(lua_stop_music));
-		});
+		state.assign_func("rn.play_sound", LUA_FN_NAME(lua_play_sound));
+		state.assign_func("rn.play_music", LUA_FN_NAME(lua_play_music));
+		state.assign_func("rn.stop_music", LUA_FN_NAME(lua_stop_music));
 	}
 
 	void play_sound(const char* path, float volume)

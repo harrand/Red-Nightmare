@@ -32,6 +32,7 @@ namespace game
 		TZ_PROFZONE("rnlib - initialise", 0xFF00AAFF);
 		game_system = std::make_unique<game_system_t>();
 		//tz::gl::get_device().set_vsync_enabled(true);
+		game::messaging::set_current_scene(game_system->scene2);
 		lua_initialise();
 		audio_initialise();
 
@@ -97,8 +98,11 @@ namespace game
 	void lua_initialise()
 	{
 		TZ_PROFZONE("rnlib - lua initialise", 0xFF00AAFF);
-		audio_lua_initialise();
-		game::messaging::scene_messaging_lua_initialise(game_system->scene2); // rn.current_scene()
-		game::entity_lua_initialise(); // rn.entity.*
+		tz::lua::for_all_states([](tz::lua::state& state)
+		{
+			game::audio_lua_initialise(state);
+			game::messaging::scene_messaging_lua_initialise(state);
+			game::entity_lua_initialise(state); // rn.entity.*
+		});
 	}
 }

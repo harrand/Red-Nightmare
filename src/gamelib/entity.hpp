@@ -40,7 +40,7 @@ namespace game
 		}
 	};
 
-	void entity_lua_initialise();
+	void entity_lua_initialise(tz::lua::state& state);
 }
 
 #endif // REDNIGHTMARE_GAMELIB_ENTITY_HPP
