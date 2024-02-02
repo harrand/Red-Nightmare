@@ -6,11 +6,12 @@ rn.entity.pre_instantiate = function(uuid, prefab_name)
 	local obj <close> = tz.profzone_obj:new()
 	obj:set_text(tostring(uuid))
 	obj:set_name("Pre-Instantiate - \"" .. prefab_name .. "\"")
+	local ret = nil
 
 	local prefab = rn.entity.prefabs[prefab_name]
 	if prefab ~= nil then
 		if prefab.pre_instantiate ~= nil then
-			prefab.pre_instantiate(uuid)
+			ret = prefab.pre_instantiate(uuid)
 		end
 	else
 		tz.report("Missing prefab \"" .. prefab_name .. "\"")
@@ -20,6 +21,7 @@ rn.entity.pre_instantiate = function(uuid, prefab_name)
 	tz.report("pre_instantiate " .. tostring(uuid) .. " from \"" .. prefab_name .. "\"")
 
 	rn.current_scene():entity_set_name(uuid, prefab_name)
+	return ret
 end
 
 rn.entity.instantiate = function(uuid, prefab_name)

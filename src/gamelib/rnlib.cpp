@@ -114,6 +114,8 @@ namespace game
 
 		tz::lua::for_all_states([&lua_require_cmd](tz::lua::state& state)
 		{
+			//state.execute(R"(
+			//)");
 			game::audio_lua_initialise(state);
 			game::messaging::scene_messaging_lua_initialise(state);
 			game::entity_lua_initialise(state); // rn.entity.*

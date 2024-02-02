@@ -27,8 +27,12 @@ namespace game
 		TZ_PROFZONE("scene - add entity from prefab", 0xFF99CC44);
 		entity_handle ret = this->add_entity(uuid);
 
-		std::string preinit_lua = std::format("rn.entity.pre_instantiate({}, \"{}\")", uuid, prefab_name);
+		std::string preinit_lua = std::format(R"(
+			last_model = rn.entity.pre_instantiate({}, "{}")
+			)", uuid, prefab_name);
 		tz::lua::get_state().execute(preinit_lua.c_str());
+		std::string model_name = tz::lua::get_state().get_string("last_model").value_or("");
+		(void)model_name;
 		// initialise scene element. model etc has been chosen by now.
 
 		this->initialise_renderer_component(uuid);
