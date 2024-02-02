@@ -52,9 +52,12 @@ namespace game
 		TZ_PROFZONE("scene - add entity from existing", 0xFF99CC44);
 		// add to entity list.
 		entity_handle ret = this->add_entity(uuid);
-		auto& ent = this->entities[ret].ent;
-		ent = this->get_entity(existing);
-		std::erase_if(ent.internal_variables, [](const auto& iter)
+		auto& existing_ent = this->entities[this->uuid_entity_map[existing]];
+
+		auto& ent = this->entities[ret];
+		ent.ent = this->get_entity(existing);
+		ent.ren.model_name = existing_ent.ren.model_name;
+		std::erase_if(ent.ent.internal_variables, [](const auto& iter)
 		{
 			const auto& [varname, value] = iter;
 			return !varname.starts_with('.');

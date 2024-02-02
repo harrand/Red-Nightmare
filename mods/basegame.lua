@@ -12,6 +12,6 @@ rn.entity.prefabs["morbius"] =
 		print("it's morbin' time!")
 	end,
 	update = function(uuid)
-		print("MORB")
+
 	end
 }
