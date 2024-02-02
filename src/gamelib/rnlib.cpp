@@ -35,7 +35,7 @@ namespace game
 		lua_initialise();
 		audio_initialise();
 
-		for(std::size_t i = 0; i < 150; i++)
+		for(std::size_t i = 0; i < 512; i++)
 		{
 			game_system->scene2.add_entity(i);
 		}

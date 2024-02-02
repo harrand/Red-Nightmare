@@ -75,7 +75,7 @@ namespace game
 		this->uuid_entity_map.clear();
 	}
 
-	constexpr std::size_t single_threaded_update_limit = 128u;
+	constexpr std::size_t single_threaded_update_limit = 32u;
 
 	void scene::update(float delta_seconds)
 	{
