@@ -1,4 +1,5 @@
 #include "gamelib/render/scene_renderer.hpp"
+#include "gamelib/messaging/scene.hpp"
 #include "tz/core/profile.hpp"
 #include "tz/wsi/monitor.hpp"
 #include "tz/gl/resource.hpp"
@@ -496,6 +497,17 @@ namespace game::render
 		state.stack_push_float(ret[0]);
 		state.stack_push_float(ret[1]);
 		return 2;
+	}
+	
+	int impl_rn_scene_renderer::set_camera_position(tz::lua::state& state)
+	{
+		auto [_, camx, camy] = tz::lua::parse_args<tz::lua::nil, float, float>(state);
+		game::messaging::scene_insert_message
+		({
+			.operation = game::messaging::scene_operation::renderer_set_camera_position,
+			.value = tz::vec2{camx, camy}
+		});
+		return 0;
 	}
 
 	int impl_rn_scene_renderer::add_string(tz::lua::state& state)

@@ -29,6 +29,9 @@ namespace game::messaging
 		entity_set_local_scale,
 		entity_set_global_position,
 		entity_set_global_scale,
+		renderer_set_camera_position,
+		//renderer_get_clear_colour,
+		//renderer_set_clear_colour
 	};
 
 	struct scene_message
@@ -37,6 +40,8 @@ namespace game::messaging
 		entity_uuid uuid;
 		std::any value = {};
 	};
+
+	void scene_insert_message(scene_message msg);
 }
 
 #endif // REDNIGHTMARE_GAMELIB_MESSAGING_SCENE_HPP

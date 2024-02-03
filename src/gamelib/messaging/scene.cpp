@@ -117,6 +117,13 @@ namespace game::messaging
 				sc->get_renderer().get_renderer().animated_object_set_global_transform(cmp.obj, trans);
 			}
 			break;
+			case scene_operation::renderer_set_camera_position:
+			{
+				TZ_PROFZONE("renderer set camera position", 0xFF99CC44);
+				tz::vec2 cam_pos = std::any_cast<tz::vec2>(msg.value);
+				sc->get_renderer().set_camera_position(cam_pos);
+			}
+			break;
 		}
 	}
 
@@ -402,5 +409,10 @@ namespace game::messaging
 		});
 		// do this thread too. main thread could also have messages.
 		scene_messaging_local_dispatch();
+	}
+
+	void scene_insert_message(scene_message msg)
+	{
+		local_scene_receiver.send_message(msg);
 	}
 }

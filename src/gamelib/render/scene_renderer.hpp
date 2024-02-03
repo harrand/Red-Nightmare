@@ -139,6 +139,7 @@ namespace game::render
 	{
 		scene_renderer* renderer = nullptr;
 		int get_camera_position(tz::lua::state& state);
+		int set_camera_position(tz::lua::state& state);
 
 		int add_string(tz::lua::state& state);
 		int remove_string(tz::lua::state& state);
@@ -148,6 +149,7 @@ namespace game::render
 	LUA_CLASS_BEGIN(impl_rn_scene_renderer)
 		LUA_CLASS_METHODS_BEGIN
 			LUA_METHOD(impl_rn_scene_renderer, get_camera_position)
+			LUA_METHOD(impl_rn_scene_renderer, set_camera_position)
 			LUA_METHOD(impl_rn_scene_renderer, add_string)
 			LUA_METHOD(impl_rn_scene_renderer, remove_string)
 			LUA_METHOD(impl_rn_scene_renderer, clear_strings)

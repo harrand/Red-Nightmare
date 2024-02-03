@@ -27,7 +27,10 @@ void main()
 
 	out::frag_colour = texture(res::textures[1], coord);
 	vec4 unpixelised_colour = texture(res::textures[0], uv);
-	if(out::frag_colour == vec4(0.0))
+	// TODO: triage this. was having a bug where 2d sprites (unpixelised stuff) would become invisible if the clear colour wasnt transparent black.
+	// note: if transparency is 0.1 this would also completely ignore unpixelised. do we want this? other option: mix by amount equivalent to w (i.e manual alpha blend)
+	//if(out::frag_colour == vec4(0.0))
+	if(out::frag_colour.w == 0.0f)
 	{
 		out::frag_colour = unpixelised_colour;
 	}
