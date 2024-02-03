@@ -11,6 +11,7 @@
 #include <filesystem>
 
 #include ImportedTextHeader(plane, glb)
+#include ImportedTextHeader(mod, lua)
 
 namespace game
 {
@@ -112,10 +113,13 @@ namespace game
 			lua_require_cmd += std::format("require(\"{}\")", path);
 		}
 
-		tz::lua::for_all_states([&lua_require_cmd](tz::lua::state& state)
+		std::string mod_lua_src{ImportedTextData(mod, lua)};
+
+		tz::lua::for_all_states([&lua_require_cmd, &mod_lua_src](tz::lua::state& state)
 		{
 			//state.execute(R"(
 			//)");
+			state.execute(mod_lua_src.c_str());
 			game::audio_lua_initialise(state);
 			game::messaging::scene_messaging_lua_initialise(state);
 			game::entity_lua_initialise(state); // rn.entity.*
@@ -124,6 +128,7 @@ namespace game
 			state.execute("package.path = package.path .. \";./mods/?.lua\"");
 			// iterate over /mods and require everything.
 			state.execute(lua_require_cmd.c_str());
+			state.execute("rn.load_mods()");
 		});
 	}
 }

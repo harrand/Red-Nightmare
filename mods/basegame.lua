@@ -2,7 +2,15 @@ function foo()
 	tz.report("foo!")
 end
 
-rn.entity.prefabs["morbius"] = 
+local mod = "basegame"
+
+rn.mods[mod] =
+{
+	description = "Base game content for Red Nightmare",
+	prefabs = {}
+}
+
+rn.mods[mod].prefabs["morbius"] = 
 {
 	pre_instantiate = function(uuid)
 		print("i'm preparing to morb...")
