@@ -258,6 +258,23 @@ namespace game::render
 		return this->renderer;
 	}
 
+	tz::vec4 scene_renderer::get_clear_colour() const
+	{
+		const tz::gl::renderer& ren = tz::gl::get_device().get_renderer(this->renderer.get_render_pass());
+		return ren.get_state().graphics.clear_colour;
+	}
+
+	void scene_renderer::set_clear_colour(tz::vec4 rgba)
+	{
+		tz::gl::renderer& ren = tz::gl::get_device().get_renderer(this->renderer.get_render_pass());
+		ren.edit(tz::gl::RendererEditBuilder{}
+		.render_state
+		({
+			.clear_colour = rgba
+		})
+		.build());
+	}
+
 	/*static*/ std::vector<tz::gl::buffer_resource> scene_renderer::evaluate_extra_buffers()
 	{
 		std::vector<tz::gl::buffer_resource> ret = {};
@@ -506,6 +523,28 @@ namespace game::render
 		({
 			.operation = game::messaging::scene_operation::renderer_set_camera_position,
 			.value = tz::vec2{camx, camy}
+		});
+		return 0;
+	}
+
+	int impl_rn_scene_renderer::get_clear_colour(tz::lua::state& state)
+	{
+		tz::vec4 clear_colour = this->renderer->get_clear_colour();
+		state.stack_push_float(clear_colour[0]);
+		state.stack_push_float(clear_colour[1]);
+		state.stack_push_float(clear_colour[2]);
+		state.stack_push_float(clear_colour[3]);
+		return 4;
+	}
+
+	int impl_rn_scene_renderer::set_clear_colour(tz::lua::state& state)
+	{
+		auto [_, r, g, b, a] = tz::lua::parse_args<tz::lua::nil, float, float, float, float>(state);
+
+		game::messaging::scene_insert_message
+		({
+			.operation = game::messaging::scene_operation::renderer_set_clear_colour,
+			.value = tz::vec4{r, g, b, a}
 		});
 		return 0;
 	}

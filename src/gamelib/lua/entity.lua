@@ -18,8 +18,6 @@ rn.entity.pre_instantiate = function(uuid, prefab_name)
 		tz.assert(false);
 	end
 
-	tz.report("pre_instantiate " .. tostring(uuid) .. " from \"" .. prefab_name .. "\"")
-
 	rn.current_scene():entity_set_name(uuid, prefab_name)
 	return ret
 end
@@ -38,8 +36,6 @@ rn.entity.instantiate = function(uuid, prefab_name)
 		tz.report("Missing prefab \"" .. prefab_name .. "\"")
 		tz.assert(false);
 	end
-
-	tz.report("instantiate " .. tostring(uuid) .. " from \"" .. prefab_name .. "\"")
 
 	rn.current_scene():entity_write(uuid, ".prefab", prefab_name);
 end

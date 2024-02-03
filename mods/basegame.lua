@@ -8,11 +8,10 @@ rn.mods[mod] =
 		morbius =
 		{
 			pre_instantiate = function(uuid)
-				print("i'm preparing to morb...")
 				return "plane"
 			end,
 			instantiate = function(uuid)
-				print("it's morbin' time!")
+
 			end,
 			update = function(uuid, delta_seconds)
 				local t = rn.current_scene():entity_read(uuid, "timer") or 0.0

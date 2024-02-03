@@ -63,6 +63,10 @@ namespace game::render
 
 		tz::ren::animation_renderer& get_renderer();
 		const tz::ren::animation_renderer& get_renderer() const;
+
+		tz::vec4 get_clear_colour() const;
+		void set_clear_colour(tz::vec4 rgba);
+
 		void lua_initialise(tz::lua::state& state);
 	private:
 		static std::vector<tz::gl::buffer_resource> evaluate_extra_buffers();
@@ -141,6 +145,9 @@ namespace game::render
 		int get_camera_position(tz::lua::state& state);
 		int set_camera_position(tz::lua::state& state);
 
+		int get_clear_colour(tz::lua::state& state);
+		int set_clear_colour(tz::lua::state& state);
+
 		int add_string(tz::lua::state& state);
 		int remove_string(tz::lua::state& state);
 		int clear_strings(tz::lua::state& state);
@@ -150,6 +157,10 @@ namespace game::render
 		LUA_CLASS_METHODS_BEGIN
 			LUA_METHOD(impl_rn_scene_renderer, get_camera_position)
 			LUA_METHOD(impl_rn_scene_renderer, set_camera_position)
+
+			LUA_METHOD(impl_rn_scene_renderer, get_clear_colour)
+			LUA_METHOD(impl_rn_scene_renderer, set_clear_colour)
+
 			LUA_METHOD(impl_rn_scene_renderer, add_string)
 			LUA_METHOD(impl_rn_scene_renderer, remove_string)
 			LUA_METHOD(impl_rn_scene_renderer, clear_strings)

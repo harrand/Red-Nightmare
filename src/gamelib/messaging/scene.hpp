@@ -30,8 +30,7 @@ namespace game::messaging
 		entity_set_global_position,
 		entity_set_global_scale,
 		renderer_set_camera_position,
-		//renderer_get_clear_colour,
-		//renderer_set_clear_colour
+		renderer_set_clear_colour
 	};
 
 	struct scene_message

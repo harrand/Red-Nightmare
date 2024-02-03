@@ -124,6 +124,13 @@ namespace game::messaging
 				sc->get_renderer().set_camera_position(cam_pos);
 			}
 			break;
+			case scene_operation::renderer_set_clear_colour:
+			{
+				TZ_PROFZONE("renderer set clear colour", 0xFF99CC44);
+				tz::vec4 rgba = std::any_cast<tz::vec4>(msg.value);
+				sc->get_renderer().set_clear_colour(rgba);
+			}
+			break;
 		}
 	}
 
