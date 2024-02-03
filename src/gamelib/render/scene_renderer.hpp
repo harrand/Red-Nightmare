@@ -120,119 +120,6 @@ namespace game::render
 
 	// LUA API
 
-	struct impl_rn_scene_texture_locator
-	{
-		tz::ren::animation_renderer::texture_locator tloc;
-		int get_colour_tint(tz::lua::state& state);
-		int set_colour_tint(tz::lua::state& state);
-		int get_texture_handle(tz::lua::state& state);
-		int set_texture_handle(tz::lua::state& state);
-		int get_texture_scale(tz::lua::state& state);
-		int set_texture_scale(tz::lua::state& state);
-	};
-
-	LUA_CLASS_BEGIN(impl_rn_scene_texture_locator)
-		LUA_CLASS_METHODS_BEGIN
-			LUA_METHOD(impl_rn_scene_texture_locator, get_colour_tint)
-			LUA_METHOD(impl_rn_scene_texture_locator, set_colour_tint)
-			LUA_METHOD(impl_rn_scene_texture_locator, get_texture_handle)
-			LUA_METHOD(impl_rn_scene_texture_locator, set_texture_handle)
-			LUA_METHOD(impl_rn_scene_texture_locator, get_texture_scale)
-			LUA_METHOD(impl_rn_scene_texture_locator, set_texture_scale)
-		LUA_CLASS_METHODS_END
-	LUA_CLASS_END
-
-	struct impl_rn_scene_element
-	{
-		scene_element elem;
-		int get_object_count(tz::lua::state& state);
-		int object_get_texture(tz::lua::state& state);
-		// note: setting texture tint affects the texture locator itself, meaning everything using the texture handle is affected.
-		// if you want to just affect this specific object, use object_set_colour_tint
-		int object_set_texture_tint(tz::lua::state& state);
-		int object_set_texture_handle(tz::lua::state& state);
-		int object_set_texture_scale(tz::lua::state& state);
-		// get/set colour tint for this specific object only. does not affect any other object, even if they use the same texture id.
-		int object_get_colour_tint(tz::lua::state& state);
-		int object_set_colour_tint(tz::lua::state& state);
-		int object_get_visibility(tz::lua::state& state);
-		int object_set_visibility(tz::lua::state& state);
-		int face_forward(tz::lua::state& state);
-		int face_backward(tz::lua::state& state);
-		int face_left(tz::lua::state& state);
-		int face_right(tz::lua::state& state);
-		int face_forward2d(tz::lua::state& state);
-		int rotate(tz::lua::state& state);
-		int vrotate(tz::lua::state& state);
-		int get_position(tz::lua::state& state);
-		int set_position(tz::lua::state& state);
-		int get_depth(tz::lua::state& state);
-		int set_depth(tz::lua::state& state);
-		int get_subobject_position(tz::lua::state& state);
-		int get_scale(tz::lua::state& state);
-		int set_scale(tz::lua::state& state);
-		int get_uniform_scale(tz::lua::state& state);
-		int set_uniform_scale(tz::lua::state& state);
-		int get_animation_count(tz::lua::state& state);
-		int get_playing_animation_id(tz::lua::state& state);
-		int get_playing_animation_name(tz::lua::state& state);
-		int is_animation_playing(tz::lua::state& state);
-		int get_animation_name(tz::lua::state& state);
-		int get_animation_speed(tz::lua::state& state);
-		int set_animation_speed(tz::lua::state& state);
-		int play_animation(tz::lua::state& state);
-		int play_animation_by_name(tz::lua::state& state);
-		int queue_animation(tz::lua::state& state);
-		int queue_animation_by_name(tz::lua::state& state);
-		int skip_animation(tz::lua::state& state);
-		int skip_all_animations(tz::lua::state& state);
-		int halt_animation(tz::lua::state& state);
-	};
-
-	LUA_CLASS_BEGIN(impl_rn_scene_element)
-		LUA_CLASS_METHODS_BEGIN
-			LUA_METHOD(impl_rn_scene_element, get_object_count)
-			LUA_METHOD(impl_rn_scene_element, object_get_texture)
-			LUA_METHOD(impl_rn_scene_element, object_set_texture_tint)
-			LUA_METHOD(impl_rn_scene_element, object_set_texture_handle)
-			LUA_METHOD(impl_rn_scene_element, object_set_texture_scale)
-			LUA_METHOD(impl_rn_scene_element, object_get_colour_tint)
-			LUA_METHOD(impl_rn_scene_element, object_set_colour_tint)
-			LUA_METHOD(impl_rn_scene_element, object_get_visibility)
-			LUA_METHOD(impl_rn_scene_element, object_set_visibility)
-			LUA_METHOD(impl_rn_scene_element, face_forward)
-			LUA_METHOD(impl_rn_scene_element, face_backward)
-			LUA_METHOD(impl_rn_scene_element, face_left)
-			LUA_METHOD(impl_rn_scene_element, face_right)
-			LUA_METHOD(impl_rn_scene_element, face_forward2d)
-			LUA_METHOD(impl_rn_scene_element, rotate)
-			LUA_METHOD(impl_rn_scene_element, vrotate)
-			LUA_METHOD(impl_rn_scene_element, get_position)
-			LUA_METHOD(impl_rn_scene_element, set_position)
-			LUA_METHOD(impl_rn_scene_element, get_depth)
-			LUA_METHOD(impl_rn_scene_element, set_depth)
-			LUA_METHOD(impl_rn_scene_element, get_subobject_position)
-			LUA_METHOD(impl_rn_scene_element, get_scale)
-			LUA_METHOD(impl_rn_scene_element, set_scale)
-			LUA_METHOD(impl_rn_scene_element, get_uniform_scale)
-			LUA_METHOD(impl_rn_scene_element, set_uniform_scale)
-			LUA_METHOD(impl_rn_scene_element, get_animation_count)
-			LUA_METHOD(impl_rn_scene_element, get_playing_animation_id)
-			LUA_METHOD(impl_rn_scene_element, get_playing_animation_name)
-			LUA_METHOD(impl_rn_scene_element, is_animation_playing)
-			LUA_METHOD(impl_rn_scene_element, get_animation_name)
-			LUA_METHOD(impl_rn_scene_element, get_animation_speed)
-			LUA_METHOD(impl_rn_scene_element, set_animation_speed)
-			LUA_METHOD(impl_rn_scene_element, play_animation)
-			LUA_METHOD(impl_rn_scene_element, play_animation_by_name)
-			LUA_METHOD(impl_rn_scene_element, queue_animation)
-			LUA_METHOD(impl_rn_scene_element, queue_animation_by_name)
-			LUA_METHOD(impl_rn_scene_element, skip_animation)
-			LUA_METHOD(impl_rn_scene_element, skip_all_animations)
-			LUA_METHOD(impl_rn_scene_element, halt_animation)
-		LUA_CLASS_METHODS_END
-	LUA_CLASS_END
-
 	struct impl_rn_rendered_text
 	{
 		scene_renderer* renderer = nullptr;
@@ -251,13 +138,7 @@ namespace game::render
 	struct impl_rn_scene_renderer
 	{
 		scene_renderer* renderer = nullptr;
-		int get_ambient_light(tz::lua::state& state);
-		int set_ambient_light(tz::lua::state& state);
-		int get_element(tz::lua::state& state);
-		int element_count(tz::lua::state& state);
-		int load_texture_from_disk(tz::lua::state& state);
-
-		int set_camera_position(tz::lua::state& state);
+		int get_camera_position(tz::lua::state& state);
 
 		int add_string(tz::lua::state& state);
 		int remove_string(tz::lua::state& state);
@@ -266,12 +147,7 @@ namespace game::render
 
 	LUA_CLASS_BEGIN(impl_rn_scene_renderer)
 		LUA_CLASS_METHODS_BEGIN
-			LUA_METHOD(impl_rn_scene_renderer, get_ambient_light)
-			LUA_METHOD(impl_rn_scene_renderer, set_ambient_light)
-			LUA_METHOD(impl_rn_scene_renderer, get_element)
-			LUA_METHOD(impl_rn_scene_renderer, element_count)
-			LUA_METHOD(impl_rn_scene_renderer, load_texture_from_disk)
-			LUA_METHOD(impl_rn_scene_renderer, set_camera_position)
+			LUA_METHOD(impl_rn_scene_renderer, get_camera_position)
 			LUA_METHOD(impl_rn_scene_renderer, add_string)
 			LUA_METHOD(impl_rn_scene_renderer, remove_string)
 			LUA_METHOD(impl_rn_scene_renderer, clear_strings)

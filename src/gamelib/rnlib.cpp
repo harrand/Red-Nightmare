@@ -46,7 +46,7 @@ namespace game
 
 		// add some test morbii
 		tz::lua::get_state().execute(R"(
-			local count = 2048
+			local count = 128
 			for i=-count/2,count/2,1 do
 				local uuid = rn.current_scene():add_entity("morbius")
 				rn.current_scene():entity_set_local_position(uuid, 0.0, i * 2.0, 0.0)
@@ -133,6 +133,7 @@ namespace game
 			state.execute(mod_lua_src.c_str());
 			game::audio_lua_initialise(state);
 			game::messaging::scene_messaging_lua_initialise(state);
+			game_system->scene2.get_renderer().lua_initialise(state);
 			game::entity_lua_initialise(state); // rn.entity.*
 
 			// add require/dofile access to mods/

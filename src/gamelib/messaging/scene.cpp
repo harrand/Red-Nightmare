@@ -315,7 +315,6 @@ namespace game::messaging
 		int entity_set_global_scale(tz::lua::state& state)
 		{
 			TZ_PROFZONE("scene - entity set global scale", 0xFF99CC44);
-			TZ_PROFZONE("scene - entity set global position", 0xFF99CC44);
 			auto [_, entity_uuid, x, y, z] = tz::lua::parse_args<tz::lua::nil, unsigned int, float, float, float>(state);
 			local_scene_receiver.send_message
 			({
@@ -324,6 +323,15 @@ namespace game::messaging
 				.value = tz::vec3{x, y, z}
 			});
 			return 0;
+		}
+
+		int get_renderer(tz::lua::state& state)
+		{
+			using namespace game::render;
+
+			impl_rn_scene_renderer ren{.renderer = &sc->get_renderer()};
+			LUA_CLASS_PUSH(state, impl_rn_scene_renderer, ren);
+			return 1;
 		}
 	};
 
@@ -343,6 +351,7 @@ namespace game::messaging
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_global_position)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_global_scale)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_global_scale)
+			LUA_METHOD(lua_local_scene_message_receiver, get_renderer)
 		LUA_CLASS_METHODS_END
 	LUA_CLASS_END
 
