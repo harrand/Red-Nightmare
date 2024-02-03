@@ -46,6 +46,9 @@ namespace game
 		const game::entity& get_entity(entity_uuid uuid) const;
 		game::entity& get_entity(entity_uuid uuid);
 
+		const game::render::scene_renderer::entry& get_entity_render_component(entity_uuid uuid) const;
+		const game::render::scene_renderer::entry& get_entity_render_component(entity_handle e) const;
+
 		const game::render::scene_renderer& get_renderer() const;
 		game::render::scene_renderer& get_renderer();
 	private:

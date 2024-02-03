@@ -252,6 +252,11 @@ namespace game::render
 		return this->renderer;
 	}
 
+	const tz::ren::animation_renderer& scene_renderer::get_renderer() const
+	{
+		return this->renderer;
+	}
+
 	/*static*/ std::vector<tz::gl::buffer_resource> scene_renderer::evaluate_extra_buffers()
 	{
 		std::vector<tz::gl::buffer_resource> ret = {};

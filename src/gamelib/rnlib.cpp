@@ -33,7 +33,9 @@ namespace game
 	{
 		TZ_PROFZONE("rnlib - initialise", 0xFF00AAFF);
 		game_system = std::make_unique<game_system_t>();
-		tz::gl::get_device().set_vsync_enabled(true);
+		#if !TZ_PROFILE
+			tz::gl::get_device().set_vsync_enabled(true);
+		#endif
 		game::messaging::set_current_scene(game_system->scene2);
 		lua_initialise();
 		audio_initialise();
@@ -41,6 +43,15 @@ namespace game
 		// add default models...
 		// try not to add too many. mods should be responsible for adding the models they need. default models should only be for the most obvious things (like a plane for a 2d sprite)
 		game_system->scene2.get_renderer().add_model("plane", tz::io::gltf::from_memory(ImportedTextData(plane, glb)));
+
+		// add some test morbii
+		tz::lua::get_state().execute(R"(
+			local count = 2048
+			for i=-count/2,count/2,1 do
+				local uuid = rn.current_scene():add_entity("morbius")
+				rn.current_scene():entity_set_local_position(uuid, 0.0, i * 2.0, 0.0)
+			end
+		)");
 	}
 
 	void terminate()

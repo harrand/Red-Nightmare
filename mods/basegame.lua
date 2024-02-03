@@ -14,8 +14,13 @@ rn.mods[mod] =
 			instantiate = function(uuid)
 				print("it's morbin' time!")
 			end,
-			update = function(uuid)
+			update = function(uuid, delta_seconds)
+				local t = rn.current_scene():entity_read(uuid, "timer") or 0.0
+				t = t + delta_seconds
 
+				local x, y, z = rn.current_scene():entity_get_local_position(uuid)
+				rn.current_scene():entity_set_local_position(uuid, math.sin(t), y, z);
+				rn.current_scene():entity_write(uuid, "timer", t)
 			end
 		}
 	},

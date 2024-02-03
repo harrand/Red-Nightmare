@@ -121,7 +121,7 @@ namespace game
 			std::string lua_str;
 			for(const scene_entity_data& ed : this->entities)
 			{
-				lua_str += std::format("rn.entity.update({})", ed.ent.uuid);
+				lua_str += std::format("rn.entity.update({}, {})", ed.ent.uuid, delta_seconds);
 			}
 			tz::lua::get_state().execute(lua_str.c_str());
 			game::messaging::scene_messaging_local_dispatch();
@@ -138,11 +138,12 @@ namespace game
 			{
 				TZ_PROFZONE("scene - update some", 0xFFCCAACC);
 				std::string lua_str;
-				lua_str.reserve(sizeof("rn.entity.update(XXXX)") * object_count);
+				lua_str.reserve(sizeof("rn.entity.update(XXXXXXXXXXXX)") * object_count);
+				// update delta-time while we're here.
 				auto begin = std::next(this->uuid_entity_map.begin(), offset);
 				for(std::size_t j = 0; j < object_count; j++)
 				{
-					lua_str += std::format("rn.entity.update({})", this->entities[(begin++)->second].ent.uuid);
+					lua_str += std::format("rn.entity.update({}, {})", this->entities[(begin++)->second].ent.uuid, delta_seconds);
 				}
 				// execute update on all entities
 				tz::lua::get_state().execute(lua_str.c_str());
@@ -151,6 +152,19 @@ namespace game
 				// there will be some lock contention, but very minor - as there is a single lock per worker, no matter how many messages it generates.
 				game::messaging::scene_messaging_local_dispatch();
 			});
+		}
+		// do remainder objects ourselves.
+		if(remainder_objects > 0)
+		{
+			TZ_PROFZONE("scene - update remaining objects on main thread", 0xFFCCAACC);
+			std::string lua_str;
+			for(std::size_t i = (count - remainder_objects); i < count; i++)
+			{
+				auto begin = std::next(this->uuid_entity_map.begin(), i);
+				lua_str += std::format("rn.entity.update({}, {})", this->entities[(begin++)->second].ent.uuid, delta_seconds);
+			}
+			tz::lua::get_state().execute(lua_str.c_str());
+			game::messaging::scene_messaging_local_dispatch();
 		}
 	}
 
@@ -196,6 +210,18 @@ namespace game
 		auto iter = this->uuid_entity_map.find(uuid);
 		tz::assert(iter != this->uuid_entity_map.end(), "No entity exists with uuid %llu", uuid);
 		return this->get_entity(iter->second);
+	}
+
+	const game::render::scene_renderer::entry& scene::get_entity_render_component(entity_uuid uuid) const
+	{
+		auto iter = this->uuid_entity_map.find(uuid);
+		tz::assert(iter != this->uuid_entity_map.end(), "No entity exists with uuid %llu", uuid);
+		return this->get_entity_render_component(iter->second);
+	}
+
+	const game::render::scene_renderer::entry& scene::get_entity_render_component(entity_handle e) const
+	{
+		return this->entities[e].ren;
 	}
 
 	const game::render::scene_renderer& scene::get_renderer() const

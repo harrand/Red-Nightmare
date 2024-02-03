@@ -44,7 +44,7 @@ rn.entity.instantiate = function(uuid, prefab_name)
 	rn.current_scene():entity_write(uuid, ".prefab", prefab_name);
 end
 
-rn.entity.update = function(uuid)
+rn.entity.update = function(uuid, delta_seconds)
 	local obj <close> = tz.profzone_obj:new()
 	obj:set_text(tostring(uuid))
 	obj:set_name("Entity Update")
@@ -54,7 +54,7 @@ rn.entity.update = function(uuid)
 		local prefab = rn.entity.prefabs[prefab_name]
 		if prefab ~= nil then
 			if prefab.update ~= nil then
-				prefab.update(uuid)
+				prefab.update(uuid, delta_seconds)
 			end
 		else
 			tz.report("Missing prefab \"" .. prefab_name .. "\"")

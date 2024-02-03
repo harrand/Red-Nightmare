@@ -25,6 +25,10 @@ namespace game::messaging
 		remove_entity,
 		entity_write,
 		entity_set_name,
+		entity_set_local_position,
+		entity_set_local_scale,
+		entity_set_global_position,
+		entity_set_global_scale,
 	};
 
 	struct scene_message

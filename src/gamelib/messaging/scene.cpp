@@ -32,6 +32,7 @@ namespace game::messaging
 		{
 			case scene_operation::add_entity:
 			{
+				TZ_PROFZONE("add entity", 0xFF99CC44);
 				auto val = std::any_cast<tz::lua::lua_generic>(msg.value);
 				std::visit([&msg](auto&& arg)
 				{
@@ -58,16 +59,63 @@ namespace game::messaging
 			}
 			break;
 			case scene_operation::remove_entity:
+			{
+				TZ_PROFZONE("remove entity", 0xFF99CC44);
 				sc->remove_entity(msg.uuid);
+			}
 			break;
 			case scene_operation::entity_write:
 			{
+				TZ_PROFZONE("entity write", 0xFF99CC44);
 				const auto& [varname, lua_value] = std::any_cast<std::pair<std::string, tz::lua::lua_generic>>(msg.value);
 				sc->get_entity(msg.uuid).internal_variables[varname] = lua_value;
 			}
 			break;
 			case scene_operation::entity_set_name:
+			{
+				TZ_PROFZONE("entity set name", 0xFF99CC44);
 				sc->get_entity(msg.uuid).name = std::any_cast<std::string>(msg.value);
+			}
+			break;
+			case scene_operation::entity_set_local_position:
+			{
+				TZ_PROFZONE("entity set local position", 0xFF99CC44);
+				tz::vec3 val = std::any_cast<tz::vec3>(msg.value);
+				auto cmp = sc->get_entity_render_component(msg.uuid);
+				tz::trs trans = sc->get_renderer().get_renderer().animated_object_get_local_transform(cmp.obj);
+				trans.translate = val;
+				sc->get_renderer().get_renderer().animated_object_set_local_transform(cmp.obj, trans);
+			}
+			break;
+			case scene_operation::entity_set_local_scale:
+			{
+				TZ_PROFZONE("entity set local scale", 0xFF99CC44);
+				tz::vec3 val = std::any_cast<tz::vec3>(msg.value);
+				auto cmp = sc->get_entity_render_component(msg.uuid);
+				tz::trs trans = sc->get_renderer().get_renderer().animated_object_get_local_transform(cmp.obj);
+				trans.scale = val;
+				sc->get_renderer().get_renderer().animated_object_set_local_transform(cmp.obj, trans);
+			}
+			break;
+			case scene_operation::entity_set_global_position:
+			{
+				TZ_PROFZONE("entity set global position", 0xFF99CC44);
+				tz::vec3 val = std::any_cast<tz::vec3>(msg.value);
+				auto cmp = sc->get_entity_render_component(msg.uuid);
+				tz::trs trans = sc->get_renderer().get_renderer().animated_object_get_global_transform(cmp.obj);
+				trans.translate = val;
+				sc->get_renderer().get_renderer().animated_object_set_global_transform(cmp.obj, trans);
+			}
+			break;
+			case scene_operation::entity_set_global_scale:
+			{
+				TZ_PROFZONE("entity set global scale", 0xFF99CC44);
+				tz::vec3 val = std::any_cast<tz::vec3>(msg.value);
+				auto cmp = sc->get_entity_render_component(msg.uuid);
+				tz::trs trans = sc->get_renderer().get_renderer().animated_object_get_global_transform(cmp.obj);
+				trans.scale = val;
+				sc->get_renderer().get_renderer().animated_object_set_global_transform(cmp.obj, trans);
+			}
 			break;
 		}
 	}
@@ -153,11 +201,11 @@ namespace game::messaging
 		int entity_set_name(tz::lua::state& state)
 		{
 			TZ_PROFZONE("scene - entity set name", 0xFF99CC44);
-			auto [_, entity_id, name] = tz::lua::parse_args<tz::lua::nil, unsigned int, std::string>(state);
+			auto [_, entity_uuid, name] = tz::lua::parse_args<tz::lua::nil, unsigned int, std::string>(state);
 			local_scene_receiver.send_message
 			({
 				.operation = scene_operation::entity_set_name,
-				.uuid = static_cast<entity_uuid>(entity_id),
+				.uuid = static_cast<game::entity_uuid>(entity_uuid),
 				.value = name
 			});
 			return 0;
@@ -166,9 +214,116 @@ namespace game::messaging
 		int entity_get_name(tz::lua::state& state)
 		{
 			TZ_PROFZONE("scene - entity get name", 0xFF99CC44);
-			auto [_, entity_id] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
-			state.stack_push_string(sc->get_entity(entity_id).name);	
+			auto [_, entity_uuid] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+			state.stack_push_string(sc->get_entity(entity_uuid).name);	
 			return 1;
+		}
+
+		tz::trs impl_entity_get_local_transform(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity get local transform", 0xFF99CC44);
+			auto [_, entity_uuid] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+			auto cmp = sc->get_entity_render_component(entity_uuid);
+			const auto& scren = sc->get_renderer();
+			return scren.get_renderer().animated_object_get_local_transform(cmp.obj);
+		}
+
+		tz::trs impl_entity_get_global_transform(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity get global transform", 0xFF99CC44);
+			auto [_, entity_uuid] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+			auto cmp = sc->get_entity_render_component(entity_uuid);
+			const auto& scren = sc->get_renderer();
+			return scren.get_renderer().animated_object_get_global_transform(cmp.obj);
+		}
+
+		int entity_get_local_position(tz::lua::state& state)
+		{
+			tz::trs localt = impl_entity_get_local_transform(state);
+			state.stack_push_float(localt.translate[0]);
+			state.stack_push_float(localt.translate[1]);
+			state.stack_push_float(localt.translate[2]);
+			return 3;
+		}
+
+		int entity_set_local_position(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity set local position", 0xFF99CC44);
+			auto [_, entity_uuid, x, y, z] = tz::lua::parse_args<tz::lua::nil, unsigned int, float, float, float>(state);
+			local_scene_receiver.send_message
+			({
+				.operation = scene_operation::entity_set_local_position,
+				.uuid = static_cast<game::entity_uuid>(entity_uuid),
+				.value = tz::vec3{x, y, z}
+			});
+			return 0;
+		}
+
+		int entity_get_local_scale(tz::lua::state& state)
+		{
+			tz::trs localt = impl_entity_get_local_transform(state);
+			state.stack_push_float(localt.scale[0]);
+			state.stack_push_float(localt.scale[1]);
+			state.stack_push_float(localt.scale[2]);
+			return 3;
+		}
+
+		int entity_set_local_scale(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity set local position", 0xFF99CC44);
+			auto [_, entity_uuid, x, y, z] = tz::lua::parse_args<tz::lua::nil, unsigned int, float, float, float>(state);
+			local_scene_receiver.send_message
+			({
+				.operation = scene_operation::entity_set_local_scale,
+				.uuid = static_cast<game::entity_uuid>(entity_uuid),
+				.value = tz::vec3{x, y, z}
+			});
+			return 0;
+		}
+
+		int entity_get_global_position(tz::lua::state& state)
+		{
+			tz::trs localt = impl_entity_get_global_transform(state);
+			state.stack_push_float(localt.translate[0]);
+			state.stack_push_float(localt.translate[1]);
+			state.stack_push_float(localt.translate[2]);
+			return 3;
+		}
+
+		int entity_set_global_position(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity set global position", 0xFF99CC44);
+			auto [_, entity_uuid, x, y, z] = tz::lua::parse_args<tz::lua::nil, unsigned int, float, float, float>(state);
+			local_scene_receiver.send_message
+			({
+				.operation = scene_operation::entity_set_global_position,
+				.uuid = static_cast<game::entity_uuid>(entity_uuid),
+				.value = tz::vec3{x, y, z}
+			});
+			return 0;
+		}
+
+		int entity_get_global_scale(tz::lua::state& state)
+		{
+			tz::trs localt = impl_entity_get_global_transform(state);
+			state.stack_push_float(localt.scale[0]);
+			state.stack_push_float(localt.scale[1]);
+			state.stack_push_float(localt.scale[2]);
+			return 3;
+		}
+
+		int entity_set_global_scale(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity set global scale", 0xFF99CC44);
+			TZ_PROFZONE("scene - entity set global position", 0xFF99CC44);
+			auto [_, entity_uuid, x, y, z] = tz::lua::parse_args<tz::lua::nil, unsigned int, float, float, float>(state);
+			local_scene_receiver.send_message
+			({
+				.operation = scene_operation::entity_set_global_scale,
+				.uuid = static_cast<game::entity_uuid>(entity_uuid),
+				.value = tz::vec3{x, y, z}
+			});
+			return 0;
 		}
 	};
 
@@ -180,6 +335,14 @@ namespace game::messaging
 			LUA_METHOD(lua_local_scene_message_receiver, entity_read)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_name)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_name)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_get_local_position)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_set_local_position)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_get_local_scale)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_set_local_scale)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_get_global_position)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_set_global_position)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_get_global_scale)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_set_global_scale)
 		LUA_CLASS_METHODS_END
 	LUA_CLASS_END
 

@@ -62,6 +62,7 @@ namespace game::render
 		void set_point_light_capacity(unsigned int num_point_lights);
 
 		tz::ren::animation_renderer& get_renderer();
+		const tz::ren::animation_renderer& get_renderer() const;
 		void lua_initialise(tz::lua::state& state);
 	private:
 		static std::vector<tz::gl::buffer_resource> evaluate_extra_buffers();
