@@ -15,8 +15,8 @@ add_subdirectory(lib)
 tz_add_library(
 	TARGET rednightmare_gamelib
 	SOURCES
-		src/gamelib/input/keyboard.cpp
-		src/gamelib/input/keyboard.hpp
+		src/gamelib/input/kbm.cpp
+		src/gamelib/input/kbm.hpp
 
 		src/gamelib/messaging/scene.cpp
 		src/gamelib/messaging/scene.hpp

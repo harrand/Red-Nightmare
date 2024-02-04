@@ -18,11 +18,15 @@ rn.mods[mod] =
 				t = t + delta_seconds
 
 				local x, y, z = rn.current_scene():entity_get_local_position(uuid)
-				if rn.input.keyboard():is_key_down("a") then
+				if rn.input():is_key_down("a") then
 					x = x - 5.0 * delta_seconds
 				end
-				if rn.input.keyboard():is_key_down("d") then
+				if rn.input():is_key_down("d") then
 					x = x + 5.0 * delta_seconds
+				end
+
+				if rn.input():is_mouse_down("right") then
+					x = 0; y = 0; z = 0
 				end
 				rn.current_scene():entity_set_local_position(uuid, x, y, z);
 			end
