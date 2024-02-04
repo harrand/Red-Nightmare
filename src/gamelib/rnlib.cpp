@@ -45,15 +45,6 @@ namespace game
 		// add default models...
 		// try not to add too many. mods should be responsible for adding the models they need. default models should only be for the most obvious things (like a plane for a 2d sprite)
 		game_system->scene2.get_renderer().add_model("plane", tz::io::gltf::from_memory(ImportedTextData(plane, glb)));
-
-		// add some test morbii
-		tz::lua::get_state().execute(R"(
-			local count = 128
-			for i=-count/2,count/2,1 do
-				local uuid = rn.current_scene():add_entity("morbius")
-				rn.current_scene():entity_set_local_position(uuid, 0.0, i * 2.0, 0.0)
-			end
-		)");
 	}
 
 	void terminate()
@@ -107,7 +98,9 @@ namespace game
 
 	void dbgui_game_bar()
 	{
-		//game_system->scene.dbgui_game_bar();
+		std::string bar_string;
+		bar_string = std::format("{} entities", game_system->scene2.entity_count());
+		ImGui::Text("%s", bar_string.c_str());
 	}
 
 	// called directly from initialise.

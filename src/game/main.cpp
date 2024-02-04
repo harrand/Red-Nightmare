@@ -22,6 +22,15 @@ int main()
 		tz::duration fps_limiter = tz::system_time();
 
 		game::initialise();
+
+		tz::lua::get_state().execute(R"(
+			local count = 128
+			for i=-count/2,count/2,1 do
+				local uuid = rn.current_scene():add_entity("morbius")
+				rn.current_scene():entity_set_local_position(uuid, 0.0, i * 2.0, 0.0)
+			end
+		)");
+
 		while(!tz::window().is_close_requested())
 		{
 			TZ_FRAME_BEGIN;
