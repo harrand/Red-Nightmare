@@ -15,8 +15,6 @@ namespace game::messaging
 	// this has one drawback: reads technically read from the previous-frame's state, and writes do not take affect until the end of the frame.
 	// however, with clever use of the thread-local message passers, we could in theory check past writes when figuring out what to return for a read (this part is NYI).
 
-
-
 	game::scene* sc = nullptr;
 
 	void set_current_scene(game::scene& scene)
@@ -24,10 +22,18 @@ namespace game::messaging
 		sc = &scene;
 	}
 
+	std::vector<entity_uuid> deleted_entities_this_frame = {};	
+
 	void on_scene_process_message(const scene_message& msg)
 	{
 		TZ_PROFZONE("scene message", 0xFF99CC44);
 		tz::assert(sc != nullptr);
+		if(std::find(deleted_entities_this_frame.begin(), deleted_entities_this_frame.end(), msg.uuid) != deleted_entities_this_frame.end())
+		{
+			// this uuid has already been deleted within a previous message.
+			// we drop this message.
+			return;
+		}
 		switch(msg.operation)
 		{
 			case scene_operation::add_entity:
@@ -62,6 +68,7 @@ namespace game::messaging
 			{
 				TZ_PROFZONE("remove entity", 0xFF99CC44);
 				sc->remove_entity(msg.uuid);
+				deleted_entities_this_frame.push_back(msg.uuid);
 			}
 			break;
 			case scene_operation::entity_write:
@@ -134,7 +141,12 @@ namespace game::messaging
 		}
 	}
 
-	REGISTER_MESSAGING_SYSTEM(scene_message, scene, on_scene_process_message);
+	void on_scene_update()
+	{
+		deleted_entities_this_frame.clear();
+	}
+
+	REGISTER_MESSAGING_SYSTEM(scene_message, scene, on_scene_process_message, on_scene_update);
 
 	// lua api boilerplate.
 	// yes, this is rn.current_scene()
