@@ -28,7 +28,11 @@ namespace game::messaging
 	{
 		TZ_PROFZONE("scene message", 0xFF99CC44);
 		tz::assert(sc != nullptr);
-		if(std::find(deleted_entities_this_frame.begin(), deleted_entities_this_frame.end(), msg.uuid) != deleted_entities_this_frame.end())
+		auto was_deleted_this_frame = [](auto val)->bool
+		{
+			return std::find(deleted_entities_this_frame.begin(), deleted_entities_this_frame.end(), val) != deleted_entities_this_frame.end();
+		};
+		if(was_deleted_this_frame(msg.uuid))
 		{
 			// this uuid has already been deleted within a previous message.
 			// we drop this message.
@@ -40,7 +44,7 @@ namespace game::messaging
 			{
 				TZ_PROFZONE("add entity", 0xFF99CC44);
 				auto val = std::any_cast<tz::lua::lua_generic>(msg.value);
-				std::visit([&msg](auto&& arg)
+				std::visit([&msg, &was_deleted_this_frame](auto&& arg)
 				{
 					using T = std::decay_t<decltype(arg)>;
 					if constexpr(std::is_same_v<T, std::string>) // add_entity(prefab_name) (instantiate from prefab)
@@ -51,6 +55,7 @@ namespace game::messaging
 					else if constexpr(std::is_same_v<T, std::int64_t>) // add entity(uuid) (entity copy)
 					{
 						tz::report("init from uuid %llu", arg);
+						tz::assert(!was_deleted_this_frame(arg), "Attempted to create entity from existing uuid %lu, but this entity was deleted by a previous message this frame.", arg);
 						sc->add_entity_from_existing(msg.uuid, arg);
 					}
 					else if constexpr(std::is_same_v<T, tz::lua::nil>) // add entity() (empty entity)

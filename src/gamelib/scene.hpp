@@ -40,6 +40,9 @@ namespace game
 		void fixed_update(float delta_seconds, std::uint64_t unprocessed);
 		void block();
 
+		bool contains_entity(entity_uuid uuid) const;
+		bool contains_entity(entity_handle e) const;
+
 		std::size_t entity_count() const;
 		const game::entity& get_entity(entity_handle e) const;
 		game::entity& get_entity(entity_handle e);

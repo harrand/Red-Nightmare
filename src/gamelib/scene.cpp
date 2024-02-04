@@ -50,6 +50,7 @@ namespace game
 	scene::entity_handle scene::add_entity_from_existing(entity_uuid uuid, entity_uuid existing)
 	{
 		TZ_PROFZONE("scene - add entity from existing", 0xFF99CC44);
+		tz::assert(this->contains_entity(existing), "Attempt to create entity from existing copy %lu, but this entity does not exist.", existing);
 		// add to entity list.
 		entity_handle ret = this->add_entity(uuid);
 		auto& existing_ent = this->entities[this->uuid_entity_map[existing]];
@@ -181,6 +182,16 @@ namespace game
 		}
 		this->entity_update_jobs.clear();
 		this->renderer.block();
+	}
+
+	bool scene::contains_entity(entity_uuid uuid) const
+	{
+		return this->uuid_entity_map.contains(uuid);
+	}
+
+	bool scene::contains_entity(entity_handle e) const
+	{
+		return this->entities.contains(e);
 	}
 
 	std::size_t scene::entity_count() const
