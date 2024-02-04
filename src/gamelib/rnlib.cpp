@@ -1,3 +1,4 @@
+#include "gamelib/input/keyboard.hpp"
 #include "gamelib/messaging/scene.hpp"
 #include "gamelib/rnlib.hpp"
 #include "gamelib/audio.hpp"
@@ -39,6 +40,7 @@ namespace game
 		game::messaging::set_current_scene(game_system->scene2);
 		lua_initialise();
 		audio_initialise();
+		game::input::keyboard_initialise();
 
 		// add default models...
 		// try not to add too many. mods should be responsible for adding the models they need. default models should only be for the most obvious things (like a plane for a 2d sprite)
@@ -82,6 +84,8 @@ namespace game
 				ImGui::End();
 			}
 		}
+
+		game::input::keyboard_advance();
 		game_system->scene2.update(delta_seconds);
 		tz::gl::get_device().render();
 		game_system->scene2.block();
@@ -135,6 +139,7 @@ namespace game
 			game::messaging::scene_messaging_lua_initialise(state);
 			game_system->scene2.get_renderer().lua_initialise(state);
 			game::entity_lua_initialise(state); // rn.entity.*
+			game::input::keyboard_lua_initialise(state);
 
 			// add require/dofile access to mods/
 			state.execute("package.path = package.path .. \";./mods/?.lua\"");

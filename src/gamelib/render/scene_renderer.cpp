@@ -576,7 +576,7 @@ namespace game::render
 	void scene_renderer::lua_initialise(tz::lua::state& state)
 	{
 		TZ_PROFZONE("scene renderer - lua initialise", 0xFFFF4488);
-		state.new_type("impl_rn_rendered_text", LUA_CLASS_NAME(impl_rn_rendered_text::registers));
+		state.new_type("impl_rn_rendered_text", LUA_CLASS_NAME(impl_rn_rendered_text)::registers);
 		state.new_type("impl_rn_scene_renderer", LUA_CLASS_NAME(impl_rn_scene_renderer)::registers);
 	}
 
