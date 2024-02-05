@@ -170,42 +170,49 @@ namespace game::messaging
 			// caller now knows the entity id, even though it doesnt exist yet.
 			// subsequent messages that use the id *should* be processed after this one, making the whole thing safe.
 			static std::atomic_uint_fast64_t entity_uuid_counter = 0;
-			auto entity_id = static_cast<entity_uuid>(entity_uuid_counter.fetch_add(1));
+			auto uuid = static_cast<entity_uuid>(entity_uuid_counter.fetch_add(1));
 			local_scene_receiver.send_message
 			({
 				.operation = scene_operation::add_entity,
 				// add new entity. its uuid is `entity_id`
-				.uuid = entity_id,
+				.uuid = uuid,
 				.value = arg
 			});
 			// return the id as a uint.
 			// TODO: wrap userdata around this?
-			state.stack_push_uint(entity_id);
+			state.stack_push_uint(uuid);
 			return 1;
 		}
 
 		int remove_entity(tz::lua::state& state)
 		{
 			TZ_PROFZONE("scene - remove entity", 0xFF99CC44);
-			auto [_, entity_id] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+			auto [_, uuid] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
 			local_scene_receiver.send_message
 			({
 				.operation = scene_operation::remove_entity,
-				.uuid = static_cast<entity_uuid>(entity_id)
+				.uuid = static_cast<entity_uuid>(uuid)
 			});
 			return 0;
+		}
+
+		int contains_entity(tz::lua::state& state)
+		{
+			auto [_, uuid] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+			state.stack_push_bool(sc->contains_entity(uuid));
+			return 1;
 		}
 
 		int entity_write(tz::lua::state& state)
 		{
 			TZ_PROFZONE("scene - entity write", 0xFF99CC44);
-			auto [_, entity_id, varname] = tz::lua::parse_args<tz::lua::nil, unsigned int, std::string>(state);
+			auto [_, uuid, varname] = tz::lua::parse_args<tz::lua::nil, unsigned int, std::string>(state);
 			tz::lua::lua_generic variable_value = state.stack_get_generic(4);
 			std::pair<std::string, tz::lua::lua_generic> message{varname, variable_value};
 			local_scene_receiver.send_message
 			({
 				.operation = scene_operation::entity_write,
-				.uuid = static_cast<entity_uuid>(entity_id),
+				.uuid = static_cast<entity_uuid>(uuid),
 				.value = message
 			});
 			return 0;
@@ -215,8 +222,8 @@ namespace game::messaging
 		{
 			TZ_PROFZONE("scene - entity read", 0xFF99CC44);
 			// reads instantly.
-			auto [_, entity_id, varname] = tz::lua::parse_args<tz::lua::nil, unsigned int, std::string>(state);
-			const auto& vars = sc->get_entity(entity_id).internal_variables;
+			auto [_, uuid, varname] = tz::lua::parse_args<tz::lua::nil, unsigned int, std::string>(state);
+			const auto& vars = sc->get_entity(uuid).internal_variables;
 			// note: this code could be ran concurrently.
 			// because all forms of scene/entity mutation are deferred, reading concurrently is safe here. note: the map operator[] accidentally constructing empties would be a data race here, so we are careful and use find() instead.
 			auto iter = vars.find(varname);
@@ -232,11 +239,11 @@ namespace game::messaging
 		int entity_set_name(tz::lua::state& state)
 		{
 			TZ_PROFZONE("scene - entity set name", 0xFF99CC44);
-			auto [_, entity_uuid, name] = tz::lua::parse_args<tz::lua::nil, unsigned int, std::string>(state);
+			auto [_, uuid, name] = tz::lua::parse_args<tz::lua::nil, unsigned int, std::string>(state);
 			local_scene_receiver.send_message
 			({
 				.operation = scene_operation::entity_set_name,
-				.uuid = static_cast<game::entity_uuid>(entity_uuid),
+				.uuid = static_cast<entity_uuid>(uuid),
 				.value = name
 			});
 			return 0;
@@ -245,16 +252,16 @@ namespace game::messaging
 		int entity_get_name(tz::lua::state& state)
 		{
 			TZ_PROFZONE("scene - entity get name", 0xFF99CC44);
-			auto [_, entity_uuid] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
-			state.stack_push_string(sc->get_entity(entity_uuid).name);	
+			auto [_, uuid] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+			state.stack_push_string(sc->get_entity(uuid).name);	
 			return 1;
 		}
 
 		tz::trs impl_entity_get_local_transform(tz::lua::state& state)
 		{
 			TZ_PROFZONE("scene - entity get local transform", 0xFF99CC44);
-			auto [_, entity_uuid] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
-			auto cmp = sc->get_entity_render_component(entity_uuid);
+			auto [_, uuid] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+			auto cmp = sc->get_entity_render_component(uuid);
 			const auto& scren = sc->get_renderer();
 			return scren.get_renderer().animated_object_get_local_transform(cmp.obj);
 		}
@@ -262,8 +269,8 @@ namespace game::messaging
 		tz::trs impl_entity_get_global_transform(tz::lua::state& state)
 		{
 			TZ_PROFZONE("scene - entity get global transform", 0xFF99CC44);
-			auto [_, entity_uuid] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
-			auto cmp = sc->get_entity_render_component(entity_uuid);
+			auto [_, uuid] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+			auto cmp = sc->get_entity_render_component(uuid);
 			const auto& scren = sc->get_renderer();
 			return scren.get_renderer().animated_object_get_global_transform(cmp.obj);
 		}
@@ -280,11 +287,11 @@ namespace game::messaging
 		int entity_set_local_position(tz::lua::state& state)
 		{
 			TZ_PROFZONE("scene - entity set local position", 0xFF99CC44);
-			auto [_, entity_uuid, x, y, z] = tz::lua::parse_args<tz::lua::nil, unsigned int, float, float, float>(state);
+			auto [_, uuid, x, y, z] = tz::lua::parse_args<tz::lua::nil, unsigned int, float, float, float>(state);
 			local_scene_receiver.send_message
 			({
 				.operation = scene_operation::entity_set_local_position,
-				.uuid = static_cast<game::entity_uuid>(entity_uuid),
+				.uuid = static_cast<entity_uuid>(uuid),
 				.value = tz::vec3{x, y, z}
 			});
 			return 0;
@@ -302,11 +309,11 @@ namespace game::messaging
 		int entity_set_local_scale(tz::lua::state& state)
 		{
 			TZ_PROFZONE("scene - entity set local position", 0xFF99CC44);
-			auto [_, entity_uuid, x, y, z] = tz::lua::parse_args<tz::lua::nil, unsigned int, float, float, float>(state);
+			auto [_, uuid, x, y, z] = tz::lua::parse_args<tz::lua::nil, unsigned int, float, float, float>(state);
 			local_scene_receiver.send_message
 			({
 				.operation = scene_operation::entity_set_local_scale,
-				.uuid = static_cast<game::entity_uuid>(entity_uuid),
+				.uuid = static_cast<entity_uuid>(uuid),
 				.value = tz::vec3{x, y, z}
 			});
 			return 0;
@@ -324,11 +331,11 @@ namespace game::messaging
 		int entity_set_global_position(tz::lua::state& state)
 		{
 			TZ_PROFZONE("scene - entity set global position", 0xFF99CC44);
-			auto [_, entity_uuid, x, y, z] = tz::lua::parse_args<tz::lua::nil, unsigned int, float, float, float>(state);
+			auto [_, uuid, x, y, z] = tz::lua::parse_args<tz::lua::nil, unsigned int, float, float, float>(state);
 			local_scene_receiver.send_message
 			({
 				.operation = scene_operation::entity_set_global_position,
-				.uuid = static_cast<game::entity_uuid>(entity_uuid),
+				.uuid = static_cast<entity_uuid>(uuid),
 				.value = tz::vec3{x, y, z}
 			});
 			return 0;
@@ -346,11 +353,11 @@ namespace game::messaging
 		int entity_set_global_scale(tz::lua::state& state)
 		{
 			TZ_PROFZONE("scene - entity set global scale", 0xFF99CC44);
-			auto [_, entity_uuid, x, y, z] = tz::lua::parse_args<tz::lua::nil, unsigned int, float, float, float>(state);
+			auto [_, uuid, x, y, z] = tz::lua::parse_args<tz::lua::nil, unsigned int, float, float, float>(state);
 			local_scene_receiver.send_message
 			({
 				.operation = scene_operation::entity_set_global_scale,
-				.uuid = static_cast<game::entity_uuid>(entity_uuid),
+				.uuid = static_cast<entity_uuid>(uuid),
 				.value = tz::vec3{x, y, z}
 			});
 			return 0;
@@ -382,9 +389,15 @@ namespace game::messaging
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_global_position)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_global_scale)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_global_scale)
-			LUA_METHOD(lua_local_scene_message_receiver, get_renderer)
 		LUA_CLASS_METHODS_END
 	LUA_CLASS_END
+
+	LUA_BEGIN(rn_renderer)
+		using namespace game::render;
+		impl_rn_scene_renderer ren{.renderer = &sc->get_renderer()};
+		LUA_CLASS_PUSH(state, impl_rn_scene_renderer, ren);
+		return 1;
+	LUA_END
 
 	LUA_BEGIN(rn_current_scene)
 		LUA_CLASS_PUSH(state, lua_local_scene_message_receiver, lua_local_scene_message_receiver{});
@@ -400,6 +413,7 @@ namespace game::messaging
 		// expose the class api
 		state.execute("rn = rn or {}");
 		state.new_type("lua_local_scene_message_receiver", LUA_CLASS_NAME(lua_local_scene_message_receiver)::registers);
+		state.assign_func("rn.renderer", LUA_FN_NAME(rn_renderer));
 		state.assign_func("rn.current_scene", LUA_FN_NAME(rn_current_scene));
 		// rn.current_scene:add_entity(...) is now a thing.
 	}
