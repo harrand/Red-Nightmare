@@ -556,6 +556,7 @@ namespace game::render
 		game::messaging::scene_insert_message
 		({
 			.operation = game::messaging::scene_operation::renderer_set_clear_colour,
+			.uuid = std::numeric_limits<entity_uuid>::max(),
 			.value = tz::vec4{r, g, b, a}
 		});
 		return 0;
