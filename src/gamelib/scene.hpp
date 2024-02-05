@@ -54,6 +54,7 @@ namespace game
 
 		const game::render::scene_renderer& get_renderer() const;
 		game::render::scene_renderer& get_renderer();
+
 	private:
 		void initialise_renderer_component(entity_uuid uuid);
 		// free list gives handle stability, which we want.
@@ -62,6 +63,11 @@ namespace game
 		std::unordered_map<entity_uuid, entity_handle> uuid_entity_map = {};
 		std::vector<tz::job_handle> entity_update_jobs = {};
 		game::render::scene_renderer renderer;
+	public:
+		decltype(entities)::iterator begin();
+		decltype(entities)::const_iterator begin() const ;
+		decltype(entities)::iterator end();
+		decltype(entities)::const_iterator end() const;
 	};
 }
 

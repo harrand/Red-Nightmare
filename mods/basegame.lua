@@ -32,4 +32,14 @@ rn.mods[mod] =
 			end
 		}
 	},
+	levels =
+	{
+		startscreen =
+		{
+			on_load = function()
+				local morb1 = rn.current_scene():add_entity("morbius")
+				rn.renderer():set_clear_colour(1.0, 0.5, 1.0, 1.0)
+			end
+		}
+	}
 }

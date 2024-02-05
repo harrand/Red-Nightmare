@@ -14,5 +14,10 @@ rn.load_mods = function()
 			prefabdata.mod = modname
 			rn.entity.prefabs[prefabname] = prefabdata
 		end
+
+		for levelname, leveldata in pairs(moddata.levels) do
+			leveldata.mod = modname
+			rn.level.levels[levelname] = leveldata
+		end
 	end
 end

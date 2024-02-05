@@ -108,7 +108,19 @@ namespace game::render
 
 	void scene_renderer::remove_entry(entry e)
 	{
+		TZ_PROFZONE("scene renderer - remove entry", 0xFFFF4488);
 		this->renderer.remove_animated_objects(e.obj);
+		// todo: remove or set-null the given entry? otherwise you can remove twice?
+	}
+
+	void scene_renderer::clear_entries()
+	{
+		TZ_PROFZONE("scene renderer - clear entries", 0xFFFF4488);
+		for(entry e : this->entries)
+		{
+			this->renderer.remove_animated_objects(e.obj);
+		}
+		this->entries.clear();
 	}
 
 	scene_element scene_renderer::get_element(entry e)

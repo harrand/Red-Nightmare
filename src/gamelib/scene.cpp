@@ -98,6 +98,7 @@ namespace game
 	{
 		this->entities.clear();
 		this->uuid_entity_map.clear();
+		this->renderer.clear_entries();
 	}
 
 	constexpr std::size_t single_threaded_update_limit = 32u;
@@ -250,5 +251,25 @@ namespace game
 		auto& ent = this->entities[this->uuid_entity_map.at(uuid)];
 		tz::assert(ent.ren.obj == tz::nullhand, "initialise_render_component(ent) - already has an animated_objects handle!");
 		ent.ren = this->renderer.add_entry(ent.ren.model_name);
+	}
+
+	decltype(scene::entities)::iterator scene::begin()
+	{
+		return this->entities.begin();
+	}
+
+	decltype(scene::entities)::const_iterator scene::begin() const
+	{
+		return this->entities.begin();
+	}
+
+	decltype(scene::entities)::iterator scene::end()
+	{
+		return this->entities.end();
+	}
+
+	decltype(scene::entities)::const_iterator scene::end() const
+	{
+		return this->entities.end();
 	}
 }

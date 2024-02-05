@@ -13,6 +13,7 @@
 
 #include ImportedTextHeader(plane, glb)
 #include ImportedTextHeader(mod, lua)
+#include ImportedTextHeader(level, lua)
 
 namespace game
 {
@@ -121,13 +122,15 @@ namespace game
 			lua_require_cmd += std::format("require(\"{}\")", path);
 		}
 
+		std::string level_lua_src{ImportedTextData(level, lua)};
 		std::string mod_lua_src{ImportedTextData(mod, lua)};
 
-		tz::lua::for_all_states([&lua_require_cmd, &mod_lua_src](tz::lua::state& state)
+		tz::lua::for_all_states([&lua_require_cmd, &mod_lua_src, &level_lua_src](tz::lua::state& state)
 		{
 			//state.execute(R"(
 			//)");
 			state.execute(mod_lua_src.c_str());
+			state.execute(level_lua_src.c_str());
 			game::audio_lua_initialise(state);
 			game::messaging::scene_messaging_lua_initialise(state);
 			game_system->scene2.get_renderer().lua_initialise(state);

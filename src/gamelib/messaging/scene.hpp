@@ -23,6 +23,7 @@ namespace game::messaging
 	{
 		add_entity,
 		remove_entity,
+		clear_entities,
 		entity_write,
 		entity_set_name,
 		entity_set_local_position,

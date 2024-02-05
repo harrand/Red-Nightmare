@@ -76,6 +76,19 @@ namespace game::messaging
 				deleted_entities_this_frame.push_back(msg.uuid);
 			}
 			break;
+			case scene_operation::clear_entities:
+			{
+				TZ_PROFZONE("clear entities", 0xFF99CC44);
+				// pretend we deleted everything
+				for(const auto& ele : *sc)
+				{
+					tz::assert(!ele.is_null());
+					deleted_entities_this_frame.push_back(ele.ent.uuid);
+				}
+				// actually delete everything.
+				sc->clear();
+			}
+			break;
 			case scene_operation::entity_write:
 			{
 				TZ_PROFZONE("entity write", 0xFF99CC44);
@@ -192,6 +205,17 @@ namespace game::messaging
 			({
 				.operation = scene_operation::remove_entity,
 				.uuid = static_cast<entity_uuid>(uuid)
+			});
+			return 0;
+		}
+
+		int clear_entities(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - clear entities", 0xFF99CC44);
+			local_scene_receiver.send_message
+			({
+				.operation = scene_operation::clear_entities,
+				.uuid = std::numeric_limits<entity_uuid>::max()
 			});
 			return 0;
 		}
@@ -377,6 +401,7 @@ namespace game::messaging
 		LUA_CLASS_METHODS_BEGIN
 			LUA_METHOD(lua_local_scene_message_receiver, add_entity)
 			LUA_METHOD(lua_local_scene_message_receiver, remove_entity)
+			LUA_METHOD(lua_local_scene_message_receiver, clear_entities)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_write)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_read)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_name)
