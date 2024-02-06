@@ -55,6 +55,7 @@ namespace game
 		const game::render::scene_renderer& get_renderer() const;
 		game::render::scene_renderer& get_renderer();
 
+		void dbgui();
 	private:
 		void initialise_renderer_component(entity_uuid uuid);
 		// free list gives handle stability, which we want.

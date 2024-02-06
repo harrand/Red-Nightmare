@@ -63,7 +63,7 @@ namespace game
 		{
 			if(ImGui::Begin("Scene", &game_system->dbgui.display_scene))
 			{
-				//game_system->scene.dbgui();
+				game_system->scene2.dbgui();
 				ImGui::End();
 			}
 		}

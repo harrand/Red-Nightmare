@@ -30,6 +30,7 @@ tz_add_library(
 		src/gamelib/rnlib.cpp
 		src/gamelib/rnlib.hpp
 		src/gamelib/scene.cpp
+		src/gamelib/scene.dbgui.cpp
 		src/gamelib/scene.hpp
 		src/gamelib/entity.cpp
 		src/gamelib/entity.hpp
