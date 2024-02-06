@@ -85,6 +85,48 @@ namespace game
 						{
 							(void)arg;
 							ImGui::Text("nil");
+							ImGui::SameLine();
+							ImGui::Dummy(ImVec2{25, 0});
+							ImGui::SameLine();
+							// buttons to initialise to any value type.
+							tz::lua::lua_generic new_value = tz::lua::nil{};
+							bool reinitialise = false;
+							std::string bool_label = "bool" + label;
+							if(ImGui::Button(bool_label.c_str()))
+							{
+								new_value = false;
+								reinitialise = true;
+							}
+							ImGui::SameLine();
+							std::string double_label = "double" + label;
+							if(ImGui::Button(double_label.c_str()))
+							{
+								new_value = 0.0;
+								reinitialise = true;
+							}
+							ImGui::SameLine();
+							std::string integer_label = "integer" + label;
+							if(ImGui::Button(integer_label.c_str()))
+							{
+								new_value = std::int64_t{0};
+								reinitialise = true;
+							}
+							ImGui::SameLine();
+							std::string string_label = "string" + label;
+							if(ImGui::Button(string_label.c_str()))
+							{
+								new_value = std::string{""},
+								reinitialise = true;
+							}
+							if(reinitialise)
+							{
+								game::messaging::scene_insert_message({
+									.operation = game::messaging::scene_operation::entity_write,
+									.uuid = uuid,
+									.value = std::pair<std::string, tz::lua::lua_generic>{name, new_value}
+								});
+								any_messages_sent = true;
+							}
 						}
 						else
 						{
