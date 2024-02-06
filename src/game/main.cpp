@@ -24,6 +24,8 @@ int main()
 		game::initialise();
 
 		tz::lua::get_state().execute(R"(
+			rn.level.load("startscreen")
+
 			local count = 128
 			for i=-count/2,count/2,1 do
 				local uuid = rn.current_scene():add_entity("morbius")

@@ -88,6 +88,8 @@ namespace game
 							ImGui::SameLine();
 							ImGui::Dummy(ImVec2{25, 0});
 							ImGui::SameLine();
+							ImGui::Text("Set as:");
+							ImGui::SameLine();
 							// buttons to initialise to any value type.
 							tz::lua::lua_generic new_value = tz::lua::nil{};
 							bool reinitialise = false;
@@ -177,7 +179,8 @@ namespace game
 
 	void scene::dbgui()
 	{
-		if(ImGui::CollapsingHeader("Entities"))
+		std::string label = std::format("Entities ({})", this->entity_count());
+		if(ImGui::CollapsingHeader(label.c_str()))
 		{
 			for(const scene_entity_data& edata : *this)
 			{
