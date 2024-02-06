@@ -1,13 +1,25 @@
 #include "gamelib/scene.hpp"
+#include "gamelib/render/scene_renderer.hpp"
 
 namespace game
 {
-	void dbgui_ent(const scene_entity_data& edata)
+	void dbgui_ent_ren(const render::scene_renderer::entry& ren, const render::scene_renderer& renderer)
+	{
+		ImGui::Text("Model: %s", ren.obj == tz::nullhand ? "None" : ren.model_name.c_str());
+		if(ren.obj != tz::nullhand)
+		{
+			ImGui::Text("AOH: %zu", static_cast<std::size_t>(static_cast<tz::hanval>(ren.obj)));
+			tz::ren::animation_renderer::gltf_handle gltfh = renderer.get_renderer().animated_object_get_gltf(ren.obj);
+			ImGui::Text("GLTFH: %zu", static_cast<std::size_t>(static_cast<tz::hanval>(gltfh)));
+		}
+	}
+
+	void dbgui_ent(const scene_entity_data& edata, const render::scene_renderer& renderer)
 	{
 		std::string tree_title = std::format("{}: {}", edata.ent.uuid, edata.ent.name);
 		if(ImGui::TreeNode(tree_title.c_str()))
 		{
-			ImGui::Text("Model: %s", edata.ren.obj == tz::nullhand ? "None" : edata.ren.model_name.c_str());
+			dbgui_ent_ren(edata.ren, renderer);
 			std::string subtree_title = std::format("Internals ({})", edata.ent.internal_variables.size());
 			if(edata.ent.internal_variables.size() && ImGui::TreeNode(subtree_title.c_str()))
 			{
@@ -49,7 +61,7 @@ namespace game
 		{
 			for(const scene_entity_data& edata : *this)
 			{
-				dbgui_ent(edata);
+				dbgui_ent(edata, this->get_renderer());
 			}
 		}
 	}

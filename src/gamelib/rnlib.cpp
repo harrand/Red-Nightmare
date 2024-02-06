@@ -72,7 +72,7 @@ namespace game
 		{
 			if(ImGui::Begin("Renderer", &game_system->dbgui.display_animation_renderer))
 			{
-				//game_system->scene.get_renderer().dbgui();
+				game_system->scene2.get_renderer().dbgui();
 				ImGui::End();
 			}
 		}
