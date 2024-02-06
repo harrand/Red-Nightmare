@@ -56,9 +56,20 @@ rn.mods[mod] =
 			end,
 			instantiate = function(uuid)
 				rn.entity.prefabs.keyboard_controlled.instantiate(uuid)
+				rn.current_scene():entity_write(uuid, "morbing", false)
+				rn.current_scene():entity_write(uuid, "age", 25)
+				rn.current_scene():entity_write(uuid, "timer", 0.0)
+				rn.current_scene():entity_write(uuid, "personality", nil)
 			end,
 			update = function(uuid, delta_seconds)
 				rn.entity.prefabs.keyboard_controlled.update(uuid, delta_seconds)
+				local morbing = rn.current_scene():entity_read(uuid, "morbing")
+				local t = rn.current_scene():entity_read(uuid, "timer") or 0
+				t = t + delta_seconds
+				rn.current_scene():entity_write(uuid, "timer", t)
+				if morbing == true then
+					print("MORBING TIME")
+				end
 			end
 		}
 	},
