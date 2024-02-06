@@ -4,6 +4,7 @@
 #include "tz/tz.hpp"
 #include "tz/wsi/keyboard.hpp"
 #include "tz/wsi/mouse.hpp"
+#include "tz/dbgui/dbgui.hpp"
 #include <algorithm>
 
 namespace game::input
@@ -73,12 +74,12 @@ namespace game::input
 
 	bool is_key_down(tz::wsi::key k)
 	{
-		return internal_key_states[static_cast<int>(k)];
+		return !tz::dbgui::claims_keyboard() && internal_key_states[static_cast<int>(k)];
 	}
 
 	bool is_mouse_button_down(tz::wsi::mouse_button b)
 	{
-		return internal_mouse_button_states[static_cast<int>(b)];
+		return !tz::dbgui::claims_mouse() && internal_mouse_button_states[static_cast<int>(b)];
 	}
 
 	// Lua API
