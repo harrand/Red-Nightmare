@@ -57,4 +57,7 @@ rn.entity.update = function(uuid, delta_seconds)
 			tz.assert(false);
 		end
 	end
+
+	-- if the entity is casting a spell, that also needs to advance.
+	rn.spell.advance(uuid)
 end

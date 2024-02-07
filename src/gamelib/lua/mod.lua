@@ -19,5 +19,10 @@ rn.load_mods = function()
 			leveldata.mod = modname
 			rn.level.levels[levelname] = leveldata
 		end
+
+		for spellname, spelldata in pairs(moddata.spells) do
+			spelldata.mod = modname
+			rn.spell.spells[spellname] = spelldata
+		end
 	end
 end

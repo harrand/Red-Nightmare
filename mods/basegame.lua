@@ -96,5 +96,18 @@ rn.mods[mod] =
 			end
 			--]]
 		}
+	},
+	spells = 
+	{
+		morb = 
+		{
+			cast_duration = 2.0,
+			advance = function(uuid)
+				--print("MORBING...")
+			end,
+			finish = function(uuid)
+				rn.current_scene():entity_write(uuid, "morbing", true)
+			end
+		}
 	}
 }

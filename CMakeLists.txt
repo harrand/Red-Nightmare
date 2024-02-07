@@ -79,4 +79,5 @@ add_text(
 		src/gamelib/lua/entity.lua
 		src/gamelib/lua/level.lua
 		src/gamelib/lua/mod.lua
+		src/gamelib/lua/spell.lua
 )
