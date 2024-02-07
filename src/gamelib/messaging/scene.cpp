@@ -142,6 +142,30 @@ namespace game::messaging
 				sc->get_renderer().get_renderer().animated_object_set_global_transform(cmp.obj, trans);
 			}
 			break;
+			case scene_operation::entity_set_subobject_texture_handle:
+			{
+				TZ_PROFZONE("entity set global subobject texture handle", 0xFF99CC44);
+				std::pair<std::size_t, std::int64_t> val = std::any_cast<std::pair<std::size_t, std::int64_t>>(msg.value);
+				auto cmp = sc->get_entity_render_component(msg.uuid);
+				render::scene_element elem = sc->get_renderer().get_element(cmp);
+				auto objh = sc->get_renderer().get_renderer().animated_object_get_subobjects(cmp.obj)[val.first];
+				auto texloc = elem.object_get_texture(objh, 0);
+				texloc.texture = static_cast<tz::hanval>(val.second);
+				elem.object_set_texture(objh, 0, texloc);
+			}
+			break;
+			case scene_operation::entity_set_subobject_texture_colour:
+			{
+				TZ_PROFZONE("entity set global subobject texture colour", 0xFF99CC44);
+				std::pair<std::size_t, tz::vec3> val = std::any_cast<std::pair<std::size_t, tz::vec3>>(msg.value);
+				auto cmp = sc->get_entity_render_component(msg.uuid);
+				render::scene_element elem = sc->get_renderer().get_element(cmp);
+				auto objh = sc->get_renderer().get_renderer().animated_object_get_subobjects(cmp.obj)[val.first];
+				auto texloc = elem.object_get_texture(objh, 0);
+				texloc.colour_tint = val.second;
+				elem.object_set_texture(objh, 0, texloc);
+			}
+			break;
 			case scene_operation::renderer_set_camera_position:
 			{
 				TZ_PROFZONE("renderer set camera position", 0xFF99CC44);
@@ -258,6 +282,32 @@ namespace game::messaging
 			}
 			state.stack_push_generic(ret);
 			return 1;
+		}
+
+		int entity_set_subobject_texture(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity set subobject texture", 0xFF99CC44);
+			auto [_, uuid, subobject, texid] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int, unsigned int>(state);
+			local_scene_receiver.send_message
+			({
+				.operation = scene_operation::entity_set_subobject_texture_handle,
+				.uuid = static_cast<entity_uuid>(uuid),
+				.value = std::pair<std::size_t, std::int64_t>{subobject, texid}
+			});
+			return 0;
+		}
+
+		int entity_set_subobject_colour(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity set subobject colour", 0xFF99CC44);
+			auto [_, uuid, subobject, r, g, b] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int, float, float, float>(state);
+			local_scene_receiver.send_message
+			({
+				.operation = scene_operation::entity_set_subobject_texture_colour,
+				.uuid = static_cast<entity_uuid>(uuid),
+				.value = std::pair<std::size_t, tz::vec3>{uuid, tz::vec3{r, g, b}}
+			});
+			return 0;
 		}
 
 		int entity_set_name(tz::lua::state& state)
@@ -404,6 +454,8 @@ namespace game::messaging
 			LUA_METHOD(lua_local_scene_message_receiver, clear_entities)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_write)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_read)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_set_subobject_texture)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_set_subobject_colour)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_name)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_name)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_local_position)

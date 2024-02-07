@@ -30,6 +30,8 @@ namespace game::messaging
 		entity_set_local_scale,
 		entity_set_global_position,
 		entity_set_global_scale,
+		entity_set_subobject_texture_handle,
+		entity_set_subobject_texture_colour,
 		renderer_set_camera_position,
 		renderer_set_clear_colour
 	};
