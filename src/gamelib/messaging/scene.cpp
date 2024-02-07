@@ -284,6 +284,17 @@ namespace game::messaging
 			return 1;
 		}
 
+		int entity_get_subobject_texture(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity get subobject texture", 0xFF99CC44);
+			auto [_, uuid, subobject] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int>(state);
+			auto cmp = sc->get_entity_render_component(uuid);	
+			auto objh = sc->get_renderer().get_renderer().animated_object_get_subobjects(cmp.obj)[subobject];
+			auto texloc = sc->get_renderer().get_renderer().object_get_texture(objh, 0);
+			state.stack_push_uint(static_cast<std::size_t>(static_cast<tz::hanval>(texloc.texture)));
+			return 1;
+		}
+
 		int entity_set_subobject_texture(tz::lua::state& state)
 		{
 			TZ_PROFZONE("scene - entity set subobject texture", 0xFF99CC44);
@@ -295,6 +306,19 @@ namespace game::messaging
 				.value = std::pair<std::size_t, std::int64_t>{subobject, texid}
 			});
 			return 0;
+		}
+
+		int entity_get_subobject_colour(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity get subobject colour", 0xFF99CC44);
+			auto [_, uuid, subobject] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int>(state);
+			auto cmp = sc->get_entity_render_component(uuid);	
+			auto objh = sc->get_renderer().get_renderer().animated_object_get_subobjects(cmp.obj)[subobject];
+			auto texloc = sc->get_renderer().get_renderer().object_get_texture(objh, 0);
+			state.stack_push_float(texloc.colour_tint[0]);
+			state.stack_push_float(texloc.colour_tint[1]);
+			state.stack_push_float(texloc.colour_tint[2]);
+			return 3;
 		}
 
 		int entity_set_subobject_colour(tz::lua::state& state)
@@ -454,7 +478,9 @@ namespace game::messaging
 			LUA_METHOD(lua_local_scene_message_receiver, clear_entities)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_write)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_read)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_get_subobject_texture)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_subobject_texture)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_get_subobject_colour)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_subobject_colour)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_name)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_name)
