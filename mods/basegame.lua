@@ -94,7 +94,7 @@ rn.mods[mod] =
 				local dispx = tarx - myx
 				local dispy = tary - myy
 				local angle = math.atan(dispy, dispx)
-				rn.entity.prefabs.sprite.set_rotation(uuid, angle)
+				rn.entity.prefabs.sprite.set_rotation(uuid, angle + rotate_offset)
 			end
 		},
 		morbius =
@@ -142,7 +142,9 @@ rn.mods[mod] =
 					rn.entity.prefabs.sprite.set_rotation(uuid, rn.entity.prefabs.sprite.get_rotation(uuid) + delta_seconds * 2.5)
 				end
 
-				rn.entity.prefabs.sprite.lookat(uuid, 0.0, 0.0)
+				-- look at the mouse
+				local mx, my = rn.current_scene():get_mouse_position()
+				rn.entity.prefabs.sprite.lookat(uuid, mx, my, 0.0)
 			end
 		}
 	},

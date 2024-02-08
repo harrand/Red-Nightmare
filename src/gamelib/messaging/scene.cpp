@@ -1,6 +1,7 @@
 #include "gamelib/messaging/scene.hpp"
 #include "gamelib/messaging/system.hpp"
 #include "tz/core/profile.hpp"
+#include "tz/wsi/monitor.hpp"
 
 #include <filesystem>
 #include <iostream>
@@ -556,14 +557,32 @@ namespace game::messaging
 			return 0;
 		}
 
-		int get_renderer(tz::lua::state& state)
+		int get_mouse_position(tz::lua::state& state)
 		{
-			using namespace game::render;
+			auto windims = tz::window().get_dimensions();	
+			auto mondims = tz::wsi::get_monitors().front().dimensions;
+			const float ar = static_cast<float>(mondims[0]) / mondims[1];
+			auto pos = static_cast<tz::vec2>(tz::window().get_mouse_state().mouse_position);
+			// invert y
+			pos[1] = windims[1] - pos[1];
+			// transform to 0.0-1.0
+			pos[0] /= windims[0];
+			pos[1] /= windims[1];
+			pos *= 2.0f;
+			pos -= tz::vec2::filled(1.0f);
+			// multiply by view bounds
+			const tz::vec2 vb = sc->get_renderer().get_view_bounds();
+			pos[0] *= vb[0];
+			pos[1] *= vb[1] / ar;
+			// now translate by camera position
+			const tz::vec2 campos = sc->get_renderer().get_camera_position();
+			pos += campos;
 
-			impl_rn_scene_renderer ren{.renderer = &sc->get_renderer()};
-			LUA_CLASS_PUSH(state, impl_rn_scene_renderer, ren);
-			return 1;
+			state.stack_push_float(pos[0]);
+			state.stack_push_float(pos[1]);
+			return 2;
 		}
+
 	};
 
 	LUA_CLASS_BEGIN(lua_local_scene_message_receiver)
@@ -591,6 +610,7 @@ namespace game::messaging
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_global_rotation)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_global_scale)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_global_scale)
+			LUA_METHOD(lua_local_scene_message_receiver, get_mouse_position)
 		LUA_CLASS_METHODS_END
 	LUA_CLASS_END
 
