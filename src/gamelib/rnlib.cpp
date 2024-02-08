@@ -11,7 +11,6 @@
 #include <memory>
 #include <filesystem>
 
-#include ImportedTextHeader(plane, glb)
 #include ImportedTextHeader(game, lua)
 #include ImportedTextHeader(level, lua)
 #include ImportedTextHeader(mod, lua)
@@ -47,7 +46,7 @@ namespace game
 
 		// add default models...
 		// try not to add too many. mods should be responsible for adding the models they need. default models should only be for the most obvious things (like a plane for a 2d sprite)
-		game_system->scene2.get_renderer().add_model("plane", tz::io::gltf::from_memory(ImportedTextData(plane, glb)));
+		//game_system->scene2.get_renderer().add_model("plane", tz::io::gltf::from_memory(ImportedTextData(plane, glb)));
 		// and default textures...
 	}
 

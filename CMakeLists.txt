@@ -74,8 +74,6 @@ add_text(
 	OUTPUT_DIR ${PROJECT_BINARY_DIR}
 	TEXT_FILES
 		res/fonts/ProggyClean.ttf
-		res/models/human_animated_textured.glb
-		res/models/plane.glb
 		src/gamelib/lua/entity.lua
 		src/gamelib/lua/game.lua
 		src/gamelib/lua/level.lua

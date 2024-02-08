@@ -66,6 +66,7 @@ rn.mods[mod] =
 			static_init = function()
 				print("morb to begin")
 				rn.renderer():add_texture("effect.consecrate", "consecrate.png")
+				rn.renderer():add_model("plane", "plane.glb")
 			end,
 			pre_instantiate = function(uuid)
 				return rn.entity.prefabs.plane.pre_instantiate(uuid)

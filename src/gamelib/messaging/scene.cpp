@@ -193,6 +193,15 @@ namespace game::messaging
 				sc->get_renderer().add_texture(name, tz::io::image::load_from_file(texture_path.string()));
 			}
 			break;
+			case scene_operation::renderer_add_model:
+			{
+				TZ_PROFZONE("renderer add model", 0xFF99CC44);
+				auto [name, relpath] = std::any_cast<std::pair<std::string, std::string>>(msg.value);
+				auto modpath = std::filesystem::current_path()/"mods";
+				auto model_path = modpath/relpath;
+				sc->get_renderer().add_model(name, tz::io::gltf::from_file(model_path.string().c_str()));
+			}
+			break;
 		}
 	}
 

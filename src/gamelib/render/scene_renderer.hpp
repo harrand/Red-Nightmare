@@ -157,6 +157,7 @@ namespace game::render
 		int set_clear_colour(tz::lua::state& state);
 
 		int add_texture(tz::lua::state& state);
+		int add_model(tz::lua::state& state);
 
 		int add_string(tz::lua::state& state);
 		int remove_string(tz::lua::state& state);
@@ -172,6 +173,7 @@ namespace game::render
 			LUA_METHOD(impl_rn_scene_renderer, set_clear_colour)
 
 			LUA_METHOD(impl_rn_scene_renderer, add_texture)
+			LUA_METHOD(impl_rn_scene_renderer, add_model)
 
 			LUA_METHOD(impl_rn_scene_renderer, add_string)
 			LUA_METHOD(impl_rn_scene_renderer, remove_string)

@@ -617,6 +617,18 @@ namespace game::render
 		return 0;
 	}
 
+	int impl_rn_scene_renderer::add_model(tz::lua::state& state)
+	{
+		auto [_, name, relpath] = tz::lua::parse_args<tz::lua::nil, std::string, std::string>(state);
+		game::messaging::scene_insert_message
+		({
+			.operation = game::messaging::scene_operation::renderer_add_model,
+			.uuid = std::numeric_limits<entity_uuid>::max(),
+			.value = std::pair<std::string, std::string>{name, relpath}
+		});
+		return 0;
+	}
+
 	int impl_rn_scene_renderer::add_string(tz::lua::state& state)
 	{
 		TZ_PROFZONE("scene renderer - add string", 0xFFFFAAEE);
