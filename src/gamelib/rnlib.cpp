@@ -47,6 +47,7 @@ namespace game
 		// add default models...
 		// try not to add too many. mods should be responsible for adding the models they need. default models should only be for the most obvious things (like a plane for a 2d sprite)
 		game_system->scene2.get_renderer().add_model("plane", tz::io::gltf::from_memory(ImportedTextData(plane, glb)));
+		// and default textures...
 	}
 
 	void terminate()
@@ -119,6 +120,11 @@ namespace game
 		for(const auto& entry : std::filesystem::recursive_directory_iterator("./mods"))
 		{
 			// stem is just filename without extension (which is what require likes)
+			if(entry.path().extension() != ".lua")
+			{
+				// dont try to require non .lua files
+				continue;
+			}
 			std::string path = entry.path().stem().string();
 			lua_require_cmd += std::format("require(\"{}\")", path);
 		}
@@ -146,5 +152,7 @@ namespace game
 			state.execute(lua_require_cmd.c_str());
 			state.execute("rn.load_mods()");
 		});
+
+		tz::lua::get_state().execute("rn.static_init()");
 	}
 }

@@ -39,6 +39,12 @@ namespace game::render
 		void add_model(std::string model_name, tz::io::gltf model);
 		void remove_model(std::string model_name);
 
+		void add_texture(std::string texture_name, tz::io::image image);
+		void remove_texture(std::string texture_name);
+
+		tz::ren::animation_renderer::texture_handle get_texture(std::string texture_name) const;
+		std::string get_texture_name(tz::ren::animation_renderer::texture_handle texh) const;
+
 		entry add_entry(std::string model_name);
 		void remove_entry(entry e);
 		void clear_entries();
@@ -98,6 +104,7 @@ namespace game::render
 		tz::vec2 view_bounds = {64.0f, 64.0f};
 		std::vector<entry> entries = {};
 		std::unordered_map<std::string, tz::ren::animation_renderer::gltf_handle> registered_models = {};
+		std::unordered_map<std::string, tz::ren::animation_renderer::texture_handle> registered_textures = {};
 	};
 
 	struct scene_element
@@ -149,6 +156,8 @@ namespace game::render
 		int get_clear_colour(tz::lua::state& state);
 		int set_clear_colour(tz::lua::state& state);
 
+		int add_texture(tz::lua::state& state);
+
 		int add_string(tz::lua::state& state);
 		int remove_string(tz::lua::state& state);
 		int clear_strings(tz::lua::state& state);
@@ -161,6 +170,8 @@ namespace game::render
 
 			LUA_METHOD(impl_rn_scene_renderer, get_clear_colour)
 			LUA_METHOD(impl_rn_scene_renderer, set_clear_colour)
+
+			LUA_METHOD(impl_rn_scene_renderer, add_texture)
 
 			LUA_METHOD(impl_rn_scene_renderer, add_string)
 			LUA_METHOD(impl_rn_scene_renderer, remove_string)

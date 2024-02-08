@@ -49,10 +49,26 @@ rn.mods[mod] =
 				end
 			end
 		},
-		morbius =
+		plane = 
 		{
 			pre_instantiate = function(uuid)
 				return "plane"
+			end,
+			set_texture = function(uuid, texname)
+				rn.current_scene():entity_set_subobject_texture(uuid, 2, texname)
+			end,
+			set_colour = function(uuid, r, g, b)
+				rn.current_scene():entity_set_subobject_colour(uuid, 2, r, g, b)
+			end
+		},
+		morbius =
+		{
+			static_init = function()
+				print("morb to begin")
+				rn.renderer():add_texture("effect.consecrate", "consecrate.png")
+			end,
+			pre_instantiate = function(uuid)
+				return rn.entity.prefabs.plane.pre_instantiate(uuid)
 			end,
 			instantiate = function(uuid)
 				rn.entity.prefabs.keyboard_controlled.instantiate(uuid)
@@ -60,6 +76,7 @@ rn.mods[mod] =
 				rn.current_scene():entity_write(uuid, "age", 25)
 				rn.current_scene():entity_write(uuid, "timer", 0.0)
 				rn.current_scene():entity_write(uuid, "personality", nil)
+				rn.entity.prefabs.plane.set_colour(uuid, 1.0, 0.0, 0.0)
 			end,
 			update = function(uuid, delta_seconds)
 				rn.entity.prefabs.keyboard_controlled.update(uuid, delta_seconds)

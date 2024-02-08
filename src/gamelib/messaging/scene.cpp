@@ -2,6 +2,7 @@
 #include "gamelib/messaging/system.hpp"
 #include "tz/core/profile.hpp"
 
+#include <filesystem>
 #include <iostream>
 
 namespace game::messaging
@@ -142,15 +143,17 @@ namespace game::messaging
 				sc->get_renderer().get_renderer().animated_object_set_global_transform(cmp.obj, trans);
 			}
 			break;
-			case scene_operation::entity_set_subobject_texture_handle:
+			case scene_operation::entity_set_subobject_texture_name:
 			{
-				TZ_PROFZONE("entity set global subobject texture handle", 0xFF99CC44);
-				std::pair<std::size_t, std::int64_t> val = std::any_cast<std::pair<std::size_t, std::int64_t>>(msg.value);
+				TZ_PROFZONE("entity set global subobject texture name", 0xFF99CC44);
+				std::pair<std::size_t, std::string> val = std::any_cast<std::pair<std::size_t, std::string>>(msg.value);
 				auto cmp = sc->get_entity_render_component(msg.uuid);
 				render::scene_element elem = sc->get_renderer().get_element(cmp);
 				auto objh = sc->get_renderer().get_renderer().animated_object_get_subobjects(cmp.obj)[val.first];
 				auto texloc = elem.object_get_texture(objh, 0);
-				texloc.texture = static_cast<tz::hanval>(val.second);
+				auto texhandle = sc->get_renderer().get_texture(val.second);
+				tz::assert(texhandle != tz::nullhand, "Unrecognised texture name \"%s\"", val.second.c_str());
+				texloc.texture = texhandle;
 				elem.object_set_texture(objh, 0, texloc);
 			}
 			break;
@@ -160,7 +163,8 @@ namespace game::messaging
 				std::pair<std::size_t, tz::vec3> val = std::any_cast<std::pair<std::size_t, tz::vec3>>(msg.value);
 				auto cmp = sc->get_entity_render_component(msg.uuid);
 				render::scene_element elem = sc->get_renderer().get_element(cmp);
-				auto objh = sc->get_renderer().get_renderer().animated_object_get_subobjects(cmp.obj)[val.first];
+				auto subobjects = sc->get_renderer().get_renderer().animated_object_get_subobjects(cmp.obj);
+				auto objh = subobjects[val.first];
 				auto texloc = elem.object_get_texture(objh, 0);
 				texloc.colour_tint = val.second;
 				elem.object_set_texture(objh, 0, texloc);
@@ -178,6 +182,15 @@ namespace game::messaging
 				TZ_PROFZONE("renderer set clear colour", 0xFF99CC44);
 				tz::vec4 rgba = std::any_cast<tz::vec4>(msg.value);
 				sc->get_renderer().set_clear_colour(rgba);
+			}
+			break;
+			case scene_operation::renderer_add_texture:
+			{
+				TZ_PROFZONE("renderer add texture", 0xFF99CC44);
+				auto [name, relpath] = std::any_cast<std::pair<std::string, std::string>>(msg.value);
+				auto modpath = std::filesystem::current_path()/"mods";
+				auto texture_path = modpath/relpath;
+				sc->get_renderer().add_texture(name, tz::io::image::load_from_file(texture_path.string()));
 			}
 			break;
 		}
@@ -291,19 +304,19 @@ namespace game::messaging
 			auto cmp = sc->get_entity_render_component(uuid);	
 			auto objh = sc->get_renderer().get_renderer().animated_object_get_subobjects(cmp.obj)[subobject];
 			auto texloc = sc->get_renderer().get_renderer().object_get_texture(objh, 0);
-			state.stack_push_uint(static_cast<std::size_t>(static_cast<tz::hanval>(texloc.texture)));
+			state.stack_push_string(sc->get_renderer().get_texture_name(texloc.texture));
 			return 1;
 		}
 
 		int entity_set_subobject_texture(tz::lua::state& state)
 		{
 			TZ_PROFZONE("scene - entity set subobject texture", 0xFF99CC44);
-			auto [_, uuid, subobject, texid] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int, unsigned int>(state);
+			auto [_, uuid, subobject, texname] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int, std::string>(state);
 			local_scene_receiver.send_message
 			({
-				.operation = scene_operation::entity_set_subobject_texture_handle,
+				.operation = scene_operation::entity_set_subobject_texture_name,
 				.uuid = static_cast<entity_uuid>(uuid),
-				.value = std::pair<std::size_t, std::int64_t>{subobject, texid}
+				.value = std::pair<std::size_t, std::string>{subobject, texname}
 			});
 			return 0;
 		}
@@ -329,7 +342,7 @@ namespace game::messaging
 			({
 				.operation = scene_operation::entity_set_subobject_texture_colour,
 				.uuid = static_cast<entity_uuid>(uuid),
-				.value = std::pair<std::size_t, tz::vec3>{uuid, tz::vec3{r, g, b}}
+				.value = std::pair<std::size_t, tz::vec3>{subobject, tz::vec3{r, g, b}}
 			});
 			return 0;
 		}

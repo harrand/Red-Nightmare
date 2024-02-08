@@ -76,6 +76,49 @@ namespace game::render
 	void scene_renderer::remove_model(std::string model_name)
 	{
 		this->registered_models.erase(model_name);
+		// TODO: remove from underlying renderer?
+	}
+
+	void scene_renderer::add_texture(std::string texture_name, tz::io::image image)
+	{
+		if(this->registered_textures.contains(texture_name))
+		{
+			tz::report("Warning: Attempted to register texture \"%s\", but a texture was already registered with that name", texture_name.c_str());
+		}
+		this->registered_textures[texture_name] = this->renderer.add_texture(image);
+	}
+
+	void scene_renderer::remove_texture(std::string texture_name)
+	{
+		this->registered_textures.erase(texture_name);
+		// TODO: remove from underlying renderer?
+	}
+
+	tz::ren::animation_renderer::texture_handle scene_renderer::get_texture(std::string texture_name) const
+	{
+		auto iter = this->registered_textures.find(texture_name);
+		if(iter == this->registered_textures.end())
+		{
+			return tz::nullhand;
+		}
+		return iter->second;
+	}
+
+	std::string scene_renderer::get_texture_name(tz::ren::animation_renderer::texture_handle texh) const
+	{
+		if(texh == tz::nullhand)
+		{
+			return "Null Texture";
+		}
+		// very slow. boo
+		for(const auto& [name, handle] : this->registered_textures)
+		{
+			if(handle == texh)
+			{
+				return name;
+			}
+		}
+		return "<missingtex>";
 	}
 
 	scene_renderer::entry scene_renderer::add_entry(std::string model_name)
@@ -558,6 +601,18 @@ namespace game::render
 			.operation = game::messaging::scene_operation::renderer_set_clear_colour,
 			.uuid = std::numeric_limits<entity_uuid>::max(),
 			.value = tz::vec4{r, g, b, a}
+		});
+		return 0;
+	}
+
+	int impl_rn_scene_renderer::add_texture(tz::lua::state& state)
+	{
+		auto [_, name, relpath] = tz::lua::parse_args<tz::lua::nil, std::string, std::string>(state);
+		game::messaging::scene_insert_message
+		({
+			.operation = game::messaging::scene_operation::renderer_add_texture,
+			.uuid = std::numeric_limits<entity_uuid>::max(),
+			.value = std::pair<std::string, std::string>{name, relpath}
 		});
 		return 0;
 	}

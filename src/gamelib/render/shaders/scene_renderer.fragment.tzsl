@@ -79,8 +79,8 @@ void main()
 	texture_locator base_colour = in::textures[0];
 	if(base_colour.texture_id == BADU)
 	{
-		// use solid red.
-		outcol = vec4(1.0f, 1.0f, 1.0f, 1.0f);
+		// use solid white.
+		outcol = vec4(base_colour.colour_tint, 1.0f);
 	}
 	else
 	{
