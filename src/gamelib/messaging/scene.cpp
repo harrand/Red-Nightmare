@@ -113,6 +113,16 @@ namespace game::messaging
 				sc->get_renderer().get_renderer().animated_object_set_local_transform(cmp.obj, trans);
 			}
 			break;
+			case scene_operation::entity_set_local_rotation:
+			{
+				TZ_PROFZONE("entity set local rotation", 0xFF99CC44);
+				tz::quat val = std::any_cast<tz::quat>(msg.value);
+				auto cmp = sc->get_entity_render_component(msg.uuid);
+				tz::trs trans = sc->get_renderer().get_renderer().animated_object_get_local_transform(cmp.obj);
+				trans.rotate = val;
+				sc->get_renderer().get_renderer().animated_object_set_local_transform(cmp.obj, trans);
+			}
+			break;
 			case scene_operation::entity_set_local_scale:
 			{
 				TZ_PROFZONE("entity set local scale", 0xFF99CC44);
@@ -130,6 +140,16 @@ namespace game::messaging
 				auto cmp = sc->get_entity_render_component(msg.uuid);
 				tz::trs trans = sc->get_renderer().get_renderer().animated_object_get_global_transform(cmp.obj);
 				trans.translate = val;
+				sc->get_renderer().get_renderer().animated_object_set_global_transform(cmp.obj, trans);
+			}
+			break;
+			case scene_operation::entity_set_global_rotation:
+			{
+				TZ_PROFZONE("entity set global rotation", 0xFF99CC44);
+				tz::quat val = std::any_cast<tz::quat>(msg.value);
+				auto cmp = sc->get_entity_render_component(msg.uuid);
+				tz::trs trans = sc->get_renderer().get_renderer().animated_object_get_global_transform(cmp.obj);
+				trans.rotate = val;
 				sc->get_renderer().get_renderer().animated_object_set_global_transform(cmp.obj, trans);
 			}
 			break;
@@ -397,6 +417,7 @@ namespace game::messaging
 
 		int entity_get_local_position(tz::lua::state& state)
 		{
+			TZ_PROFZONE("scene - entity get local position", 0xFF99CC44);
 			tz::trs localt = impl_entity_get_local_transform(state);
 			state.stack_push_float(localt.translate[0]);
 			state.stack_push_float(localt.translate[1]);
@@ -417,8 +438,33 @@ namespace game::messaging
 			return 0;
 		}
 
+		int entity_get_local_rotation(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity get local rotation", 0xFF99CC44);
+			tz::trs localt = impl_entity_get_local_transform(state);
+			state.stack_push_float(localt.rotate[0]);
+			state.stack_push_float(localt.rotate[1]);
+			state.stack_push_float(localt.rotate[2]);
+			state.stack_push_float(localt.rotate[3]);
+			return 4;
+		}
+
+		int entity_set_local_rotation(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity set local rotation", 0xFF99CC44);
+			auto [_, uuid, x, y, z, w] = tz::lua::parse_args<tz::lua::nil, unsigned int, float, float, float, float>(state);
+			local_scene_receiver.send_message
+			({
+				.operation = scene_operation::entity_set_local_rotation,
+				.uuid = static_cast<entity_uuid>(uuid),
+				.value = tz::quat{x, y, z, w}
+			});
+			return 0;
+		}
+
 		int entity_get_local_scale(tz::lua::state& state)
 		{
+			TZ_PROFZONE("scene - entity get local scale", 0xFF99CC44);
 			tz::trs localt = impl_entity_get_local_transform(state);
 			state.stack_push_float(localt.scale[0]);
 			state.stack_push_float(localt.scale[1]);
@@ -428,7 +474,7 @@ namespace game::messaging
 
 		int entity_set_local_scale(tz::lua::state& state)
 		{
-			TZ_PROFZONE("scene - entity set local position", 0xFF99CC44);
+			TZ_PROFZONE("scene - entity set local scale", 0xFF99CC44);
 			auto [_, uuid, x, y, z] = tz::lua::parse_args<tz::lua::nil, unsigned int, float, float, float>(state);
 			local_scene_receiver.send_message
 			({
@@ -441,6 +487,7 @@ namespace game::messaging
 
 		int entity_get_global_position(tz::lua::state& state)
 		{
+			TZ_PROFZONE("scene - entity get global position", 0xFF99CC44);
 			tz::trs localt = impl_entity_get_global_transform(state);
 			state.stack_push_float(localt.translate[0]);
 			state.stack_push_float(localt.translate[1]);
@@ -461,8 +508,34 @@ namespace game::messaging
 			return 0;
 		}
 
+
+		int entity_get_global_rotation(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity get global rotation", 0xFF99CC44);
+			tz::trs localt = impl_entity_get_global_transform(state);
+			state.stack_push_float(localt.rotate[0]);
+			state.stack_push_float(localt.rotate[1]);
+			state.stack_push_float(localt.rotate[2]);
+			state.stack_push_float(localt.rotate[3]);
+			return 4;
+		}
+
+		int entity_set_global_rotation(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity set global rotation", 0xFF99CC44);
+			auto [_, uuid, x, y, z, w] = tz::lua::parse_args<tz::lua::nil, unsigned int, float, float, float, float>(state);
+			local_scene_receiver.send_message
+			({
+				.operation = scene_operation::entity_set_global_rotation,
+				.uuid = static_cast<entity_uuid>(uuid),
+				.value = tz::quat{x, y, z, w}
+			});
+			return 0;
+		}
+
 		int entity_get_global_scale(tz::lua::state& state)
 		{
+			TZ_PROFZONE("scene - entity get global scale", 0xFF99CC44);
 			tz::trs localt = impl_entity_get_global_transform(state);
 			state.stack_push_float(localt.scale[0]);
 			state.stack_push_float(localt.scale[1]);
@@ -508,10 +581,14 @@ namespace game::messaging
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_name)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_local_position)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_local_position)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_get_local_rotation)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_set_local_rotation)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_local_scale)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_local_scale)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_global_position)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_global_position)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_get_global_rotation)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_set_global_rotation)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_global_scale)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_global_scale)
 		LUA_CLASS_METHODS_END

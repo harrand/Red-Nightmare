@@ -25,9 +25,9 @@ int main()
 
 		tz::lua::get_state().execute(R"(
 			rn.level.load("startscreen")
-			for i=1,64,1 do
-				rn.current_scene():add_entity("morbius")
-			end
+			--for i=1,64,1 do
+			--	rn.current_scene():add_entity("morbius")
+			--end
 		)");
 
 		while(!tz::window().is_close_requested())

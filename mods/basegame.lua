@@ -49,7 +49,7 @@ rn.mods[mod] =
 				end
 			end
 		},
-		plane = 
+		sprite = 
 		{
 			pre_instantiate = function(uuid)
 				return "plane"
@@ -57,8 +57,44 @@ rn.mods[mod] =
 			set_texture = function(uuid, texname)
 				rn.current_scene():entity_set_subobject_texture(uuid, 2, texname)
 			end,
+			get_texture = function(uuid)
+				return rn.current_scene():entity_get_subobject_texture(uuid, 2)
+			end,
 			set_colour = function(uuid, r, g, b)
 				rn.current_scene():entity_set_subobject_colour(uuid, 2, r, g, b)
+			end,
+			get_colour = function(uuid)
+				return rn.current_scene():entity_get_subobject_colour(uuid, 2)
+			end,
+			set_position = function(uuid, x, y)
+				rn.current_scene():entity_set_local_position(uuid, x, y, 0.0)
+			end,
+			get_position = function(uuid)
+				local x, y, z = rn.current_scene():entity_get_local_position(uuid)
+				return x, y
+			end,
+			set_rotation = function(uuid, angle)
+				-- this angle is a rotation in the z-axis as we're a 2d sprite.
+				rn.current_scene():entity_set_local_rotation(uuid, 0.0, 0.0, math.sin(angle / 2.0), math.cos(angle / 2.0))
+			end,
+			get_rotation = function(uuid)
+				local x, y, z, w = rn.current_scene():entity_get_local_rotation(uuid)
+				return 2.0 * math.asin(z)
+			end,
+			set_scale = function(uuid, scale)
+				rn.current_scene():entity_set_local_scale(uuid, scale, scale, scale)
+			end,
+			get_scale = function(uuid)
+				local x, y, z = rn.current_scene():entity_get_local_scale(uuid)
+				-- ideally they're all the same, so lets just get x
+				return x
+			end,
+			lookat = function(uuid, tarx, tary, rotate_offset)
+				local myx, myy = rn.entity.prefabs.sprite.get_position(uuid)
+				local dispx = tarx - myx
+				local dispy = tary - myy
+				local angle = math.atan(dispy, dispx)
+				rn.entity.prefabs.sprite.set_rotation(uuid, angle)
 			end
 		},
 		morbius =
@@ -69,7 +105,7 @@ rn.mods[mod] =
 				rn.renderer():add_model("plane", "plane.glb")
 			end,
 			pre_instantiate = function(uuid)
-				return rn.entity.prefabs.plane.pre_instantiate(uuid)
+				return rn.entity.prefabs.sprite.pre_instantiate(uuid)
 			end,
 			instantiate = function(uuid)
 				rn.entity.prefabs.keyboard_controlled.instantiate(uuid)
@@ -77,7 +113,7 @@ rn.mods[mod] =
 				rn.current_scene():entity_write(uuid, "age", 25)
 				rn.current_scene():entity_write(uuid, "timer", 0.0)
 				rn.current_scene():entity_write(uuid, "personality", nil)
-				rn.entity.prefabs.plane.set_colour(uuid, 1.0, 0.0, 0.0)
+				rn.entity.prefabs.sprite.set_colour(uuid, 1.0, 0.0, 0.0)
 			end,
 			update = function(uuid, delta_seconds)
 				rn.entity.prefabs.keyboard_controlled.update(uuid, delta_seconds)
@@ -88,6 +124,25 @@ rn.mods[mod] =
 				if morbing == true then
 					print("MORBING TIME")
 				end
+
+				if rn.input():is_key_down("l") then
+					rn.entity.prefabs.sprite.set_rotation(uuid, rn.entity.prefabs.sprite.get_rotation(uuid) - delta_seconds * 2.5)
+				end
+
+
+				if rn.input():is_key_down("k") then
+					rn.entity.prefabs.sprite.set_scale(uuid, rn.entity.prefabs.sprite.get_scale(uuid) * (1.0 - delta_seconds))
+				end
+
+				if rn.input():is_key_down("i") then
+					rn.entity.prefabs.sprite.set_scale(uuid, rn.entity.prefabs.sprite.get_scale(uuid) * (1.0 + delta_seconds))
+				end
+
+				if rn.input():is_key_down("j") then
+					rn.entity.prefabs.sprite.set_rotation(uuid, rn.entity.prefabs.sprite.get_rotation(uuid) + delta_seconds * 2.5)
+				end
+
+				rn.entity.prefabs.sprite.lookat(uuid, 0.0, 0.0)
 			end
 		}
 	},
