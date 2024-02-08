@@ -61,11 +61,3 @@ rn.entity.update = function(uuid, delta_seconds)
 	-- if the entity is casting a spell, that also needs to advance.
 	rn.spell.advance(uuid)
 end
-	
-rn.static_init = function()
-	for prefabname, prefabdata in pairs(rn.entity.prefabs) do
-		if prefabdata.static_init ~= nil then
-			prefabdata.static_init()
-		end
-	end
-end

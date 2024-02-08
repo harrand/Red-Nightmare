@@ -77,6 +77,7 @@ add_text(
 		res/models/human_animated_textured.glb
 		res/models/plane.glb
 		src/gamelib/lua/entity.lua
+		src/gamelib/lua/game.lua
 		src/gamelib/lua/level.lua
 		src/gamelib/lua/mod.lua
 		src/gamelib/lua/spell.lua

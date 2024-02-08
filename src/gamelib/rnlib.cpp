@@ -12,6 +12,7 @@
 #include <filesystem>
 
 #include ImportedTextHeader(plane, glb)
+#include ImportedTextHeader(game, lua)
 #include ImportedTextHeader(level, lua)
 #include ImportedTextHeader(mod, lua)
 #include ImportedTextHeader(spell, lua)
@@ -82,6 +83,10 @@ namespace game
 		game::input::input_advance();
 		game_system->scene2.update(delta_seconds);
 		tz::gl::get_device().render();
+		{
+			std::string update_src = std::format("rn.update({})", delta_seconds);
+			tz::lua::get_state().execute(update_src.c_str());
+		}
 		game_system->scene2.block();
 		game::messaging::scene_messaging_update();
 	}
@@ -129,14 +134,16 @@ namespace game
 			lua_require_cmd += std::format("require(\"{}\")", path);
 		}
 
+		std::string game_lua_src{ImportedTextData(game, lua)};
 		std::string level_lua_src{ImportedTextData(level, lua)};
 		std::string mod_lua_src{ImportedTextData(mod, lua)};
 		std::string spell_lua_src{ImportedTextData(spell, lua)};
 
-		tz::lua::for_all_states([&lua_require_cmd, &mod_lua_src, &level_lua_src, &spell_lua_src](tz::lua::state& state)
+		tz::lua::for_all_states([&lua_require_cmd, &mod_lua_src, &level_lua_src, &spell_lua_src, &game_lua_src](tz::lua::state& state)
 		{
 			//state.execute(R"(
 			//)");
+			state.execute(game_lua_src.c_str());
 			state.execute(mod_lua_src.c_str());
 			state.execute(level_lua_src.c_str());
 			state.execute(spell_lua_src.c_str());
