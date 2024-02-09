@@ -91,6 +91,13 @@ namespace game::messaging
 				sc->clear();
 			}
 			break;
+			case scene_operation::set_level_name:
+			{
+				TZ_PROFZONE("set level name", 0xFF99CC44);
+				std::string name = std::any_cast<std::string>(msg.value);
+				sc->set_current_level_name(name);
+			}
+			break;
 			case scene_operation::entity_write:
 			{
 				TZ_PROFZONE("entity write", 0xFF99CC44);
@@ -285,6 +292,34 @@ namespace game::messaging
 				.uuid = std::numeric_limits<entity_uuid>::max()
 			});
 			return 0;
+		}
+
+		int set_level_name(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - set level name", 0xFF99CC44);
+			auto [_, name] = tz::lua::parse_args<tz::lua::nil, std::string>(state);
+			local_scene_receiver.send_message
+			({
+				.operation = scene_operation::set_level_name,
+				.uuid = std::numeric_limits<entity_uuid>::max(),
+				.value = name
+			});
+			return 0;
+		}
+
+		int get_level_name(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - get level name", 0xFF99CC44);
+			std::string name = sc->get_current_level_name();
+			if(name.empty())
+			{
+				state.stack_push_nil();
+			}
+			else
+			{
+				state.stack_push_string(name);
+			}
+			return 1;
 		}
 
 		int contains_entity(tz::lua::state& state)
@@ -571,6 +606,8 @@ namespace game::messaging
 			LUA_METHOD(lua_local_scene_message_receiver, add_entity)
 			LUA_METHOD(lua_local_scene_message_receiver, remove_entity)
 			LUA_METHOD(lua_local_scene_message_receiver, clear_entities)
+			LUA_METHOD(lua_local_scene_message_receiver, set_level_name)
+			LUA_METHOD(lua_local_scene_message_receiver, get_level_name)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_write)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_read)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_subobject_texture)

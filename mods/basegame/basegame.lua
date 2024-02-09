@@ -113,7 +113,8 @@ rn.mods[mod] =
 				rn.current_scene():entity_write(uuid, "age", 25)
 				rn.current_scene():entity_write(uuid, "timer", 0.0)
 				rn.current_scene():entity_write(uuid, "personality", nil)
-				rn.entity.prefabs.sprite.set_colour(uuid, 1.0, 0.0, 0.0)
+				rn.entity.prefabs.sprite.set_colour(uuid, 1.0, 0.8, 0.7)
+				rn.entity.prefabs.sprite.set_texture(uuid, "effect.consecrate")
 			end,
 			update = function(uuid, delta_seconds)
 				rn.entity.prefabs.keyboard_controlled.update(uuid, delta_seconds)
@@ -162,14 +163,12 @@ rn.mods[mod] =
 				rn.title_string_engine = rn.renderer():add_string(20, 60, 10, "Topaz" .. tz.version.string, 1.0, 1.0, 1.0)
 				rn.title_string_press_to_begin = rn.renderer():add_string(w / 2 - 110.0, h * 0.4, 10, "PRESS [ENTER] TO PLAY", 1.0, 1.0, 1.0)
 			end,
-			--[[
-			on_update = function()
+			update = function()
 				local w, h = tz.window():get_dimensions()
 				rn.title_string:set_position(w / 2 - 250.0, h * 0.8)
 				rn.title_string_author:set_position(w / 2 + 150, h * 0.8 - 55)
 				rn.title_string_press_to_begin:set_position(w / 2 - 110.0, h * 0.4)
 			end
-			--]]
 		}
 	},
 	spells = 

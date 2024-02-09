@@ -253,6 +253,16 @@ namespace game
 		return this->mouse_pos_ws;
 	}
 
+	std::string scene::get_current_level_name() const
+	{
+		return this->current_level_name;
+	}
+
+	void scene::set_current_level_name(std::string level_name)
+	{
+		this->current_level_name = level_name;
+	}
+
 	void scene::initialise_renderer_component(entity_uuid uuid)
 	{
 		auto& ent = this->entities[this->uuid_entity_map.at(uuid)];
