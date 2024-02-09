@@ -55,15 +55,19 @@ namespace game
 		const game::render::scene_renderer& get_renderer() const;
 		game::render::scene_renderer& get_renderer();
 
+		tz::vec2 get_mouse_position_world_space() const;
+
 		void dbgui();
 	private:
 		void initialise_renderer_component(entity_uuid uuid);
+		tz::vec2 calc_mouse_position_world_space() const;
 		// free list gives handle stability, which we want.
 		// hashmap gives fast lookup for those who want to index by uuid (which everyone will want to do)
 		tz::free_list<scene_entity_data> entities = {};
 		std::unordered_map<entity_uuid, entity_handle> uuid_entity_map = {};
 		std::vector<tz::job_handle> entity_update_jobs = {};
 		game::render::scene_renderer renderer;
+		tz::vec2 mouse_pos_ws = {};
 	public:
 		decltype(entities)::iterator begin();
 		decltype(entities)::const_iterator begin() const ;

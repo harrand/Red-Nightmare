@@ -3,6 +3,7 @@
 #include "gamelib/render/scene_renderer.hpp"
 #include "tz/core/debug.hpp"
 #include "tz/core/profile.hpp"
+#include "tz/wsi/monitor.hpp"
 #include <format>
 
 namespace game
@@ -106,6 +107,7 @@ namespace game
 	void scene::update(float delta_seconds)
 	{
 		TZ_PROFZONE("scene - update", 0xFFCCAACC);
+		this->mouse_pos_ws = this->calc_mouse_position_world_space();
 		this->renderer.update(delta_seconds);	
 
 		auto count = this->entity_count();
@@ -246,11 +248,39 @@ namespace game
 		return this->renderer;
 	}
 
+	tz::vec2 scene::get_mouse_position_world_space() const
+	{
+		return this->mouse_pos_ws;
+	}
+
 	void scene::initialise_renderer_component(entity_uuid uuid)
 	{
 		auto& ent = this->entities[this->uuid_entity_map.at(uuid)];
 		tz::assert(ent.ren.obj == tz::nullhand, "initialise_render_component(ent) - already has an animated_objects handle!");
 		ent.ren = this->renderer.add_entry(ent.ren.model_name);
+	}
+
+	tz::vec2 scene::calc_mouse_position_world_space() const
+	{
+		auto windims = tz::window().get_dimensions();	
+		auto mondims = tz::wsi::get_monitors().front().dimensions;
+		const float ar = static_cast<float>(mondims[0]) / mondims[1];
+		auto pos = static_cast<tz::vec2>(tz::window().get_mouse_state().mouse_position);
+		// invert y
+		pos[1] = windims[1] - pos[1];
+		// transform to 0.0-1.0
+		pos[0] /= windims[0];
+		pos[1] /= windims[1];
+		pos *= 2.0f;
+		pos -= tz::vec2::filled(1.0f);
+		// multiply by view bounds
+		const tz::vec2 vb = this->get_renderer().get_view_bounds();
+		pos[0] *= vb[0];
+		pos[1] *= vb[1] / ar;
+		// now translate by camera position
+		const tz::vec2 campos = this->get_renderer().get_camera_position();
+		pos += campos;
+		return pos;
 	}
 
 	decltype(scene::entities)::iterator scene::begin()
