@@ -121,7 +121,8 @@ namespace game
 			std::string cwd = std::filesystem::current_path().string();
 			tz::assert(std::filesystem::exists("./mods"), "./mods directory not found. Current path: \"%s\"", cwd.c_str());
 		#endif
-		for(const auto& entry : std::filesystem::recursive_directory_iterator("./mods"))
+		constexpr const char mods_folder[] = "./mods";
+		for(const auto& entry : std::filesystem::recursive_directory_iterator(mods_folder))
 		{
 			// stem is just filename without extension (which is what require likes)
 			if(entry.path().extension() != ".lua")
@@ -129,7 +130,14 @@ namespace game
 				// dont try to require non .lua files
 				continue;
 			}
-			std::string path = entry.path().stem().string();
+			std::string path = entry.path().string();
+			std::string suffix_to_remove = entry.path().extension().string();
+			auto iter = path.find(mods_folder);
+			path.erase(iter, sizeof(mods_folder));
+			path.erase(path.find(suffix_to_remove), suffix_to_remove.size());
+			// single backslashes detected in path, which is bad.
+			// note: linux might possibly prefer double backslash instead of single forward slash. windows doesn't care.
+			std::replace(path.begin(), path.end(), '\\', '/');
 			lua_require_cmd += std::format("require(\"{}\")", path);
 		}
 

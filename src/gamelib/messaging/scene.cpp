@@ -582,7 +582,6 @@ namespace game::messaging
 			state.stack_push_float(pos[1]);
 			return 2;
 		}
-
 	};
 
 	LUA_CLASS_BEGIN(lua_local_scene_message_receiver)
