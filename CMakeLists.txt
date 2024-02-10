@@ -21,6 +21,11 @@ tz_add_library(
 		src/gamelib/messaging/scene.cpp
 		src/gamelib/messaging/scene.hpp
 		src/gamelib/messaging/system.hpp
+		
+		src/gamelib/physics/aabb.cpp
+		src/gamelib/physics/aabb.hpp
+		src/gamelib/physics/grid_hierarchy.cpp
+		src/gamelib/physics/grid_hierarchy.hpp
 
 		src/gamelib/render/scene_renderer.cpp
 		src/gamelib/render/scene_renderer.hpp
