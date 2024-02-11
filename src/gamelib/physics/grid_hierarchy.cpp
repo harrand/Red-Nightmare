@@ -146,6 +146,12 @@ namespace game::physics
 										duplicate_protection.insert({lhs, rhs});
 										duplicate_protection.insert({rhs, lhs});
 									}
+									// erase x intersects with x.
+									std::erase_if(this->cached_intersections.value(), [](const auto& tuple)
+									{
+										const auto& [entity_a, entity_b, unused] = tuple;
+										return entity_a == entity_b;
+									});
 								}
 							}
 						}
@@ -216,6 +222,7 @@ namespace game::physics
 		// between {0.0, 0.0} and {1.0, 1.0}
 		offseted_centre[0] *= this->cell_dimensions[0];
 		offseted_centre[1] *= this->cell_dimensions[1];
+		// between {0.0, 0.0} and cell_dimensions
 		cell_coord coord = {static_cast<unsigned short>(offseted_centre[0]), static_cast<unsigned short>(offseted_centre[1])};
 		this->get_cell(coord).contained_entities.push_back(uuid);
 

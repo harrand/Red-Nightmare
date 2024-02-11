@@ -187,7 +187,45 @@ namespace game
 
 	void scene::fixed_update(float delta_seconds, std::uint64_t unprocessed)
 	{
+		TZ_PROFZONE("scene - fixed update", 0xFFCCAACC);
+		for(const auto& [entity_a, entity_b, manifold] : this->grid.get_intersections())
+		{
+			TZ_PROFZONE("scene - collision response", 0xFFCC22CC);
+			auto comp_a = this->get_entity_render_component(entity_a);
+			tz::assert(!comp_a.model_name.empty());
+			auto comp_b = this->get_entity_render_component(entity_b);
+			tz::assert(!comp_b.model_name.empty());
 
+			tz::vec3 apos = this->get_renderer().get_renderer().animated_object_get_global_transform(comp_a.obj).translate;
+			tz::vec3 bpos = this->get_renderer().get_renderer().animated_object_get_global_transform(comp_b.obj).translate;
+
+			// https://research.ncl.ac.uk/game/mastersdegree/gametechnologies/physicstutorials/5collisionresponse/Physics%20-%20Collision%20Response.pdf
+			// projection method - change their position in opposite directions along the manifold normal.
+			// todo: consider impulse method
+			tz::vec2 normal = manifold.normal * 0.5f;
+			// move both entities.
+			// note: we have a normal, but we dont know which should go along the normal and which should go opposite it.
+			// to determine this, we dot product the displacement between the two with the normal.
+			tz::vec2 displacement = bpos.swizzle<0, 1>() - apos.swizzle<0, 1>();
+			float dot = displacement.dot(normal);
+			if(dot > 0.0f)
+			{
+				normal *= -1.0f;
+			}
+
+			game::messaging::scene_insert_message
+			({
+				.operation = game::messaging::scene_operation::entity_set_global_position,
+				.uuid = entity_a,
+				.value = (apos.swizzle<0, 1>() + normal).with_more(apos[2])
+			});
+			game::messaging::scene_insert_message
+			({
+				.operation = game::messaging::scene_operation::entity_set_global_position,
+				.uuid = entity_b,
+				.value = (bpos.swizzle<0, 1>() - normal).with_more(bpos[2])
+			});
+		}
 	}
 
 	void scene::block()

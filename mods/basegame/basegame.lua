@@ -13,7 +13,7 @@ rn.mods[mod] =
 				sc:entity_write(uuid, "control.left", "a")
 				sc:entity_write(uuid, "control.right", "d")
 				sc:entity_write(uuid, "control.backward", "s")
-				sc:entity_write(uuid, "control.enabled", true)
+				sc:entity_write(uuid, "control.enabled", false)
 			end,
 			update = function(uuid, delta_seconds)
 				local sc = rn.current_scene()
@@ -163,8 +163,8 @@ rn.mods[mod] =
 				math.randomseed(os.time())
 				for i=0,128,1 do
 					local morbx = rn.current_scene():add_entity("morbius")
-					local randx = math.random(-50, 50)
-					local randy = math.random(-50, 50)
+					local randx = math.random(-40, 40)
+					local randy = math.random(-40, 40)
 					rn.entity.prefabs.sprite.set_position(morbx, randx, randy)
 				end
 
@@ -172,7 +172,7 @@ rn.mods[mod] =
 				rn.title_string = rn.renderer():add_string(w / 2 - 250.0, h * 0.8, 40, "Red Nightmare", 0.6, 0.1, 0.15)
 				rn.title_string_author = rn.renderer():add_string(w / 2 + 150, h * 0.8 - 55, 12, "by Harrand", 0.9, 0.3, 0.35)
 				rn.title_string_engine = rn.renderer():add_string(20, 60, 10, "Topaz" .. tz.version.string, 1.0, 1.0, 1.0)
-				rn.title_string_press_to_begin = rn.renderer():add_string(w / 2 - 110.0, h * 0.4, 10, "PRESS [ENTER] TO PLAY", 1.0, 1.0, 1.0)
+				rn.title_string_press_to_begin = rn.renderer():add_string(w / 2 - 110.0, h * 0.4, 10, "PRESS [ENTER] TO not PLAY", 1.0, 1.0, 1.0)
 			end,
 			update = function()
 				local w, h = tz.window():get_dimensions()

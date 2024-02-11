@@ -35,18 +35,16 @@ namespace game::physics
             // Calculate penetration depths along both axes
             float x_penetration = std::min(max[0] - box.min[0], box.max[0] - min[0]);
             float y_penetration = std::min(max[1] - box.min[1], box.max[1] - min[1]);
-
-            // Determine the axis with the minimum penetration depth
-            if (x_penetration < y_penetration) {
-                ret.normal = {1.0f, 0.0f};
-                ret.penetration_depth = x_penetration;
-            } else {
-                ret.normal = {0.0f, 1.0f};
-                ret.penetration_depth = y_penetration;
+            if(x_penetration == 0.0f && y_penetration == 0.0f)
+            {
+                // they're technically touching, but on the exact pixel-perfect boundaries.
+                // in this case we just say they aren't intersecting.
+                return ret;
             }
             ret.intersecting = true;
+            ret.normal = {y_penetration, x_penetration};
+            ret.penetration_depth = std::hypot(x_penetration, y_penetration);
         }
-        
         return ret;
 	}
 
