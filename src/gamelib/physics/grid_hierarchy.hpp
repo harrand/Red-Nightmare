@@ -30,6 +30,7 @@ namespace game::physics
 		void remove_entity(entity_uuid uuid);
 		// notify the simulation that the boundary for an existing entity has changed (e.g its moved, or its dimensions have changed)
 		void notify_change(entity_uuid uuid, boundary_t boundary, oob_policy oob = oob_policy::assert_in_bounds);
+		bool contains(entity_uuid uuid) const;
 
 		const intersection_data& get_intersections();
 		// remove all entities in the simulation. world boundaries stay the same.

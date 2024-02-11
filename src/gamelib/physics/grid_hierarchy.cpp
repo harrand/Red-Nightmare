@@ -69,6 +69,11 @@ namespace game::physics
 		this->cached_intersections = std::nullopt;
 	}
 
+	bool grid_hierarchy::contains(entity_uuid uuid) const
+	{
+		return this->bounded_entities.find(uuid) != this->bounded_entities.end();
+	}
+
 	void grid_hierarchy::remove_entity(entity_uuid uuid)
 	{
 		TZ_PROFZONE("grid hierarchy - remove entity", 0xFFBB2244);
