@@ -156,6 +156,13 @@ namespace game::physics
 		return this->cached_intersections.value();
 	}
 
+	void grid_hierarchy::clear()
+	{
+		this->create_cells();
+		this->bounded_entities.clear();
+		this->cached_intersections = std::nullopt;
+	}
+
 	grid_hierarchy::cell_coord grid_hierarchy::notify_change_without_cache_changes(entity_uuid uuid, boundary_t boundary, oob_policy oob = oob_policy::assert_in_bounds)
 	{
 		tz::vec2 boundary_centre = boundary.get_centre();
@@ -168,14 +175,15 @@ namespace game::physics
 		cell_size[1] /= this->cell_dimensions[1];
 		if(extent[0] > cell_size[0] || extent[1] > cell_size[1])
 		{
-			// this boundary is bigger than a cell.
-			// this means we need *fewer* cells
-			if(this->cell_dimensions[0] == 1 || this->cell_dimensions[1] == 1)
-			{
-				// our cells cant be any larger. we're fucked.
-				tz::error("Boundary is so small that even a single cell in the grid cannot hold the boundary. YOU FUCKED UP.");
-			}
 			cell_coord new_cell_max = this->cell_dimensions / 2;
+			if(new_cell_max[0] < 3 || new_cell_max[1] < 3)
+			{
+				// remember how we iterate - only neighbours and ourselves, and skip edges of the grid.
+				// if we're 3x3 for example then only the first cell is checked with its neighbours, coz theres one cell in the mdidle and the rest are edges
+				// if we're less than 3x3, e.g 3x2, 2x2 or 2x1, then there are *only* edge neighbours, meaning collisions dont happen anymore at all.
+				// basically, the cells should never get that massive anyway.
+				tz::error("Cell size has expanded so large that the grid is now smaller than 3x3, meaning the collision detection algorithm will now fail.");
+			}
 			this->set_dimensions(this->centre, this->bounds, new_cell_max);
 		}
 

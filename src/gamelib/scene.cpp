@@ -112,6 +112,7 @@ namespace game
 		this->entities.clear();
 		this->uuid_entity_map.clear();
 		this->renderer.clear_entries();
+		this->grid.clear();
 	}
 
 	constexpr std::size_t single_threaded_update_limit = 32u;
