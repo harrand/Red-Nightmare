@@ -28,22 +28,38 @@ namespace game::physics
 	aabb::manifold aabb::intersect(const aabb& box) const
 	{
 		aabb::manifold ret;
-		bool x_overlap = (max[0] >= box.min[0] && min[0] <= box.max[0]);
-        bool y_overlap = (max[1] >= box.min[1] && min[1] <= box.max[1]);
+        tz::vec2 pos = this->get_centre();
+        tz::vec2 boxpos = box.get_centre();
 
-        if (x_overlap && y_overlap) {
-            // Calculate penetration depths along both axes
-            float x_penetration = std::min(max[0] - box.min[0], box.max[0] - min[0]);
-            float y_penetration = std::min(max[1] - box.min[1], box.max[1] - min[1]);
-            if(x_penetration == 0.0f && y_penetration == 0.0f)
-            {
-                // they're technically touching, but on the exact pixel-perfect boundaries.
-                // in this case we just say they aren't intersecting.
-                return ret;
-            }
-            ret.intersecting = true;
-            ret.normal = {y_penetration, x_penetration};
-            ret.penetration_depth = std::hypot(x_penetration, y_penetration);
+        tz::vec2 half = this->get_extent() * 0.5f;
+        tz::vec2 boxhalf = box.get_extent() * 0.5f;
+
+        float dx = boxpos[0] - pos[0];
+        float px = (boxhalf[0] + half[0]) - std::abs(dx);
+        if(px <= 0.01f)
+        {
+            return ret;
+        }
+
+        float dy = boxpos[1] - pos[1];
+        float py = (boxhalf[1] + half[0]) - std::abs(dy);
+        if(py <= 0.01f)
+        {
+            return ret;
+        }
+
+        ret.intersecting = true;
+        if(px < py)
+        {
+            float sx = std::copysignf(1.0f, dx);
+            ret.penetration_depth = px * sx;
+            ret.normal = {sx, 0.0f};
+        }
+        else
+        {
+            float sy = std::copysignf(1.0f, dy);
+            ret.penetration_depth = py * sy;
+            ret.normal = {0.0f, sy};
         }
         return ret;
 	}

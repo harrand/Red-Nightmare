@@ -22,8 +22,7 @@ namespace game
 		bool is_null() const;
 
 		// set an internal variable. if the variable doesnt exist, also returns nil.
-		template<typename T>
-		tz::lua::lua_generic get_internal(std::string_view varname) const
+		tz::lua::lua_generic get_internal(const std::string& varname) const
 		{
 			auto iter = this->internal_variables.find(varname);
 			if(iter == this->internal_variables.end())
@@ -34,7 +33,7 @@ namespace game
 		}
 
 		template<typename T>
-		void set_internal(std::string_view varname, T&& val) requires(tz::static_find<std::decay_t<T>, bool, double, std::int64_t, std::string>() || std::is_integral_v<T> || std::is_same_v<T, tz::lua::nil>)
+		void set_internal(const std::string& varname, T&& val) requires(tz::static_find<std::decay_t<T>, bool, double, std::int64_t, std::string>() || std::is_integral_v<T> || std::is_same_v<T, tz::lua::nil>)
 		{
 			this->internal_variables[varname] = val; 
 		}
