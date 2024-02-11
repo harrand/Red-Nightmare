@@ -92,7 +92,7 @@ namespace game::physics
 		}
 	}
 
-	intersection_data grid_hierarchy::get_intersections()
+	const intersection_data& grid_hierarchy::get_intersections()
 	{
 		// pair hashing nonsense. ignore this begin.
 		struct pair_hash

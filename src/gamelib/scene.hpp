@@ -66,6 +66,7 @@ namespace game
 		std::string get_current_level_name() const;
 		void set_current_level_name(std::string level_name);
 
+		physics::intersection_data_view get_intersections();
 		void dbgui();
 	private:
 		physics::boundary_t bound_entity(entity_uuid uuid) const;

@@ -8,6 +8,7 @@ namespace game::physics
 {
 	using boundary_t = aabb;
 	using intersection_data = std::vector<std::tuple<entity_uuid, entity_uuid, boundary_t::manifold>>;
+	using intersection_data_view = std::span<const intersection_data::value_type>;
 	// grid hierarchy. cell size is uniform.
 	class grid_hierarchy
 	{
@@ -30,7 +31,7 @@ namespace game::physics
 		// notify the simulation that the boundary for an existing entity has changed (e.g its moved, or its dimensions have changed)
 		void notify_change(entity_uuid uuid, boundary_t boundary, oob_policy oob = oob_policy::assert_in_bounds);
 
-		intersection_data get_intersections();
+		const intersection_data& get_intersections();
 		// remove all entities in the simulation. world boundaries stay the same.
 		void clear();
 	private:

@@ -197,7 +197,6 @@ namespace game
 		}
 		this->entity_update_jobs.clear();
 		auto intersections = this->grid.get_intersections();
-		tz::report("intersections: %zu", intersections.size());
 		this->renderer.block();
 	}
 
@@ -274,12 +273,12 @@ namespace game
 
 	void scene::notify_new_entity(entity_uuid uuid)
 	{
-		this->grid.add_entity(uuid, this->bound_entity(uuid));
+		this->grid.add_entity(uuid, this->bound_entity(uuid), physics::grid_hierarchy::oob_policy::discard);
 	}
 
 	void scene::notify_entity_change(entity_uuid uuid)
 	{
-		this->grid.notify_change(uuid, this->bound_entity(uuid));
+		this->grid.notify_change(uuid, this->bound_entity(uuid), physics::grid_hierarchy::oob_policy::discard);
 	}
 
 	tz::vec2 scene::get_mouse_position_world_space() const
@@ -297,6 +296,11 @@ namespace game
 		this->current_level_name = level_name;
 	}
 
+	physics::intersection_data_view scene::get_intersections()
+	{
+		return this->grid.get_intersections();
+	}
+
 	physics::boundary_t scene::bound_entity(entity_uuid uuid) const
 	{
 		auto comp = this->get_entity_render_component(uuid);
@@ -304,8 +308,8 @@ namespace game
 		{
 			tz::trs trs = this->get_renderer().get_renderer().animated_object_get_global_transform(comp.obj);
 			tz::vec2 centre = trs.translate.swizzle<0, 1>();
-			tz::vec2 half_extent = trs.scale.swizzle<0, 1>() * 0.5f;
-			return {.min = centre - half_extent, .max = centre + half_extent};
+			tz::vec2 extent = trs.scale.swizzle<0, 1>();
+			return {.min = centre - extent, .max = centre + extent};
 		}
 		else
 		{
