@@ -54,4 +54,12 @@ namespace game::physics
 	{
 		return (min + max) / 2.0f;
 	}
+
+    tz::vec2 aabb::get_extent() const
+    {
+        tz::vec2 ret = max - min;
+        ret[0] = std::abs(ret[0]);
+        ret[1] = std::abs(ret[1]);
+        return ret;
+    }
 }

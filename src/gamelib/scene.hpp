@@ -2,6 +2,7 @@
 #define REDNIGHTMARE_GAMELIB_SCENE_HPP
 #include "gamelib/entity.hpp"
 #include "gamelib/render/scene_renderer.hpp"
+#include "gamelib/physics/grid_hierarchy.hpp"
 #include "tz/core/data/free_list.hpp"
 #include "tz/core/job/job.hpp"
 #include <unordered_map>
@@ -27,7 +28,7 @@ namespace game
 	class scene
 	{
 	public:
-		scene() = default;
+		scene();
 		using entity_handle = tz::free_list<scene_entity_data>::handle;
 
 		entity_handle add_entity(entity_uuid uuid);
@@ -55,12 +56,19 @@ namespace game
 		const game::render::scene_renderer& get_renderer() const;
 		game::render::scene_renderer& get_renderer();
 
+		physics::grid_hierarchy& get_grid();
+		const physics::grid_hierarchy& get_grid() const;
+
+		void notify_new_entity(entity_uuid uuid);
+		void notify_entity_change(entity_uuid uuid);
+
 		tz::vec2 get_mouse_position_world_space() const;
 		std::string get_current_level_name() const;
 		void set_current_level_name(std::string level_name);
 
 		void dbgui();
 	private:
+		physics::boundary_t bound_entity(entity_uuid uuid) const;
 		void initialise_renderer_component(entity_uuid uuid);
 		tz::vec2 calc_mouse_position_world_space() const;
 		// free list gives handle stability, which we want.
@@ -71,6 +79,7 @@ namespace game
 		game::render::scene_renderer renderer;
 		tz::vec2 mouse_pos_ws = {};
 		std::string current_level_name = "";
+		physics::grid_hierarchy grid;
 	public:
 		decltype(entities)::iterator begin();
 		decltype(entities)::const_iterator begin() const ;

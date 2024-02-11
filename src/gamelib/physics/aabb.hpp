@@ -18,6 +18,7 @@ namespace game::physics
 		manifold intersect(const tz::vec2& point) const;
 		manifold intersect(const aabb& box) const;
 		tz::vec2 get_centre() const;
+		tz::vec2 get_extent() const;
 	};
 }
 

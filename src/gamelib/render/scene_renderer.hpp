@@ -101,7 +101,7 @@ namespace game::render
 		tz::ren::text_renderer text_renderer;
 		int impl_mouse_scroll_delta = 0;
 		tz::ren::animation_renderer::object_handle root = tz::nullhand;
-		tz::vec2 view_bounds = {64.0f, 64.0f};
+		tz::vec2 view_bounds = {512.0f, 512.0f};
 		std::vector<entry> entries = {};
 		std::unordered_map<std::string, tz::ren::animation_renderer::gltf_handle> registered_models = {};
 		std::unordered_map<std::string, tz::ren::animation_renderer::texture_handle> registered_textures = {};

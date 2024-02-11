@@ -157,6 +157,15 @@ rn.mods[mod] =
 				local morb1 = rn.current_scene():add_entity("morbius")
 				--rn.renderer():set_clear_colour(1.0, 0.5, 1.0, 1.0)
 
+				-- add a bunch more randoms
+				math.randomseed(os.time())
+				for i=0,128,1 do
+					local morbx = rn.current_scene():add_entity("morbius")
+					local randx = math.random(-50, 50)
+					local randy = math.random(-50, 50)
+					rn.entity.prefabs.sprite.set_position(morbx, randx, randy)
+				end
+
 				local w, h = tz.window():get_dimensions()
 				rn.title_string = rn.renderer():add_string(w / 2 - 250.0, h * 0.8, 40, "Red Nightmare", 0.6, 0.1, 0.15)
 				rn.title_string_author = rn.renderer():add_string(w / 2 + 150, h * 0.8 - 55, 12, "by Harrand", 0.9, 0.3, 0.35)

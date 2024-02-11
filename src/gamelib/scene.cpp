@@ -1,5 +1,6 @@
 #include "gamelib/scene.hpp"
 #include "gamelib/messaging/scene.hpp"
+#include "gamelib/physics/grid_hierarchy.hpp"
 #include "gamelib/render/scene_renderer.hpp"
 #include "tz/core/debug.hpp"
 #include "tz/core/profile.hpp"
@@ -8,6 +9,12 @@
 
 namespace game
 {
+	scene::scene():
+	grid(tz::vec2::zero(), this->get_renderer().get_view_bounds(), static_cast<physics::grid_hierarchy::cell_coord>(tz::vec2i{10, 10}))
+	{
+
+	}
+
 	scene::entity_handle scene::add_entity(entity_uuid uuid)
 	{
 		TZ_PROFZONE("scene - add entity", 0xFF99CC44);
@@ -41,6 +48,7 @@ namespace game
 			ent.ren.model_name = model_name;
 
 			this->initialise_renderer_component(uuid);
+			this->notify_new_entity(uuid);
 		}
 		
 		std::string init_lua = std::format("rn.entity.instantiate({}, \"{}\")", uuid, prefab_name);
@@ -65,7 +73,11 @@ namespace game
 			return !varname.starts_with('.');
 		});
 
-		this->initialise_renderer_component(uuid);
+		if(!ent.ren.model_name.empty())
+		{
+			this->initialise_renderer_component(uuid);
+			this->notify_new_entity(uuid);
+		}
 		return ret;
 	}
 
@@ -184,6 +196,8 @@ namespace game
 			tz::job_system().block(jh);
 		}
 		this->entity_update_jobs.clear();
+		auto intersections = this->grid.get_intersections();
+		tz::report("intersections: %zu", intersections.size());
 		this->renderer.block();
 	}
 
@@ -248,6 +262,26 @@ namespace game
 		return this->renderer;
 	}
 
+	physics::grid_hierarchy& scene::get_grid()
+	{
+		return this->grid;
+	}
+
+	const physics::grid_hierarchy& scene::get_grid() const
+	{
+		return this->grid;
+	}
+
+	void scene::notify_new_entity(entity_uuid uuid)
+	{
+		this->grid.add_entity(uuid, this->bound_entity(uuid));
+	}
+
+	void scene::notify_entity_change(entity_uuid uuid)
+	{
+		this->grid.notify_change(uuid, this->bound_entity(uuid));
+	}
+
 	tz::vec2 scene::get_mouse_position_world_space() const
 	{
 		return this->mouse_pos_ws;
@@ -261,6 +295,23 @@ namespace game
 	void scene::set_current_level_name(std::string level_name)
 	{
 		this->current_level_name = level_name;
+	}
+
+	physics::boundary_t scene::bound_entity(entity_uuid uuid) const
+	{
+		auto comp = this->get_entity_render_component(uuid);
+		if(!comp.model_name.empty())
+		{
+			tz::trs trs = this->get_renderer().get_renderer().animated_object_get_global_transform(comp.obj);
+			tz::vec2 centre = trs.translate.swizzle<0, 1>();
+			tz::vec2 half_extent = trs.scale.swizzle<0, 1>() * 0.5f;
+			return {.min = centre - half_extent, .max = centre + half_extent};
+		}
+		else
+		{
+			tz::error("Cannot bound entity without render component");
+			return {};
+		}
 	}
 
 	void scene::initialise_renderer_component(entity_uuid uuid)

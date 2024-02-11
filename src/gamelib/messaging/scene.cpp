@@ -119,6 +119,7 @@ namespace game::messaging
 				tz::trs trans = sc->get_renderer().get_renderer().animated_object_get_local_transform(cmp.obj);
 				trans.translate = val;
 				sc->get_renderer().get_renderer().animated_object_set_local_transform(cmp.obj, trans);
+				sc->notify_entity_change(msg.uuid);
 			}
 			break;
 			case scene_operation::entity_set_local_rotation:
@@ -139,6 +140,7 @@ namespace game::messaging
 				tz::trs trans = sc->get_renderer().get_renderer().animated_object_get_local_transform(cmp.obj);
 				trans.scale = val;
 				sc->get_renderer().get_renderer().animated_object_set_local_transform(cmp.obj, trans);
+				sc->notify_entity_change(msg.uuid);
 			}
 			break;
 			case scene_operation::entity_set_global_position:
@@ -149,6 +151,7 @@ namespace game::messaging
 				tz::trs trans = sc->get_renderer().get_renderer().animated_object_get_global_transform(cmp.obj);
 				trans.translate = val;
 				sc->get_renderer().get_renderer().animated_object_set_global_transform(cmp.obj, trans);
+				sc->notify_entity_change(msg.uuid);
 			}
 			break;
 			case scene_operation::entity_set_global_rotation:
@@ -169,6 +172,7 @@ namespace game::messaging
 				tz::trs trans = sc->get_renderer().get_renderer().animated_object_get_global_transform(cmp.obj);
 				trans.scale = val;
 				sc->get_renderer().get_renderer().animated_object_set_global_transform(cmp.obj, trans);
+				sc->notify_entity_change(msg.uuid);
 			}
 			break;
 			case scene_operation::entity_set_subobject_texture_name:
