@@ -115,6 +115,7 @@ rn.mods[mod] =
 				rn.current_scene():entity_write(uuid, "age", 25)
 				rn.current_scene():entity_write(uuid, "timer", 0.0)
 				rn.current_scene():entity_write(uuid, "personality", nil)
+				rn.current_scene():entity_write(uuid, "mass", 1.0)
 				rn.entity.prefabs.sprite.set_colour(uuid, 1.0, 0.8, 0.7)
 				rn.entity.prefabs.sprite.set_texture(uuid, "effect.consecrate")
 			end,

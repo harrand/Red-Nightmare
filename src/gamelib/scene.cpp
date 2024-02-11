@@ -204,7 +204,7 @@ namespace game
 			// https://research.ncl.ac.uk/game/mastersdegree/gametechnologies/physicstutorials/5collisionresponse/Physics%20-%20Collision%20Response.pdf
 			// projection method - change their position in opposite directions along the manifold normal.
 			// todo: consider impulse method
-			tz::vec2 normal = manifold.normal.normalised() * manifold.penetration_depth * 0.5f;
+			tz::vec2 normal = manifold.normal.normalised() * manifold.penetration_depth;
 			// move both entities.
 			// note: we have a normal, but we dont know which should go along the normal and which should go opposite it.
 			// to determine this, we dot product the displacement between the two with the normal.
@@ -216,8 +216,7 @@ namespace game
 			}
 
 			// get the mass ratio
-			// if they're equal it means 1.0, so they both get affected equally.
-			/*
+			// if an entity has no `mass` internal variable, we assume its mass is 1.0.
 			tz::lua::lua_generic mass_a_gen = this->get_entity(entity_a).get_internal("mass");
 			tz::lua::lua_generic mass_b_gen = this->get_entity(entity_b).get_internal("mass");
 			float mass_a = 1.0f;
@@ -232,21 +231,22 @@ namespace game
 			}
 			tz::assert(mass_a > 0.0f && mass_b > 0.0f);
 			float mass_ratio = mass_a / (mass_a + mass_b);
-			*/
+
+			tz::vec2 disp_a = normal * (1.0f - mass_ratio);
+			tz::vec2 disp_b = normal * -1.0f * (mass_ratio);
 
 			game::messaging::scene_insert_message
 			({
 				.operation = game::messaging::scene_operation::entity_set_global_position,
 				.uuid = entity_a,
-				.value = (apos.swizzle<0, 1>() + normal).with_more(apos[2])
+				.value = (apos.swizzle<0, 1>() + disp_a).with_more(apos[2])
 			});
 			game::messaging::scene_insert_message
 			({
 				.operation = game::messaging::scene_operation::entity_set_global_position,
 				.uuid = entity_b,
-				.value = (bpos.swizzle<0, 1>() - normal).with_more(bpos[2])
+				.value = (bpos.swizzle<0, 1>() + disp_b).with_more(bpos[2])
 			});
-			tz::report("COLLISION RESPONSE BETWEEN %llu and %llu", entity_a, entity_b);
 		}
 	}
 
@@ -257,7 +257,6 @@ namespace game
 			tz::job_system().block(jh);
 		}
 		this->entity_update_jobs.clear();
-		auto intersections = this->grid.get_intersections();
 		this->renderer.block();
 	}
 
