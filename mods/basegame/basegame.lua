@@ -5,6 +5,32 @@ rn.mods[mod] =
 	description = "Base game content for Red Nightmare",
 	prefabs =
 	{
+		mouse_controlled = 
+		{
+			update = function(uuid, delta_seconds)
+				local sc = rn.current_scene()
+				local x, y, z = sc:entity_get_local_position(uuid)
+				local inp = rn.input()
+
+				if inp:is_mouse_down("left") then
+					local mx, my = sc:get_mouse_position()
+					sc:entity_write(uuid, "target_location_x", mx)
+					sc:entity_write(uuid, "target_location_y", my)
+				end
+
+				local tarx = sc:entity_read(uuid, "target_location_x")
+				local tary = sc:entity_read(uuid, "target_location_y")
+				if tarx ~= nil and tary ~= nil then
+					local movement_speed = 5.0
+					local dstx = tarx - x
+					local dsty = tary - y
+					local hypot = math.sqrt(dstx^2 + dsty^2)
+					x = x + ((dstx / hypot) * delta_seconds * movement_speed)
+					y = y + ((dsty / hypot) * delta_seconds * movement_speed)
+					sc:entity_set_local_position(uuid, x, y, z)
+				end
+			end
+		},
 		keyboard_controlled =
 		{
 			instantiate = function(uuid)
@@ -13,7 +39,7 @@ rn.mods[mod] =
 				sc:entity_write(uuid, "control.left", "a")
 				sc:entity_write(uuid, "control.right", "d")
 				sc:entity_write(uuid, "control.backward", "s")
-				sc:entity_write(uuid, "control.enabled", false)
+				sc:entity_write(uuid, "control.enabled", true)
 			end,
 			update = function(uuid, delta_seconds)
 				local sc = rn.current_scene()
@@ -53,6 +79,9 @@ rn.mods[mod] =
 		},
 		sprite = 
 		{
+			static_init = function()
+				rn.renderer():add_model("plane", "basegame/res/plane.glb")
+			end,
 			pre_instantiate = function(uuid)
 				return "plane"
 			end,
@@ -103,8 +132,7 @@ rn.mods[mod] =
 		{
 			static_init = function()
 				print("morb to begin")
-				rn.renderer():add_texture("effect.consecrate", "basegame/res/consecrate.png")
-				rn.renderer():add_model("plane", "basegame/res/plane.glb")
+				rn.renderer():add_texture("effect.consecrate", "basegame/res/sprites/consecrate.png")
 			end,
 			pre_instantiate = function(uuid)
 				return rn.entity.prefabs.sprite.pre_instantiate(uuid)
@@ -159,6 +187,50 @@ rn.mods[mod] =
 				-- things with a 1.0 red colour component will not collide
 				return r == 1.0
 			end
+		},
+		magic_ball =
+		{
+			frame_count = 3,
+			static_init = function()
+				for i=0,rn.entity.prefabs.magic_ball.frame_count,1 do
+					rn.renderer():add_texture("sprite.magicball" .. i, "basegame/res/sprites/magic_ball/magic_ball" .. i .. ".png")
+				end
+			end,
+			pre_instantiate = function(uuid)
+				return rn.entity.prefabs.sprite.pre_instantiate(uuid)
+			end,
+			instantiate = function(uuid)
+				rn.entity.prefabs.sprite.set_texture(uuid, "sprite.magicball0")
+				rn.current_scene():entity_write(uuid, "magic_type", "fire")
+			end,
+			update = function(uuid, delta_seconds)
+				local sc = rn.current_scene()
+				local magic_type = sc:entity_read(uuid, "magic_type")
+				local t = sc:entity_read(uuid, "timer") or 0.0
+				if t > 0 then
+					tz.assert(magic_type ~= nil, "Magic ball did not have a magic type.")
+				end
+
+				-- todo: saner magic colours
+				if magic_type == "fire" then
+					rn.entity.prefabs.sprite.set_colour(uuid, 0.9, 0.4, 0.1)
+				else
+					print("PANIK")
+				end
+				t = t + delta_seconds
+				local frame_id = math.floor((t * 10.0) % rn.entity.prefabs.magic_ball.frame_count)
+				rn.entity.prefabs.sprite.set_texture(uuid, "sprite.magicball" .. frame_id)
+				sc:entity_write(uuid, "timer", t)
+
+
+				rn.entity.prefabs.mouse_controlled.update(uuid, delta_seconds)
+
+				local tarx = sc:entity_read(uuid, "target_location_x")
+				local tary = sc:entity_read(uuid, "target_location_y")
+				if tarx ~= nil and tary ~= nil then
+					rn.entity.prefabs.sprite.lookat(uuid, tarx, tary, math.pi / -2.0)
+				end
+			end
 		}
 	},
 	levels =
@@ -172,7 +244,7 @@ rn.mods[mod] =
 				-- add a bunch more randoms
 				math.randomseed(os.time())
 				for i=0,128,1 do
-					local morbx = rn.current_scene():add_entity("morbius")
+					local morbx = rn.current_scene():add_entity("magic_ball")
 					local randx = math.random(-40, 40)
 					local randy = math.random(-40, 40)
 					rn.entity.prefabs.sprite.set_position(morbx, randx, randy)

@@ -190,73 +190,10 @@ namespace game
 	void scene::fixed_update(float delta_seconds, std::uint64_t unprocessed)
 	{
 		TZ_PROFZONE("scene - fixed update", 0xFFCCAACC);
+
 		for(const auto& [entity_a, entity_b, manifold] : this->grid.get_intersections())
 		{
-			TZ_PROFZONE("scene - collision response", 0xFFCC22CC);
-
-			{
-				TZ_PROFZONE("lua collision check", 0xFFCC22CC);
-				std::string do_collision_check_lua = std::format("impl_do_collision_response = rn.entity.on_collision({}, {})", entity_a, entity_b);
-				tz::lua::get_state().execute(do_collision_check_lua.c_str());
-			}
-			if(tz::lua::get_state().get_bool("impl_do_collision_response") == false)
-			{
-				continue;
-			}
-			auto comp_a = this->get_entity_render_component(entity_a);
-			tz::assert(!comp_a.model_name.empty());
-			auto comp_b = this->get_entity_render_component(entity_b);
-			tz::assert(!comp_b.model_name.empty());
-
-			tz::vec3 apos = this->get_renderer().get_renderer().animated_object_get_global_transform(comp_a.obj).translate;
-			tz::vec3 bpos = this->get_renderer().get_renderer().animated_object_get_global_transform(comp_b.obj).translate;
-
-			// https://research.ncl.ac.uk/game/mastersdegree/gametechnologies/physicstutorials/5collisionresponse/Physics%20-%20Collision%20Response.pdf
-			// projection method - change their position in opposite directions along the manifold normal.
-			// todo: consider impulse method
-			tz::vec2 normal = manifold.normal.normalised() * manifold.penetration_depth;
-			// move both entities.
-			// note: we have a normal, but we dont know which should go along the normal and which should go opposite it.
-			// to determine this, we dot product the displacement between the two with the normal.
-			tz::vec2 displacement = bpos.swizzle<0, 1>() - apos.swizzle<0, 1>();
-			float dot = displacement.dot(normal);
-			if(dot > 0.0f)
-			{
-				normal *= -1.0f;
-			}
-
-			// get the mass ratio
-			// if an entity has no `mass` internal variable, we assume its mass is 1.0.
-			tz::lua::lua_generic mass_a_gen = this->get_entity(entity_a).get_internal("mass");
-			tz::lua::lua_generic mass_b_gen = this->get_entity(entity_b).get_internal("mass");
-			float mass_a = 1.0f;
-			float mass_b = 1.0f;
-			if(std::holds_alternative<double>(mass_a_gen))
-			{
-				mass_a = std::get<double>(mass_a_gen);
-			}
-			if(std::holds_alternative<double>(mass_b_gen))
-			{
-				mass_b = std::get<double>(mass_b_gen);
-			}
-			tz::assert(mass_a > 0.0f && mass_b > 0.0f);
-			float mass_ratio = mass_a / (mass_a + mass_b);
-
-			tz::vec2 disp_a = normal * (1.0f - mass_ratio);
-			tz::vec2 disp_b = normal * -1.0f * (mass_ratio);
-
-			game::messaging::scene_insert_message
-			({
-				.operation = game::messaging::scene_operation::entity_set_global_position,
-				.uuid = entity_a,
-				.value = (apos.swizzle<0, 1>() + disp_a).with_more(apos[2])
-			});
-			game::messaging::scene_insert_message
-			({
-				.operation = game::messaging::scene_operation::entity_set_global_position,
-				.uuid = entity_b,
-				.value = (bpos.swizzle<0, 1>() + disp_b).with_more(bpos[2])
-			});
+			this->single_collision_response(entity_a, entity_b, manifold);
 		}
 	}
 
@@ -416,6 +353,74 @@ namespace game
 		const tz::vec2 campos = this->get_renderer().get_camera_position();
 		pos += campos;
 		return pos;
+	}
+
+	void scene::single_collision_response(entity_uuid entity_a, entity_uuid entity_b, physics::boundary_t::manifold manifold)
+	{
+		TZ_PROFZONE("scene - collision response", 0xFFCC22CC);
+		{
+			TZ_PROFZONE("lua collision check", 0xFFCC22CC);
+			std::string do_collision_check_lua = std::format("impl_do_collision_response = rn.entity.on_collision({}, {})", entity_a, entity_b);
+			tz::lua::get_state().execute(do_collision_check_lua.c_str());
+		}
+		if(tz::lua::get_state().get_bool("impl_do_collision_response") == false)
+		{
+			return;
+		}
+		auto comp_a = this->get_entity_render_component(entity_a);
+		tz::assert(!comp_a.model_name.empty());
+		auto comp_b = this->get_entity_render_component(entity_b);
+		tz::assert(!comp_b.model_name.empty());
+
+		tz::vec3 apos = this->get_renderer().get_renderer().animated_object_get_global_transform(comp_a.obj).translate;
+		tz::vec3 bpos = this->get_renderer().get_renderer().animated_object_get_global_transform(comp_b.obj).translate;
+
+		// https://research.ncl.ac.uk/game/mastersdegree/gametechnologies/physicstutorials/5collisionresponse/Physics%20-%20Collision%20Response.pdf
+		// projection method - change their position in opposite directions along the manifold normal.
+		// todo: consider impulse method
+		tz::vec2 normal = manifold.normal.normalised() * manifold.penetration_depth;
+		// move both entities.
+		// note: we have a normal, but we dont know which should go along the normal and which should go opposite it.
+		// to determine this, we dot product the displacement between the two with the normal.
+		tz::vec2 displacement = bpos.swizzle<0, 1>() - apos.swizzle<0, 1>();
+		float dot = displacement.dot(normal);
+		if(dot > 0.0f)
+		{
+			normal *= -1.0f;
+		}
+
+		// get the mass ratio
+		// if an entity has no `mass` internal variable, we assume its mass is 1.0.
+		tz::lua::lua_generic mass_a_gen = this->get_entity(entity_a).get_internal("mass");
+		tz::lua::lua_generic mass_b_gen = this->get_entity(entity_b).get_internal("mass");
+		float mass_a = 1.0f;
+		float mass_b = 1.0f;
+		if(std::holds_alternative<double>(mass_a_gen))
+		{
+			mass_a = std::get<double>(mass_a_gen);
+		}
+		if(std::holds_alternative<double>(mass_b_gen))
+		{
+			mass_b = std::get<double>(mass_b_gen);
+		}
+		tz::assert(mass_a > 0.0f && mass_b > 0.0f);
+		float mass_ratio = mass_a / (mass_a + mass_b);
+
+		tz::vec2 disp_a = normal * (1.0f - mass_ratio);
+		tz::vec2 disp_b = normal * -1.0f * (mass_ratio);
+
+		game::messaging::scene_insert_message
+		({
+			.operation = game::messaging::scene_operation::entity_set_global_position,
+			.uuid = entity_a,
+			.value = (apos.swizzle<0, 1>() + disp_a).with_more(apos[2])
+		});
+		game::messaging::scene_insert_message
+		({
+			.operation = game::messaging::scene_operation::entity_set_global_position,
+			.uuid = entity_b,
+			.value = (bpos.swizzle<0, 1>() + disp_b).with_more(bpos[2])
+		});
 	}
 
 	decltype(scene::entities)::iterator scene::begin()
