@@ -156,6 +156,8 @@ rn.mods[mod] =
 				if r > other_r then
 					rn.entity.prefabs.sprite.set_colour(other, r, g, b)
 				end
+				-- things with a 1.0 red colour component will not collide
+				return r == 1.0
 			end
 		}
 	},

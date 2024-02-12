@@ -66,13 +66,15 @@ rn.entity.on_collision = function(uuid_a, uuid_b)
 	local obj <close> = tz.profzone_obj:new()
 	obj:set_text(tostring(uuid_a) .. " and " .. tostring(uuid_b))
 	obj:set_name("Lua On Collision")
+
+	local ret = true
 	-- a
 	local prefab_name_a = rn.current_scene():entity_read(uuid_a, ".prefab")
 	if prefab_name_a ~= nil then
 		local prefab = rn.entity.prefabs[prefab_name_a]
 		tz.assert(prefab ~= nil, "Missing prefab \"" .. prefab_name_a .. "\"")
 		if prefab.on_collision ~= nil then
-			prefab.on_collision(uuid_a, uuid_b)
+			ret = prefab.on_collision(uuid_a, uuid_b) and ret
 		end
 	end
 
@@ -82,7 +84,8 @@ rn.entity.on_collision = function(uuid_a, uuid_b)
 		local prefab = rn.entity.prefabs[prefab_name_b]
 		tz.assert(prefab ~= nil, "Missing prefab \"" .. prefab_name_b .. "\"")
 		if prefab.on_collision ~= nil then
-			prefab.on_collision(uuid_b, uuid_a)
+			ret = prefab.on_collision(uuid_b, uuid_a) and ret
 		end
 	end
+	return ret
 end
