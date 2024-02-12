@@ -116,7 +116,7 @@ rn.mods[mod] =
 				rn.current_scene():entity_write(uuid, "timer", 0.0)
 				rn.current_scene():entity_write(uuid, "personality", nil)
 				rn.current_scene():entity_write(uuid, "mass", 1.0)
-				rn.entity.prefabs.sprite.set_colour(uuid, 1.0, 0.8, 0.7)
+				rn.entity.prefabs.sprite.set_colour(uuid, 0.0, 0.3, 0.6)
 				rn.entity.prefabs.sprite.set_texture(uuid, "effect.consecrate")
 			end,
 			update = function(uuid, delta_seconds)
@@ -149,6 +149,13 @@ rn.mods[mod] =
 				-- look at the mouse
 				local mx, my = rn.current_scene():get_mouse_position()
 				rn.entity.prefabs.sprite.lookat(uuid, mx, my, 0.0)
+			end,
+			on_collision = function(me, other)
+				local r, g, b = rn.entity.prefabs.sprite.get_colour(me)
+				local other_r, other_g, other_b = rn.entity.prefabs.sprite.get_colour(other)
+				if r > other_r then
+					rn.entity.prefabs.sprite.set_colour(other, r, g, b)
+				end
 			end
 		}
 	},

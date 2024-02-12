@@ -190,6 +190,7 @@ namespace game
 	void scene::fixed_update(float delta_seconds, std::uint64_t unprocessed)
 	{
 		TZ_PROFZONE("scene - fixed update", 0xFFCCAACC);
+		std::string on_collision_lua = "";
 		for(const auto& [entity_a, entity_b, manifold] : this->grid.get_intersections())
 		{
 			TZ_PROFZONE("scene - collision response", 0xFFCC22CC);
@@ -247,6 +248,12 @@ namespace game
 				.uuid = entity_b,
 				.value = (bpos.swizzle<0, 1>() + disp_b).with_more(bpos[2])
 			});
+			on_collision_lua += std::format("rn.entity.on_collision({}, {})\n", entity_a, entity_b);
+		}
+		if(!on_collision_lua.empty())
+		{
+			TZ_PROFZONE("collision response - invoke lua", 0xFFCCAACC);
+			tz::lua::get_state().execute(on_collision_lua.c_str());
 		}
 	}
 

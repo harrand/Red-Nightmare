@@ -61,3 +61,28 @@ rn.entity.update = function(uuid, delta_seconds)
 	-- if the entity is casting a spell, that also needs to advance.
 	rn.spell.advance(uuid)
 end
+
+rn.entity.on_collision = function(uuid_a, uuid_b)
+	local obj <close> = tz.profzone_obj:new()
+	obj:set_text(tostring(uuid_a) .. " and " .. tostring(uuid_b))
+	obj:set_name("Lua On Collision")
+	-- a
+	local prefab_name_a = rn.current_scene():entity_read(uuid_a, ".prefab")
+	if prefab_name_a ~= nil then
+		local prefab = rn.entity.prefabs[prefab_name_a]
+		tz.assert(prefab ~= nil, "Missing prefab \"" .. prefab_name_a .. "\"")
+		if prefab.on_collision ~= nil then
+			prefab.on_collision(uuid_a, uuid_b)
+		end
+	end
+
+	-- b
+	local prefab_name_b = rn.current_scene():entity_read(uuid_b, ".prefab")
+	if prefab_name_b ~= nil then
+		local prefab = rn.entity.prefabs[prefab_name_b]
+		tz.assert(prefab ~= nil, "Missing prefab \"" .. prefab_name_b .. "\"")
+		if prefab.on_collision ~= nil then
+			prefab.on_collision(uuid_b, uuid_a)
+		end
+	end
+end
