@@ -122,7 +122,35 @@ namespace game
 			tz::assert(std::filesystem::exists("./mods"), "./mods directory not found. Current path: \"%s\"", cwd.c_str());
 		#endif
 		constexpr const char mods_folder[] = "./mods";
-		for(const auto& entry : std::filesystem::recursive_directory_iterator(mods_folder))
+		// attempt to require all lua files in mods directories. this includes:
+		// mods/*.lua <--- if your entire mod is a single .lua file
+		// mods/*/*.lua (note: this is not recursive, only the first subdirectory is searched) <--- if your mod is a directory containing lua files and extra stuff.
+		//				this means that your top-level lua files in your mod are automatically included, but anything in a deeper folder should be manually included via `require`
+		// extra note: these automatic includes are in unspecified order. if you want some lua files to run after others, but them in a deeper folder and `require` them in a top-level lua file.
+		
+		// i recommend one of the two mod architectures:
+		// 1. a tiny mod with a single lua file. i simply have `mods/my_tiny_mod.lua`
+		// 2. a full mod with a directory. i have `mods/my_mod` as a directory, containing a single `my_mod.lua` file.
+		// - i also have a subdirectory `mods/my_mods/prefabs` containing lua files specifying prefabs.
+		// - all of these are manually require'd by `my_mod.lua`
+
+		// you are encouraged to take a look through the `basegame` mod. this is a full-mod.
+		std::vector<std::filesystem::directory_entry> candidates = {};
+		for(const auto& entry : std::filesystem::directory_iterator(mods_folder))
+		{
+			if(entry.is_directory())
+			{
+				for(const auto& entry2 : std::filesystem::directory_iterator(entry))
+				{
+					candidates.push_back(entry2);
+				}
+			}
+			else
+			{
+				candidates.push_back(entry);
+			}
+		}
+		for(const auto& entry : candidates)
 		{
 			// stem is just filename without extension (which is what require likes)
 			if(entry.path().extension() != ".lua")

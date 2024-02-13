@@ -1,136 +1,8 @@
-local mod = "basegame"
-
-rn.mods[mod] =
+rn.mods.basegame =
 {
 	description = "Base game content for Red Nightmare",
 	prefabs =
 	{
-		mouse_controlled = 
-		{
-			update = function(uuid, delta_seconds)
-				local sc = rn.current_scene()
-				local x, y, z = sc:entity_get_local_position(uuid)
-				local inp = rn.input()
-
-				if inp:is_mouse_down("left") then
-					local mx, my = sc:get_mouse_position()
-					sc:entity_write(uuid, "target_location_x", mx)
-					sc:entity_write(uuid, "target_location_y", my)
-				end
-
-				local tarx = sc:entity_read(uuid, "target_location_x")
-				local tary = sc:entity_read(uuid, "target_location_y")
-				if tarx ~= nil and tary ~= nil then
-					local movement_speed = 5.0
-					local dstx = tarx - x
-					local dsty = tary - y
-					local hypot = math.sqrt(dstx^2 + dsty^2)
-					-- if hypot is zero then it's exactly at the position - no need to move.
-					if hypot > 0.0 and hypot >= (delta_seconds * movement_speed) then
-						x = x + ((dstx / hypot) * delta_seconds * movement_speed)
-						y = y + ((dsty / hypot) * delta_seconds * movement_speed)
-						sc:entity_set_local_position(uuid, x, y, z)
-					end
-				end
-			end
-		},
-		keyboard_controlled =
-		{
-			instantiate = function(uuid)
-				local sc = rn.current_scene()
-				sc:entity_write(uuid, "control.forward", "w")
-				sc:entity_write(uuid, "control.left", "a")
-				sc:entity_write(uuid, "control.right", "d")
-				sc:entity_write(uuid, "control.backward", "s")
-				sc:entity_write(uuid, "control.enabled", true)
-			end,
-			update = function(uuid, delta_seconds)
-				local sc = rn.current_scene()
-				local x, y, z = sc:entity_get_local_position(uuid)
-				local inp = rn.input()
-
-				local control_forward = sc:entity_read(uuid, "control.forward")
-				local control_left = sc:entity_read(uuid, "control.left")
-				local control_right = sc:entity_read(uuid, "control.right")
-				local control_backward = sc:entity_read(uuid, "control.backward")
-				local control_enabled = sc:entity_read(uuid, "control.enabled")
-
-				local movement_speed = 5.0
-				local moved = false
-
-				if control_enabled and inp:is_key_down(control_left) then
-					x = x - movement_speed * delta_seconds
-					moved = true
-				end
-				if control_enabled and inp:is_key_down(control_right) then
-					x = x + movement_speed * delta_seconds
-					moved = true
-				end
-				if control_enabled and inp:is_key_down(control_forward) then
-					y = y + movement_speed * delta_seconds
-					moved = true
-				end
-				if control_enabled and inp:is_key_down(control_backward) then
-					y = y - movement_speed * delta_seconds
-					moved = true
-				end
-				
-				if moved then
-					sc:entity_set_local_position(uuid, x, y, z);
-				end
-			end
-		},
-		sprite = 
-		{
-			static_init = function()
-				rn.renderer():add_model("plane", "basegame/res/plane.glb")
-			end,
-			pre_instantiate = function(uuid)
-				return "plane"
-			end,
-			set_texture = function(uuid, texname)
-				rn.current_scene():entity_set_subobject_texture(uuid, 2, texname)
-			end,
-			get_texture = function(uuid)
-				return rn.current_scene():entity_get_subobject_texture(uuid, 2)
-			end,
-			set_colour = function(uuid, r, g, b)
-				rn.current_scene():entity_set_subobject_colour(uuid, 2, r, g, b)
-			end,
-			get_colour = function(uuid)
-				return rn.current_scene():entity_get_subobject_colour(uuid, 2)
-			end,
-			set_position = function(uuid, x, y)
-				rn.current_scene():entity_set_local_position(uuid, x, y, 0.0)
-			end,
-			get_position = function(uuid)
-				local x, y, z = rn.current_scene():entity_get_local_position(uuid)
-				return x, y
-			end,
-			set_rotation = function(uuid, angle)
-				-- this angle is a rotation in the z-axis as we're a 2d sprite.
-				rn.current_scene():entity_set_local_rotation(uuid, 0.0, 0.0, math.sin(angle / 2.0), math.cos(angle / 2.0))
-			end,
-			get_rotation = function(uuid)
-				local x, y, z, w = rn.current_scene():entity_get_local_rotation(uuid)
-				return 2.0 * math.asin(z)
-			end,
-			set_scale = function(uuid, scale)
-				rn.current_scene():entity_set_local_scale(uuid, scale, scale, scale)
-			end,
-			get_scale = function(uuid)
-				local x, y, z = rn.current_scene():entity_get_local_scale(uuid)
-				-- ideally they're all the same, so lets just get x
-				return x
-			end,
-			lookat = function(uuid, tarx, tary, rotate_offset)
-				local myx, myy = rn.entity.prefabs.sprite.get_position(uuid)
-				local dispx = tarx - myx
-				local dispy = tary - myy
-				local angle = math.atan(dispy, dispx)
-				rn.entity.prefabs.sprite.set_rotation(uuid, angle + rotate_offset)
-			end
-		},
 		morbius =
 		{
 			static_init = function()
@@ -283,3 +155,7 @@ rn.mods[mod] =
 		}
 	}
 }
+
+require("basegame/prefabs/mouse_controlled")
+require("basegame/prefabs/keyboard_controlled")
+require("basegame/prefabs/sprite")
