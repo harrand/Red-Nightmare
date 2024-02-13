@@ -63,60 +63,6 @@ rn.mods.basegame =
 				return r == 1.0
 			end
 		},
-		magic_ball =
-		{
-			frame_count = 3,
-			static_init = function()
-				for i=0,rn.entity.prefabs.magic_ball.frame_count,1 do
-					rn.renderer():add_texture("sprite.magicball" .. i, "basegame/res/sprites/magic_ball/magic_ball" .. i .. ".png")
-				end
-			end,
-			pre_instantiate = function(uuid)
-				return rn.entity.prefabs.sprite.pre_instantiate(uuid)
-			end,
-			instantiate = function(uuid)
-				rn.entity.prefabs.sprite.set_texture(uuid, "sprite.magicball0")
-				local sc = rn.current_scene()
-				sc:entity_write(uuid, "magic_type", "fire")
-				sc:entity_write(uuid, ".boundary_scale", 0.5)
-			end,
-			update = function(uuid, delta_seconds)
-				local sc = rn.current_scene()
-				local magic_type = sc:entity_read(uuid, "magic_type")
-				local t = sc:entity_read(uuid, "timer") or 0.0
-				if t > 0 then
-					tz.assert(magic_type ~= nil, "Magic ball did not have a magic type.")
-				end
-
-				-- todo: saner magic colours
-				if magic_type == "fire" then
-					rn.entity.prefabs.sprite.set_colour(uuid, 0.9, 0.4, 0.1)
-				else
-					print("PANIK")
-				end
-				t = t + delta_seconds
-				local frame_id = math.floor((t * 10.0) % rn.entity.prefabs.magic_ball.frame_count)
-				rn.entity.prefabs.sprite.set_texture(uuid, "sprite.magicball" .. frame_id)
-				sc:entity_write(uuid, "timer", t)
-
-
-				rn.entity.prefabs.mouse_controlled.update(uuid, delta_seconds)
-
-				local tarx = sc:entity_read(uuid, "target_location_x")
-				local tary = sc:entity_read(uuid, "target_location_y")
-				if tarx ~= nil and tary ~= nil then
-					rn.entity.prefabs.sprite.lookat(uuid, tarx, tary, math.pi / -2.0)
-				end
-			end,
-			on_collision = function(uuid_a, uuid_b)
-				local prefab_name = rn.current_scene():entity_read(uuid_b, ".prefab")
-				if prefab_name ~= "magic_ball" then
-					rn.current_scene():remove_entity(uuid_a)
-					rn.current_scene():remove_entity(uuid_b)
-				end
-				return true
-			end
-		}
 	},
 	levels =
 	{
@@ -129,7 +75,7 @@ rn.mods.basegame =
 				-- add a bunch more randoms
 				math.randomseed(os.time())
 				for i=0,128,1 do
-					local morbx = rn.current_scene():add_entity("magic_ball")
+					local morbx = rn.current_scene():add_entity("firebolt")
 					local randx = math.random(-40, 40)
 					local randy = math.random(-40, 40)
 					rn.entity.prefabs.sprite.set_position(morbx, randx, randy)
@@ -167,3 +113,4 @@ rn.mods.basegame =
 require("basegame/prefabs/mouse_controlled")
 require("basegame/prefabs/keyboard_controlled")
 require("basegame/prefabs/sprite")
+require("basegame/prefabs/magicbolt")

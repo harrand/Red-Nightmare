@@ -2,6 +2,25 @@ rn = rn or {}
 rn.spell = rn.spell or {}
 rn.spell.spells = rn.spell.spells or {}
 
+rn.spell.schools =
+{
+	physical =
+	{
+		pretty_name = "Physical",
+		colour = {1.0, 1.0, 1.0},
+	},
+	fire =
+	{
+		pretty_name = "Fire",
+		colour = {0.9, 0.4, 0.1},
+	},
+	frost =
+	{
+		pretty_name = "Frost",
+		colour = {0.3, 0.6, 1.0},
+	},
+}
+
 rn.spell.cast = function(uuid, spell_name)
 	local obj <close> = tz.profzone_obj:new()
 	obj:set_text(tostring(uuid))
