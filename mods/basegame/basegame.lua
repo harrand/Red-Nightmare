@@ -25,9 +25,12 @@ rn.mods[mod] =
 					local dstx = tarx - x
 					local dsty = tary - y
 					local hypot = math.sqrt(dstx^2 + dsty^2)
-					x = x + ((dstx / hypot) * delta_seconds * movement_speed)
-					y = y + ((dsty / hypot) * delta_seconds * movement_speed)
-					sc:entity_set_local_position(uuid, x, y, z)
+					-- if hypot is zero then it's exactly at the position - no need to move.
+					if hypot > 0.0 and hypot >= (delta_seconds * movement_speed) then
+						x = x + ((dstx / hypot) * delta_seconds * movement_speed)
+						y = y + ((dsty / hypot) * delta_seconds * movement_speed)
+						sc:entity_set_local_position(uuid, x, y, z)
+					end
 				end
 			end
 		},
@@ -201,7 +204,9 @@ rn.mods[mod] =
 			end,
 			instantiate = function(uuid)
 				rn.entity.prefabs.sprite.set_texture(uuid, "sprite.magicball0")
-				rn.current_scene():entity_write(uuid, "magic_type", "fire")
+				local sc = rn.current_scene()
+				sc:entity_write(uuid, "magic_type", "fire")
+				sc:entity_write(uuid, ".boundary_scale", 0.5)
 			end,
 			update = function(uuid, delta_seconds)
 				local sc = rn.current_scene()

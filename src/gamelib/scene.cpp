@@ -310,12 +310,18 @@ namespace game
 
 	physics::boundary_t scene::bound_entity(entity_uuid uuid) const
 	{
+		tz::lua::lua_generic maybe_custom_scale = this->get_entity(uuid).get_internal(".boundary_scale");
+		float custom_scale = 1.0f;
+		if(std::holds_alternative<double>(maybe_custom_scale))
+		{
+			custom_scale = std::get<double>(maybe_custom_scale);
+		}
 		auto comp = this->get_entity_render_component(uuid);
 		if(!comp.model_name.empty())
 		{
 			tz::trs trs = this->get_renderer().get_renderer().animated_object_get_global_transform(comp.obj);
 			tz::vec2 centre = trs.translate.swizzle<0, 1>();
-			tz::vec2 extent = trs.scale.swizzle<0, 1>();
+			tz::vec2 extent = trs.scale.swizzle<0, 1>() * custom_scale;
 			return {.min = centre - extent, .max = centre + extent};
 		}
 		else
