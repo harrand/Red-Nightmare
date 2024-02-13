@@ -107,6 +107,14 @@ rn.mods.basegame =
 				if tarx ~= nil and tary ~= nil then
 					rn.entity.prefabs.sprite.lookat(uuid, tarx, tary, math.pi / -2.0)
 				end
+			end,
+			on_collision = function(uuid_a, uuid_b)
+				local prefab_name = rn.current_scene():entity_read(uuid_b, ".prefab")
+				if prefab_name ~= "magic_ball" then
+					rn.current_scene():remove_entity(uuid_a)
+					rn.current_scene():remove_entity(uuid_b)
+				end
+				return true
 			end
 		}
 	},

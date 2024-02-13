@@ -89,12 +89,13 @@ namespace game
 		const auto& ent = this->entities[e];
 
 		// if it has renderer component - it needs to be destroyed.
+		auto uuid = ent.ent.uuid;
 		if(ent.ren.obj != tz::nullhand)
 		{
 			this->renderer.remove_entry(ent.ren);
+			this->grid.remove_entity(uuid);
 		}
 
-		auto uuid = ent.ent.uuid;
 		this->entities.erase(e);
 		this->uuid_entity_map.erase(uuid);
 	}
