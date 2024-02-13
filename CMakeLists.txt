@@ -18,6 +18,9 @@ tz_add_library(
 		src/gamelib/input/kbm.cpp
 		src/gamelib/input/kbm.hpp
 
+		src/gamelib/lua/meta.cpp
+		src/gamelib/lua/meta.hpp
+
 		src/gamelib/messaging/scene.cpp
 		src/gamelib/messaging/scene.hpp
 		src/gamelib/messaging/system.hpp

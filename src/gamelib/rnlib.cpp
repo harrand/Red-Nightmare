@@ -1,4 +1,5 @@
 #include "gamelib/input/kbm.hpp"
+#include "gamelib/lua/meta.hpp"
 #include "gamelib/messaging/scene.hpp"
 #include "gamelib/rnlib.hpp"
 #include "gamelib/audio.hpp"
@@ -187,6 +188,7 @@ namespace game
 			game_system->scene2.get_renderer().lua_initialise(state);
 			game::entity_lua_initialise(state); // rn.entity.*
 			game::input::input_lua_initialise(state);
+			game::meta::lua_initialise(state);
 
 			// add require/dofile access to mods/
 			state.execute("package.path = package.path .. \";./mods/?.lua\"");
@@ -195,6 +197,7 @@ namespace game
 			state.execute("rn.load_mods()");
 		});
 
-		tz::lua::get_state().execute("rn.static_init()");
+		tz::lua::get_state().execute(R"(rn.static_init())");
+		game::meta::reflect();
 	}
 }
