@@ -1,6 +1,7 @@
 #include "gamelib/scene.hpp"
 #include "gamelib/render/scene_renderer.hpp"
 #include "gamelib/messaging/scene.hpp"
+#include "gamelib/lua/meta.hpp"
 #include "imgui.h"
 
 namespace game
@@ -185,6 +186,35 @@ namespace game
 			for(const scene_entity_data& edata : *this)
 			{
 				dbgui_ent(edata, this->get_renderer());
+			}
+		}
+		if(ImGui::CollapsingHeader("Mods"))
+		{
+			for(const game::meta::modinfo_t& mod : game::meta::get_mods())
+			{
+				if(ImGui::TreeNode(mod.name.c_str()))
+				{
+					ImGui::Text("Description: %s", mod.description.c_str());
+					ImGui::TreePop();
+				}
+			}
+		}
+		if(ImGui::CollapsingHeader("Prefabs"))
+		{
+			for(game::meta::prefabinfo_t prefab : game::meta::get_prefabs())
+			{
+				if(ImGui::TreeNode(prefab.name.c_str()))
+				{
+					ImGui::Text("Mod: %s", prefab.mod.c_str());
+					ImGui::BeginDisabled();
+					ImGui::Checkbox("Has static init", &prefab.has_static_init);
+					ImGui::Checkbox("Has pre-instantiate", &prefab.has_pre_instantiate);
+					ImGui::Checkbox("Has instantiate", &prefab.has_instantiate);
+					ImGui::Checkbox("Has update", &prefab.has_update);
+					ImGui::Checkbox("Has on-collision", &prefab.has_on_collision);
+					ImGui::EndDisabled();
+					ImGui::TreePop();
+				}
 			}
 		}
 	}

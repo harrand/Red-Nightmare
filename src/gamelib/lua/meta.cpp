@@ -13,10 +13,20 @@ namespace game::meta
 	LUA_END
 
 	LUA_BEGIN(rn_inform_prefab)
-		auto [name, mod] = tz::lua::parse_args<std::string, std::string>(state);
-		internal_prefab_list.push_back({.name = name, .mod = mod});
+		auto [name, mod, has_static_init, has_pre_instantiate, has_instantiate, has_update, has_on_collision] = tz::lua::parse_args<std::string, std::string, bool, bool, bool, bool, bool>(state);
+		internal_prefab_list.push_back({.name = name, .mod = mod, .has_static_init = has_static_init, .has_pre_instantiate = has_pre_instantiate, .has_instantiate = has_instantiate, .has_update = has_update, .has_on_collision = has_on_collision});
 		return 0;
 	LUA_END
+
+	std::span<modinfo_t> get_mods()
+	{
+		return internal_mod_list;
+	}
+
+	std::span<prefabinfo_t> get_prefabs()
+	{
+		return internal_prefab_list;
+	}
 
 	void lua_initialise(tz::lua::state& state)
 	{
@@ -35,7 +45,7 @@ namespace game::meta
 			end
 
 			for prefabname, prefabdata in pairs(rn.entity.prefabs) do
-				rn.inform_prefab(prefabname, prefabdata.mod)
+				rn.inform_prefab(prefabname, prefabdata.mod, prefabdata.static_init ~= nil, prefabdata.pre_instantiate ~= nil, prefabdata.instantiate ~= nil, prefabdata.update ~= nil, prefabdata.on_collision ~= nil)
 			end
 		)");
 	}

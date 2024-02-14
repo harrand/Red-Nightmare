@@ -14,9 +14,15 @@ namespace game::meta
 	{
 		std::string name;
 		std::string mod;
+		bool has_static_init;
+		bool has_pre_instantiate;
+		bool has_instantiate;
+		bool has_update;
+		bool has_on_collision;
 	};
 
 	std::span<modinfo_t> get_mods();
+	std::span<prefabinfo_t> get_prefabs();
 	void lua_initialise(tz::lua::state& state);
 	void reflect();
 }
