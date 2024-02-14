@@ -172,12 +172,6 @@ namespace game::render
 		return {this, e};
 	}
 
-	scene_renderer::entry scene_renderer::entry_at(std::size_t idx) const
-	{
-		tz::assert(idx < this->entries.size());
-		return this->entries[idx];
-	}
-
 	std::size_t scene_renderer::entry_count() const
 	{
 		return this->entries.size();

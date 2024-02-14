@@ -51,7 +51,6 @@ namespace game::render
 		void remove_entry(entry e);
 		void clear_entries();
 		scene_element get_element(entry e);
-		entry entry_at(std::size_t idx) const;
 		std::size_t entry_count() const;
 
 		const tz::ren::text_renderer& get_text_renderer() const;

@@ -221,6 +221,7 @@ namespace game
 						owned_levels.push_back(level);
 					}
 				}
+				ImGui::SetNextItemOpen(mod.name == "basegame");
 				if(ImGui::TreeNode(mod.name.c_str()))
 				{
 					ImGui::Text("Description: %s", mod.description.c_str());
