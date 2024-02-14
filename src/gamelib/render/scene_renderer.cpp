@@ -154,6 +154,7 @@ namespace game::render
 		TZ_PROFZONE("scene renderer - remove entry", 0xFFFF4488);
 		this->renderer.remove_animated_objects(e.obj);
 		// todo: remove or set-null the given entry? otherwise you can remove twice?
+		std::erase(this->entries, e);
 	}
 
 	void scene_renderer::clear_entries()

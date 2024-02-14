@@ -244,6 +244,7 @@ namespace game::messaging
 
 	REGISTER_MESSAGING_SYSTEM(scene_message, scene, on_scene_process_message, on_scene_update);
 
+	static std::atomic_uint_fast64_t entity_uuid_counter = 0;
 	// lua api boilerplate.
 	// yes, this is rn.current_scene()
 
@@ -260,7 +261,6 @@ namespace game::messaging
 			// entity uuid is created *now* and instantly returned.
 			// caller now knows the entity id, even though it doesnt exist yet.
 			// subsequent messages that use the id *should* be processed after this one, making the whole thing safe.
-			static std::atomic_uint_fast64_t entity_uuid_counter = 0;
 			auto uuid = static_cast<entity_uuid>(entity_uuid_counter.fetch_add(1));
 			local_scene_receiver.send_message
 			({
@@ -691,6 +691,13 @@ namespace game::messaging
 		});
 		// do this thread too. main thread could also have messages.
 		scene_messaging_local_dispatch();
+	}
+
+	entity_uuid scene_quick_add(std::string prefab_name)
+	{
+		auto ret = static_cast<entity_uuid>(entity_uuid_counter.fetch_add(1));
+		sc->add_entity_from_prefab(ret, prefab_name);
+		return ret;
 	}
 
 	void scene_insert_message(scene_message msg)

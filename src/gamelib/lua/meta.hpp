@@ -13,7 +13,7 @@ namespace game::meta
 	struct prefabinfo_t
 	{
 		std::string name;
-		std::string mod;
+		std::size_t mod_id;
 		bool has_static_init;
 		bool has_pre_instantiate;
 		bool has_instantiate;
@@ -21,8 +21,15 @@ namespace game::meta
 		bool has_on_collision;
 	};
 
+	struct levelinfo_t
+	{
+		std::string name;
+		std::size_t mod_id;
+	};
+
 	std::span<modinfo_t> get_mods();
 	std::span<prefabinfo_t> get_prefabs();
+	std::span<levelinfo_t> get_levels();
 	void lua_initialise(tz::lua::state& state);
 	void reflect();
 }

@@ -48,6 +48,7 @@ namespace game::messaging
 		std::any value = {};
 	};
 
+	entity_uuid scene_quick_add(std::string prefab_name);
 	void scene_insert_message(scene_message msg);
 }
 

@@ -34,6 +34,8 @@ namespace game::render
 		{
 			tz::ren::animation_renderer::animated_objects_handle obj;
 			std::string model_name;
+
+			bool operator==(const entry&) const = default;
 		};
 
 		void add_model(std::string model_name, tz::io::gltf model);

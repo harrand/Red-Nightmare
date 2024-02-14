@@ -21,7 +21,19 @@ namespace game
 	{
 		std::string tree_title = std::format("{}: {}", edata.ent.uuid, edata.ent.name);
 		bool any_messages_sent = false;
-		if(ImGui::TreeNode(tree_title.c_str()))
+		bool deleted = false;
+		if(ImGui::Button("x"))
+		{
+			any_messages_sent = true;
+			game::messaging::scene_insert_message
+			({
+				.operation = game::messaging::scene_operation::remove_entity,
+				.uuid = edata.ent.uuid
+			});
+			deleted = true;
+		}
+		ImGui::SameLine();
+		if(!deleted && ImGui::TreeNode(tree_title.c_str()))
 		{
 			dbgui_ent_ren(edata.ren, renderer);
 			std::string subtree_title = std::format("Internals ({})", edata.ent.internal_variables.size());
@@ -190,29 +202,68 @@ namespace game
 		}
 		if(ImGui::CollapsingHeader("Mods"))
 		{
-			for(const game::meta::modinfo_t& mod : game::meta::get_mods())
+			for(std::size_t i = 0; i < game::meta::get_mods().size(); i++)
 			{
+				const auto& mod = game::meta::get_mods()[i];
+				std::vector<meta::prefabinfo_t> owned_prefabs = {};
+				std::vector<meta::levelinfo_t> owned_levels = {};
+				for(const auto& prefab : game::meta::get_prefabs())
+				{
+					if(prefab.mod_id == i)
+					{
+						owned_prefabs.push_back(prefab);
+					}
+				}
+				for(const auto& level : game::meta::get_levels())
+				{
+					if(level.mod_id == i)
+					{
+						owned_levels.push_back(level);
+					}
+				}
 				if(ImGui::TreeNode(mod.name.c_str()))
 				{
 					ImGui::Text("Description: %s", mod.description.c_str());
-					ImGui::TreePop();
-				}
-			}
-		}
-		if(ImGui::CollapsingHeader("Prefabs"))
-		{
-			for(game::meta::prefabinfo_t prefab : game::meta::get_prefabs())
-			{
-				if(ImGui::TreeNode(prefab.name.c_str()))
-				{
-					ImGui::Text("Mod: %s", prefab.mod.c_str());
-					ImGui::BeginDisabled();
-					ImGui::Checkbox("Has static init", &prefab.has_static_init);
-					ImGui::Checkbox("Has pre-instantiate", &prefab.has_pre_instantiate);
-					ImGui::Checkbox("Has instantiate", &prefab.has_instantiate);
-					ImGui::Checkbox("Has update", &prefab.has_update);
-					ImGui::Checkbox("Has on-collision", &prefab.has_on_collision);
-					ImGui::EndDisabled();
+					if(owned_prefabs.size() && ImGui::TreeNode("Prefabs"))
+					{
+						for(auto prefab : owned_prefabs)
+						{
+							if(ImGui::TreeNode(prefab.name.c_str()))
+							{
+								ImGui::BeginDisabled();
+								ImGui::Checkbox("Has Static Init", &prefab.has_static_init);
+								ImGui::Checkbox("Has Pre Instantiate", &prefab.has_pre_instantiate);
+								ImGui::Checkbox("Has Instantiate", &prefab.has_instantiate);
+								ImGui::Checkbox("Has Update", &prefab.has_update);
+								ImGui::Checkbox("Has On-Collision", &prefab.has_on_collision);
+								ImGui::EndDisabled();
+
+								if(ImGui::Button("Add to Current Scene"))
+								{
+									game::messaging::scene_quick_add(prefab.name);
+								}
+
+								ImGui::TreePop();
+							}
+						}
+						ImGui::TreePop();
+					}
+					if(owned_levels.size() && ImGui::TreeNode("Levels"))
+					{
+						for(auto level : owned_levels)
+						{
+							if(ImGui::TreeNode(level.name.c_str()))
+							{
+								if(ImGui::Button("Load Level"))
+								{
+									std::string lua_cmd = std::format("rn.level.load(\"{}\")", level.name);
+									tz::lua::get_state().execute(lua_cmd.c_str());
+								}
+								ImGui::TreePop();
+							}
+						}
+						ImGui::TreePop();
+					}
 					ImGui::TreePop();
 				}
 			}

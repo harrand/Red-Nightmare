@@ -5,8 +5,9 @@ rn.level.levels = rn.level.levels or {}
 rn.level.load = function(name)
 	local level = rn.level.levels[name]
 	if level ~= nil then
+		rn.current_scene():clear_entities()
+		rn.renderer():clear_strings()
 		if level.on_load ~= nil then
-			rn.current_scene():clear_entities()
 			level.on_load()
 		end
 		rn.current_scene():set_level_name(name)
