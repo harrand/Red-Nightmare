@@ -1,4 +1,5 @@
 #include "gamelib/scene.hpp"
+#include "gamelib/lua/meta.hpp"
 #include "gamelib/messaging/scene.hpp"
 #include "gamelib/physics/grid_hierarchy.hpp"
 #include "gamelib/render/scene_renderer.hpp"
@@ -43,10 +44,11 @@ namespace game
 		tz::lua::get_state().execute(preinit_lua.c_str());
 		std::string model_name = tz::lua::get_state().get_string("last_model").value_or("");
 
+		auto& ent = this->entities[ret];
+		ent.ent.set_internal(".prefab", prefab_name);
 		// initialise scene element, if a model was selected.
 		if(model_name.size())
 		{
-			auto& ent = this->entities[ret];
 			ent.ren.model_name = model_name;
 
 			this->initialise_renderer_component(uuid);
@@ -281,12 +283,18 @@ namespace game
 
 	void scene::notify_new_entity(entity_uuid uuid)
 	{
-		this->grid.add_entity(uuid, this->bound_entity(uuid), physics::grid_hierarchy::oob_policy::discard);
+		if(this->wants_collision_detection(uuid))
+		{
+			this->grid.add_entity(uuid, this->bound_entity(uuid), physics::grid_hierarchy::oob_policy::discard);
+		}
 	}
 
 	void scene::notify_entity_change(entity_uuid uuid)
 	{
-		this->grid.notify_change(uuid, this->bound_entity(uuid), physics::grid_hierarchy::oob_policy::discard);
+		if(this->wants_collision_detection(uuid))
+		{
+			this->grid.notify_change(uuid, this->bound_entity(uuid), physics::grid_hierarchy::oob_policy::discard);
+		}
 	}
 
 	tz::vec2 scene::get_mouse_position_world_space() const
@@ -307,6 +315,42 @@ namespace game
 	physics::intersection_data_view scene::get_intersections()
 	{
 		return this->grid.get_intersections();
+	}
+
+	bool scene::wants_collision_detection(entity_uuid uuid) const
+	{
+		TZ_PROFZONE("scene - wants collision detection", 0xFFCC22CC);
+		const auto& cmp = this->get_entity_render_component(uuid);
+		if(cmp.model_name.empty())
+		{
+			// if it doesnt have a model name, that means it doesn't have a model.
+			// if it doesnt have a model, then it has no transform (pos/rot/scale)
+			// if it has no transform, the concept of collision detection makes no sense.
+			return false;
+		}
+		// by this point it has a model and transform, but doesn't necessarily mean it cares about collisions.
+		// if it doesnt have a prefab, then we assume it doesnt care about collisions.
+		const auto& ent = this->get_entity(uuid);
+		tz::lua::lua_generic maybe_prefab_name = ent.get_internal(".prefab");
+		if(!std::holds_alternative<tz::lua::nil>(maybe_prefab_name))
+		{
+			// its not nil.
+			// assert that its a string, as .prefab must be a string.
+			tz::assert(std::holds_alternative<std::string>(maybe_prefab_name));
+			auto prefab_name = std::get<std::string>(maybe_prefab_name);
+			// try to get the prefab info from metadata.
+			auto all_prefabs = game::meta::get_prefabs();
+			auto iter = std::find_if(all_prefabs.begin(), all_prefabs.end(),
+			[&prefab_name](const auto& prefabdata)
+			{
+				return prefabdata.name == prefab_name;
+			});
+			tz::assert(iter != all_prefabs.end());
+			// if the prefab defines an `on_collision` method, then it does want collision detection.
+			// if it doesn't then it doesnt need collision detection.
+			return iter->has_on_collision;
+		}
+		return false;
 	}
 
 	physics::boundary_t scene::bound_entity(entity_uuid uuid) const

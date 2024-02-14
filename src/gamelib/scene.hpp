@@ -69,6 +69,7 @@ namespace game
 		physics::intersection_data_view get_intersections();
 		void dbgui();
 	private:
+		bool wants_collision_detection(entity_uuid uuid) const;
 		physics::boundary_t bound_entity(entity_uuid uuid) const;
 		void initialise_renderer_component(entity_uuid uuid);
 		tz::vec2 calc_mouse_position_world_space() const;

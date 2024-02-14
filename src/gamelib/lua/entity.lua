@@ -36,8 +36,6 @@ rn.entity.instantiate = function(uuid, prefab_name)
 		tz.report("Missing prefab \"" .. prefab_name .. "\"")
 		tz.assert(false);
 	end
-
-	rn.current_scene():entity_write(uuid, ".prefab", prefab_name);
 end
 
 rn.entity.update = function(uuid, delta_seconds)
