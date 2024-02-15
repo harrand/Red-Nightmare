@@ -70,12 +70,14 @@ rn.mods.basegame =
 		{
 			on_load = function()
 				local morb1 = rn.current_scene():add_entity("morbius")
+				rn.entity.prefabs.combat_stats.set_base_max_hp(morb1, 100)
 				--rn.renderer():set_clear_colour(1.0, 0.5, 1.0, 1.0)
 
 				-- add a bunch more randoms
 				math.randomseed(os.time())
 				for i=0,128,1 do
 					local morbx = rn.current_scene():add_entity("firebolt")
+					rn.entity.prefabs.magic_ball_base.set_damage(morbx, 2)
 					local randx = math.random(-40, 40)
 					local randy = math.random(-40, 40)
 					rn.entity.prefabs.sprite.set_position(morbx, randx, randy)

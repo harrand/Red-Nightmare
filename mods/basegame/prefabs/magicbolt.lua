@@ -31,11 +31,23 @@ rn.mods.basegame.prefabs.magic_ball_base =
 		end
 	end,
 	on_collision = function(uuid_a, uuid_b)
-		-- just destroy whatever it touches, no matter what.
-		-- todo: don't do this. fire/frost/shadow bolts should have unified collision behaviour, but not this.
+		-- todo: don't do this is the other thing is "friendly"
+		-- despawn ourselves, then deal damage to the collidee with dmg equal to our max health.
+		local dmg = rn.entity.prefabs.combat_stats.get_max_hp(uuid_a)
+		local magic_type = rn.current_scene():entity_read(uuid_a, "magic_type")
+		if magic_type == nil then
+			magic_type = "physical"
+		end
+		rn.entity.prefabs.combat_stats.dmg(uuid_b, dmg, magic_type, uuid_a)
 		rn.current_scene():remove_entity(uuid_a)
-		rn.current_scene():remove_entity(uuid_b)
 		return false
+	end,
+	set_damage = function(uuid, dmg)
+		-- damage dealt is equal to max hp.
+		rn.entity.prefabs.combat_stats.set_base_max_hp(uuid, dmg)
+	end,
+	get_damage = function(uuid)
+		return rn.entity.prefabs.combat_stats.get_base_max_hp(uuid)
 	end
 }
 

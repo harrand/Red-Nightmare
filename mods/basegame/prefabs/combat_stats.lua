@@ -107,6 +107,23 @@ rn.mods.basegame.prefabs.combat_stats =
 		local invincible = rn.current_scene():entity_read(uuid, "invincible") or false
 		if invincible then return false end
 		return minus_hp >= max_hp
+	end,
+	dmg = function(uuid, dmg, magic_type, enemy_uuid)
+		-- firstly:
+		-- get our resistance
+		local our_resistance = rn.entity.prefabs.combat_stats["get_" .. magic_type .. "_resist"](uuid)
+		-- get the caster's power of the given magic type
+		local caster_power = 0.0
+		if enemy_uuid ~= 0 then
+			caster_power = rn.entity.prefabs.combat_stats["get_" .. magic_type .. "_power"](enemy_uuid)
+		end
+		
+		-- dmg = (base_dmg * caster_power) * max(our_resistance - 1.0, 0.0)
+		local mitigated_dmg = (dmg * (caster_power + 1.0)) * math.max(1.0 - our_resistance, 0.0)
+		rn.entity.prefabs.combat_stats.dmg_unmit(uuid, mitigated_dmg)
+
+		-- todo: formal combat logging
+		print(rn.current_scene():entity_get_name(uuid) .. " took " .. mitigated_dmg .. " " .. magic_type .. " damage from " .. rn.current_scene():entity_get_name(enemy_uuid))
 	end
 }
 
