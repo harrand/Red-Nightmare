@@ -86,13 +86,25 @@ namespace game
 		state.assign_func("rn.stop_music", LUA_FN_NAME(lua_stop_music));
 	}
 
+	float global_volume = 0.1f;
+
+	void audio_set_global_volume(float volume)
+	{
+		global_volume = volume;
+	}
+
+	float audio_get_global_volume()
+	{
+		return global_volume;
+	}
+
 	void play_sound(const char* path, float volume)
 	{
 		if(wavs.find(path) == wavs.end())
 		{
 			wavs[path].load(path);
 		}
-		soloud.play(wavs[path], volume);
+		soloud.play(wavs[path], volume * global_volume);
 	}
 
 	void play_music(const char* path, std::size_t track_id, float volume)
@@ -103,7 +115,7 @@ namespace game
 			wavs[path].setLooping(true);
 		}
 		tz::assert(music_tracks.size() > track_id);
-		music_tracks[track_id] = soloud.play(wavs[path]);
+		music_tracks[track_id] = soloud.play(wavs[path], volume * global_volume);
 	}
 
 	void stop_music(std::size_t track_id)

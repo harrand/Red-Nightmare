@@ -66,6 +66,11 @@ namespace game
 		{
 			if(ImGui::Begin("Scene", &game_system->dbgui.display_scene))
 			{
+				float vol = game::audio_get_global_volume();
+				if(ImGui::SliderFloat("Volume", &vol, 0.0f, 1.0f))
+				{
+					game::audio_set_global_volume(vol);
+				}
 				game_system->scene2.dbgui();
 				ImGui::End();
 			}
