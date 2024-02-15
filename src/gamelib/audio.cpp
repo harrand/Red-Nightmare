@@ -1,4 +1,5 @@
 #include "gamelib/audio.hpp"
+#include "gamelib/messaging/scene.hpp"
 #include "tz/lua/api.hpp"
 #include "soloud.h"
 #include "soloud_wav.h"
@@ -30,34 +31,51 @@ namespace game
 	LUA_BEGIN(lua_play_sound)
 		auto [path] = tz::lua::parse_args<std::string>(state);
 		float volume = 1.0f;
-		tz::lua::lua_generic maybe_volume = state.stack_get_generic(2);
-		if(std::holds_alternative<double>(maybe_volume))
+		if(state.stack_size() >= 2)
 		{
-			volume = std::get<double>(maybe_volume);
+			tz::lua::lua_generic maybe_volume = state.stack_get_generic(2);
+			if(std::holds_alternative<double>(maybe_volume))
+			{
+				volume = std::get<double>(maybe_volume);
+			}
 		}
-		std::string cwd = std::filesystem::current_path().string();
-		path = cwd + std::string("/res/sounds/") + path;
-		play_sound(path.c_str(), volume);
+		game::messaging::scene_insert_message
+		({
+			.operation = game::messaging::scene_operation::audio_play_sound,
+			.uuid = std::numeric_limits<entity_uuid>::max(),
+			.value = std::pair<std::string, float>{path, volume}
+		});
 		return 0;
 	LUA_END
 
 	LUA_BEGIN(lua_play_music)
 		auto [path, track] = tz::lua::parse_args<std::string, unsigned int>(state);
 		float volume = 1.0f;
-		tz::lua::lua_generic maybe_volume = state.stack_get_generic(3);
-		if(std::holds_alternative<double>(maybe_volume))
+		if(state.stack_size() >= 3)
 		{
-			volume = std::get<double>(maybe_volume);
+			tz::lua::lua_generic maybe_volume = state.stack_get_generic(3);
+			if(std::holds_alternative<double>(maybe_volume))
+			{
+				volume = std::get<double>(maybe_volume);
+			}
 		}
-		std::string cwd = std::filesystem::current_path().string();
-		path = cwd + std::string("/res/sounds/") + path;
-		play_music(path.c_str(), track, volume);
+		game::messaging::scene_insert_message
+		({
+			.operation = game::messaging::scene_operation::audio_play_music,
+			.uuid = std::numeric_limits<entity_uuid>::max(),
+			.value = std::tuple<std::string, unsigned int, float>{path, track, volume}
+		});
 		return 0;
 	LUA_END
 
 	LUA_BEGIN(lua_stop_music)
 		auto [track] = tz::lua::parse_args<unsigned int>(state);
-		stop_music(track);
+		game::messaging::scene_insert_message
+		({
+			.operation = game::messaging::scene_operation::audio_stop_music,
+			.uuid = std::numeric_limits<entity_uuid>::max(),
+			.value = track
+		});
 		return 0;
 	LUA_END
 

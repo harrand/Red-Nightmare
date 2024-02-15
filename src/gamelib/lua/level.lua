@@ -7,6 +7,7 @@ rn.level.load = function(name)
 	if level ~= nil then
 		rn.current_scene():clear_entities()
 		rn.renderer():clear_strings()
+		rn.stop_music(0)
 		if level.on_load ~= nil then
 			level.on_load()
 		end

@@ -1,5 +1,6 @@
 #include "gamelib/messaging/scene.hpp"
 #include "gamelib/messaging/system.hpp"
+#include "gamelib/audio.hpp"
 #include "tz/core/profile.hpp"
 #include "tz/wsi/monitor.hpp"
 
@@ -232,6 +233,31 @@ namespace game::messaging
 				auto modpath = std::filesystem::current_path()/"mods";
 				auto model_path = modpath/relpath;
 				sc->get_renderer().add_model(name, tz::io::gltf::from_file(model_path.string().c_str()));
+			}
+			break;
+			case scene_operation::audio_play_sound:
+			{
+				TZ_PROFZONE("audio play sound", 0xFF99CC44);
+				auto [relpath, volume] = std::any_cast<std::pair<std::string, float>>(msg.value);
+				auto modpath = std::filesystem::current_path()/"mods";
+				auto audio_path = modpath/relpath;
+				game::play_sound(audio_path.string().c_str(), volume);
+			}
+			break;
+			case scene_operation::audio_play_music:
+			{
+				TZ_PROFZONE("audio play music", 0xFF99CC44);
+				auto [relpath, track, volume] = std::any_cast<std::tuple<std::string, unsigned int, float>>(msg.value);
+				auto modpath = std::filesystem::current_path()/"mods";
+				auto audio_path = modpath/relpath;
+				game::play_music(audio_path.string().c_str(), track, volume);
+			}
+			break;
+			case scene_operation::audio_stop_music:
+			{
+				TZ_PROFZONE("audio stop music", 0xFF99CC44);
+				auto track_id = std::any_cast<unsigned int>(msg.value);
+				game::stop_music(track_id);
 			}
 			break;
 		}

@@ -38,7 +38,10 @@ namespace game::messaging
 		renderer_set_camera_position,
 		renderer_set_clear_colour,
 		renderer_add_texture,
-		renderer_add_model
+		renderer_add_model,
+		audio_play_sound,
+		audio_play_music,
+		audio_stop_music
 	};
 
 	struct scene_message
