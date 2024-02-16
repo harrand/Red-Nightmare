@@ -184,6 +184,7 @@ namespace game::messaging
 				render::scene_element elem = sc->get_renderer().get_element(cmp);
 				auto objh = sc->get_renderer().get_renderer().animated_object_get_subobjects(cmp.obj)[val.first];
 				auto texloc = elem.object_get_texture(objh, 0);
+				sc->get_renderer().get_renderer().object_set_visible(objh, true);
 				auto texhandle = sc->get_renderer().get_texture(val.second);
 				tz::assert(texhandle != tz::nullhand, "Unrecognised texture name \"%s\"", val.second.c_str());
 				texloc.texture = texhandle;
@@ -198,6 +199,7 @@ namespace game::messaging
 				render::scene_element elem = sc->get_renderer().get_element(cmp);
 				auto subobjects = sc->get_renderer().get_renderer().animated_object_get_subobjects(cmp.obj);
 				auto objh = subobjects[val.first];
+				sc->get_renderer().get_renderer().object_set_visible(objh, true);
 				auto texloc = elem.object_get_texture(objh, 0);
 				texloc.colour_tint = val.second;
 				elem.object_set_texture(objh, 0, texloc);

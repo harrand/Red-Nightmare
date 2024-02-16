@@ -387,6 +387,15 @@ namespace game
 		auto& ent = this->entities[this->uuid_entity_map.at(uuid)];
 		tz::assert(ent.ren.obj == tz::nullhand, "initialise_render_component(ent) - already has an animated_objects handle!");
 		ent.ren = this->renderer.add_entry(ent.ren.model_name);
+		auto objs = this->renderer.get_renderer().animated_object_get_subobjects(ent.ren.obj);
+		// note: entity lua code can set textures/colours on their renderer component elements.
+		// however, this can never happen on the frame that the entity is created
+		// for that reason, we instantly set all created objects to be invisible
+		// otherwise, there may be a single-frame flash of an empty (default) texture before the necessary messages actually get processed.
+		for(tz::ren::animation_renderer::object_handle oh : objs)
+		{
+			this->renderer.get_renderer().object_set_visible(oh, false);
+		}
 	}
 
 	tz::vec2 scene::calc_mouse_position_world_space() const
