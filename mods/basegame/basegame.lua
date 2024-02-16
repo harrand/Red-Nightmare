@@ -14,6 +14,7 @@ rn.mods.basegame =
 			end,
 			instantiate = function(uuid)
 				rn.entity.prefabs.keyboard_controlled.instantiate(uuid)
+				rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 2, "morb")
 				rn.current_scene():entity_write(uuid, "morbing", false)
 				rn.current_scene():entity_write(uuid, "age", 25)
 				rn.current_scene():entity_write(uuid, "timer", 0.0)
