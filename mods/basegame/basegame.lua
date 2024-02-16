@@ -54,13 +54,7 @@ rn.mods.basegame =
 				rn.entity.prefabs.sprite.lookat(uuid, mx, my, 0.0)
 			end,
 			on_collision = function(me, other)
-				local r, g, b = rn.entity.prefabs.sprite.get_colour(me)
-				local other_r, other_g, other_b = rn.entity.prefabs.sprite.get_colour(other)
-				if r > other_r then
-					rn.entity.prefabs.sprite.set_colour(other, r, g, b)
-				end
-				-- things with a 1.0 red colour component will not collide
-				return r == 1.0
+				return true
 			end
 		},
 	},
@@ -121,3 +115,5 @@ require("basegame/prefabs/magicbolt")
 require("basegame/prefabs/cast_buildup")
 require("basegame/prefabs/combat_stats")
 require("basegame/prefabs/timed_despawn")
+require("basegame/prefabs/obstacle")
+require("basegame/prefabs/invisible_wall")

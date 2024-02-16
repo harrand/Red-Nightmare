@@ -73,7 +73,7 @@ namespace game
 		physics::boundary_t bound_entity(entity_uuid uuid) const;
 		void initialise_renderer_component(entity_uuid uuid);
 		tz::vec2 calc_mouse_position_world_space() const;
-		void single_collision_response(entity_uuid entity_a, entity_uuid entity_b, physics::boundary_t::manifold manifold);
+		bool single_collision_response(entity_uuid entity_a, entity_uuid entity_b, physics::boundary_t::manifold manifold);
 		// free list gives handle stability, which we want.
 		// hashmap gives fast lookup for those who want to index by uuid (which everyone will want to do)
 		tz::free_list<scene_entity_data> entities = {};

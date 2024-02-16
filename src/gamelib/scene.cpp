@@ -194,9 +194,15 @@ namespace game
 	{
 		TZ_PROFZONE("scene - fixed update", 0xFFCCAACC);
 
+		bool messages_sent = false;
 		for(const auto& [entity_a, entity_b, manifold] : this->grid.get_intersections())
 		{
-			this->single_collision_response(entity_a, entity_b, manifold);
+			messages_sent |= this->single_collision_response(entity_a, entity_b, manifold);
+		}
+		if(messages_sent)
+		{
+			game::messaging::scene_messaging_local_dispatch();
+			game::messaging::scene_messaging_update();
 		}
 	}
 
@@ -406,7 +412,7 @@ namespace game
 		return pos;
 	}
 
-	void scene::single_collision_response(entity_uuid entity_a, entity_uuid entity_b, physics::boundary_t::manifold manifold)
+	bool scene::single_collision_response(entity_uuid entity_a, entity_uuid entity_b, physics::boundary_t::manifold manifold)
 	{
 		TZ_PROFZONE("scene - collision response", 0xFFCC22CC);
 		{
@@ -416,7 +422,7 @@ namespace game
 		}
 		if(tz::lua::get_state().get_bool("impl_do_collision_response") == false)
 		{
-			return;
+			return false;
 		}
 		auto comp_a = this->get_entity_render_component(entity_a);
 		tz::assert(!comp_a.model_name.empty());
@@ -450,9 +456,17 @@ namespace game
 		{
 			mass_a = std::get<double>(mass_a_gen);
 		}
+		if(std::holds_alternative<std::int64_t>(mass_a_gen))
+		{
+			mass_a = std::get<std::int64_t>(mass_a_gen);
+		}
 		if(std::holds_alternative<double>(mass_b_gen))
 		{
 			mass_b = std::get<double>(mass_b_gen);
+		}
+		if(std::holds_alternative<std::int64_t>(mass_b_gen))
+		{
+			mass_b = std::get<std::int64_t>(mass_b_gen);
 		}
 		tz::assert(mass_a > 0.0f && mass_b > 0.0f);
 		float mass_ratio = mass_a / (mass_a + mass_b);
@@ -472,6 +486,7 @@ namespace game
 			.uuid = entity_b,
 			.value = (bpos.swizzle<0, 1>() + disp_b).with_more(bpos[2])
 		});
+		return true;
 	}
 
 	decltype(scene::entities)::iterator scene::begin()
