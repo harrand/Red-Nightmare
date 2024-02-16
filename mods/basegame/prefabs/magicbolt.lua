@@ -35,8 +35,13 @@ rn.mods.basegame.prefabs.magic_ball_base =
 		-- despawn ourselves, then deal damage to the collidee with dmg equal to our max health.
 		local dmg = rn.entity.prefabs.combat_stats.get_max_hp(uuid_a)
 		local magic_type = rn.current_scene():entity_read(uuid_a, "magic_type")
+		local owner_id = rn.current_scene():entity_read(uuid_a, "owner")
 		if magic_type == nil then
 			magic_type = "physical"
+		end
+		if owner_id == uuid_b then
+			-- collided with whomsoever casted me. don't do anything.
+			return false
 		end
 		rn.entity.prefabs.combat_stats.dmg(uuid_b, dmg, magic_type, uuid_a)
 		rn.current_scene():remove_entity(uuid_a)
@@ -48,6 +53,11 @@ rn.mods.basegame.prefabs.magic_ball_base =
 	end,
 	get_damage = function(uuid)
 		return rn.entity.prefabs.combat_stats.get_base_max_hp(uuid)
+	end,
+	set_target = function(uuid, tarx, tary)
+		local sc = rn.current_scene()
+		sc:entity_write(uuid, "target_location_x", tarx)
+		sc:entity_write(uuid, "target_location_y", tary)
 	end
 }
 

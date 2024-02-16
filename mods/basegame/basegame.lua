@@ -14,6 +14,7 @@ rn.mods.basegame =
 			end,
 			instantiate = function(uuid)
 				rn.entity.prefabs.keyboard_controlled.instantiate(uuid)
+				rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 1, "lesser_firebolt")
 				rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 2, "morb")
 				rn.current_scene():entity_write(uuid, "morbing", false)
 				rn.current_scene():entity_write(uuid, "age", 25)
@@ -118,3 +119,5 @@ require("basegame/prefabs/combat_stats")
 require("basegame/prefabs/timed_despawn")
 require("basegame/prefabs/obstacle")
 require("basegame/prefabs/invisible_wall")
+
+require("basegame/spells/lesser_firebolt")

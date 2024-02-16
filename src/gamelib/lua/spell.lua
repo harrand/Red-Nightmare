@@ -29,7 +29,7 @@ rn.spell.cast = function(uuid, spell_name)
 	local current_spell_name = sc:entity_read(uuid, "cast.name")
 	if current_spell_name ~= nil then
 		-- already casting
-		tz.report(tostring(uuid) .. " cannot cast " .. spell_name .. " because it is already casting " .. current_spell_name)
+		--tz.report(tostring(uuid) .. " cannot cast " .. spell_name .. " because it is already casting " .. current_spell_name)
 		return
 	end
 
