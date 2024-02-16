@@ -65,8 +65,7 @@ rn.mods.basegame =
 		startscreen =
 		{
 			on_load = function()
-				local morb1 = rn.current_scene():add_entity("morbius")
-				rn.entity.prefabs.combat_stats.set_base_max_hp(morb1, 100)
+				local morb1 = rn.current_scene():add_entity("player_melistra")
 				--rn.renderer():set_clear_colour(1.0, 0.5, 1.0, 1.0)
 
 				-- add a bunch more randoms
@@ -110,6 +109,8 @@ rn.mods.basegame =
 	}
 }
 
+require("basegame/prefabs/players/player_melistra")
+
 require("basegame/prefabs/mouse_controlled")
 require("basegame/prefabs/keyboard_controlled")
 require("basegame/prefabs/sprite")
@@ -119,5 +120,7 @@ require("basegame/prefabs/combat_stats")
 require("basegame/prefabs/timed_despawn")
 require("basegame/prefabs/obstacle")
 require("basegame/prefabs/invisible_wall")
+
+require("basegame/spells/lesser_firebolt")
 
 require("basegame/spells/lesser_firebolt")
