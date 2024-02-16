@@ -361,6 +361,22 @@ namespace game::messaging
 			return 1;
 		}
 
+		int entity_get_model(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity get model", 0xFF99CC44);
+			auto [_, uuid] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+			std::string mname = sc->get_entity_render_component(uuid).model_name;
+			if(mname.empty())
+			{
+				state.stack_push_nil();
+			}
+			else
+			{
+				state.stack_push_string(mname);
+			}
+			return 1;
+		}
+
 		int entity_write(tz::lua::state& state)
 		{
 			TZ_PROFZONE("scene - entity write", 0xFF99CC44);
@@ -640,6 +656,8 @@ namespace game::messaging
 			LUA_METHOD(lua_local_scene_message_receiver, clear_entities)
 			LUA_METHOD(lua_local_scene_message_receiver, set_level_name)
 			LUA_METHOD(lua_local_scene_message_receiver, get_level_name)
+			LUA_METHOD(lua_local_scene_message_receiver, contains_entity)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_get_model)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_write)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_read)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_subobject_texture)
