@@ -25,5 +25,7 @@ rn.mods.basegame.prefabs.cast_buildup =
 			local colour = rn.spell.schools[magic_type].colour
 			rn.entity.prefabs.sprite.set_colour(uuid, colour[1], colour[2], colour[3])
 		end
+
+		rn.entity.prefabs.sticky.update(uuid, delta_seconds)
 	end
 }

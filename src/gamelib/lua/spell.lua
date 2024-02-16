@@ -36,6 +36,7 @@ rn.spell.cast = function(uuid, spell_name)
 	-- begin cast.
 	sc:entity_write(uuid, "cast.name", spell_name)
 	sc:entity_write(uuid, "cast.begin", tz.time())
+	rn.spell.create_effect_on(uuid, spell_name)
 end
 
 rn.spell.advance = function(uuid)
@@ -82,4 +83,43 @@ rn.spell.clear = function(uuid)
 	local sc = rn.current_scene()
 	sc:entity_write(uuid, "cast.name", nil)
 	sc:entity_write(uuid, "cast.begin", nil)
+	rn.spell.clear_effect_on(uuid)
+end
+
+rn.spell.create_effect_on = function(uuid, spell_name)
+	local sc = rn.current_scene()
+
+	if spell_name == nil then
+		return
+	end
+	local spelldata = rn.spell.spells[spell_name]
+	local magic_type = spelldata.magic_type
+	if spelldata == nil or magic_type == nil or magic_type == "physical" then
+		return
+	end
+
+	local model = sc:entity_get_model(uuid)
+	if model == "plane" then
+		local effect = sc:add_entity("cast_buildup")
+		sc:entity_write(effect, "magic_type", magic_type)
+		sc:entity_write(uuid, "cast_buildup0", effect)
+		-- stick the effect to the caster
+		rn.entity.prefabs.sticky.stick_to(effect, uuid)
+	else
+		tz.error(false, "No support for model " .. tostring(model) .. " having cast effects.")
+	end
+end
+
+rn.spell.clear_effect_on = function(uuid)
+	local sc = rn.current_scene()
+	local model = sc:entity_get_model(uuid)
+	if model == "plane" then
+		local buildup0 = sc:entity_read(uuid, "cast_buildup0")
+		if buildup0 ~= nil and sc:contains_entity(buildup0) then
+			-- delete the buildup effect coz we're done casting.
+			sc:remove_entity(buildup0)
+		end
+	else
+		tz.error(false, "No support for model " .. tostring(model) .. " having cast effects.")
+	end
 end

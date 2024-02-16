@@ -6,6 +6,7 @@ rn.mods.basegame.prefabs.player_melistra =
 	instantiate = function(uuid)
 		rn.entity.prefabs.keyboard_controlled.instantiate(uuid)
 		rn.entity.prefabs.sprite.set_colour(uuid, 0.6, 0.3, 0.2)
+		rn.entity.prefabs.sprite.set_scale(uuid, 0.2)
 		rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 1, "lesser_firebolt")
 
 		rn.entity.prefabs.combat_stats.set_base_max_hp(uuid, 100)

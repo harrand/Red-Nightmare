@@ -113,6 +113,7 @@ require("basegame/prefabs/players/player_melistra")
 
 require("basegame/prefabs/mouse_controlled")
 require("basegame/prefabs/keyboard_controlled")
+require("basegame/prefabs/sticky")
 require("basegame/prefabs/sprite")
 require("basegame/prefabs/magicbolt")
 require("basegame/prefabs/cast_buildup")
