@@ -392,6 +392,7 @@ namespace game::render
 			.dimensions = mondims,
 			.flags = {tz::gl::resource_flag::renderer_output}
 		}));
+		rinfo.debug_name("Post-Render Pixelate");
 		this->handle = tz::gl::get_device().create_renderer(rinfo);
 		this->dims_cache = tz::window().get_dimensions();
 	}
