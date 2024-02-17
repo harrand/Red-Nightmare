@@ -207,6 +207,7 @@ namespace game
 				const auto& mod = game::meta::get_mods()[i];
 				std::vector<meta::prefabinfo_t> owned_prefabs = {};
 				std::vector<meta::levelinfo_t> owned_levels = {};
+				std::vector<meta::spellinfo_t> owned_spells = {};
 				for(const auto& prefab : game::meta::get_prefabs())
 				{
 					if(prefab.mod_id == i)
@@ -219,6 +220,13 @@ namespace game
 					if(level.mod_id == i)
 					{
 						owned_levels.push_back(level);
+					}
+				}
+				for(const auto& spell : game::meta::get_spells())
+				{
+					if(spell.mod_id == i)
+					{
+						owned_spells.push_back(spell);
 					}
 				}
 				ImGui::SetNextItemOpen(mod.name == "basegame");
@@ -273,6 +281,19 @@ namespace game
 									std::string lua_cmd = std::format("rn.level.load(\"{}\")", level.name);
 									tz::lua::get_state().execute(lua_cmd.c_str());
 								}
+								ImGui::TreePop();
+							}
+						}
+						ImGui::TreePop();
+					}
+					if(owned_spells.size() && ImGui::TreeNode("Spells"))
+					{
+						for(auto spell : owned_spells)
+						{
+							if(ImGui::TreeNode(spell.name.c_str()))
+							{
+								ImGui::Text("%s", spell.description.c_str());
+								ImGui::Text("Type: %s", spell.magic_type.c_str());
 								ImGui::TreePop();
 							}
 						}

@@ -28,9 +28,18 @@ namespace game::meta
 		std::size_t mod_id;
 	};
 
+	struct spellinfo_t
+	{
+		std::string name;
+		std::size_t mod_id;
+		std::string description;
+		std::string magic_type;
+	};
+
 	std::span<modinfo_t> get_mods();
 	std::span<prefabinfo_t> get_prefabs();
 	std::span<levelinfo_t> get_levels();
+	std::span<spellinfo_t> get_spells();
 	void lua_initialise(tz::lua::state& state);
 	void reflect();
 }

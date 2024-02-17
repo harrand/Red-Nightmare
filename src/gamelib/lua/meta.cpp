@@ -6,6 +6,7 @@ namespace game::meta
 	std::vector<modinfo_t> internal_mod_list = {};
 	std::vector<prefabinfo_t> internal_prefab_list = {};
 	std::vector<levelinfo_t> internal_level_list = {};
+	std::vector<spellinfo_t> internal_spell_list = {};
 
 	LUA_BEGIN(rn_inform_mod)
 		auto [name, description] = tz::lua::parse_args<std::string, std::string>(state);
@@ -39,6 +40,19 @@ namespace game::meta
 		return 0;
 	LUA_END
 
+	LUA_BEGIN(rn_inform_spell)
+		auto [name, mod, description, magic_type] = tz::lua::parse_args<std::string, std::string, std::string, std::string>(state);
+		auto iter = std::find_if(internal_mod_list.begin(), internal_mod_list.end(),
+		[&mod](const auto& cur_mod)
+		{
+			return cur_mod.name == mod;
+		});
+		tz::assert(iter != internal_mod_list.end());
+		std::size_t mod_id = std::distance(internal_mod_list.begin(), iter);
+		internal_spell_list.push_back({.name = name, .mod_id = mod_id, .description = description, .magic_type = magic_type});
+		return 0;
+	LUA_END
+
 	std::span<modinfo_t> get_mods()
 	{
 		return internal_mod_list;
@@ -54,17 +68,25 @@ namespace game::meta
 		return internal_level_list;
 	}
 
+	std::span<spellinfo_t> get_spells()
+	{
+		return internal_spell_list;
+	}
+
 	void lua_initialise(tz::lua::state& state)
 	{
 		state.assign_func("rn.inform_mod", LUA_FN_NAME(rn_inform_mod));
 		state.assign_func("rn.inform_prefab", LUA_FN_NAME(rn_inform_prefab));
 		state.assign_func("rn.inform_level", LUA_FN_NAME(rn_inform_level));
+		state.assign_func("rn.inform_spell", LUA_FN_NAME(rn_inform_spell));
 	}
 
 	void reflect()
 	{
 		internal_mod_list.clear();
 		internal_prefab_list.clear();
+		internal_level_list.clear();
+		internal_spell_list.clear();
 		tz::lua::get_state().execute(R"(
 			-- reflect mods
 			for modname, moddata in pairs(rn.mods) do
@@ -79,6 +101,11 @@ namespace game::meta
 			-- reflect levels
 			for levelname, leveldata in pairs(rn.level.levels) do
 				rn.inform_level(levelname, leveldata.mod)
+			end
+
+			-- reflect spells
+			for spellname, spelldata in pairs(rn.spell.spells) do
+				rn.inform_spell(spellname, spelldata.mod, spelldata.description or "<No Description>", spelldata.magic_type or "Untyped")
 			end
 		)");
 	}
