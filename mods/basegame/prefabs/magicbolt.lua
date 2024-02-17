@@ -30,6 +30,7 @@ rn.mods.basegame.prefabs.magic_ball_base =
 		if tarx ~= nil and tary ~= nil then
 			rn.entity.prefabs.sprite.lookat(uuid, tarx, tary, math.pi / -2.0)
 		end
+		rn.entity.prefabs.timed_despawn.update(uuid, delta_seconds)
 	end,
 	on_collision = function(uuid_a, uuid_b)
 		-- todo: don't do this is the other thing is "friendly"

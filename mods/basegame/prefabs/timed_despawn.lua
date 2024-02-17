@@ -7,7 +7,10 @@ rn.mods.basegame.prefabs.timed_despawn =
 		rn.current_scene():entity_write(uuid, "duration", dur)
 	end,
 	update = function(uuid, delta_seconds)
-		local t = rn.current_scene():entity_read(uuid, "duration") or 999999999
+		local t = rn.current_scene():entity_read(uuid, "duration")
+		if t == nil then
+			return
+		end
 		t = t - delta_seconds
 		if t <= 0.0 then
 			rn.current_scene():remove_entity(uuid)
