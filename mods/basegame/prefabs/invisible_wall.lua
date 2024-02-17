@@ -1,5 +1,6 @@
 rn.mods.basegame.prefabs.invisible_wall =
 {
+	description = "1x1 Immovable object. Invisible, although has a debug-pink appearance on debug builds.",
 	static_init = function()
 		if tz.debug then
 			rn.renderer():add_texture("invisible", "basegame/res/sprites/invisible_debug.png")

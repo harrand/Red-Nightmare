@@ -1,5 +1,6 @@
 rn.mods.basegame.prefabs.sprite =
 {
+	description = "Entity is a textured 2D plane",
 	static_init = function()
 		rn.renderer():add_model("plane", "basegame/res/plane.glb")
 	end,

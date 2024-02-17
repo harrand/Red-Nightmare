@@ -1,5 +1,6 @@
 rn.mods.basegame.prefabs.magic_ball_base =
 {
+	description = "Meta-Entity representing a bolt of unknown magic type.",
 	frame_count = 3,
 	static_init = function()
 		for i=0,rn.entity.prefabs.magic_ball_base.frame_count,1 do
@@ -68,6 +69,7 @@ for schoolname, schooldata in pairs(rn.spell.schools) do
 		-- is a magic school.
 		rn.mods.basegame.prefabs[schoolname .. "bolt"] =
 		{
+			description = "Represents a magical bolt of " .. schoolname,
 			pre_instantiate = rn.mods.basegame.prefabs.magic_ball_base.pre_instantiate,
 			instantiate = function(uuid)
 				rn.mods.basegame.prefabs.magic_ball_base.instantiate(uuid)

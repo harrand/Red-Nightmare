@@ -70,6 +70,7 @@ end
 
 rn.mods.basegame.prefabs.combat_stats =
 {
+	description = "Provides combat stats (e.g hp, magical power, magical resistance etc...) for an entity.",
 	instantiate = function(uuid)
 	end,
 	get_hp = function(uuid)

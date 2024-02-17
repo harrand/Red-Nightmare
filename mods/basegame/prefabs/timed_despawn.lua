@@ -1,5 +1,6 @@
 rn.mods.basegame.prefabs.timed_despawn = 
 {
+	description = "Entity will automatically remove itself from the scene when the provided duration reaches 0 (in seconds). The duration defaults to a very large value.",
 	-- set the internal variable "duration" to a number of seconds.
 	-- when it hits 0 the entity will automatically despawn.
 	set_duration = function(uuid, dur)

@@ -1,5 +1,6 @@
 rn.mods.basegame.prefabs.cast_buildup = 
 {
+	description = "Sprite particle effect displayed while an entity casts a magic spell.",
 	frame_count = 6,
 	static_init = function()
 		for i=0,rn.entity.prefabs.cast_buildup.frame_count,1 do

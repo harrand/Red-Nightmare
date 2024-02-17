@@ -243,6 +243,7 @@ namespace game
 							}
 							if(ImGui::TreeNode(prefab.name.c_str()))
 							{
+								ImGui::Text("%s", prefab.description.c_str());
 								ImGui::BeginDisabled();
 								ImGui::Checkbox("Has Static Init", &prefab.has_static_init);
 								ImGui::Checkbox("Has Pre Instantiate", &prefab.has_pre_instantiate);

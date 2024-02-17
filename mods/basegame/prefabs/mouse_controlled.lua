@@ -1,5 +1,6 @@
 rn.mods.basegame.prefabs.mouse_controlled =
 {
+	description = "Entity can be controlled by mouse presses. Right now this is just movement (left-click-to-move).",
 	update = function(uuid, delta_seconds)
 		local sc = rn.current_scene()
 		local x, y, z = sc:entity_get_local_position(uuid)

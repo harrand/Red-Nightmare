@@ -1,5 +1,6 @@
 rn.mods.basegame.prefabs.sticky =
 {
+	description = "Entity's global position is set to match the targetted entity every frame.",
 	update = function(uuid, delta_seconds)
 		local sc = rn.current_scene()
 		local stick_to_uuid = sc:entity_read(uuid, "stick_to_entity")

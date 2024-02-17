@@ -1,5 +1,6 @@
 rn.mods.basegame.prefabs.keyboard_controlled =
 {
+	description = "Entity can be controlled by keybinds. Namely movement (default wasd) and upto nine spells (1-9) bound.",
 	instantiate = function(uuid)
 		local sc = rn.current_scene()
 		sc:entity_write(uuid, "control.forward", "w")

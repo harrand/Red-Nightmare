@@ -14,7 +14,7 @@ namespace game::meta
 	LUA_END
 
 	LUA_BEGIN(rn_inform_prefab)
-		auto [name, mod, has_static_init, has_pre_instantiate, has_instantiate, has_update, has_on_collision] = tz::lua::parse_args<std::string, std::string, bool, bool, bool, bool, bool>(state);
+		auto [name, description, mod, has_static_init, has_pre_instantiate, has_instantiate, has_update, has_on_collision] = tz::lua::parse_args<std::string, std::string, std::string, bool, bool, bool, bool, bool>(state);
 		auto iter = std::find_if(internal_mod_list.begin(), internal_mod_list.end(),
 		[&mod](const auto& cur_mod)
 		{
@@ -22,7 +22,7 @@ namespace game::meta
 		});
 		tz::assert(iter != internal_mod_list.end());
 		std::size_t mod_id = std::distance(internal_mod_list.begin(), iter);
-		internal_prefab_list.push_back({.name = name, .mod_id = mod_id, .has_static_init = has_static_init, .has_pre_instantiate = has_pre_instantiate, .has_instantiate = has_instantiate, .has_update = has_update, .has_on_collision = has_on_collision});
+		internal_prefab_list.push_back({.name = name, .description = description, .mod_id = mod_id, .has_static_init = has_static_init, .has_pre_instantiate = has_pre_instantiate, .has_instantiate = has_instantiate, .has_update = has_update, .has_on_collision = has_on_collision});
 		return 0;
 	LUA_END
 
@@ -73,7 +73,7 @@ namespace game::meta
 
 			-- reflect prefabs
 			for prefabname, prefabdata in pairs(rn.entity.prefabs) do
-				rn.inform_prefab(prefabname, prefabdata.mod, prefabdata.static_init ~= nil, prefabdata.pre_instantiate ~= nil, prefabdata.instantiate ~= nil, prefabdata.update ~= nil, prefabdata.on_collision ~= nil)
+				rn.inform_prefab(prefabname, prefabdata.description or "<No Description>", prefabdata.mod, prefabdata.static_init ~= nil, prefabdata.pre_instantiate ~= nil, prefabdata.instantiate ~= nil, prefabdata.update ~= nil, prefabdata.on_collision ~= nil)
 			end
 
 			-- reflect levels

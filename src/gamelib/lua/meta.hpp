@@ -13,6 +13,7 @@ namespace game::meta
 	struct prefabinfo_t
 	{
 		std::string name;
+		std::string description;
 		std::size_t mod_id;
 		bool has_static_init;
 		bool has_pre_instantiate;
