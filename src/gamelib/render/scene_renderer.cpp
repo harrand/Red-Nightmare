@@ -17,7 +17,7 @@ namespace game::render
 {
 	scene_renderer::scene_renderer():
 	pixelate_pass(),
-	output
+	pixelate_input
 	{tz::gl::image_output_info{
 		.colours =
 		{
@@ -31,7 +31,7 @@ namespace game::render
 		.custom_options = {tz::gl::renderer_option::no_present, tz::gl::renderer_option::alpha_blending},
 		.texture_capacity = 128u,
 		.extra_buffers = evaluate_extra_buffers(),
-		.output = &this->output,
+		.output = &this->pixelate_input,
 	}),
 	text_renderer(1024u, tz::gl::renderer_options{tz::gl::renderer_option::no_clear_output, tz::gl::renderer_option::no_depth_testing})
 	{

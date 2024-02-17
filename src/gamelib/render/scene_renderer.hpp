@@ -97,7 +97,7 @@ namespace game::render
 		};
 
 		pixelate_pass_t pixelate_pass;
-		tz::gl::image_output output;
+		tz::gl::image_output pixelate_input;
 		tz::ren::animation_renderer renderer;
 		tz::ren::text_renderer text_renderer;
 		int impl_mouse_scroll_delta = 0;
