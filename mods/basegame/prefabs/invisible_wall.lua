@@ -10,6 +10,7 @@ rn.mods.basegame.prefabs.invisible_wall =
 	end,
 	pre_instantiate = rn.mods.basegame.prefabs.sprite.pre_instantiate,
 	instantiate = function(uuid)
+		rn.entity.prefabs.sprite.instantiate(uuid)
 		rn.entity.prefabs.obstacle.instantiate(uuid)
 		rn.entity.prefabs.sprite.set_texture(uuid, "invisible")
 	end,

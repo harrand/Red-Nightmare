@@ -11,6 +11,7 @@ rn.mods.basegame.prefabs.cast_buildup =
 		return rn.entity.prefabs.sprite.pre_instantiate(uuid)
 	end,
 	instantiate = function(uuid)
+		rn.entity.prefabs.sprite.instantiate(uuid)
 		rn.entity.prefabs.sprite.set_texture(uuid, "sprite.cast_buildup0")
 	end,
 	update = function(uuid, delta_seconds)

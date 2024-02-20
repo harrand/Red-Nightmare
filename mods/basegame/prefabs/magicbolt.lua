@@ -11,6 +11,7 @@ rn.mods.basegame.prefabs.magic_ball_base =
 		return rn.entity.prefabs.sprite.pre_instantiate(uuid)
 	end,
 	instantiate = function(uuid)
+		rn.entity.prefabs.sprite.instantiate(uuid)
 		rn.entity.prefabs.sprite.set_texture(uuid, "sprite.magicball0")
 		rn.current_scene():entity_write(uuid, ".boundary_scale", 0.5)
 	end,

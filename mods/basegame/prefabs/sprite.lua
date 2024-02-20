@@ -7,6 +7,12 @@ rn.mods.basegame.prefabs.sprite =
 	pre_instantiate = function(uuid)
 		return "plane"
 	end,
+	instantiate = function(uuid)
+		rn.entity.prefabs.sprite.set_visible(uuid, true)
+	end,
+	set_visible = function(uuid, visible)
+		rn.current_scene():entity_set_subobject_visible(uuid, 2, visible)
+	end,
 	set_texture = function(uuid, texname)
 		rn.current_scene():entity_set_subobject_texture(uuid, 2, texname)
 	end,

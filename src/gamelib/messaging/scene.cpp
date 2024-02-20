@@ -184,7 +184,7 @@ namespace game::messaging
 				render::scene_element elem = sc->get_renderer().get_element(cmp);
 				auto objh = sc->get_renderer().get_renderer().animated_object_get_subobjects(cmp.obj)[val.first];
 				auto texloc = elem.object_get_texture(objh, 0);
-				sc->get_renderer().get_renderer().object_set_visible(objh, true);
+				//sc->get_renderer().get_renderer().object_set_visible(objh, true);
 				auto texhandle = sc->get_renderer().get_texture(val.second);
 				tz::assert(texhandle != tz::nullhand, "Unrecognised texture name \"%s\"", val.second.c_str());
 				texloc.texture = texhandle;
@@ -199,10 +199,21 @@ namespace game::messaging
 				render::scene_element elem = sc->get_renderer().get_element(cmp);
 				auto subobjects = sc->get_renderer().get_renderer().animated_object_get_subobjects(cmp.obj);
 				auto objh = subobjects[val.first];
-				sc->get_renderer().get_renderer().object_set_visible(objh, true);
+				//sc->get_renderer().get_renderer().object_set_visible(objh, true);
 				auto texloc = elem.object_get_texture(objh, 0);
 				texloc.colour_tint = val.second;
 				elem.object_set_texture(objh, 0, texloc);
+			}
+			break;
+			case scene_operation::entity_set_subobject_visible:
+			{
+				TZ_PROFZONE("entity set subobject visible", 0xFF99CC44);
+				auto [subobject_id, visible] = std::any_cast<std::pair<std::size_t, bool>>(msg.value);
+				auto cmp = sc->get_entity_render_component(msg.uuid);
+				render::scene_element elem = sc->get_renderer().get_element(cmp);
+				auto subobjects = sc->get_renderer().get_renderer().animated_object_get_subobjects(cmp.obj);
+				auto objh = subobjects[subobject_id];
+				sc->get_renderer().get_renderer().object_set_visible(objh, visible);
 			}
 			break;
 			case scene_operation::entity_set_subobject_pixelated:
@@ -471,6 +482,19 @@ namespace game::messaging
 			return 0;
 		}
 
+		int entity_set_subobject_visible(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity set subobject pixelated", 0xFF99CC44);
+			auto [_, uuid, subobject, visible] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int, bool>(state);
+			local_scene_receiver.send_message
+			({
+				.operation = scene_operation::entity_set_subobject_visible,
+				.uuid = static_cast<entity_uuid>(uuid),
+				.value = std::pair<std::size_t, bool>(subobject, visible)
+			});
+			return 0;
+		}
+
 		int entity_set_subobject_pixelated(tz::lua::state& state)
 		{
 			TZ_PROFZONE("scene - entity set subobject pixelated", 0xFF99CC44);
@@ -688,6 +712,7 @@ namespace game::messaging
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_subobject_texture)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_subobject_colour)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_subobject_colour)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_set_subobject_visible)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_subobject_pixelated)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_name)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_name)

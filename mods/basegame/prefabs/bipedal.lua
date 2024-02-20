@@ -1,3 +1,9 @@
+local base_subobj = 3
+-- note: these 3 may or may not be mixed up.
+local chest_subobj = 5
+local helm_subobj = 7
+local legs_subobj = 9
+
 rn.mods.basegame.prefabs.bipedal =
 {
 	description = "Entity is a 3D bipedal animated humanoid",
@@ -8,7 +14,20 @@ rn.mods.basegame.prefabs.bipedal =
 		return "bipedal"
 	end,
 	instantiate = function(uuid)
-		rn.current_scene():entity_set_subobject_pixelated(uuid, 3, true)
+		rn.current_scene():entity_set_subobject_pixelated(uuid, base_subobj, true)
+		rn.current_scene():entity_set_subobject_pixelated(uuid, helm_subobj, true)
+		rn.current_scene():entity_set_subobject_pixelated(uuid, chest_subobj, true)
+		rn.current_scene():entity_set_subobject_pixelated(uuid, legs_subobj, true)
+		rn.entity.prefabs.bipedal.set_visible(uuid, true)
+		--rn.entity.prefabs.bipedal.set_subobject_visible(uuid, helm_subobj, true)
+		--rn.entity.prefabs.bipedal.set_subobject_visible(uuid, chest_subobj, true)
+		--rn.entity.prefabs.bipedal.set_subobject_visible(uuid, legs_subobj, true)
+	end,
+	set_subobject_visible = function(uuid, subobject, visible)
+		rn.current_scene():entity_set_subobject_visible(uuid, subobject, visible)
+	end,
+	set_visible = function(uuid, visible)
+		rn.entity.prefabs.bipedal.set_subobject_visible(uuid, 3, visible)	
 	end,
 	set_texture = function(uuid, texname)
 		rn.current_scene():entity_set_subobject_texture(uuid, 3, texname)

@@ -61,7 +61,7 @@ namespace game::render
 
 		constexpr float initial_zoom = 4.0f;
 		this->view_bounds /= initial_zoom;
-		this->pixelate_pass.zoom_amount() /= initial_zoom;
+		//this->pixelate_pass.zoom_amount() /= initial_zoom;
 	}
 
 	void scene_renderer::add_model(std::string model_name, tz::io::gltf model)
