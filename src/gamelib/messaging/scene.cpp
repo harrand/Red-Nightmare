@@ -205,6 +205,17 @@ namespace game::messaging
 				elem.object_set_texture(objh, 0, texloc);
 			}
 			break;
+			case scene_operation::entity_set_subobject_pixelated:
+			{
+				TZ_PROFZONE("entity set subobject pixelated", 0xFF99CC44);
+				auto [subobject_id, pixelate] = std::any_cast<std::pair<std::size_t, bool>>(msg.value);
+				auto cmp = sc->get_entity_render_component(msg.uuid);
+				render::scene_element elem = sc->get_renderer().get_element(cmp);
+				auto subobjects = sc->get_renderer().get_renderer().animated_object_get_subobjects(cmp.obj);
+				auto objh = subobjects[subobject_id];
+				sc->get_renderer().get_renderer().get_object(objh).unused2[2] = pixelate;
+			}
+			break;
 			case scene_operation::renderer_set_camera_position:
 			{
 				TZ_PROFZONE("renderer set camera position", 0xFF99CC44);
@@ -460,6 +471,19 @@ namespace game::messaging
 			return 0;
 		}
 
+		int entity_set_subobject_pixelated(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity set subobject pixelated", 0xFF99CC44);
+			auto [_, uuid, subobject, pixelated] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int, bool>(state);
+			local_scene_receiver.send_message
+			({
+				.operation = scene_operation::entity_set_subobject_pixelated,
+				.uuid = static_cast<entity_uuid>(uuid),
+				.value = std::pair<std::size_t, bool>(subobject, pixelated)
+			});
+			return 0;
+		}
+
 		int entity_set_name(tz::lua::state& state)
 		{
 			TZ_PROFZONE("scene - entity set name", 0xFF99CC44);
@@ -664,6 +688,7 @@ namespace game::messaging
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_subobject_texture)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_subobject_colour)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_subobject_colour)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_set_subobject_pixelated)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_name)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_name)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_local_position)
