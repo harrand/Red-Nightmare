@@ -124,5 +124,4 @@ require("basegame/prefabs/obstacle")
 require("basegame/prefabs/invisible_wall")
 
 require("basegame/spells/lesser_firebolt")
-
-require("basegame/spells/lesser_firebolt")
+require("basegame/spells/lesser_frostbolt")

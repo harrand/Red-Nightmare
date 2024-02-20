@@ -131,7 +131,7 @@ rn.spell.create_effect_on = function(uuid, spell_name)
 		sc:entity_write(uuid, "cast_buildup0", effect)
 		sc:entity_write(uuid, "cast.location", "cast_buildup0")
 		-- stick the effect to the caster's left hand
-		rn.entity.prefabs.sticky.stick_to_subobject(effect, uuid, rn.entity.prefabs.bipedal.left_hand)
+		rn.entity.prefabs.sticky.stick_to_subobject(effect, uuid, rn.entity.prefabs.bipedal.right_hand)
 	else
 		tz.error(false, "No support for model " .. tostring(model) .. " having cast effects.")
 	end
