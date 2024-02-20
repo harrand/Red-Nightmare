@@ -11,6 +11,8 @@ local legs_subobj = 9
 rn.mods.basegame.prefabs.bipedal =
 {
 	description = "Entity is a 3D bipedal animated humanoid",
+	left_hand = 20,
+	right_hand = 24,
 	static_init = function()
 		rn.renderer():add_model("bipedal", "basegame/res/models/bipedal.glb")
 	end,
