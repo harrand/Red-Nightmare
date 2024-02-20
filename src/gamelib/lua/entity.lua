@@ -87,3 +87,51 @@ rn.entity.on_collision = function(uuid_a, uuid_b)
 	end
 	return ret
 end
+
+-- invoked when an entity begins casting a spell.
+rn.entity.on_cast_begin = function(uuid, spellname)
+	local prefab_name = rn.current_scene():entity_read(uuid, ".prefab")
+	if prefab_name ~= nil then
+		local prefab = rn.entity.prefabs[prefab_name]
+		if prefab ~= nil then
+			if prefab.on_cast_begin ~= nil then
+				prefab.on_cast_begin(uuid, spellname)
+			end
+		else
+			tz.report("Missing prefab \"" .. prefab_name .. "\"")
+			tz.assert(false);
+		end
+	end
+end
+
+-- invoked when an entity is no longer casting a spell (happens if the cast is cancelled or completes)
+rn.entity.on_cast_end = function(uuid)
+	local prefab_name = rn.current_scene():entity_read(uuid, ".prefab")
+	if prefab_name ~= nil then
+		local prefab = rn.entity.prefabs[prefab_name]
+		if prefab ~= nil then
+			if prefab.on_cast_end ~= nil then
+				prefab.on_cast_end(uuid)
+			end
+		else
+			tz.report("Missing prefab \"" .. prefab_name .. "\"")
+			tz.assert(false);
+		end
+	end
+end
+
+-- invoked when an entity is finishes a spell (successful completion, not if the cast is cancelled)
+rn.entity.on_cast_success = function(uuid)
+	local prefab_name = rn.current_scene():entity_read(uuid, ".prefab")
+	if prefab_name ~= nil then
+		local prefab = rn.entity.prefabs[prefab_name]
+		if prefab ~= nil then
+			if prefab.on_cast_success ~= nil then
+				prefab.on_cast_success(uuid)
+			end
+		else
+			tz.report("Missing prefab \"" .. prefab_name .. "\"")
+			tz.assert(false);
+		end
+	end
+end

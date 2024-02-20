@@ -32,6 +32,7 @@ rn.spell.cast = function(uuid, spell_name)
 	sc:entity_write(uuid, "cast.name", spell_name)
 	sc:entity_write(uuid, "cast.begin", tz.time())
 	rn.spell.create_effect_on(uuid, spell_name)
+	rn.entity.on_cast_begin(uuid, spell_name)
 end
 
 rn.spell.is_casting = function(uuid)
@@ -82,6 +83,7 @@ rn.spell.advance = function(uuid)
 			-- its rarely what we want, but sometimes is (and will often be near enough rather than crashing here.)
 			castx, casty = rn.entity.prefabs.sprite.get_position(uuid)
 		end
+		rn.entity.on_cast_success(uuid)
 		if spelldata.finish ~= nil then
 			spelldata.finish(uuid, castx, casty)
 		end
@@ -102,6 +104,7 @@ rn.spell.clear = function(uuid)
 	sc:entity_write(uuid, "cast.begin", nil)
 	sc:entity_write(uuid, "cast.location", nil)
 	rn.spell.clear_effect_on(uuid)
+	rn.entity.on_cast_end(uuid)
 end
 
 rn.spell.create_effect_on = function(uuid, spell_name)

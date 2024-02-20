@@ -33,6 +33,8 @@ namespace game::messaging
 		entity_set_global_position,
 		entity_set_global_rotation,
 		entity_set_global_scale,
+		entity_play_animation,
+		entity_queue_animation,
 		entity_set_subobject_texture_name,
 		entity_set_subobject_texture_colour,
 		entity_set_subobject_visible,

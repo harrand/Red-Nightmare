@@ -29,6 +29,18 @@ rn.mods.basegame.prefabs.bipedal =
 		--rn.entity.prefabs.bipedal.set_subobject_visible(uuid, chest_subobj, true)
 		--rn.entity.prefabs.bipedal.set_subobject_visible(uuid, legs_subobj, true)
 	end,
+	on_cast_begin = function(uuid, spellname)
+		local spelldata = rn.spell.spells[spellname]
+		local cast_duration = spelldata.cast_duration
+		local animation_duration = rn.current_scene():entity_get_animation_length(uuid, "Cast1H_Directed")
+		-- note: the end frame of the animation is unlikely to be when we want the cast to go off.
+		-- for now, let's say we want the anim to be 65% done when the cast actually goes off.
+		animation_duration = animation_duration * 0.65
+		rn.entity.prefabs.bipedal.play_animation(uuid, "Cast1H_Directed", false, animation_duration / cast_duration)
+	end,
+	play_animation = function(uuid, animation_name, loop, time_warp)
+		rn.current_scene():entity_play_animation(uuid, animation_name, loop, time_warp)
+	end,
 	set_subobject_visible = function(uuid, subobject, visible)
 		rn.current_scene():entity_set_subobject_visible(uuid, subobject, visible)
 	end,
@@ -82,13 +94,11 @@ rn.mods.basegame.prefabs.bipedal =
 		local tilt_factor = 0.125
 		if math.abs(dx) > math.abs(dy) then
 			local signx = math.abs(dx)/dx
-			print("signx = " .. signx)
 			-- if face right, rx and rz is positive
 			-- if face left, rx is negative and rz is positive
 			rn.entity.prefabs.bipedal.set_rotation(uuid, 0.0, -signx * math.pi / 2.0, 0.0)
 		else
 			local signy = math.abs(dy)/dy
-			print("signy = " .. signy)
 			rn.entity.prefabs.bipedal.set_rotation(uuid, 0.0, math.max(-signy, 0.0) * math.pi, math.pi * signy * tilt_factor)
 		end
 	end,

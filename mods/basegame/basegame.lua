@@ -109,8 +109,6 @@ rn.mods.basegame =
 	}
 }
 
-require("basegame/prefabs/players/player_melistra")
-
 require("basegame/prefabs/mouse_controlled")
 require("basegame/prefabs/keyboard_controlled")
 require("basegame/prefabs/sticky")
@@ -122,6 +120,8 @@ require("basegame/prefabs/combat_stats")
 require("basegame/prefabs/timed_despawn")
 require("basegame/prefabs/obstacle")
 require("basegame/prefabs/invisible_wall")
+
+require("basegame/prefabs/players/player_melistra")
 
 require("basegame/spells/lesser_firebolt")
 require("basegame/spells/lesser_frostbolt")

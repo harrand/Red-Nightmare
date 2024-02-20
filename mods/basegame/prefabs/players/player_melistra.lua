@@ -32,5 +32,6 @@ rn.mods.basegame.prefabs.player_melistra =
 	end,
 	on_collision = function(me, other)
 		return true
-	end
+	end,
+	on_cast_begin = rn.mods.basegame.prefabs.bipedal.on_cast_begin
 }

@@ -176,6 +176,22 @@ namespace game::messaging
 				sc->notify_entity_change(msg.uuid);
 			}
 			break;
+			case scene_operation::entity_play_animation:
+			{
+				TZ_PROFZONE("entity play animation", 0xFF99CC44);
+				auto [name, loop, time_warp] = std::any_cast<std::tuple<std::string, bool, float>>(msg.value);
+				auto cmp = sc->get_entity_render_component(msg.uuid);
+				sc->get_renderer().get_element(cmp).play_animation_by_name(name, loop, time_warp);
+			}
+			break;
+			case scene_operation::entity_queue_animation:
+			{
+				TZ_PROFZONE("entity queue animation", 0xFF99CC44);
+				auto [name, loop, time_warp] = std::any_cast<std::tuple<std::string, bool, float>>(msg.value);
+				auto cmp = sc->get_entity_render_component(msg.uuid);
+				sc->get_renderer().get_element(cmp).queue_animation_by_name(name, loop, time_warp);
+			}
+			break;
 			case scene_operation::entity_set_subobject_texture_name:
 			{
 				TZ_PROFZONE("entity set global subobject texture name", 0xFF99CC44);
@@ -430,6 +446,65 @@ namespace game::messaging
 			}
 			state.stack_push_generic(ret);
 			return 1;
+		}
+
+		int entity_get_animation_length(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity get animation length", 0xFF99CC44);
+			auto [_, uuid, name] = tz::lua::parse_args<tz::lua::nil, unsigned int, std::string>(state);
+			auto cmp = sc->get_entity_render_component(uuid);
+			const tz::ren::animation_renderer& ren = sc->get_renderer().get_renderer();
+			auto gltfh = ren.animated_object_get_gltf(cmp.obj);
+			auto maybe_animation_id = ren.gltf_get_animation_id_by_name(gltfh, name);
+			tz::assert(maybe_animation_id.has_value(), "No animation \"%s\" exists in gltfh.", name.c_str());
+			state.stack_push_float(ren.gltf_get_animation_length(gltfh, maybe_animation_id.value()));
+			return 1;
+		}
+
+		int entity_play_animation(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity play animation", 0xFF99CC44);
+			auto [_, uuid, name] = tz::lua::parse_args<tz::lua::nil, unsigned int, std::string>(state);
+			bool loop = false;
+			float time_warp = 1.0f;
+			if(state.stack_size() >= 4)
+			{
+				loop = state.stack_get_bool(4);
+				if(state.stack_size() >= 5)
+				{
+					time_warp = state.stack_get_float(5);
+				}
+			}
+			local_scene_receiver.send_message
+			({
+				.operation = scene_operation::entity_play_animation,
+				.uuid = static_cast<entity_uuid>(uuid),
+				.value = std::tuple<std::string, bool, float>{name, loop, time_warp}
+			});
+			return 0;
+		}
+
+		int entity_queue_animation(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity queue animation", 0xFF99CC44);
+			auto [_, uuid, name] = tz::lua::parse_args<tz::lua::nil, unsigned int, std::string>(state);
+			bool loop = false;
+			float time_warp = 1.0f;
+			if(state.stack_size() >= 4)
+			{
+				loop = state.stack_get_bool(4);
+				if(state.stack_size() >= 5)
+				{
+					time_warp = state.stack_get_float(5);
+				}
+			}
+			local_scene_receiver.send_message
+			({
+				.operation = scene_operation::entity_queue_animation,
+				.uuid = static_cast<entity_uuid>(uuid),
+				.value = std::tuple<std::string, bool, float>{name, loop, time_warp}
+			});
+			return 0;
 		}
 
 		int entity_get_subobject_texture(tz::lua::state& state)
@@ -735,6 +810,9 @@ namespace game::messaging
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_model)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_write)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_read)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_get_animation_length)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_play_animation)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_queue_animation)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_subobject_texture)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_subobject_texture)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_subobject_colour)
