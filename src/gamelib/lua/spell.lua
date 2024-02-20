@@ -64,9 +64,27 @@ rn.spell.advance = function(uuid)
 	local is_instant_cast = spelldata.cast_duration == nil or spelldata.cast_duration == 0.0
 	local cast_completed = tz.time() > (spell_began + (spelldata.cast_duration or 0.0) * 1000.0)
 	if is_instant_cast or cast_completed then
+
+
 		-- the spell has finished casting. unleash its effect.
+		-- firstly, where are we casting?
+		-- if we specified a location uuid, get its position now:
+		local castx = nil
+		local casty = nil
+		local cast_location = sc:entity_read(uuid, "cast.location")
+		if cast_location ~= nil then
+			-- location is an internal variable name. a pointer if you will.
+			local location_uuid = sc:entity_read(uuid, cast_location)
+			-- we expect it to be a sprite.
+			castx, casty = rn.entity.prefabs.sprite.get_position(location_uuid)
+		else
+			-- we dont know. in truth we should be screwed here.
+			-- however add a fallback just incase - the caster's root global position.
+			-- its rarely what we want, but sometimes is (and will often be near enough rather than crashing here.)
+			castx, casty = rn.entity.prefabs.sprite.get_position(uuid)
+		end
 		if spelldata.finish ~= nil then
-			spelldata.finish(uuid)
+			spelldata.finish(uuid, castx, casty)
 		end
 		-- then cleanup
 		rn.spell.clear(uuid)
@@ -83,6 +101,7 @@ rn.spell.clear = function(uuid)
 	local sc = rn.current_scene()
 	sc:entity_write(uuid, "cast.name", nil)
 	sc:entity_write(uuid, "cast.begin", nil)
+	sc:entity_write(uuid, "cast.location", nil)
 	rn.spell.clear_effect_on(uuid)
 end
 
@@ -103,8 +122,16 @@ rn.spell.create_effect_on = function(uuid, spell_name)
 		local effect = sc:add_entity("cast_buildup")
 		sc:entity_write(effect, "magic_type", magic_type)
 		sc:entity_write(uuid, "cast_buildup0", effect)
+		sc:entity_write(uuid, "cast.location", "cast_buildup0")
 		-- stick the effect to the caster
 		rn.entity.prefabs.sticky.stick_to(effect, uuid)
+	elseif model == "bipedal" then
+		local effect = sc:add_entity("cast_buildup")
+		sc:entity_write(effect, "magic_type", magic_type)
+		sc:entity_write(uuid, "cast_buildup0", effect)
+		sc:entity_write(uuid, "cast.location", "cast_buildup0")
+		-- stick the effect to the caster's left hand
+		rn.entity.prefabs.sticky.stick_to_subobject(effect, uuid, 24)
 	else
 		tz.error(false, "No support for model " .. tostring(model) .. " having cast effects.")
 	end
@@ -114,6 +141,12 @@ rn.spell.clear_effect_on = function(uuid)
 	local sc = rn.current_scene()
 	local model = sc:entity_get_model(uuid)
 	if model == "plane" then
+		local buildup0 = sc:entity_read(uuid, "cast_buildup0")
+		if buildup0 ~= nil and sc:contains_entity(buildup0) then
+			-- delete the buildup effect coz we're done casting.
+			sc:remove_entity(buildup0)
+		end
+	elseif model == "bipedal" then
 		local buildup0 = sc:entity_read(uuid, "cast_buildup0")
 		if buildup0 ~= nil and sc:contains_entity(buildup0) then
 			-- delete the buildup effect coz we're done casting.

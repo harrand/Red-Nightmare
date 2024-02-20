@@ -2,7 +2,11 @@ local base_subobj = 3
 -- note: these 3 may or may not be mixed up.
 local chest_subobj = 5
 local helm_subobj = 7
+-- note: subobject 16 also seems to be around the head?
 local legs_subobj = 9
+
+-- 18 seems to be left shoulder. 19 elbow. 20 hand.
+-- 22 right shoulder, 23 elbow. 24 hand.
 
 rn.mods.basegame.prefabs.bipedal =
 {

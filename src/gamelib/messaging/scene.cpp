@@ -533,18 +533,41 @@ namespace game::messaging
 		{
 			TZ_PROFZONE("scene - entity get local transform", 0xFF99CC44);
 			auto [_, uuid] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+			tz::lua::lua_generic maybe_subobject = tz::lua::nil{};
+			if(state.stack_size() >= 3)
+			{
+				maybe_subobject = state.stack_get_generic(3);
+			}
+
 			auto cmp = sc->get_entity_render_component(uuid);
 			const auto& scren = sc->get_renderer();
-			return scren.get_renderer().animated_object_get_local_transform(cmp.obj);
+			if(std::holds_alternative<tz::lua::nil>(maybe_subobject))
+			{
+				// no subobject specified.
+				return scren.get_renderer().animated_object_get_local_transform(cmp.obj);
+			}
+			auto subobjects = scren.get_renderer().animated_object_get_subobjects(cmp.obj);
+			auto objh = subobjects[std::get<std::int64_t>(maybe_subobject)];
+			return scren.get_renderer().object_get_local_transform(objh);
 		}
 
 		tz::trs impl_entity_get_global_transform(tz::lua::state& state)
 		{
 			TZ_PROFZONE("scene - entity get global transform", 0xFF99CC44);
 			auto [_, uuid] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+			tz::lua::lua_generic maybe_subobject = state.stack_get_generic(3);
+
 			auto cmp = sc->get_entity_render_component(uuid);
 			const auto& scren = sc->get_renderer();
-			return scren.get_renderer().animated_object_get_global_transform(cmp.obj);
+
+			if(std::holds_alternative<tz::lua::nil>(maybe_subobject))
+			{
+				// no subobject specified.
+				return scren.get_renderer().animated_object_get_global_transform(cmp.obj);
+			}
+			auto subobjects = scren.get_renderer().animated_object_get_subobjects(cmp.obj);
+			auto objh = subobjects[std::get<double>(maybe_subobject)];
+			return scren.get_renderer().object_get_global_transform(objh);
 		}
 
 		int entity_get_local_position(tz::lua::state& state)
