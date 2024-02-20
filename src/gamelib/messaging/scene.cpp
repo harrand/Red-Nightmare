@@ -555,7 +555,11 @@ namespace game::messaging
 		{
 			TZ_PROFZONE("scene - entity get global transform", 0xFF99CC44);
 			auto [_, uuid] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
-			tz::lua::lua_generic maybe_subobject = state.stack_get_generic(3);
+			tz::lua::lua_generic maybe_subobject = tz::lua::nil{};
+			if(state.stack_size() >= 3)
+			{
+				maybe_subobject = state.stack_get_generic(3);
+			}
 
 			auto cmp = sc->get_entity_render_component(uuid);
 			const auto& scren = sc->get_renderer();

@@ -53,7 +53,7 @@ rn.mods.basegame.prefabs.bipedal =
 	get_position = function(uuid)
 		return rn.entity.prefabs.sprite.get_position(uuid)
 	end,
-	set_rotation = function(uuid, rx, ry, rz)
+	set_rotation = function(uuid, ry, rx, rz)
 		-- euler to quaternion
 		local sin = math.sin
 		local cos = math.cos
@@ -75,7 +75,22 @@ rn.mods.basegame.prefabs.bipedal =
 		local t3 = 2.0 * (w * z + x * y)
 		local t4 = 1.0 - 2.0 * (y * y + z * z)
 		local yaw = math.atan(t3, t4)
-		return pitch, yaw, roll
+		return yaw, pitch, roll
+	end,
+	face_direction = function(uuid, dx, dy)
+		-- face in a directional vector. useful for calculating casting directions.
+		local tilt_factor = 0.125
+		if math.abs(dx) > math.abs(dy) then
+			local signx = math.abs(dx)/dx
+			print("signx = " .. signx)
+			-- if face right, rx and rz is positive
+			-- if face left, rx is negative and rz is positive
+			rn.entity.prefabs.bipedal.set_rotation(uuid, 0.0, -signx * math.pi / 2.0, 0.0)
+		else
+			local signy = math.abs(dy)/dy
+			print("signy = " .. signy)
+			rn.entity.prefabs.bipedal.set_rotation(uuid, 0.0, math.max(-signy, 0.0) * math.pi, math.pi * signy * tilt_factor)
+		end
 	end,
 	set_scale = function(uuid, sx, sy, sz)
 		rn.current_scene():entity_set_local_scale(uuid, sx, sy, sz)

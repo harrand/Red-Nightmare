@@ -26,17 +26,16 @@ rn.spell.cast = function(uuid, spell_name)
 	obj:set_text(tostring(uuid))
 	obj:set_name("Spell Cast - \"" .. spell_name .. "\"")
 	local sc = rn.current_scene()
-	local current_spell_name = sc:entity_read(uuid, "cast.name")
-	if current_spell_name ~= nil then
-		-- already casting
-		--tz.report(tostring(uuid) .. " cannot cast " .. spell_name .. " because it is already casting " .. current_spell_name)
-		return
-	end
+	if rn.spell.is_casting(uuid) then return end
 
 	-- begin cast.
 	sc:entity_write(uuid, "cast.name", spell_name)
 	sc:entity_write(uuid, "cast.begin", tz.time())
 	rn.spell.create_effect_on(uuid, spell_name)
+end
+
+rn.spell.is_casting = function(uuid)
+	return rn.current_scene():entity_read(uuid, "cast.name") ~= nil
 end
 
 rn.spell.advance = function(uuid)

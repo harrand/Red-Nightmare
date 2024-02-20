@@ -22,6 +22,13 @@ rn.mods.basegame.prefabs.player_melistra =
 	end,
 	update = function(uuid, delta_seconds)
 		rn.entity.prefabs.keyboard_controlled.update(uuid, delta_seconds)
+
+		-- face towards mouse position.
+		if rn.spell.is_casting(uuid) then
+			local mx, my = rn.current_scene():get_mouse_position()
+			local x, y = rn.current_scene():entity_get_global_position(uuid)
+			rn.entity.prefabs.bipedal.face_direction(uuid, x - mx, y - my)
+		end
 	end,
 	on_collision = function(me, other)
 		return true
