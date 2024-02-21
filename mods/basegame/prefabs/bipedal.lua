@@ -67,24 +67,60 @@ rn.mods.basegame.prefabs.bipedal =
 	play_animation = function(uuid, animation_name, loop, time_warp)
 		rn.current_scene():entity_play_animation(uuid, animation_name, loop, time_warp)
 	end,
+
 	set_subobject_visible = function(uuid, subobject, visible)
 		rn.current_scene():entity_set_subobject_visible(uuid, subobject, visible)
+	end,
+	set_subobject_texture = function(uuid, subobject, texname)
+		rn.current_scene():entity_set_subobject_texture(uuid, subobject, texname)
+	end,
+	set_subobject_colour = function(uuid, subobject, r, g, b)
+		rn.current_scene():entity_set_subobject_colour(uuid, subobject, r, g, b)
 	end,
 	set_visible = function(uuid, visible)
 		rn.entity.prefabs.bipedal.set_subobject_visible(uuid, 3, visible)	
 	end,
 	set_texture = function(uuid, texname)
-		rn.current_scene():entity_set_subobject_texture(uuid, 3, texname)
+		rn.entity.prefabs.bipedal.set_subobject_texture(uuid, 3, texname)
 	end,
 	get_texture = function(uuid)
 		return rn.current_scene():entity_get_subobject_texture(uuid, 3)
 	end,
 	set_colour = function(uuid, r, g, b)
-		rn.current_scene():entity_set_subobject_colour(uuid, 3, r, g, b)
+		rn.entity.prefabs.bipedal.set_subobject_colour(uuid, 3, r, g, b)
 	end,
 	get_colour = function(uuid)
 		return rn.current_scene():entity_get_subobject_colour(uuid, 3)
 	end,
+
+	set_chest_visible = function(uuid, visible)
+		rn.entity.prefabs.bipedal.set_subobject_visible(uuid, chest_subobj, visible)
+	end,
+	set_chest_texture = function(uuid, texname)
+		rn.entity.prefabs.bipedal.set_subobject_texture(uuid, chest_subobj, texname)
+	end,
+	set_chest_colour = function(uuid, r, g, b)
+		rn.entity.prefabs.bipedal.set_subobject_colour(uuid, chest_subobj, r, g, b)
+	end,
+	set_helm_visible = function(uuid, visible)
+		rn.entity.prefabs.bipedal.set_subobject_visible(uuid, helm_subobj, visible)
+	end,
+	set_helm_texture = function(uuid, texname)
+		rn.entity.prefabs.bipedal.set_subobject_texture(uuid, helm_subobj, texname)
+	end,
+	set_helm_colour = function(uuid, r, g, b)
+		rn.entity.prefabs.bipedal.set_subobject_colour(uuid, helm_subobj, r, g, b)
+	end,
+	set_legs_visible = function(uuid, visible)
+		rn.entity.prefabs.bipedal.set_subobject_visible(uuid, legs_subobj, visible)
+	end,
+	set_legs_texture = function(uuid, texname)
+		rn.entity.prefabs.bipedal.set_subobject_texture(uuid, legs_subobj, texname)
+	end,
+	set_legs_colour = function(uuid, r, g, b)
+		rn.entity.prefabs.bipedal.set_subobject_colour(uuid, legs_subobj, r, g, b)
+	end,
+
 	set_position = function(uuid, x, y)
 		rn.entity.prefabs.sprite.set_position(uuid, x, y)
 	end,
