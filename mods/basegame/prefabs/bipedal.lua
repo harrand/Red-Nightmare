@@ -8,6 +8,8 @@ local legs_subobj = 9
 -- 18 seems to be left shoulder. 19 elbow. 20 hand.
 -- 22 right shoulder, 23 elbow. 24 hand.
 
+local base_scale = 0.2
+
 rn.mods.basegame.prefabs.bipedal =
 {
 	description = "Entity is a 3D bipedal animated humanoid",
@@ -24,10 +26,31 @@ rn.mods.basegame.prefabs.bipedal =
 		rn.current_scene():entity_set_subobject_pixelated(uuid, helm_subobj, true)
 		rn.current_scene():entity_set_subobject_pixelated(uuid, chest_subobj, true)
 		rn.current_scene():entity_set_subobject_pixelated(uuid, legs_subobj, true)
+		rn.entity.prefabs.bipedal.set_scale(uuid, 1.0, 1.0, 1.0)
 		rn.entity.prefabs.bipedal.set_visible(uuid, true)
 		--rn.entity.prefabs.bipedal.set_subobject_visible(uuid, helm_subobj, true)
 		--rn.entity.prefabs.bipedal.set_subobject_visible(uuid, chest_subobj, true)
 		--rn.entity.prefabs.bipedal.set_subobject_visible(uuid, legs_subobj, true)
+	end,
+	update = function(uuid, delta_seconds)
+		local sc = rn.current_scene()
+		local currently_playing = sc:entity_get_playing_animation(uuid)
+		if currently_playing == nil then
+			print("playing idle animation:")
+			sc:entity_play_animation(uuid, "CastIdle")
+		end
+	end,
+	on_move = function(uuid, xdiff, ydiff, zdiff)
+		local sc = rn.current_scene()
+		local currently_playing = sc:entity_get_playing_animation(uuid)
+		if currently_playing ~= "Run" then
+			rn.current_scene():entity_play_animation(uuid, "Run")
+		end
+		-- if we're moving both horizontally and vertically, always prefer horizontal facing.
+		if math.abs(xdiff) >= math.abs(ydiff) then
+			ydiff = 0
+		end
+		rn.entity.prefabs.bipedal.face_direction(uuid, -xdiff, -ydiff)
 	end,
 	on_cast_begin = function(uuid, spellname)
 		local spelldata = rn.spell.spells[spellname]
@@ -103,9 +126,13 @@ rn.mods.basegame.prefabs.bipedal =
 		end
 	end,
 	set_scale = function(uuid, sx, sy, sz)
-		rn.current_scene():entity_set_local_scale(uuid, sx, sy, sz)
+		rn.current_scene():entity_set_local_scale(uuid, sx * base_scale, sy * base_scale, sz * base_scale)
 	end,
 	get_scale = function(uuid)
-		return rn.current_scene():entity_get_local_scale(uuid)
+		local x, y, z = rn.current_scene():entity_get_local_scale(uuid)
+		x = x * base_scale
+		y = y * base_scale
+		z = z * base_scale
+		return x, y, z
 	end
 }

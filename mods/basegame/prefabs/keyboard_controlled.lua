@@ -14,7 +14,6 @@ rn.mods.basegame.prefabs.keyboard_controlled =
 	end,
 	update = function(uuid, delta_seconds)
 		local sc = rn.current_scene()
-		local x, y, z = sc:entity_get_local_position(uuid)
 		local inp = rn.input()
 
 		local control_forward = sc:entity_read(uuid, "control.forward")
@@ -42,25 +41,32 @@ rn.mods.basegame.prefabs.keyboard_controlled =
 		local movement_speed = 5.0
 		local moved = false
 
+		local xdiff = 0
+		local ydiff = 0
 		if control_enabled and inp:is_key_down(control_left) then
-			x = x - movement_speed * delta_seconds
+			xdiff = xdiff - movement_speed * delta_seconds
+			--x = x - movement_speed * delta_seconds
 			moved = true
 		end
 		if control_enabled and inp:is_key_down(control_right) then
-			x = x + movement_speed * delta_seconds
+			xdiff = xdiff + movement_speed * delta_seconds
+			--x = x + movement_speed * delta_seconds
 			moved = true
 		end
 		if control_enabled and inp:is_key_down(control_forward) then
-			y = y + movement_speed * delta_seconds
+			ydiff = ydiff + movement_speed * delta_seconds
+			--y = y + movement_speed * delta_seconds
 			moved = true
 		end
 		if control_enabled and inp:is_key_down(control_backward) then
-			y = y - movement_speed * delta_seconds
+			ydiff = ydiff - movement_speed * delta_seconds
+			--y = y - movement_speed * delta_seconds
 			moved = true
 		end
 		
 		if moved then
-			sc:entity_set_local_position(uuid, x, y, z);
+			rn.entity.on_move(uuid, xdiff, ydiff, 0.0)
+			--sc:entity_set_local_position(uuid, x, y, z);
 		end
 	end,
 	bind_spell = function(uuid, action_id, spell_name)

@@ -1,6 +1,6 @@
 rn.mods.basegame.spells.lesser_firebolt =
 {
-	cast_duration = 2.5,
+	cast_duration = 1.25,
 	magic_type = "fire",
 	description = "Launches a small bolt of fire in the target direction. Enemies hit suffer ${fire_power*1.0} fire damage.",
 	finish = function(uuid, casterx, castery)

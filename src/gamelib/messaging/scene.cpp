@@ -461,6 +461,23 @@ namespace game::messaging
 			return 1;
 		}
 
+		int entity_get_playing_animation(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity get playing animation", 0xFF99CC44);
+			auto [_, uuid] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);	
+			auto cmp = sc->get_entity_render_component(uuid);
+			std::string name = sc->get_renderer().get_element(cmp).get_playing_animation_name();
+			if(name.empty())
+			{
+				state.stack_push_nil();
+			}
+			else
+			{
+				state.stack_push_string(name);
+			}
+			return 1;
+		}
+
 		int entity_play_animation(tz::lua::state& state)
 		{
 			TZ_PROFZONE("scene - entity play animation", 0xFF99CC44);
@@ -811,6 +828,7 @@ namespace game::messaging
 			LUA_METHOD(lua_local_scene_message_receiver, entity_write)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_read)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_animation_length)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_get_playing_animation)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_play_animation)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_queue_animation)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_subobject_texture)

@@ -12,7 +12,6 @@ rn.mods.basegame.prefabs.player_melistra =
 		rn.entity.prefabs.keyboard_controlled.instantiate(uuid)
 		rn.entity.prefabs.bipedal.instantiate(uuid)
 		rn.entity.prefabs.bipedal.set_texture(uuid, "skin.melistra")
-		rn.entity.prefabs.bipedal.set_scale(uuid, 0.3, 0.3, 0.3)
 		rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 1, "lesser_firebolt")
 		rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 2, "lesser_frostbolt")
 
@@ -21,6 +20,7 @@ rn.mods.basegame.prefabs.player_melistra =
 		rn.entity.prefabs.combat_stats.set_base_fire_resist(uuid, 0.1)
 	end,
 	update = function(uuid, delta_seconds)
+		rn.entity.prefabs.bipedal.update(uuid, delta_seconds)
 		rn.entity.prefabs.keyboard_controlled.update(uuid, delta_seconds)
 
 		-- face towards mouse position.
@@ -30,6 +30,7 @@ rn.mods.basegame.prefabs.player_melistra =
 			rn.entity.prefabs.bipedal.face_direction(uuid, x - mx, y - my)
 		end
 	end,
+	on_move = rn.mods.basegame.prefabs.bipedal.on_move,
 	on_collision = function(me, other)
 		return true
 	end,

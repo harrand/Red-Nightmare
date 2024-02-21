@@ -88,6 +88,34 @@ rn.entity.on_collision = function(uuid_a, uuid_b)
 	return ret
 end
 
+rn.entity.on_move = function(uuid, xdiff, ydiff, zdiff)
+	local sc = rn.current_scene()
+	local x, y, z = sc:entity_get_local_position(uuid)
+	x = x + xdiff
+	y = y + ydiff
+	z = z + zdiff
+	sc:entity_set_local_position(uuid, x, y, z)
+
+	-- cancel cast as we cannot cast on the move.
+	if rn.spell.is_casting(uuid) then
+		print("cast cancelled due to movement.")
+		rn.spell.clear(uuid)
+	end
+
+	local prefab_name = rn.current_scene():entity_read(uuid, ".prefab")
+	if prefab_name ~= nil then
+		local prefab = rn.entity.prefabs[prefab_name]
+		if prefab ~= nil then
+			if prefab.on_move ~= nil then
+				prefab.on_move(uuid, xdiff, ydiff, zdiff)
+			end
+		else
+			tz.report("Missing prefab \"" .. prefab_name .. "\"")
+			tz.assert(false);
+		end
+	end
+end
+
 -- invoked when an entity begins casting a spell.
 rn.entity.on_cast_begin = function(uuid, spellname)
 	local prefab_name = rn.current_scene():entity_read(uuid, ".prefab")
