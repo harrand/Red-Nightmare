@@ -98,6 +98,10 @@ rn.entity.on_collision = function(uuid_a, uuid_b)
 end
 
 rn.entity.on_move = function(uuid, xdiff, ydiff, zdiff)
+	if xdiff == 0.0 and ydiff == 0.0 and zdiff == 0.0 then
+		-- ignore if we haven't actually moved
+		return
+	end
 	local sc = rn.current_scene()
 	local x, y, z = sc:entity_get_local_position(uuid)
 	x = x + xdiff

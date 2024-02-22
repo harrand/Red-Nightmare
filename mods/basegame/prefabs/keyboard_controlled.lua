@@ -66,7 +66,6 @@ rn.mods.basegame.prefabs.keyboard_controlled =
 		
 		if moved then
 			rn.entity.on_move(uuid, xdiff, ydiff, 0.0)
-			--sc:entity_set_local_position(uuid, x, y, z);
 		end
 	end,
 	bind_spell = function(uuid, action_id, spell_name)

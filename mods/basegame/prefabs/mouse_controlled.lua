@@ -21,9 +21,9 @@ rn.mods.basegame.prefabs.mouse_controlled =
 			local hypot = math.sqrt(dstx^2 + dsty^2)
 			-- if hypot is zero then it's exactly at the position - no need to move.
 			if hypot > 0.0 and hypot >= (delta_seconds * movement_speed) then
-				x = x + ((dstx / hypot) * delta_seconds * movement_speed)
-				y = y + ((dsty / hypot) * delta_seconds * movement_speed)
-				sc:entity_set_local_position(uuid, x, y, z)
+				local xdiff = ((dstx / hypot) * delta_seconds * movement_speed)
+				local ydiff = ((dsty / hypot) * delta_seconds * movement_speed)
+				rn.entity.on_move(uuid, xdiff, ydiff, 0.0)
 			end
 		end
 	end
