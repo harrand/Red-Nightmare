@@ -9,6 +9,9 @@ rn.mods.basegame.prefabs.sprite =
 	end,
 	instantiate = function(uuid)
 		rn.entity.prefabs.sprite.set_visible(uuid, true)
+		-- note: if this doesnt exist, then for some reason sprites sometimes spawn rotated 90% (and thus are facing the wrong way and present as invisible infinitessimally-small lines in our view)
+		-- the below code works around the problem, although there is a bug somewhere.
+		rn.current_scene():entity_set_global_rotation(uuid, 0.0, 0.0, 0.0, 1.0)
 	end,
 	set_visible = function(uuid, visible)
 		rn.current_scene():entity_set_subobject_visible(uuid, 2, visible)

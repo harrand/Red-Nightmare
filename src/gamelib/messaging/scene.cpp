@@ -639,7 +639,7 @@ namespace game::messaging
 				return scren.get_renderer().animated_object_get_local_transform(cmp.obj);
 			}
 			auto subobjects = scren.get_renderer().animated_object_get_subobjects(cmp.obj);
-			auto objh = subobjects[std::get<std::int64_t>(maybe_subobject)];
+			auto objh = subobjects[std::get<double>(maybe_subobject)];
 			return scren.get_renderer().object_get_local_transform(objh);
 		}
 

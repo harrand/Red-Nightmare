@@ -13,6 +13,7 @@ rn.mods.basegame =
 				return rn.entity.prefabs.sprite.pre_instantiate(uuid)
 			end,
 			instantiate = function(uuid)
+				rn.entity.prefabs.sprite.instantiate(uuid)
 				rn.entity.prefabs.keyboard_controlled.instantiate(uuid)
 				rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 1, "lesser_firebolt")
 				rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 2, "morb")

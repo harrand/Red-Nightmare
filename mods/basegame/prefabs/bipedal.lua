@@ -35,12 +35,10 @@ rn.mods.basegame.prefabs.bipedal =
 	update = function(uuid, delta_seconds)
 		local sc = rn.current_scene()
 		local currently_playing = sc:entity_get_playing_animation(uuid)
-		local moving = sc:entity_read(uuid, "moving")
 		local should_stop_move_animation = currently_playing == "Run" and not moving
-		if currently_playing == nil or should_stop_move_animation then
+		if currently_playing == nil then
 			sc:entity_play_animation(uuid, "CastIdle")
 		end
-		sc:entity_write(uuid, "moving", false)
 	end,
 	on_move = function(uuid, xdiff, ydiff, zdiff)
 		local sc = rn.current_scene()
@@ -53,7 +51,9 @@ rn.mods.basegame.prefabs.bipedal =
 			ydiff = 0
 		end
 		rn.entity.prefabs.bipedal.face_direction(uuid, -xdiff, -ydiff)
-		sc:entity_write(uuid, "moving", true)
+	end,
+	on_stop_moving = function(uuid)
+		rn.current_scene():entity_play_animation(uuid, "CastIdle")
 	end,
 	on_cast_begin = function(uuid, spellname)
 		local spelldata = rn.spell.spells[spellname]

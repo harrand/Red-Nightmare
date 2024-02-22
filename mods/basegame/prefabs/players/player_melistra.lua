@@ -35,6 +35,7 @@ rn.mods.basegame.prefabs.player_melistra =
 		end
 	end,
 	on_move = rn.mods.basegame.prefabs.bipedal.on_move,
+	on_stop_moving = rn.mods.basegame.prefabs.bipedal.on_stop_moving,
 	on_collision = function(me, other)
 		return true
 	end,

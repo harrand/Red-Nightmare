@@ -43,7 +43,12 @@ rn.entity.update = function(uuid, delta_seconds)
 	obj:set_text(tostring(uuid))
 	obj:set_name("Entity Update")
 
-	local prefab_name = rn.current_scene():entity_read(uuid, ".prefab")
+	local sc = rn.current_scene()
+	local moving = sc:entity_read(uuid, "moving")
+	sc:entity_write(uuid, "moving_last_frame", moving)
+	sc:entity_write(uuid, "moving", false)
+
+	local prefab_name = sc:entity_read(uuid, ".prefab")
 	if prefab_name ~= nil then
 		local prefab = rn.entity.prefabs[prefab_name]
 		if prefab ~= nil then
@@ -58,6 +63,10 @@ rn.entity.update = function(uuid, delta_seconds)
 
 	-- if the entity is casting a spell, that also needs to advance.
 	rn.spell.advance(uuid)
+	if not moving and sc:entity_read(uuid, "moving_last_frame") == true then
+		-- entity just stopped moving.
+		rn.entity.on_stop_moving(uuid)
+	end
 end
 
 rn.entity.on_collision = function(uuid_a, uuid_b)
@@ -114,6 +123,23 @@ rn.entity.on_move = function(uuid, xdiff, ydiff, zdiff)
 			tz.assert(false);
 		end
 	end
+	sc:entity_write(uuid, "moving", true)
+end
+
+rn.entity.on_stop_moving = function(uuid)
+	local prefab_name = rn.current_scene():entity_read(uuid, ".prefab")
+	if prefab_name ~= nil then
+		local prefab = rn.entity.prefabs[prefab_name]
+		if prefab ~= nil then
+			if prefab.on_stop_moving ~= nil then
+				prefab.on_stop_moving(uuid)
+			end
+		else
+			tz.report("Missing prefab \"" .. prefab_name .. "\"")
+			tz.assert(false);
+		end
+	end
+
 end
 
 -- invoked when an entity begins casting a spell.
