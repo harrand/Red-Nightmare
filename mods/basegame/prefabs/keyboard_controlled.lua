@@ -38,29 +38,24 @@ rn.mods.basegame.prefabs.keyboard_controlled =
 			end
 		end
 
-		local movement_speed = 5.0
 		local moved = false
 
 		local xdiff = 0
 		local ydiff = 0
 		if control_enabled and inp:is_key_down(control_left) then
-			xdiff = xdiff - movement_speed * delta_seconds
-			--x = x - movement_speed * delta_seconds
+			xdiff = -1
 			moved = true
 		end
 		if control_enabled and inp:is_key_down(control_right) then
-			xdiff = xdiff + movement_speed * delta_seconds
-			--x = x + movement_speed * delta_seconds
+			xdiff = 1
 			moved = true
 		end
 		if control_enabled and inp:is_key_down(control_forward) then
-			ydiff = ydiff + movement_speed * delta_seconds
-			--y = y + movement_speed * delta_seconds
+			ydiff = 1
 			moved = true
 		end
 		if control_enabled and inp:is_key_down(control_backward) then
-			ydiff = ydiff - movement_speed * delta_seconds
-			--y = y - movement_speed * delta_seconds
+			ydiff = -1
 			moved = true
 		end
 		

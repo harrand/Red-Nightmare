@@ -22,10 +22,12 @@ rn.mods.basegame.prefabs.bipedal =
 		return "bipedal"
 	end,
 	instantiate = function(uuid)
-		rn.current_scene():entity_set_subobject_pixelated(uuid, base_subobj, true)
-		rn.current_scene():entity_set_subobject_pixelated(uuid, helm_subobj, true)
-		rn.current_scene():entity_set_subobject_pixelated(uuid, chest_subobj, true)
-		rn.current_scene():entity_set_subobject_pixelated(uuid, legs_subobj, true)
+		local sc = rn.current_scene()
+		sc:entity_set_subobject_pixelated(uuid, base_subobj, true)
+		sc:entity_set_subobject_pixelated(uuid, helm_subobj, true)
+		sc:entity_set_subobject_pixelated(uuid, chest_subobj, true)
+		sc:entity_set_subobject_pixelated(uuid, legs_subobj, true)
+		sc:entity_write(uuid, ".movement_speed", 0.1)
 		rn.entity.prefabs.bipedal.set_scale(uuid, 1.0, 1.0, 1.0)
 		rn.entity.prefabs.bipedal.set_visible(uuid, true)
 		--rn.entity.prefabs.bipedal.set_subobject_visible(uuid, helm_subobj, true)
