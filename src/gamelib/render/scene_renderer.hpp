@@ -75,6 +75,9 @@ namespace game::render
 		tz::vec4 get_clear_colour() const;
 		void set_clear_colour(tz::vec4 rgba);
 
+		void add_light(std::size_t light_uid, point_light_data data);
+		void remove_light(std::size_t light_uid);
+
 		void lua_initialise(tz::lua::state& state);
 	private:
 		static std::vector<tz::gl::buffer_resource> evaluate_extra_buffers();
@@ -106,6 +109,7 @@ namespace game::render
 		std::vector<entry> entries = {};
 		std::unordered_map<std::string, tz::ren::animation_renderer::gltf_handle> registered_models = {};
 		std::unordered_map<std::string, tz::ren::animation_renderer::texture_handle> registered_textures = {};
+		std::map<std::size_t, std::size_t> light_uid_to_index = {};
 	};
 
 	struct scene_element

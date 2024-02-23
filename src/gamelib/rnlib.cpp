@@ -49,6 +49,12 @@ namespace game
 		// try not to add too many. mods should be responsible for adding the models they need. default models should only be for the most obvious things (like a plane for a 2d sprite)
 		//game_system->scene2.get_renderer().add_model("plane", tz::io::gltf::from_memory(ImportedTextData(plane, glb)));
 		// and default textures...
+		game_system->scene2.get_renderer().add_light(0,
+		{
+			.position = tz::vec3(0.0f, 0.0f, 0.0f),
+			.colour = tz::vec3{1.0f, 0.0f, 0.0f},
+			.power = 5.0f
+		});
 	}
 
 	void terminate()
