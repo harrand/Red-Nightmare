@@ -235,8 +235,8 @@ namespace game
 					ImGui::Text("Description: %s", mod.description.c_str());
 					if(owned_prefabs.size() && ImGui::TreeNode("Prefabs"))
 					{
-						static bool hide_prefabs_without_pre_instantiate = false;
-						static bool hide_prefabs_without_on_collision = false;
+						static bool hide_prefabs_without_pre_instantiate = true;
+						static bool hide_prefabs_without_on_collision = true;
 						ImGui::Checkbox("Hide Prefabs without Pre-Instantiate", &hide_prefabs_without_pre_instantiate);
 						ImGui::Checkbox("Hide Prefabs without On-Collision", &hide_prefabs_without_on_collision);
 						for(auto prefab : owned_prefabs)
