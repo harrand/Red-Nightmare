@@ -77,6 +77,7 @@ namespace game::render
 
 		void add_light(std::size_t light_uid, point_light_data data);
 		void remove_light(std::size_t light_uid);
+		void clear_lights();
 
 		void lua_initialise(tz::lua::state& state);
 	private:

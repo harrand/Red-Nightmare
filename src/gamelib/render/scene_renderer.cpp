@@ -352,6 +352,7 @@ namespace game::render
 
 	void scene_renderer::add_light(std::size_t light_uid, point_light_data data)
 	{
+		tz::assert(this->light_uid_to_index.size() == this->get_point_lights().size());
 		for(auto& [id, uid] : this->light_uid_to_index)
 		{
 			if(uid == std::numeric_limits<std::size_t>::max())
@@ -371,6 +372,7 @@ namespace game::render
 
 	void scene_renderer::remove_light(std::size_t light_uid)
 	{
+		tz::assert(this->light_uid_to_index.size() == this->get_point_lights().size());
 		for(auto& [id, uid] : this->light_uid_to_index)
 		{
 			if(uid == light_uid)
@@ -380,6 +382,16 @@ namespace game::render
 				this->get_point_lights()[id] = point_light_data{};
 				return;
 			}
+		}
+	}
+
+	void scene_renderer::clear_lights()
+	{
+		tz::assert(this->light_uid_to_index.size() == this->get_point_lights().size());
+		for(auto& [id, uid] : this->light_uid_to_index)
+		{
+			uid = std::numeric_limits<std::size_t>::max();
+			this->get_point_lights()[id] = point_light_data{};
 		}
 	}
 
