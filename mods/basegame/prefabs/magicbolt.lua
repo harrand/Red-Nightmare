@@ -39,12 +39,13 @@ rn.mods.basegame.prefabs.magic_ball_base =
 		-- todo: don't do this is the other thing is "friendly"
 		-- despawn ourselves, then deal damage to the collidee with dmg equal to our max health.
 		local dmg = rn.entity.prefabs.combat_stats.get_max_hp(uuid_a)
+		local target_alive = rn.entity.prefabs.combat_stats.is_alive(uuid_b)
 		local magic_type = rn.current_scene():entity_read(uuid_a, "magic_type")
 		local owner_id = rn.current_scene():entity_read(uuid_a, "owner")
 		if magic_type == nil then
 			magic_type = "physical"
 		end
-		if owner_id == uuid_b then
+		if owner_id == uuid_b or not target_alive then
 			-- collided with whomsoever casted me. don't do anything.
 			return false
 		end

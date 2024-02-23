@@ -200,3 +200,18 @@ rn.entity.on_cast_success = function(uuid)
 		end
 	end
 end
+
+rn.entity.on_death = function(uuid, dmg, magic_type, enemy_uuid)
+	local prefab_name = rn.current_scene():entity_read(uuid, ".prefab")
+	if prefab_name ~= nil then
+		local prefab = rn.entity.prefabs[prefab_name]
+		if prefab ~= nil then
+			if prefab.on_death ~= nil then
+				prefab.on_death(uuid, dmg, magic_type, enemy_uuid)
+			end
+		else
+			tz.report("Missing prefab \"" .. prefab_name .. "\"")
+			tz.assert(false);
+		end
+	end
+end

@@ -66,6 +66,9 @@ rn.mods.basegame.prefabs.bipedal =
 		animation_duration = animation_duration * 0.65
 		rn.entity.prefabs.bipedal.play_animation(uuid, "Cast1H_Directed", false, animation_duration / cast_duration)
 	end,
+	on_death = function(uuid, dmg, magic_type, enemy_uuid)
+		rn.current_scene():entity_play_animation(uuid, "Death")
+	end,
 	play_animation = function(uuid, animation_name, loop, time_warp)
 		rn.current_scene():entity_play_animation(uuid, animation_name, loop, time_warp)
 	end,

@@ -19,11 +19,22 @@ rn.mods.basegame.prefabs.player_melistra =
 		rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 1, "lesser_firebolt")
 		rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 2, "lesser_frostbolt")
 
-		rn.entity.prefabs.combat_stats.set_base_max_hp(uuid, 100)
+		rn.entity.prefabs.combat_stats.set_base_max_hp(uuid, 20)
 		rn.entity.prefabs.combat_stats.set_base_fire_power(uuid, 10)
 		rn.entity.prefabs.combat_stats.set_base_fire_resist(uuid, 0.1)
 	end,
 	update = function(uuid, delta_seconds)
+		if rn.entity.prefabs.combat_stats.is_dead(uuid) then
+			-- i know in theory on_death should handle this.
+			-- however, let's say youre moving in the same frame you die.
+			-- its possible the "run" animation message is sent after another entity hits you and kills you on another worker thread.
+			-- for that reason, if we accidentally overplay the death animation in this edge-case, we re-play it here.
+			local playing_anim = rn.current_scene():entity_get_playing_animation(uuid)
+			if playing_anim ~= nil and playing_anim ~= "Death" then
+				rn.current_scene():entity_play_animation(uuid, "Death")
+			end
+			return
+		end
 		rn.entity.prefabs.bipedal.update(uuid, delta_seconds)
 		rn.entity.prefabs.keyboard_controlled.update(uuid, delta_seconds)
 
@@ -39,5 +50,6 @@ rn.mods.basegame.prefabs.player_melistra =
 	on_collision = function(me, other)
 		return true
 	end,
-	on_cast_begin = rn.mods.basegame.prefabs.bipedal.on_cast_begin
+	on_cast_begin = rn.mods.basegame.prefabs.bipedal.on_cast_begin,
+	on_death = rn.mods.basegame.prefabs.bipedal.on_death
 }

@@ -79,18 +79,17 @@ rn.mods.basegame.prefabs.combat_stats =
 	end,
 	dmg_unmit = function(uuid, dmg)
 		tz.assert(dmg >= 0.0, "Damage dealt cannot be negative.")
+		local just_died = false
 		local minus_hp = rn.current_scene():entity_read(uuid, "hp_lost") or 0.0
 		local max_hp = rn.mods.basegame.prefabs.combat_stats.get_max_hp(uuid) or 0.0
 		if minus_hp >= max_hp then
 			-- bloke is already dead. dont bother doing anything.
-			return
+			return false
 		end
 		-- clamp minus_hp between 0 and max_hp
 		minus_hp = math.min(math.max(minus_hp + dmg, 0.0), max_hp)
-		if minus_hp >= max_hp then
-			-- man finna die.
-		end
 		rn.current_scene():entity_write(uuid, "hp_lost", minus_hp)
+		return minus_hp >= max_hp
 	end,
 	heal_unmit = function(uuid, heal)
 		tz.assert(heal >= 0.0, "Healing received can't be negative.")
@@ -101,6 +100,10 @@ rn.mods.basegame.prefabs.combat_stats =
 		end
 		minus_hp = math.max(0.0, minus_hp - heal)
 		rn.current_scene():entity_write(uuid, "hp_lost", minus_hp)
+	end,
+	is_alive = function(uuid)
+		local has_stats = rn.current_scene():entity_read(uuid, "base_max_hp") ~= nil
+		return has_stats and not rn.mods.basegame.prefabs.combat_stats.is_dead(uuid)
 	end,
 	is_dead = function(uuid)
 		local minus_hp = rn.current_scene():entity_read(uuid, "hp_lost") or 0.0
@@ -121,7 +124,10 @@ rn.mods.basegame.prefabs.combat_stats =
 		
 		-- dmg = (base_dmg * caster_power) * max(our_resistance - 1.0, 0.0)
 		local mitigated_dmg = (dmg * (caster_power + 1.0)) * math.max(1.0 - our_resistance, 0.0)
-		rn.entity.prefabs.combat_stats.dmg_unmit(uuid, mitigated_dmg)
+		local just_died = rn.entity.prefabs.combat_stats.dmg_unmit(uuid, mitigated_dmg)
+		if just_died then
+			rn.entity.on_death(uuid, mitigated_dmg, magic_type, enemy_uuid)
+		end
 
 		-- todo: formal combat logging
 		print(rn.current_scene():entity_get_name(uuid) .. " took " .. mitigated_dmg .. " " .. magic_type .. " damage from " .. rn.current_scene():entity_get_name(enemy_uuid))
