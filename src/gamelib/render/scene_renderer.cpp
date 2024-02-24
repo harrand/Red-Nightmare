@@ -281,8 +281,10 @@ namespace game::render
 	void scene_renderer::set_point_light_capacity(unsigned int num_point_lights)
 	{
 		tz::gl::resource_handle light_buf_handle = this->renderer.get_extra_buffer(1);
-		std::size_t old_size = sizeof(tz::vec3) + sizeof(std::uint32_t) + sizeof(point_light_data) * this->get_point_lights().size();
-		std::size_t new_size = sizeof(tz::vec3) + sizeof(std::uint32_t) + sizeof(point_light_data) * num_point_lights;
+		std::size_t old_count = this->get_point_lights().size();
+		std::size_t new_count = num_point_lights;
+		std::size_t old_size = sizeof(tz::vec3) + sizeof(std::uint32_t) + sizeof(point_light_data) * old_count;
+		std::size_t new_size = sizeof(tz::vec3) + sizeof(std::uint32_t) + sizeof(point_light_data) * new_count;
 		if(old_size == new_size)
 		{
 			return;
@@ -303,10 +305,10 @@ namespace game::render
 		// we're sorted.
 		*reinterpret_cast<std::uint32_t*>(ren.get_resource(light_buf_handle)->data().data() + sizeof(tz::vec3)) = num_point_lights;
 
-		if(old_size > new_size)
+		if(old_count > new_count)
 		{
 			// if we removed old lights, remove their uid mappings.
-			for(std::size_t i = new_size; i < old_size; i++)
+			for(std::size_t i = new_count; i < old_count; i++)
 			{
 				tz::assert(this->light_uid_to_index.at(i) == std::numeric_limits<std::size_t>::max(), "Removed light via capacity-change, but light %zu was already mapped to an existing uid. It will now suddenly disappear.", i);
 				this->light_uid_to_index.erase(i);
@@ -316,9 +318,10 @@ namespace game::render
 		{
 			// if we added new lights,
 			// write new empty entries into the light uid mapping.
-			for(std::size_t i = old_size; i < new_size; i++)
+			for(std::size_t i = old_count; i < new_count; i++)
 			{
 				this->light_uid_to_index[i] = std::numeric_limits<std::size_t>::max();
+				this->get_point_lights()[i] = point_light_data{};
 			}
 		}
 	}
@@ -360,10 +363,12 @@ namespace game::render
 				// this light id is unused.
 				uid = light_uid;
 				this->get_point_lights()[id] = data;
+				tz::report("light %zu assigned to uid %zu", id, uid);
 				return;
 			}
 		}
 
+		tz::report("ran out of lights, doubling capacity to %zu", this->get_point_lights().size() * 2);
 		// couldnt find a light that was free. gotta increase capacity.
 		this->set_point_light_capacity(this->get_point_lights().size() * 2);
 		// recurse.
@@ -392,7 +397,6 @@ namespace game::render
 			if(uid == light_uid)
 			{
 				// this light id is unused.
-				uid = std::numeric_limits<std::size_t>::max();
 				return &this->get_point_lights()[id];
 			}
 		}
@@ -407,6 +411,19 @@ namespace game::render
 			uid = std::numeric_limits<std::size_t>::max();
 			this->get_point_lights()[id] = point_light_data{};
 		}
+	}
+
+	std::vector<std::size_t> scene_renderer::get_all_light_uids() const
+	{
+		std::vector<std::size_t> ret;
+		for(auto& [id, uid] : this->light_uid_to_index)
+		{
+			if(uid != std::numeric_limits<std::size_t>::max())
+			{
+				ret.push_back(uid);
+			}
+		}
+		return ret;
 	}
 
 	/*static*/ std::vector<tz::gl::buffer_resource> scene_renderer::evaluate_extra_buffers()
@@ -714,7 +731,7 @@ namespace game::render
 	int impl_rn_scene_renderer::add_light(tz::lua::state& state)
 	{
 		auto [_, posx, posy, r, g, b, power] = tz::lua::parse_args<tz::lua::nil, float, float, float, float, float, float>(state);
-		std::size_t light_uid = light_uuid_counter.fetch_add(1, std::memory_order_relaxed);
+		std::size_t light_uid = light_uuid_counter.fetch_add(1);
 		game::messaging::scene_insert_message
 		({
 			.operation = game::messaging::scene_operation::renderer_add_light,
@@ -733,7 +750,42 @@ namespace game::render
 			.operation = game::messaging::scene_operation::renderer_remove_light,
 			.uuid = std::numeric_limits<entity_uuid>::max(),
 			.value = uid
+		});
+		return 0;
+	}
 
+	int impl_rn_scene_renderer::light_set_position(tz::lua::state& state)
+	{
+		auto [_, uid, x, y, z] = tz::lua::parse_args<tz::lua::nil, unsigned int, float, float, float>(state);
+		game::messaging::scene_insert_message
+		({
+			.operation = game::messaging::scene_operation::renderer_light_set_position,
+			.uuid = std::numeric_limits<entity_uuid>::max(),
+			.value = std::pair<std::size_t, tz::vec3>{uid, tz::vec3{x, y, z}}
+		});
+		return 0;
+	}
+
+	int impl_rn_scene_renderer::light_set_colour(tz::lua::state& state)
+	{
+		auto [_, uid, r, g, b] = tz::lua::parse_args<tz::lua::nil, unsigned int, float, float, float>(state);
+		game::messaging::scene_insert_message
+		({
+			.operation = game::messaging::scene_operation::renderer_light_set_colour,
+			.uuid = std::numeric_limits<entity_uuid>::max(),
+			.value = std::pair<std::size_t, tz::vec3>{uid, tz::vec3{r, g, b}}
+		});
+		return 0;
+	}
+
+	int impl_rn_scene_renderer::light_set_power(tz::lua::state& state)
+	{
+		auto [_, uid, pow] = tz::lua::parse_args<tz::lua::nil, unsigned int, float>(state);
+		game::messaging::scene_insert_message
+		({
+			.operation = game::messaging::scene_operation::renderer_light_set_power,
+			.uuid = std::numeric_limits<entity_uuid>::max(),
+			.value = std::pair<std::size_t, float>{uid, pow}
 		});
 		return 0;
 	}

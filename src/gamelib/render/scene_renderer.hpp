@@ -79,6 +79,7 @@ namespace game::render
 		void remove_light(std::size_t light_uid);
 		point_light_data* get_light(std::size_t light_uid);
 		void clear_lights();
+		std::vector<std::size_t> get_all_light_uids() const;
 
 		void lua_initialise(tz::lua::state& state);
 	private:
@@ -168,6 +169,9 @@ namespace game::render
 
 		int add_light(tz::lua::state& state);
 		int remove_light(tz::lua::state& state);
+		int light_set_position(tz::lua::state& state);
+		int light_set_colour(tz::lua::state& state);
+		int light_set_power(tz::lua::state& state);
 		int clear_lights(tz::lua::state& state);
 
 		int add_string(tz::lua::state& state);
@@ -188,6 +192,9 @@ namespace game::render
 
 			LUA_METHOD(impl_rn_scene_renderer, add_light)
 			LUA_METHOD(impl_rn_scene_renderer, remove_light)
+			LUA_METHOD(impl_rn_scene_renderer, light_set_position)
+			LUA_METHOD(impl_rn_scene_renderer, light_set_colour)
+			LUA_METHOD(impl_rn_scene_renderer, light_set_power)
 			LUA_METHOD(impl_rn_scene_renderer, clear_lights)
 
 			LUA_METHOD(impl_rn_scene_renderer, add_string)

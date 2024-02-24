@@ -26,6 +26,7 @@ namespace game::messaging
 	}
 
 	std::vector<entity_uuid> deleted_entities_this_frame = {};	
+	std::vector<std::size_t> deleted_lights_this_frame = {};
 
 	void on_scene_process_message(const scene_message& msg)
 	{
@@ -34,6 +35,10 @@ namespace game::messaging
 		auto was_deleted_this_frame = [](auto val)->bool
 		{
 			return std::find(deleted_entities_this_frame.begin(), deleted_entities_this_frame.end(), val) != deleted_entities_this_frame.end();
+		};
+		auto light_was_deleted_this_frame = [](auto val)->bool
+		{
+			return std::find(deleted_lights_this_frame.begin(), deleted_lights_this_frame.end(), val) != deleted_lights_this_frame.end();
 		};
 		if(was_deleted_this_frame(msg.uuid))
 		{
@@ -76,6 +81,7 @@ namespace game::messaging
 			{
 				TZ_PROFZONE("remove entity", 0xFF99CC44);
 				sc->remove_entity(msg.uuid);
+
 				deleted_entities_this_frame.push_back(msg.uuid);
 			}
 			break;
@@ -280,6 +286,7 @@ namespace game::messaging
 				TZ_PROFZONE("renderer add light", 0xFF99CC44);
 				auto [uid, pos, colour, power] = std::any_cast<std::tuple<std::size_t, tz::vec3, tz::vec3, float>>(msg.value);
 				sc->get_renderer().add_light(uid, {.position = pos, .colour = colour, .power = power});
+				tz::report("add light uid %zu", uid);
 			}
 			break;
 			case scene_operation::renderer_remove_light:
@@ -287,12 +294,62 @@ namespace game::messaging
 				TZ_PROFZONE("renderer remove light", 0xFF99CC44);
 				auto uid = std::any_cast<unsigned int>(msg.value);
 				sc->get_renderer().remove_light(uid);
+				deleted_lights_this_frame.push_back(uid);
+			}
+			break;
+			case scene_operation::renderer_light_set_position:
+			{
+				TZ_PROFZONE("renderer light set position", 0xFF99CC44);
+				auto [uid, pos] = std::any_cast<std::pair<std::size_t, tz::vec3>>(msg.value);
+
+				if(light_was_deleted_this_frame(uid))
+				{
+					return;
+				}
+
+				auto* light = sc->get_renderer().get_light(uid);
+				tz::assert(light != nullptr);
+				light->position = pos;
+			}
+			break;
+			case scene_operation::renderer_light_set_colour:
+			{
+				TZ_PROFZONE("renderer light set colour", 0xFF99CC44);
+				auto [uid, col] = std::any_cast<std::pair<std::size_t, tz::vec3>>(msg.value);
+
+				if(light_was_deleted_this_frame(uid))
+				{
+					return;
+				}
+
+				auto* light = sc->get_renderer().get_light(uid);
+				tz::assert(light != nullptr);
+				light->colour = col;
+			}
+			break;
+			case scene_operation::renderer_light_set_power:
+			{
+				TZ_PROFZONE("renderer light set power", 0xFF99CC44);
+				auto [uid, pow] = std::any_cast<std::pair<std::size_t, float>>(msg.value);
+
+				if(light_was_deleted_this_frame(uid))
+				{
+					return;
+				}
+
+				auto* light = sc->get_renderer().get_light(uid);
+				tz::assert(light != nullptr);
+				light->power = pow;
 			}
 			break;
 			case scene_operation::renderer_clear_lights:
 			{
 				TZ_PROFZONE("renderer clear lights", 0xFF99CC44);
 				sc->get_renderer().clear_lights();
+				for(std::size_t uid : sc->get_renderer().get_all_light_uids())
+				{
+					deleted_lights_this_frame.push_back(uid);
+				}
 			}
 			break;
 			case scene_operation::audio_play_sound:
@@ -326,6 +383,7 @@ namespace game::messaging
 	void on_scene_update()
 	{
 		deleted_entities_this_frame.clear();
+		deleted_lights_this_frame.clear();
 	}
 
 	REGISTER_MESSAGING_SYSTEM(scene_message, scene, on_scene_process_message, on_scene_update);
@@ -365,6 +423,11 @@ namespace game::messaging
 		{
 			TZ_PROFZONE("scene - remove entity", 0xFF99CC44);
 			auto [_, uuid] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+
+
+			std::string lua_cmd = std::format("rn.entity.on_remove({})", uuid);
+			state.execute(lua_cmd.c_str());
+
 			local_scene_receiver.send_message
 			({
 				.operation = scene_operation::remove_entity,

@@ -16,6 +16,9 @@ rn.mods.basegame.prefabs.magic_ball_base =
 		local sc = rn.current_scene()
 		sc:entity_write(uuid, ".boundary_scale", 0.5)
 		sc:entity_write(uuid, ".movement_speed", 0.25)
+
+		local light = rn.renderer():add_light(0.0, 0.0, 0.0, 0.0, 0.0, 1.5)
+		sc:entity_write(uuid, "attached_light", light)
 	end,
 	update = function(uuid, delta_seconds)
 		local sc = rn.current_scene()
@@ -25,7 +28,6 @@ rn.mods.basegame.prefabs.magic_ball_base =
 		rn.entity.prefabs.sprite.set_texture(uuid, "sprite.magicball" .. frame_id)
 		sc:entity_write(uuid, "timer", t)
 
-
 		rn.entity.prefabs.mouse_controlled.update(uuid, delta_seconds)
 
 		local tarx = sc:entity_read(uuid, "target_location_x")
@@ -34,6 +36,15 @@ rn.mods.basegame.prefabs.magic_ball_base =
 			rn.entity.prefabs.sprite.lookat(uuid, tarx, tary, math.pi / -2.0)
 		end
 		rn.entity.prefabs.timed_despawn.update(uuid, delta_seconds)
+
+		local light = sc:entity_read(uuid, "attached_light")
+		local x, y = rn.entity.prefabs.sprite.get_position(uuid)
+		if light ~= nil then
+			local magic_type = rn.current_scene():entity_read(uuid, "magic_type")
+			local colour = rn.spell.schools[magic_type].colour
+			rn.renderer():light_set_colour(light, colour[1], colour[2], colour[3])
+			rn.renderer():light_set_position(light, x, y, 0.0)
+		end
 	end,
 	on_collision = function(uuid_a, uuid_b)
 		-- todo: don't do this is the other thing is "friendly"
@@ -52,6 +63,13 @@ rn.mods.basegame.prefabs.magic_ball_base =
 		rn.entity.prefabs.combat_stats.dmg(uuid_b, dmg, magic_type, uuid_a)
 		rn.current_scene():remove_entity(uuid_a)
 		return false
+	end,
+	on_remove = function(uuid)
+		local light = rn.current_scene():entity_read(uuid, "attached_light")
+		if light ~= nil then
+			rn.current_scene():entity_write(uuid, "attached_light", nil)
+			rn.renderer():remove_light(light)
+		end
 	end,
 	set_damage = function(uuid, dmg)
 		-- damage dealt is equal to max hp.
@@ -85,7 +103,8 @@ for schoolname, schooldata in pairs(rn.spell.schools) do
 				rn.entity.prefabs.sprite.set_colour(uuid, school.colour[1], school.colour[2], school.colour[3])
 			end,
 			update = rn.mods.basegame.prefabs.magic_ball_base.update,
-			on_collision = rn.mods.basegame.prefabs.magic_ball_base.on_collision
+			on_collision = rn.mods.basegame.prefabs.magic_ball_base.on_collision,
+			on_remove = rn.mods.basegame.prefabs.magic_ball_base.on_remove
 		}
 	end
 end

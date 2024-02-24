@@ -112,7 +112,7 @@ namespace game
 	void dbgui_game_bar()
 	{
 		std::string bar_string;
-		bar_string = std::format("{} entities | {} intersections", game_system->scene2.entity_count(), game_system->scene2.get_intersections().size());
+		bar_string = std::format("{} entities | {} intersections | {}/{} lights", game_system->scene2.entity_count(), game_system->scene2.get_intersections().size(), game_system->scene2.get_renderer().get_all_light_uids().size(), game_system->scene2.get_renderer().get_point_lights().size());
 		ImGui::Text("%s", bar_string.c_str());
 	}
 
