@@ -275,6 +275,26 @@ namespace game::messaging
 				sc->get_renderer().add_model(name, tz::io::gltf::from_file(model_path.string().c_str()));
 			}
 			break;
+			case scene_operation::renderer_add_light:
+			{
+				TZ_PROFZONE("renderer add light", 0xFF99CC44);
+				auto [uid, pos, colour, power] = std::any_cast<std::tuple<std::size_t, tz::vec3, tz::vec3, float>>(msg.value);
+				sc->get_renderer().add_light(uid, {.position = pos, .colour = colour, .power = power});
+			}
+			break;
+			case scene_operation::renderer_remove_light:
+			{
+				TZ_PROFZONE("renderer remove light", 0xFF99CC44);
+				auto uid = std::any_cast<unsigned int>(msg.value);
+				sc->get_renderer().remove_light(uid);
+			}
+			break;
+			case scene_operation::renderer_clear_lights:
+			{
+				TZ_PROFZONE("renderer clear lights", 0xFF99CC44);
+				sc->get_renderer().clear_lights();
+			}
+			break;
 			case scene_operation::audio_play_sound:
 			{
 				TZ_PROFZONE("audio play sound", 0xFF99CC44);

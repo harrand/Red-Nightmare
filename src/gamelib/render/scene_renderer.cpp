@@ -385,6 +385,20 @@ namespace game::render
 		}
 	}
 
+	scene_renderer::point_light_data* scene_renderer::get_light(std::size_t light_uid)
+	{
+		for(auto& [id, uid] : this->light_uid_to_index)
+		{
+			if(uid == light_uid)
+			{
+				// this light id is unused.
+				uid = std::numeric_limits<std::size_t>::max();
+				return &this->get_point_lights()[id];
+			}
+		}
+		return nullptr;
+	}
+
 	void scene_renderer::clear_lights()
 	{
 		tz::assert(this->light_uid_to_index.size() == this->get_point_lights().size());
@@ -691,6 +705,45 @@ namespace game::render
 			.operation = game::messaging::scene_operation::renderer_add_model,
 			.uuid = std::numeric_limits<entity_uuid>::max(),
 			.value = std::pair<std::string, std::string>{name, relpath}
+		});
+		return 0;
+	}
+
+	static std::atomic_uint_fast64_t light_uuid_counter = 0;
+
+	int impl_rn_scene_renderer::add_light(tz::lua::state& state)
+	{
+		auto [_, posx, posy, r, g, b, power] = tz::lua::parse_args<tz::lua::nil, float, float, float, float, float, float>(state);
+		std::size_t light_uid = light_uuid_counter.fetch_add(1, std::memory_order_relaxed);
+		game::messaging::scene_insert_message
+		({
+			.operation = game::messaging::scene_operation::renderer_add_light,
+			.uuid = std::numeric_limits<entity_uuid>::max(),
+			.value = std::tuple<std::size_t, tz::vec3, tz::vec3, float>{light_uid, tz::vec3{posx, posy, 0.0f}, tz::vec3{r, g, b}, power}
+		});
+		state.stack_push_uint(light_uid);
+		return 1;
+	}
+
+	int impl_rn_scene_renderer::remove_light(tz::lua::state& state)
+	{
+		auto [_, uid] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+		game::messaging::scene_insert_message
+		({
+			.operation = game::messaging::scene_operation::renderer_remove_light,
+			.uuid = std::numeric_limits<entity_uuid>::max(),
+			.value = uid
+
+		});
+		return 0;
+	}
+
+	int impl_rn_scene_renderer::clear_lights(tz::lua::state& state)
+	{
+		game::messaging::scene_insert_message
+		({
+			.operation = game::messaging::scene_operation::renderer_clear_lights,
+			.uuid = std::numeric_limits<entity_uuid>::max()
 		});
 		return 0;
 	}
