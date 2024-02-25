@@ -13,12 +13,10 @@ rn.mods.basegame.prefabs.magic_ball_base =
 	instantiate = function(uuid)
 		rn.entity.prefabs.sprite.instantiate(uuid)
 		rn.entity.prefabs.sprite.set_texture(uuid, "sprite.magicball0")
+		rn.entity.prefabs.light_emitter.instantiate(uuid)
 		local sc = rn.current_scene()
 		sc:entity_write(uuid, ".boundary_scale", 0.5)
 		sc:entity_write(uuid, ".movement_speed", 0.25)
-
-		local light = rn.renderer():add_light(0.0, 0.0, 0.0, 0.0, 0.0, 2.0)
-		sc:entity_write(uuid, "attached_light", light)
 	end,
 	update = function(uuid, delta_seconds)
 		local sc = rn.current_scene()
@@ -36,14 +34,12 @@ rn.mods.basegame.prefabs.magic_ball_base =
 			rn.entity.prefabs.sprite.lookat(uuid, tarx, tary, math.pi / -2.0)
 		end
 		rn.entity.prefabs.timed_despawn.update(uuid, delta_seconds)
+		local magic_type = sc:entity_read(uuid, "magic_type")
 
-		local light = sc:entity_read(uuid, "attached_light")
-		local x, y = rn.entity.prefabs.sprite.get_position(uuid)
-		if light ~= nil then
-			local magic_type = rn.current_scene():entity_read(uuid, "magic_type")
+		if rn.entity.prefabs.light_emitter.exists(uuid) then
 			local colour = rn.spell.schools[magic_type].colour
-			rn.renderer():light_set_colour(light, colour[1], colour[2], colour[3])
-			rn.renderer():light_set_position(light, x, y, 0.0)
+			rn.entity.prefabs.light_emitter.set_colour(uuid, colour[1], colour[2], colour[3])
+			rn.entity.prefabs.light_emitter.update(uuid, delta_seconds)
 		end
 	end,
 	on_collision = function(uuid_a, uuid_b)
@@ -64,13 +60,7 @@ rn.mods.basegame.prefabs.magic_ball_base =
 		rn.current_scene():remove_entity(uuid_a)
 		return false
 	end,
-	on_remove = function(uuid)
-		local light = rn.current_scene():entity_read(uuid, "attached_light")
-		if light ~= nil then
-			rn.current_scene():entity_write(uuid, "attached_light", nil)
-			rn.renderer():remove_light(light)
-		end
-	end,
+	on_remove = rn.mods.basegame.prefabs.light_emitter.on_remove,
 	set_damage = function(uuid, dmg)
 		-- damage dealt is equal to max hp.
 		rn.entity.prefabs.combat_stats.set_base_max_hp(uuid, dmg)
