@@ -97,7 +97,7 @@ rn.entity.on_collision = function(uuid_a, uuid_b)
 	return ret
 end
 
-rn.entity.on_move = function(uuid, xdiff, ydiff, zdiff)
+rn.entity.on_move = function(uuid, xdiff, ydiff, zdiff, delta_seconds)
 	local hypot = math.sqrt(xdiff^2 + ydiff^2 + zdiff^2)
 	local sc = rn.current_scene()
 
@@ -107,9 +107,9 @@ rn.entity.on_move = function(uuid, xdiff, ydiff, zdiff)
 		return
 	end
 
-	xdiff = xdiff * movement_speed / hypot
-	ydiff = ydiff * movement_speed / hypot
-	zdiff = zdiff * movement_speed / hypot
+	xdiff = xdiff * delta_seconds * movement_speed / hypot
+	ydiff = ydiff * delta_seconds * movement_speed / hypot
+	zdiff = zdiff * delta_seconds * movement_speed / hypot
 	local x, y, z = sc:entity_get_local_position(uuid)
 	x = x + xdiff
 	y = y + ydiff

@@ -80,8 +80,8 @@ rn.mods.basegame =
 
 				-- add a bunch more randoms
 				math.randomseed(os.time())
-				for i=0,128,1 do
-					local morbx = rn.current_scene():add_entity("firebolt")
+				for i=0,64,1 do
+					local morbx = rn.current_scene():add_entity("player_melistra")
 					rn.entity.prefabs.magic_ball_base.set_damage(morbx, 2)
 					local randx = math.random(-40, 40)
 					local randy = math.random(-40, 40)

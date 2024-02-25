@@ -60,7 +60,7 @@ rn.mods.basegame.prefabs.keyboard_controlled =
 		end
 		
 		if moved then
-			rn.entity.on_move(uuid, xdiff, ydiff, 0.0)
+			rn.entity.on_move(uuid, xdiff, ydiff, 0.0, delta_seconds)
 		end
 	end,
 	bind_spell = function(uuid, action_id, spell_name)

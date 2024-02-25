@@ -16,7 +16,7 @@ rn.mods.basegame.prefabs.magic_ball_base =
 		rn.entity.prefabs.light_emitter.instantiate(uuid)
 		local sc = rn.current_scene()
 		sc:entity_write(uuid, ".boundary_scale", 0.5)
-		sc:entity_write(uuid, ".movement_speed", 0.25)
+		sc:entity_write(uuid, ".movement_speed", 25)
 	end,
 	update = function(uuid, delta_seconds)
 		local sc = rn.current_scene()
