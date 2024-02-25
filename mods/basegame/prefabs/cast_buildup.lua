@@ -13,6 +13,7 @@ rn.mods.basegame.prefabs.cast_buildup =
 	instantiate = function(uuid)
 		rn.entity.prefabs.sprite.instantiate(uuid)
 		rn.entity.prefabs.sprite.set_texture(uuid, "sprite.cast_buildup0")
+		rn.entity.prefabs.light_emitter.instantiate(uuid)
 	end,
 	update = function(uuid, delta_seconds)
 		local sc = rn.current_scene()
@@ -26,8 +27,12 @@ rn.mods.basegame.prefabs.cast_buildup =
 		if magic_type ~= nil then
 			local colour = rn.spell.schools[magic_type].colour
 			rn.entity.prefabs.sprite.set_colour(uuid, colour[1], colour[2], colour[3])
+			rn.entity.prefabs.light_emitter.set_power(uuid, math.sqrt(t * 2.0))
+			rn.entity.prefabs.light_emitter.set_colour(uuid, colour[1], colour[2], colour[3])
 		end
 
+		rn.entity.prefabs.light_emitter.update(uuid, delta_seconds)
 		rn.entity.prefabs.sticky.update(uuid, delta_seconds)
-	end
+	end,
+	on_remove = rn.mods.basegame.prefabs.light_emitter.on_remove,
 }

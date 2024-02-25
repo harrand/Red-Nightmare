@@ -2,7 +2,8 @@ rn.mods.basegame.prefabs.light_emitter =
 {
 	description = "Entity gives off light for the duration of its lifetime.",
 	instantiate = function(uuid)
-		local light = rn.renderer():add_light(0.0, 0.0, 0.0, 0.0, 0.0, 2.0)
+		-- initial power of 69. hopefully noticeable enough that you think "why is it so bright oh i forgot to set power" you fuckin weapon
+		local light = rn.renderer():add_light(0.0, 0.0, 0.0, 0.0, 0.0, 69.0)
 		rn.current_scene():entity_write(uuid, "attached_light", light)
 	end,
 	update = function(uuid, delta_seconds)
@@ -25,6 +26,12 @@ rn.mods.basegame.prefabs.light_emitter =
 		local light = rn.current_scene():entity_read(uuid, "attached_light")
 		if light ~= nil then
 			rn.renderer():light_set_colour(light, r, g, b)
+		end
+	end,
+	set_power = function(uuid, pow)
+		local light = rn.current_scene():entity_read(uuid, "attached_light")
+		if light ~= nil then
+			rn.renderer():light_set_power(light, pow)
 		end
 	end,
 	exists = function(uuid)
