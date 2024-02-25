@@ -349,11 +349,11 @@ namespace game::messaging
 			case scene_operation::renderer_clear_lights:
 			{
 				TZ_PROFZONE("renderer clear lights", 0xFF99CC44);
-				sc->get_renderer().clear_lights();
 				for(std::size_t uid : sc->get_renderer().get_all_light_uids())
 				{
 					deleted_lights_this_frame.push_back(uid);
 				}
+				sc->get_renderer().clear_lights();
 			}
 			break;
 			case scene_operation::audio_play_sound:
