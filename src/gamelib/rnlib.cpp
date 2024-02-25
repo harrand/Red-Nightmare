@@ -24,6 +24,7 @@ namespace game
 	{
 		bool display_scene = false;
 		bool display_animation_renderer = false;
+		bool display_combat_analyst = false;
 	};
 	struct game_system_t
 	{
@@ -85,6 +86,15 @@ namespace game
 			}
 		}
 
+		if(game_system->dbgui.display_combat_analyst)
+		{
+			if(ImGui::Begin("Combat Analyst", &game_system->dbgui.display_combat_analyst))
+			{
+				game_system->scene2.dbgui_combat_analyst();
+				ImGui::End();
+			}
+		}
+
 		game::input::input_advance();
 		game_system->scene2.update(delta_seconds);
 		tz::gl::get_device().render();
@@ -107,6 +117,7 @@ namespace game
 	{
 		ImGui::MenuItem("Scene", nullptr, &game_system->dbgui.display_scene);
 		ImGui::MenuItem("Animation Renderer", nullptr, &game_system->dbgui.display_animation_renderer);
+		ImGui::MenuItem("Combat Analyst", nullptr, &game_system->dbgui.display_combat_analyst);
 	}
 
 	void dbgui_game_bar()

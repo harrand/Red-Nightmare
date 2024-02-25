@@ -68,6 +68,7 @@ namespace game
 
 		physics::intersection_data_view get_intersections();
 		void dbgui();
+		void dbgui_combat_analyst();
 	private:
 		bool wants_collision_detection(entity_uuid uuid) const;
 		physics::boundary_t bound_entity(entity_uuid uuid) const;
@@ -82,6 +83,7 @@ namespace game
 		game::render::scene_renderer renderer;
 		tz::vec2 mouse_pos_ws = {};
 		std::string current_level_name = "";
+		std::string debug_dbgui_tracked_entity_input_string;
 		physics::grid_hierarchy grid;
 	public:
 		decltype(entities)::iterator begin();

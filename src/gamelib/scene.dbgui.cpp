@@ -304,4 +304,132 @@ namespace game
 			}
 		}
 	}
+
+	template<typename T>
+	std::optional<T> try_get_internal(const game::entity& ent, std::string internal_name)
+	{
+		tz::lua::lua_generic maybe_val = ent.get_internal(internal_name);
+		if(std::holds_alternative<tz::lua::nil>(maybe_val))
+		{
+			return std::nullopt;
+		}
+		if(std::holds_alternative<T>(maybe_val))
+		{
+			return std::get<T>(maybe_val);
+		}
+		return std::nullopt;
+	}
+	
+	int evaluate_lua_int(std::string lua_expr)
+	{
+		std::string code = std::format("internal_result = {}", lua_expr);
+		tz::lua::get_state().execute(code.c_str());
+		auto maybe_dub = tz::lua::get_state().get_int("internal_result");
+		return maybe_dub.value_or(0);
+	}
+
+	double evaluate_lua_double(std::string lua_expr)
+	{
+		std::string code = std::format("internal_result = {}", lua_expr);
+		tz::lua::get_state().execute(code.c_str());
+		auto maybe_dub = tz::lua::get_state().get_double("internal_result");
+		return maybe_dub.value_or(0.0);
+	}
+
+	bool evaluate_lua_bool(std::string lua_expr)
+	{
+		std::string code = std::format("internal_result = {}", lua_expr);
+		tz::lua::get_state().execute(code.c_str());
+		auto maybe_dub = tz::lua::get_state().get_bool("internal_result");
+		return maybe_dub.value_or(false);
+	}
+
+	tz::vec3 evaluate_lua_vec3(std::string lua_expr)
+	{
+		std::string code = std::format("internal_result = {}; internal_result_x = internal_result[1]; internal_result_y = internal_result[2]; internal_result_z = internal_result[3]", lua_expr);
+		tz::lua::get_state().execute(code.c_str());
+		auto x = tz::lua::get_state().get_float("internal_result_x").value_or(0.0f);
+		auto y = tz::lua::get_state().get_float("internal_result_y").value_or(0.0f);
+		auto z = tz::lua::get_state().get_float("internal_result_z").value_or(0.0f);
+		return {x, y, z};
+	}
+
+	void dbgui_combat_ent(scene& sc, entity_uuid uuid)
+	{
+		game::entity& ent = sc.get_entity(uuid);
+		std::string title = std::format("{}: {}", ent.uuid, ent.name);
+		ImGui::Text(title.c_str());
+
+		auto max_hp = evaluate_lua_double(std::format("rn.entity.prefabs.combat_stats.get_max_hp({})", uuid));
+		auto alive = evaluate_lua_bool(std::format("rn.entity.prefabs.combat_stats.is_alive({})", uuid));
+		auto dead = evaluate_lua_bool(std::format("rn.entity.prefabs.combat_stats.is_dead({})", uuid));
+		auto lost_hp = try_get_internal<double>(ent, "hp_lost").value_or(0.0);
+		auto invincible = try_get_internal<bool>(ent, "invincible").value_or(false);
+		if(max_hp == 0.0)
+		{
+			ImGui::Text("Not a combatant.");
+			return;
+		}
+		ImGui::Text("Max HP: %.2f", max_hp);
+		ImGui::Text("Invincible: %s", invincible ? "true" : "false");
+		ImGui::Text("Status: %s", alive ? "Alive" : "Dead");
+		double current_hp = max_hp - lost_hp;
+		tz::assert(current_hp >= 0.0f);
+		ImGui::Text("HP: %.1f (%.2f%%)", current_hp, 100.0 * current_hp / max_hp);
+
+		ImGui::Separator();
+		auto physical_power = evaluate_lua_double(std::format("rn.entity.prefabs.combat_stats.get_physical_power({})", uuid));
+		auto fire_power = evaluate_lua_double(std::format("rn.entity.prefabs.combat_stats.get_fire_power({})", uuid));
+		auto frost_power = evaluate_lua_double(std::format("rn.entity.prefabs.combat_stats.get_frost_power({})", uuid));
+		auto fire_colour = evaluate_lua_vec3(std::format("rn.spell.schools.fire.colour", uuid));
+		auto frost_colour = evaluate_lua_vec3(std::format("rn.spell.schools.frost.colour", uuid));
+
+		auto physical_resist = evaluate_lua_double(std::format("rn.entity.prefabs.combat_stats.get_physical_resist({})", uuid));
+		auto fire_resist = evaluate_lua_double(std::format("rn.entity.prefabs.combat_stats.get_fire_resist({})", uuid));
+		auto frost_resist = evaluate_lua_double(std::format("rn.entity.prefabs.combat_stats.get_frost_resist({})", uuid));
+		ImGui::Text("Physical Power: %.2f", physical_power);
+		ImGui::TextColored(ImVec4{fire_colour[0], fire_colour[1], fire_colour[2], 1.0}, "Fire Power: %.2f", fire_power);
+		ImGui::TextColored(ImVec4{frost_colour[0], frost_colour[1], frost_colour[2], 1.0}, "Frost Power: %.2f", frost_power);
+		ImGui::Spacing();
+		ImGui::Text("Physical Resist: %g%%", physical_resist * 100.0f);
+		ImGui::TextColored(ImVec4{fire_colour[0], fire_colour[1], fire_colour[2], 1.0}, "Fire Resist: %g%%", fire_resist * 100.0f);
+		ImGui::TextColored(ImVec4{frost_colour[0], frost_colour[1], frost_colour[2], 1.0}, "Frost Resist: %g%%", frost_resist * 100.0f);
+
+		ImGui::Separator();
+		ImGui::Text("Spell-casta-mabob");
+		static std::string spell_name = "";
+		ImGui::InputText("Spell Name", &spell_name);
+		if(ImGui::Button("Cast"))
+		{
+			std::string code = std::format("rn.spell.cast({}, \"{}\")", uuid, spell_name);
+			tz::lua::get_state().execute(code.c_str());
+		}
+	}
+	
+	void scene::dbgui_combat_analyst()
+	{
+		ImGui::Text("It's analysin' time");
+		static entity_uuid tracked_entity = null_uuid;
+		if(ImGui::InputText("Entity UUID", &this->debug_dbgui_tracked_entity_input_string))
+		{
+			if(this->debug_dbgui_tracked_entity_input_string == "null")
+			{
+				tracked_entity = null_uuid;
+			}
+			else
+			{
+				// atoi returns 0 if conversion fails. so just accept the value directly.
+				tracked_entity = std::atoi(this->debug_dbgui_tracked_entity_input_string.c_str());
+			}
+		}
+
+		if(tracked_entity != null_uuid && this->contains_entity(tracked_entity))
+		{
+			dbgui_combat_ent(*this, tracked_entity);
+		}
+		else
+		{
+			ImGui::Text("No Entity Tracked");
+		}
+	}
 }
