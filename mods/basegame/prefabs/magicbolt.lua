@@ -17,7 +17,7 @@ rn.mods.basegame.prefabs.magic_ball_base =
 		sc:entity_write(uuid, ".boundary_scale", 0.5)
 		sc:entity_write(uuid, ".movement_speed", 0.25)
 
-		local light = rn.renderer():add_light(0.0, 0.0, 0.0, 0.0, 0.0, 1.5)
+		local light = rn.renderer():add_light(0.0, 0.0, 0.0, 0.0, 0.0, 2.0)
 		sc:entity_write(uuid, "attached_light", light)
 	end,
 	update = function(uuid, delta_seconds)

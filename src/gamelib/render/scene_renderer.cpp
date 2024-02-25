@@ -68,6 +68,8 @@ namespace game::render
 		{
 			this->light_uid_to_index[i] = std::numeric_limits<std::size_t>::max();
 		}
+
+		this->set_camera_position({0.0f, 0.0f});
 	}
 
 	void scene_renderer::add_model(std::string model_name, tz::io::gltf model)
@@ -203,11 +205,14 @@ namespace game::render
 		return this->renderer.get_camera_transform().translate.swizzle<0, 1>();
 	}
 
+	constexpr float depth_max = 5.0f;
+
 	void scene_renderer::set_camera_position(tz::vec2 cam_pos)
 	{
 		tz::trs trs = this->renderer.get_camera_transform();
 		trs.translate[0] = cam_pos[0];
 		trs.translate[1] = cam_pos[1];
+		trs.translate[2] = depth_max / 2.0f;
 		this->renderer.set_camera_transform(trs);
 	}
 
@@ -225,8 +230,9 @@ namespace game::render
 			.right = this->view_bounds[0],
 			.top = this->view_bounds[1] / aspect_ratio,
 			.bottom = -this->view_bounds[1] / aspect_ratio,
-			.near_plane = -20.0f,
-			.far_plane = 21.5f
+			.near_plane = -depth_max,
+			.far_plane = depth_max
+
 		});
 
 		this->pixelate_pass.handle_resize(this->renderer.get_render_pass());

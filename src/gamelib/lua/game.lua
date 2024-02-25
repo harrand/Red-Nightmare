@@ -11,6 +11,14 @@ rn.static_init = function()
 			prefabdata.static_init()
 		end
 	end
+
+	for levelname, leveldata in pairs(rn.level.levels) do
+		if leveldata.static_init ~= nil then
+			local obj2 <close> = tz.profzone_obj:new()
+			obj2:set_name(levelname .. " - Static Init")
+			leveldata.static_init()
+		end
+	end
 end
 
 rn.update = function(delta_seconds)

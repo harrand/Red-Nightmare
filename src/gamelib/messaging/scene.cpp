@@ -201,16 +201,20 @@ namespace game::messaging
 			case scene_operation::entity_set_subobject_texture_name:
 			{
 				TZ_PROFZONE("entity set global subobject texture name", 0xFF99CC44);
-				std::pair<std::size_t, std::string> val = std::any_cast<std::pair<std::size_t, std::string>>(msg.value);
+				std::tuple<std::size_t, std::string, std::size_t> val = std::any_cast<std::tuple<std::size_t, std::string, std::size_t>>(msg.value);
+				std::size_t subobject = std::get<0>(val);
+				std::string texture_name = std::get<1>(val);
+				std::size_t bound_texture_id = std::get<2>(val);
+
 				auto cmp = sc->get_entity_render_component(msg.uuid);
 				render::scene_element elem = sc->get_renderer().get_element(cmp);
-				auto objh = sc->get_renderer().get_renderer().animated_object_get_subobjects(cmp.obj)[val.first];
+				auto objh = sc->get_renderer().get_renderer().animated_object_get_subobjects(cmp.obj)[subobject];
 				auto texloc = elem.object_get_texture(objh, 0);
 				//sc->get_renderer().get_renderer().object_set_visible(objh, true);
-				auto texhandle = sc->get_renderer().get_texture(val.second);
-				tz::assert(texhandle != tz::nullhand, "Unrecognised texture name \"%s\"", val.second.c_str());
+				auto texhandle = sc->get_renderer().get_texture(texture_name);
+				tz::assert(texhandle != tz::nullhand, "Unrecognised texture name \"%s\"", texture_name.c_str());
 				texloc.texture = texhandle;
-				elem.object_set_texture(objh, 0, texloc);
+				elem.object_set_texture(objh, bound_texture_id, texloc);
 			}
 			break;
 			case scene_operation::entity_set_subobject_texture_colour:
@@ -611,9 +615,14 @@ namespace game::messaging
 		{
 			TZ_PROFZONE("scene - entity get subobject texture", 0xFF99CC44);
 			auto [_, uuid, subobject] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int>(state);
+			std::size_t bound_texture_id = 0;
+			if(state.stack_size() >= 4)
+			{
+				bound_texture_id = state.stack_get_uint(4);
+			}
 			auto cmp = sc->get_entity_render_component(uuid);	
 			auto objh = sc->get_renderer().get_renderer().animated_object_get_subobjects(cmp.obj)[subobject];
-			auto texloc = sc->get_renderer().get_renderer().object_get_texture(objh, 0);
+			auto texloc = sc->get_renderer().get_renderer().object_get_texture(objh, bound_texture_id);
 			state.stack_push_string(sc->get_renderer().get_texture_name(texloc.texture));
 			return 1;
 		}
@@ -622,11 +631,16 @@ namespace game::messaging
 		{
 			TZ_PROFZONE("scene - entity set subobject texture", 0xFF99CC44);
 			auto [_, uuid, subobject, texname] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int, std::string>(state);
+			std::size_t bound_texture_id = 0;
+			if(state.stack_size() >= 5)
+			{
+				bound_texture_id = state.stack_get_uint(5);
+			}
 			local_scene_receiver.send_message
 			({
 				.operation = scene_operation::entity_set_subobject_texture_name,
 				.uuid = static_cast<entity_uuid>(uuid),
-				.value = std::pair<std::size_t, std::string>{subobject, texname}
+				.value = std::tuple<std::size_t, std::string, std::size_t>{subobject, texname, bound_texture_id}
 			});
 			return 0;
 		}

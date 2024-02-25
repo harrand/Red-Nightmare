@@ -65,7 +65,16 @@ rn.mods.basegame =
 	{
 		startscreen =
 		{
+			static_init = function()
+				rn.renderer():add_texture("background.grassy", "basegame/res/textures/background_grassy.png")
+				rn.renderer():add_texture("background.grassy_normals", "basegame/res/textures/background_grassy_normals.png")
+			end,
 			on_load = function()
+				local bg = rn.current_scene():add_entity("sprite")
+				rn.entity.prefabs.sprite.set_scale(bg, 100, 100)
+				rn.entity.prefabs.sprite.set_texture(bg, "background.grassy")
+				rn.entity.prefabs.sprite.set_normal_map(bg, "background.grassy_normals")
+				rn.current_scene():entity_set_local_position(bg, 0.0, 0.0, -2.0)
 				local morb1 = rn.current_scene():add_entity("player_melistra")
 				--rn.renderer():set_clear_colour(1.0, 0.5, 1.0, 1.0)
 

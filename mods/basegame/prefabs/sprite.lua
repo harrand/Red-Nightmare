@@ -22,6 +22,12 @@ rn.mods.basegame.prefabs.sprite =
 	get_texture = function(uuid)
 		return rn.current_scene():entity_get_subobject_texture(uuid, 2)
 	end,
+	set_normal_map = function(uuid, texname)
+		rn.current_scene():entity_set_subobject_texture(uuid, 2, texname, 1)
+	end,
+	--get_normal_map = function(uuid)
+	--	return rn.current_scene():entity_get_subobject_texture(uuid, 2, 1)
+	--end,
 	set_colour = function(uuid, r, g, b)
 		rn.current_scene():entity_set_subobject_colour(uuid, 2, r, g, b)
 	end,
