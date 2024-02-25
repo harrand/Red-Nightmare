@@ -339,7 +339,7 @@ namespace game
 	bool evaluate_lua_bool(std::string lua_expr)
 	{
 		std::string code = std::format("internal_result = {}", lua_expr);
-		tz::lua::get_state().execute(code.c_str());
+		tz::lua::get_state().execute(code.c_str(), false);
 		auto maybe_dub = tz::lua::get_state().get_bool("internal_result");
 		return maybe_dub.value_or(false);
 	}
@@ -399,10 +399,18 @@ namespace game
 		ImGui::Text("Spell-casta-mabob");
 		static std::string spell_name = "";
 		ImGui::InputText("Spell Name", &spell_name);
-		if(ImGui::Button("Cast"))
+		bool is_valid_spell_name = evaluate_lua_bool(std::format("rn.spell.spells.{} ~= nil", spell_name));
+		if(is_valid_spell_name)
 		{
-			std::string code = std::format("rn.spell.cast({}, \"{}\")", uuid, spell_name);
-			tz::lua::get_state().execute(code.c_str());
+			if(ImGui::Button("Cast"))
+			{
+				std::string code = std::format("rn.spell.cast({}, \"{}\")", uuid, spell_name);
+				tz::lua::get_state().execute(code.c_str());
+			}
+		}
+		else
+		{
+			ImGui::Text("\"%s\" is not a valid spell name.", spell_name.c_str());
 		}
 	}
 	
