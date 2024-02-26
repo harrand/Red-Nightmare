@@ -60,11 +60,25 @@ rn.mods.basegame.prefabs.bipedal =
 	on_cast_begin = function(uuid, spellname)
 		local spelldata = rn.spell.spells[spellname]
 		local cast_duration = spelldata.cast_duration
-		local animation_duration = rn.current_scene():entity_get_animation_length(uuid, "Cast1H_Directed")
+		local cast_anim = nil
+		if spelldata.two_handed == true then
+			if spelldata.cast_type == "omni" then
+				cast_anim = "Cast2H_Omni"
+			else
+				cast_anim = "Cast2H_Directed"
+			end
+		else
+			if spelldata.cast_type == "omni" then
+				cast_anim = "Cast1H_Omni"
+			else
+				cast_anim = "Cast1H_Directed"
+			end
+		end
+		local animation_duration = rn.current_scene():entity_get_animation_length(uuid, cast_anim)
 		-- note: the end frame of the animation is unlikely to be when we want the cast to go off.
 		-- for now, let's say we want the anim to be 65% done when the cast actually goes off.
 		animation_duration = animation_duration * 0.65
-		rn.entity.prefabs.bipedal.play_animation(uuid, "Cast1H_Directed", false, animation_duration / cast_duration)
+		rn.entity.prefabs.bipedal.play_animation(uuid, cast_anim, false, animation_duration / cast_duration)
 	end,
 	on_death = function(uuid, dmg, magic_type, enemy_uuid)
 		rn.current_scene():entity_play_animation(uuid, "Death")

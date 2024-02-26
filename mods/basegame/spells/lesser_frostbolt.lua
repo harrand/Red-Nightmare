@@ -2,6 +2,8 @@ rn.mods.basegame.spells.lesser_frostbolt =
 {
 	cast_duration = 1.25,
 	magic_type = "frost",
+	two_handed = false,
+	cast_type = "directed",
 	description = "Launches a small shard of frost in the target direction. Enemies hit suffer ${frost_power*1.0} frost damage.",
 	finish = function(uuid, casterx, castery)
 		local magic_type = rn.spell.spells.lesser_frostbolt.magic_type

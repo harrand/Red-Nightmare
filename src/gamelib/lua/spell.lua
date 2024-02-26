@@ -128,12 +128,22 @@ rn.spell.create_effect_on = function(uuid, spell_name)
 		-- stick the effect to the caster
 		rn.entity.prefabs.sticky.stick_to(effect, uuid)
 	elseif model == "bipedal" then
+		-- do left hand:
 		local effect = sc:add_entity("cast_buildup")
 		sc:entity_write(effect, "magic_type", magic_type)
 		sc:entity_write(uuid, "cast_buildup0", effect)
 		sc:entity_write(uuid, "cast.location", "cast_buildup0")
 		-- stick the effect to the caster's left hand
 		rn.entity.prefabs.sticky.stick_to_subobject(effect, uuid, rn.entity.prefabs.bipedal.right_hand)
+		-- do right hand if spell is marked as two-handed:
+		if spelldata.two_handed == true then
+			local effect2 = sc:add_entity("cast_buildup")
+			sc:entity_write(effect2, "magic_type", magic_type)
+			sc:entity_write(uuid, "cast_buildup1", effect2)
+			sc:entity_write(uuid, "cast.location", "cast_buildup0")
+			-- stick the effect to the caster's right hand
+			rn.entity.prefabs.sticky.stick_to_subobject(effect2, uuid, rn.entity.prefabs.bipedal.left_hand)
+		end
 	else
 		tz.error(false, "No support for model " .. tostring(model) .. " having cast effects.")
 	end
@@ -153,6 +163,12 @@ rn.spell.clear_effect_on = function(uuid)
 		if buildup0 ~= nil and sc:contains_entity(buildup0) then
 			-- delete the buildup effect coz we're done casting.
 			sc:remove_entity(buildup0)
+		end
+		-- buildup1 will exist if the cast was two-handed (i.e there was a spell effect on the right hand too.)
+		local buildup1 = sc:entity_read(uuid, "cast_buildup1")
+		if buildup1 ~= nil and sc:contains_entity(buildup1) then
+			-- delete the buildup effect coz we're done casting.
+			sc:remove_entity(buildup1)
 		end
 	else
 		tz.error(false, "No support for model " .. tostring(model) .. " having cast effects.")
