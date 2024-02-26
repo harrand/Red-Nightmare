@@ -84,6 +84,7 @@ namespace game::render
 		void add_string(std::size_t string_uid, tz::vec2 pos, float size, std::string str, tz::vec3 colour);
 		void remove_string(std::size_t string_uid);
 		void clear_strings();
+		void string_set_position(std::size_t string_uid, tz::vec2 pos);
 
 		void lua_initialise(tz::lua::state& state);
 	private:
@@ -167,6 +168,7 @@ namespace game::render
 		int add_string(tz::lua::state& state);
 		int remove_string(tz::lua::state& state);
 		int clear_strings(tz::lua::state& state);
+		int string_set_position(tz::lua::state& state);
 	};
 
 	LUA_CLASS_BEGIN(impl_rn_scene_renderer)
@@ -190,6 +192,7 @@ namespace game::render
 			LUA_METHOD(impl_rn_scene_renderer, add_string)
 			LUA_METHOD(impl_rn_scene_renderer, remove_string)
 			LUA_METHOD(impl_rn_scene_renderer, clear_strings)
+			LUA_METHOD(impl_rn_scene_renderer, string_set_position)
 		LUA_CLASS_METHODS_END
 	LUA_CLASS_END
 }

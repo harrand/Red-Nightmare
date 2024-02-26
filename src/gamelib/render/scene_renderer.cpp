@@ -453,6 +453,14 @@ namespace game::render
 		this->get_text_renderer().clear_strings();
 	}
 
+	void scene_renderer::string_set_position(std::size_t string_uid, tz::vec2 pos)
+	{
+		auto handle = this->string_uid_to_handle.at(string_uid);
+		tz::trs trs = this->get_text_renderer().string_get_transform(handle);
+		trs.translate = pos.with_more(0.0f);
+		this->get_text_renderer().string_set_transform(handle, trs);
+	}
+
 	/*static*/ std::vector<tz::gl::buffer_resource> scene_renderer::evaluate_extra_buffers()
 	{
 		std::vector<tz::gl::buffer_resource> ret = {};
@@ -855,6 +863,19 @@ namespace game::render
 			.uuid = std::numeric_limits<entity_uuid>::max(),
 		});
 		return 0;
+	}
+
+	int impl_rn_scene_renderer::string_set_position(tz::lua::state& state)
+	{
+		auto [_, uid, x, y] = tz::lua::parse_args<tz::lua::nil, unsigned int, float, float>(state);
+		game::messaging::scene_insert_message
+		({
+			.operation = game::messaging::scene_operation::renderer_string_set_position,
+			.uuid = std::numeric_limits<entity_uuid>::max(),
+			.value = std::pair<std::size_t, tz::vec2>{uid, tz::vec2{x, y}}
+		});
+		return 0;
+
 	}
 
 	void scene_renderer::lua_initialise(tz::lua::state& state)

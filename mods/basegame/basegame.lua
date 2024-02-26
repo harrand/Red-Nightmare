@@ -89,18 +89,20 @@ rn.mods.basegame =
 				end
 
 				local w, h = tz.window():get_dimensions()
-				rn.title_string = rn.renderer():add_string(w / 2 - 250.0, h * 0.8, 40, "Red Nightmare", 0.6, 0.1, 0.15)
-				rn.title_string_author = rn.renderer():add_string(w / 2 + 150, h * 0.8 - 55, 12, "by Harrand", 0.9, 0.3, 0.35)
-				rn.title_string_engine = rn.renderer():add_string(20, 60, 10, "Topaz" .. tz.version.string, 1.0, 1.0, 1.0)
-				rn.title_string_press_to_begin = rn.renderer():add_string(w / 2 - 110.0, h * 0.4, 10, "PRESS [ENTER] TO not PLAY", 1.0, 1.0, 1.0)
+				local ren = rn.renderer()
+				rn.title_string = ren:add_string(w / 2 - 250.0, h * 0.8, 40, "Red Nightmare", 0.6, 0.1, 0.15)
+				rn.title_string_author = ren:add_string(w / 2 + 150, h * 0.8 - 55, 12, "by Harrand", 0.9, 0.3, 0.35)
+				rn.title_string_engine = ren:add_string(20, 60, 10, "Topaz" .. tz.version.string, 1.0, 1.0, 1.0)
+				rn.title_string_press_to_begin = ren:add_string(w / 2 - 110.0, h * 0.4, 10, "PRESS [ENTER] TO not PLAY", 1.0, 1.0, 1.0)
 
 				rn.play_music("basegame/res/audio/music/intro.mp3", 0)
 			end,
 			update = function()
 				local w, h = tz.window():get_dimensions()
-				--rn.title_string:set_position(w / 2 - 250.0, h * 0.8)
-				--rn.title_string_author:set_position(w / 2 + 150, h * 0.8 - 55)
-				--rn.title_string_press_to_begin:set_position(w / 2 - 110.0, h * 0.4)
+				local ren = rn.renderer()
+				ren:string_set_position(rn.title_string, w / 2 - 250.0, h * 0.8)
+				ren:string_set_position(rn.title_string_author, w / 2 + 150, h * 0.8 - 55)
+				ren:string_set_position(rn.title_string_press_to_begin, w / 2 - 110.0, h * 0.4)
 			end
 		}
 	},

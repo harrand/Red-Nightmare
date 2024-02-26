@@ -376,6 +376,13 @@ namespace game::messaging
 				sc->get_renderer().clear_strings();
 			}
 			break;
+			case scene_operation::renderer_string_set_position:
+			{
+				TZ_PROFZONE("renderer string set position", 0xFF99CC44);
+				auto [uid, pos] = std::any_cast<std::pair<std::size_t, tz::vec2>>(msg.value);
+				sc->get_renderer().string_set_position(uid, pos);
+			}
+			break;
 			case scene_operation::audio_play_sound:
 			{
 				TZ_PROFZONE("audio play sound", 0xFF99CC44);
