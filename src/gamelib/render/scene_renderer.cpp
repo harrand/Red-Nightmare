@@ -42,8 +42,8 @@ namespace game::render
 
 		this->text_renderer.append_to_render_graph();
 
-		auto fh = this->text_renderer.add_font(tz::io::ttf::from_memory(ImportedTextData(ProggyClean, ttf)));
-		this->text_renderer.add_string(fh, {.scale = tz::vec3::filled(20.0f)}, "test");
+		this->default_font = this->text_renderer.add_font(tz::io::ttf::from_memory(ImportedTextData(ProggyClean, ttf)));
+		this->text_renderer.add_string(this->default_font, {.scale = tz::vec3::filled(20.0f)}, "test");
 
 		tz::gl::get_device().render_graph().add_dependencies(this->pixelate_pass.handle, this->renderer.get_render_pass());
 		tz::gl::get_device().render_graph().add_dependencies(this->text_renderer.get_render_pass(), this->pixelate_pass.handle);
@@ -432,6 +432,27 @@ namespace game::render
 		return ret;
 	}
 
+	void scene_renderer::add_string(std::size_t string_uid, tz::vec2 pos, float size, std::string str, tz::vec3 colour)
+	{
+		tz::trs trs{.translate = pos.with_more(0.0f), .scale = tz::vec3::filled(size)};
+		auto handle = this->get_text_renderer().add_string(this->default_font, trs, str, colour);
+		this->string_uid_to_handle[string_uid] = handle;
+	}
+
+	void scene_renderer::remove_string(std::size_t string_uid)
+	{
+		auto iter = this->string_uid_to_handle.find(string_uid);
+		tz::assert(iter != this->string_uid_to_handle.end());
+		this->get_text_renderer().remove_string(iter->second);
+		this->string_uid_to_handle.erase(iter);
+	}
+
+	void scene_renderer::clear_strings()
+	{
+		this->string_uid_to_handle.clear();
+		this->get_text_renderer().clear_strings();
+	}
+
 	/*static*/ std::vector<tz::gl::buffer_resource> scene_renderer::evaluate_extra_buffers()
 	{
 		std::vector<tz::gl::buffer_resource> ret = {};
@@ -657,15 +678,6 @@ namespace game::render
 
 	// Lua API
 
-	int impl_rn_rendered_text::set_position(tz::lua::state& state)
-	{
-		auto [_, posx, posy] = tz::lua::parse_args<tz::lua::nil, float, float>(state);
-		this->trs.translate[0] = posx;
-		this->trs.translate[1] = posy;
-		this->renderer->get_text_renderer().string_set_transform(this->sh, this->trs);
-		return 0;
-	}
-
 	int impl_rn_scene_renderer::get_camera_position(tz::lua::state& state)
 	{
 		tz::vec2 ret = this->renderer->get_camera_position();
@@ -806,34 +818,48 @@ namespace game::render
 		return 0;
 	}
 
+	static std::atomic_uint_fast64_t string_uid_counter = 0;
+
 	int impl_rn_scene_renderer::add_string(tz::lua::state& state)
 	{
 		TZ_PROFZONE("scene renderer - add string", 0xFFFFAAEE);
 		auto [_, posx, posy, size, str, r, g, b] = tz::lua::parse_args<tz::lua::nil, float, float, float, std::string, float, float, float>(state);
-		tz::trs trs{.translate = {posx, posy, 0.0f}, .scale = tz::vec3::filled(size)};
-		auto stringh = this->renderer->get_text_renderer().add_string(static_cast<tz::hanval>(0), trs, str, {r, g, b});
-		impl_rn_rendered_text ret{.renderer = this->renderer, .sh = stringh, .trs = trs};
-		LUA_CLASS_PUSH(state, impl_rn_rendered_text, ret);
+		std::size_t string_uid = string_uid_counter.fetch_add(1);
+		game::messaging::scene_insert_message
+		({
+			.operation = game::messaging::scene_operation::renderer_add_string,
+			.uuid = std::numeric_limits<entity_uuid>::max(),
+			.value = std::tuple<std::size_t, tz::vec2, float, std::string, tz::vec3>{string_uid, tz::vec2{posx, posy}, size, str, tz::vec3{r, g, b}}
+		});
+		state.stack_push_uint(string_uid);
 		return 1;
 	}
 
 	int impl_rn_scene_renderer::remove_string(tz::lua::state& state)
 	{
-		auto& text = state.stack_get_userdata<impl_rn_rendered_text>(2);
-		this->renderer->get_text_renderer().remove_string(text.sh);
+		auto [_, uid] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+		game::messaging::scene_insert_message
+		({
+			.operation = game::messaging::scene_operation::renderer_remove_string,
+			.uuid = std::numeric_limits<entity_uuid>::max(),
+			.value = uid
+		});
 		return 0;
 	}
 
 	int impl_rn_scene_renderer::clear_strings(tz::lua::state& state)
 	{
-		this->renderer->get_text_renderer().clear_strings();
+		game::messaging::scene_insert_message
+		({
+			.operation = game::messaging::scene_operation::renderer_clear_strings,
+			.uuid = std::numeric_limits<entity_uuid>::max(),
+		});
 		return 0;
 	}
 
 	void scene_renderer::lua_initialise(tz::lua::state& state)
 	{
 		TZ_PROFZONE("scene renderer - lua initialise", 0xFFFF4488);
-		state.new_type("impl_rn_rendered_text", LUA_CLASS_NAME(impl_rn_rendered_text)::registers);
 		state.new_type("impl_rn_scene_renderer", LUA_CLASS_NAME(impl_rn_scene_renderer)::registers);
 	}
 

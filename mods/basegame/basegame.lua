@@ -98,9 +98,9 @@ rn.mods.basegame =
 			end,
 			update = function()
 				local w, h = tz.window():get_dimensions()
-				rn.title_string:set_position(w / 2 - 250.0, h * 0.8)
-				rn.title_string_author:set_position(w / 2 + 150, h * 0.8 - 55)
-				rn.title_string_press_to_begin:set_position(w / 2 - 110.0, h * 0.4)
+				--rn.title_string:set_position(w / 2 - 250.0, h * 0.8)
+				--rn.title_string_author:set_position(w / 2 + 150, h * 0.8 - 55)
+				--rn.title_string_press_to_begin:set_position(w / 2 - 110.0, h * 0.4)
 			end
 		}
 	},

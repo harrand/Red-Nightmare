@@ -81,6 +81,10 @@ namespace game::render
 		void clear_lights();
 		std::vector<std::size_t> get_all_light_uids() const;
 
+		void add_string(std::size_t string_uid, tz::vec2 pos, float size, std::string str, tz::vec3 colour);
+		void remove_string(std::size_t string_uid);
+		void clear_strings();
+
 		void lua_initialise(tz::lua::state& state);
 	private:
 		static std::vector<tz::gl::buffer_resource> evaluate_extra_buffers();
@@ -106,6 +110,7 @@ namespace game::render
 		tz::gl::image_output pixelate_input;
 		tz::ren::animation_renderer renderer;
 		tz::ren::text_renderer text_renderer;
+		tz::ren::text_renderer::font_handle default_font = tz::nullhand;
 		int impl_mouse_scroll_delta = 0;
 		tz::ren::animation_renderer::object_handle root = tz::nullhand;
 		tz::vec2 view_bounds = {512.0f, 512.0f};
@@ -113,6 +118,7 @@ namespace game::render
 		std::unordered_map<std::string, tz::ren::animation_renderer::gltf_handle> registered_models = {};
 		std::unordered_map<std::string, tz::ren::animation_renderer::texture_handle> registered_textures = {};
 		std::map<std::size_t, std::size_t> light_uid_to_index = {};
+		std::unordered_map<std::size_t, tz::ren::text_renderer::string_handle> string_uid_to_handle = {};
 	};
 
 	struct scene_element
@@ -139,22 +145,6 @@ namespace game::render
 	};
 
 	// LUA API
-
-	struct impl_rn_rendered_text
-	{
-		scene_renderer* renderer = nullptr;
-		scene_renderer::string_handle sh;
-		tz::trs trs;
-
-		int set_position(tz::lua::state& state);
-	};
-
-	LUA_CLASS_BEGIN(impl_rn_rendered_text)
-		LUA_CLASS_METHODS_BEGIN
-			LUA_METHOD(impl_rn_rendered_text, set_position)
-		LUA_CLASS_METHODS_END
-	LUA_CLASS_END
-
 	struct impl_rn_scene_renderer
 	{
 		scene_renderer* renderer = nullptr;

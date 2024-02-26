@@ -356,6 +356,26 @@ namespace game::messaging
 				sc->get_renderer().clear_lights();
 			}
 			break;
+			case scene_operation::renderer_add_string:
+			{
+				TZ_PROFZONE("renderer add string", 0xFF99CC44);
+				auto [uid, pos, size, str, colour] = std::any_cast<std::tuple<std::size_t, tz::vec2, float, std::string, tz::vec3>>(msg.value);
+				sc->get_renderer().add_string(uid, pos, size, str, colour);
+			}
+			break;
+			case scene_operation::renderer_remove_string:
+			{
+				TZ_PROFZONE("renderer remove string", 0xFF99CC44);
+				auto uid = std::any_cast<unsigned int>(msg.value);
+				sc->get_renderer().remove_string(uid);
+			}
+			break;
+			case scene_operation::renderer_clear_strings:
+			{
+				TZ_PROFZONE("renderer clear strings", 0xFF99CC44);
+				sc->get_renderer().clear_strings();
+			}
+			break;
 			case scene_operation::audio_play_sound:
 			{
 				TZ_PROFZONE("audio play sound", 0xFF99CC44);

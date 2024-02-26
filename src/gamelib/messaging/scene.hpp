@@ -49,6 +49,9 @@ namespace game::messaging
 		renderer_light_set_colour,
 		renderer_light_set_power,
 		renderer_clear_lights,
+		renderer_add_string,
+		renderer_remove_string,
+		renderer_clear_strings,
 		audio_play_sound,
 		audio_play_music,
 		audio_stop_music
