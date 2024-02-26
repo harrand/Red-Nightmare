@@ -50,10 +50,11 @@ rn.mods.basegame.prefabs.magic_ball_base =
 		local target_alive = rn.entity.prefabs.combat_stats.is_alive(uuid_b)
 		local magic_type = rn.current_scene():entity_read(uuid_a, "magic_type")
 		local owner_id = rn.current_scene():entity_read(uuid_a, "owner")
+		local other_owner = rn.current_scene():entity_read(uuid_b, "owner")
 		if magic_type == nil then
 			magic_type = "physical"
 		end
-		if owner_id == uuid_b or not target_alive then
+		if owner_id == uuid_b or not target_alive or (owner_id ~= nil and owner_id == other_owner) then
 			-- collided with whomsoever casted me. don't do anything.
 			return false
 		end
