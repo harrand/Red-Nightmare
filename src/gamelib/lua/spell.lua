@@ -19,6 +19,11 @@ rn.spell.schools =
 		pretty_name = "Frost",
 		colour = {0.3, 0.6, 1.0},
 	},
+	holy = 
+	{
+		pretty_name = "Holy",
+		colour = {1.0, 0.85, 0.4},
+	}
 }
 
 rn.spell.cast = function(uuid, spell_name)
