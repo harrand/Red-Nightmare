@@ -81,7 +81,9 @@ rn.mods.basegame =
 				-- add a bunch more randoms
 				math.randomseed(os.time())
 				for i=0,128,1 do
-					local morbx = rn.current_scene():add_entity("firebolt")
+					local ty = "firebolt"
+					if i%2 == 0 then ty = "frostbolt" end
+					local morbx = rn.current_scene():add_entity(ty)
 					rn.entity.prefabs.magic_ball_base.set_damage(morbx, 2)
 					local randx = math.random(-40, 40)
 					local randy = math.random(-40, 40)
@@ -133,6 +135,7 @@ require("basegame/prefabs/combat_stats")
 require("basegame/prefabs/timed_despawn")
 require("basegame/prefabs/obstacle")
 require("basegame/prefabs/invisible_wall")
+require("basegame/prefabs/floating_combat_text")
 
 require("basegame/prefabs/players/player_melistra")
 

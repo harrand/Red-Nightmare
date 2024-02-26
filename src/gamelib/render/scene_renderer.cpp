@@ -752,6 +752,14 @@ namespace game::render
 		return 0;
 	}
 
+	int impl_rn_scene_renderer::get_view_bounds(tz::lua::state& state)
+	{
+		tz::vec2 bounds = this->renderer->get_view_bounds();
+		state.stack_push_float(bounds[0]);
+		state.stack_push_float(bounds[1]);
+		return 2;
+	}
+
 	static std::atomic_uint_fast64_t light_uuid_counter = 0;
 
 	int impl_rn_scene_renderer::add_light(tz::lua::state& state)

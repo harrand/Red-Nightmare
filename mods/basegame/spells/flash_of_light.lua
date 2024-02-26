@@ -9,7 +9,7 @@ rn.mods.basegame.spells.flash_of_light =
 		local magic_type = rn.spell.spells.flash_of_light.magic_type
 		local sc = rn.current_scene()
 		local holy_power = rn.entity.prefabs.combat_stats.get_holy_power(uuid)
-		rn.entity.prefabs.combat_stats.heal_unmit(uuid, holy_power + 10)
+		rn.entity.prefabs.combat_stats.heal(uuid, holy_power + 10, magic_type, uuid)
 
 		-- display a little healing effect on the caster.
 		local effect = sc:add_entity("cast_buildup")

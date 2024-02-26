@@ -96,10 +96,12 @@ rn.mods.basegame.prefabs.combat_stats =
 		local minus_hp = rn.current_scene():entity_read(uuid, "hp_lost") or 0.0
 		if minus_hp == 0 then
 			-- bloke is already full hp.
-			return
+			return 0.0
 		end
+		local real_healing = math.min(minus_hp, heal)
 		minus_hp = math.max(0.0, minus_hp - heal)
 		rn.current_scene():entity_write(uuid, "hp_lost", minus_hp)
+		return real_healing
 	end,
 	is_alive = function(uuid)
 		local has_stats = rn.current_scene():entity_read(uuid, "base_max_hp") ~= nil
@@ -111,6 +113,20 @@ rn.mods.basegame.prefabs.combat_stats =
 		local invincible = rn.current_scene():entity_read(uuid, "invincible") or false
 		if invincible then return false end
 		return minus_hp >= max_hp
+	end,
+	heal = function(uuid, heal, magic_type, ally_uuid)
+		local caster_power = 0.0
+		if ally_uuid ~= 0 then
+			caster_power = rn.entity.prefabs.combat_stats["get_" .. magic_type .. "_power"](ally_uuid)
+		end
+		local effective_healing = (heal * (caster_power + 1.0))
+		local real_healing = rn.entity.prefabs.combat_stats.heal_unmit(uuid, effective_healing)
+		-- floating combat text
+		local sc = rn.current_scene()
+		local text = sc:add_entity("floating_combat_text")
+		local x, y = rn.entity.prefabs.sprite.get_position(uuid)
+		rn.entity.prefabs.floating_combat_text.set(text, x, y, tostring(math.ceil(real_healing)), {0.0, 1.0, 0.0})
+
 	end,
 	dmg = function(uuid, dmg, magic_type, enemy_uuid)
 		-- firstly:
@@ -131,6 +147,14 @@ rn.mods.basegame.prefabs.combat_stats =
 
 		-- todo: formal combat logging
 		print(rn.current_scene():entity_get_name(uuid) .. " took " .. mitigated_dmg .. " " .. magic_type .. " damage from " .. rn.current_scene():entity_get_name(enemy_uuid))
+
+		-- floating combat text
+		if mitigated_dmg > 0.0 then
+			local sc = rn.current_scene()
+			local text = sc:add_entity("floating_combat_text")
+			local x, y = rn.entity.prefabs.sprite.get_position(uuid)
+			rn.entity.prefabs.floating_combat_text.set(text, x, y, tostring(math.ceil(mitigated_dmg)), rn.spell.schools[magic_type].colour)
+		end
 	end
 }
 

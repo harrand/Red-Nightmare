@@ -158,6 +158,8 @@ namespace game::render
 		int add_texture(tz::lua::state& state);
 		int add_model(tz::lua::state& state);
 
+		int get_view_bounds(tz::lua::state& state);
+
 		int add_light(tz::lua::state& state);
 		int remove_light(tz::lua::state& state);
 		int light_set_position(tz::lua::state& state);
@@ -181,6 +183,8 @@ namespace game::render
 
 			LUA_METHOD(impl_rn_scene_renderer, add_texture)
 			LUA_METHOD(impl_rn_scene_renderer, add_model)
+
+			LUA_METHOD(impl_rn_scene_renderer, get_view_bounds)
 
 			LUA_METHOD(impl_rn_scene_renderer, add_light)
 			LUA_METHOD(impl_rn_scene_renderer, remove_light)
