@@ -26,19 +26,28 @@ namespace game::messaging
 	}
 
 	std::vector<entity_uuid> deleted_entities_this_frame = {};	
+	std::vector<entity_uuid> deleted_entities_last_frame = {};	
 	std::vector<std::size_t> deleted_lights_this_frame = {};
+	std::vector<std::size_t> deleted_strings_this_frame = {};
 
 	void on_scene_process_message(const scene_message& msg)
 	{
 		TZ_PROFZONE("scene message", 0xFF99CC44);
 		tz::assert(sc != nullptr);
+		// for reasons not immediately clear to me - in the edge-case of TONS of stuff happening in a very slow frame, with a clear at the end - shit goes wrong unless you catch deleted stuff from the past 2 frames instead of 1.
+		// i havent yet figured out why its necessary to check the last 2 frames - probably something to do with the latency of add_entity -> instantiate -> (clear goes here and causes trouble) -> messages from instantiate are ran on deleted entity = boom
 		auto was_deleted_this_frame = [](auto val)->bool
 		{
-			return std::find(deleted_entities_this_frame.begin(), deleted_entities_this_frame.end(), val) != deleted_entities_this_frame.end();
+			return std::find(deleted_entities_this_frame.begin(), deleted_entities_this_frame.end(), val) != deleted_entities_this_frame.end() ||
+			std::find(deleted_entities_last_frame.begin(), deleted_entities_last_frame.end(), val) != deleted_entities_last_frame.end();
 		};
 		auto light_was_deleted_this_frame = [](auto val)->bool
 		{
 			return std::find(deleted_lights_this_frame.begin(), deleted_lights_this_frame.end(), val) != deleted_lights_this_frame.end();
+		};
+		auto string_was_deleted_this_frame = [](auto val)->bool
+		{
+			return std::find(deleted_strings_this_frame.begin(), deleted_strings_this_frame.end(), val) != deleted_strings_this_frame.end();
 		};
 		if(was_deleted_this_frame(msg.uuid))
 		{
@@ -81,7 +90,6 @@ namespace game::messaging
 			{
 				TZ_PROFZONE("remove entity", 0xFF99CC44);
 				sc->remove_entity(msg.uuid);
-
 				deleted_entities_this_frame.push_back(msg.uuid);
 			}
 			break;
@@ -367,12 +375,21 @@ namespace game::messaging
 			{
 				TZ_PROFZONE("renderer remove string", 0xFF99CC44);
 				auto uid = std::any_cast<unsigned int>(msg.value);
+				if(string_was_deleted_this_frame(uid))
+				{
+					return;
+				}
 				sc->get_renderer().remove_string(uid);
+				deleted_strings_this_frame.push_back(uid);
 			}
 			break;
 			case scene_operation::renderer_clear_strings:
 			{
 				TZ_PROFZONE("renderer clear strings", 0xFF99CC44);
+				for(std::size_t uid : sc->get_renderer().get_all_string_uids())
+				{
+					deleted_strings_this_frame.push_back(uid);
+				}
 				sc->get_renderer().clear_strings();
 			}
 			break;
@@ -380,6 +397,12 @@ namespace game::messaging
 			{
 				TZ_PROFZONE("renderer string set position", 0xFF99CC44);
 				auto [uid, pos] = std::any_cast<std::pair<std::size_t, tz::vec2>>(msg.value);
+
+				if(string_was_deleted_this_frame(uid))
+				{
+					return;
+				}
+
 				sc->get_renderer().string_set_position(uid, pos);
 			}
 			break;
@@ -413,8 +436,10 @@ namespace game::messaging
 
 	void on_scene_update()
 	{
+		deleted_entities_last_frame = std::move(deleted_entities_this_frame);
 		deleted_entities_this_frame.clear();
 		deleted_lights_this_frame.clear();
+		deleted_strings_this_frame.clear();
 	}
 
 	REGISTER_MESSAGING_SYSTEM(scene_message, scene, on_scene_process_message, on_scene_update);

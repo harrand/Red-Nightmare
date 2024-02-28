@@ -461,6 +461,17 @@ namespace game::render
 		this->get_text_renderer().string_set_transform(handle, trs);
 	}
 
+	std::vector<std::size_t> scene_renderer::get_all_string_uids() const
+	{
+		std::vector<std::size_t> ret;
+		for(auto& [id, handle] : this->string_uid_to_handle)
+		{
+			tz::assert(handle != tz::nullhand);
+			ret.push_back(id);
+		}
+		return ret;
+	}
+
 	/*static*/ std::vector<tz::gl::buffer_resource> scene_renderer::evaluate_extra_buffers()
 	{
 		std::vector<tz::gl::buffer_resource> ret = {};
