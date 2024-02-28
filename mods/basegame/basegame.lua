@@ -153,6 +153,21 @@ rn.mods.basegame =
 			colour = {0.5, 0.5, 0.5},
 			texture = "chest.chainmail",
 		},
+		fiery_hauberk =
+		{
+			static_init = function()
+				rn.renderer():add_texture("chest.platebody", "basegame/res/skins/chests/platebody.png")
+			end,
+			on_equip = function(uuid)
+				rn.entity.prefabs.combat_stats.apply_pct_more_fire_power(uuid, 2.0)
+			end,
+			on_unequip = function(uuid)
+				rn.entity.prefabs.combat_stats.apply_pct_more_fire_power(uuid, 0.5)
+			end,
+			slot = rn.item.slot.chest,
+			colour = {0.3, 0.05, 0.1},
+			texture = "chest.platebody",
+		},
 		iron_chainlegs =
 		{
 			static_init = function()

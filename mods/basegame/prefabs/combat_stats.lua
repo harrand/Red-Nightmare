@@ -52,7 +52,7 @@ function rn_impl_create_combat_stat(stat_name)
 
 	prfb["apply_pct_more_" .. stat_name] = function(uuid, val)
 		local old_pct_more = prfb["get_pct_more_" .. stat_name](uuid) or 0.0
-		prfb["set_pct_more_" .. stat_name](uuid, 1.0 - ((1.0 + old_pct_more) * (1.0 + val)))
+		prfb["set_pct_more_" .. stat_name](uuid, ((old_pct_more + 1.0) * val) - 1.0)
 	end
 
 	-- get the stat value, after all modifiers.
