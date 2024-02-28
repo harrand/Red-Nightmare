@@ -6,9 +6,6 @@ rn.mods.basegame.prefabs.health_bar_impl =
 	end,
 	instantiate = function(uuid)
 		rn.entity.prefabs.sprite.instantiate(uuid)
-		rn.entity.prefabs.sprite.set_colour(uuid, 0.0, 1.0, 0.0)
-		local health_bar_middle_scale = 0.8
-		rn.current_scene():entity_set_local_scale(uuid, 1.0 * health_bar_middle_scale, 0.2 * health_bar_middle_scale, 1.0)
 	end,
 	update = function(uuid, delta_seconds)
 		local sc = rn.current_scene()
@@ -22,12 +19,29 @@ rn.mods.basegame.prefabs.health_bar_impl =
 	end,
 	internal_update = function(uuid, delta_seconds)
 		local sc = rn.current_scene()
-		local offsetx = 0.0
-		local offsety = 0.0
 		local parent = sc:entity_read(uuid, "parent")
 		if parent ~= nil and sc:contains_entity(parent) then
-			-- z offset of -0.1 so it always displays infront of the background
+			local base_ox = sc:entity_read(uuid, "base_offsetx")
+			local base_oy = sc:entity_read(uuid, "base_offsety")
+			local offsetx = 0.0
+			local offsety = 0.0
+
+			local attachment = sc:entity_read(parent, "attachment")
+
+			local max_hp = rn.entity.prefabs.combat_stats.get_max_hp(attachment)
+			local hp = rn.entity.prefabs.combat_stats.get_hp(attachment)
+			local hp_pct = hp / max_hp
+			rn.entity.prefabs.sprite.set_colour(uuid, 1.0 - hp_pct, hp_pct * 0.5, 0.0)
+
+			local health_bar_middle_scale = 0.8
+			local padding = 1.1
+			local scalex = 1.0 * health_bar_middle_scale * hp_pct * padding
+			offsetx = ((1.0 - hp_pct) * -health_bar_middle_scale) * padding
+
+			rn.entity.prefabs.sticky.set_offset(uuid, offsetx + base_ox, offsety + base_oy)
 			rn.entity.prefabs.sticky.update(uuid, delta_seconds)
+			rn.current_scene():entity_set_global_scale(uuid, health_bar_middle_scale, 0.2 * health_bar_middle_scale, scalex)
+			rn.entity.prefabs.sprite.set_visible(uuid, true)
 		end
 	end
 }
@@ -77,13 +91,19 @@ rn.mods.basegame.prefabs.health_bar =
 		sc:entity_write(uuid, "health_bar_active", true)
 
 		local me = sc:add_entity("health_bar")
+		local base_offsetx = 0.0
+		local base_offsety = -1.0
+		local base_offsetz = 0.0
 		sc:entity_write(me, "attachment", uuid)
-		rn.entity.prefabs.sticky.stick_to(me, uuid, 0.0, -1.0, 0.0)
+		rn.entity.prefabs.sticky.stick_to(me, uuid, base_offsetx, base_offsety, base_offsetz)
 		rn.entity.prefabs.timed_despawn.set_duration(me, duration)
 
 		local inner = sc:add_entity("health_bar_impl")
 		sc:entity_write(inner, "parent", me)
 		sc:entity_write(me, "child", inner)
-		rn.entity.prefabs.sticky.stick_to(inner, uuid, 0.0, -1.0, 0.01)
+		-- teeny tiny Z offset to guarantee inner always displays over `uuid` (or it will be completely occluded!)
+		rn.entity.prefabs.sticky.stick_to(inner, uuid, base_offsetx, base_offsety, base_offsetz + 0.01)
+		sc:entity_write(inner, "base_offsetx", base_offsetx)
+		sc:entity_write(inner, "base_offsety", base_offsety)
 	end
 }

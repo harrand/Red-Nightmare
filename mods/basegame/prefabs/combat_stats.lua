@@ -127,6 +127,10 @@ rn.mods.basegame.prefabs.combat_stats =
 		local x, y = rn.entity.prefabs.sprite.get_position(uuid)
 		rn.entity.prefabs.floating_combat_text.set(text, x, y, tostring(math.ceil(real_healing)), {0.0, 1.0, 0.0})
 
+		-- display health bar on healee
+		-- for 5 seconds.
+		rn.entity.prefabs.health_bar.display(uuid, 5.0)
+
 	end,
 	dmg = function(uuid, dmg, magic_type, enemy_uuid)
 		-- firstly:

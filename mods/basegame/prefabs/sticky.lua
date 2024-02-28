@@ -25,5 +25,17 @@ rn.mods.basegame.prefabs.sticky =
 		local sc = rn.current_scene()
 		sc:entity_write(uuid, "stick_to_entity", uuid_to_stick_to)
 		sc:entity_write(uuid, "stick_subobject", subobject)
-	end
+	end,
+	set_offset = function(uuid, offsetx, offsety, offsetz)
+		local sc = rn.current_scene()
+		if offsetx ~= nil then
+			sc:entity_write(uuid, "stick_offsetx", offsetx)	
+		end
+		if offsety ~= nil then
+			sc:entity_write(uuid, "stick_offsety", offsety)	
+		end
+		if offsetz ~= nil then
+			sc:entity_write(uuid, "stick_offsetz", offsetz)	
+		end
+	end,
 }
