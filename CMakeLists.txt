@@ -84,6 +84,7 @@ add_text(
 		res/fonts/ProggyClean.ttf
 		src/gamelib/lua/entity.lua
 		src/gamelib/lua/game.lua
+		src/gamelib/lua/item.lua
 		src/gamelib/lua/level.lua
 		src/gamelib/lua/mod.lua
 		src/gamelib/lua/spell.lua

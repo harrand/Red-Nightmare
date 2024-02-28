@@ -19,6 +19,22 @@ rn.static_init = function()
 			leveldata.static_init()
 		end
 	end
+
+	for spellname, spelldata in pairs(rn.spell.spells) do
+		if spelldata.static_init ~= nil then
+			local obj2 <close> = tz.profzone_obj:new()
+			obj2:set_name(spellname .. " - Static Init")
+			spelldata.static_init()
+		end
+	end
+
+	for itemname, itemdata in pairs(rn.item.items) do
+		if itemdata.static_init ~= nil then
+			local obj2 <close> = tz.profzone_obj:new()
+			obj2:set_name(itemname .. " - Static Init")
+			itemdata.static_init()
+		end
+	end
 end
 
 rn.update = function(delta_seconds)

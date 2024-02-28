@@ -230,3 +230,33 @@ rn.entity.on_remove = function(uuid)
 		end
 	end
 end
+
+rn.entity.on_equip = function(uuid, item_name)
+	local prefab_name = rn.current_scene():entity_read(uuid, ".prefab")
+	if prefab_name ~= nil then
+		local prefab = rn.entity.prefabs[prefab_name]
+		if prefab ~= nil then
+			if prefab.on_equip ~= nil then
+				prefab.on_equip(uuid, item_name)
+			end
+		else
+			tz.report("Missing prefab \"" .. prefab_name .. "\"")
+			tz.assert(false);
+		end
+	end
+end
+
+rn.entity.on_unequip = function(uuid, item_name)
+	local prefab_name = rn.current_scene():entity_read(uuid, ".prefab")
+	if prefab_name ~= nil then
+		local prefab = rn.entity.prefabs[prefab_name]
+		if prefab ~= nil then
+			if prefab.on_unequip ~= nil then
+				prefab.on_unequip(uuid, item_name)
+			end
+		else
+			tz.report("Missing prefab \"" .. prefab_name .. "\"")
+			tz.assert(false);
+		end
+	end
+end

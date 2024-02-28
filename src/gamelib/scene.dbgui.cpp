@@ -208,6 +208,7 @@ namespace game
 				std::vector<meta::prefabinfo_t> owned_prefabs = {};
 				std::vector<meta::levelinfo_t> owned_levels = {};
 				std::vector<meta::spellinfo_t> owned_spells = {};
+				std::vector<meta::iteminfo_t> owned_items = {};
 				for(const auto& prefab : game::meta::get_prefabs())
 				{
 					if(prefab.mod_id == i)
@@ -227,6 +228,13 @@ namespace game
 					if(spell.mod_id == i)
 					{
 						owned_spells.push_back(spell);
+					}
+				}
+				for(const auto& item : game::meta::get_items())
+				{
+					if(item.mod_id == i)
+					{
+						owned_items.push_back(item);
 					}
 				}
 				ImGui::SetNextItemOpen(mod.name == "basegame");
@@ -294,6 +302,18 @@ namespace game
 							{
 								ImGui::Text("%s", spell.description.c_str());
 								ImGui::Text("Type: %s", spell.magic_type.c_str());
+								ImGui::TreePop();
+							}
+						}
+						ImGui::TreePop();
+					}
+					if(owned_items.size() && ImGui::TreeNode("Items"))
+					{
+						for(auto item : owned_items)
+						{
+							if(ImGui::TreeNode(item.name.c_str()))
+							{
+								ImGui::Text("Slot ID: %zu", item.slot_id);
 								ImGui::TreePop();
 							}
 						}
