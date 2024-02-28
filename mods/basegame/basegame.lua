@@ -128,10 +128,46 @@ rn.mods.basegame =
 			static_init = function()
 				rn.renderer():add_texture("helm.med_helm", "basegame/res/skins/helms/med_helm.png")
 			end,
+			on_equip = function(uuid)
+				rn.entity.prefabs.combat_stats.apply_flat_increased_physical_resist(uuid, 0.1)
+			end,
+			on_unequip = function(uuid)
+				rn.entity.prefabs.combat_stats.apply_flat_increased_physical_resist(uuid, -0.1)
+			end,
 			slot = rn.item.slot.helm,
 			colour = {0.5, 0.5, 0.5},
 			texture = "helm.med_helm",
-		}
+		},
+		iron_chainmail =
+		{
+			static_init = function()
+				rn.renderer():add_texture("chest.chainmail", "basegame/res/skins/chests/chainmail.png")
+			end,
+			on_equip = function(uuid)
+				rn.entity.prefabs.combat_stats.apply_flat_increased_physical_resist(uuid, 0.25)
+			end,
+			on_unequip = function(uuid)
+				rn.entity.prefabs.combat_stats.apply_flat_increased_physical_resist(uuid, -0.25)
+			end,
+			slot = rn.item.slot.chest,
+			colour = {0.5, 0.5, 0.5},
+			texture = "chest.chainmail",
+		},
+		iron_chainlegs =
+		{
+			static_init = function()
+				rn.renderer():add_texture("legs.chainlegs", "basegame/res/skins/legs/chainlegs.png")
+			end,
+			on_equip = function(uuid)
+				rn.entity.prefabs.combat_stats.apply_flat_increased_physical_resist(uuid, 0.15)
+			end,
+			on_unequip = function(uuid)
+				rn.entity.prefabs.combat_stats.apply_flat_increased_physical_resist(uuid, -0.15)
+			end,
+			slot = rn.item.slot.legs,
+			colour = {0.5, 0.5, 0.5},
+			texture = "legs.chainlegs",
+		},
 	}
 }
 

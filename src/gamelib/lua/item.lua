@@ -27,6 +27,10 @@ rn.item.equip = function(uuid, item_name)
 	sc:entity_write(uuid, "equipment." .. tostring(slot), item_name)
 	rn.entity.on_equip(uuid, item_name)
 
+	if itemdata.on_equip ~= nil then
+		itemdata.on_equip(uuid)
+	end
+
 	print("entity " .. tostring(uuid) .. " equips " .. item_name .. " (slot " .. tostring(slot) .. ")")
 end
 
@@ -37,5 +41,11 @@ rn.item.unequip = function(uuid, slot)
 		rn.entity.on_unequip(uuid, old_item)
 		sc:entity_write(uuid, "equipment." .. tostring(slot), nil)
 		print("entity " .. tostring(uuid) .. " unequips " .. old_item .. " (slot " .. tostring(slot) .. ")")
+
+		local itemdata = rn.item.items[old_item]
+
+		if itemdata.on_unequip ~= nil then
+			itemdata.on_unequip(uuid)
+		end
 	end
 end
