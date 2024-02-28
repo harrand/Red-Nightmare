@@ -52,5 +52,7 @@ rn.mods.basegame.prefabs.player_melistra =
 		return true
 	end,
 	on_cast_begin = rn.mods.basegame.prefabs.bipedal.on_cast_begin,
-	on_death = rn.mods.basegame.prefabs.bipedal.on_death
+	on_death = rn.mods.basegame.prefabs.bipedal.on_death,
+	on_equip = rn.mods.basegame.prefabs.bipedal.on_equip,
+	on_unequip = rn.mods.basegame.prefabs.bipedal.on_unequip,
 }

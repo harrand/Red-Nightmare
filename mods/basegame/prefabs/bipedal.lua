@@ -83,6 +83,32 @@ rn.mods.basegame.prefabs.bipedal =
 	on_death = function(uuid, dmg, magic_type, enemy_uuid)
 		rn.current_scene():entity_play_animation(uuid, "Death")
 	end,
+	on_equip = function(uuid, itemname)
+		local itemdata = rn.item.items[itemname]
+		local subobject = rn.entity.prefabs.bipedal.item_slot_to_subobject(itemdata.slot)
+		rn.entity.prefabs.bipedal.set_subobject_visible(uuid, subobject, true)
+		local col = itemdata.colour or {1.0, 1.0, 1.0}
+		rn.entity.prefabs.bipedal.set_subobject_colour(uuid, subobject, col[1], col[2], col[3])
+		rn.entity.prefabs.bipedal.set_subobject_texture(uuid, subobject, itemdata.texture)
+	end,
+	on_unequip = function(uuid, itemname)
+		local itemdata = rn.item.items[itemname]
+		local subobject = rn.entity.prefabs.bipedal.item_slot_to_subobject(itemdata.slot)
+		rn.entity.prefabs.bipedal.set_subobject_visible(uuid, subobject, false)
+	end,
+	item_slot_to_subobject = function(itemslot)
+		if itemslot == rn.item.slot.none then
+			return nil
+		elseif itemslot == rn.item.slot.helm then
+			return helm_subobj
+		elseif itemslot == rn.item.slot.chest then
+			return chest_subobj
+		elseif itemslot == rn.item.slot.legs then
+			return legs_subobj
+		else
+			tz.assert(false, "Unknown item slot " .. itemslot)
+		end
+	end,
 	play_animation = function(uuid, animation_name, loop, time_warp)
 		rn.current_scene():entity_play_animation(uuid, animation_name, loop, time_warp)
 	end,

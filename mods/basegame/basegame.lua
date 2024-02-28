@@ -125,10 +125,12 @@ rn.mods.basegame =
 	{
 		iron_sallet =
 		{
-			slot = rn.item.slot.helm,
 			static_init = function()
 				rn.renderer():add_texture("helm.med_helm", "basegame/res/skins/helms/med_helm.png")
-			end
+			end,
+			slot = rn.item.slot.helm,
+			colour = {0.5, 0.5, 0.5},
+			texture = "helm.med_helm",
 		}
 	}
 }
