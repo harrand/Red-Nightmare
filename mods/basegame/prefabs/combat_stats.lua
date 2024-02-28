@@ -148,12 +148,16 @@ rn.mods.basegame.prefabs.combat_stats =
 		-- todo: formal combat logging
 		print(rn.current_scene():entity_get_name(uuid) .. " took " .. mitigated_dmg .. " " .. magic_type .. " damage from " .. rn.current_scene():entity_get_name(enemy_uuid))
 
-		-- floating combat text
 		if mitigated_dmg > 0.0 then
+			-- floating combat text
 			local sc = rn.current_scene()
 			local text = sc:add_entity("floating_combat_text")
 			local x, y = rn.entity.prefabs.sprite.get_position(uuid)
 			rn.entity.prefabs.floating_combat_text.set(text, x, y, tostring(math.ceil(mitigated_dmg)), rn.spell.schools[magic_type].colour)
+			
+			-- display health bar on damagee
+			-- for 5 seconds.
+			rn.entity.prefabs.health_bar.display(uuid, 5.0)
 		end
 	end
 }

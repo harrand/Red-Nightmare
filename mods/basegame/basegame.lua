@@ -136,6 +136,7 @@ require("basegame/prefabs/timed_despawn")
 require("basegame/prefabs/obstacle")
 require("basegame/prefabs/invisible_wall")
 require("basegame/prefabs/floating_combat_text")
+require("basegame/prefabs/health_bar")
 
 require("basegame/prefabs/players/player_melistra")
 
