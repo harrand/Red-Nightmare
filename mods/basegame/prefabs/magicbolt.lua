@@ -14,6 +14,7 @@ rn.mods.basegame.prefabs.magic_ball_base =
 		rn.entity.prefabs.sprite.instantiate(uuid)
 		rn.entity.prefabs.sprite.set_texture(uuid, "sprite.magicball0")
 		rn.entity.prefabs.light_emitter.instantiate(uuid)
+		rn.entity.prefabs.health_bar.never_display_on(uuid)
 		local sc = rn.current_scene()
 		sc:entity_write(uuid, ".boundary_scale", 0.5)
 		sc:entity_write(uuid, ".movement_speed", 25)

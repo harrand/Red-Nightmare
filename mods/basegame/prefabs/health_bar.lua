@@ -85,12 +85,18 @@ rn.mods.basegame.prefabs.health_bar =
 	display = function(uuid, duration)
 		local sc = rn.current_scene()
 		local alive = rn.entity.prefabs.combat_stats.is_alive(uuid)
-		local already_has = sc:entity_read(uuid, "health_bar_active") ~= nil
-		if not alive or already_has then return end
-
-		sc:entity_write(uuid, "health_bar_active", true)
+		local already_has = sc:entity_read(uuid, "health_bar_active")
+		local display_disabled = sc:entity_read(uuid, "nohealthbar") ~= nil
+		if not alive or display_disabled then return end
+		if already_has ~= nil and sc:contains_entity(already_has) then
+			-- already_has is the uuid of the existing health bar. extend its duration back.
+			print("extending duration of " .. already_has)
+			rn.entity.prefabs.timed_despawn.set_duration(already_has, duration)
+			return
+		end
 
 		local me = sc:add_entity("health_bar")
+		sc:entity_write(uuid, "health_bar_active", me)
 		local base_offsetx = 0.0
 		local base_offsety = -1.0
 		local base_offsetz = 0.0
@@ -105,5 +111,8 @@ rn.mods.basegame.prefabs.health_bar =
 		rn.entity.prefabs.sticky.stick_to(inner, uuid, base_offsetx, base_offsety, base_offsetz + 0.01)
 		sc:entity_write(inner, "base_offsetx", base_offsetx)
 		sc:entity_write(inner, "base_offsety", base_offsety)
+	end,
+	never_display_on = function(uuid)
+		rn.current_scene():entity_write(uuid, "nohealthbar", true)
 	end
 }
