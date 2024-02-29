@@ -455,14 +455,29 @@ namespace game::messaging
 		{
 			TZ_PROFZONE("scene - add entity", 0xFF99CC44);
 			tz::lua::lua_generic arg = tz::lua::nil{};
+			auto uuid = static_cast<entity_uuid>(entity_uuid_counter.fetch_add(1));
 			if(state.stack_size() > 1)
 			{
 				arg = state.stack_get_generic(2);
+				// note: if arg is a string - it means its a prefab name.
+				// imagine the scenario:
+				/*
+				my_entity = rn.current_scene():add_entity("my_prefab")
+				local prefab_name = rn.current_scene():entity_read(my_entity, ".prefab")
+				*/
+				// for internal variables, this shouldnt be valid (coz the entity message hasnt been processed yet, but you're already asking to read from it.)
+				// *however*, .prefab ought to be a special case - that is technically known.
+				// lots of the lua codebase reads .prefab, so it's not as simple as saying "well the caller knows the prefab name, they should just use it again"
+				// forcing that to be the only way to deal with this would massively complicate the codebase - would need a special code path for everything to deal with this edge-case.
+				// what we do here is simple: right now, map the uuid to the prefab name locally to the lua state.
+				// note: local dispatch will clear this up for each lua state, so this table doesnt get big and eat memory.
+				std::string lua_code = std::format("rn.impl_prefab_map = rn.impl_prefab_map or {{}}; rn.impl_prefab_map[{}] = \"{}\"", uuid, std::get<std::string>(arg));
+				state.execute(lua_code.c_str());
 			}
+
 			// entity uuid is created *now* and instantly returned.
 			// caller now knows the entity id, even though it doesnt exist yet.
 			// subsequent messages that use the id *should* be processed after this one, making the whole thing safe.
-			auto uuid = static_cast<entity_uuid>(entity_uuid_counter.fetch_add(1));
 			local_scene_receiver.send_message
 			({
 				.operation = scene_operation::add_entity,
@@ -471,7 +486,6 @@ namespace game::messaging
 				.value = arg
 			});
 			// return the id as a uint.
-			// TODO: wrap userdata around this?
 			state.stack_push_uint(uuid);
 			return 1;
 		}
@@ -575,16 +589,49 @@ namespace game::messaging
 			TZ_PROFZONE("scene - entity read", 0xFF99CC44);
 			// reads instantly.
 			auto [_, uuid, varname] = tz::lua::parse_args<tz::lua::nil, unsigned int, std::string>(state);
-			// the code below may be necessary at some point, but seems like it will hide bugs down the line.
-			/*
+			// if the scene does not contain this entity, it's for one of two reasons:
+			// 1. the uuid is garbage nonsense and this is an error.
+			// 2. a message has just been sent (and thus not processing till the next update) that creates a new entity, and the caller has instantly performed a read on it.
+			// the code below tries to handle the 2nd case:
 			if(!sc->contains_entity(uuid))
 			{
 				// if the entity doesnt exist (hopefully meaning it was only created this frame, just return nil)
-				tz::assert(!was_deleted_this_frame(uuid), "Attempt to entity_read from uuid %zu, which was recently removed from the scene. Logic error.", uuid);
-				state.stack_push_nil();
+				tz::assert(!was_deleted_this_frame(uuid), "Attempt to entity_read from uuid %zu, which was recently removed from the scene (or is a garbage uuid value). Logic error.", uuid);
+				// see above in entity_create for this .prefab special case:
+				if(varname == ".prefab")
+				{
+					// this handles the following case:
+					/*
+					local sc = rn.current_scene()
+					local my_ent = sc:add_entity("my_poggers_prefab")
+					local prefab_name = sc:entity_read(my_ent, ".prefab")
+					-- prefab_name == "my_poggers_prefab" thanks to this hack.
+					*/
+					std::string lua_code = std::format("__luatmp = rn.impl_prefab_map[{}];", uuid);
+					state.execute(lua_code.c_str());
+					auto maybe_prefab_name = state.get_string("__luatmp");
+					if(maybe_prefab_name.has_value())
+					{
+						state.stack_push_string(maybe_prefab_name.value());
+						return 1;
+					}
+				}
+				else
+				{
+					// the caller has probably just sent a "create entity please" message and also just now tried to read from it.
+					// this is not an error. but, we can only return nil here.
+					// note: this means the following bug could occur:
+					/*
+					local sc = rn.current_scene()
+					local my_ent = sc:add_entity("my_poggers_prefab")
+					sc:entity_write(my_ent, "magic", 123)
+					local result = sc:entity_read(my_ent, "magic")
+					-- result == nil, not `123`
+					*/
+					state.stack_push_nil();
+				}
 				return 1;
 			}
-			*/
 			const auto& vars = sc->get_entity(uuid).internal_variables;
 			// note: this code could be ran concurrently.
 			// because all forms of scene/entity mutation are deferred, reading concurrently is safe here. note: the map operator[] accidentally constructing empties would be a data race here, so we are careful and use find() instead.
@@ -1057,6 +1104,8 @@ namespace game::messaging
 	{
 		TZ_PROFZONE("scene - pass local messages", 0xFF99CC44);
 		local_scene_receiver.update();
+		// clear our hacky global table up
+		tz::lua::get_state().execute("rn.impl_prefab_map = {}");
 	}
 
 	void scene_messaging_force_dispatches()

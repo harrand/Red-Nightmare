@@ -76,6 +76,7 @@ rn.mods.basegame =
 				rn.entity.prefabs.sprite.set_normal_map(bg, "background.grassy_normals")
 				rn.current_scene():entity_set_local_position(bg, 0.0, 0.0, -2.0)
 				local morb1 = rn.current_scene():add_entity("player_melistra")
+				rn.item.equip(morb1, "iron_sallet")
 				--rn.renderer():set_clear_colour(1.0, 0.5, 1.0, 1.0)
 
 				-- add a bunch more randoms
