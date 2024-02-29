@@ -50,3 +50,28 @@ rn.item.unequip = function(uuid, slot)
 		end
 	end
 end
+
+rn.item.unequip_all = function(uuid)
+	for i=1,rn.item.slot._count-1,1 do
+		rn.item.unequip(uuid, i)
+	end
+end
+
+rn.item.copy_equipment = function(uuid_from, uuid_to)
+	for i=1,rn.item.slot._count-1,1 do
+		local eq = rn.current_scene():entity_read(uuid_from, "equipment." .. tostring(i))
+		if eq ~= nil then
+			rn.item.equip(uuid_to, eq)
+		end
+	end
+end
+
+rn.item.move_equipment = function(uuid_from, uuid_to)
+	for i=1,rn.item.slot._count-1,1 do
+		local eq = rn.current_scene():entity_read(uuid_from, "equipment." .. tostring(i))
+		if eq ~= nil then
+			rn.item.equip(uuid_to, eq)
+			rn.item.unequip(uuid_from, i)
+		end
+	end
+end
