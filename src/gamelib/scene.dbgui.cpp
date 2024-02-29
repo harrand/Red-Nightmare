@@ -382,6 +382,7 @@ namespace game
 		ImGui::Text(title.c_str());
 
 		auto max_hp = evaluate_lua_double(std::format("rn.entity.prefabs.combat_stats.get_max_hp({})", uuid));
+		auto movement_speed = evaluate_lua_double(std::format("rn.entity.prefabs.combat_stats.get_movement_speed({})", uuid));
 		auto alive = evaluate_lua_bool(std::format("rn.entity.prefabs.combat_stats.is_alive({})", uuid));
 		auto dead = evaluate_lua_bool(std::format("rn.entity.prefabs.combat_stats.is_dead({})", uuid));
 		auto lost_hp = try_get_internal<double>(ent, "hp_lost").value_or(0.0);
@@ -391,14 +392,14 @@ namespace game
 			ImGui::Text("Not a combatant.");
 			return;
 		}
-		ImGui::Text("Max HP: %.2f", max_hp);
 		ImGui::Text("Invincible: %s", invincible ? "true" : "false");
 		ImGui::Text("Status: %s", alive ? "Alive" : "Dead");
 		double current_hp = max_hp - lost_hp;
 		tz::assert(current_hp >= 0.0f);
-		ImGui::Text("HP: %.1f (%.2f%%)", current_hp, 100.0 * current_hp / max_hp);
+		ImGui::Text("HP: %.1f/%.1f (%.2f%%)", current_hp, max_hp, 100.0 * current_hp / max_hp);
 
 		ImGui::Separator();
+		ImGui::Text("Movement Speed: %.1f", movement_speed);
 		auto physical_power = evaluate_lua_double(std::format("rn.entity.prefabs.combat_stats.get_physical_power({})", uuid));
 		auto fire_power = evaluate_lua_double(std::format("rn.entity.prefabs.combat_stats.get_fire_power({})", uuid));
 		auto frost_power = evaluate_lua_double(std::format("rn.entity.prefabs.combat_stats.get_frost_power({})", uuid));

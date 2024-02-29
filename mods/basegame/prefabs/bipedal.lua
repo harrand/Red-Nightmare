@@ -15,6 +15,7 @@ rn.mods.basegame.prefabs.bipedal =
 	description = "Entity is a 3D bipedal animated humanoid",
 	left_hand = 20,
 	right_hand = 24,
+	default_movement_speed = 6,
 	static_init = function()
 		rn.renderer():add_model("bipedal", "basegame/res/models/bipedal.glb")
 	end,
@@ -27,7 +28,7 @@ rn.mods.basegame.prefabs.bipedal =
 		sc:entity_set_subobject_pixelated(uuid, helm_subobj, true)
 		sc:entity_set_subobject_pixelated(uuid, chest_subobj, true)
 		sc:entity_set_subobject_pixelated(uuid, legs_subobj, true)
-		sc:entity_write(uuid, ".movement_speed", 6)
+		rn.entity.prefabs.combat_stats.set_base_movement_speed(uuid, rn.entity.prefabs.bipedal.default_movement_speed)
 		rn.entity.prefabs.bipedal.set_scale(uuid, 1.0, 1.0, 1.0)
 		rn.entity.prefabs.bipedal.set_visible(uuid, true)
 		--rn.entity.prefabs.bipedal.set_subobject_visible(uuid, helm_subobj, true)
@@ -45,8 +46,9 @@ rn.mods.basegame.prefabs.bipedal =
 	on_move = function(uuid, xdiff, ydiff, zdiff)
 		local sc = rn.current_scene()
 		local currently_playing = sc:entity_get_playing_animation(uuid)
+		local movement_haste = rn.entity.prefabs.combat_stats.get_movement_speed(uuid) / rn.entity.prefabs.bipedal.default_movement_speed
 		if currently_playing ~= "Run" then
-			rn.current_scene():entity_play_animation(uuid, "Run")
+			rn.current_scene():entity_play_animation(uuid, "Run", false, movement_haste)
 		end
 		-- if we're moving both horizontally and vertically, always prefer horizontal facing.
 		if math.abs(xdiff) >= math.abs(ydiff) then

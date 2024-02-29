@@ -169,6 +169,8 @@ rn.mods.basegame.prefabs.combat_stats =
 }
 
 rn_impl_create_combat_stat("max_hp")
+rn_impl_create_combat_stat("movement_speed")
+rn_impl_create_combat_stat("haste")
 for schoolname, schooldata in pairs(rn.spell.schools) do
 	rn_impl_create_combat_stat(schoolname .. "_power")
 	rn_impl_create_combat_stat(schoolname .. "_resist")

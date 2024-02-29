@@ -23,6 +23,7 @@ rn.mods.basegame.prefabs.player_melistra =
 		rn.entity.prefabs.combat_stats.set_base_max_hp(uuid, 20)
 		rn.entity.prefabs.combat_stats.set_base_fire_power(uuid, 10)
 		rn.entity.prefabs.combat_stats.set_base_fire_resist(uuid, 0.1)
+		rn.entity.prefabs.combat_stats.set_base_movement_speed(uuid, rn.entity.prefabs.bipedal.default_movement_speed)
 	end,
 	update = function(uuid, delta_seconds)
 		if rn.entity.prefabs.combat_stats.is_dead(uuid) then

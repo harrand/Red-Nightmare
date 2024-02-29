@@ -111,7 +111,7 @@ rn.entity.on_move = function(uuid, xdiff, ydiff, zdiff, delta_seconds)
 	local hypot = math.sqrt(xdiff^2 + ydiff^2 + zdiff^2)
 	local sc = rn.current_scene()
 
-	local movement_speed = sc:entity_read(uuid, ".movement_speed") or 0.0
+	local movement_speed = rn.entity.prefabs.combat_stats.get_movement_speed(uuid)
 	if (xdiff == 0.0 and ydiff == 0.0 and zdiff == 0.0) or hypot == 0.0 or movement_speed == 0.0 then
 		-- ignore if we haven't actually moved
 		return

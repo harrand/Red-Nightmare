@@ -17,7 +17,8 @@ rn.mods.basegame.prefabs.mouse_controlled =
 		if tarx ~= nil and tary ~= nil then
 			local dstx = tarx - x
 			local dsty = tary - y
-			if (dstx^2 + dsty^2) >= ((sc:entity_read(uuid, ".movement_speed") or 0.0) * delta_seconds)^2 then
+			local movement_speed = rn.entity.prefabs.combat_stats.get_movement_speed(uuid)
+			if (dstx^2 + dsty^2) >= (movement_speed * delta_seconds)^2 then
 				rn.entity.on_move(uuid, dstx, dsty, 0.0, delta_seconds)
 			end
 		end
