@@ -30,17 +30,18 @@ namespace game::messaging
 	std::vector<std::size_t> deleted_lights_this_frame = {};
 	std::vector<std::size_t> deleted_strings_this_frame = {};
 
+	bool was_deleted_this_frame(auto val)
+	{
+		return std::find(deleted_entities_this_frame.begin(), deleted_entities_this_frame.end(), val) != deleted_entities_this_frame.end() ||
+		std::find(deleted_entities_last_frame.begin(), deleted_entities_last_frame.end(), val) != deleted_entities_last_frame.end();
+	}
+
 	void on_scene_process_message(const scene_message& msg)
 	{
 		TZ_PROFZONE("scene message", 0xFF99CC44);
 		tz::assert(sc != nullptr);
 		// for reasons not immediately clear to me - in the edge-case of TONS of stuff happening in a very slow frame, with a clear at the end - shit goes wrong unless you catch deleted stuff from the past 2 frames instead of 1.
 		// i havent yet figured out why its necessary to check the last 2 frames - probably something to do with the latency of add_entity -> instantiate -> (clear goes here and causes trouble) -> messages from instantiate are ran on deleted entity = boom
-		auto was_deleted_this_frame = [](auto val)->bool
-		{
-			return std::find(deleted_entities_this_frame.begin(), deleted_entities_this_frame.end(), val) != deleted_entities_this_frame.end() ||
-			std::find(deleted_entities_last_frame.begin(), deleted_entities_last_frame.end(), val) != deleted_entities_last_frame.end();
-		};
 		auto light_was_deleted_this_frame = [](auto val)->bool
 		{
 			return std::find(deleted_lights_this_frame.begin(), deleted_lights_this_frame.end(), val) != deleted_lights_this_frame.end();
@@ -61,7 +62,7 @@ namespace game::messaging
 			{
 				TZ_PROFZONE("add entity", 0xFF99CC44);
 				auto val = std::any_cast<tz::lua::lua_generic>(msg.value);
-				std::visit([&msg, &was_deleted_this_frame](auto&& arg)
+				std::visit([&msg](auto&& arg)
 				{
 					using T = std::decay_t<decltype(arg)>;
 					if constexpr(std::is_same_v<T, std::string>) // add_entity(prefab_name) (instantiate from prefab)
@@ -574,6 +575,16 @@ namespace game::messaging
 			TZ_PROFZONE("scene - entity read", 0xFF99CC44);
 			// reads instantly.
 			auto [_, uuid, varname] = tz::lua::parse_args<tz::lua::nil, unsigned int, std::string>(state);
+			// the code below may be necessary at some point, but seems like it will hide bugs down the line.
+			/*
+			if(!sc->contains_entity(uuid))
+			{
+				// if the entity doesnt exist (hopefully meaning it was only created this frame, just return nil)
+				tz::assert(!was_deleted_this_frame(uuid), "Attempt to entity_read from uuid %zu, which was recently removed from the scene. Logic error.", uuid);
+				state.stack_push_nil();
+				return 1;
+			}
+			*/
 			const auto& vars = sc->get_entity(uuid).internal_variables;
 			// note: this code could be ran concurrently.
 			// because all forms of scene/entity mutation are deferred, reading concurrently is safe here. note: the map operator[] accidentally constructing empties would be a data race here, so we are careful and use find() instead.

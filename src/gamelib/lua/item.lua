@@ -7,7 +7,8 @@ rn.item.slot =
 	none = 0,
 	helm = 1,
 	chest = 2,
-	legs = 3
+	legs = 3,
+	_count = 4
 }
 
 rn.item.equip = function(uuid, item_name)

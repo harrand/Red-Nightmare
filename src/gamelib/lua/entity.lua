@@ -61,6 +61,16 @@ rn.entity.update = function(uuid, delta_seconds)
 		end
 	end
 
+	for i=0,rn.item.slot._count-1,1 do
+		local item = sc:entity_read(uuid, "equipment." .. i)
+		if item ~= nil then
+			local itemdata = rn.item.items[item]
+			if itemdata.on_update ~= nil then
+				itemdata.on_update(uuid, delta_seconds)
+			end
+		end
+	end
+
 	-- if the entity is casting a spell, that also needs to advance.
 	rn.spell.advance(uuid)
 	if not moving and sc:entity_read(uuid, "moving_last_frame") == true then
