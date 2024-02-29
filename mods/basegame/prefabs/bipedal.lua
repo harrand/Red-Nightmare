@@ -46,9 +46,9 @@ rn.mods.basegame.prefabs.bipedal =
 	on_move = function(uuid, xdiff, ydiff, zdiff)
 		local sc = rn.current_scene()
 		local currently_playing = sc:entity_get_playing_animation(uuid)
-		local movement_haste = rn.entity.prefabs.combat_stats.get_movement_speed(uuid) / rn.entity.prefabs.bipedal.default_movement_speed
+		local movement_anim_multiplier = rn.entity.prefabs.combat_stats.get_movement_speed(uuid) / rn.entity.prefabs.bipedal.default_movement_speed
 		if currently_playing ~= "Run" then
-			rn.current_scene():entity_play_animation(uuid, "Run", false, movement_haste)
+			rn.current_scene():entity_play_animation(uuid, "Run", false, movement_anim_multiplier)
 		end
 		-- if we're moving both horizontally and vertically, always prefer horizontal facing.
 		if math.abs(xdiff) >= math.abs(ydiff) then
@@ -61,7 +61,12 @@ rn.mods.basegame.prefabs.bipedal =
 	end,
 	on_cast_begin = function(uuid, spellname)
 		local spelldata = rn.spell.spells[spellname]
-		local cast_duration = spelldata.cast_duration
+		local base_cast_time = spelldata.cast_duration
+
+		local haste = rn.entity.prefabs.combat_stats.get_haste(uuid) or 0.0
+		-- new_casting_time = base_casting_time / (1 + haste)
+		local cast_duration = base_cast_time / (1.0 + haste)
+
 		local cast_anim = nil
 		if spelldata.two_handed == true then
 			if spelldata.cast_type == "omni" then

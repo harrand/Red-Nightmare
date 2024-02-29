@@ -66,8 +66,12 @@ rn.spell.advance = function(uuid)
 		return
 	end
 
-	local is_instant_cast = spelldata.cast_duration == nil or spelldata.cast_duration == 0.0
-	local cast_completed = tz.time() > (spell_began + (spelldata.cast_duration or 0.0) * 1000.0)
+	local base_cast_time = spelldata.cast_duration
+	local haste = rn.entity.prefabs.combat_stats.get_haste(uuid) or 0.0
+	-- new_casting_time = base_casting_time / (1 + haste)
+	local cast_time = base_cast_time / (1.0 + haste)
+	local is_instant_cast = cast_time == nil or cast_time == 0.0
+	local cast_completed = tz.time() > (spell_began + (cast_time or 0.0) * 1000.0)
 	if is_instant_cast or cast_completed then
 
 
