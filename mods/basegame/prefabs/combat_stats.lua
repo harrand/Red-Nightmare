@@ -129,7 +129,9 @@ rn.mods.basegame.prefabs.combat_stats =
 
 		-- display health bar on healee
 		-- for 5 seconds.
-		rn.entity.prefabs.health_bar.display(uuid, 5.0)
+		if real_healing > 0.0 then
+			rn.entity.prefabs.health_bar.display(uuid, 5.0)
+		end
 
 	end,
 	dmg = function(uuid, dmg, magic_type, enemy_uuid)
