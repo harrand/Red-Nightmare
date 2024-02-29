@@ -313,6 +313,7 @@ namespace game
 						{
 							if(ImGui::TreeNode(item.name.c_str()))
 							{
+								ImGui::Text("%s", item.tooltip.c_str());
 								ImGui::Text("Slot ID: %zu", item.slot_id);
 								ImGui::TreePop();
 							}

@@ -55,7 +55,7 @@ namespace game::meta
 	LUA_END
 
 	LUA_BEGIN(rn_inform_item)
-		auto [name, mod, slot_id] = tz::lua::parse_args<std::string, std::string, unsigned int>(state);
+		auto [name, mod, tooltip, slot_id] = tz::lua::parse_args<std::string, std::string, std::string, unsigned int>(state);
 		auto iter = std::find_if(internal_mod_list.begin(), internal_mod_list.end(),
 		[&mod](const auto& cur_mod)
 		{
@@ -63,7 +63,7 @@ namespace game::meta
 		});
 		tz::assert(iter != internal_mod_list.end());
 		std::size_t mod_id = std::distance(internal_mod_list.begin(), iter);
-		internal_item_list.push_back({.name = name, .mod_id = mod_id, .slot_id = slot_id});
+		internal_item_list.push_back({.name = name, .mod_id = mod_id, .tooltip = tooltip, .slot_id = slot_id});
 		return 0;
 	LUA_END
 
@@ -131,7 +131,7 @@ namespace game::meta
 
 			-- reflect items
 			for itemname, itemdata in pairs(rn.item.items) do
-				rn.inform_item(itemname, itemdata.mod, itemdata.slot_id or rn.item.slot.none)
+				rn.inform_item(itemname, itemdata.mod, itemdata.tooltip or "<No Tooltip>", itemdata.slot or rn.item.slot.none)
 			end
 		)");
 	}

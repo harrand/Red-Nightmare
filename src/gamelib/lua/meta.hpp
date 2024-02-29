@@ -40,6 +40,7 @@ namespace game::meta
 	{
 		std::string name;
 		std::size_t mod_id;
+		std::string tooltip;
 		std::size_t slot_id;
 	};
 
