@@ -739,6 +739,27 @@ namespace game::render
 		return 0;
 	}
 
+	int impl_rn_scene_renderer::get_ambient_light(tz::lua::state& state)
+	{
+		tz::vec3 col = this->renderer->get_ambient_light();
+		state.stack_push_float(col[0]);
+		state.stack_push_float(col[1]);
+		state.stack_push_float(col[2]);
+		return 3;
+	}
+
+	int impl_rn_scene_renderer::set_ambient_light(tz::lua::state& state)
+	{
+		auto [_, r, g, b] = tz::lua::parse_args<tz::lua::nil, float, float, float>(state);
+		game::messaging::scene_insert_message
+		({
+			.operation = game::messaging::scene_operation::renderer_set_ambient_light,
+			.uuid = std::numeric_limits<entity_uuid>::max(),
+			.value = tz::vec3{r, g, b}
+		});
+		return 0;
+	}
+
 	int impl_rn_scene_renderer::add_texture(tz::lua::state& state)
 	{
 		auto [_, name, relpath] = tz::lua::parse_args<tz::lua::nil, std::string, std::string>(state);

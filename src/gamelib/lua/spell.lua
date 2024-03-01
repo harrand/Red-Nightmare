@@ -38,6 +38,13 @@ rn.spell.cast = function(uuid, spell_name)
 	sc:entity_write(uuid, "cast.begin", tz.time())
 	rn.spell.create_effect_on(uuid, spell_name)
 	rn.entity.on_cast_begin(uuid, spell_name)
+
+	local spelldata = rn.spell.spells[spell_name]
+	if spelldata ~= nil then
+		if spelldata.on_cast_begin ~= nil then
+			spelldata.on_cast_begin(uuid)
+		end
+	end
 end
 
 rn.spell.is_casting = function(uuid)
@@ -102,8 +109,11 @@ rn.spell.advance = function(uuid)
 		return
 	end
 
+	local cast_elapsed = tz.time() - spell_began
+	local cast_progress = cast_elapsed / (cast_time * 1000.0)
+
 	if spelldata.advance ~= nil then
-		spelldata.advance(uuid)
+		spelldata.advance(uuid, cast_progress)
 	end
 end
 

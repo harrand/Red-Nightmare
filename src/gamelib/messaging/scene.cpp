@@ -276,6 +276,13 @@ namespace game::messaging
 				sc->get_renderer().set_clear_colour(rgba);
 			}
 			break;
+			case scene_operation::renderer_set_ambient_light:
+			{
+				TZ_PROFZONE("renderer set ambient light", 0xFF99CC44);
+				tz::vec3 rgb = std::any_cast<tz::vec3>(msg.value);
+				sc->get_renderer().set_ambient_light(rgb);
+			}
+			break;
 			case scene_operation::renderer_add_texture:
 			{
 				TZ_PROFZONE("renderer add texture", 0xFF99CC44);

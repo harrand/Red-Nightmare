@@ -210,6 +210,7 @@ require("basegame/prefabs/melee_swing_area")
 
 require("basegame/prefabs/players/player_melistra")
 
+require("basegame/spells/firestorm")
 require("basegame/spells/flash_of_light")
 require("basegame/spells/lesser_firebolt")
 require("basegame/spells/lesser_frostbolt")
