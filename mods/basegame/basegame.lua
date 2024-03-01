@@ -78,7 +78,6 @@ rn.mods.basegame =
 				local morb1 = rn.current_scene():add_entity("player_melistra")
 				rn.item.equip(morb1, "iron_sallet")
 				-- OMEGA 900% HASTE
-				rn.entity.prefabs.combat_stats.set_base_haste(morb1, 9.0)
 				--rn.renderer():set_clear_colour(1.0, 0.5, 1.0, 1.0)
 
 				-- add a bunch more randoms
@@ -121,6 +120,23 @@ rn.mods.basegame =
 			end,
 			finish = function(uuid)
 				rn.current_scene():entity_write(uuid, "morbing", true)
+			end
+		},
+		melee =
+		{
+			cast_duration = 0.75,
+			magic_type = "physical",
+			finish = function(uuid)
+				local swing = rn.current_scene():add_entity("melee_swing_area")
+				rn.entity.prefabs.melee_swing_area.set_caster(swing, uuid)
+				rn.entity.prefabs.timed_despawn.set_duration(swing, 1.0)
+				local x, y
+				if rn.current_scene():entity_get_model(uuid) == "bipedal" then
+					x, y, _ = rn.current_scene():entity_get_global_position(uuid, rn.entity.prefabs.bipedal.right_hand)
+				else
+					local x, y = rn.entity.prefabs.sprite.get_position(uuid)
+				end
+				rn.entity.prefabs.sprite.set_position(swing, x, y)
 			end
 		}
 	},
@@ -190,13 +206,13 @@ require("basegame/prefabs/obstacle")
 require("basegame/prefabs/invisible_wall")
 require("basegame/prefabs/floating_combat_text")
 require("basegame/prefabs/health_bar")
+require("basegame/prefabs/melee_swing_area")
 
 require("basegame/prefabs/players/player_melistra")
 
 require("basegame/spells/flash_of_light")
 require("basegame/spells/lesser_firebolt")
 require("basegame/spells/lesser_frostbolt")
-
 
 require("basegame/items/fiery_hauberk")
 require("basegame/items/white_legion_helm")

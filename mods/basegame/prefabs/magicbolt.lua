@@ -17,6 +17,7 @@ rn.mods.basegame.prefabs.magic_ball_base =
 		rn.entity.prefabs.health_bar.never_display_on(uuid)
 		local sc = rn.current_scene()
 		sc:entity_write(uuid, ".boundary_scale", 0.5)
+		sc:entity_write(uuid, ".is_projectile", true)
 		rn.entity.prefabs.combat_stats.set_base_movement_speed(uuid, 25)
 	end,
 	update = function(uuid, delta_seconds)

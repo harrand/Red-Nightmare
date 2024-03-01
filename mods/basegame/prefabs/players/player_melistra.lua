@@ -19,6 +19,7 @@ rn.mods.basegame.prefabs.player_melistra =
 		rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 1, "lesser_firebolt")
 		rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 2, "lesser_frostbolt")
 		rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 3, "flash_of_light")
+		rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 4, "melee")
 
 		rn.entity.prefabs.combat_stats.set_base_max_hp(uuid, 20)
 		rn.entity.prefabs.combat_stats.set_base_fire_power(uuid, 10)

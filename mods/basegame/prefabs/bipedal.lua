@@ -68,17 +68,21 @@ rn.mods.basegame.prefabs.bipedal =
 		local cast_duration = base_cast_time / (1.0 + haste)
 
 		local cast_anim = nil
-		if spelldata.two_handed == true then
-			if spelldata.cast_type == "omni" then
-				cast_anim = "Cast2H_Omni"
-			else
-				cast_anim = "Cast2H_Directed"
-			end
+		if spelldata.magic_type == "physical" or spelldata.magic_type == nil then
+			cast_anim = "Attack1H_Horizontal"
 		else
-			if spelldata.cast_type == "omni" then
-				cast_anim = "Cast1H_Omni"
+			if spelldata.two_handed == true then
+				if spelldata.cast_type == "omni" then
+					cast_anim = "Cast2H_Omni"
+				else
+					cast_anim = "Cast2H_Directed"
+				end
 			else
-				cast_anim = "Cast1H_Directed"
+				if spelldata.cast_type == "omni" then
+					cast_anim = "Cast1H_Omni"
+				else
+					cast_anim = "Cast1H_Directed"
+				end
 			end
 		end
 		local animation_duration = rn.current_scene():entity_get_animation_length(uuid, cast_anim)

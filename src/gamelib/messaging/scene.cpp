@@ -846,7 +846,16 @@ namespace game::messaging
 				return scren.get_renderer().animated_object_get_local_transform(cmp.obj);
 			}
 			auto subobjects = scren.get_renderer().animated_object_get_subobjects(cmp.obj);
-			auto objh = subobjects[std::get<double>(maybe_subobject)];
+			unsigned int subobject_val;
+			if(std::holds_alternative<double>(maybe_subobject))
+			{
+				subobject_val = std::get<double>(maybe_subobject);
+			}
+			else
+			{
+				subobject_val = std::get<std::int64_t>(maybe_subobject);
+			}
+			auto objh = subobjects[subobject_val];
 			return scren.get_renderer().object_get_local_transform(objh);
 		}
 
@@ -869,7 +878,16 @@ namespace game::messaging
 				return scren.get_renderer().animated_object_get_global_transform(cmp.obj);
 			}
 			auto subobjects = scren.get_renderer().animated_object_get_subobjects(cmp.obj);
-			auto objh = subobjects[std::get<double>(maybe_subobject)];
+			unsigned int subobject_val;
+			if(std::holds_alternative<double>(maybe_subobject))
+			{
+				subobject_val = std::get<double>(maybe_subobject);
+			}
+			else
+			{
+				subobject_val = std::get<std::int64_t>(maybe_subobject);
+			}
+			auto objh = subobjects[subobject_val];
 			return scren.get_renderer().object_get_global_transform(objh);
 		}
 
