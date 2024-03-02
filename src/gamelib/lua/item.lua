@@ -8,7 +8,9 @@ rn.item.slot =
 	helm = 1,
 	chest = 2,
 	legs = 3,
-	_count = 4
+	left_hand = 4,
+	right_hand = 5,
+	_count = 6
 }
 
 rn.item.equip = function(uuid, item_name)

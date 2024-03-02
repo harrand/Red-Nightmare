@@ -95,17 +95,41 @@ rn.mods.basegame.prefabs.bipedal =
 		rn.current_scene():entity_play_animation(uuid, "Death")
 	end,
 	on_equip = function(uuid, itemname)
+		local sc = rn.current_scene()
 		local itemdata = rn.item.items[itemname]
 		local subobject = rn.entity.prefabs.bipedal.item_slot_to_subobject(itemdata.slot)
-		rn.entity.prefabs.bipedal.set_subobject_visible(uuid, subobject, true)
-		local col = itemdata.colour or {1.0, 1.0, 1.0}
-		rn.entity.prefabs.bipedal.set_subobject_colour(uuid, subobject, col[1], col[2], col[3])
-		rn.entity.prefabs.bipedal.set_subobject_texture(uuid, subobject, itemdata.texture)
+		if (itemdata.slot ~= rn.item.slot.left_hand) and (itemdata.slot ~= rn.item.slot.right_hand) then
+			-- armour
+			rn.entity.prefabs.bipedal.set_subobject_visible(uuid, subobject, true)
+			local col = itemdata.colour or {1.0, 1.0, 1.0}
+			rn.entity.prefabs.bipedal.set_subobject_colour(uuid, subobject, col[1], col[2], col[3])
+			rn.entity.prefabs.bipedal.set_subobject_texture(uuid, subobject, itemdata.texture)
+		else
+			-- weapon
+			local prefab_name = itemdata.weapon_prefab
+
+			tz.assert(prefab_name ~= nil, "no weapon_prefab specified by item " .. itemname)
+
+			local weapon_entity = sc:add_entity(prefab_name)
+			rn.entity.prefabs.sprite.set_colour(weapon_entity, itemdata.colour[1], itemdata.colour[2], itemdata.colour[3])
+			rn.entity.prefabs.sticky.stick_to_subobject(weapon_entity, uuid, subobject, true, false)
+			sc:entity_write(uuid, "weapon_entity", weapon_entity)
+		end
 	end,
 	on_unequip = function(uuid, itemname)
+		local sc = rn.current_scene()
 		local itemdata = rn.item.items[itemname]
 		local subobject = rn.entity.prefabs.bipedal.item_slot_to_subobject(itemdata.slot)
-		rn.entity.prefabs.bipedal.set_subobject_visible(uuid, subobject, false)
+		if (itemdata.slot ~= rn.item.slot.left_hand) and (itemdata.slot ~= rn.item.slot.right_hand) then
+			-- armour
+			rn.entity.prefabs.bipedal.set_subobject_visible(uuid, subobject, false)
+		else
+			-- weapon
+			local weapon_entity = sc:entity_read(uuid, "weapon_entity")
+			tz.assert(weapon_entity ~= nil, "no weapon entity?")
+			sc:entity_write(uuid, "weapon_entity", nil)
+			sc:remove_entity(weapon_entity)
+		end
 	end,
 	item_slot_to_subobject = function(itemslot)
 		if itemslot == rn.item.slot.none then
@@ -116,6 +140,10 @@ rn.mods.basegame.prefabs.bipedal =
 			return chest_subobj
 		elseif itemslot == rn.item.slot.legs then
 			return legs_subobj
+		elseif itemslot == rn.item.slot.left_hand then
+			return rn.mods.basegame.prefabs.bipedal.left_hand
+		elseif itemslot == rn.item.slot.right_hand then
+			return rn.mods.basegame.prefabs.bipedal.right_hand
 		else
 			tz.assert(false, "Unknown item slot " .. itemslot)
 		end
