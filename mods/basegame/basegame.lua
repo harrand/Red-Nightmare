@@ -77,6 +77,9 @@ rn.mods.basegame =
 				rn.current_scene():entity_set_local_position(bg, 0.0, 0.0, -2.0)
 				local morb1 = rn.current_scene():add_entity("player_melistra")
 				rn.item.equip(morb1, "iron_sallet")
+				rn.item.equip(morb1, "iron_chainmail")
+				rn.item.equip(morb1, "iron_chainlegs")
+				rn.item.equip(morb1, "holy_water_sprinkler")
 				-- OMEGA 900% HASTE
 				--rn.renderer():set_clear_colour(1.0, 0.5, 1.0, 1.0)
 
@@ -215,6 +218,7 @@ require("basegame/prefabs/melee_swing_area")
 require("basegame/prefabs/players/player_melistra")
 
 require("basegame/prefabs/weapon_models/sword")
+require("basegame/prefabs/weapon_models/morning_star")
 
 require("basegame/spells/firestorm")
 require("basegame/spells/flash_of_light")
@@ -222,5 +226,6 @@ require("basegame/spells/lesser_firebolt")
 require("basegame/spells/lesser_frostbolt")
 
 require("basegame/items/fiery_hauberk")
+require("basegame/items/holy_water_sprinkler")
 require("basegame/items/steel_longsword")
 require("basegame/items/white_legion_helm")
