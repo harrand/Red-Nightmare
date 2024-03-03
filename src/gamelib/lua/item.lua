@@ -53,6 +53,10 @@ rn.item.unequip = function(uuid, slot)
 	end
 end
 
+rn.item.get_equipped = function(uuid, slot)
+	return rn.current_scene():entity_read(uuid, "equipment." .. tostring(slot))
+end
+
 rn.item.unequip_all = function(uuid)
 	for i=1,rn.item.slot._count-1,1 do
 		rn.item.unequip(uuid, i)
@@ -76,4 +80,12 @@ rn.item.move_equipment = function(uuid_from, uuid_to)
 			rn.item.unequip(uuid_from, i)
 		end
 	end
+end
+
+rn.item.drop = function(item_name, x, y)
+	local posx = x or 0.0
+	local posy = y or 0.0
+	local drop = rn.current_scene():add_entity("loot_drop")
+	rn.entity.prefabs.loot_drop.set_position(drop, posx, posy)	
+	rn.item.equip(drop, item_name)
 end

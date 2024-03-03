@@ -257,5 +257,11 @@ rn.mods.basegame.prefabs.bipedal =
 		y = y * base_scale
 		z = z * base_scale
 		return x, y, z
-	end
+	end,
+	get_can_equip = function(uuid)
+		return rn.current_scene():entity_read(uuid, "can_equip")
+	end,
+	set_can_equip = function(uuid, can_equip)
+		rn.current_scene():entity_write(uuid, "can_equip", can_equip)
+	end,
 }

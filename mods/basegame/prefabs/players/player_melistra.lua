@@ -12,6 +12,7 @@ rn.mods.basegame.prefabs.player_melistra =
 	instantiate = function(uuid)
 		rn.entity.prefabs.keyboard_controlled.instantiate(uuid)
 		rn.entity.prefabs.bipedal.instantiate(uuid)
+		rn.entity.prefabs.bipedal.set_can_equip(uuid, true)
 		rn.entity.prefabs.bipedal.set_texture(uuid, "skin.melistra")
 		--rn.entity.prefabs.bipedal.set_helm_visible(uuid, true)
 		--rn.entity.prefabs.bipedal.set_helm_texture(uuid, "helm.full")
