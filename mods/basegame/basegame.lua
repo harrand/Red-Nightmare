@@ -215,6 +215,7 @@ require("basegame/prefabs/invisible_wall")
 require("basegame/prefabs/floating_combat_text")
 require("basegame/prefabs/health_bar")
 require("basegame/prefabs/melee_swing_area")
+require("basegame/prefabs/zombie")
 
 require("basegame/prefabs/players/player_melistra")
 

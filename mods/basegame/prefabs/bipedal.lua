@@ -38,7 +38,7 @@ rn.mods.basegame.prefabs.bipedal =
 	update = function(uuid, delta_seconds)
 		local sc = rn.current_scene()
 		local currently_playing = sc:entity_get_playing_animation(uuid)
-		local should_stop_move_animation = currently_playing == "Run" and not moving
+		local should_stop_move_animation = (currently_playing == rn.entity.prefabs.bipedal.get_run_animation(uuid)) and not moving
 		if currently_playing == nil then
 			sc:entity_play_animation(uuid, "CastIdle")
 		end
@@ -47,8 +47,9 @@ rn.mods.basegame.prefabs.bipedal =
 		local sc = rn.current_scene()
 		local currently_playing = sc:entity_get_playing_animation(uuid)
 		local movement_anim_multiplier = rn.entity.prefabs.combat_stats.get_movement_speed(uuid) / rn.entity.prefabs.bipedal.default_movement_speed
-		if currently_playing ~= "Run" then
-			rn.current_scene():entity_play_animation(uuid, "Run", false, movement_anim_multiplier)
+		local anim = rn.entity.prefabs.bipedal.get_run_animation(uuid)
+		if currently_playing ~= anim then
+			rn.current_scene():entity_play_animation(uuid, anim, false, movement_anim_multiplier)
 		end
 		-- if we're moving both horizontally and vertically, always prefer horizontal facing.
 		if math.abs(xdiff) >= math.abs(ydiff) then
@@ -265,4 +266,10 @@ rn.mods.basegame.prefabs.bipedal =
 	set_can_equip = function(uuid, can_equip)
 		rn.current_scene():entity_write(uuid, "can_equip", can_equip)
 	end,
+	set_run_animation = function(uuid, run_anim)
+		rn.current_scene():entity_write(uuid, "run_animation", run_anim)
+	end,
+	get_run_animation = function(uuid)
+		return rn.current_scene():entity_read(uuid, "run_animation") or "Run"
+	end
 }

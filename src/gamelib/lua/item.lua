@@ -136,7 +136,9 @@ rn.item.drop_equipment = function(uuid, slot)
 	if equipped ~= nil then
 		rn.item.unequip(uuid, slot)
 		local drop = rn.item.drop_at(x, y, equipped)
-		rn.entity.prefabs.loot_drop.set_blacklisted(drop, uuid)
+		if drop ~= nil then
+			rn.entity.prefabs.loot_drop.set_blacklisted(drop, uuid)
+		end
 	end
 end
 
@@ -152,12 +154,17 @@ rn.item.drop_all_equipment = function(uuid)
 	end
 	if equipped ~= {} then
 		local drop = rn.item.drop_at(x, y, table.unpack(equipped))
-		rn.entity.prefabs.loot_drop.set_blacklisted(drop, uuid)
+		if drop ~= nil then
+			rn.entity.prefabs.loot_drop.set_blacklisted(drop, uuid)
+		end
 	end
 end
 
 rn.item.drop = function(...)
 	local args = table.pack(...)
+	if args.n == 0 then
+		return nil
+	end
 	local drop = rn.current_scene():add_entity("loot_drop")
 	for i=1,args.n do
 		local itemname = args[i]
@@ -168,6 +175,8 @@ end
 
 rn.item.drop_at = function(xpos, ypos, ...)
 	local drop = rn.item.drop(...)
-	rn.entity.prefabs.sprite.set_position(drop, xpos, ypos)
+	if drop ~= nil then
+		rn.entity.prefabs.sprite.set_position(drop, xpos, ypos)
+	end
 	return drop
 end
