@@ -45,7 +45,7 @@ rn.mods.basegame.prefabs.loot_drop =
 	on_equip = rn.mods.basegame.prefabs.bipedal.on_equip,
 	on_unequip = rn.mods.basegame.prefabs.bipedal.on_unequip,
 	on_collision = function(me, other)
-		local should_equip_me = rn.entity.prefabs.bipedal.get_can_equip(other)
+		local should_equip_me = rn.entity.prefabs.bipedal.get_can_equip(other) and rn.entity.prefabs.combat_stats.is_alive(other)
 		if not should_equip_me then
 			return false
 		end
