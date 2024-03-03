@@ -11,5 +11,6 @@ rn.mods.basegame.items.steel_longsword =
 	end,
 	slot = rn.item.slot.right_hand,
 	colour = {0.62, 0.6, 0.69},
+	rarity = "rare",
 	weapon_prefab = "weapon_model_sword"
 }

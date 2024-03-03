@@ -27,5 +27,6 @@ rn.mods.basegame.items.white_legion_helm =
 	end,
 	slot = rn.item.slot.helm,
 	colour = {0.8, 0.8, 0.8},
+	rarity = "rare",
 	texture = "helm.full_helm"
 }

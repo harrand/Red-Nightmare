@@ -38,5 +38,6 @@ rn.mods.basegame.items.fiery_hauberk =
 	end,
 	slot = rn.item.slot.chest,
 	colour = {0.3, 0.05, 0.1},
+	rarity = "epic",
 	texture = "chest.platebody",
 }
