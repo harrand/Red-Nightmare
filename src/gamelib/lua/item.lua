@@ -130,10 +130,44 @@ rn.item.move_equipment = function(uuid_from, uuid_to)
 	end
 end
 
-rn.item.drop = function(item_name, x, y)
-	local posx = x or 0.0
-	local posy = y or 0.0
+rn.item.drop_equipment = function(uuid, slot)
+	local equipped = rn.item.get_equipped(uuid, slot)
+	local x, y = rn.entity.prefabs.sprite.get_position(uuid)
+	if equipped ~= nil then
+		rn.item.unequip(uuid, slot)
+		local drop = rn.item.drop_at(x, y, equipped)
+		rn.entity.prefabs.loot_drop.set_blacklisted(drop, uuid)
+	end
+end
+
+rn.item.drop_all_equipment = function(uuid)
+	local equipped = {}
+	local x, y = rn.entity.prefabs.sprite.get_position(uuid)
+	for i=1,rn.item.slot._count-1,1 do
+		local cur_equipped = rn.item.get_equipped(uuid, i)
+		if cur_equipped ~= nil then
+			rn.item.unequip(uuid, i)
+			table.insert(equipped, cur_equipped)
+		end
+	end
+	if equipped ~= {} then
+		local drop = rn.item.drop_at(x, y, table.unpack(equipped))
+		rn.entity.prefabs.loot_drop.set_blacklisted(drop, uuid)
+	end
+end
+
+rn.item.drop = function(...)
+	local args = table.pack(...)
 	local drop = rn.current_scene():add_entity("loot_drop")
-	rn.entity.prefabs.loot_drop.set_position(drop, posx, posy)	
-	rn.item.equip(drop, item_name)
+	for i=1,args.n do
+		local itemname = args[i]
+		rn.item.equip(drop, itemname)
+	end
+	return drop
+end
+
+rn.item.drop_at = function(xpos, ypos, ...)
+	local drop = rn.item.drop(...)
+	rn.entity.prefabs.sprite.set_position(drop, xpos, ypos)
+	return drop
 end

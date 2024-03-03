@@ -93,6 +93,7 @@ rn.mods.basegame.prefabs.bipedal =
 	end,
 	on_death = function(uuid, dmg, magic_type, enemy_uuid)
 		rn.current_scene():entity_play_animation(uuid, "Death")
+		rn.item.drop_all_equipment(uuid)
 	end,
 	on_equip = function(uuid, itemname)
 		local sc = rn.current_scene()
