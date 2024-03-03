@@ -13,6 +13,40 @@ rn.item.slot =
 	_count = 6
 }
 
+rn.item.rarity =
+{
+	common =
+	{
+		colour = {0.57735, 0.57735, 0.57735},
+		pretty_name = "Common",
+		impl_index = 0
+	},
+	uncommon = 
+	{
+		colour = {0.331295, 0.883452, 0.331295},
+		pretty_name = "Uncommon",
+		impl_index = 1
+	},
+	rare =
+	{
+		colour = {0.251498, 0.402396, 0.880242},
+		pretty_name = "Rare",
+		impl_index = 2
+	},
+	epic =
+	{
+		colour = {0.699127, 0.149813, 0.699127},
+		pretty_name = "Epic",
+		impl_index = 3
+	},
+	legendary =
+	{
+		colour = {0.991228, 0.0, 0.132164},
+		pretty_name = "Legendary",
+		impl_index = 4
+	}
+}
+
 rn.item.equip = function(uuid, item_name)
 	local obj <close> = tz.profzone_obj:new()
 	obj:set_text(tostring(uuid))
@@ -55,6 +89,20 @@ end
 
 rn.item.get_equipped = function(uuid, slot)
 	return rn.current_scene():entity_read(uuid, "equipment." .. tostring(slot))
+end
+
+rn.item.get_highest_equipped_rarity = function(uuid)
+	local max_rarity = "common"
+	for i=1,rn.item.slot._count-1,1 do
+		local equipped = rn.item.get_equipped(uuid, i)
+		if equipped ~= nil then
+			local cur_rarity = rn.item.items[equipped].rarity or "common"
+			if rn.item.rarity[cur_rarity].impl_index > rn.item.rarity[max_rarity].impl_index then
+				max_rarity = cur_rarity
+			end
+		end
+	end
+	return max_rarity
 end
 
 rn.item.unequip_all = function(uuid)

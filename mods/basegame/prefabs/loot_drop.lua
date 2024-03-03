@@ -33,10 +33,12 @@ rn.mods.basegame.prefabs.loot_drop =
 		end
 		rn.entity.prefabs.bipedal.set_rotation(uuid, xrot, yrot, zrot)
 		rn.entity.prefabs.bipedal.set_position(uuid, 0.0, 0.2 * math.sin(t), 0.0)
+		local max_rarity = rn.item.get_highest_equipped_rarity(uuid)
+		local rarity_colour = rn.item.rarity[max_rarity].colour
 
 		if rn.entity.prefabs.light_emitter.exists(uuid) then
 			rn.entity.prefabs.light_emitter.set_power(uuid, 1.25)
-			rn.entity.prefabs.light_emitter.set_colour(uuid, 1.0, 1.0, 1.0)
+			rn.entity.prefabs.light_emitter.set_colour(uuid, rarity_colour[1], rarity_colour[2], rarity_colour[3])
 			rn.entity.prefabs.light_emitter.update(uuid, delta_seconds)
 		end
 	end,
