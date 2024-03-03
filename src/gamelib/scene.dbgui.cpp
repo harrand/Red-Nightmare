@@ -311,12 +311,16 @@ namespace game
 					{
 						for(auto item : owned_items)
 						{
+							ImVec4 col{item.rarity_colour[0], item.rarity_colour[1], item.rarity_colour[2], 1.0f};
+							ImGui::PushStyleColor(ImGuiCol_Text, col);
 							if(ImGui::TreeNode(item.name.c_str()))
 							{
 								ImGui::Text("%s", item.tooltip.c_str());
 								ImGui::Text("Slot ID: %zu", item.slot_id);
+								ImGui::Text("Rarity: %s", item.rarity.c_str());
 								ImGui::TreePop();
 							}
+							ImGui::PopStyleColor();
 						}
 						ImGui::TreePop();
 					}

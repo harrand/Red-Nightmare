@@ -1,6 +1,7 @@
 #ifndef REDNIGHTMARE_GAMELIB_LUA_META_HPP
 #define REDNIGHTMARE_GAMELIB_LUA_META_HPP
 #include "tz/lua/state.hpp"
+#include "tz/core/data/vector.hpp"
 
 namespace game::meta
 {
@@ -42,6 +43,8 @@ namespace game::meta
 		std::size_t mod_id;
 		std::string tooltip;
 		std::size_t slot_id;
+		std::string rarity;
+		tz::vec3 rarity_colour;
 	};
 
 	std::span<modinfo_t> get_mods();
