@@ -522,7 +522,7 @@ namespace game::render
 		std::array<float, 2> dimension_buffer_data;
 		dimension_buffer_data[0] = mondims[0];
 		dimension_buffer_data[1] = mondims[1];
-		this->zoom_buffer = rinfo.add_resource(tz::gl::buffer_resource::from_one(1.25f,
+		this->zoom_buffer = rinfo.add_resource(tz::gl::buffer_resource::from_one(1.75f,
 		{
 			.access = tz::gl::resource_access::dynamic_access
 		}));
