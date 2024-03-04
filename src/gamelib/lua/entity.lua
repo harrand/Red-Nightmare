@@ -108,6 +108,7 @@ rn.entity.on_collision = function(uuid_a, uuid_b)
 end
 
 rn.entity.on_move = function(uuid, xdiff, ydiff, zdiff, delta_seconds)
+	tz.assert(uuid ~= nil, "on_move on nil uuid.")
 	local hypot = math.sqrt(xdiff^2 + ydiff^2 + zdiff^2)
 	local sc = rn.current_scene()
 

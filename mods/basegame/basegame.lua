@@ -63,59 +63,6 @@ rn.mods.basegame =
 	},
 	levels =
 	{
-		startscreen =
-		{
-			static_init = function()
-				rn.renderer():add_texture("background.grassy", "basegame/res/textures/background_grassy.png")
-				rn.renderer():add_texture("background.grassy_normals", "basegame/res/textures/background_grassy_normals.png")
-			end,
-			on_load = function()
-				local bg = rn.current_scene():add_entity("sprite")
-				rn.entity.prefabs.sprite.set_scale(bg, 69, 69)
-				rn.entity.prefabs.sprite.set_texture(bg, "background.grassy")
-				rn.entity.prefabs.sprite.set_normal_map(bg, "background.grassy_normals")
-				rn.current_scene():entity_set_local_position(bg, 0.0, 0.0, -2.0)
-				local morb1 = rn.current_scene():add_entity("player_melistra")
-				rn.item.equip(morb1, "iron_sallet")
-				rn.item.equip(morb1, "iron_chainmail")
-				rn.item.equip(morb1, "iron_chainlegs")
-				rn.item.equip(morb1, "holy_water_sprinkler")
-				-- OMEGA 900% HASTE
-				--rn.renderer():set_clear_colour(1.0, 0.5, 1.0, 1.0)
-
-				-- add a bunch more randoms
-				math.randomseed(os.time())
-				for i=0,128,1 do
-					local ty = "firebolt"
-					if i%2 == 0 then ty = "frostbolt" end
-					local morbx = rn.current_scene():add_entity(ty)
-					rn.entity.prefabs.magic_ball_base.set_damage(morbx, 2)
-					local randx = math.random(-40, 40)
-					local randy = math.random(-40, 40)
-					rn.entity.prefabs.sprite.set_position(morbx, randx, randy)
-				end
-
-				--[[
-				local w, h = tz.window():get_dimensions()
-				local ren = rn.renderer()
-				rn.title_string = ren:add_string(w / 2 - 250.0, h * 0.8, 40, "Red Nightmare", 0.6, 0.1, 0.15)
-				rn.title_string_author = ren:add_string(w / 2 + 150, h * 0.8 - 55, 12, "by Harrand", 0.9, 0.3, 0.35)
-				rn.title_string_engine = ren:add_string(20, 60, 10, "Topaz" .. tz.version.string, 1.0, 1.0, 1.0)
-				rn.title_string_press_to_begin = ren:add_string(w / 2 - 110.0, h * 0.4, 10, "PRESS [ENTER] TO not PLAY", 1.0, 1.0, 1.0)
-				--]]
-
-				rn.play_music("basegame/res/audio/music/intro.mp3", 0)
-			end,
-			update = function()
-				--[[
-				local w, h = tz.window():get_dimensions()
-				local ren = rn.renderer()
-				ren:string_set_position(rn.title_string, w / 2 - 250.0, h * 0.8)
-				ren:string_set_position(rn.title_string_author, w / 2 + 150, h * 0.8 - 55)
-				ren:string_set_position(rn.title_string_press_to_begin, w / 2 - 110.0, h * 0.4)
-				--]]
-			end
-		}
 	},
 	spells = 
 	{
@@ -231,3 +178,6 @@ require("basegame/items/fiery_hauberk")
 require("basegame/items/holy_water_sprinkler")
 require("basegame/items/steel_longsword")
 require("basegame/items/white_legion_helm")
+
+require("basegame/levels/startscreen")
+require("basegame/levels/dev0")

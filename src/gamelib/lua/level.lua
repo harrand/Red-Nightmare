@@ -19,7 +19,7 @@ rn.level.load = function(name)
 	end
 end
 
-rn.level.current_level_update = function()
+rn.level.current_level_update = function(delta_seconds)
 	local obj <close> = tz.profzone_obj:new()
 	obj:set_name("Current Level Update")
 
@@ -35,6 +35,6 @@ rn.level.current_level_update = function()
 		return
 	end
 	if level.update ~= nil then
-		level.update()
+		level.update(delta_seconds)
 	end
 end

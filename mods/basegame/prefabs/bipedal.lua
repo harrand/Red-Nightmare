@@ -34,6 +34,7 @@ rn.mods.basegame.prefabs.bipedal =
 		--rn.entity.prefabs.bipedal.set_subobject_visible(uuid, helm_subobj, true)
 		--rn.entity.prefabs.bipedal.set_subobject_visible(uuid, chest_subobj, true)
 		--rn.entity.prefabs.bipedal.set_subobject_visible(uuid, legs_subobj, true)
+		rn.entity.prefabs.bipedal.face_direction(uuid, 0.0, 1.0)
 	end,
 	update = function(uuid, delta_seconds)
 		local sc = rn.current_scene()

@@ -7,7 +7,6 @@ rn.mods.basegame.prefabs.keyboard_controlled =
 		sc:entity_write(uuid, "control.left", "a")
 		sc:entity_write(uuid, "control.right", "d")
 		sc:entity_write(uuid, "control.backward", "s")
-		sc:entity_write(uuid, "control.enabled", true)
 		for i=1,9,1 do
 			sc:entity_write(uuid, "control." .. tostring(i), tostring(i))
 		end
@@ -20,7 +19,7 @@ rn.mods.basegame.prefabs.keyboard_controlled =
 		local control_left = sc:entity_read(uuid, "control.left")
 		local control_right = sc:entity_read(uuid, "control.right")
 		local control_backward = sc:entity_read(uuid, "control.backward")
-		local control_enabled = sc:entity_read(uuid, "control.enabled")
+		local control_enabled = rn.entity.prefabs.keyboard_controlled.get_enabled(uuid)
 
 		if control_enabled then
 			for i=1,9,1 do
@@ -65,5 +64,13 @@ rn.mods.basegame.prefabs.keyboard_controlled =
 	end,
 	bind_spell = function(uuid, action_id, spell_name)
 		rn.current_scene():entity_write(uuid, "action." .. tostring(math.floor(action_id)), spell_name)
+	end,
+	get_enabled = function(uuid)
+		local val = rn.current_scene():entity_read(uuid, "control.enabled")
+		if val == nil then return true end
+		return val
+	end,
+	set_enabled = function(uuid, boolval)
+		rn.current_scene():entity_write(uuid, "control.enabled", boolval)
 	end
 }
