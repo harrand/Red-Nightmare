@@ -3,6 +3,7 @@
 #include "gamelib/messaging/scene.hpp"
 #include "gamelib/rnlib.hpp"
 #include "gamelib/audio.hpp"
+#include "tz/core/data/data_store.hpp"
 #include "tz/ren/mesh.hpp"
 #include "tz/lua/api.hpp"
 #include "tz/core/debug.hpp"
@@ -25,12 +26,14 @@ namespace game
 	{
 		bool display_scene = false;
 		bool display_animation_renderer = false;
+		bool display_data_store = false;
 		bool display_combat_analyst = false;
 	};
 	struct game_system_t
 	{
 		game::scene scene2;
 		dbgui_data_t dbgui;
+		tz::data_store data_store;
 	};
 
 	std::unique_ptr<game_system_t> game_system = nullptr;
@@ -87,6 +90,15 @@ namespace game
 			}
 		}
 
+		if(game_system->dbgui.display_data_store)
+		{
+			if(ImGui::Begin("Data Store", &game_system->dbgui.display_data_store))
+			{
+				game_system->data_store.dbgui();
+				ImGui::End();
+			}
+		}
+
 		if(game_system->dbgui.display_combat_analyst)
 		{
 			if(ImGui::Begin("Combat Analyst", &game_system->dbgui.display_combat_analyst))
@@ -118,6 +130,7 @@ namespace game
 	{
 		ImGui::MenuItem("Scene", nullptr, &game_system->dbgui.display_scene);
 		ImGui::MenuItem("Animation Renderer", nullptr, &game_system->dbgui.display_animation_renderer);
+		ImGui::MenuItem("Data Store", nullptr, &game_system->dbgui.display_data_store);
 		ImGui::MenuItem("Combat Analyst", nullptr, &game_system->dbgui.display_combat_analyst);
 	}
 
@@ -127,6 +140,13 @@ namespace game
 		bar_string = std::format("{} entities | {} intersections | {}/{} lights", game_system->scene2.entity_count(), game_system->scene2.get_intersections().size(), game_system->scene2.get_renderer().get_all_light_uids().size(), game_system->scene2.get_renderer().get_point_lights().size());
 		ImGui::Text("%s", bar_string.c_str());
 	}
+
+	LUA_BEGIN(data_store)
+		using namespace tz;
+		tz::tz_lua_data_store ds{.ds = &game_system->data_store};
+		LUA_CLASS_PUSH(state, tz_lua_data_store, ds);
+		return 1;
+	LUA_END
 
 	// called directly from initialise.
 	void lua_initialise()
@@ -198,6 +218,7 @@ namespace game
 			//state.execute(R"(
 			//)");
 			state.execute(game_lua_src.c_str());
+			state.assign_func("rn.data_store", LUA_FN_NAME(data_store));
 			state.execute(item_lua_src.c_str());
 			state.execute(mod_lua_src.c_str());
 			state.execute(level_lua_src.c_str());
