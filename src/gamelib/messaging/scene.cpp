@@ -365,6 +365,27 @@ namespace game::messaging
 				sc->get_renderer().clear_lights();
 			}
 			break;
+			case scene_operation::renderer_directional_light_set_direction:
+			{
+				TZ_PROFZONE("renderer directional light set direction", 0xFF99CC44);
+				auto dir = std::any_cast<tz::vec3>(msg.value);
+				sc->get_renderer().directional_light_set_direction(dir);
+			}
+			break;
+			case scene_operation::renderer_directional_light_set_power:
+			{
+				TZ_PROFZONE("renderer directional light set power", 0xFF99CC44);
+				auto pow = std::any_cast<float>(msg.value);
+				sc->get_renderer().directional_light_set_power(pow);
+			}
+			break;
+			case scene_operation::renderer_directional_light_set_colour:
+			{
+				TZ_PROFZONE("renderer directional light set colour", 0xFF99CC44);
+				auto col = std::any_cast<tz::vec3>(msg.value);
+				sc->get_renderer().directional_light_set_colour(col);
+			}
+			break;
 			case scene_operation::renderer_add_string:
 			{
 				TZ_PROFZONE("renderer add string", 0xFF99CC44);

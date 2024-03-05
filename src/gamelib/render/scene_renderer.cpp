@@ -266,6 +266,7 @@ namespace game::render
 		*reinterpret_cast<tz::vec3*>(bufdata.data()) = rgb_light;
 	}
 
+	constexpr std::size_t non_directional_light_bytes = sizeof(tz::vec3);
 	constexpr std::size_t non_point_light_bytes = sizeof(tz::vec3) + sizeof(float) + sizeof(tz::vec3) + sizeof(float) + sizeof(tz::vec3);
 
 	std::span<const scene_renderer::point_light_data> scene_renderer::get_point_lights() const
@@ -432,6 +433,48 @@ namespace game::render
 			}
 		}
 		return ret;
+	}
+
+	tz::vec3 scene_renderer::directional_light_get_direction() const
+	{
+		tz::gl::resource_handle light_buf_handle = this->renderer.get_extra_buffer(1);
+		std::span<const std::byte> directional_light_data = tz::gl::get_device().get_renderer(this->renderer.get_render_pass()).get_resource(light_buf_handle)->data().subspan(non_directional_light_bytes);
+		return *reinterpret_cast<const tz::vec3*>(directional_light_data.data() + sizeof(float) + sizeof(tz::vec3) + sizeof(float));
+	}
+
+	void scene_renderer::directional_light_set_direction(tz::vec3 direction)
+	{
+		tz::gl::resource_handle light_buf_handle = this->renderer.get_extra_buffer(1);
+		std::span<std::byte> directional_light_data = tz::gl::get_device().get_renderer(this->renderer.get_render_pass()).get_resource(light_buf_handle)->data().subspan(non_directional_light_bytes);
+		*reinterpret_cast<tz::vec3*>(directional_light_data.data() + sizeof(float) + sizeof(tz::vec3) + sizeof(float)) = direction;
+	}
+
+	float scene_renderer::directional_light_get_power() const
+	{
+		tz::gl::resource_handle light_buf_handle = this->renderer.get_extra_buffer(1);
+		std::span<const std::byte> directional_light_data = tz::gl::get_device().get_renderer(this->renderer.get_render_pass()).get_resource(light_buf_handle)->data().subspan(non_directional_light_bytes);
+		return *reinterpret_cast<const float*>(directional_light_data.data());
+	}
+
+	void scene_renderer::directional_light_set_power(float power)
+	{
+		tz::gl::resource_handle light_buf_handle = this->renderer.get_extra_buffer(1);
+		std::span<std::byte> directional_light_data = tz::gl::get_device().get_renderer(this->renderer.get_render_pass()).get_resource(light_buf_handle)->data().subspan(non_directional_light_bytes);
+		*reinterpret_cast<float*>(directional_light_data.data()) = power;
+	}
+
+	tz::vec3 scene_renderer::directional_light_get_colour() const
+	{
+		tz::gl::resource_handle light_buf_handle = this->renderer.get_extra_buffer(1);
+		std::span<const std::byte> directional_light_data = tz::gl::get_device().get_renderer(this->renderer.get_render_pass()).get_resource(light_buf_handle)->data().subspan(non_directional_light_bytes);
+		return *reinterpret_cast<const tz::vec3*>(directional_light_data.data() + sizeof(float));
+	}
+
+	void scene_renderer::directional_light_set_colour(tz::vec3 colour)
+	{
+		tz::gl::resource_handle light_buf_handle = this->renderer.get_extra_buffer(1);
+		std::span<std::byte> directional_light_data = tz::gl::get_device().get_renderer(this->renderer.get_render_pass()).get_resource(light_buf_handle)->data().subspan(non_directional_light_bytes);
+		*reinterpret_cast<tz::vec3*>(directional_light_data.data() + sizeof(float)) = colour;
 	}
 
 	void scene_renderer::add_string(std::size_t string_uid, tz::vec2 pos, float size, std::string str, tz::vec3 colour)
@@ -792,6 +835,66 @@ namespace game::render
 		state.stack_push_float(bounds[0]);
 		state.stack_push_float(bounds[1]);
 		return 2;
+	}
+
+	int impl_rn_scene_renderer::directional_light_get_direction(tz::lua::state& state)
+	{
+		tz::vec3 dir = this->renderer->directional_light_get_direction();
+		state.stack_push_float(dir[0]);
+		state.stack_push_float(dir[1]);
+		state.stack_push_float(dir[2]);
+		return 3;
+	}
+
+	int impl_rn_scene_renderer::directional_light_set_direction(tz::lua::state& state)
+	{
+		auto [_, x, y, z] = tz::lua::parse_args<tz::lua::nil, float, float, float>(state);
+		game::messaging::scene_insert_message
+		({
+			.operation = game::messaging::scene_operation::renderer_directional_light_set_direction,
+			.uuid = std::numeric_limits<entity_uuid>::max(),
+			.value = tz::vec3{x, y, z}
+		});
+		return 0;
+	}
+
+	int impl_rn_scene_renderer::directional_light_get_power(tz::lua::state& state)
+	{
+		state.stack_push_float(this->renderer->directional_light_get_power());
+		return 1;
+	}
+
+	int impl_rn_scene_renderer::directional_light_set_power(tz::lua::state& state)
+	{
+		auto [_, pow] = tz::lua::parse_args<tz::lua::nil, float>(state);
+		game::messaging::scene_insert_message
+		({
+			.operation = game::messaging::scene_operation::renderer_directional_light_set_power,
+			.uuid = std::numeric_limits<entity_uuid>::max(),
+			.value = pow
+		});
+		return 0;
+	}
+
+	int impl_rn_scene_renderer::directional_light_get_colour(tz::lua::state& state)
+	{
+		tz::vec3 col = this->renderer->directional_light_get_colour();
+		state.stack_push_float(col[0]);
+		state.stack_push_float(col[1]);
+		state.stack_push_float(col[2]);
+		return 3;
+	}
+
+	int impl_rn_scene_renderer::directional_light_set_colour(tz::lua::state& state)
+	{
+		auto [_, r, g, b] = tz::lua::parse_args<tz::lua::nil, float, float, float>(state);
+		game::messaging::scene_insert_message
+		({
+			.operation = game::messaging::scene_operation::renderer_directional_light_set_colour,
+			.uuid = std::numeric_limits<entity_uuid>::max(),
+			.value = tz::vec3{r, g, b}
+		});
+		return 0;
 	}
 
 	static std::atomic_uint_fast64_t light_uuid_counter = 0;

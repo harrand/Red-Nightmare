@@ -26,7 +26,7 @@ namespace game::render
 		struct light_data
 		{
 			tz::vec3 ambient_light_colour{1.0f, 1.0f, 1.0f};
-			float directional_light_power = 0.0f;
+			float directional_light_power = 0.2f;
 			tz::vec3 directional_light_colour = tz::vec3::filled(1.0f);
 			float pad0;
 			tz::vec3 directional_light_direction = {-1.0f, -0.3f, 0.0f};
@@ -84,6 +84,13 @@ namespace game::render
 		point_light_data* get_light(std::size_t light_uid);
 		void clear_lights();
 		std::vector<std::size_t> get_all_light_uids() const;
+
+		tz::vec3 directional_light_get_direction() const;
+		void directional_light_set_direction(tz::vec3 direction);
+		float directional_light_get_power() const;
+		void directional_light_set_power(float power);
+		tz::vec3 directional_light_get_colour() const;
+		void directional_light_set_colour(tz::vec3 colour);
 
 		void add_string(std::size_t string_uid, tz::vec2 pos, float size, std::string str, tz::vec3 colour);
 		void remove_string(std::size_t string_uid);
@@ -168,6 +175,13 @@ namespace game::render
 
 		int get_view_bounds(tz::lua::state& state);
 
+		int directional_light_get_direction(tz::lua::state& state);
+		int directional_light_set_direction(tz::lua::state& state);
+		int directional_light_get_power(tz::lua::state& state);
+		int directional_light_set_power(tz::lua::state& state);
+		int directional_light_get_colour(tz::lua::state& state);
+		int directional_light_set_colour(tz::lua::state& state);
+
 		int add_light(tz::lua::state& state);
 		int remove_light(tz::lua::state& state);
 		int light_set_position(tz::lua::state& state);
@@ -195,6 +209,13 @@ namespace game::render
 			LUA_METHOD(impl_rn_scene_renderer, add_model)
 
 			LUA_METHOD(impl_rn_scene_renderer, get_view_bounds)
+
+			LUA_METHOD(impl_rn_scene_renderer, directional_light_get_direction)
+			LUA_METHOD(impl_rn_scene_renderer, directional_light_set_direction)
+			LUA_METHOD(impl_rn_scene_renderer, directional_light_get_power)
+			LUA_METHOD(impl_rn_scene_renderer, directional_light_set_power)
+			LUA_METHOD(impl_rn_scene_renderer, directional_light_get_colour)
+			LUA_METHOD(impl_rn_scene_renderer, directional_light_set_colour)
 
 			LUA_METHOD(impl_rn_scene_renderer, add_light)
 			LUA_METHOD(impl_rn_scene_renderer, remove_light)
