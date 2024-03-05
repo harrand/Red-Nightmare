@@ -13,7 +13,7 @@ rn.level.load = function(name)
 		if level.on_load ~= nil then
 			level.on_load()
 		end
-		rn.current_scene():set_level_name(name)
+		rn.level.data_write("name", name)
 	else
 		tz.report("Unknown level \"" .. name .. "\"")
 		tz.assert(false);
@@ -24,7 +24,7 @@ rn.level.current_level_update = function(delta_seconds)
 	local obj <close> = tz.profzone_obj:new()
 	obj:set_name("Current Level Update")
 
-	local cur_level_name = rn.current_scene():get_level_name()
+	local cur_level_name = rn.level.data_read("name")
 	if cur_level_name == nil then
 		return
 	end

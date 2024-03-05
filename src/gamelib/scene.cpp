@@ -308,16 +308,6 @@ namespace game
 		return this->mouse_pos_ws;
 	}
 
-	std::string scene::get_current_level_name() const
-	{
-		return this->current_level_name;
-	}
-
-	void scene::set_current_level_name(std::string level_name)
-	{
-		this->current_level_name = level_name;
-	}
-
 	physics::intersection_data_view scene::get_intersections()
 	{
 		return this->grid.get_intersections();

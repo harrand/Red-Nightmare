@@ -63,8 +63,6 @@ namespace game
 		void notify_entity_change(entity_uuid uuid);
 
 		tz::vec2 get_mouse_position_world_space() const;
-		std::string get_current_level_name() const;
-		void set_current_level_name(std::string level_name);
 
 		physics::intersection_data_view get_intersections();
 		void dbgui();
@@ -82,7 +80,6 @@ namespace game
 		std::vector<tz::job_handle> entity_update_jobs = {};
 		game::render::scene_renderer renderer;
 		tz::vec2 mouse_pos_ws = {};
-		std::string current_level_name = "";
 		std::string debug_dbgui_tracked_entity_input_string;
 		physics::grid_hierarchy grid;
 	public:
