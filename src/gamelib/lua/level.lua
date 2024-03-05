@@ -46,7 +46,6 @@ rn.level.data_read = function(...)
 	for i,key in pairs(args) do
 		if type(i) == 'number' then
 			key = "current_level." .. key
-			tz.report("key: " .. key)
 			table.insert(amended_args, key)
 		end
 	end
