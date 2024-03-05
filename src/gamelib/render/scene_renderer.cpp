@@ -266,12 +266,14 @@ namespace game::render
 		*reinterpret_cast<tz::vec3*>(bufdata.data()) = rgb_light;
 	}
 
+	constexpr std::size_t non_point_light_bytes = sizeof(tz::vec3) + sizeof(float) + sizeof(tz::vec3) + sizeof(float) + sizeof(tz::vec3);
+
 	std::span<const scene_renderer::point_light_data> scene_renderer::get_point_lights() const
 	{
 		tz::gl::resource_handle light_buf_handle = this->renderer.get_extra_buffer(1);
 		std::span<const std::byte> bufdata = tz::gl::get_device().get_renderer(this->renderer.get_render_pass()).get_resource(light_buf_handle)->data();
-		std::uint32_t point_light_count = *reinterpret_cast<const std::uint32_t*>(bufdata.data() + sizeof(tz::vec3));
-		const auto* point_lights_start = reinterpret_cast<const point_light_data*>(bufdata.data() + sizeof(tz::vec3) + sizeof(std::uint32_t));
+		std::uint32_t point_light_count = *reinterpret_cast<const std::uint32_t*>(bufdata.data() + non_point_light_bytes);
+		auto* point_lights_start = reinterpret_cast<const point_light_data*>(bufdata.data() + non_point_light_bytes + sizeof(std::uint32_t));
 		return {point_lights_start, point_light_count};
 	}
 
@@ -279,8 +281,8 @@ namespace game::render
 	{
 		tz::gl::resource_handle light_buf_handle = this->renderer.get_extra_buffer(1);
 		std::span<std::byte> bufdata = tz::gl::get_device().get_renderer(this->renderer.get_render_pass()).get_resource(light_buf_handle)->data();
-		std::uint32_t point_light_count = *reinterpret_cast<const std::uint32_t*>(bufdata.data() + sizeof(tz::vec3));
-		auto* point_lights_start = reinterpret_cast<point_light_data*>(bufdata.data() + sizeof(tz::vec3) + sizeof(std::uint32_t));
+		std::uint32_t point_light_count = *reinterpret_cast<const std::uint32_t*>(bufdata.data() + non_point_light_bytes);
+		auto* point_lights_start = reinterpret_cast<point_light_data*>(bufdata.data() + non_point_light_bytes + sizeof(std::uint32_t));
 		return {point_lights_start, point_light_count};
 	}
 
@@ -289,8 +291,8 @@ namespace game::render
 		tz::gl::resource_handle light_buf_handle = this->renderer.get_extra_buffer(1);
 		std::size_t old_count = this->get_point_lights().size();
 		std::size_t new_count = num_point_lights;
-		std::size_t old_size = sizeof(tz::vec3) + sizeof(std::uint32_t) + sizeof(point_light_data) * old_count;
-		std::size_t new_size = sizeof(tz::vec3) + sizeof(std::uint32_t) + sizeof(point_light_data) * new_count;
+		std::size_t old_size = non_point_light_bytes + sizeof(std::uint32_t) + sizeof(point_light_data) * old_count;
+		std::size_t new_size = non_point_light_bytes + sizeof(std::uint32_t) + sizeof(point_light_data) * new_count;
 		if(old_size == new_size)
 		{
 			return;
@@ -309,7 +311,7 @@ namespace game::render
 		});
 		// write new count.
 		// we're sorted.
-		*reinterpret_cast<std::uint32_t*>(ren.get_resource(light_buf_handle)->data().data() + sizeof(tz::vec3)) = num_point_lights;
+		*reinterpret_cast<std::uint32_t*>(ren.get_resource(light_buf_handle)->data().data() + non_point_light_bytes) = num_point_lights;
 
 		if(old_count > new_count)
 		{

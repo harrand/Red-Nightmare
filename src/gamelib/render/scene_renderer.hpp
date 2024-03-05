@@ -26,6 +26,10 @@ namespace game::render
 		struct light_data
 		{
 			tz::vec3 ambient_light_colour{1.0f, 1.0f, 1.0f};
+			float directional_light_power = 0.0f;
+			tz::vec3 directional_light_colour = tz::vec3::filled(1.0f);
+			float pad0;
+			tz::vec3 directional_light_direction = {-1.0f, -0.3f, 0.0f};
 			std::uint32_t point_light_count = 32u;
 			std::array<point_light_data, 32u> point_lights = {};
 		};

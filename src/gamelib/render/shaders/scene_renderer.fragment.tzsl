@@ -31,6 +31,9 @@ input(id = 5, flat) texture_locator in::textures[MAX_TEX_COUNT];
 resource(id = 4) const buffer res::light_buffer
 {
 	vec3 ambient_light_colour;
+	float directional_light_power;
+	vec3 directional_light_colour;
+	vec3 directional_light_direction;
 	uint point_light_count;
 	point_light_data point_lights[];	
 } light;
@@ -38,6 +41,18 @@ resource(id = 4) const buffer res::light_buffer
 resource(id = 5) const texture res::textures[];
 
 // Phong Shading
+float diffuse_directional(vec3 normal, bool is_2d)
+{
+	if(is_2d)
+	{
+		return 0.0f;
+	}
+	vec3 light_dir = normalize(light.directional_light_direction);
+	float diffuse = max(dot(vec3(0.0f, 0.0f, 1.0f), normal), 0.0f);
+	diffuse = light.directional_light_power * 0.5f * diffuse;
+	return diffuse;
+}
+
 float diffuse(point_light_data l, vec3 normal, bool is_2d)
 {
 	vec3 lightDir = l.position - in::position;
@@ -109,6 +124,8 @@ void main()
 	outcol.xyz *= light.ambient_light_colour;
 
 	normal = normalize(normal);
+	vec4 directional_light_contribution = vec4(light.directional_light_colour * diffuse_directional(normal, !should_pixelate), 0.0f);
+	outcol.xyz += directional_light_contribution.xyz;
 	for(uint i = 0; i < light.point_light_count; i++)
 	{
 		point_light_data l = light.point_lights[i];
