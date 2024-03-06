@@ -28,6 +28,8 @@ rn.load_mods = function()
 		for itemname, itemdata in pairs(moddata.items) do
 			itemdata.mod = modname
 			rn.item.items[itemname] = itemdata
+			local rarity = itemdata.rarity or "common"
+			table.insert(rn.item.rarity[rarity].items, itemname)
 		end
 	end
 end

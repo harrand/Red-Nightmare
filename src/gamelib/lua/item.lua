@@ -19,31 +19,36 @@ rn.item.rarity =
 	{
 		colour = {0.57735, 0.57735, 0.57735},
 		pretty_name = "Common",
-		impl_index = 0
+		impl_index = 0,
+		items = {}
 	},
 	uncommon = 
 	{
 		colour = {0.331295, 0.883452, 0.331295},
 		pretty_name = "Uncommon",
-		impl_index = 1
+		impl_index = 1,
+		items = {}
 	},
 	rare =
 	{
 		colour = {0.251498, 0.402396, 0.880242},
 		pretty_name = "Rare",
-		impl_index = 2
+		impl_index = 2,
+		items = {}
 	},
 	epic =
 	{
 		colour = {0.699127, 0.149813, 0.699127},
 		pretty_name = "Epic",
-		impl_index = 3
+		impl_index = 3,
+		items = {}
 	},
 	legendary =
 	{
-		colour = {0.991228, 0.0, 0.132164},
+		colour = {0.991228, 0.5, 0.132164},
 		pretty_name = "Legendary",
-		impl_index = 4
+		impl_index = 4,
+		items = {}
 	}
 }
 

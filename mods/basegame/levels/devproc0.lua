@@ -28,8 +28,19 @@ rn.mods.basegame.levels.devproc0 =
 					if randval <= 0.1 then
 						-- 2.5% chance of spawning a loot chest
 						if randval <= 0.025 then
+							local rarity = "common"
+							if randval <= 0.001 then
+								rarity = "legendary"
+							elseif randval <= 0.005 then
+								rarity = "epic"
+							elseif randval <= 0.01 then
+								rarity = "rare"
+							end
 							local ent = rn.current_scene():add_entity("loot_chest")
 							rn.entity.prefabs.sprite.set_position(ent, x, y)
+							rn.entity.prefabs.loot_chest.add_random_loot(ent, rarity)
+							local rarity_col = rn.item.rarity[rarity].colour
+							rn.entity.prefabs.sprite.set_colour(ent, rarity_col[1], rarity_col[2], rarity_col[3])
 						else
 							-- 7.5% chance of just a wall
 							local ent = rn.current_scene():add_entity("wall")

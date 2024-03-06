@@ -39,4 +39,11 @@ rn.mods.basegame.prefabs.loot_chest =
 		rn.current_scene():entity_write(uuid, ".loot" .. loot_count, item_name)
 		rn.current_scene():entity_write(uuid, ".loot_count", loot_count)
 	end,
+	add_random_loot = function(uuid, rarity)
+		local rarity_data = rn.item.rarity[rarity]
+		tz.assert(rarity_data ~= nil, "Item rarity \"" .. tostring(rarity) .. "\" is seemingly invalid.")
+		local rarity_item_count = #rarity_data.items
+		local item_index = math.random(1, rarity_item_count)
+		rn.entity.prefabs.loot_chest.add_loot(uuid, rarity_data.items[item_index])
+	end
 }

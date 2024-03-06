@@ -8,6 +8,9 @@ rn.mods.basegame.items.fiery_hauberk =
 		rn.renderer():add_texture("chest.platebody", "basegame/res/skins/chests/platebody.png")
 	end,
 	on_equip = function(uuid)
+		if not rn.entity.prefabs.combat_stats.is_alive(uuid) then
+			return
+		end
 		rn.entity.prefabs.light_emitter.instantiate(uuid)
 
 		rn.entity.prefabs.combat_stats.apply_pct_more_fire_power(uuid, 2.0)
@@ -19,6 +22,9 @@ rn.mods.basegame.items.fiery_hauberk =
 	end,
 	on_update = function(uuid, delta_seconds)
 		local sc = rn.current_scene()
+		if not rn.entity.prefabs.combat_stats.is_alive(uuid) then
+			return
+		end
 		local t = sc:entity_read(uuid, "fiery_hauberk_timer") or 0.0
 		t = t + delta_seconds
 
@@ -37,7 +43,7 @@ rn.mods.basegame.items.fiery_hauberk =
 		rn.entity.prefabs.light_emitter.update(uuid, delta_seconds)
 	end,
 	slot = rn.item.slot.chest,
-	colour = {0.3, 0.05, 0.1},
-	rarity = "epic",
+	colour = {0.5, 0.2, 0.1},
+	rarity = "legendary",
 	texture = "chest.platebody",
 }
