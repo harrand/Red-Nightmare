@@ -45,7 +45,7 @@ rn.item.rarity =
 	},
 	legendary =
 	{
-		colour = {0.991228, 0.5, 0.132164},
+		colour = {1.0, 0.85, 0.4},
 		pretty_name = "Legendary",
 		impl_index = 4,
 		items = {}

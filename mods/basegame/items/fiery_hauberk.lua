@@ -43,7 +43,7 @@ rn.mods.basegame.items.fiery_hauberk =
 		rn.entity.prefabs.light_emitter.update(uuid, delta_seconds)
 	end,
 	slot = rn.item.slot.chest,
-	colour = {0.5, 0.2, 0.1},
+	colour = rn.spell.schools.fire.colour,
 	rarity = "legendary",
-	texture = "chest.platebody",
+	texture = "chest.chainmail",
 }
