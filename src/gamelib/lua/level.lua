@@ -20,6 +20,12 @@ rn.level.load = function(name)
 	end
 end
 
+rn.level.reload = function()
+	local name = rn.level.data_read("name")
+	tz.assert(name ~= nil, "No level loaded!")
+	rn.level.load(name)
+end
+
 rn.level.current_level_update = function(delta_seconds)
 	local obj <close> = tz.profzone_obj:new()
 	obj:set_name("Current Level Update")
@@ -37,6 +43,10 @@ rn.level.current_level_update = function(delta_seconds)
 	end
 	if level.update ~= nil then
 		level.update(delta_seconds)
+	end
+
+	if rn.input():is_key_down("esc") then
+		rn.level.reload()
 	end
 end
 
