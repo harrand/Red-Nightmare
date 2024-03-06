@@ -15,6 +15,7 @@ rn.mods.basegame.levels.dev0 =
 		rn.item.equip(morb1, "iron_chainmail")
 		rn.item.equip(morb1, "iron_chainlegs")
 		rn.item.equip(morb1, "holy_water_sprinkler")
+		rn.level.data_write("player", morb1)
 
 		-- add a bunch more randoms
 		math.randomseed(os.time())

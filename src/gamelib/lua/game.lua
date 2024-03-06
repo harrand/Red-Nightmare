@@ -44,4 +44,31 @@ rn.update = function(delta_seconds)
 	-- entity updates don't happen here - although they may still be in progress when this is called.
 	-- global-state updates should happen here, such as current-level-advance.
 	rn.level.current_level_update(delta_seconds)
+	rn.camera_follow_player(delta_seconds)
+end
+
+rn.camera_follow_player = function(delta_seconds)
+	local player_uuid = rn.level.data_read("player")
+	if player_uuid == nil or not rn.current_scene():contains_entity(player_uuid) then return end
+
+	local camx, camy = rn.renderer():get_camera_position()
+	local px, py = rn.entity.prefabs.sprite.get_position(player_uuid)
+	local dstx = px - camx
+	local dsty = py - camy
+	local avgdst = (math.abs(dstx) + math.abs(dsty)) / 2.0
+
+	local viewx, viewy = rn.renderer():get_view_bounds()
+	local avgview = (viewx + viewy) / 2.0
+	print("avgdst = " .. avgdst .. ", avgview = " .. avgview)
+	-- if the tracked player is at least half the screen away from the middle.
+	local is_nearly_out = (avgdst >= (avgview * 0.25 * 0.5))
+	-- if the tracked player is now leaving the screen
+	local is_fully_out = (avgdst >= (avgview * 0.25))
+	if is_fully_out or is_halfway_out then
+		-- we really need to catch up
+		-- lerp based on delta_seconds
+		camx = camx + (dstx * delta_seconds)
+		camy = camy + (dsty * delta_seconds)
+		rn.renderer():set_camera_position(camx, camy)
+	end
 end
