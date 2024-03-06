@@ -59,13 +59,14 @@ rn.camera_follow_player = function(delta_seconds)
 
 	local viewx, viewy = rn.renderer():get_view_bounds()
 	local avgview = (viewx + viewy) / 2.0
-	print("avgdst = " .. avgdst .. ", avgview = " .. avgview)
 	-- if the tracked player is at least half the screen away from the middle.
 	local is_nearly_out = (avgdst >= (avgview * 0.25 * 0.5))
-	-- if the tracked player is now leaving the screen
-	local is_fully_out = (avgdst >= (avgview * 0.25))
-	if is_fully_out or is_halfway_out then
-		-- we really need to catch up
+	local is_absolutely_miles_out = (avgdst >= (avgview * 0.5))
+	if is_absolutely_miles_out == true then
+		-- we're super far out. just teleport camera to the player.
+		rn.renderer():set_camera_position(px, py)
+	elseif is_nearly_out == true then
+		-- we kinda need to catch up
 		-- lerp based on delta_seconds
 		camx = camx + (dstx * delta_seconds)
 		camy = camy + (dsty * delta_seconds)
