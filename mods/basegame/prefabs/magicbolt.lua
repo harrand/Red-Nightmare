@@ -56,6 +56,11 @@ rn.mods.basegame.prefabs.magic_ball_base =
 		if magic_type == nil then
 			magic_type = "physical"
 		end
+		-- if we touch an obstacle, die.
+		if rn.entity.prefabs.obstacle.is_obstacle(uuid_b) then
+			rn.current_scene():remove_entity(uuid_a)
+			return false
+		end
 		if owner_id == uuid_b or not target_alive or (owner_id ~= nil and owner_id == other_owner) then
 			-- collided with whomsoever casted me. don't do anything.
 			return false

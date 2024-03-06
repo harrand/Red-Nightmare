@@ -203,6 +203,7 @@ namespace game::render
 			LUA_METHOD(impl_rn_scene_renderer, get_clear_colour)
 			LUA_METHOD(impl_rn_scene_renderer, set_clear_colour)
 
+			LUA_METHOD(impl_rn_scene_renderer, get_ambient_light)
 			LUA_METHOD(impl_rn_scene_renderer, set_ambient_light)
 
 			LUA_METHOD(impl_rn_scene_renderer, add_texture)

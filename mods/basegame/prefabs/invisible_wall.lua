@@ -8,11 +8,10 @@ rn.mods.basegame.prefabs.invisible_wall =
 			rn.renderer():add_texture("invisible", "basegame/res/sprites/invisible.png")
 		end
 	end,
-	pre_instantiate = rn.mods.basegame.prefabs.sprite.pre_instantiate,
+	pre_instantiate = rn.mods.basegame.prefabs.wall.pre_instantiate,
 	instantiate = function(uuid)
-		rn.entity.prefabs.sprite.instantiate(uuid)
-		rn.entity.prefabs.obstacle.instantiate(uuid)
+		rn.entity.prefabs.wall.instantiate(uuid)
 		rn.entity.prefabs.sprite.set_texture(uuid, "invisible")
 	end,
-	on_collision = rn.mods.basegame.prefabs.obstacle.on_collision
+	on_collision = rn.mods.basegame.prefabs.wall.on_collision
 }
