@@ -39,8 +39,6 @@ rn.mods.basegame.levels.devproc0 =
 							local ent = rn.current_scene():add_entity("loot_chest")
 							rn.entity.prefabs.sprite.set_position(ent, x, y)
 							rn.entity.prefabs.loot_chest.add_random_loot(ent, rarity)
-							local rarity_col = rn.item.rarity[rarity].colour
-							rn.entity.prefabs.sprite.set_colour(ent, rarity_col[1], rarity_col[2], rarity_col[3])
 						else
 							-- 7.5% chance of just a wall
 							local ent = rn.current_scene():add_entity("wall")

@@ -34,10 +34,23 @@ rn.mods.basegame.prefabs.loot_chest =
 		return true
 	end,
 	add_loot = function(uuid, item_name)
-		local loot_count = rn.current_scene():entity_read(uuid, ".loot_count") or 0
+		local sc = rn.current_scene()
+		local loot_count = sc:entity_read(uuid, ".loot_count") or 0
 		loot_count = loot_count + 1
-		rn.current_scene():entity_write(uuid, ".loot" .. loot_count, item_name)
-		rn.current_scene():entity_write(uuid, ".loot_count", loot_count)
+		sc:entity_write(uuid, ".loot" .. loot_count, item_name)
+		sc:entity_write(uuid, ".loot_count", loot_count)
+
+		local loot_rarity = rn.item.items[item_name].rarity or "common"
+		local rarity_id = rn.item.rarity[loot_rarity].impl_index
+		local current_max_rarity = sc:entity_read(uuid, "max_rarity") or "common"
+		local current_max_rarity_id = rn.item.rarity[current_max_rarity].impl_index
+
+		-- the new loot is a higher rarity than any others so far - upgrade the chests rarity.
+		if rarity_id > current_max_rarity_id then
+			sc:entity_write(uuid, "max_rarity", loot_rarity)
+			local col = rn.item.rarity[loot_rarity].colour
+			rn.entity.prefabs.sprite.set_colour(uuid, col[1], col[2], col[3])
+		end
 	end,
 	add_random_loot = function(uuid, rarity)
 		local rarity_data = rn.item.rarity[rarity]
