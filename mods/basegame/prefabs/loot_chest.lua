@@ -15,7 +15,13 @@ rn.mods.basegame.prefabs.loot_chest =
 	end,
 	on_remove = function(uuid)
 		local x, y = rn.entity.prefabs.sprite.get_position(uuid)
-		rn.item.drop_at(x, y, "iron_chainmail")
+		local loot_count = rn.current_scene():entity_read(uuid, ".loot_count") or 0
+		if loot_count == 0 then return end
+		for i=1,loot_count,1 do
+			local cur_loot = rn.current_scene():entity_read(uuid, ".loot" .. i)
+			tz.assert(cur_loot ~= nil, "Loot entry in chest was somehow nil. Logic error.")
+			rn.item.drop_at(x, y, cur_loot)
+		end
 	end,
 	on_collision = function(me, other)
 		if me == other then return true end
@@ -26,5 +32,11 @@ rn.mods.basegame.prefabs.loot_chest =
 			rn.current_scene():remove_entity(other)
 		end
 		return true
+	end,
+	add_loot = function(uuid, item_name)
+		local loot_count = rn.current_scene():entity_read(uuid, ".loot_count") or 0
+		loot_count = loot_count + 1
+		rn.current_scene():entity_write(uuid, ".loot" .. loot_count, item_name)
+		rn.current_scene():entity_write(uuid, ".loot_count", loot_count)
 	end,
 }

@@ -49,6 +49,7 @@ rn.mods.basegame.levels.devproc0 =
 		rn.entity.prefabs.sprite.set_normal_map(bg, "background.blackrock_normals")
 		rn.current_scene():entity_set_local_position(bg, 0.0, 0.0, -2.0)
 
-		rn.current_scene():add_entity("loot_chest")
+		local main_chest = rn.current_scene():add_entity("loot_chest")
+		rn.entity.prefabs.loot_chest.add_loot(main_chest, "steel_longsword")
 	end
 }
