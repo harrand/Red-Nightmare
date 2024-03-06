@@ -28,7 +28,7 @@ rn.mods.basegame.levels.startscreen =
 		rn.entity.on_move(player, 0.0, -1.0, 0.0, delta_seconds)
 
 		if rn.input():is_key_down("enter") then
-			rn.level.load("dev0")
+			rn.level.load("devproc0")
 		end
 	end
 }

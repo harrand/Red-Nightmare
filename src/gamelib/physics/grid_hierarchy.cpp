@@ -119,6 +119,7 @@ namespace game::physics
 			{
 				for(std::size_t j = 1; j < (this->cell_dimensions[1] - 1); j++)
 				{
+					TZ_PROFZONE("get intersections - collaborate cell", 0xFFAA1122);
 					const auto& current_cell = this->get_cell(static_cast<cell_coord>(tz::vector<std::size_t, 2>{i, j}));
 					const auto& current_objects = current_cell.contained_entities;
 					// iterate on all surrounding cells, including ourself.
@@ -126,6 +127,8 @@ namespace game::physics
 					{
 						for(int dy = -1; dy < 1; dy++)
 						{
+							TZ_PROFZONE("collaborate cell - iterate over neighbours", 0xFFAA1122);
+							volatile int cell_count = current_objects.size();
 							const auto& other_cell = this->get_cell(static_cast<cell_coord>(tz::vector<std::size_t, 2>{i + dx, j + dy}));
 							const auto& other_objects = other_cell.contained_entities;
 							// narrow phase collision.
@@ -137,6 +140,7 @@ namespace game::physics
 									{
 										continue;
 									}
+									TZ_PROFZONE("neighbour - find collisions between", 0xFFAA1122);
 									const boundary_t& lhs_bound = this->bounded_entities.at(lhs);
 									const boundary_t& rhs_bound = this->bounded_entities.at(rhs);
 									boundary_t::manifold result = lhs_bound.intersect(rhs_bound);
