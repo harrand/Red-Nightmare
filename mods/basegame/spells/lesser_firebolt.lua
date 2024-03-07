@@ -15,7 +15,9 @@ rn.mods.basegame.spells.lesser_firebolt =
 
 		local mx, my = sc:get_mouse_position()
 		sc:entity_write(projectile, "owner", uuid)
-		rn.entity.prefabs.magic_ball_base.set_target(projectile, mx, my)
+		local dx = mx - casterx
+		local dy = my - castery
+		rn.entity.prefabs.magic_ball_base.set_target(projectile, dx * 999, dy * 999)
 		local power = rn.entity.prefabs.combat_stats["get_" .. magic_type .. "_power"](uuid)
 		rn.entity.prefabs.magic_ball_base.set_damage(projectile, power)
 		return projectile
