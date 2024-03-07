@@ -28,9 +28,13 @@ rn.mods.basegame.items.fiery_hauberk =
 		local t = sc:entity_read(uuid, "fiery_hauberk_timer") or 0.0
 		t = t + delta_seconds
 
-		if t > 1.0 then
+		local fireball_period = 0.5
+		if t > fireball_period then
 			local x, y, z_ = sc:entity_get_local_position(uuid)
-			rn.spell.spells.lesser_firebolt.finish(uuid, x, y)
+			local proj = rn.spell.spells.lesser_firebolt.finish(uuid, x, y)
+			local dx = math.random(-1, 1)
+			local dy = math.random(-1, 1)
+			rn.entity.prefabs.magic_ball_base.set_target(proj, dx * 999, dy * 999)
 			t = 0
 		end
 
@@ -39,7 +43,7 @@ rn.mods.basegame.items.fiery_hauberk =
 
 		local colour = rn.spell.schools.fire.colour
 		rn.entity.prefabs.light_emitter.set_colour(uuid, colour[1], colour[2], colour[3])
-		rn.entity.prefabs.light_emitter.set_power(uuid, 2.0 * math.abs(math.sin(t)) + 0.1)
+		rn.entity.prefabs.light_emitter.set_power(uuid, 2.0 * math.abs(math.sin(t) / fireball_period) + 0.1)
 		rn.entity.prefabs.light_emitter.update(uuid, delta_seconds)
 	end,
 	slot = rn.item.slot.chest,

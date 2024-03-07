@@ -60,5 +60,13 @@ rn.mods.basegame.levels.devproc0 =
 
 		local main_chest = rn.current_scene():add_entity("loot_chest")
 		rn.entity.prefabs.loot_chest.add_loot(main_chest, "steel_longsword")
+
+		local insin_chest = rn.current_scene():add_entity("loot_chest")
+		rn.entity.prefabs.sprite.set_position(insin_chest, -boundx + wallscale, 0.0)
+		rn.entity.prefabs.loot_chest.add_loot(insin_chest, "insin")
+
+		local fiery_hauberk_chest = rn.current_scene():add_entity("loot_chest")
+		rn.entity.prefabs.sprite.set_position(fiery_hauberk_chest, -boundx + wallscale, 0.0)
+		rn.entity.prefabs.loot_chest.add_loot(fiery_hauberk_chest, "fiery_hauberk")
 	end
 }
