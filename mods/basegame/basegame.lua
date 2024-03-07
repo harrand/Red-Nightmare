@@ -166,6 +166,7 @@ require("basegame/prefabs/floating_combat_text")
 require("basegame/prefabs/health_bar")
 require("basegame/prefabs/melee_swing_area")
 require("basegame/prefabs/zombie")
+require("basegame/prefabs/elemental")
 
 require("basegame/prefabs/players/player_melistra")
 
@@ -183,6 +184,7 @@ require("basegame/items/holy_water_sprinkler")
 require("basegame/items/insin")
 require("basegame/items/steel_longsword")
 require("basegame/items/white_legion_helm")
+require("basegame/items/elemental_circlet")
 
 require("basegame/levels/startscreen")
 require("basegame/levels/dev0")
