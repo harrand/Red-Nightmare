@@ -96,6 +96,15 @@ rn.item.get_equipped = function(uuid, slot)
 	return rn.current_scene():entity_read(uuid, "equipment." .. tostring(slot))
 end
 
+rn.item.foreach_equipped = function(uuid, fn)
+	for i=1,rn.item.slot._count-1,1 do
+		local equipped = rn.item.get_equipped(uuid, i)
+		if equipped ~= nil then
+			fn(equipped)
+		end
+	end
+end
+
 rn.item.get_highest_equipped_rarity = function(uuid)
 	local max_rarity = "common"
 	for i=1,rn.item.slot._count-1,1 do

@@ -99,7 +99,7 @@ rn.spell.advance = function(uuid)
 			-- its rarely what we want, but sometimes is (and will often be near enough rather than crashing here.)
 			castx, casty = rn.entity.prefabs.sprite.get_position(uuid)
 		end
-		rn.entity.on_cast_success(uuid)
+		rn.entity.on_cast_success(uuid, current_spell_name)
 		if spelldata.finish ~= nil then
 			spelldata.finish(uuid, castx, casty)
 		end

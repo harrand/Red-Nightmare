@@ -18,5 +18,6 @@ rn.mods.basegame.spells.lesser_firebolt =
 		rn.entity.prefabs.magic_ball_base.set_target(projectile, mx, my)
 		local power = rn.entity.prefabs.combat_stats["get_" .. magic_type .. "_power"](uuid)
 		rn.entity.prefabs.magic_ball_base.set_damage(projectile, power)
+		return projectile
 	end
 }

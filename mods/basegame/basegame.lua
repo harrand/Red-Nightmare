@@ -178,6 +178,7 @@ require("basegame/spells/lesser_frostbolt")
 
 require("basegame/items/fiery_hauberk")
 require("basegame/items/holy_water_sprinkler")
+require("basegame/items/insin")
 require("basegame/items/steel_longsword")
 require("basegame/items/white_legion_helm")
 

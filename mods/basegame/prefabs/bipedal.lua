@@ -238,8 +238,15 @@ rn.mods.basegame.prefabs.bipedal =
 		local yaw = math.atan(t3, t4)
 		return yaw, pitch, roll
 	end,
+	get_face_direction = function(uuid)
+		local dx = rn.current_scene():entity_read(uuid, "facedirx") or 0.0
+		local dy = rn.current_scene():entity_read(uuid, "facediry") or 0.0
+		return dx, dy
+	end,
 	face_direction = function(uuid, dx, dy)
 		-- face in a directional vector. useful for calculating casting directions.
+		rn.current_scene():entity_write(uuid, "facedirx", dx)
+		rn.current_scene():entity_write(uuid, "facediry", dy)
 		local tilt_factor = 0.125
 		if math.abs(dx) > math.abs(dy) then
 			local signx = math.abs(dx)/dx

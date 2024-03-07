@@ -197,7 +197,7 @@ rn.entity.on_cast_end = function(uuid)
 end
 
 -- invoked when an entity is finishes a spell (successful completion, not if the cast is cancelled)
-rn.entity.on_cast_success = function(uuid)
+rn.entity.on_cast_success = function(uuid, spellname)
 	local prefab_name = rn.current_scene():entity_read(uuid, ".prefab")
 	if prefab_name ~= nil then
 		local prefab = rn.entity.prefabs[prefab_name]
@@ -210,6 +210,13 @@ rn.entity.on_cast_success = function(uuid)
 			tz.assert(false);
 		end
 	end
+
+	rn.item.foreach_equipped(uuid, function(item_name)
+		local item = rn.item.items[item_name]
+		if item.on_cast ~= nil then
+			item.on_cast(uuid, spellname)
+		end
+	end)
 end
 
 rn.entity.on_death = function(uuid, dmg, magic_type, enemy_uuid)
