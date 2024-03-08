@@ -102,7 +102,25 @@ for schoolname, schooldata in pairs(rn.spell.schools) do
 				rn.entity.prefabs.sprite.set_colour(uuid, school.colour[1], school.colour[2], school.colour[3])
 			end,
 			update = rn.mods.basegame.prefabs.magic_ball_base.update,
-			on_collision = rn.mods.basegame.prefabs.magic_ball_base.on_collision,
+			on_collision = function(me, other)
+				rn.mods.basegame.prefabs.magic_ball_base.on_collision(me, other)
+				
+				-- special behaviour:
+				-- if the magicbolt hits a dropped itemset containing an elemental circlet - it ignites it.
+				local other_prefab = rn.current_scene():entity_read(other, ".prefab")
+				if other_prefab == "loot_drop" then
+					local circlet = "elemental_circlet_base"
+					local circlet_slot = rn.item.items[circlet].slot
+					if rn.item.get_equipped(other, circlet_slot) == circlet then
+						-- the loot drop needs to be animated into an elemental of our type.
+						local elemental = rn.current_scene():add_entity(schoolname .. "_elemental")
+						rn.entity.prefabs.sprite.set_position(elemental, rn.entity.prefabs.sprite.get_position(other))
+						rn.item.move_equipment(other, elemental)
+						rn.current_scene():remove_entity(other)
+						rn.current_scene():remove_entity(me)
+					end
+				end
+			end,
 			on_remove = rn.mods.basegame.prefabs.magic_ball_base.on_remove
 		}
 	end

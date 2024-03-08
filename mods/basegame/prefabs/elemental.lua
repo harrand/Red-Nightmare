@@ -52,7 +52,7 @@ rn.mods.basegame.prefabs.elemental_base =
 	on_move = rn.mods.basegame.prefabs.bipedal.on_move,
 	on_stop_moving = rn.mods.basegame.prefabs.bipedal.on_stop_moving,
 	on_collision = function(me, other)
-		return true
+		return false
 	end,
 	on_cast_begin = rn.mods.basegame.prefabs.bipedal.on_cast_begin,
 	on_death = function(uuid, dmg, magic_type, enemy_uuid)
