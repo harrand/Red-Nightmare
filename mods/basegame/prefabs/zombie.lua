@@ -18,8 +18,8 @@ rn.mods.basegame.prefabs.zombie =
 		rn.entity.prefabs.combat_stats.set_base_physical_power(uuid, 2.0)
 		rn.entity.prefabs.combat_stats.set_base_movement_speed(uuid, rn.entity.prefabs.bipedal.default_movement_speed * 0.7)
 
-		rn.entity.prefabs.zombie_ai.instantiate(uuid)
-		rn.entity.prefabs.zombie_ai.set_aggro_range(uuid, 15)
+		rn.entity.prefabs.melee_ai.instantiate(uuid)
+		rn.entity.prefabs.melee_ai.set_aggro_range(uuid, 15)
 	end,
 	update = function(uuid, delta_seconds)
 		if rn.entity.prefabs.combat_stats.is_dead(uuid) then
@@ -35,11 +35,11 @@ rn.mods.basegame.prefabs.zombie =
 		end
 		rn.entity.prefabs.bipedal.update(uuid, delta_seconds)
 
-		rn.entity.prefabs.zombie_ai.update(uuid, delta_seconds)
+		rn.entity.prefabs.melee_ai.update(uuid, delta_seconds)
 	end,
 	on_move = rn.mods.basegame.prefabs.bipedal.on_move,
 	on_stop_moving = rn.mods.basegame.prefabs.bipedal.on_stop_moving,
-	on_collision = rn.mods.basegame.prefabs.zombie_ai.on_collision,
+	on_collision = rn.mods.basegame.prefabs.melee_ai.on_collision,
 	on_cast_begin = rn.mods.basegame.prefabs.bipedal.on_cast_begin,
 	on_death = rn.mods.basegame.prefabs.bipedal.on_death,
 	on_equip = rn.mods.basegame.prefabs.bipedal.on_equip,
