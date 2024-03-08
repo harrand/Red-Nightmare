@@ -5,7 +5,7 @@ rn.mods.basegame.prefabs.basic_target_field =
 	end,
 	instantiate = function(uuid)
 		rn.entity.prefabs.sprite.instantiate(uuid)
-		--rn.entity.prefabs.sprite.set_visible(uuid, false)
+		rn.entity.prefabs.sprite.set_visible(uuid, false)
 	end,
 	update = function(uuid, delta_seconds)
 		rn.entity.prefabs.sticky.update(uuid, delta_seconds)

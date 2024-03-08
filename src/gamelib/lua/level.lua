@@ -45,7 +45,7 @@ rn.level.current_level_update = function(delta_seconds)
 		level.update(delta_seconds)
 	end
 
-	if rn.input():is_key_down("esc") then
+	if rn.input():is_key_down("esc") and rn.input():is_key_down("enter") then
 		rn.level.reload()
 	end
 end
