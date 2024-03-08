@@ -39,9 +39,7 @@ rn.mods.basegame.prefabs.zombie =
 	end,
 	on_move = rn.mods.basegame.prefabs.bipedal.on_move,
 	on_stop_moving = rn.mods.basegame.prefabs.bipedal.on_stop_moving,
-	on_collision = function(me, other)
-		return true
-	end,
+	on_collision = rn.mods.basegame.prefabs.zombie_ai.on_collision,
 	on_cast_begin = rn.mods.basegame.prefabs.bipedal.on_cast_begin,
 	on_death = rn.mods.basegame.prefabs.bipedal.on_death,
 	on_equip = rn.mods.basegame.prefabs.bipedal.on_equip,

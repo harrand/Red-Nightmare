@@ -24,6 +24,7 @@ rn.mods.basegame.prefabs.bipedal =
 	end,
 	instantiate = function(uuid)
 		local sc = rn.current_scene()
+		sc:entity_write(uuid, ".boundary_scale", 2.5)
 		sc:entity_set_subobject_pixelated(uuid, base_subobj, true)
 		sc:entity_set_subobject_pixelated(uuid, helm_subobj, true)
 		sc:entity_set_subobject_pixelated(uuid, chest_subobj, true)
@@ -44,6 +45,9 @@ rn.mods.basegame.prefabs.bipedal =
 			sc:entity_play_animation(uuid, "CastIdle")
 		end
 	end,
+	on_collision = function(me, other)
+		return rn.entity.prefabs.combat_stats.is_alive(me)
+	end,
 	on_move = function(uuid, xdiff, ydiff, zdiff)
 		local sc = rn.current_scene()
 		local currently_playing = sc:entity_get_playing_animation(uuid)
@@ -59,7 +63,9 @@ rn.mods.basegame.prefabs.bipedal =
 		rn.entity.prefabs.bipedal.face_direction(uuid, -xdiff, -ydiff)
 	end,
 	on_stop_moving = function(uuid)
-		rn.current_scene():entity_play_animation(uuid, "CastIdle")
+		if not rn.spell.is_casting(uuid) then
+			rn.current_scene():entity_play_animation(uuid, "CastIdle")
+		end
 	end,
 	on_cast_begin = function(uuid, spellname)
 		local spelldata = rn.spell.spells[spellname]

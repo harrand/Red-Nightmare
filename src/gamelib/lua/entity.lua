@@ -129,7 +129,6 @@ rn.entity.on_move = function(uuid, xdiff, ydiff, zdiff, delta_seconds)
 
 	-- cancel cast as we cannot cast on the move.
 	if rn.spell.is_casting(uuid) then
-		print("cast cancelled due to movement.")
 		rn.spell.clear(uuid)
 	end
 

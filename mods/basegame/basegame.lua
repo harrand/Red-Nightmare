@@ -83,6 +83,7 @@ rn.mods.basegame =
 			finish = function(uuid)
 				local swing = rn.current_scene():add_entity("melee_swing_area")
 				rn.entity.prefabs.melee_swing_area.set_caster(swing, uuid)
+				rn.entity.prefabs.sprite.set_scale(swing, 2.0)
 				rn.entity.prefabs.timed_despawn.set_duration(swing, 1.0)
 				local x, y
 				if rn.current_scene():entity_get_model(uuid) == "bipedal" then

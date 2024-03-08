@@ -3,7 +3,7 @@ rn.mods.basegame.prefabs.melee_swing_area =
 	pre_instantiate = rn.mods.basegame.prefabs.sprite.pre_instantiate,
 	instantiate = function(uuid)
 		rn.entity.prefabs.sprite.instantiate(uuid)
-		rn.entity.prefabs.sprite.set_visible(uuid, false)
+		--rn.entity.prefabs.sprite.set_visible(uuid, false)
 	end,
 	update = function(uuid, delta_seconds)
 		rn.entity.prefabs.timed_despawn.update(uuid, delta_seconds)

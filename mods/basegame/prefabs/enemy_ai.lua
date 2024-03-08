@@ -64,6 +64,17 @@ rn.mods.basegame.prefabs.zombie_ai =
 			end
 		end
 	end,
+	on_collision = function(me, other)
+		if not rn.entity.prefabs.combat_stats.is_alive(me) then return end
+		local target = rn.entity.prefabs.zombie_ai.get_target(me)
+		if target == other then
+			local x, y = rn.entity.prefabs.sprite.get_position(me)
+			local tarx, tary = rn.entity.prefabs.sprite.get_position(other)
+			rn.spell.cast(me, "melee")
+			rn.entity.prefabs.bipedal.face_direction(me, x - tarx, y - tary)
+		end
+		return rn.entity.prefabs.bipedal.on_collision(me, other)
+	end,
 	update = function(uuid, delta_seconds)
 		-- if enemy is casting, let them cast.
 		if rn.spell.is_casting(uuid) then return end
@@ -86,10 +97,7 @@ rn.mods.basegame.prefabs.zombie_ai =
 				rn.current_scene():entity_write(uuid, "last_known_target_positionx", tarx)
 				rn.current_scene():entity_write(uuid, "last_known_target_positiony", tary)
 				rn.entity.prefabs.zombie_ai.set_target(uuid, nil)
-			elseif hypot < 1.0 then
-				-- if we're really close. attack!
-				rn.spell.cast(uuid, "melee")
-			else
+			elseif not rn.spell.is_casting(uuid) then
 				-- keep going.
 				local can_move = rn.entity.on_move(uuid, dx, dy, 0.0, delta_seconds)
 				if not can_move then
