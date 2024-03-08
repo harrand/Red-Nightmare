@@ -23,6 +23,11 @@ rn.spell.schools =
 	{
 		pretty_name = "Holy",
 		colour = {1.0, 0.85, 0.4},
+	},
+	shadow =
+	{
+		pretty_name = "Shadow",
+		colour = {0.2, 0.0, 0.4}
 	}
 }
 

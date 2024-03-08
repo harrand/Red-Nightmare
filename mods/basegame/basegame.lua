@@ -179,6 +179,7 @@ require("basegame/spells/firestorm")
 require("basegame/spells/flash_of_light")
 require("basegame/spells/lesser_firebolt")
 require("basegame/spells/lesser_frostbolt")
+require("basegame/spells/summon_zombie")
 
 require("basegame/items/fiery_hauberk")
 require("basegame/items/holy_water_sprinkler")
