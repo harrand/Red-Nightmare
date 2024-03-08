@@ -165,6 +165,7 @@ require("basegame/prefabs/loot_chest")
 require("basegame/prefabs/floating_combat_text")
 require("basegame/prefabs/health_bar")
 require("basegame/prefabs/melee_swing_area")
+require("basegame/prefabs/enemy_ai")
 require("basegame/prefabs/zombie")
 require("basegame/prefabs/elemental")
 

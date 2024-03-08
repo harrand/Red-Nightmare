@@ -17,6 +17,9 @@ rn.mods.basegame.prefabs.zombie =
 		rn.entity.prefabs.combat_stats.set_base_max_hp(uuid, 20)
 		rn.entity.prefabs.combat_stats.set_base_physical_power(uuid, 2.0)
 		rn.entity.prefabs.combat_stats.set_base_movement_speed(uuid, rn.entity.prefabs.bipedal.default_movement_speed * 0.7)
+
+		rn.entity.prefabs.zombie_ai.instantiate(uuid)
+		rn.entity.prefabs.zombie_ai.set_aggro_range(uuid, 15)
 	end,
 	update = function(uuid, delta_seconds)
 		if rn.entity.prefabs.combat_stats.is_dead(uuid) then
@@ -32,12 +35,7 @@ rn.mods.basegame.prefabs.zombie =
 		end
 		rn.entity.prefabs.bipedal.update(uuid, delta_seconds)
 
-		-- face towards mouse position.
-		if rn.spell.is_casting(uuid) then
-			local mx, my = rn.current_scene():get_mouse_position()
-			local x, y = rn.current_scene():entity_get_global_position(uuid)
-			rn.entity.prefabs.bipedal.face_direction(uuid, x - mx, y - my)
-		end
+		rn.entity.prefabs.zombie_ai.update(uuid, delta_seconds)
 	end,
 	on_move = rn.mods.basegame.prefabs.bipedal.on_move,
 	on_stop_moving = rn.mods.basegame.prefabs.bipedal.on_stop_moving,

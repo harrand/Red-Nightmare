@@ -103,8 +103,6 @@ for schoolname, schooldata in pairs(rn.spell.schools) do
 			end,
 			update = rn.mods.basegame.prefabs.magic_ball_base.update,
 			on_collision = function(me, other)
-				rn.mods.basegame.prefabs.magic_ball_base.on_collision(me, other)
-				
 				-- special behaviour:
 				-- if the magicbolt hits a dropped itemset containing an elemental circlet - it ignites it.
 				local other_prefab = rn.current_scene():entity_read(other, ".prefab")
@@ -120,6 +118,8 @@ for schoolname, schooldata in pairs(rn.spell.schools) do
 						rn.current_scene():remove_entity(me)
 					end
 				end
+
+				return rn.mods.basegame.prefabs.magic_ball_base.on_collision(me, other)
 			end,
 			on_remove = rn.mods.basegame.prefabs.magic_ball_base.on_remove
 		}
