@@ -48,6 +48,16 @@ rn.mods.basegame.levels.devproc0 =
 							rn.entity.prefabs.sprite.set_scale(ent, wallscale * 0.5)
 						end
 					end
+
+					local randval2 = math.random()
+					if randval2 <= 0.01 then
+						local pn = "zombie"
+						if randval2 <= 0.002 then
+							pn = "frost_elemental"
+						end
+						local ent = rn.current_scene():add_entity(pn)
+						rn.entity.prefabs.sprite.set_position(ent, x, y)
+					end
 				end
 			end
 		end
