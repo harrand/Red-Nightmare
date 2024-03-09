@@ -36,6 +36,11 @@ rn.entity.instantiate = function(uuid, prefab_name)
 		tz.report("Missing prefab \"" .. prefab_name .. "\"")
 		tz.assert(false);
 	end
+	rn.current_scene():entity_write(uuid, "instantiated", true)
+end
+
+rn.entity.is_instantiated = function(uuid)
+	return rn.current_scene():entity_read(uuid, "instantiated") == true
 end
 
 rn.entity.update = function(uuid, delta_seconds)
@@ -83,6 +88,8 @@ rn.entity.on_collision = function(uuid_a, uuid_b)
 	local obj <close> = tz.profzone_obj:new()
 	obj:set_text(tostring(uuid_a) .. " and " .. tostring(uuid_b))
 	obj:set_name("Lua On Collision")
+
+	if not rn.entity.is_instantiated(uuid_a) or not rn.entity.is_instantiated(uuid_b) then return false end
 
 	local ret = true
 	-- a
@@ -197,13 +204,13 @@ rn.entity.on_cast_end = function(uuid)
 end
 
 -- invoked when an entity is finishes a spell (successful completion, not if the cast is cancelled)
-rn.entity.on_cast_success = function(uuid, spellname)
+rn.entity.on_cast_success = function(uuid, spellname, castx, casty)
 	local prefab_name = rn.current_scene():entity_read(uuid, ".prefab")
 	if prefab_name ~= nil then
 		local prefab = rn.entity.prefabs[prefab_name]
 		if prefab ~= nil then
 			if prefab.on_cast_success ~= nil then
-				prefab.on_cast_success(uuid)
+				prefab.on_cast_success(uuid, spellname, castx, casty)
 			end
 		else
 			tz.report("Missing prefab \"" .. prefab_name .. "\"")
@@ -214,7 +221,7 @@ rn.entity.on_cast_success = function(uuid, spellname)
 	rn.item.foreach_equipped(uuid, function(item_name)
 		local item = rn.item.items[item_name]
 		if item.on_cast ~= nil then
-			item.on_cast(uuid, spellname)
+			item.on_cast(uuid, spellname, castx, casty)
 		end
 	end)
 end

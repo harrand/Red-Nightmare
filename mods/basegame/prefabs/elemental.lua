@@ -73,6 +73,7 @@ for schoolname, schooldata in pairs(rn.spell.schools) do
 			instantiate = function(uuid)
 				rn.entity.prefabs.elemental_base.instantiate(uuid)
 				rn.entity.prefabs.base_ai.add_ability(uuid, "lesser_" .. schoolname .. "bolt", rn.ai.ability.filler_damage)
+				rn.entity.prefabs.combat_stats["set_base_" .. schoolname .. "_power"](uuid, 3.0)
 				rn.item.equip(uuid, "elemental_circlet_" .. schoolname)
 				rn.current_scene():entity_write(uuid, ".elemental_magic_type", schoolname)
 			end,

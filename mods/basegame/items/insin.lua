@@ -9,9 +9,8 @@ rn.mods.basegame.items.insin =
 	on_unequip = function(uuid)
 		rn.entity.prefabs.combat_stats.apply_flat_increased_physical_power(uuid, -3.0)
 	end,
-	on_cast = function(uuid, spellname)
+	on_cast = function(uuid, spellname, casterx, castery)
 		if spellname ~= "melee" then return end
-		local casterx, castery = rn.entity.prefabs.sprite.get_position(uuid)
 		local dx, dy = rn.entity.prefabs.bipedal.get_face_direction(uuid)
 		local angle = math.atan(dy, dx)
 		-- we want to cast 3 fireballs

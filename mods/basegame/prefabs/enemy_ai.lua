@@ -199,7 +199,7 @@ rn.mods.basegame.prefabs.ranged_ai =
 	get_target = rn.mods.basegame.prefabs.base_ai.get_target,
 	set_target = rn.mods.basegame.prefabs.base_ai.set_target,
 	find_target = rn.mods.basegame.prefabs.base_ai.find_target,
-	on_cast_success = function(uuid)
+	on_cast_success = function(uuid, spellname, castx, casty)
 		local random_multiplier = rn.current_scene():entity_write(uuid, "flee_multiplier", math.random(-100, 100) * 0.005)
 	end,
 	on_target_field_collide = rn.mods.basegame.prefabs.base_ai.on_target_field_collide,

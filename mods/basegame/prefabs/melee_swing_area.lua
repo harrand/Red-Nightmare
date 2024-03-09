@@ -21,15 +21,18 @@ rn.mods.basegame.prefabs.melee_swing_area =
 		if caster == other then return false end
 
 		local other_is_projectile = sc:entity_read(other, ".is_projectile") == true
+		local other_owner = sc:entity_read(other, "owner")
 		if other_is_projectile then
-			-- cool thing! we're gonna send the projectile away from the caster!
-			local casterx, castery = rn.entity.prefabs.sprite.get_position(me)
-			local projx, projy = rn.entity.prefabs.sprite.get_position(other)
-			local vectorx = (casterx - projx) * 999
-			local vectory = (castery - projy) * 999
-			rn.entity.prefabs.magic_ball_base.set_target(other, projx - vectorx, projy - vectory)
-			-- also set the owner to the caster now, so it can actually hit its enemies.
-			sc:entity_write(other, "owner", caster)
+			if other_owner ~= caster then
+				-- cool thing! we're gonna send the projectile away from the caster!
+				local casterx, castery = rn.entity.prefabs.sprite.get_position(me)
+				local projx, projy = rn.entity.prefabs.sprite.get_position(other)
+				local vectorx = (casterx - projx) * 999
+				local vectory = (castery - projy) * 999
+				rn.entity.prefabs.magic_ball_base.set_target(other, projx - vectorx, projy - vectory)
+				-- also set the owner to the caster now, so it can actually hit its enemies.
+				sc:entity_write(other, "owner", caster)
+			end
 		else
 			-- deal some deeps
 			rn.entity.prefabs.combat_stats.dmg(other, 1, "physical", caster)

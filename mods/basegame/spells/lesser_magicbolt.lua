@@ -1,7 +1,7 @@
 for schoolname, schooldata in pairs(rn.spell.schools) do
 	rn.mods.basegame.spells["lesser_" .. schoolname .. "bolt"] =
 	{
-		cast_duration = 1.25,
+		cast_duration = 1.0,
 		magic_type = schoolname,
 		two_handed = false,
 		cast_type = "directed",
