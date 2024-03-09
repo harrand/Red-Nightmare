@@ -17,7 +17,10 @@ rn.mods.basegame.prefabs.elemental_base =
 
 		rn.entity.prefabs.combat_stats.set_base_max_hp(uuid, 20)
 		rn.entity.prefabs.combat_stats.set_base_physical_power(uuid, 2.0)
-		rn.entity.prefabs.combat_stats.set_base_movement_speed(uuid, rn.entity.prefabs.bipedal.default_movement_speed * 0.7)
+		rn.entity.prefabs.combat_stats.set_base_movement_speed(uuid, rn.entity.prefabs.bipedal.default_movement_speed * 0.9)
+
+		rn.entity.prefabs.ranged_ai.instantiate(uuid)
+		rn.entity.prefabs.ranged_ai.set_aggro_range(uuid, 25)
 	end,
 	update = function(uuid, delta_seconds)
 		if rn.entity.prefabs.combat_stats.is_dead(uuid) then
@@ -32,13 +35,7 @@ rn.mods.basegame.prefabs.elemental_base =
 			return
 		end
 		rn.entity.prefabs.bipedal.update(uuid, delta_seconds)
-
-		-- face towards mouse position.
-		if rn.spell.is_casting(uuid) then
-			local mx, my = rn.current_scene():get_mouse_position()
-			local x, y = rn.current_scene():entity_get_global_position(uuid)
-			rn.entity.prefabs.bipedal.face_direction(uuid, x - mx, y - my)
-		end
+		rn.entity.prefabs.ranged_ai.update(uuid, delta_seconds)
 
 		local magic_type = rn.current_scene():entity_read(uuid, ".elemental_magic_type")
 		if magic_type ~= nil then
@@ -52,9 +49,12 @@ rn.mods.basegame.prefabs.elemental_base =
 	on_move = rn.mods.basegame.prefabs.bipedal.on_move,
 	on_stop_moving = rn.mods.basegame.prefabs.bipedal.on_stop_moving,
 	on_collision = function(me, other)
-		return false
+		-- return true if obstacle, false otherwise
+		-- i.e we dont collide with anything aside from obstacle
+		return rn.entity.prefabs.obstacle.is_obstacle(other)
 	end,
 	on_cast_begin = rn.mods.basegame.prefabs.bipedal.on_cast_begin,
+	on_cast_success = rn.mods.basegame.prefabs.ranged_ai.on_cast_success,
 	on_death = function(uuid, dmg, magic_type, enemy_uuid)
 		rn.entity.prefabs.light_emitter.on_remove(uuid)
 		rn.mods.basegame.prefabs.bipedal.on_death(uuid, dmg, magic_type, enemy_uuid)
@@ -80,6 +80,7 @@ for schoolname, schooldata in pairs(rn.spell.schools) do
 			on_move = rn.mods.basegame.prefabs.elemental_base.on_move,
 			on_stop_moving = rn.mods.basegame.prefabs.elemental_base.on_stop_moving,
 			on_cast_begin = rn.mods.basegame.prefabs.elemental_base.on_cast_begin,
+			on_cast_success = rn.mods.basegame.prefabs.elemental_base.on_cast_success,
 			on_death = rn.mods.basegame.prefabs.elemental_base.on_death,
 			on_equip= rn.mods.basegame.prefabs.elemental_base.on_equip,
 			on_unequip = rn.mods.basegame.prefabs.elemental_base.on_unequip,

@@ -72,6 +72,18 @@ rn.mods.basegame.prefabs.base_ai =
 				-- target died. clear target and abort.
 				rn.entity.prefabs.base_ai.set_target(uuid, nil)
 				return
+			else
+				local tarx, tary = rn.entity.prefabs.sprite.get_position(target)
+				local x, y = rn.entity.prefabs.sprite.get_position(uuid)
+				local dx = tarx - x
+				local dy = tary - y
+				local hypot = math.sqrt(dx^2 + dy^2)
+				if hypot > rn.entity.prefabs.base_ai.get_aggro_range(uuid) then
+					-- if target is out of aggro range, clear target and move to its last known location.
+					rn.current_scene():entity_write(uuid, "last_known_target_positionx", tarx)
+					rn.current_scene():entity_write(uuid, "last_known_target_positiony", tary)
+					rn.entity.prefabs.base_ai.set_target(uuid, nil)
+				end
 			end
 		else
 			-- try to find target
@@ -94,7 +106,8 @@ rn.mods.basegame.prefabs.melee_ai =
 	find_target = rn.mods.basegame.prefabs.base_ai.find_target,
 	on_target_field_collide = rn.mods.basegame.prefabs.base_ai.on_target_field_collide,
 	on_collision = function(me, other)
-		if not rn.entity.prefabs.combat_stats.is_alive(me) then return end
+		local ret = rn.entity.prefabs.bipedal.on_collision(me, other)
+		if not rn.entity.prefabs.combat_stats.is_alive(me) then return ret end
 		local target = rn.entity.prefabs.base_ai.get_target(me)
 		if target == other then
 			local x, y = rn.entity.prefabs.sprite.get_position(me)
@@ -102,7 +115,7 @@ rn.mods.basegame.prefabs.melee_ai =
 			rn.spell.cast(me, "melee")
 			rn.entity.prefabs.bipedal.face_direction(me, x - tarx, y - tary)
 		end
-		return rn.entity.prefabs.bipedal.on_collision(me, other)
+		return ret
 	end,
 	update = function(uuid, delta_seconds)
 		rn.entity.prefabs.base_ai.update(uuid, delta_seconds)
@@ -111,18 +124,12 @@ rn.mods.basegame.prefabs.melee_ai =
 		local target = rn.entity.prefabs.base_ai.get_target(uuid)
 
 		if target ~= nil and rn.current_scene():contains_entity(target) then
-			local tarx, tary = rn.entity.prefabs.sprite.get_position(target)
-			local x, y = rn.entity.prefabs.sprite.get_position(uuid)
-			local dx = tarx - x
-			local dy = tary - y
-			local hypot = math.sqrt(dx^2 + dy^2)
-			if hypot > rn.entity.prefabs.base_ai.get_aggro_range(uuid) then
-				-- if target is out of aggro range, clear target and move to its last known location.
-				rn.current_scene():entity_write(uuid, "last_known_target_positionx", tarx)
-				rn.current_scene():entity_write(uuid, "last_known_target_positiony", tary)
-				rn.entity.prefabs.base_ai.set_target(uuid, nil)
-			elseif not rn.spell.is_casting(uuid) then
+			if not rn.spell.is_casting(uuid) then
 				-- keep going.
+				local tarx, tary = rn.entity.prefabs.sprite.get_position(target)
+				local x, y = rn.entity.prefabs.sprite.get_position(uuid)
+				local dx = tarx - x
+				local dy = tary - y
 				local can_move = rn.entity.on_move(uuid, dx, dy, 0.0, delta_seconds)
 				if not can_move then
 					-- cant move to target. just clear it and hope for the best?
@@ -150,4 +157,61 @@ rn.mods.basegame.prefabs.melee_ai =
 	end,
 	get_aggro_range = rn.mods.basegame.prefabs.base_ai.get_aggro_range,
 	set_aggro_range = rn.mods.basegame.prefabs.base_ai.set_aggro_range,
+}
+
+rn.mods.basegame.prefabs.ranged_ai =
+{
+	instantiate = rn.mods.basegame.prefabs.base_ai.instantiate,
+	get_target = rn.mods.basegame.prefabs.base_ai.get_target,
+	set_target = rn.mods.basegame.prefabs.base_ai.set_target,
+	find_target = rn.mods.basegame.prefabs.base_ai.find_target,
+	on_cast_success = function(uuid)
+		local random_multiplier = rn.current_scene():entity_write(uuid, "flee_multiplier", math.random(-100, 100) * 0.005)
+	end,
+	on_target_field_collide = rn.mods.basegame.prefabs.base_ai.on_target_field_collide,
+	update = function(uuid, delta_seconds)
+		rn.entity.prefabs.base_ai.update(uuid, delta_seconds)
+		-- if enemy is casting, let them cast.
+		local target = rn.entity.prefabs.base_ai.get_target(uuid)
+		if target == nil or not rn.current_scene():contains_entity(target) then
+			return
+		end
+		local tarx, tary = rn.entity.prefabs.sprite.get_position(target)
+		local x, y = rn.entity.prefabs.sprite.get_position(uuid)
+		local dx = tarx - x
+		local dy = tary - y
+
+		if rn.entity.prefabs.ranged_ai.is_fleeing(uuid) then
+			-- we're currently fleeing.
+			-- -dx, -dy would be exactly away from the enemy.
+			-- but we want to introduce a lil bit of randomness.
+			-- however it cant change every frame, so we simply multiply dx by our uuid.
+			local runaway_timer = rn.current_scene():entity_read(uuid, "flee_duration") or 0.0
+			local flee_multiplier = rn.current_scene():entity_read(uuid, "flee_multiplier") or 0.0
+			rn.entity.on_move(uuid, -dx + flee_multiplier, -dy, 0.0, delta_seconds)
+			rn.entity.prefabs.ranged_ai.set_fleeing(uuid, runaway_timer - delta_seconds)
+		elseif not rn.spell.is_casting(uuid) then
+			rn.entity.prefabs.bipedal.face_direction(uuid, -dx, -dy)
+			local hypot = math.sqrt(dx^2 + dy^2)
+			local aggro_range = rn.entity.prefabs.base_ai.get_aggro_range(uuid)
+			if hypot >= (aggro_range * 0.8) then
+				-- ranged will move closer if its target is very far.
+				rn.entity.on_move(uuid, dx, dy, 0.0, delta_seconds)
+			elseif hypot <= (aggro_range * 0.2) then
+				-- ranged will move away if its target is too close (upto a maximum amount of time running)
+				rn.entity.prefabs.ranged_ai.set_fleeing(uuid, 5.0)
+			else
+				-- otherwise, will cast spells.
+				rn.spell.cast(uuid, "lesser_firebolt")
+			end
+		end
+	end,
+	get_aggro_range = rn.mods.basegame.prefabs.base_ai.get_aggro_range,
+	set_aggro_range = rn.mods.basegame.prefabs.base_ai.set_aggro_range,
+	set_fleeing = function(uuid, flee_duration)
+		rn.current_scene():entity_write(uuid, "flee_duration", flee_duration)
+	end,
+	is_fleeing = function(uuid)
+		return (rn.current_scene():entity_read(uuid, "flee_duration") or 0.0) > 0.0
+	end,
 }

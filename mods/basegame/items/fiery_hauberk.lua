@@ -32,6 +32,7 @@ rn.mods.basegame.items.fiery_hauberk =
 		if t > fireball_period then
 			local x, y, z_ = sc:entity_get_local_position(uuid)
 			local proj = rn.spell.spells.lesser_firebolt.finish(uuid, x, y)
+			if proj == nil then return end
 			local dx = math.random(-1, 1)
 			local dy = math.random(-1, 1)
 			rn.entity.prefabs.magic_ball_base.set_target(proj, dx * 999, dy * 999)

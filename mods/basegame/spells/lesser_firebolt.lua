@@ -17,8 +17,12 @@ rn.mods.basegame.spells.lesser_firebolt =
 			tarx, tary = sc:get_mouse_position()
 		else
 			local target = rn.entity.prefabs.base_ai.get_target(uuid)
-			if target ~= nil then
+			if target ~= nil and sc:contains_entity(target) then
 				tarx, tary = rn.entity.prefabs.sprite.get_position(target)
+			else
+				-- no target and nothing to shoot at... shoot randomly?
+				tarx = math.random()
+				tary = math.random()
 			end
 		end
 
