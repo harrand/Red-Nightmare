@@ -208,12 +208,17 @@ rn.mods.basegame.prefabs.ranged_ai =
 		-- if enemy is casting, let them cast.
 		local target = rn.entity.prefabs.base_ai.get_target(uuid)
 		if target == nil or not rn.current_scene():contains_entity(target) then
+			-- if target ever drops, cancel our current fleeing if we are.
+			-- otherwise a new challenger approaches and the dude instantly goes french???
+			rn.entity.prefabs.ranged_ai.set_fleeing(uuid, nil)
 			return
 		end
 		local tarx, tary = rn.entity.prefabs.sprite.get_position(target)
 		local x, y = rn.entity.prefabs.sprite.get_position(uuid)
 		local dx = tarx - x
 		local dy = tary - y
+		local hypot = math.sqrt(dx^2 + dy^2)
+		local aggro_range = rn.entity.prefabs.base_ai.get_aggro_range(uuid)
 
 		if rn.entity.prefabs.ranged_ai.is_fleeing(uuid) then
 			-- we're currently fleeing.
@@ -221,13 +226,15 @@ rn.mods.basegame.prefabs.ranged_ai =
 			-- but we want to introduce a lil bit of randomness.
 			-- however it cant change every frame, so we simply multiply dx by our uuid.
 			local runaway_timer = rn.current_scene():entity_read(uuid, "flee_duration") or 0.0
+			-- if we've ran halfway to our aggro range, then we've gone far enough and can stop running now
+			if hypot >= (aggro_range * 0.5) then
+				runaway_timer = 0
+			end
 			local flee_multiplier = rn.current_scene():entity_read(uuid, "flee_multiplier") or 0.0
 			rn.entity.on_move(uuid, -dx + flee_multiplier, -dy, 0.0, delta_seconds)
 			rn.entity.prefabs.ranged_ai.set_fleeing(uuid, runaway_timer - delta_seconds)
 		elseif not rn.spell.is_casting(uuid) then
 			rn.entity.prefabs.bipedal.face_direction(uuid, -dx, -dy)
-			local hypot = math.sqrt(dx^2 + dy^2)
-			local aggro_range = rn.entity.prefabs.base_ai.get_aggro_range(uuid)
 			if hypot >= (aggro_range * 0.8) then
 				-- ranged will move closer if its target is very far.
 				rn.entity.on_move(uuid, dx, dy, 0.0, delta_seconds)
