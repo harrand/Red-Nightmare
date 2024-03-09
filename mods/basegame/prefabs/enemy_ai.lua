@@ -1,3 +1,18 @@
+rn.ai = rn.ai or {}
+rn.ai.ability =
+{
+	-- ai will cast this spell often do deal damage to its target.
+	filler_damage = 0,
+	-- ai will cast this spell to try to kill its target. will expect a longer cast - will only use if its at a safe distance
+	rare_damage = 1,
+	-- ai will use this spell if its health gets low.
+	heal = 2,
+	-- ai will use this spell if it's trying to run away.
+	mobility = 3,
+	-- ai will drop everything to use this spell if its about to die.
+	last_resort = 4
+}
+
 rn.mods.basegame.prefabs.basic_target_field =
 {
 	pre_instantiate = function(uuid)
@@ -33,6 +48,25 @@ rn.mods.basegame.prefabs.base_ai =
 {
 	instantiate = function(uuid)
 		rn.current_scene():entity_write(uuid, ".ai", "base_ai")
+	end,
+	add_ability = function(uuid, spell_name, ability)
+		local sc = rn.current_scene()
+		local ability_count = rn.entity.prefabs.base_ai.get_ability_count(uuid, ability)
+		ability_count = math.floor(ability_count + 1)
+		sc:entity_write(uuid, "ability." .. ability .. ".count", ability_count)
+
+		print("binding spell " .. spell_name .. " to ability-id " .. ability_count)
+		sc:entity_write(uuid, "ability." .. ability .. "." .. ability_count, spell_name)
+	end,
+	get_ability_count = function(uuid, ability)
+		return rn.current_scene():entity_read(uuid, "ability." .. ability .. ".count") or 0.0
+	end,
+	get_ability_spell = function(uuid, ability, id)
+		return rn.current_scene():entity_read(uuid, "ability." .. ability .. "." .. id)
+	end,
+	get_random_ability_spell = function(uuid, ability)
+		local count = rn.entity.prefabs.base_ai.get_ability_count(uuid, ability)
+		return rn.entity.prefabs.base_ai.get_ability_spell(uuid, ability, math.random(count))
 	end,
 	get_target = function(uuid)
 		return rn.current_scene():entity_read(uuid, "target")
@@ -202,7 +236,11 @@ rn.mods.basegame.prefabs.ranged_ai =
 				rn.entity.prefabs.ranged_ai.set_fleeing(uuid, 5.0)
 			else
 				-- otherwise, will cast spells.
-				rn.spell.cast(uuid, "lesser_firebolt")
+				local random_damage_ability = rn.entity.prefabs.base_ai.get_random_ability_spell(uuid, rn.ai.ability.filler_damage)
+				if random_damage_ability == nil then
+					random_damage_ability = "lesser_firebolt"
+				end
+				rn.spell.cast(uuid, random_damage_ability)
 			end
 		end
 	end,
