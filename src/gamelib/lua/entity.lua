@@ -239,6 +239,8 @@ rn.entity.on_death = function(uuid, dmg, magic_type, enemy_uuid)
 			tz.assert(false);
 		end
 	end
+
+	rn.spell.clear(uuid)
 end
 
 rn.entity.on_remove = function(uuid)
