@@ -79,6 +79,7 @@ require("basegame/prefabs/melee_swing_area")
 require("basegame/prefabs/enemy_ai")
 require("basegame/prefabs/zombie")
 require("basegame/prefabs/elemental")
+require("basegame/prefabs/portal")
 
 require("basegame/prefabs/players/player_melistra")
 
