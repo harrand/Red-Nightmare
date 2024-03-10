@@ -12,7 +12,9 @@ rn.mods.basegame.levels.devproc0 =
 		rn.renderer():set_ambient_light(0.3, 0.3, 0.4, 1.0)
 
 		local wallscale = 4
-		local boundx, boundy = rn.renderer():get_view_bounds()
+		local size = 64
+		local boundx = size
+		local boundy = size
 		boundx = math.floor((boundx * 0.5) - wallscale)
 		boundy = math.floor((boundy * 0.5) - wallscale)
 		for x=-boundx,boundx,wallscale do

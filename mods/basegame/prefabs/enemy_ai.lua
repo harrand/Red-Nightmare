@@ -77,7 +77,7 @@ rn.mods.basegame.prefabs.base_ai =
 	find_target = function(uuid, target_range)
 		local sc = rn.current_scene()
 		local target_field = sc:entity_read(uuid, "target_field")
-		if target_field ~= nil then
+		if target_field ~= nil and sc:contains_entity(target_field) then
 			rn.entity.prefabs.sprite.set_scale(target_field, target_range)
 		else
 			target_field = sc:add_entity("basic_target_field")

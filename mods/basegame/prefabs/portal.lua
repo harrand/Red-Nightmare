@@ -30,7 +30,11 @@ rn.mods.basegame.prefabs.portal =
 	end,
 	on_collision = function(me, other)
 		if other ~= nil and rn.current_scene():contains_entity(other) then
-			rn.entity.prefabs.sprite.set_position(other, 0.0, 0.0)
+			if rn.level.data_read("player") == other then
+				rn.level.reload()
+			else
+				rn.current_scene():remove_entity(other)
+			end
 		end
 		return false
 	end
