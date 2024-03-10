@@ -186,6 +186,8 @@ require("basegame/items/holy_water_sprinkler")
 require("basegame/items/insin")
 require("basegame/items/steel_longsword")
 require("basegame/items/white_legion_helm")
+require("basegame/items/white_legion_platebody")
+require("basegame/items/white_legion_platelegs")
 require("basegame/items/elemental_circlet")
 
 require("basegame/levels/startscreen")
