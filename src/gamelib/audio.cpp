@@ -10,6 +10,7 @@
 
 namespace game
 {
+	constexpr SoLoud::handle audio_nullhand = std::numeric_limits<SoLoud::handle>::max();
 	SoLoud::Soloud soloud;
 	std::unordered_map<std::string, SoLoud::Wav> wavs;
 	std::array<SoLoud::handle, 8> music_tracks;
@@ -19,7 +20,7 @@ namespace game
 		soloud.init();
 		for(auto& track : music_tracks)
 		{
-			track = -1;
+			track = audio_nullhand;
 		}
 	}
 	
@@ -27,6 +28,8 @@ namespace game
 	{
 		soloud.deinit();
 	}
+
+	bool music_is_playing(std::size_t track_id);
 
 	LUA_BEGIN(lua_play_sound)
 		auto [path] = tz::lua::parse_args<std::string>(state);
@@ -68,6 +71,12 @@ namespace game
 		return 0;
 	LUA_END
 
+	LUA_BEGIN(lua_music_is_playing)
+		auto [track] = tz::lua::parse_args<unsigned int>(state);
+		state.stack_push_bool(music_is_playing(track));
+		return 1;
+	LUA_END
+
 	LUA_BEGIN(lua_stop_music)
 		auto [track] = tz::lua::parse_args<unsigned int>(state);
 		game::messaging::scene_insert_message
@@ -83,6 +92,7 @@ namespace game
 	{
 		state.assign_func("rn.play_sound", LUA_FN_NAME(lua_play_sound));
 		state.assign_func("rn.play_music", LUA_FN_NAME(lua_play_music));
+		state.assign_func("rn.music_is_playing", LUA_FN_NAME(lua_music_is_playing));
 		state.assign_func("rn.stop_music", LUA_FN_NAME(lua_stop_music));
 	}
 
@@ -118,9 +128,16 @@ namespace game
 		music_tracks[track_id] = soloud.play(wavs[path], volume * global_volume);
 	}
 
+	bool music_is_playing(std::size_t track_id)
+	{
+		return music_tracks[track_id] != audio_nullhand;
+	}
+
 	void stop_music(std::size_t track_id)
 	{
 		tz::assert(music_tracks.size() > track_id);
-		soloud.stop(music_tracks[track_id]);
+		auto& track = music_tracks[track_id];
+		soloud.stop(track);
+		track = audio_nullhand;
 	}
 }

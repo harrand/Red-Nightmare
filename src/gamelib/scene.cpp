@@ -13,7 +13,7 @@
 namespace game
 {
 	scene::scene():
-	grid(tz::vec2::zero(), this->get_renderer().get_view_bounds() * 8.0f, static_cast<physics::grid_hierarchy::cell_coord>(tz::vec2i{50, 50}))
+	grid(tz::vec2::zero(), this->get_renderer().get_view_bounds() * 16.0f, static_cast<physics::grid_hierarchy::cell_coord>(tz::vec2i{50, 50}))
 	{
 	}
 

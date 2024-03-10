@@ -59,9 +59,9 @@ namespace game::render
 		//	this->renderer.add_gltf(this->get_model(static_cast<model>(i)));
 		//}
 
-		constexpr float initial_zoom = 4.0f;
+		constexpr float initial_zoom = 28.0f;
 		this->view_bounds /= initial_zoom;
-		//this->pixelate_pass.zoom_amount() /= initial_zoom;
+		this->pixelate_pass.zoom_amount() /= initial_zoom;
 
 		// set initial lights to unused.
 		for(std::size_t i = 0; i < light_data{}.point_lights.size(); i++)
@@ -567,7 +567,7 @@ namespace game::render
 		std::array<float, 2> dimension_buffer_data;
 		dimension_buffer_data[0] = mondims[0];
 		dimension_buffer_data[1] = mondims[1];
-		this->zoom_buffer = rinfo.add_resource(tz::gl::buffer_resource::from_one(1.75f,
+		this->zoom_buffer = rinfo.add_resource(tz::gl::buffer_resource::from_one(7.0f,
 		{
 			.access = tz::gl::resource_access::dynamic_access
 		}));

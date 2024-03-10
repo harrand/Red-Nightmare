@@ -2,7 +2,7 @@ rn = rn or {}
 rn.level = rn.level or {}
 rn.level.levels = rn.level.levels or {}
 
-rn.level.load = function(name)
+rn.level.load = function(name, dont_stop_music)
 	rn.level.data_clear()
 	local level = rn.level.levels[name]
 	if level ~= nil then
@@ -10,7 +10,9 @@ rn.level.load = function(name)
 		rn.renderer():clear_lights()
 		rn.renderer():clear_strings()
 		rn.renderer():set_ambient_light(1.0, 1.0, 1.0, 1.0)
-		rn.stop_music(0)
+		if dont_stop_music == nil then
+			rn.stop_music(0)
+		end
 		if level.on_load ~= nil then
 			level.on_load()
 		end
@@ -21,10 +23,10 @@ rn.level.load = function(name)
 	end
 end
 
-rn.level.reload = function()
+rn.level.reload = function(dont_stop_music)
 	local name = rn.level.data_read("name")
 	tz.assert(name ~= nil, "No level loaded!")
-	rn.level.load(name)
+	rn.level.load(name, dont_stop_music)
 end
 
 rn.level.current_level_update = function(delta_seconds)
