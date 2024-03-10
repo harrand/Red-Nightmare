@@ -9,6 +9,7 @@ rn.level.load = function(name)
 		rn.current_scene():clear_entities()
 		rn.renderer():clear_lights()
 		rn.renderer():clear_strings()
+		rn.renderer():set_ambient_light(1.0, 1.0, 1.0, 1.0)
 		rn.stop_music(0)
 		if level.on_load ~= nil then
 			level.on_load()

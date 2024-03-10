@@ -121,11 +121,11 @@ void main()
 		normal = vec3(0.0f, 0.0f, 1.0f);
 	}
 	outcol.xyz *= in::colour;
-	outcol.xyz *= light.ambient_light_colour;
 
 	normal = normalize(normal);
 	vec4 directional_light_contribution = vec4(light.directional_light_colour * diffuse_directional(normal, !should_pixelate), 0.0f);
 	outcol.xyz += directional_light_contribution.xyz;
+	outcol.xyz *= light.ambient_light_colour;
 	for(uint i = 0; i < light.point_light_count; i++)
 	{
 		point_light_data l = light.point_lights[i];

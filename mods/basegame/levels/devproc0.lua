@@ -9,6 +9,7 @@ rn.mods.basegame.levels.devproc0 =
 	on_load = function()
 		local player = rn.current_scene():add_entity("player_melistra")
 		rn.level.data_write("player", player)
+		rn.renderer():set_ambient_light(0.3, 0.3, 0.4, 1.0)
 
 		local wallscale = 4
 		local boundx, boundy = rn.renderer():get_view_bounds()
