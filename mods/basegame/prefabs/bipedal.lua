@@ -79,7 +79,7 @@ rn.mods.basegame.prefabs.bipedal =
 		local artificial_anim_delay = 0.0
 		if spelldata.magic_type == "physical" or spelldata.magic_type == nil then
 			cast_anim = "Attack1H_Horizontal"
-			artificial_anim_delay = -0.2
+			artificial_anim_delay = -0.125
 		else
 			if spelldata.two_handed == true then
 				if spelldata.cast_type == "omni" then

@@ -18,16 +18,18 @@ rn.mods.basegame.prefabs.cast_buildup =
 	update = function(uuid, delta_seconds)
 		local sc = rn.current_scene()
 		local t = sc:entity_read(uuid, "timer") or 0.0
-		t = t + delta_seconds
+		local time_warp = sc:entity_read(uuid, "time_warp") or 1.0
+		t = t + (delta_seconds * time_warp)
 		local frame_id = math.floor((t * 10.0) % rn.entity.prefabs.cast_buildup.frame_count)
 		rn.entity.prefabs.sprite.set_texture(uuid, "sprite.cast_buildup" .. frame_id)
 		sc:entity_write(uuid, "timer", t)
 
 		local magic_type = sc:entity_read(uuid, "magic_type")
+		local power_override = sc:entity_read(uuid, "power_override")
 		if magic_type ~= nil then
 			local colour = rn.spell.schools[magic_type].colour
 			rn.entity.prefabs.sprite.set_colour(uuid, colour[1], colour[2], colour[3])
-			rn.entity.prefabs.light_emitter.set_power(uuid, math.sqrt(t * 2.0))
+			rn.entity.prefabs.light_emitter.set_power(uuid, power_override or math.sqrt(t * 2.0))
 			rn.entity.prefabs.light_emitter.set_colour(uuid, colour[1], colour[2], colour[3])
 		end
 

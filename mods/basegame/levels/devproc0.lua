@@ -9,7 +9,7 @@ rn.mods.basegame.levels.devproc0 =
 	on_load = function()
 		local player = rn.current_scene():add_entity("player_melistra")
 		rn.level.data_write("player", player)
-		rn.renderer():set_ambient_light(0.3, 0.3, 0.4, 1.0)
+		rn.renderer():set_ambient_light(0.2, 0.2, 0.25, 1.0)
 
 		local wallscale = 4
 		local size = 64
@@ -60,6 +60,11 @@ rn.mods.basegame.levels.devproc0 =
 						end
 						local ent = rn.current_scene():add_entity(pn)
 						rn.entity.prefabs.sprite.set_position(ent, x, y)
+					end
+
+					local randval3 = math.random()
+					if randval3 <= 0.02 then
+						rn.entity.prefabs.weapon_model_torch.spawn_on_ground(x, y)
 					end
 				end
 			end
