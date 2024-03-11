@@ -87,5 +87,6 @@ add_text(
 		src/gamelib/lua/item.lua
 		src/gamelib/lua/level.lua
 		src/gamelib/lua/mod.lua
+		src/gamelib/lua/player.lua
 		src/gamelib/lua/spell.lua
 )

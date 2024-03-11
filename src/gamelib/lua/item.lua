@@ -100,7 +100,7 @@ rn.item.foreach_equipped = function(uuid, fn)
 	for i=1,rn.item.slot._count-1,1 do
 		local equipped = rn.item.get_equipped(uuid, i)
 		if equipped ~= nil then
-			fn(equipped)
+			fn(i, equipped)
 		end
 	end
 end

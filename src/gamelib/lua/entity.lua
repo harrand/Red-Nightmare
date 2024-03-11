@@ -218,7 +218,7 @@ rn.entity.on_cast_success = function(uuid, spellname, castx, casty)
 		end
 	end
 
-	rn.item.foreach_equipped(uuid, function(item_name)
+	rn.item.foreach_equipped(uuid, function(_, item_name)
 		local item = rn.item.items[item_name]
 		if item.on_cast ~= nil then
 			item.on_cast(uuid, spellname, castx, casty)

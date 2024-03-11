@@ -76,8 +76,10 @@ rn.mods.basegame.prefabs.bipedal =
 		local cast_duration = base_cast_time / (1.0 + haste)
 
 		local cast_anim = nil
+		local artificial_anim_delay = 0.0
 		if spelldata.magic_type == "physical" or spelldata.magic_type == nil then
 			cast_anim = "Attack1H_Horizontal"
+			artificial_anim_delay = -0.2
 		else
 			if spelldata.two_handed == true then
 				if spelldata.cast_type == "omni" then
@@ -96,7 +98,7 @@ rn.mods.basegame.prefabs.bipedal =
 		local animation_duration = rn.current_scene():entity_get_animation_length(uuid, cast_anim)
 		-- note: the end frame of the animation is unlikely to be when we want the cast to go off.
 		-- for now, let's say we want the anim to be 65% done when the cast actually goes off.
-		animation_duration = animation_duration * 0.65
+		animation_duration = animation_duration * (0.65 + artificial_anim_delay)
 		rn.entity.prefabs.bipedal.play_animation(uuid, cast_anim, false, animation_duration / cast_duration)
 	end,
 	on_death = function(uuid, dmg, magic_type, enemy_uuid)
