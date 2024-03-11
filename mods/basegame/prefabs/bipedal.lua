@@ -124,7 +124,7 @@ rn.mods.basegame.prefabs.bipedal =
 			local weapon_entity = sc:add_entity(prefab_name)
 			rn.entity.prefabs.sprite.set_colour(weapon_entity, itemdata.colour[1], itemdata.colour[2], itemdata.colour[3])
 			rn.entity.prefabs.sticky.stick_to_subobject(weapon_entity, uuid, subobject, true, false)
-			sc:entity_write(uuid, "weapon_entity", weapon_entity)
+			sc:entity_write(uuid, "weapon_entity" .. itemdata.slot, weapon_entity)
 		end
 	end,
 	on_unequip = function(uuid, itemname)
@@ -136,9 +136,9 @@ rn.mods.basegame.prefabs.bipedal =
 			rn.entity.prefabs.bipedal.set_subobject_visible(uuid, subobject, false)
 		else
 			-- weapon
-			local weapon_entity = sc:entity_read(uuid, "weapon_entity")
+			local weapon_entity = sc:entity_read(uuid, "weapon_entity" .. itemdata.slot)
 			tz.assert(weapon_entity ~= nil, "no weapon entity?")
-			sc:entity_write(uuid, "weapon_entity", nil)
+			sc:entity_write(uuid, "weapon_entity" .. itemdata.slot, nil)
 			sc:remove_entity(weapon_entity)
 		end
 	end,
