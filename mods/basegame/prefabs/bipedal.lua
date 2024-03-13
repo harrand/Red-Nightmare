@@ -1,10 +1,10 @@
-local base_subobj = 5
+local base_subobj = 9
 -- note: these 3 may or may not be mixed up.
-local chest_subobj = 6
-local helm_subobj = 3
+local chest_subobj = 3
+local helm_subobj = 5
 -- note: subobject 16 also seems to be around the head?
 -- new model: 9 or 10 is head?
-local legs_subobj = 9
+local legs_subobj = 7
 
 -- 18 seems to be left shoulder. 19 elbow. 20 hand.
 -- 22 right shoulder, 23 elbow. 24 hand.
@@ -18,8 +18,8 @@ local base_scale = 0.75
 rn.mods.basegame.prefabs.bipedal =
 {
 	description = "Entity is a 3D bipedal animated humanoid",
-	left_hand = 16,
-	right_hand = 20,
+	left_hand = 20,
+	right_hand = 24,
 	default_movement_speed = 6,
 	static_init = function()
 		rn.renderer():add_model("bipedal", "basegame/res/models/bipedal.glb")

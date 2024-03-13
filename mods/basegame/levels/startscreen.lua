@@ -66,8 +66,8 @@ rn.mods.basegame.levels.startscreen =
 		rn.entity.prefabs.keyboard_controlled.set_enabled(player, false)
 		rn.entity.prefabs.combat_stats.set_pct_more_movement_speed(player, -0.2)
 		rn.item.equip(player, "iron_sallet")
-		--rn.item.equip(player, "iron_chainmail")
-		--rn.item.equip(player, "iron_chainlegs")
+		rn.item.equip(player, "iron_chainmail")
+		rn.item.equip(player, "iron_chainlegs")
 		rn.item.equip(player, "steel_longsword")
 		rn.item.equip(player, "basic_torch")
 
