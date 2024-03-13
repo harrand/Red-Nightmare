@@ -1,20 +1,25 @@
-local base_subobj = 3
+local base_subobj = 5
 -- note: these 3 may or may not be mixed up.
 local chest_subobj = 5
-local helm_subobj = 7
+local helm_subobj = 3
 -- note: subobject 16 also seems to be around the head?
+-- new model: 9 or 10 is head?
 local legs_subobj = 9
 
 -- 18 seems to be left shoulder. 19 elbow. 20 hand.
 -- 22 right shoulder, 23 elbow. 24 hand.
 
-local base_scale = 0.2
+-- new model:
+-- 11-12 left shoulder. 13 elbow. 14 hand
+-- 15-16 right shoulder, 17 elbow. 18 hand.
+
+local base_scale = 0.75
 
 rn.mods.basegame.prefabs.bipedal =
 {
 	description = "Entity is a 3D bipedal animated humanoid",
-	left_hand = 20,
-	right_hand = 24,
+	left_hand = 16,
+	right_hand = 20,
 	default_movement_speed = 6,
 	static_init = function()
 		rn.renderer():add_model("bipedal", "basegame/res/models/bipedal.glb")
@@ -24,7 +29,7 @@ rn.mods.basegame.prefabs.bipedal =
 	end,
 	instantiate = function(uuid)
 		local sc = rn.current_scene()
-		sc:entity_write(uuid, ".boundary_scale", 2.5)
+		sc:entity_write(uuid, ".boundary_scale", 1.0)
 		sc:entity_set_subobject_pixelated(uuid, base_subobj, true)
 		sc:entity_set_subobject_pixelated(uuid, helm_subobj, true)
 		sc:entity_set_subobject_pixelated(uuid, chest_subobj, true)
@@ -51,7 +56,7 @@ rn.mods.basegame.prefabs.bipedal =
 	on_move = function(uuid, xdiff, ydiff, zdiff)
 		local sc = rn.current_scene()
 		local currently_playing = sc:entity_get_playing_animation(uuid)
-		local movement_anim_multiplier = rn.entity.prefabs.combat_stats.get_movement_speed(uuid) / rn.entity.prefabs.bipedal.default_movement_speed
+		local movement_anim_multiplier = 0.9 * rn.entity.prefabs.combat_stats.get_movement_speed(uuid) / rn.entity.prefabs.bipedal.default_movement_speed
 		local anim = rn.entity.prefabs.bipedal.get_run_animation(uuid)
 		if currently_playing ~= anim then
 			rn.current_scene():entity_play_animation(uuid, anim, false, movement_anim_multiplier)
@@ -78,7 +83,7 @@ rn.mods.basegame.prefabs.bipedal =
 		local cast_anim = nil
 		local artificial_anim_delay = 0.0
 		if spelldata.magic_type == "physical" or spelldata.magic_type == nil then
-			cast_anim = "Attack1H_Horizontal"
+			cast_anim = "Melee1H_Attack"
 			artificial_anim_delay = -0.125
 		else
 			if spelldata.two_handed == true then
@@ -102,7 +107,7 @@ rn.mods.basegame.prefabs.bipedal =
 		rn.entity.prefabs.bipedal.play_animation(uuid, cast_anim, false, animation_duration / cast_duration)
 	end,
 	on_death = function(uuid, dmg, magic_type, enemy_uuid)
-		rn.current_scene():entity_play_animation(uuid, "Death")
+		rn.current_scene():entity_play_animation(uuid, "ZombieDeath")
 		rn.item.drop_all_equipment(uuid)
 	end,
 	on_equip = function(uuid, itemname)
@@ -173,19 +178,19 @@ rn.mods.basegame.prefabs.bipedal =
 		rn.current_scene():entity_set_subobject_colour(uuid, subobject, r, g, b)
 	end,
 	set_visible = function(uuid, visible)
-		rn.entity.prefabs.bipedal.set_subobject_visible(uuid, 3, visible)	
+		rn.entity.prefabs.bipedal.set_subobject_visible(uuid, base_subobj, visible)	
 	end,
 	set_texture = function(uuid, texname)
-		rn.entity.prefabs.bipedal.set_subobject_texture(uuid, 3, texname)
+		rn.entity.prefabs.bipedal.set_subobject_texture(uuid, base_subobj, texname)
 	end,
 	get_texture = function(uuid)
-		return rn.current_scene():entity_get_subobject_texture(uuid, 3)
+		return rn.current_scene():entity_get_subobject_texture(uuid, base_subobj)
 	end,
 	set_colour = function(uuid, r, g, b)
-		rn.entity.prefabs.bipedal.set_subobject_colour(uuid, 3, r, g, b)
+		rn.entity.prefabs.bipedal.set_subobject_colour(uuid, base_subobj, r, g, b)
 	end,
 	get_colour = function(uuid)
-		return rn.current_scene():entity_get_subobject_colour(uuid, 3)
+		return rn.current_scene():entity_get_subobject_colour(uuid, base_subobj)
 	end,
 
 	set_chest_visible = function(uuid, visible)
@@ -286,6 +291,6 @@ rn.mods.basegame.prefabs.bipedal =
 		rn.current_scene():entity_write(uuid, "run_animation", run_anim)
 	end,
 	get_run_animation = function(uuid)
-		return rn.current_scene():entity_read(uuid, "run_animation") or "Run"
+		return rn.current_scene():entity_read(uuid, "run_animation") or "TorchRun"
 	end
 }

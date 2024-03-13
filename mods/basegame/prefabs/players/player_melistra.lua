@@ -2,7 +2,7 @@ rn.mods.basegame.prefabs.player_melistra =
 {
 	description = "Lady Melistra, the first playable character in Red Nightmare.",
 	static_init = function()
-		rn.renderer():add_texture("skin.melistra", "basegame/res/skins/melistra.png")
+		rn.renderer():add_texture("skin.man", "basegame/res/skins/man.png")
 		--rn.renderer():add_texture("helm.full", "basegame/res/skins/helms/full_helm.png")
 	end,
 	pre_instantiate = function(uuid)
@@ -13,7 +13,7 @@ rn.mods.basegame.prefabs.player_melistra =
 		rn.entity.prefabs.keyboard_controlled.instantiate(uuid)
 		rn.entity.prefabs.bipedal.instantiate(uuid)
 		rn.entity.prefabs.bipedal.set_can_equip(uuid, true)
-		rn.entity.prefabs.bipedal.set_texture(uuid, "skin.melistra")
+		rn.entity.prefabs.bipedal.set_texture(uuid, "skin.man")
 		--rn.entity.prefabs.bipedal.set_helm_visible(uuid, true)
 		--rn.entity.prefabs.bipedal.set_helm_texture(uuid, "helm.full")
 		--rn.entity.prefabs.bipedal.set_helm_colour(uuid, 0.6, 0.1, 0.2)

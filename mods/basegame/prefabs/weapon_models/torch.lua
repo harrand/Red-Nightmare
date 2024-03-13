@@ -14,7 +14,7 @@ rn.mods.basegame.prefabs.weapon_model_torch =
 		local effect = sc:add_entity("cast_buildup")
 		sc:entity_write(effect, "magic_type", "fire")
 		sc:entity_write(effect, "time_warp", 2.5)
-		sc:entity_write(effect, "power_override", 2.0)
+		sc:entity_write(effect, "power_override", 0.85)
 		rn.entity.prefabs.sprite.set_scale(effect, 0.75)
 		rn.entity.prefabs.sticky.stick_to_subobject(effect, uuid, 3, false, false)
 		sc:entity_write(uuid, "sparkle", effect)

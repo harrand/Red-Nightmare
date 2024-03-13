@@ -52,7 +52,7 @@ rn.mods.basegame.prefabs.loot_drop =
 		local rarity_colour = rn.item.rarity[max_rarity].colour
 
 		if rn.entity.prefabs.light_emitter.exists(uuid) then
-			rn.entity.prefabs.light_emitter.set_power(uuid, 1.25)
+			rn.entity.prefabs.light_emitter.set_power(uuid, 0.6)
 			rn.entity.prefabs.light_emitter.set_colour(uuid, rarity_colour[1], rarity_colour[2], rarity_colour[3])
 			rn.entity.prefabs.light_emitter.update(uuid, delta_seconds)
 		end

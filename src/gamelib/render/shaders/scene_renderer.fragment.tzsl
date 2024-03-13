@@ -45,10 +45,10 @@ float diffuse_directional(vec3 normal, bool is_2d)
 {
 	if(is_2d)
 	{
-		return 0.0f;
+		//return 0.0f;
 	}
 	vec3 light_dir = normalize(light.directional_light_direction);
-	float diffuse = max(dot(vec3(0.0f, 0.0f, 1.0f), normal), 0.0f);
+	float diffuse = max(dot(light_dir, normal), 0.0f);
 	diffuse = light.directional_light_power * 0.5f * diffuse;
 	return diffuse;
 }
@@ -58,14 +58,19 @@ float diffuse(point_light_data l, vec3 normal, bool is_2d)
 	vec3 lightDir = l.position - in::position;
 	if(is_2d)
 	{
-		lightDir.z = 0.0f;
+		lightDir.z = normal.z;
 	}
-	float distance = length(lightDir) + 1.0f;
+	else
+	{
+		// ignore far z distances for 3d.
+		lightDir.z = clamp(lightDir.z, -1.0, 1.0);
+	}
+	float distance = length(lightDir.xy) + 0.1f;
 	lightDir = normalize(lightDir);
 
 	// Calculate the diffuse lighting component using the Phong diffuse lighting model
-	float diffuse = max(dot(vec3(0.0f, 0.0f, 1.0f), normal), 0.0);
-	diffuse = l.power * 0.5f * diffuse / tz::math::pow(distance, 1.0f);
+	float diffuse = max(dot(lightDir, normal), 0.0);
+	diffuse = l.power * 0.5f * diffuse / tz::math::pow(distance, 0.5f);
 	return diffuse;
 }
 
@@ -75,13 +80,18 @@ float specular(point_light_data l, vec3 normal, bool is_2d)
 	vec3 light_dir = l.position - in::position;
 	if(is_2d)
 	{
-		light_dir.z = 0.0f;
+		light_dir.z = normal.z;
 	}
-	float distance = length(light_dir) + 1.0f;
+	else
+	{
+		// ignore far z distances for 3d.
+		light_dir.z = clamp(light_dir.z, -1.0, 1.0);
+	}
+	float distance = length(light_dir.xy) + 0.1f;
 	light_dir = normalize(light_dir);
 
-	float specular = pow(max(dot(normal, vec3(0.0f, 0.0f, 1.0f)), 0.0), 8);
-	specular = l.power * specular / tz::math::pow(distance, 1.0f);
+	float specular = pow(max(dot(normal, light_dir), 0.0), 8);
+	specular = l.power * specular / tz::math::pow(distance, 0.5f);
 	return specular;
 }
 

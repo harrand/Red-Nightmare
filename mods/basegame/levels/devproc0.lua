@@ -9,7 +9,9 @@ rn.mods.basegame.levels.devproc0 =
 	on_load = function()
 		local player = rn.current_scene():add_entity("player_melistra")
 		rn.level.data_write("player", player)
-		rn.renderer():set_ambient_light(0.2, 0.2, 0.25, 1.0)
+		rn.renderer():set_ambient_light(0.2, 0.2, 0.225, 1.0)
+		rn.renderer():directional_light_set_power(0.4)
+		rn.renderer():directional_light_set_colour(0.8, 0.8, 1.0)
 
 		local wallscale = 4
 		local size = 64
