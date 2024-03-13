@@ -1,6 +1,6 @@
 local base_subobj = 5
 -- note: these 3 may or may not be mixed up.
-local chest_subobj = 5
+local chest_subobj = 6
 local helm_subobj = 3
 -- note: subobject 16 also seems to be around the head?
 -- new model: 9 or 10 is head?
