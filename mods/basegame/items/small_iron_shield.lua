@@ -19,5 +19,6 @@ rn.mods.basegame.items.small_iron_shield =
 	slot = rn.item.slot.left_hand,
 	colour = {0.5, 0.5, 0.5},
 	rarity = "common",
-	weapon_prefab = "weapon_small_shield"
+	weapon_prefab = "weapon_small_shield",
+	weapon_class = "shield"
 }

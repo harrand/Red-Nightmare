@@ -41,7 +41,7 @@ rn.mods.basegame.prefabs.bipedal =
 		local currently_playing = sc:entity_get_playing_animation(uuid)
 		local should_stop_move_animation = (currently_playing == rn.entity.prefabs.bipedal.get_run_animation(uuid)) and not moving
 		if currently_playing == nil then
-			sc:entity_play_animation(uuid, "CastIdle")
+			sc:entity_play_animation(uuid, rn.entity.prefabs.bipedal.get_idle_animation(uuid))
 		end
 	end,
 	on_collision = function(me, other)
@@ -63,7 +63,7 @@ rn.mods.basegame.prefabs.bipedal =
 	end,
 	on_stop_moving = function(uuid)
 		if not rn.spell.is_casting(uuid) then
-			rn.current_scene():entity_play_animation(uuid, "CastIdle")
+			rn.current_scene():entity_play_animation(uuid, rn.entity.prefabs.bipedal.get_idle_animation(uuid))
 		end
 	end,
 	on_cast_begin = function(uuid, spellname)
@@ -285,6 +285,29 @@ rn.mods.basegame.prefabs.bipedal =
 		rn.current_scene():entity_write(uuid, "run_animation", run_anim)
 	end,
 	get_run_animation = function(uuid)
-		return rn.current_scene():entity_read(uuid, "run_animation") or "TorchRun"
+		local run_override = rn.current_scene():entity_read(uuid, "run_animation")
+		if run_override ~= nil then return run_override end
+		if rn.item.get_weapon_class_equipped_slot(uuid, "torch") then
+			return "TorchRun"
+		elseif rn.item.get_weapon_class_equipped_slot(uuid, "shield") then
+			return "Melee1H_Run"
+		else
+			return "Run"
+		end
+	end,
+	set_idle_animation = function(uuid, idle_anim)
+		rn.current_scene():entity_write(uuid, "idle_animation", idle_anim)
+	end,
+	get_idle_animation = function(uuid)
+		local idle_override = rn.current_scene():entity_read(uuid, "idle_animation")
+		if idle_override ~= nil then return idle_override end
+		if rn.item.get_weapon_class_equipped_slot(uuid, "torch") then
+			return "TorchIdle"
+		elseif rn.item.get_weapon_class_equipped_slot(uuid, "shield") then
+			return "Melee1H_Idle_Examine"
+		else
+			return "Idle"
+		end
+
 	end
 }

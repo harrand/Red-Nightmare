@@ -13,6 +13,7 @@ rn.mods.basegame.prefabs.zombie =
 		rn.entity.prefabs.bipedal.set_texture(uuid, "skin.zombie")
 		--rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 1, "melee")
 		rn.entity.prefabs.bipedal.set_run_animation(uuid, "ZombieWalk")
+		rn.entity.prefabs.bipedal.set_idle_animation(uuid, "ZombieIdle")
 
 		rn.entity.prefabs.combat_stats.set_base_max_hp(uuid, 20)
 		rn.entity.prefabs.combat_stats.set_base_physical_power(uuid, 2.0)

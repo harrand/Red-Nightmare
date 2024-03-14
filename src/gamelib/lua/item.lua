@@ -194,3 +194,24 @@ rn.item.drop_at = function(xpos, ypos, ...)
 	end
 	return drop
 end
+
+rn.item.get_weapon_class = function(item_name)
+	if item_name == nil then return nil end
+	local itemdata = rn.item.items[item_name]
+	if itemdata ~= nil then
+		return itemdata.weapon_class
+	end
+	return nil
+end
+
+-- given a weapon class, retrieve the weapon item slot (left or right hand) matching that class, or nil if there is no match.
+rn.item.get_weapon_class_equipped_slot = function(uuid, class)
+	local left = rn.item.get_equipped(uuid, rn.item.slot.left_hand)	
+	local right = rn.item.get_equipped(uuid, rn.item.slot.right_hand)	
+	if rn.item.get_weapon_class(left) == class then
+		return rn.item.slot.left_hand
+	end
+	if rn.item.get_weapon_class(right) == class then
+		return rn.item.slot.right_hand
+	end
+end
