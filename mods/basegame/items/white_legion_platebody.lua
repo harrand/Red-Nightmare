@@ -4,11 +4,11 @@ rn.mods.basegame.items.white_legion_platebody =
 		+40% Physical Resist
 	]],
 	on_equip = function(uuid)
-		rn.entity.prefabs.combat_stats.apply_flat_increased_physical_resist(uuid, 0.4)
+		rn.entity.prefabs.combat_stats.apply_flat_increased_physical_resist(uuid, 0.125)
 		rn.entity.prefabs.combat_stats.apply_flat_increased_max_hp(uuid, 9)
 	end,
 	on_unequip = function(uuid)
-		rn.entity.prefabs.combat_stats.apply_flat_increased_physical_resist(uuid, -0.4)
+		rn.entity.prefabs.combat_stats.apply_flat_increased_physical_resist(uuid, -0.125)
 		rn.entity.prefabs.combat_stats.apply_flat_increased_max_hp(uuid, -9)
 	end,
 	slot = rn.item.slot.chest,

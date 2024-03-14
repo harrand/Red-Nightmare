@@ -8,11 +8,11 @@ rn.mods.basegame.items.white_legion_helm =
 		rn.renderer():add_texture("helm.full_helm", "basegame/res/skins/helms/full_helm.png")
 	end,
 	on_equip = function(uuid)
-		rn.entity.prefabs.combat_stats.apply_flat_increased_physical_resist(uuid, 0.2)
+		rn.entity.prefabs.combat_stats.apply_flat_increased_physical_resist(uuid, 0.075)
 		rn.entity.prefabs.combat_stats.apply_flat_increased_max_hp(uuid, 3)
 	end,
 	on_unequip = function(uuid)
-		rn.entity.prefabs.combat_stats.apply_flat_increased_physical_resist(uuid, -0.2)
+		rn.entity.prefabs.combat_stats.apply_flat_increased_physical_resist(uuid, -0.075)
 		rn.entity.prefabs.combat_stats.apply_flat_increased_max_hp(uuid, -3)
 	end,
 	on_update = function(uuid, delta_seconds)
