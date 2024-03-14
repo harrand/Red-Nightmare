@@ -1,13 +1,7 @@
 local base_subobj = 9
--- note: these 3 may or may not be mixed up.
 local chest_subobj = 3
 local helm_subobj = 5
--- note: subobject 16 also seems to be around the head?
--- new model: 9 or 10 is head?
 local legs_subobj = 7
-
--- 18 seems to be left shoulder. 19 elbow. 20 hand.
--- 22 right shoulder, 23 elbow. 24 hand.
 
 -- new model:
 -- 11-12 left shoulder. 13 elbow. 14 hand
