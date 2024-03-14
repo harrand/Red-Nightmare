@@ -21,8 +21,7 @@ function rn_impl_create_combat_stat(stat_name)
 	end
 
 	prfb["apply_flat_increased_" .. stat_name] = function(uuid, val)
-		local old_flat_inc = prfb["get_flat_increased_" .. stat_name](uuid) or 0.0
-		prfb["set_flat_increased_" .. stat_name](uuid, old_flat_inc + val)
+		rn.current_scene():entity_write_add(uuid, "flat_inc_" .. stat_name, val)
 	end
 
 	-- additional percentage stat applied. stacks additively
@@ -36,8 +35,7 @@ function rn_impl_create_combat_stat(stat_name)
 	end
 
 	prfb["apply_pct_increased_" .. stat_name] = function(uuid, val)
-		local old_pct_inc = prfb["get_pct_increased_" .. stat_name](uuid) or 0.0
-		prfb["set_pct_increased_" .. stat_name](uuid, old_pct_inc + val)
+		rn.current_scene():entity_write_add(uuid, "pct_inc_" .. stat_name, val)
 	end
 
 	-- additional percentage stat applied. stacks multiplicatively
@@ -51,8 +49,7 @@ function rn_impl_create_combat_stat(stat_name)
 	end
 
 	prfb["apply_pct_more_" .. stat_name] = function(uuid, val)
-		local old_pct_more = prfb["get_pct_more_" .. stat_name](uuid) or 0.0
-		prfb["set_pct_more_" .. stat_name](uuid, ((old_pct_more + 1.0) * val) - 1.0)
+		rn.current_scene():entity_write_multiply_percentage(uuid, "pct_more_" .. stat_name, val)
 	end
 
 	-- get the stat value, after all modifiers.

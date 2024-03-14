@@ -114,6 +114,76 @@ namespace game::messaging
 				sc->get_entity(msg.uuid).internal_variables[varname] = lua_value;
 			}
 			break;
+			case scene_operation::entity_write_add:
+			{
+				TZ_PROFZONE("entity write add", 0xFF99CC44);
+				const auto& [varname, lua_value] = std::any_cast<std::pair<std::string, tz::lua::lua_generic>>(msg.value);
+				std::visit([&msg, varname](auto&& arg)
+				{
+					using T = std::decay_t<decltype(arg)>;
+					tz::lua::lua_generic& val = sc->get_entity(msg.uuid).internal_variables[varname];
+					if(!std::holds_alternative<T>(val))
+					{
+						val = T{0};
+					}
+					if constexpr(std::is_arithmetic_v<T>)
+					{
+						std::get<T>(val) += arg;
+					}
+					else
+					{
+						tz::error("entity_write_add invoked on varname \"%s\" which has non-integral underlying type.", varname.c_str());
+					}
+				}, lua_value);
+			}
+			break;
+			case scene_operation::entity_write_multiply:
+			{
+				TZ_PROFZONE("entity write multiply", 0xFF99CC44);
+				const auto& [varname, lua_value] = std::any_cast<std::pair<std::string, tz::lua::lua_generic>>(msg.value);
+				std::visit([&msg, varname](auto&& arg)
+				{
+					using T = std::decay_t<decltype(arg)>;
+					tz::lua::lua_generic& val = sc->get_entity(msg.uuid).internal_variables[varname];
+					if(!std::holds_alternative<T>(val))
+					{
+						val = T{1};
+					}
+					if constexpr(std::is_arithmetic_v<T>)
+					{
+						std::get<T>(val) *= arg;
+					}
+					else
+					{
+						tz::error("entity_write_multiply invoked on varname \"%s\" which has non-integral underlying type.", varname.c_str());
+					}
+				}, lua_value);
+			}
+			break;
+			case scene_operation::entity_write_multiply_percentage:
+			{
+				TZ_PROFZONE("entity write multiply percentage", 0xFF99CC44);
+				const auto& [varname, lua_value] = std::any_cast<std::pair<std::string, tz::lua::lua_generic>>(msg.value);
+				std::visit([&msg, varname](auto&& arg)
+				{
+					using T = std::decay_t<decltype(arg)>;
+					tz::lua::lua_generic& val = sc->get_entity(msg.uuid).internal_variables[varname];
+					if(!std::holds_alternative<T>(val))
+					{
+						val = T{0};
+					}
+					if constexpr(std::is_arithmetic_v<T>)
+					{
+						T& valt = std::get<T>(val);
+						valt = ((valt + 1.0f) * arg) - 1.0f;
+					}
+					else
+					{
+						tz::error("entity_write_multiply_percentage invoked on varname \"%s\" which has non-integral underlying type.", varname.c_str());
+					}
+				}, lua_value);
+			}
+			break;
 			case scene_operation::entity_set_name:
 			{
 				TZ_PROFZONE("entity set name", 0xFF99CC44);
@@ -571,6 +641,51 @@ namespace game::messaging
 			local_scene_receiver.send_message
 			({
 				.operation = scene_operation::entity_write,
+				.uuid = static_cast<entity_uuid>(uuid),
+				.value = message
+			});
+			return 0;
+		}
+
+		int entity_write_add(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity write add", 0xFF99CC44);
+			auto [_, uuid, varname] = tz::lua::parse_args<tz::lua::nil, unsigned int, std::string>(state);
+			tz::lua::lua_generic variable_value = state.stack_get_generic(4);
+			std::pair<std::string, tz::lua::lua_generic> message{varname, variable_value};
+			local_scene_receiver.send_message
+			({
+				.operation = scene_operation::entity_write_add,
+				.uuid = static_cast<entity_uuid>(uuid),
+				.value = message
+			});
+			return 0;
+		}
+
+		int entity_write_multiply(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity write multiply", 0xFF99CC44);
+			auto [_, uuid, varname] = tz::lua::parse_args<tz::lua::nil, unsigned int, std::string>(state);
+			tz::lua::lua_generic variable_value = state.stack_get_generic(4);
+			std::pair<std::string, tz::lua::lua_generic> message{varname, variable_value};
+			local_scene_receiver.send_message
+			({
+				.operation = scene_operation::entity_write_multiply,
+				.uuid = static_cast<entity_uuid>(uuid),
+				.value = message
+			});
+			return 0;
+		}
+
+		int entity_write_multiply_percentage(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity write multiply percentage", 0xFF99CC44);
+			auto [_, uuid, varname] = tz::lua::parse_args<tz::lua::nil, unsigned int, std::string>(state);
+			tz::lua::lua_generic variable_value = state.stack_get_generic(4);
+			std::pair<std::string, tz::lua::lua_generic> message{varname, variable_value};
+			local_scene_receiver.send_message
+			({
+				.operation = scene_operation::entity_write_multiply_percentage,
 				.uuid = static_cast<entity_uuid>(uuid),
 				.value = message
 			});
@@ -1042,6 +1157,9 @@ namespace game::messaging
 			LUA_METHOD(lua_local_scene_message_receiver, contains_entity)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_model)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_write)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_write_add)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_write_multiply)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_write_multiply_percentage)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_read)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_animation_length)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_playing_animation)
