@@ -205,7 +205,7 @@ namespace game::render
 		return this->renderer.get_camera_transform().translate.swizzle<0, 1>();
 	}
 
-	constexpr float depth_max = 5.0f;
+	constexpr float depth_max = 10.0f;
 
 	void scene_renderer::set_camera_position(tz::vec2 cam_pos)
 	{

@@ -308,6 +308,19 @@ rn.mods.basegame.prefabs.bipedal =
 		else
 			return "Idle"
 		end
-
-	end
+	end,
+	set_death_animation = function(uuid, death_anim)
+		rn.current_scene():entity_write(uuid, "death_animation", death_anim)
+	end,
+	get_death_animation = function(uuid)
+		local death_override = rn.current_scene():entity_read(uuid, "death_animation")
+		if death_override ~= nil then return death_override end
+		if rn.item.get_weapon_class_equipped_slot(uuid, "torch") then
+			return "CastDeath"
+		elseif rn.item.get_weapon_class_equipped_slot(uuid, "shield") then
+			return "Melee1H_Death"
+		else
+			return "Melee2H_Death"
+		end
+	end,
 }

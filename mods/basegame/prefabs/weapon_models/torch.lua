@@ -31,7 +31,7 @@ rn.mods.basegame.prefabs.weapon_model_torch =
 	put_on_ground = function(uuid, posx, posy)
 		rn.mods.basegame.prefabs.sticky.stick_to(uuid, nil)
 		rn.entity.prefabs.sprite.set_position(uuid, posx, posy)
-		rn.entity.prefabs.sprite.set_rotation(uuid, -math.pi * 0.5)
+		rn.entity.prefabs.sprite.set_rotation(uuid, -math.pi * 0.25)
 		rn.entity.prefabs.sprite.set_colour(uuid, 0.6, 0.6, 0.6)
 	end,
 	spawn_on_ground = function(posx, posy)

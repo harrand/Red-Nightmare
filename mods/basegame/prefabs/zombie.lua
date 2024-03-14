@@ -14,6 +14,7 @@ rn.mods.basegame.prefabs.zombie =
 		--rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 1, "melee")
 		rn.entity.prefabs.bipedal.set_run_animation(uuid, "ZombieWalk")
 		rn.entity.prefabs.bipedal.set_idle_animation(uuid, "ZombieIdle")
+		rn.entity.prefabs.bipedal.set_death_animation(uuid, "ZombieDeath")
 
 		rn.entity.prefabs.combat_stats.set_base_max_hp(uuid, 20)
 		rn.entity.prefabs.combat_stats.set_base_physical_power(uuid, 2.0)
@@ -29,8 +30,9 @@ rn.mods.basegame.prefabs.zombie =
 			-- its possible the "run" animation message is sent after another entity hits you and kills you on another worker thread.
 			-- for that reason, if we accidentally overplay the death animation in this edge-case, we re-play it here.
 			local playing_anim = rn.current_scene():entity_get_playing_animation(uuid)
-			if playing_anim ~= nil and playing_anim ~= "Death" then
-				rn.current_scene():entity_play_animation(uuid, "Death")
+			local death_anim = rn.entity.prefabs.bipedal.get_death_animation(uuid)
+			if playing_anim ~= nil and playing_anim ~= death_anim then
+				rn.current_scene():entity_play_animation(uuid, death_anim)
 			end
 			return
 		end
