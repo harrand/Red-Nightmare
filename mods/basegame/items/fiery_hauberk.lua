@@ -13,11 +13,13 @@ rn.mods.basegame.items.fiery_hauberk =
 		end
 		rn.entity.prefabs.light_emitter.instantiate(uuid)
 
+		rn.entity.prefabs.combat_stats.apply_flat_increased_max_hp(uuid, 20)
 		rn.entity.prefabs.combat_stats.apply_pct_more_fire_power(uuid, 2.0)
 	end,
 	on_unequip = function(uuid)
 		rn.entity.prefabs.light_emitter.on_remove(uuid)
 
+		rn.entity.prefabs.combat_stats.apply_flat_increased_max_hp(uuid, -20)
 		rn.entity.prefabs.combat_stats.apply_pct_more_fire_power(uuid, 0.5)
 	end,
 	on_update = function(uuid, delta_seconds)

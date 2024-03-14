@@ -32,6 +32,8 @@ rn.mods.basegame.prefabs.portal =
 		if other ~= nil and rn.current_scene():contains_entity(other) then
 			if rn.level.data_read("player") == other then
 				rn.player.stash()
+				local difficulty = rn.data_store():read("difficulty") or 0
+				rn.data_store():set("difficulty", difficulty + 1)
 				rn.level.reload()
 				rn.player.unstash()
 			else

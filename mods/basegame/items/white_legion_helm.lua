@@ -9,9 +9,11 @@ rn.mods.basegame.items.white_legion_helm =
 	end,
 	on_equip = function(uuid)
 		rn.entity.prefabs.combat_stats.apply_flat_increased_physical_resist(uuid, 0.2)
+		rn.entity.prefabs.combat_stats.apply_flat_increased_max_hp(uuid, 3)
 	end,
 	on_unequip = function(uuid)
 		rn.entity.prefabs.combat_stats.apply_flat_increased_physical_resist(uuid, -0.2)
+		rn.entity.prefabs.combat_stats.apply_flat_increased_max_hp(uuid, -3)
 	end,
 	on_update = function(uuid, delta_seconds)
 		local sc = rn.current_scene()

@@ -13,6 +13,7 @@ rn.mods.basegame.levels.devproc0 =
 		rn.renderer():directional_light_set_power(0.4)
 		rn.renderer():directional_light_set_colour(0.8, 0.8, 1.0)
 
+		local difficulty = rn.data_store():read("difficulty") or 0
 		local wallscale = 4
 		local size = 64
 		local boundx = size
@@ -31,14 +32,15 @@ rn.mods.basegame.levels.devproc0 =
 					-- randomly 10%...
 					local randval = math.random()
 					if randval <= 0.1 then
+						randval = randval / (math.min(difficulty, 20) + 1)
 						-- 2.5% chance of spawning a loot chest
 						if randval <= 0.025 then
 							local rarity = "common"
-							if randval <= 0.001 then
+							if randval <= 0.0001 then
 								rarity = "legendary"
-							elseif randval <= 0.005 then
+							elseif randval <= 0.00085 then
 								rarity = "epic"
-							elseif randval <= 0.01 then
+							elseif randval <= 0.005 then
 								rarity = "rare"
 							end
 							local ent = rn.current_scene():add_entity("loot_chest")
@@ -62,8 +64,17 @@ rn.mods.basegame.levels.devproc0 =
 						end
 						local ent = rn.current_scene():add_entity(pn)
 						rn.entity.prefabs.sprite.set_position(ent, x, y)
-					end
+						-- buff depending on difficulty
+						-- health increased by 2 per level
+						rn.entity.prefabs.combat_stats.apply_flat_increased_max_hp(ent, difficulty + 2)
 
+						for schoolname, schooldata in pairs(rn.spell.schools) do
+							-- all powers increased by 1 per level
+							rn.entity.prefabs.combat_stats["apply_flat_increased_" .. schoolname .. "_power"](ent, difficulty)
+							-- all resistances increased by 0.5 per level
+							rn.entity.prefabs.combat_stats["apply_flat_increased_" .. schoolname .. "_resist"](ent, difficulty * 0.005)
+						end
+					end
 					local randval3 = math.random()
 					if randval3 <= 0.02 then
 						rn.entity.prefabs.weapon_model_torch.spawn_on_ground(x, y)
@@ -77,17 +88,6 @@ rn.mods.basegame.levels.devproc0 =
 		rn.entity.prefabs.sprite.set_texture(bg, "background.blackrock")
 		rn.entity.prefabs.sprite.set_normal_map(bg, "background.blackrock_normals")
 		rn.current_scene():entity_set_local_position(bg, 0.0, 0.0, -2.0)
-
-		local main_chest = rn.current_scene():add_entity("loot_chest")
-		rn.entity.prefabs.loot_chest.add_loot(main_chest, "steel_longsword")
-
-		local insin_chest = rn.current_scene():add_entity("loot_chest")
-		rn.entity.prefabs.sprite.set_position(insin_chest, -boundx + wallscale, 0.0)
-		rn.entity.prefabs.loot_chest.add_loot(insin_chest, "insin")
-
-		local fiery_hauberk_chest = rn.current_scene():add_entity("loot_chest")
-		rn.entity.prefabs.sprite.set_position(fiery_hauberk_chest, -boundx + wallscale, 0.0)
-		rn.entity.prefabs.loot_chest.add_loot(fiery_hauberk_chest, "fiery_hauberk")
 
 		local reload_portal = rn.current_scene():add_entity("portal")
 		rn.entity.prefabs.sprite.set_position(reload_portal, -boundx + wallscale, boundy - wallscale)

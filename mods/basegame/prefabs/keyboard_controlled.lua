@@ -28,7 +28,7 @@ rn.mods.basegame.prefabs.keyboard_controlled =
 				-- we expect control_action to be a string representation of an *integer*
 				-- however if its 1, then the string could easily be `1.0`
 				-- so we string -> number -> string. i know...
-				if inp:is_key_down(tostring(math.floor(tonumber(control_action)))) then
+				if control_action ~= nil and inp:is_key_down(tostring(math.floor(tonumber(control_action)))) then
 					local cast_name = sc:entity_read(uuid, "action." .. istr)
 					if cast_name ~= nil then
 						rn.spell.cast(uuid, cast_name)
@@ -41,19 +41,19 @@ rn.mods.basegame.prefabs.keyboard_controlled =
 
 		local xdiff = 0
 		local ydiff = 0
-		if control_enabled and inp:is_key_down(control_left) then
+		if control_enabled and control_left ~= nil and inp:is_key_down(control_left) then
 			xdiff = -1
 			moved = true
 		end
-		if control_enabled and inp:is_key_down(control_right) then
+		if control_enabled and control_right ~= nil and inp:is_key_down(control_right) then
 			xdiff = 1
 			moved = true
 		end
-		if control_enabled and inp:is_key_down(control_forward) then
+		if control_enabled and control_forward ~= nil and inp:is_key_down(control_forward) then
 			ydiff = 1
 			moved = true
 		end
-		if control_enabled and inp:is_key_down(control_backward) then
+		if control_enabled and control_backward ~= nil and inp:is_key_down(control_backward) then
 			ydiff = -1
 			moved = true
 		end

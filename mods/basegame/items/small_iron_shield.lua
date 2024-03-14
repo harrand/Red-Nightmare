@@ -8,12 +8,14 @@ rn.mods.basegame.items.small_iron_shield =
 		for schoolname, schooldata in pairs(rn.spell.schools) do
 			rn.entity.prefabs.combat_stats["apply_flat_increased_" .. schoolname .. "_resist"](uuid, 0.1)
 		end
+		rn.entity.prefabs.combat_stats.apply_flat_increased_max_hp(uuid, 3)
 		rn.entity.prefabs.combat_stats.apply_flat_increased_physical_resist(uuid, 0.2)
 	end,
 	on_unequip = function(uuid)
 		for schoolname, schooldata in pairs(rn.spell.schools) do
 			rn.entity.prefabs.combat_stats["apply_flat_increased_" .. schoolname .. "_resist"](uuid, -0.1)
 		end
+		rn.entity.prefabs.combat_stats.apply_flat_increased_max_hp(uuid, -3)
 		rn.entity.prefabs.combat_stats.apply_flat_increased_physical_resist(uuid, -0.2)
 	end,
 	slot = rn.item.slot.left_hand,
