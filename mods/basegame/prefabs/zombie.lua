@@ -42,7 +42,18 @@ rn.mods.basegame.prefabs.zombie =
 	end,
 	on_move = rn.mods.basegame.prefabs.bipedal.on_move,
 	on_stop_moving = rn.mods.basegame.prefabs.bipedal.on_stop_moving,
-	on_collision = rn.mods.basegame.prefabs.melee_ai.on_collision,
+	on_collision = function(me, other)
+		local target = rn.entity.prefabs.base_ai.get_target(me)
+		if target == other and target == rn.player.get() and not rn.spell.is_casting(me) then
+			local attack_power = rn.entity.prefabs.combat_stats.get_physical_power(me)
+			local target_hp = rn.entity.prefabs.combat_stats.get_hp(target)
+			if attack_power * 4 >= target_hp then
+				rn.spell.spells.zombie_devour.precast(me, target)
+				return true
+			end
+		end
+		return rn.mods.basegame.prefabs.melee_ai.on_collision(me, other)
+	end,
 	on_cast_begin = rn.mods.basegame.prefabs.bipedal.on_cast_begin,
 	on_death = rn.mods.basegame.prefabs.bipedal.on_death,
 	on_equip = rn.mods.basegame.prefabs.bipedal.on_equip,

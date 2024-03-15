@@ -76,6 +76,15 @@ rn.entity.update = function(uuid, delta_seconds)
 		end
 	end
 
+	local stunned = rn.entity.get_stunned(uuid)
+	if stunned ~= nil then
+		if stunned > delta_seconds then
+			rn.entity.stun(uuid, stunned - delta_seconds)
+		else
+			rn.entity.unstun(uuid)
+		end
+	end
+
 	-- if the entity is casting a spell, that also needs to advance.
 	rn.spell.advance(uuid)
 	if not moving and sc:entity_read(uuid, "moving_last_frame") == true then
@@ -286,4 +295,19 @@ rn.entity.on_unequip = function(uuid, item_name)
 			tz.assert(false);
 		end
 	end
+end
+
+rn.entity.stun = function(uuid, stun_length)
+	rn.current_scene():entity_write(uuid, "stunned_duration", stun_length)
+	rn.entity.prefabs.keyboard_controlled.set_enabled(uuid, false)
+	rn.spell.clear(uuid)
+end
+
+rn.entity.unstun = function(uuid)
+	rn.current_scene():entity_write(uuid, "stunned_duration", nil)
+	rn.entity.prefabs.keyboard_controlled.set_enabled(uuid, true)
+end
+
+rn.entity.get_stunned = function(uuid)
+	return rn.current_scene():entity_read(uuid, "stunned_duration")
 end

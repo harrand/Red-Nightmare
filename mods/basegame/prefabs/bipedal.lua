@@ -40,7 +40,10 @@ rn.mods.basegame.prefabs.bipedal =
 		local sc = rn.current_scene()
 		local currently_playing = sc:entity_get_playing_animation(uuid)
 		local should_stop_move_animation = (currently_playing == rn.entity.prefabs.bipedal.get_run_animation(uuid)) and not moving
-		if currently_playing == nil then
+		local stunned = rn.entity.get_stunned(uuid)
+		if stunned ~= nil and currently_playing ~= "Stunned" then
+			sc:entity_play_animation(uuid, "Stunned", false, 0.1)
+		elseif currently_playing == nil then
 			sc:entity_play_animation(uuid, rn.entity.prefabs.bipedal.get_idle_animation(uuid))
 		end
 	end,
@@ -76,21 +79,25 @@ rn.mods.basegame.prefabs.bipedal =
 
 		local cast_anim = nil
 		local artificial_anim_delay = 0.0
-		if spelldata.magic_type == "physical" or spelldata.magic_type == nil then
-			cast_anim = "Melee1H_Attack"
-			artificial_anim_delay = -0.125
+		if spelldata.animation_override ~= nil then
+			cast_anim = spelldata.animation_override
 		else
-			if spelldata.two_handed == true then
-				if spelldata.cast_type == "omni" then
-					cast_anim = "Cast2H_Omni"
-				else
-					cast_anim = "Cast2H_Directed"
-				end
+			if spelldata.magic_type == "physical" or spelldata.magic_type == nil then
+				cast_anim = "Melee1H_Attack"
+				artificial_anim_delay = -0.125
 			else
-				if spelldata.cast_type == "omni" then
-					cast_anim = "Cast1H_Omni"
+				if spelldata.two_handed == true then
+					if spelldata.cast_type == "omni" then
+						cast_anim = "Cast2H_Omni"
+					else
+						cast_anim = "Cast2H_Directed"
+					end
 				else
-					cast_anim = "Cast1H_Directed"
+					if spelldata.cast_type == "omni" then
+						cast_anim = "Cast1H_Omni"
+					else
+						cast_anim = "Cast1H_Directed"
+					end
 				end
 			end
 		end
