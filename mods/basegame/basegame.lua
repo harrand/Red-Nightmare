@@ -45,6 +45,7 @@ require("basegame/spells/flash_of_light")
 require("basegame/spells/lesser_magicbolt")
 require("basegame/spells/summon_zombie")
 require("basegame/spells/zombie_devour")
+require("basegame/spells/zombie_swipe")
 
 require("basegame/items/basic_torch")
 require("basegame/items/imperial_plate_helm")

@@ -146,7 +146,7 @@ rn.mods.basegame.prefabs.melee_ai =
 		if target == other then
 			local x, y = rn.entity.prefabs.sprite.get_position(me)
 			local tarx, tary = rn.entity.prefabs.sprite.get_position(other)
-			rn.spell.cast(me, "melee")
+			rn.spell.cast(me, rn.entity.prefabs.melee_ai.get_melee_ability(me))
 			rn.entity.prefabs.bipedal.face_direction(me, x - tarx, y - tary)
 		end
 		return ret
@@ -191,6 +191,12 @@ rn.mods.basegame.prefabs.melee_ai =
 	end,
 	get_aggro_range = rn.mods.basegame.prefabs.base_ai.get_aggro_range,
 	set_aggro_range = rn.mods.basegame.prefabs.base_ai.set_aggro_range,
+	set_melee_ability = function(uuid, spellname)
+		rn.current_scene():entity_write(uuid, "melee_ai_spell", spellname)
+	end,
+	get_melee_ability = function(uuid)
+		return rn.current_scene():entity_read(uuid, "melee_ai_spell") or "melee"
+	end,
 }
 
 rn.mods.basegame.prefabs.ranged_ai =

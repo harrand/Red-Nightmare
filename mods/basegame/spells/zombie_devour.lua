@@ -8,7 +8,9 @@ rn.mods.basegame.spells.zombie_devour =
 		local target = rn.current_scene():entity_read(uuid, "target")
 		if target ~= nil and rn.current_scene():contains_entity(target) then
 			rn.entity.unstun(target)
-			rn.entity.prefabs.combat_stats.dmg(target, rn.entity.prefabs.combat_stats.get_physical_power(uuid) * 10, "physical", uuid)
+			local dmg = rn.entity.prefabs.combat_stats.get_physical_power(uuid) * 10
+			rn.entity.prefabs.combat_stats.dmg(target, dmg, "physical", uuid)
+			rn.entity.prefabs.combat_stats.heal(uuid, dmg * 0.5, "shadow", uuid)
 		end
 	end,
 	precast = function(me, target)

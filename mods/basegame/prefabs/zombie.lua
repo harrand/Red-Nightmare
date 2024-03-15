@@ -12,7 +12,7 @@ rn.mods.basegame.prefabs.zombie =
 		rn.entity.prefabs.bipedal.set_can_equip(uuid, true)
 		rn.entity.prefabs.bipedal.set_texture(uuid, "skin.zombie")
 		--rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 1, "melee")
-		rn.entity.prefabs.bipedal.set_run_animation(uuid, "ZombieWalk")
+		rn.entity.prefabs.bipedal.set_run_animation(uuid, "ZombieRun")
 		rn.entity.prefabs.bipedal.set_idle_animation(uuid, "ZombieIdle")
 		rn.entity.prefabs.bipedal.set_death_animation(uuid, "ZombieDeath")
 
@@ -22,6 +22,7 @@ rn.mods.basegame.prefabs.zombie =
 
 		rn.entity.prefabs.melee_ai.instantiate(uuid)
 		rn.entity.prefabs.melee_ai.set_aggro_range(uuid, 15)
+		rn.entity.prefabs.melee_ai.set_melee_ability(uuid, "zombie_swipe")
 	end,
 	update = function(uuid, delta_seconds)
 		if rn.entity.prefabs.combat_stats.is_dead(uuid) then
