@@ -10,7 +10,8 @@ rn.mods.basegame.items.elemental_circlet_base =
 	slot = rn.item.slot.helm,
 	colour = {1.0, 1.0, 1.0},
 	rarity = "common",
-	texture = "helm.circlet"
+	texture = "helm.circlet",
+	valid_loot = false
 }
 
 for schoolname, schooldata in pairs(rn.spell.schools) do
@@ -31,7 +32,8 @@ for schoolname, schooldata in pairs(rn.spell.schools) do
 			slot = rn.mods.basegame.items.elemental_circlet_base.slot,
 			colour = rn.spell.schools[schoolname].colour,
 			rarity = "epic",
-			texture = rn.mods.basegame.items.elemental_circlet_base.texture
+			texture = rn.mods.basegame.items.elemental_circlet_base.texture,
+			valid_loot = false
 		}
 	end
 end

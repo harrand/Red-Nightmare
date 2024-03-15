@@ -5,7 +5,7 @@ rn.mods.basegame.items.fiery_hauberk =
 		Equip: Every second, instantly shoot a Lesser Fireball at a nearby enemy.
 	]],
 	static_init = function()
-		rn.renderer():add_texture("chest.platebody", "basegame/res/skins/chests/platebody.png")
+		rn.renderer():add_texture("chest.breastplate", "basegame/res/skins/chests/breastplate.png")
 	end,
 	on_equip = function(uuid)
 		if not rn.entity.prefabs.combat_stats.is_alive(uuid) then
@@ -52,5 +52,5 @@ rn.mods.basegame.items.fiery_hauberk =
 	slot = rn.item.slot.chest,
 	colour = rn.spell.schools.fire.colour,
 	rarity = "legendary",
-	texture = "chest.chainmail",
+	texture = "chest.breastplate",
 }

@@ -29,7 +29,9 @@ rn.load_mods = function()
 			itemdata.mod = modname
 			rn.item.items[itemname] = itemdata
 			local rarity = itemdata.rarity or "common"
-			table.insert(rn.item.rarity[rarity].items, itemname)
+			if itemdata.valid_loot == true or itemdata.valid_loot == nil then
+				table.insert(rn.item.rarity[rarity].items, itemname)
+			end
 		end
 	end
 end

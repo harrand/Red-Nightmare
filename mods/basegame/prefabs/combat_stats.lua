@@ -118,16 +118,17 @@ rn.mods.basegame.prefabs.combat_stats =
 		end
 		local effective_healing = (heal * (caster_power + 1.0))
 		local real_healing = rn.entity.prefabs.combat_stats.heal_unmit(uuid, effective_healing)
-		-- floating combat text
-		local sc = rn.current_scene()
-		local text = sc:add_entity("floating_combat_text")
-		local x, y = rn.entity.prefabs.sprite.get_position(uuid)
-		rn.entity.prefabs.floating_combat_text.set(text, x, y, tostring(math.ceil(real_healing)), {0.0, 1.0, 0.0})
 
 		-- display health bar on healee
 		-- for 5 seconds.
 		if real_healing > 0.0 then
 			rn.entity.prefabs.health_bar.display(uuid, 5.0)
+
+			-- floating combat text
+			local sc = rn.current_scene()
+			local text = sc:add_entity("floating_combat_text")
+			local x, y = rn.entity.prefabs.sprite.get_position(uuid)
+			rn.entity.prefabs.floating_combat_text.set(text, x, y, tostring(math.ceil(real_healing)), {0.0, 1.0, 0.0})
 		end
 
 	end,

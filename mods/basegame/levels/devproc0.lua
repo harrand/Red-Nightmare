@@ -32,9 +32,9 @@ rn.mods.basegame.levels.devproc0 =
 					-- randomly 10%...
 					local randval = math.random()
 					if randval <= 0.1 then
-						randval = randval / (math.min(difficulty, 20) + 1)
 						-- 2.5% chance of spawning a loot chest
 						if randval <= 0.025 then
+							randval = randval / (math.min(difficulty, 20) + 1)
 							local rarity = "common"
 							if randval <= 0.0001 then
 								rarity = "legendary"
@@ -69,8 +69,10 @@ rn.mods.basegame.levels.devproc0 =
 						rn.entity.prefabs.combat_stats.apply_flat_increased_max_hp(ent, difficulty + 2)
 
 						for schoolname, schooldata in pairs(rn.spell.schools) do
-							-- all powers increased by 1 per level
-							rn.entity.prefabs.combat_stats["apply_flat_increased_" .. schoolname .. "_power"](ent, difficulty)
+							-- all powers increased (flat) by 0.2 per level
+							-- all powers increased by 5% per level
+							rn.entity.prefabs.combat_stats["apply_flat_increased_" .. schoolname .. "_power"](ent, difficulty * 0.2)
+							rn.entity.prefabs.combat_stats["apply_pct_increased_" .. schoolname .. "_power"](ent, difficulty * 0.05)
 							-- all resistances increased by 0.5 per level
 							rn.entity.prefabs.combat_stats["apply_flat_increased_" .. schoolname .. "_resist"](ent, difficulty * 0.005)
 						end
