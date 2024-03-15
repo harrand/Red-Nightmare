@@ -27,7 +27,7 @@ rn.mods.basegame.prefabs.basic_target_field =
 	end,
 	on_collision = function(me, other)
 		local owner = rn.current_scene():entity_read(me, "owner")
-		if owner ~= nil and (other ~= owner) then
+		if owner ~= nil and rn.current_scene():contains_entity(owner) and (other ~= owner) then
 			local owner_prefab = nil
 			local owner_prefab_str = rn.current_scene():entity_read(owner, ".ai")
 			if owner_prefab_str ~= nil then
