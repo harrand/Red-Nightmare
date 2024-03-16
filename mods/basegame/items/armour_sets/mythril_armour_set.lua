@@ -1,0 +1,1 @@
+rn_impl_create_metal_armour_set("mythril", {0.4, 0.75, 1.0}, "epic", 14.5)

@@ -29,7 +29,7 @@ rn.mods.basegame.prefabs.cast_buildup =
 		if magic_type ~= nil then
 			local colour = rn.spell.schools[magic_type].colour
 			rn.entity.prefabs.sprite.set_colour(uuid, colour[1], colour[2], colour[3])
-			rn.entity.prefabs.light_emitter.set_power(uuid, power_override or math.sqrt(t * 2.0))
+			rn.entity.prefabs.light_emitter.set_power(uuid, power_override or (math.sqrt(t * 2.0) * 0.5))
 			rn.entity.prefabs.light_emitter.set_colour(uuid, colour[1], colour[2], colour[3])
 		end
 
