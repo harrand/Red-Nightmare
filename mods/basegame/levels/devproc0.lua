@@ -97,6 +97,11 @@ rn.mods.basegame.levels.devproc0 =
 
 		local reload_portal = rn.current_scene():add_entity("portal")
 		rn.entity.prefabs.sprite.set_position(reload_portal, -boundx + wallscale, boundy - wallscale)
-		rn.entity.prefabs.portal.set_colour(reload_portal, 1.0, 0.0, 0.0)
+		rn.entity.prefabs.portal.set_colour(reload_portal, 0.5, 0.0, 0.0)
+
+		local home_portal = rn.current_scene():add_entity("portal")
+		rn.entity.prefabs.sprite.set_position(home_portal, boundx - wallscale, -boundy + wallscale)
+		rn.entity.prefabs.portal.set_colour(home_portal, 0.3, 0.3, 1.0)
+		rn.entity.prefabs.portal.set_level_destination(home_portal, "clans_camp")
 	end
 }

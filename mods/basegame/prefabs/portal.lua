@@ -28,13 +28,24 @@ rn.mods.basegame.prefabs.portal =
 	set_colour = function(uuid, r, g, b)
 		rn.entity.prefabs.sprite.set_colour(uuid, r, g, b)
 	end,
+	set_level_destination = function(uuid, level_name)
+		rn.current_scene():entity_write(uuid, "destination", level_name)
+	end,
+	get_level_destination = function(uuid)
+		return rn.current_scene():entity_read(uuid, "destination")
+	end,
 	on_collision = function(me, other)
 		if other ~= nil and rn.current_scene():contains_entity(other) then
 			if rn.level.data_read("player") == other then
 				rn.player.stash()
 				local difficulty = rn.data_store():read("difficulty") or 0
 				rn.data_store():set("difficulty", difficulty + 1)
-				rn.level.reload()
+				local destination = rn.entity.prefabs.portal.get_level_destination(me)
+				if destination ~= nil then
+					rn.level.load(destination)
+				else
+					rn.level.reload()
+				end
 				rn.player.unstash()
 			else
 				rn.current_scene():remove_entity(other)

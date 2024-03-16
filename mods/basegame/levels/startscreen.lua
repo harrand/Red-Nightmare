@@ -102,7 +102,7 @@ rn.mods.basegame.levels.startscreen =
 		end
 
 		if rn.input():is_key_down("enter") then
-			rn.level.load("devproc0")
+			rn.level.load("clans_camp")
 		end
 	end
 }

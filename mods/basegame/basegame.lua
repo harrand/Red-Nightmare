@@ -71,5 +71,6 @@ require("basegame/items/white_legion_platelegs")
 require("basegame/items/elemental_circlet")
 
 require("basegame/levels/startscreen")
+require("basegame/levels/clans_camp")
 require("basegame/levels/dev0")
 require("basegame/levels/devproc0")
