@@ -63,6 +63,10 @@ rn.mods.basegame.levels.devproc0 =
 							pn = "frost_elemental"
 						end
 						local ent = rn.current_scene():add_entity(pn)
+						if pn == "zombie" then
+							rn.item.equip(ent, "peasant_shirt")
+							rn.item.equip(ent, "peasant_pants")
+						end
 						rn.entity.prefabs.sprite.set_position(ent, x, y)
 						-- buff depending on difficulty
 						-- health increased by 2 per level

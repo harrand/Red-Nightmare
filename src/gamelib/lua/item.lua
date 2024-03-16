@@ -162,8 +162,11 @@ rn.item.drop_all_equipment = function(uuid)
 	for i=1,rn.item.slot._count-1,1 do
 		local cur_equipped = rn.item.get_equipped(uuid, i)
 		if cur_equipped ~= nil then
-			rn.item.unequip(uuid, i)
-			table.insert(equipped, cur_equipped)
+			local itemdata = rn.item.items[cur_equipped]
+			if itemdata.droppable ~= false then
+				rn.item.unequip(uuid, i)
+				table.insert(equipped, cur_equipped)
+			end
 		end
 	end
 	if equipped ~= {} then

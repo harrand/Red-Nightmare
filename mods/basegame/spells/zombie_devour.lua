@@ -8,7 +8,7 @@ rn.mods.basegame.spells.zombie_devour =
 		local target = rn.current_scene():entity_read(uuid, "target")
 		if target ~= nil and rn.current_scene():contains_entity(target) then
 			rn.entity.unstun(target)
-			local dmg = rn.entity.prefabs.combat_stats.get_physical_power(uuid) * 10
+			local dmg = rn.entity.prefabs.combat_stats.get_base_physical_power(uuid) * 10
 			rn.entity.prefabs.combat_stats.dmg(target, dmg, "physical", uuid)
 			rn.entity.prefabs.combat_stats.heal(uuid, dmg * 0.5, "shadow", uuid)
 		end
@@ -21,8 +21,8 @@ rn.mods.basegame.spells.zombie_devour =
 		-- make the victim face us.
 		local mex, mey = rn.entity.prefabs.sprite.get_position(me)
 		local vx, vy = rn.entity.prefabs.sprite.get_position(target)
-		local dx = mex - vx
-		local dy = mey - vy
+		local dx = vx - mex
+		local dy = vy - mey
 		rn.entity.prefabs.bipedal.face_direction(target, dx, dy)
 	end
 }

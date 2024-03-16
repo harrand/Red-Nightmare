@@ -45,10 +45,12 @@ rn.mods.basegame.prefabs.zombie =
 	on_stop_moving = rn.mods.basegame.prefabs.bipedal.on_stop_moving,
 	on_collision = function(me, other)
 		local target = rn.entity.prefabs.base_ai.get_target(me)
-		if target == other and target == rn.player.get() and not rn.spell.is_casting(me) then
+		if rn.entity.prefabs.combat_stats.is_alive(me) and target == other and target == rn.player.get() and not rn.spell.is_casting(me) then
 			local attack_power = rn.entity.prefabs.combat_stats.get_physical_power(me)
 			local target_hp = rn.entity.prefabs.combat_stats.get_hp(target)
-			if attack_power * 4 >= target_hp then
+			-- devour if enemy is below 25% health or our attack power exceeds their current health
+			local target_max_hp = rn.entity.prefabs.combat_stats.get_max_hp(target)
+			if target_hp > 0 and ((attack_power >= target_hp - attack_power) or (math.max(target_hp - attack_power, 0) / target_max_hp <= 0.20)) then
 				rn.spell.spells.zombie_devour.precast(me, target)
 				return true
 			end

@@ -81,6 +81,7 @@ rn.mods.basegame.prefabs.bipedal =
 		local artificial_anim_delay = 0.0
 		if spelldata.animation_override ~= nil then
 			cast_anim = spelldata.animation_override
+			artificial_anim_delay = spelldata.artificial_anim_delay or 0
 		else
 			if spelldata.magic_type == "physical" or spelldata.magic_type == nil then
 				cast_anim = "Melee1H_Attack"
@@ -109,7 +110,9 @@ rn.mods.basegame.prefabs.bipedal =
 	end,
 	on_death = function(uuid, dmg, magic_type, enemy_uuid)
 		rn.current_scene():entity_play_animation(uuid, "ZombieDeath")
-		rn.item.drop_all_equipment(uuid)
+		if rn.entity.prefabs.bipedal.drop_items_on_death(uuid) then
+			rn.item.drop_all_equipment(uuid)
+		end
 	end,
 	on_equip = function(uuid, itemname)
 		local sc = rn.current_scene()
@@ -330,4 +333,10 @@ rn.mods.basegame.prefabs.bipedal =
 			return "Melee2H_Death"
 		end
 	end,
+	drop_items_on_death = function(uuid)
+		return rn.current_scene():entity_read(uuid, "drop_items_on_death") ~= false
+	end,
+	set_drop_items_on_death = function(uuid, val) -- default: true
+		rn.current_scene():entity_write(uuid, "drop_items_on_death", val)
+	end
 }
