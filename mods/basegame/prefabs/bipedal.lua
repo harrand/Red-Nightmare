@@ -84,8 +84,18 @@ rn.mods.basegame.prefabs.bipedal =
 			artificial_anim_delay = spelldata.artificial_anim_delay or 0
 		else
 			if spelldata.magic_type == "physical" or spelldata.magic_type == nil then
-				cast_anim = "Melee1H_Attack"
-				artificial_anim_delay = -0.125
+				local main_hand = rn.item.get_equipped(uuid, rn.item.slot.right_hand)
+				local is_2h = false
+				if main_hand ~= nil then
+					is_2h = rn.item.items[main_hand].two_handed
+				end
+				if is_2h then
+					cast_anim = "Melee2H_Attack"
+					artificial_anim_delay = -0.1
+				else
+					cast_anim = "Melee1H_Attack"
+					artificial_anim_delay = -0.125
+				end
 			else
 				if spelldata.two_handed == true then
 					if spelldata.cast_type == "omni" then
@@ -297,7 +307,15 @@ rn.mods.basegame.prefabs.bipedal =
 	get_run_animation = function(uuid)
 		local run_override = rn.current_scene():entity_read(uuid, "run_animation")
 		if run_override ~= nil then return run_override end
-		if rn.item.get_weapon_class_equipped_slot(uuid, "torch") then
+		local main_hand = rn.item.get_equipped(uuid, rn.item.slot.right_hand)
+		local is_2h = false
+		if main_hand ~= nil then
+			is_2h = rn.item.items[main_hand].two_handed
+		end
+
+		if is_2h then
+			return "Melee2H_Run"
+		elseif rn.item.get_weapon_class_equipped_slot(uuid, "torch") then
 			return "TorchRun"
 		elseif rn.item.get_weapon_class_equipped_slot(uuid, "shield") then
 			return "Melee1H_Run"
@@ -311,7 +329,15 @@ rn.mods.basegame.prefabs.bipedal =
 	get_idle_animation = function(uuid)
 		local idle_override = rn.current_scene():entity_read(uuid, "idle_animation")
 		if idle_override ~= nil then return idle_override end
-		if rn.item.get_weapon_class_equipped_slot(uuid, "torch") then
+		local main_hand = rn.item.get_equipped(uuid, rn.item.slot.right_hand)
+		local is_2h = false
+		if main_hand ~= nil then
+			is_2h = rn.item.items[main_hand].two_handed
+		end
+
+		if is_2h then
+			return "Melee2H_Idle"
+		elseif rn.item.get_weapon_class_equipped_slot(uuid, "torch") then
 			return "TorchIdle"
 		elseif rn.item.get_weapon_class_equipped_slot(uuid, "shield") then
 			return "Melee1H_Idle_Examine"
@@ -325,7 +351,15 @@ rn.mods.basegame.prefabs.bipedal =
 	get_death_animation = function(uuid)
 		local death_override = rn.current_scene():entity_read(uuid, "death_animation")
 		if death_override ~= nil then return death_override end
-		if rn.item.get_weapon_class_equipped_slot(uuid, "torch") then
+		local main_hand = rn.item.get_equipped(uuid, rn.item.slot.right_hand)
+		local is_2h = false
+		if main_hand ~= nil then
+			is_2h = rn.item.items[main_hand].two_handed
+		end
+
+		if is_2h then
+			return "Melee2H_Death"
+		elseif rn.item.get_weapon_class_equipped_slot(uuid, "torch") then
 			return "CastDeath"
 		elseif rn.item.get_weapon_class_equipped_slot(uuid, "shield") then
 			return "Melee1H_Death"
