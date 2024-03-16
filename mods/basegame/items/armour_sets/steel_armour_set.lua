@@ -1,0 +1,1 @@
+rn_impl_create_metal_armour_set("steel", {0.85, 0.85, 0.85}, "rare", 9.0)

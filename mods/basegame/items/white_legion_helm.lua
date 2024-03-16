@@ -4,9 +4,6 @@ rn.mods.basegame.items.white_legion_helm =
 		+20% Physical Resist
 		+2 Health per 5 seconds
 	]],
-	static_init = function()
-		rn.renderer():add_texture("helm.full_helm", "basegame/res/skins/helms/full_helm.png")
-	end,
 	on_equip = function(uuid)
 		rn.entity.prefabs.combat_stats.apply_flat_increased_physical_resist(uuid, 0.075)
 		rn.entity.prefabs.combat_stats.apply_flat_increased_max_hp(uuid, 3)

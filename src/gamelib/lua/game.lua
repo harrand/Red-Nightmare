@@ -35,6 +35,8 @@ rn.static_init = function()
 			itemdata.static_init()
 		end
 	end
+	
+	rn_impl_static_armour_load()
 end
 
 rn.update = function(delta_seconds)

@@ -1,8 +1,5 @@
 rn.mods.basegame.items.white_legion_platelegs =
 {
-	static_init = function()
-		rn.renderer():add_texture("legs.platelegs", "basegame/res/skins/legs/platelegs.png")
-	end,
 	tooltip = [[
 
 	]],

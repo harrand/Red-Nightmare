@@ -1,0 +1,1 @@
+rn_impl_create_metal_armour_set("iron", {0.5, 0.5, 0.5}, "common", 5.0)
