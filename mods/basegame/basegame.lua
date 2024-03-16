@@ -51,6 +51,9 @@ require("basegame/items/armour_sets/metal_armour_set_base")
 require("basegame/items/armour_sets/iron_armour_set")
 require("basegame/items/armour_sets/steel_armour_set")
 
+require("basegame/items/facial_hair/full_beard")
+require("basegame/items/facial_hair/walrus")
+
 require("basegame/items/basic_torch")
 require("basegame/items/imperial_plate_helm")
 require("basegame/items/imperial_plate_platebody")
