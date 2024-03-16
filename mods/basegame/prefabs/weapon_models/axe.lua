@@ -1,4 +1,4 @@
-rn.mods.basegame.prefabs.weapon_axe =
+rn.mods.basegame.prefabs.weapon_model_axe =
 {
 	static_init = function()
 		rn.renderer():add_model("weapon.axe", "basegame/res/models/axe.glb")

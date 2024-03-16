@@ -1,4 +1,4 @@
-rn.mods.basegame.prefabs.weapon_morning_star =
+rn.mods.basegame.prefabs.weapon_model_morning_star =
 {
 	static_init = function()
 		rn.renderer():add_model("weapon.morning_star", "basegame/res/models/morning_star.glb")

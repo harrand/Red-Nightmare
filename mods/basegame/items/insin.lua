@@ -34,6 +34,6 @@ rn.mods.basegame.items.insin =
 	slot = rn.item.slot.right_hand,
 	colour = rn.spell.schools.fire.colour,
 	rarity = "legendary",
-	weapon_prefab = "weapon_morning_star",
+	weapon_prefab = "weapon_model_morning_star",
 	weapon_class = "mace"
 }

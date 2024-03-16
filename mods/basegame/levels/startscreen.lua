@@ -68,7 +68,7 @@ rn.mods.basegame.levels.startscreen =
 		rn.item.equip(player, "iron_coif")
 		rn.item.equip(player, "iron_chainmail")
 		rn.item.equip(player, "iron_chainlegs")
-		rn.item.equip(player, "steel_longsword")
+		rn.item.equip(player, "iron_sword")
 		rn.item.equip(player, "basic_torch")
 
 		rn.level.data_write("player", player)

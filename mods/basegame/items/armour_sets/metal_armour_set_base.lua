@@ -3,6 +3,7 @@ function rn_impl_create_metal_armour_set(metal_name, metal_colour, metal_rarity,
 
 	-- physical resist per item level (incl. coeff)
 	local physical_resist_factor = 0.02
+	local physical_power_factor = 1.5
 	local max_hp_factor = 0.95
 	local movement_speed_factor = 0.05
 	local shield_resist_all_factor = 0.025
@@ -161,6 +162,73 @@ function rn_impl_create_metal_armour_set(metal_name, metal_colour, metal_rarity,
 		colour = metal_colour,
 		weapon_prefab = "weapon_small_shield",
 		weapon_class = "shield",
+		rarity = metal_rarity
+	}
+
+	local mace_coeff = item_level * 0.6
+	items[metal_name .. "_mace"] =
+	{
+		on_equip = function(uuid)
+			rn.entity.prefabs.combat_stats.apply_flat_increased_physical_power(uuid, physical_power_factor * mace_coeff)
+		end,
+		on_unequip = function(uuid)
+			rn.entity.prefabs.combat_stats.apply_flat_increased_physical_power(uuid, -physical_power_factor * mace_coeff)
+		end,
+		slot = rn.item.slot.right_hand,
+		colour = metal_colour,
+		weapon_prefab = "weapon_model_morning_star",
+		weapon_class = "mace",
+		rarity = metal_rarity
+	}
+
+	local sword_coeff = item_level * 0.6
+	items[metal_name .. "_sword"] =
+	{
+		on_equip = function(uuid)
+			rn.entity.prefabs.combat_stats.apply_flat_increased_physical_power(uuid, physical_power_factor * sword_coeff)
+		end,
+		on_unequip = function(uuid)
+			rn.entity.prefabs.combat_stats.apply_flat_increased_physical_power(uuid, -physical_power_factor * sword_coeff)
+		end,
+		slot = rn.item.slot.right_hand,
+		colour = metal_colour,
+		weapon_prefab = "weapon_model_sword",
+		weapon_class = "sword",
+		rarity = metal_rarity
+	}
+
+	local axe_coeff = item_level * 0.6
+	items[metal_name .. "_axe"] =
+	{
+		on_equip = function(uuid)
+			rn.entity.prefabs.combat_stats.apply_flat_increased_physical_power(uuid, physical_power_factor * axe_coeff)
+		end,
+		on_unequip = function(uuid)
+			rn.entity.prefabs.combat_stats.apply_flat_increased_physical_power(uuid, -physical_power_factor * axe_coeff)
+		end,
+		slot = rn.item.slot.right_hand,
+		colour = metal_colour,
+		weapon_prefab = "weapon_model_axe",
+		weapon_class = "axe",
+		rarity = metal_rarity
+	}
+
+	local sword2h_coeff = item_level * 1.1
+	items[metal_name .. "_greatsword"] =
+	{
+		on_equip = function(uuid)
+			rn.entity.prefabs.combat_stats.apply_flat_increased_physical_power(uuid, physical_power_factor * sword2h_coeff)
+			rn.entity.prefabs.combat_stats.apply_flat_increased_haste(uuid, -0.3)
+		end,
+		on_unequip = function(uuid)
+			rn.entity.prefabs.combat_stats.apply_flat_increased_physical_power(uuid, -physical_power_factor * sword2h_coeff)
+			rn.entity.prefabs.combat_stats.apply_flat_increased_haste(uuid, 0.3)
+		end,
+		slot = rn.item.slot.right_hand,
+		two_handed = true,
+		colour = metal_colour,
+		weapon_prefab = "weapon_model_sword2h",
+		weapon_class = "sword2h",
 		rarity = metal_rarity
 	}
 end

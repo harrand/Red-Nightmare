@@ -30,6 +30,6 @@ rn.mods.basegame.items.holy_water_sprinkler =
 		rn.spell.schools.holy.colour[3] * 0.8
 	},
 	rarity = "epic",
-	weapon_prefab = "weapon_morning_star",
+	weapon_prefab = "weapon_model_morning_star",
 	weapon_class = "mace"
 }
