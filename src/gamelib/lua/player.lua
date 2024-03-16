@@ -14,8 +14,10 @@ rn.player.stash = function()
 		table.insert(equipment, "player.equipment." .. tostring(i))
 		table.insert(equipment, item_name)
 	end)
+	local hp_lost = rn.current_scene():entity_read(player, "hp_lost")
 
 	rn.data_store():edit_some(table.unpack(equipment))
+	rn.data_store():set("player.hp_lost", hp_lost or 0)
 end
 
 rn.player.unstash = function()
@@ -28,5 +30,7 @@ rn.player.unstash = function()
 			rn.item.equip(player, equipped)
 		end
 	end
+	local hp_lost = rn.data_store():read("player.hp_lost")
+	rn.current_scene():entity_write(player, "hp_lost", hp_lost)
 	rn.data_store():remove_all_of("player.")
 end
