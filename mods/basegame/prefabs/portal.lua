@@ -21,6 +21,7 @@ rn.mods.basegame.prefabs.portal =
 		local timer = rn.current_scene():entity_read(uuid, "timer") or 0.0
 		timer = timer + delta_seconds
 		rn.current_scene():entity_write(uuid, "timer", timer)
+		rn.entity.prefabs.sprite.set_rotation(uuid, timer)
 		rn.entity.prefabs.light_emitter.set_power(uuid, 0.5 * math.abs(math.sin(timer * 7.0)) + 1.5)
 		rn.entity.prefabs.light_emitter.set_colour(uuid, rn.entity.prefabs.sprite.get_colour(uuid))
 		rn.entity.prefabs.light_emitter.update(uuid, delta_seconds)

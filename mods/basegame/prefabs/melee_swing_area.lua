@@ -25,8 +25,22 @@ rn.mods.basegame.prefabs.melee_swing_area =
 		if other_is_projectile then
 			if other_owner ~= caster then
 				-- cool thing! we're gonna send the projectile away from the caster!
+				-- if owner is the player - send it towards the mouse
+				-- otherwise if owner is an ai with a target - send it towards the target
+				-- else simply do a vector from base position
 				local casterx, castery = rn.entity.prefabs.sprite.get_position(me)
-				local projx, projy = rn.entity.prefabs.sprite.get_position(other)
+				local projx, projy
+				if caster == rn.player.get() then
+					projx, projy = sc:get_mouse_position()
+				else
+					local ai_target = rn.entity.prefabs.base_ai.get_target(caster)
+					if ai_target ~= nil and sc:contains_entity(ai_target) then
+						-- shoot at ai_target
+						projx, projy = rn.entity.prefabs.sprite.get_position(ai_target)
+					else
+						projx, projy = rn.entity.prefabs.sprite.get_position(other)
+					end
+				end
 				local vectorx = (casterx - projx) * 999
 				local vectory = (castery - projy) * 999
 				rn.entity.prefabs.magic_ball_base.set_target(other, projx - vectorx, projy - vectory)
