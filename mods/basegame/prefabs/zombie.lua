@@ -51,7 +51,7 @@ rn.mods.basegame.prefabs.zombie =
 			-- devour if enemy is below 25% health or our attack power exceeds their current health
 			local target_max_hp = rn.entity.prefabs.combat_stats.get_max_hp(target)
 			if target_hp > 0 and ((attack_power >= target_hp - attack_power) or (math.max(target_hp - attack_power, 0) / target_max_hp <= 0.20)) then
-				rn.spell.spells.zombie_devour.precast(me, target)
+				rn.spell.cast(me, "zombie_devour")
 				return true
 			end
 		end

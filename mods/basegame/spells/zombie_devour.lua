@@ -13,9 +13,9 @@ rn.mods.basegame.spells.zombie_devour =
 			rn.entity.prefabs.combat_stats.heal(uuid, dmg * 0.5, "shadow", uuid)
 		end
 	end,
-	precast = function(me, target)
-		-- instead of letting melee_ai deal with it, we're going to do an execute.
-		rn.spell.cast(me, "zombie_devour")
+	on_cast_begin = function(me)
+		local target = rn.entity.prefabs.base_ai.get_target(me)
+		tz.assert(target ~= nil and rn.current_scene():contains_entity(target), "Attmept to precast zombie_devour on an entity that doesn't exist.")
 		-- set `target` to be stunned
 		rn.entity.stun(target, 10.0)
 		-- make the victim face us.
