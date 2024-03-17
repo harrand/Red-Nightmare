@@ -315,6 +315,8 @@ rn.mods.basegame.prefabs.bipedal =
 
 		if is_2h then
 			return "Melee2H_Run"
+		elseif rn.item.get_weapon_class_equipped_slot(uuid, "staff") then
+			return "CastRun"
 		elseif rn.item.get_weapon_class_equipped_slot(uuid, "torch") then
 			return "TorchRun"
 		elseif rn.item.get_weapon_class_equipped_slot(uuid, "shield") then
@@ -337,6 +339,8 @@ rn.mods.basegame.prefabs.bipedal =
 
 		if is_2h then
 			return "Melee2H_Idle"
+		elseif rn.item.get_weapon_class_equipped_slot(uuid, "staff") then
+			return "CastIdle"
 		elseif rn.item.get_weapon_class_equipped_slot(uuid, "torch") then
 			return "TorchIdle"
 		elseif rn.item.get_weapon_class_equipped_slot(uuid, "shield") then
@@ -359,6 +363,8 @@ rn.mods.basegame.prefabs.bipedal =
 
 		if is_2h then
 			return "Melee2H_Death"
+		elseif rn.item.get_weapon_class_equipped_slot(uuid, "staff") then
+			return "CastDeath"
 		elseif rn.item.get_weapon_class_equipped_slot(uuid, "torch") then
 			return "CastDeath"
 		elseif rn.item.get_weapon_class_equipped_slot(uuid, "shield") then

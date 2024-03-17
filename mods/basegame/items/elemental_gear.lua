@@ -1,0 +1,53 @@
+for schoolname, schooldata in pairs(rn.spell.schools) do
+	if schoolname ~= "physical" then
+		rn.mods.basegame.items[schoolname .. "_elemental_hood"] =
+		{
+			static_init = function()
+				if schoolname == "fire" then
+					rn.renderer():add_texture("helm.hood", "basegame/res/skins/helms/hood.png")
+				end
+			end,
+			on_equip = function(uuid)
+				rn.entity.prefabs.combat_stats.apply_flat_increased_physical_resist(uuid, 0.02)
+				rn.entity.prefabs.combat_stats.apply_flat_increased_max_hp(uuid, 2)
+				rn.entity.prefabs.combat_stats["apply_flat_increased_" .. schoolname .. "_power"](uuid, 2)
+			end,
+			on_unequip = function(uuid)
+				rn.entity.prefabs.combat_stats.apply_flat_increased_physical_resist(uuid, -0.02)
+				rn.entity.prefabs.combat_stats.apply_flat_increased_max_hp(uuid, -2)
+				rn.entity.prefabs.combat_stats["apply_flat_increased_" .. schoolname .. "_power"](uuid, -2)
+			end,
+			slot = rn.item.slot.helm,
+			colour = schooldata.colour,
+			texture = "helm.hood",
+			valid_loot = false,
+			droppable = false,
+			rarity = "common"
+		}
+
+		rn.mods.basegame.items[schoolname .. "_elemental_robe"] =
+		{
+			static_init = function()
+				if schoolname == "fire" then
+					rn.renderer():add_texture("chest.elemental_robes", "basegame/res/skins/chests/elemental_robes.png")
+				end
+			end,
+			on_equip = function(uuid)
+				rn.entity.prefabs.combat_stats.apply_flat_increased_physical_resist(uuid, 0.04)
+				rn.entity.prefabs.combat_stats.apply_flat_increased_max_hp(uuid, 3)
+				rn.entity.prefabs.combat_stats["apply_flat_increased_" .. schoolname .. "_power"](uuid, 4)
+			end,
+			on_unequip = function(uuid)
+				rn.entity.prefabs.combat_stats.apply_flat_increased_physical_resist(uuid, -0.04)
+				rn.entity.prefabs.combat_stats.apply_flat_increased_max_hp(uuid, -3)
+				rn.entity.prefabs.combat_stats["apply_flat_increased_" .. schoolname .. "_power"](uuid, -4)
+			end,
+			slot = rn.item.slot.chest,
+			colour = schooldata.colour,
+			texture = "chest.elemental_robes",
+			valid_loot = false,
+			droppable = false,
+			rarity = "common"
+		}
+	end
+end

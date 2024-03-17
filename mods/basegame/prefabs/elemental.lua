@@ -42,7 +42,7 @@ rn.mods.basegame.prefabs.elemental_base =
 		if magic_type ~= nil then
 			local col = rn.spell.schools[magic_type].colour
 			rn.entity.prefabs.light_emitter.set_colour(uuid, col[1], col[2], col[3])
-			rn.entity.prefabs.light_emitter.set_power(uuid, 3.0)
+			rn.entity.prefabs.light_emitter.set_power(uuid, 1.25)
 			rn.entity.prefabs.light_emitter.update(uuid, delta_seconds)
 			rn.entity.prefabs.bipedal.set_colour(uuid, col[1], col[2], col[3])
 		end
@@ -74,8 +74,9 @@ for schoolname, schooldata in pairs(rn.spell.schools) do
 			instantiate = function(uuid)
 				rn.entity.prefabs.elemental_base.instantiate(uuid)
 				rn.entity.prefabs.base_ai.add_ability(uuid, "lesser_" .. schoolname .. "bolt", rn.ai.ability.filler_damage)
-				rn.entity.prefabs.combat_stats["set_base_" .. schoolname .. "_power"](uuid, 3.0)
-				rn.item.equip(uuid, "elemental_circlet_" .. schoolname)
+				rn.entity.prefabs.combat_stats["set_base_" .. schoolname .. "_power"](uuid, 1.0)
+				rn.item.equip(uuid, schoolname .. "_elemental_hood")
+				rn.item.equip(uuid, schoolname .. "_elemental_robe")
 				rn.current_scene():entity_write(uuid, ".elemental_magic_type", schoolname)
 			end,
 			update = rn.mods.basegame.prefabs.elemental_base.update,
