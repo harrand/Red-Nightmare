@@ -60,7 +60,7 @@ rn.mods.basegame.levels.devproc0 =
 					if randval2 <= 0.01 then
 						local pn = "zombie"
 						if randval2 <= 0.002 then
-							pn = "fire_elemental"
+							pn = "frost_elemental"
 						end
 						local ent = rn.current_scene():add_entity(pn)
 						if pn == "zombie" then

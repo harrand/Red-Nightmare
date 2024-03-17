@@ -11,6 +11,7 @@ rn.mods.basegame.prefabs.elemental_base =
 		rn.entity.prefabs.bipedal.instantiate(uuid)
 		rn.entity.prefabs.bipedal.set_can_equip(uuid, true)
 		rn.entity.prefabs.bipedal.set_texture(uuid, "skin.just_eyes")
+		rn.entity.prefabs.bipedal.set_run_animation(uuid, "Idle")
 		rn.entity.prefabs.light_emitter.instantiate(uuid)
 		--rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 1, "melee")
 		--rn.entity.prefabs.bipedal.set_run_animation(uuid, "ZombieWalk")

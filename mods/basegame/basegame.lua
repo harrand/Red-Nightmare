@@ -35,6 +35,7 @@ require("basegame/prefabs/players/player_melistra")
 
 require("basegame/prefabs/weapon_models/axe")
 require("basegame/prefabs/weapon_models/morning_star")
+require("basegame/prefabs/weapon_models/maul")
 require("basegame/prefabs/weapon_models/small_shield")
 require("basegame/prefabs/weapon_models/sword")
 require("basegame/prefabs/weapon_models/sword2h")

@@ -231,6 +231,25 @@ function rn_impl_create_metal_armour_set(metal_name, metal_colour, metal_rarity,
 		weapon_class = "sword2h",
 		rarity = metal_rarity
 	}
+
+	local mace2h_coeff = item_level * 1.25
+	items[metal_name .. "_maul"] =
+	{
+		on_equip = function(uuid)
+			rn.entity.prefabs.combat_stats.apply_flat_increased_physical_power(uuid, physical_power_factor * mace2h_coeff)
+			rn.entity.prefabs.combat_stats.apply_flat_increased_haste(uuid, -0.4)
+		end,
+		on_unequip = function(uuid)
+			rn.entity.prefabs.combat_stats.apply_flat_increased_physical_power(uuid, -physical_power_factor * mace2h_coeff)
+			rn.entity.prefabs.combat_stats.apply_flat_increased_haste(uuid, 0.4)
+		end,
+		slot = rn.item.slot.right_hand,
+		two_handed = true,
+		colour = metal_colour,
+		weapon_prefab = "weapon_model_maul",
+		weapon_class = "mace2h",
+		rarity = metal_rarity
+	}
 end
 
 
