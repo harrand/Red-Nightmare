@@ -1,5 +1,16 @@
 rn.mods.basegame.levels.clans_camp =
 {
+	load_npcs = function()
+		local bloke = rn.current_scene():add_entity("bipedal")
+		rn.entity.prefabs.bipedal.set_texture(bloke, "skin.man")
+		rn.item.equip(bloke, "facial_hair_walrus")
+		rn.item.equip(bloke, "iron_chainmail")
+		rn.item.equip(bloke, "iron_platelegs")
+		rn.item.equip(bloke, "steel_sword")
+		rn.item.equip(bloke, "basic_torch")
+		rn.current_scene():entity_play_animation(bloke, "Kneeling", true, 1.0)
+		rn.entity.prefabs.sprite.set_position(bloke, -10, -5)
+	end,
 	on_load = function()
 		rn.renderer():set_ambient_light(0.525, 0.495, 0.495, 1.0)
 		rn.renderer():directional_light_set_power(0.4)
@@ -12,6 +23,8 @@ rn.mods.basegame.levels.clans_camp =
 		rn.current_scene():entity_set_local_position(bg, 0.0, 0.0, -2.0)
 		local morb1 = rn.current_scene():add_entity("player_melistra")
 		rn.level.data_write("player", morb1)
+
+		rn.mods.basegame.levels.clans_camp.load_npcs()
 
 		rn.item.equip(morb1, "peasant_shirt")
 		rn.item.equip(morb1, "peasant_pants")
