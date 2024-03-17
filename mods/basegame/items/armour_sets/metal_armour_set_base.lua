@@ -5,7 +5,7 @@ function rn_impl_create_metal_armour_set(metal_name, metal_colour, metal_rarity,
 	local physical_resist_factor = 0.02
 	local physical_power_factor = 1.5
 	local max_hp_factor = 0.95
-	local movement_speed_factor = 0.05
+	local movement_speed_factor = 0.02
 	local shield_resist_all_factor = 0.025
 
 	local coif_coeff = item_level * 0.6

@@ -18,6 +18,7 @@ rn.mods.basegame.prefabs.elemental_base =
 		rn.entity.prefabs.combat_stats.set_base_max_hp(uuid, 20)
 		rn.entity.prefabs.combat_stats.set_base_physical_power(uuid, 2.0)
 		rn.entity.prefabs.combat_stats.set_base_movement_speed(uuid, rn.entity.prefabs.bipedal.default_movement_speed * 0.9)
+		rn.entity.prefabs.combat_stats.set_base_haste(uuid, -0.25)
 
 		rn.entity.prefabs.ranged_ai.instantiate(uuid)
 		rn.entity.prefabs.ranged_ai.set_aggro_range(uuid, 25)
