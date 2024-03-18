@@ -54,8 +54,6 @@ rn.mods.basegame.prefabs.base_ai =
 		local ability_count = rn.entity.prefabs.base_ai.get_ability_count(uuid, ability)
 		ability_count = math.floor(ability_count + 1)
 		sc:entity_write(uuid, "ability." .. ability .. ".count", ability_count)
-
-		print("binding spell " .. spell_name .. " to ability-id " .. ability_count)
 		sc:entity_write(uuid, "ability." .. ability .. "." .. ability_count, spell_name)
 	end,
 	get_ability_count = function(uuid, ability)
@@ -181,7 +179,6 @@ rn.mods.basegame.prefabs.melee_ai =
 				local dy = tary - y
 				local hypot = math.sqrt(dx^2 + dy^2)
 				if hypot < 0.5 then
-					print("dropping last known target. dx = " .. tostring(dx) .. ", dy = " .. tostring(dy))
 					rn.current_scene():entity_write(uuid, "last_known_target_positionx", nil)
 					rn.current_scene():entity_write(uuid, "last_known_target_positionx", nil)
 					return

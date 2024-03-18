@@ -69,6 +69,10 @@ namespace game::messaging
 		scene_operation operation;
 		entity_uuid uuid;
 		std::any value = {};
+
+		#if TZ_DEBUG
+		std::string debug_source_location = tz::lua::get_state().print_traceback();
+		#endif
 	};
 
 	entity_uuid scene_quick_add(std::string prefab_name);

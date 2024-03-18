@@ -6,6 +6,17 @@ rn.mods.basegame.levels.devproc0 =
 		rn.renderer():add_texture("material.darkstone", "basegame/res/textures/material_darkstone.png")
 		rn.renderer():add_texture("material.darkstone_normals", "basegame/res/textures/material_darkstone_normals.png")
 	end,
+	spawn_boss = function(posx, posy)
+		local boss = rn.current_scene():add_entity("frost_elemental")
+		rn.entity.prefabs.combat_stats.apply_flat_increased_haste(boss, 0.5)
+		rn.entity.prefabs.combat_stats.apply_flat_increased_max_hp(boss, 1000)
+		rn.entity.prefabs.combat_stats.apply_flat_increased_frost_power(boss, 5.0)
+		rn.entity.prefabs.combat_stats.apply_pct_increased_frost_power(boss, 1.0)
+		rn.entity.prefabs.sprite.set_scale(boss, 30.0)
+		rn.entity.prefabs.sprite.set_position(boss, posx, posy)
+		rn.entity.prefabs.base_ai.add_ability(boss, "summon_zombie", rn.ai.ability.filler_damage)
+		rn.entity.prefabs.faction.set_faction(boss, faction.player_enemy)
+	end,
 	on_load = function()
 		local player = rn.current_scene():add_entity("player_melistra")
 		rn.level.data_write("player", player)
@@ -15,7 +26,7 @@ rn.mods.basegame.levels.devproc0 =
 
 		local difficulty = rn.data_store():read("difficulty") or 0
 		local wallscale = 4
-		local size = 64
+		local size = 64 + difficulty
 		local boundx = size
 		local boundy = size
 		boundx = math.floor((boundx * 0.5) - wallscale)
@@ -70,8 +81,8 @@ rn.mods.basegame.levels.devproc0 =
 						rn.entity.prefabs.faction.set_faction(ent, faction.player_enemy)
 						rn.entity.prefabs.sprite.set_position(ent, x, y)
 						-- buff depending on difficulty
-						-- health increased by 2 per level
-						rn.entity.prefabs.combat_stats.apply_flat_increased_max_hp(ent, difficulty + 2)
+						-- health increased by 5 per level
+						rn.entity.prefabs.combat_stats.apply_flat_increased_max_hp(ent, difficulty * 5)
 
 						for schoolname, schooldata in pairs(rn.spell.schools) do
 							-- all powers increased (flat) by 0.2 per level
@@ -96,13 +107,17 @@ rn.mods.basegame.levels.devproc0 =
 		rn.entity.prefabs.sprite.set_normal_map(bg, "background.blackrock_normals")
 		rn.current_scene():entity_set_local_position(bg, 0.0, 0.0, -2.0)
 
-		local reload_portal = rn.current_scene():add_entity("portal")
-		rn.entity.prefabs.sprite.set_position(reload_portal, -boundx + wallscale, boundy - wallscale)
-		rn.entity.prefabs.portal.set_colour(reload_portal, 0.5, 0.0, 0.0)
+		if difficulty < 20 then
+			local reload_portal = rn.current_scene():add_entity("portal")
+			rn.entity.prefabs.sprite.set_position(reload_portal, -boundx + wallscale, boundy - wallscale)
+			rn.entity.prefabs.portal.set_colour(reload_portal, 0.5, 0.0, 0.0)
 
-		local home_portal = rn.current_scene():add_entity("portal")
-		rn.entity.prefabs.sprite.set_position(home_portal, boundx - wallscale, -boundy + wallscale)
-		rn.entity.prefabs.portal.set_colour(home_portal, 0.3, 0.3, 1.0)
-		rn.entity.prefabs.portal.set_level_destination(home_portal, "clans_camp")
+			local home_portal = rn.current_scene():add_entity("portal")
+			rn.entity.prefabs.sprite.set_position(home_portal, boundx - wallscale, -boundy + wallscale)
+			rn.entity.prefabs.portal.set_colour(home_portal, 0.3, 0.3, 1.0)
+			rn.entity.prefabs.portal.set_level_destination(home_portal, "clans_camp")
+		else
+			rn.mods.basegame.levels.devproc0.spawn_boss(-boundx + (wallscale * 3.0), boundy - (wallscale * 3.0))
+		end
 	end
 }

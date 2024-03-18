@@ -45,11 +45,7 @@ rn.mods.basegame.prefabs.zombie =
 	on_stop_moving = rn.mods.basegame.prefabs.bipedal.on_stop_moving,
 	on_collision = function(me, other)
 		local target = rn.entity.prefabs.base_ai.get_target(me)
-		local target_faction = nil
-		if target ~= nil and rn.current_scene():contains_entity(target) then
-			target_faction = rn.entity.prefabs.faction.get_faction(target)
-		end
-		if rn.entity.prefabs.combat_stats.is_alive(me) and target == other and target_faction == faction.player_friend and not rn.spell.is_casting(me) then
+		if rn.entity.prefabs.combat_stats.is_alive(me) and target == other and rn.entity.prefabs.faction.is_enemy(me, other) and not rn.spell.is_casting(me) then
 			local attack_power = rn.entity.prefabs.combat_stats.get_physical_power(me)
 			local target_hp = rn.entity.prefabs.combat_stats.get_hp(target)
 			-- devour if enemy is below 25% health or our attack power exceeds their current health

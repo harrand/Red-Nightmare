@@ -129,7 +129,7 @@ rn.entity.on_move = function(uuid, xdiff, ydiff, zdiff, delta_seconds)
 	local sc = rn.current_scene()
 
 	local movement_speed = rn.entity.prefabs.combat_stats.get_movement_speed(uuid)
-	if (xdiff == 0.0 and ydiff == 0.0 and zdiff == 0.0) or hypot == 0.0 or movement_speed == 0.0 then
+	if (xdiff == 0.0 and ydiff == 0.0 and zdiff == 0.0) or hypot == 0.0 or movement_speed == 0.0 or rn.entity.get_stunned(uuid) then
 		-- ignore if we haven't actually moved
 		return false
 	end

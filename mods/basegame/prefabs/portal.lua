@@ -49,7 +49,11 @@ rn.mods.basegame.prefabs.portal =
 				end
 				rn.player.unstash()
 			else
-				rn.current_scene():remove_entity(other)
+				-- note: there's a couple of prefab types we dont want to remove.
+				local prefab = rn.current_scene():entity_read(other, ".prefab")
+				if prefab ~= "basic_target_field" then
+					rn.current_scene():remove_entity(other)
+				end
 			end
 		end
 		return false

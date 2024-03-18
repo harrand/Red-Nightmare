@@ -23,12 +23,15 @@ rn.mods.basegame.items.insin =
 
 		local sc = rn.current_scene()
 		local fiery_minion_uuid = sc:entity_read(uuid, "insin_minion")
-		local fiery_minion_summon_icd = sc:entity_read(uuid, "insin_minion_icd") or 0.0
+		local fiery_minion_summon_icd = sc:entity_read(uuid, "insin_minion_icd") or 1.0
 		if fiery_minion_uuid == nil or rn.entity.prefabs.combat_stats.is_dead(fiery_minion_uuid) then
 			if fiery_minion_summon_icd <= 0.0 then
 				-- summon minion
 				fiery_minion_uuid = sc:add_entity("fire_elemental")
 				fiery_minion_summon_icd = 10.0
+				rn.entity.prefabs.combat_stats.apply_flat_increased_max_hp(fiery_minion_uuid, rn.entity.prefabs.combat_stats.get_max_hp(uuid) * 0.5)
+				rn.entity.prefabs.combat_stats.apply_flat_increased_fire_power(fiery_minion_uuid, rn.entity.prefabs.combat_stats.get_fire_power(uuid) * 0.5)
+				rn.entity.prefabs.combat_stats.apply_flat_increased_haste(fiery_minion_uuid, rn.entity.prefabs.combat_stats.get_haste(uuid) * 0.5)
 
 				sc:entity_write(fiery_minion_uuid, "owner", uuid)
 				rn.entity.prefabs.faction.copy_faction(uuid, fiery_minion_uuid)
