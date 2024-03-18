@@ -1,10 +1,6 @@
 rn.mods.basegame.prefabs.player_melistra =
 {
 	description = "Lady Melistra, the first playable character in Red Nightmare.",
-	static_init = function()
-		rn.renderer():add_texture("skin.man", "basegame/res/skins/man.png")
-		--rn.renderer():add_texture("helm.full", "basegame/res/skins/helms/full_helm.png")
-	end,
 	pre_instantiate = function(uuid)
 		--return rn.entity.prefabs.sprite.pre_instantiate(uuid)
 		return rn.entity.prefabs.bipedal.pre_instantiate(uuid)
