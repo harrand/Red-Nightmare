@@ -15,6 +15,7 @@ rn.mods.basegame.prefabs.player_melistra =
 		rn.entity.prefabs.bipedal.set_can_equip(uuid, true)
 		rn.entity.prefabs.bipedal.set_texture(uuid, "skin.man")
 		rn.entity.prefabs.bipedal.set_drop_items_on_death(uuid, false)
+		rn.entity.prefabs.faction.set_faction(uuid, faction.player_friend)
 
 		--rn.entity.prefabs.bipedal.set_helm_visible(uuid, true)
 		--rn.entity.prefabs.bipedal.set_helm_texture(uuid, "helm.full")

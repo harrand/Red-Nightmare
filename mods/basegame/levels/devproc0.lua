@@ -67,6 +67,7 @@ rn.mods.basegame.levels.devproc0 =
 							rn.item.equip(ent, "peasant_shirt")
 							rn.item.equip(ent, "peasant_pants")
 						end
+						rn.entity.prefabs.faction.set_faction(ent, faction.player_enemy)
 						rn.entity.prefabs.sprite.set_position(ent, x, y)
 						-- buff depending on difficulty
 						-- health increased by 2 per level

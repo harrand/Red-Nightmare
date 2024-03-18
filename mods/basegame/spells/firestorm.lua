@@ -21,6 +21,7 @@ rn.mods.basegame.spells.firestorm =
 			rn.entity.prefabs.timed_despawn.set_duration(projectile, 5.0)
 			rn.entity.prefabs.sprite.set_position(projectile, casterx, castery)
 			sc:entity_write(projectile, "owner", uuid)
+			rn.entity.prefabs.faction.copy_faction(uuid, projectile)
 			local vecx = math.sin(angle_per_fireball * i) * 999
 			local vecy = math.cos(angle_per_fireball * i) * 999
 			rn.entity.prefabs.magic_ball_base.set_target(projectile, casterx + vecx, castery + vecy)

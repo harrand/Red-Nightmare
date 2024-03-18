@@ -36,6 +36,7 @@ for schoolname, schooldata in pairs(rn.spell.schools) do
 
 			rn.entity.prefabs.sprite.set_position(projectile, casterx, castery)
 			sc:entity_write(projectile, "owner", uuid)
+			rn.entity.prefabs.faction.copy_faction(uuid, projectile)
 			local dx = tarx - casterx
 			local dy = tary - castery
 			rn.entity.prefabs.magic_ball_base.set_target(projectile, dx * 999, dy * 999)

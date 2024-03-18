@@ -9,6 +9,7 @@ rn.mods.basegame =
 
 require("basegame/prefabs/mouse_controlled")
 require("basegame/prefabs/keyboard_controlled")
+require("basegame/prefabs/faction")
 require("basegame/prefabs/light_emitter")
 require("basegame/prefabs/sticky")
 require("basegame/prefabs/sprite")

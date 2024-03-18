@@ -61,7 +61,7 @@ rn.mods.basegame.prefabs.magic_ball_base =
 			rn.current_scene():remove_entity(uuid_a)
 			return false
 		end
-		if owner_id == uuid_b or not target_alive or (owner_id ~= nil and owner_id == other_owner) then
+		if owner_id == uuid_b or not target_alive or (owner_id ~= nil and owner_id == other_owner) or rn.entity.prefabs.faction.is_ally(uuid_a, uuid_b) then
 			-- collided with whomsoever casted me. don't do anything.
 			return false
 		end

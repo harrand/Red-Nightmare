@@ -4,6 +4,7 @@ rn.mods.basegame.spells.melee =
 	magic_type = "physical",
 	finish = function(uuid)
 		local swing = rn.current_scene():add_entity("melee_swing_area")
+		rn.entity.prefabs.faction.copy_faction(uuid, swing)
 		rn.entity.prefabs.melee_swing_area.set_caster(swing, uuid)
 		rn.entity.prefabs.sprite.set_scale(swing, 2.0)
 		rn.entity.prefabs.timed_despawn.set_duration(swing, 0.4)

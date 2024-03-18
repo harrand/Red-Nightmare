@@ -31,6 +31,7 @@ rn.mods.basegame.items.insin =
 				fiery_minion_summon_icd = 10.0
 
 				sc:entity_write(fiery_minion_uuid, "owner", uuid)
+				rn.entity.prefabs.faction.copy_faction(uuid, fiery_minion_uuid)
 				sc:entity_write(uuid, "insin_minion", fiery_minion_uuid)
 			else
 				-- reduce the icd.

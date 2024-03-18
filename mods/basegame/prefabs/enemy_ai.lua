@@ -28,15 +28,12 @@ rn.mods.basegame.prefabs.basic_target_field =
 	on_collision = function(me, other)
 		local owner = rn.current_scene():entity_read(me, "owner")
 		if owner ~= nil and rn.current_scene():contains_entity(owner) and (other ~= owner) then
-			-- owners owner is basically the dude who summoned whatever the ai is (e.g a necromancer for a skeleton ai)
-			local owners_owner = rn.current_scene():entity_read(owner, "owner")
-			-- dont go after your owners owner.
 			local owner_prefab = nil
 			local owner_prefab_str = rn.current_scene():entity_read(owner, ".ai")
 			if owner_prefab_str ~= nil then
 				owner_prefab = rn.entity.prefabs[owner_prefab_str]
 			end
-			if owners_owner ~= other and owner_prefab ~= nil then
+			if rn.entity.prefabs.faction.is_enemy(me, other) and owner_prefab ~= nil then
 				if owner_prefab.on_target_field_collide ~= nil then
 					owner_prefab.on_target_field_collide(owner, me, other)
 					return false
@@ -84,6 +81,7 @@ rn.mods.basegame.prefabs.base_ai =
 			rn.entity.prefabs.sprite.set_scale(target_field, target_range)
 		else
 			target_field = sc:add_entity("basic_target_field")
+			rn.entity.prefabs.faction.copy_faction(uuid, target_field)
 			--rn.entity.prefabs.sprite.set_scale(target_field, target_range)
 			sc:entity_write(target_field, "owner", uuid)
 			rn.entity.prefabs.sticky.stick_to(target_field, uuid)

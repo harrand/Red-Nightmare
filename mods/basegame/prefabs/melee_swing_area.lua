@@ -11,8 +11,9 @@ rn.mods.basegame.prefabs.melee_swing_area =
 	on_collision = function(me, other)
 		local sc = rn.current_scene()
 		local other_alive = rn.entity.prefabs.combat_stats.is_alive(other)
-		-- dont hit dead enemies
-		if not other_alive then return false end
+		local ally = rn.entity.prefabs.faction.is_ally(me, other)
+		-- dont hit dead enemies or allies
+		if not other_alive or ally then return false end
 
 		local caster = rn.entity.prefabs.melee_swing_area.get_caster(me)
 		-- dont hit if the caster is gone.

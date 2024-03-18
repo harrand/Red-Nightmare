@@ -6,6 +6,8 @@ rn.mods.basegame.spells.summon_zombie =
 	cast_type = "omni",
 	description = "Summons a zombie (at the origin of the world)",
 	finish = function(uuid, casterx, castery)
-		rn.current_scene():add_entity("zombie")
+		local ent = rn.current_scene():add_entity("zombie")
+		rn.entity.prefabs.faction.copy_faction(uuid, ent)
+		rn.entity.prefabs.sprite.set_position(ent, rn.entity.prefabs.sprite.get_position(uuid))
 	end
 }

@@ -10,6 +10,7 @@ rn.mods.basegame.spells.allure_of_flames =
 		local sc = rn.current_scene()
 		local projectile = sc:add_entity("allure_of_flame")
 		rn.entity.prefabs.timed_despawn.set_duration(projectile, 7.5)
+		rn.entity.prefabs.faction.copy_faction(uuid, projectile)
 
 		rn.entity.prefabs.sprite.set_position(projectile, casterx, castery)
 		rn.entity.prefabs.sprite.set_scale(projectile, 2.0, 2.0)
