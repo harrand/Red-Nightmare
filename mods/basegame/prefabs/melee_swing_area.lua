@@ -47,6 +47,7 @@ rn.mods.basegame.prefabs.melee_swing_area =
 				rn.entity.prefabs.magic_ball_base.set_target(other, projx - vectorx, projy - vectory)
 				-- also set the owner to the caster now, so it can actually hit its enemies.
 				sc:entity_write(other, "owner", caster)
+				rn.entity.prefabs.faction.copy_faction(caster, other)
 			end
 		else
 			-- deal some deeps
