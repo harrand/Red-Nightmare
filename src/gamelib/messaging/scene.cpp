@@ -841,7 +841,15 @@ namespace game::messaging
 			auto cmp = sc->get_entity_render_component(uuid);	
 			auto objh = sc->get_renderer().get_renderer().animated_object_get_subobjects(cmp.obj)[subobject];
 			auto texloc = sc->get_renderer().get_renderer().object_get_texture(objh, bound_texture_id);
-			state.stack_push_string(sc->get_renderer().get_texture_name(texloc.texture));
+			std::string name = sc->get_renderer().get_texture_name(texloc.texture);
+			if(name.empty())
+			{
+				state.stack_push_nil();
+			}
+			else
+			{
+				state.stack_push_string(name);
+			}
 			return 1;
 		}
 

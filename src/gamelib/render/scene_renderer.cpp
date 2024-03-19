@@ -116,7 +116,7 @@ namespace game::render
 	{
 		if(texh == tz::nullhand)
 		{
-			return "Null Texture";
+			return "";
 		}
 		// very slow. boo
 		for(const auto& [name, handle] : this->registered_textures)

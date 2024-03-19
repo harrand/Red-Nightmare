@@ -37,6 +37,6 @@ rn.mods.basegame.levels.clans_camp =
 
 		local helpme_chest = rn.current_scene():add_entity("loot_chest")
 		rn.entity.prefabs.sprite.set_position(helpme_chest, -5, -8)
-		rn.entity.prefabs.loot_chest.add_loot(helpme_chest, "iron_mace")
+		rn.entity.prefabs.loot_chest.add_loot(helpme_chest, "basic_torch")
 	end,
 }

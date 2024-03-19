@@ -23,6 +23,7 @@ rn.mods.basegame.prefabs.player_melistra =
 		rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 5, "firestorm")
 		rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 6, "allure_of_flames")
 		rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 7, "summon_zombie")
+		rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 8, "cruel_lie")
 
 		rn.entity.prefabs.combat_stats.set_base_max_hp(uuid, 20)
 		rn.entity.prefabs.combat_stats.set_base_fire_power(uuid, 10)

@@ -8,11 +8,10 @@ rn.mods.basegame.levels.devproc0 =
 	end,
 	spawn_boss = function(posx, posy)
 		local boss = rn.current_scene():add_entity("frost_elemental")
-		rn.entity.prefabs.combat_stats.apply_flat_increased_haste(boss, 0.5)
-		rn.entity.prefabs.combat_stats.apply_flat_increased_max_hp(boss, 1000)
-		rn.entity.prefabs.combat_stats.apply_flat_increased_frost_power(boss, 5.0)
-		rn.entity.prefabs.combat_stats.apply_pct_increased_frost_power(boss, 1.0)
-		rn.entity.prefabs.sprite.set_scale(boss, 30.0)
+		rn.entity.prefabs.combat_stats.apply_flat_increased_haste(boss, 0.75)
+		rn.entity.prefabs.combat_stats.apply_flat_increased_max_hp(boss, 9001)
+		rn.entity.prefabs.combat_stats.apply_flat_increased_frost_power(boss, 25.0)
+		rn.entity.prefabs.combat_stats.apply_pct_increased_frost_power(boss, 2.0)
 		rn.entity.prefabs.sprite.set_position(boss, posx, posy)
 		rn.entity.prefabs.base_ai.add_ability(boss, "summon_zombie", rn.ai.ability.filler_damage)
 		rn.entity.prefabs.faction.set_faction(boss, faction.player_enemy)
@@ -107,7 +106,7 @@ rn.mods.basegame.levels.devproc0 =
 		rn.entity.prefabs.sprite.set_normal_map(bg, "background.blackrock_normals")
 		rn.current_scene():entity_set_local_position(bg, 0.0, 0.0, -2.0)
 
-		if difficulty < 20 then
+		if difficulty < 50 then
 			local reload_portal = rn.current_scene():add_entity("portal")
 			rn.entity.prefabs.sprite.set_position(reload_portal, -boundx + wallscale, boundy - wallscale)
 			rn.entity.prefabs.portal.set_colour(reload_portal, 0.5, 0.0, 0.0)

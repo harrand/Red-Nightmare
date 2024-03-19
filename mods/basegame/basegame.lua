@@ -46,6 +46,7 @@ require("basegame/prefabs/weapon_models/staff")
 
 require("basegame/spells/melee")
 require("basegame/spells/allure_of_flames")
+require("basegame/spells/cruel_lie")
 require("basegame/spells/firestorm")
 require("basegame/spells/flash_of_light")
 require("basegame/spells/lesser_magicbolt")
