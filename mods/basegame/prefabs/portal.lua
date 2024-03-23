@@ -38,6 +38,12 @@ rn.mods.basegame.prefabs.portal =
 	on_collision = function(me, other)
 		if other ~= nil and rn.current_scene():contains_entity(other) then
 			if rn.level.data_read("player") == other then
+				-- take away player control and play an animation while we load into the next level.
+				local currently_playing = rn.current_scene():entity_get_playing_animation(other)
+				if currently_playing ~= "CastBlockStart" then
+					rn.entity.prefabs.bipedal.play_animation(other, "CastBlockStart", false, 0.35)
+				end
+				rn.entity.prefabs.keyboard_controlled.set_enabled(other, false)
 				local destination = rn.entity.prefabs.portal.get_level_destination(me)
 				if destination ~= nil then
 					rn.player.stash()
