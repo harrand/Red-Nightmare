@@ -38,16 +38,14 @@ rn.mods.basegame.prefabs.portal =
 	on_collision = function(me, other)
 		if other ~= nil and rn.current_scene():contains_entity(other) then
 			if rn.level.data_read("player") == other then
-				rn.player.stash()
-				local difficulty = rn.data_store():read("difficulty") or 0
-				rn.data_store():set("difficulty", difficulty + 1)
 				local destination = rn.entity.prefabs.portal.get_level_destination(me)
 				if destination ~= nil then
+					rn.player.stash()
 					rn.level.load(destination)
 				else
+					rn.player.stash()
 					rn.level.reload()
 				end
-				rn.player.unstash()
 			else
 				-- note: there's a couple of prefab types we dont want to remove.
 				local prefab = rn.current_scene():entity_read(other, ".prefab")

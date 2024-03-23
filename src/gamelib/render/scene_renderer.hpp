@@ -79,6 +79,8 @@ namespace game::render
 		tz::vec4 get_clear_colour() const;
 		void set_clear_colour(tz::vec4 rgba);
 
+		tz::vec3& global_colour_multiplier();
+
 		void add_light(std::size_t light_uid, point_light_data data);
 		void remove_light(std::size_t light_uid);
 		point_light_data* get_light(std::size_t light_uid);
@@ -108,6 +110,7 @@ namespace game::render
 			pixelate_pass_t();
 			tz::gl::icomponent* get_background_image();
 			tz::gl::icomponent* get_foreground_image();
+			tz::vec3& global_colour_multiplier();
 			float& zoom_amount();
 			void handle_resize(tz::gl::renderer_handle animation_render_pass);
 
@@ -167,6 +170,9 @@ namespace game::render
 		int get_clear_colour(tz::lua::state& state);
 		int set_clear_colour(tz::lua::state& state);
 
+		int get_global_colour_multiplier(tz::lua::state& state);
+		int set_global_colour_multiplier(tz::lua::state& state);
+
 		int get_ambient_light(tz::lua::state& state);
 		int set_ambient_light(tz::lua::state& state);
 
@@ -202,6 +208,9 @@ namespace game::render
 
 			LUA_METHOD(impl_rn_scene_renderer, get_clear_colour)
 			LUA_METHOD(impl_rn_scene_renderer, set_clear_colour)
+
+			LUA_METHOD(impl_rn_scene_renderer, get_global_colour_multiplier)
+			LUA_METHOD(impl_rn_scene_renderer, set_global_colour_multiplier)
 
 			LUA_METHOD(impl_rn_scene_renderer, get_ambient_light)
 			LUA_METHOD(impl_rn_scene_renderer, set_ambient_light)

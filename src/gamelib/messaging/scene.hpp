@@ -43,6 +43,7 @@ namespace game::messaging
 		entity_set_subobject_pixelated,
 		renderer_set_camera_position,
 		renderer_set_clear_colour,
+		renderer_set_global_colour_multiplier,
 		renderer_set_ambient_light,
 		renderer_add_texture,
 		renderer_add_model,

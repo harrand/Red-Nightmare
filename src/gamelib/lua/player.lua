@@ -20,6 +20,17 @@ rn.player.stash = function()
 	rn.data_store():set("player.hp_lost", hp_lost or 0)
 end
 
+rn.player.clear = function()
+	rn.data_store():remove_all_of("player.")
+	-- remove all equipment from player and reset its health.
+	local player = rn.player.get()
+	if player == nil or not rn.current_scene():contains_entity(player) then return end
+	rn.item.foreach_equipped(player, function(slot, item)
+		rn.item.unequip(player, slot)
+	end)
+	rn.entity.prefabs.combat_stats.full_heal(player)
+end
+
 rn.player.unstash = function()
 	local player = rn.player.get()
 	if player == nil then return end

@@ -339,6 +339,13 @@ namespace game::messaging
 				sc->get_renderer().set_clear_colour(rgba);
 			}
 			break;
+			case scene_operation::renderer_set_global_colour_multiplier:
+			{
+				TZ_PROFZONE("renderer set global colour multiplier", 0xFF99CC44);
+				tz::vec3 rgb = std::any_cast<tz::vec3>(msg.value);
+				sc->get_renderer().global_colour_multiplier() = rgb;
+			}
+			break;
 			case scene_operation::renderer_set_ambient_light:
 			{
 				TZ_PROFZONE("renderer set ambient light", 0xFF99CC44);

@@ -2,6 +2,7 @@ shader(type = fragment);
 
 resource(id = 0) const buffer zoom_buffer
 {
+	vec3 global_colour_multiplier;
 	float value;
 } zoom;
 
@@ -34,4 +35,5 @@ void main()
 	{
 		out::frag_colour = unpixelised_colour;
 	}
+	out::frag_colour.xyz *= zoom.global_colour_multiplier;
 }

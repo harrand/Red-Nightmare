@@ -362,6 +362,11 @@ namespace game::render
 		.build());
 	}
 
+	tz::vec3& scene_renderer::global_colour_multiplier()
+	{
+		return this->pixelate_pass.global_colour_multiplier();
+	}
+
 	void scene_renderer::add_light(std::size_t light_uid, point_light_data data)
 	{
 		tz::assert(this->light_uid_to_index.size() == this->get_point_lights().size());
@@ -567,7 +572,7 @@ namespace game::render
 		std::array<float, 2> dimension_buffer_data;
 		dimension_buffer_data[0] = mondims[0];
 		dimension_buffer_data[1] = mondims[1];
-		this->zoom_buffer = rinfo.add_resource(tz::gl::buffer_resource::from_one(7.0f,
+		this->zoom_buffer = rinfo.add_resource(tz::gl::buffer_resource::from_one(tz::vec4(1.0f, 1.0f, 1.0f, 7.0f),
 		{
 			.access = tz::gl::resource_access::dynamic_access
 		}));
@@ -599,9 +604,16 @@ namespace game::render
 		return tz::gl::get_device().get_renderer(this->handle).get_component(this->fg_image);
 	}
 
+	tz::vec3& scene_renderer::pixelate_pass_t::global_colour_multiplier()
+	{
+		// note: this is a strict aliasing violation - coz its actually a vec4.
+		// however, i dont care.
+		return tz::gl::get_device().get_renderer(this->handle).get_resource(this->zoom_buffer)->data_as<tz::vec3>().front();
+	}
+
 	float& scene_renderer::pixelate_pass_t::zoom_amount()
 	{
-		return tz::gl::get_device().get_renderer(this->handle).get_resource(this->zoom_buffer)->data_as<float>().front();
+		return tz::gl::get_device().get_renderer(this->handle).get_resource(this->zoom_buffer)->data_as<tz::vec4>().front()[3];
 	}
 
 	void scene_renderer::pixelate_pass_t::handle_resize(tz::gl::renderer_handle animation_render_pass)
@@ -780,6 +792,27 @@ namespace game::render
 			.operation = game::messaging::scene_operation::renderer_set_clear_colour,
 			.uuid = std::numeric_limits<entity_uuid>::max(),
 			.value = tz::vec4{r, g, b, a}
+		});
+		return 0;
+	}
+
+	int impl_rn_scene_renderer::get_global_colour_multiplier(tz::lua::state& state)
+	{
+		tz::vec3 ret = this->renderer->global_colour_multiplier();
+		state.stack_push_float(ret[0]);
+		state.stack_push_float(ret[1]);
+		state.stack_push_float(ret[2]);
+		return 3;
+	}
+
+	int impl_rn_scene_renderer::set_global_colour_multiplier(tz::lua::state& state)
+	{
+		auto [_, r, g, b] = tz::lua::parse_args<tz::lua::nil, float, float, float>(state);
+		game::messaging::scene_insert_message
+		({
+			.operation = game::messaging::scene_operation::renderer_set_global_colour_multiplier,
+			.uuid = std::numeric_limits<entity_uuid>::max(),
+			.value = tz::vec3{r, g, b}
 		});
 		return 0;
 	}

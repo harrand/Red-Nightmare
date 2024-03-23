@@ -74,6 +74,11 @@ rn.mods.basegame.prefabs.combat_stats =
 		local minus_hp = rn.current_scene():entity_read(uuid, "hp_lost") or 0.0
 		return (rn.mods.basegame.prefabs.combat_stats.get_max_hp(uuid) or 0.0) - minus_hp
 	end,
+	set_hp = function(uuid, hp)
+		local max_hp = rn.mods.basegame.prefabs.combat_stats.get_max_hp(uuid)
+		local hp_lost = math.min(math.max(hp - max_hp, 0), max_hp)
+		rn.current_scene():entity_write(uuid, "hp_lost", hp_lost)
+	end,
 	dmg_unmit = function(uuid, dmg)
 		tz.assert(dmg >= 0.0, "Damage dealt cannot be negative.")
 		local just_died = false
@@ -87,6 +92,9 @@ rn.mods.basegame.prefabs.combat_stats =
 		minus_hp = math.min(math.max(minus_hp + dmg, 0.0), max_hp)
 		rn.current_scene():entity_write(uuid, "hp_lost", minus_hp)
 		return minus_hp >= max_hp
+	end,
+	full_heal = function(uuid)
+		rn.current_scene():entity_write(uuid, "hp_lost", 0)
 	end,
 	heal_unmit = function(uuid, heal)
 		tz.assert(heal >= 0.0, "Healing received can't be negative.")
