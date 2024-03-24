@@ -152,6 +152,8 @@ rn.mods.basegame.prefabs.combat_stats =
 		
 		-- dmg = (base_dmg * caster_power) * max(our_resistance - 1.0, 0.0)
 		local mitigated_dmg = (dmg * (caster_power + 1.0)) * math.max(1.0 - our_resistance, 0.0)
+		mitigated_dmg = rn.entity.on_struck(uuid, enemy_uuid, mitigated_dmg, magic_type)
+		mitigated_dmg = rn.entity.on_hit(enemy_uuid, uuid, mitigated_dmg, magic_type)
 		local just_died = rn.entity.prefabs.combat_stats.dmg_unmit(uuid, mitigated_dmg)
 		if just_died then
 			rn.entity.on_death(uuid, mitigated_dmg, magic_type, enemy_uuid)

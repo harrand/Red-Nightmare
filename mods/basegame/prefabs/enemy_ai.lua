@@ -123,6 +123,15 @@ rn.mods.basegame.prefabs.base_ai =
 			rn.entity.prefabs.base_ai.find_target(uuid, rn.entity.prefabs.base_ai.get_aggro_range(uuid))
 		end
 	end,
+	on_struck = function(me, attacker, dmg, magic_type)
+		local sc = rn.current_scene()
+		if attacker ~= nil and sc:contains_entity(attacker) then
+			local parent = sc:entity_read(attacker, "owner")
+			if parent ~= nil and sc:contains_entity(parent) then attacker = parent end
+			rn.entity.prefabs.base_ai.set_target(me, attacker)
+		end
+		return dmg
+	end,
 	get_aggro_range = function(uuid)
 		return rn.current_scene():entity_read(uuid, ".aggro_range") or 10.0
 	end,
@@ -187,6 +196,7 @@ rn.mods.basegame.prefabs.melee_ai =
 			end
 		end
 	end,
+	on_struck = rn.mods.basegame.prefabs.base_ai.on_struck,
 	get_aggro_range = rn.mods.basegame.prefabs.base_ai.get_aggro_range,
 	set_aggro_range = rn.mods.basegame.prefabs.base_ai.set_aggro_range,
 	set_melee_ability = function(uuid, spellname)
@@ -255,6 +265,7 @@ rn.mods.basegame.prefabs.ranged_ai =
 			end
 		end
 	end,
+	on_struck = rn.mods.basegame.prefabs.base_ai.on_struck,
 	get_aggro_range = rn.mods.basegame.prefabs.base_ai.get_aggro_range,
 	set_aggro_range = rn.mods.basegame.prefabs.base_ai.set_aggro_range,
 	set_fleeing = function(uuid, flee_duration)

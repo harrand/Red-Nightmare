@@ -34,6 +34,7 @@ rn.mods.basegame.prefabs.melee_monster =
 		rn.entity.prefabs.bipedal.update(uuid, delta_seconds)
 		rn.entity.prefabs.melee_ai.update(uuid, delta_seconds)
 	end,
+	on_struck = rn.mods.basegame.prefabs.melee_ai.on_struck,
 	on_move = rn.mods.basegame.prefabs.bipedal.on_move,
 	on_stop_moving = rn.mods.basegame.prefabs.bipedal.on_stop_moving,
 	on_collision = rn.mods.basegame.prefabs.melee_ai.on_collision,

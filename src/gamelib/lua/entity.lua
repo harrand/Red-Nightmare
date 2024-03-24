@@ -311,3 +311,31 @@ end
 rn.entity.get_stunned = function(uuid)
 	return rn.current_scene():entity_read(uuid, "stunned_duration")
 end
+
+rn.entity.on_struck = function(struck_uuid, striker_uuid, dmg, magic_type)
+	local sc = rn.current_scene()
+	if struck_uuid ~= nil and sc:contains_entity(struck_uuid) then
+		local prefab_name = sc:entity_read(struck_uuid, ".prefab")
+		if prefab_name ~= nil then
+			local prefab = rn.entity.prefabs[prefab_name]
+			if prefab.on_struck ~= nil then
+				dmg = prefab.on_struck(struck_uuid, striker_uuid, dmg, magic_type)
+			end
+		end
+	end
+	return dmg
+end
+
+rn.entity.on_hit = function(hitter_uuid, victim_uuid, dmg, magic_type)
+	local sc = rn.current_scene()
+	if hitter_uuid ~= nil and sc:contains_entity(hitter_uuid) then
+		local prefab_name = sc:entity_read(hitter_uuid, ".prefab")
+		if prefab_name ~= nil then
+			local prefab = rn.entity.prefabs[prefab_name]
+			if prefab.on_hit ~= nil then
+				dmg = prefab.on_hit(hitter_uuid, victim_uuid, dmg, magic_type)
+			end
+		end
+	end
+	return dmg
+end

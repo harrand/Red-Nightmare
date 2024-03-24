@@ -17,6 +17,7 @@ rn.mods.basegame.prefabs.zombie =
 		rn.entity.prefabs.melee_ai.set_melee_ability(uuid, "zombie_swipe")
 	end,
 	update = rn.mods.basegame.prefabs.melee_monster.update,
+	on_struck = rn.mods.basegame.prefabs.melee_monster.on_struck,
 	on_move = rn.mods.basegame.prefabs.melee_monster.on_move,
 	on_stop_moving = rn.mods.basegame.prefabs.melee_monster.on_stop_moving,
 	on_collision = function(me, other)
