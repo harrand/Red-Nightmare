@@ -64,7 +64,21 @@ rn.item.equip = function(uuid, item_name)
 	tz.assert(slot ~= rn.item.slot.none, "Attempt to equip item " .. item_name .. " which is not a piece of equipment.")
 
 	-- if we're already equipping something in this slot, unequip it.
-	rn.item.unequip(uuid, slot)
+	rn.item.drop_equipment(uuid, slot)
+	--rn.item.unequip(uuid, slot)
+	-- if we're wielding a two-handed weapon, unequip our offhand
+	if slot == rn.item.slot.right_hand and itemdata.two_handed then
+		rn.item.drop_equipment(uuid, rn.item.slot.left_hand)
+		--rn.item.unequip(uuid, rn.item.slot.left_hand)
+	end
+	if slot == rn.item.slot.left_hand then
+		-- if we equip an offhand but we're already wielding a 2h, drop that 2h.
+		local main_hand = rn.item.get_equipped(uuid, rn.item.slot.right_hand)
+		if main_hand ~= nil and rn.item.items[main_hand].two_handed then
+			rn.item.drop_equipment(uuid, rn.item.slot.right_hand)
+			--rn.item.unequip(uuid, rn.item.slot.right_hand)
+		end
+	end
 	-- finally equip the new item.
 	sc:entity_write(uuid, "equipment." .. tostring(slot), item_name)
 	rn.entity.on_equip(uuid, item_name)
@@ -145,6 +159,7 @@ rn.item.move_equipment = function(uuid_from, uuid_to)
 end
 
 rn.item.drop_equipment = function(uuid, slot)
+	if uuid == nil or not rn.current_scene():contains_entity(uuid) then return end
 	local equipped = rn.item.get_equipped(uuid, slot)
 	local x, y = rn.entity.prefabs.sprite.get_position(uuid)
 	if equipped ~= nil then
@@ -157,6 +172,7 @@ rn.item.drop_equipment = function(uuid, slot)
 end
 
 rn.item.drop_all_equipment = function(uuid)
+	if uuid == nil or not rn.current_scene():contains_entity(uuid) then return end
 	local equipped = {}
 	local x, y = rn.entity.prefabs.sprite.get_position(uuid)
 	for i=1,rn.item.slot._count-1,1 do
