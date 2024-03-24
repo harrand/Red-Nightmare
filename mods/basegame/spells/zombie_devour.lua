@@ -8,10 +8,11 @@ rn.mods.basegame.spells.zombie_devour =
 		local target = rn.current_scene():entity_read(uuid, "devour_victim")
 		if target ~= nil and rn.current_scene():contains_entity(target) then
 			rn.entity.unstun(target)
-			local dmg = rn.entity.prefabs.combat_stats.get_base_physical_power(uuid) * 10
+			local dmg = 10
 			rn.entity.prefabs.combat_stats.dmg(target, dmg, "physical", uuid)
 			rn.entity.prefabs.combat_stats.heal(uuid, dmg * 0.5, "shadow", uuid)
 			rn.current_scene():entity_write(uuid, "devour_victim", nil)
+			rn.current_scene():entity_write(uuid, "zombie_devour_last_cast", tz.time())
 		end
 	end,
 	advance = function(uuid, cast_progress)
@@ -34,5 +35,9 @@ rn.mods.basegame.spells.zombie_devour =
 		local dx = vx - mex
 		local dy = vy - mey
 		rn.entity.prefabs.bipedal.face_direction(target, dx, dy)
+	end,
+	is_on_cooldown = function(uuid)
+		local casted_at = rn.current_scene():entity_read(uuid, "zombie_devour_last_cast") or 0.0
+		return tz.time() < (casted_at + 5000)
 	end
 }

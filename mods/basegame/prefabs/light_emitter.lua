@@ -28,6 +28,14 @@ rn.mods.basegame.prefabs.light_emitter =
 			rn.renderer():light_set_colour(light, r, g, b)
 		end
 	end,
+	get_power = function(uuid)
+		local light = rn.current_scene():entity_read(uuid, "attached_light")
+		if light ~= nil then
+			return rn.renderer():light_get_power(light)
+		else
+			return 0
+		end
+	end,
 	set_power = function(uuid, pow)
 		local light = rn.current_scene():entity_read(uuid, "attached_light")
 		if light ~= nil then

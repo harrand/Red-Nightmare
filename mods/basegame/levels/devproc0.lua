@@ -27,7 +27,7 @@ rn.mods.basegame.levels.devproc0 =
 		rn.renderer():directional_light_set_colour(0.8, 0.8, 1.0)
 
 		local wallscale = 4
-		local size = 64 + difficulty
+		local size = 64 + (difficulty * 0.5)
 		local boundx = size
 		local boundy = size
 		boundx = math.floor((boundx * 0.5) - wallscale)

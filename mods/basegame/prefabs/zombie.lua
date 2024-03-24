@@ -22,11 +22,14 @@ rn.mods.basegame.prefabs.zombie =
 	on_collision = function(me, other)
 		local target = rn.entity.prefabs.base_ai.get_target(me)
 		if rn.entity.prefabs.combat_stats.is_alive(me) and target == other and rn.entity.prefabs.faction.is_enemy(me, other) and not rn.spell.is_casting(me) then
-			local attack_power = rn.entity.prefabs.combat_stats.get_physical_power(me)
+			local attack_power = rn.entity.prefabs.combat_stats.get_physical_power(me) * 4
 			local target_hp = rn.entity.prefabs.combat_stats.get_hp(target)
 			-- devour if enemy is below 25% health or our attack power exceeds their current health
 			local target_max_hp = rn.entity.prefabs.combat_stats.get_max_hp(target)
-			if target_hp > 0 and ((attack_power >= target_hp - attack_power) or (math.max(target_hp - attack_power, 0) / target_max_hp <= 0.20)) then
+			local hp_pct = target_hp / target_max_hp
+			local devour_on_cooldown = rn.mods.basegame.spells.zombie_devour.is_on_cooldown(me)
+			print("hp_pct = " .. hp_pct .. ", attack power: " .. attack_power .. ", target hp: " .. target_hp)
+			if target_hp > 0 and (hp_pct < 0.3) and attack_power > target_hp and not devour_on_cooldown then
 				rn.spell.cast(me, "zombie_devour")
 				return true
 			end
