@@ -129,6 +129,7 @@ rn.mods.basegame.prefabs.base_ai =
 			local parent = sc:entity_read(attacker, "owner")
 			if parent ~= nil and sc:contains_entity(parent) then attacker = parent end
 			rn.entity.prefabs.base_ai.set_target(me, attacker)
+			print("i am angered by " .. sc:entity_get_name(attacker))
 		end
 		return dmg
 	end,

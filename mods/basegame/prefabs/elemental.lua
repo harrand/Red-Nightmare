@@ -48,6 +48,7 @@ rn.mods.basegame.prefabs.elemental_base =
 			rn.entity.prefabs.bipedal.set_colour(uuid, col[1], col[2], col[3])
 		end
 	end,
+	on_struck = rn.mods.basegame.prefabs.ranged_ai.on_struck,
 	on_move = rn.mods.basegame.prefabs.bipedal.on_move,
 	on_stop_moving = rn.mods.basegame.prefabs.bipedal.on_stop_moving,
 	on_collision = function(me, other)
@@ -82,6 +83,7 @@ for schoolname, schooldata in pairs(rn.spell.schools) do
 			end,
 			update = rn.mods.basegame.prefabs.elemental_base.update,
 			on_collision = rn.mods.basegame.prefabs.elemental_base.on_collision,
+			on_struck = rn.mods.basegame.prefabs.elemental_base.on_struck,
 			on_move = rn.mods.basegame.prefabs.elemental_base.on_move,
 			on_stop_moving = rn.mods.basegame.prefabs.elemental_base.on_stop_moving,
 			on_cast_begin = rn.mods.basegame.prefabs.elemental_base.on_cast_begin,
