@@ -8,7 +8,7 @@ rn.mods.basegame.levels.clans_camp =
 		rn.item.equip(bloke, "iron_platelegs")
 		rn.item.equip(bloke, "steel_sword")
 		rn.item.equip(bloke, "basic_torch")
-		rn.current_scene():entity_play_animation(bloke, "Kneeling", true, 1.0)
+		rn.current_scene():entity_play_animation(bloke, "TorchIdle", true, 1.0)
 		rn.entity.prefabs.sprite.set_position(bloke, -10, -5)
 	end,
 	on_load = function()

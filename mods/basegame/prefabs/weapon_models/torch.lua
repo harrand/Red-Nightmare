@@ -31,7 +31,8 @@ rn.mods.basegame.prefabs.weapon_model_torch =
 			-- torch flicker.
 			local timer = rn.current_scene():entity_read(uuid, "timer") or 0.0
 			timer = timer + delta_seconds
-			rn.current_scene():entity_write(effect, "power_override", math.abs(math.sin(timer * 15.0) * 0.1) + 0.8 + (math.cos(1.0 / delta_seconds) * 0.02))
+			local torch_min_power = 0.8
+			rn.current_scene():entity_write(effect, "power_override", math.abs(math.sin(timer * 15.0) * 0.1) + torch_min_power + (math.cos(1.0 / delta_seconds) * torch_min_power * 0.04))
 			rn.current_scene():entity_write(uuid, "timer", timer)
 		end
 	end,

@@ -39,7 +39,7 @@ rn.mods.basegame.prefabs.magic_ball_base =
 		local magic_type = sc:entity_read(uuid, "magic_type")
 
 		if rn.entity.prefabs.light_emitter.exists(uuid) then
-			rn.entity.prefabs.light_emitter.set_power(uuid, 1.0)
+			rn.entity.prefabs.light_emitter.set_power(uuid, 0.6)
 			local colour = rn.spell.schools[magic_type].colour
 			rn.entity.prefabs.light_emitter.set_colour(uuid, colour[1], colour[2], colour[3])
 			rn.entity.prefabs.light_emitter.update(uuid, delta_seconds)

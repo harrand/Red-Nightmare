@@ -65,12 +65,21 @@ float diffuse(point_light_data l, vec3 normal, bool is_2d)
 		// ignore far z distances for 3d.
 		lightDir.z = clamp(lightDir.z, -1.0, 1.0);
 	}
-	float distance = length(lightDir.xy) + 0.1f;
+	float distance = length(lightDir.xy) + 2.0f;
 	lightDir = normalize(lightDir);
 
 	// Calculate the diffuse lighting component using the Phong diffuse lighting model
 	float diffuse = max(dot(lightDir, normal), 0.0);
-	diffuse = l.power * 0.5f * diffuse / tz::math::pow(distance, 0.5f);
+	diffuse = l.power * 0.5f * diffuse / pow(distance, 2);
+	// slightly brightened circle around the light source so it actually illuminates.
+	if(distance < l.power * 8.0)
+	{
+		diffuse = dot(lightDir, normal) * max(diffuse, 0.3);	
+		if(distance > l.power * 4.0)
+		{
+			diffuse *= smoothstep(l.power * 8.0, l.power * 4.0, distance);
+		}
+	}
 	return diffuse;
 }
 
@@ -91,7 +100,7 @@ float specular(point_light_data l, vec3 normal, bool is_2d)
 	light_dir = normalize(light_dir);
 
 	float specular = pow(max(dot(normal, light_dir), 0.0), 8);
-	specular = l.power * specular / tz::math::pow(distance, 0.5f);
+	specular = l.power * specular / pow(distance, 2);
 	return specular;
 }
 
@@ -139,7 +148,7 @@ void main()
 	for(uint i = 0; i < light.point_light_count; i++)
 	{
 		point_light_data l = light.point_lights[i];
-		vec4 light_contribution = vec4(l.colour * diffuse(l, normal, !should_pixelate) * specular(l, normal, !should_pixelate), 0.0f); 
+		vec4 light_contribution = vec4(l.colour * min(diffuse(l, normal, !should_pixelate) + specular(l, normal, !should_pixelate), 2.0f), 0.0f); 
 		outcol.xyz += light_contribution.xyz;
 	}
 
