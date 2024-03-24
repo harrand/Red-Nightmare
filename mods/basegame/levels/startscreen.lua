@@ -2,8 +2,21 @@ local startscreen_lengthy = 120
 
 rn.mods.basegame.levels.startscreen =
 {
+	load_a_biome = function()
+		local biome_id = rn.data_store():read("startscreen.biome_id") or 0
+		if biome_id % 2 == 0 then
+			rn.mods.basegame.levels.startscreen.grass_subscene()
+		else
+			rn.mods.basegame.levels.startscreen.cave_subscene()
+		end
+	end,
 	cave_subscene = function()
-		rn.renderer():set_ambient_light(0.3, 0.3, 0.4, 1.0)
+		rn.renderer():set_ambient_light(0.2, 0.2, 0.225, 1.0)
+		rn.renderer():directional_light_set_power(0.4)
+		rn.renderer():directional_light_set_colour(0.8, 0.8, 1.0)
+
+		rn.item.equip(rn.player.get(), "iron_mace")
+		rn.item.equip(rn.player.get(), "basic_torch")
 
 		local wallscale = 4
 		local boundx = 48
@@ -56,6 +69,47 @@ rn.mods.basegame.levels.startscreen =
 		rn.entity.prefabs.sprite.set_normal_map(bg, "background.blackrock_normals")
 		rn.current_scene():entity_set_local_position(bg, 0.0, 0.0, -2.0)
 	end,
+	grass_subscene = function()
+		rn.renderer():set_ambient_light(0.525, 0.495, 0.495, 1.0)
+		rn.renderer():directional_light_set_power(0.4)
+		rn.renderer():directional_light_set_colour(0.8, 0.8, 0.8)
+		local wallscale = 4
+		local boundx = 48
+		local boundy = startscreen_lengthy
+		rn.item.equip(rn.player.get(), "steel_greatsword")
+
+		local zom1 = rn.current_scene():add_entity("zombie")
+		rn.entity.prefabs.sprite.set_position(zom1, -9, 5)
+		rn.item.equip(zom1, "peasant_pants")
+		rn.item.equip(zom1, "steel_chainmail")
+		rn.item.equip(zom1, "iron_axe")
+		rn.entity.prefabs.faction.set_faction(zom1, faction.player_enemy)
+
+		local zom2 = rn.current_scene():add_entity("zombie")
+		rn.item.equip(zom2, "shadow_elemental_robe")
+		rn.item.equip(zom2, "shadow_elemental_hood")
+		rn.item.equip(zom2, "iron_platelegs")
+		rn.item.equip(zom2, "blazing_staff")
+		rn.entity.prefabs.faction.set_faction(zom2, faction.player_enemy)
+		rn.entity.prefabs.sprite.set_position(zom2, 9, -15)
+
+		local ele1 = rn.current_scene():add_entity("fire_elemental")
+		rn.entity.prefabs.sprite.set_position(ele1, -9, 15)
+		rn.entity.prefabs.faction.set_faction(ele1, faction.player_friend)
+
+		local ele2 = rn.current_scene():add_entity("shadow_elemental")
+		rn.entity.prefabs.sprite.set_position(ele2, -6, -25)
+		rn.entity.prefabs.faction.set_faction(ele2, faction.player_enemy)
+
+		local bg = rn.current_scene():add_entity("sprite")
+		local sc = math.max(boundx, boundy)
+		rn.entity.prefabs.sprite.set_scale(bg, boundx, boundy)
+		rn.entity.prefabs.sprite.set_texture(bg, "background.grassy")
+		rn.entity.prefabs.sprite.set_normal_map(bg, "background.grassy_normals")
+		rn.current_scene():entity_set_local_position(bg, 0.0, 0.0, -2.0)
+
+		rn.entity.prefabs.dirt_path.plot_path(1, 0, (startscreen_lengthy * 0.5) - 20, "ddddddddddddddddddddd")
+	end,
 	on_load = function()
 		if not rn.music_is_playing(0) then
 			rn.play_music("basegame/res/audio/music/intro.mp3", 0)
@@ -68,8 +122,6 @@ rn.mods.basegame.levels.startscreen =
 		rn.item.equip(player, "iron_coif")
 		rn.item.equip(player, "iron_chainmail")
 		rn.item.equip(player, "iron_chainlegs")
-		rn.item.equip(player, "iron_sword")
-		rn.item.equip(player, "basic_torch")
 
 		rn.level.data_write("player", player)
 
@@ -81,7 +133,7 @@ rn.mods.basegame.levels.startscreen =
 		local title_string_press_to_begin = ren:add_string(w / 2 - 110.0, h * 0.4, 10, "PRESS [ENTER] TO PLAY", 1.0, 1.0, 1.0)
 		rn.level.data_write("title_string", title_string, "title_string_author", title_string_author, "title_string_press_to_begin", title_string_press_to_begin)
 
-		rn.mods.basegame.levels.startscreen.cave_subscene()
+		rn.mods.basegame.levels.startscreen.load_a_biome()
 	end,
 	update = function(delta_seconds)
 		local w, h = tz.window():get_dimensions()
@@ -92,11 +144,16 @@ rn.mods.basegame.levels.startscreen =
 		ren:string_set_position(title_string_press_to_begin, w / 2 - 110.0, h * 0.4)
 
 		local player = rn.level.data_read("player")
-		rn.entity.on_move(player, 0.0, -1.0, 0.0, delta_seconds)
+		if not rn.spell.is_casting(player) then
+			rn.entity.on_move(player, 0.0, -1.0, 0.0, delta_seconds)
+		end
 
 		if rn.current_scene():contains_entity(player) then
 			local px, py = rn.entity.prefabs.sprite.get_position(player)
-			if py < -52.0 then
+
+			if py < -32.0 and not rn.level.data_read("reloading") then
+				rn.data_store():set("startscreen.biome_id", (rn.data_store():read("startscreen.biome_id") or 0) + 1)
+				rn.level.data_write("reloading", true)
 				rn.level.reload(true)
 			end
 		end
