@@ -1,4 +1,4 @@
-rn.mods.basegame.prefabs.player_melistra =
+rn.mods.basegame.prefabs.player =
 {
 	description = "Lady Melistra, the first playable character in Red Nightmare.",
 	pre_instantiate = function(uuid)

@@ -115,7 +115,7 @@ rn.mods.basegame.levels.startscreen =
 			rn.play_music("basegame/res/audio/music/intro.mp3", 0)
 		end
 
-		local player = rn.current_scene():add_entity("player_melistra")
+		local player = rn.current_scene():add_entity("player")
 		rn.entity.prefabs.sprite.set_position(player, 0, (startscreen_lengthy * 0.5) - 20)
 		rn.entity.prefabs.keyboard_controlled.set_enabled(player, false)
 		rn.entity.prefabs.combat_stats.set_base_movement_speed(player, 4)

@@ -10,7 +10,7 @@ rn.mods.basegame.levels.dev0 =
 		rn.entity.prefabs.sprite.set_texture(bg, "background.grassy")
 		rn.entity.prefabs.sprite.set_normal_map(bg, "background.grassy_normals")
 		rn.current_scene():entity_set_local_position(bg, 0.0, 0.0, -2.0)
-		local morb1 = rn.current_scene():add_entity("player_melistra")
+		local morb1 = rn.current_scene():add_entity("player")
 		rn.item.equip(morb1, "iron_sallet")
 		rn.item.equip(morb1, "iron_chainmail")
 		rn.item.equip(morb1, "iron_chainlegs")

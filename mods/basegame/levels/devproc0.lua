@@ -20,7 +20,7 @@ rn.mods.basegame.levels.devproc0 =
 		local difficulty = rn.data_store():read("difficulty") or 0
 		rn.data_store():set("difficulty", difficulty + 1)
 
-		local player = rn.current_scene():add_entity("player_melistra")
+		local player = rn.current_scene():add_entity("player")
 		rn.level.data_write("player", player)
 		rn.renderer():set_ambient_light(0.2, 0.2, 0.225, 1.0)
 		rn.renderer():directional_light_set_power(0.4)

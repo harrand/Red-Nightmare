@@ -35,7 +35,7 @@ require("basegame/prefabs/skeleton")
 require("basegame/prefabs/elemental")
 require("basegame/prefabs/portal")
 
-require("basegame/prefabs/players/player_melistra")
+require("basegame/prefabs/players/player")
 
 require("basegame/prefabs/weapon_models/axe")
 require("basegame/prefabs/weapon_models/morning_star")
