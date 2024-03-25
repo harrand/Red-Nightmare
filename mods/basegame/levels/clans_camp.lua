@@ -10,6 +10,11 @@ rn.mods.basegame.levels.clans_camp =
 		rn.item.equip(bloke, "basic_torch")
 		rn.current_scene():entity_play_animation(bloke, "TorchIdle", true, 1.0)
 		rn.entity.prefabs.sprite.set_position(bloke, -10, -5)
+
+		local skele = rn.current_scene():add_entity("bipedal")
+		rn.entity.prefabs.bipedal.set_texture(skele, "skin.skeleton")
+		rn.current_scene():entity_play_animation(skele, "Idle", true, 1.0)
+		rn.entity.prefabs.sprite.set_position(skele, -10, 5)
 	end,
 	on_load = function()
 		rn.renderer():set_ambient_light(0.525, 0.495, 0.495, 1.0)

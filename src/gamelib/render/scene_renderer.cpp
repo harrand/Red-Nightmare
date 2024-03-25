@@ -1,6 +1,7 @@
 #include "gamelib/render/scene_renderer.hpp"
 #include "gamelib/messaging/scene.hpp"
 #include "tz/core/profile.hpp"
+#include "tz/gl/api/renderer.hpp"
 #include "tz/wsi/monitor.hpp"
 #include "tz/gl/resource.hpp"
 #include "tz/lua/api.hpp"
@@ -38,6 +39,10 @@ namespace game::render
 		TZ_PROFZONE("scene renderer - create", 0xFFFF4488);
 		this->renderer.append_to_render_graph();
 		// add pixelate pass to render graph, and then make sure it depends on animation renderer.
+		auto& ren = tz::gl::get_device().get_renderer(this->get_renderer().get_render_pass());
+		ren.edit(tz::gl::RendererEditBuilder{}
+		.render_state({.culling = tz::gl::graphics_culling::none})
+		.build());
 		tz::gl::get_device().render_graph().timeline.push_back(static_cast<tz::gl::eid_t>(static_cast<tz::hanval>(this->pixelate_pass.handle)));
 
 		this->text_renderer.append_to_render_graph();

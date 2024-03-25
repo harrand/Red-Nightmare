@@ -73,9 +73,32 @@ rn.mods.basegame.levels.devproc0 =
 						local pn = "zombie"
 						if randval2 <= 0.002 then
 							pn = "frost_elemental"
+						elseif randval2 <= 0.005 then
+							pn = "skeleton"
 						end
 						local ent = rn.current_scene():add_entity(pn)
-						if pn == "zombie" then
+						if pn == "skeleton" then
+							rn.entity.prefabs.combat_stats.apply_pct_more_max_hp(ent, 0.2)
+							rn.item.equip(ent, "iron_axe")
+							local randval3 = math.random() * difficulty
+							if randval3 > 40.0 then
+								rn.item.equip(ent, "mythril_chainlegs")	
+							elseif randval2 > 20.0 then
+								rn.item.equip(ent, "steel_platelegs")	
+							elseif randval2 > 10.0 then
+								rn.item.equip(ent, "iron_chainlegs")	
+							end
+							randval4 = math.random() * difficulty
+							if randval3 > 40.0 then
+								rn.item.equip(ent, "mythril_small_shield")	
+							elseif randval2 > 20.0 then
+								rn.item.equip(ent, "steel_small_shield")	
+							elseif randval2 > 10.0 then
+								rn.item.equip(ent, "iron_small_shield")	
+							elseif randval2 > 4.0 then
+								rn.item.equip(ent, "basic_torch")
+							end
+						elseif pn == "zombie" then
 							rn.item.equip(ent, "peasant_shirt")
 							rn.item.equip(ent, "peasant_pants")
 						end

@@ -31,6 +31,7 @@ require("basegame/prefabs/melee_swing_area")
 require("basegame/prefabs/enemy_ai")
 require("basegame/prefabs/melee_monster")
 require("basegame/prefabs/zombie")
+require("basegame/prefabs/skeleton")
 require("basegame/prefabs/elemental")
 require("basegame/prefabs/portal")
 
