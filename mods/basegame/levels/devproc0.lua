@@ -5,6 +5,10 @@ rn.mods.basegame.levels.devproc0 =
 		rn.renderer():add_texture("background.blackrock_normals", "basegame/res/textures/background_blackrock_normals.png")
 		rn.renderer():add_texture("material.darkstone", "basegame/res/textures/material_darkstone.png")
 		rn.renderer():add_texture("material.darkstone_normals", "basegame/res/textures/material_darkstone_normals.png")
+		rn.renderer():add_texture("texture.blackstone_wall_v", "basegame/res/textures/blackstone_wall_v.png")
+		rn.renderer():add_texture("texture.blackstone_wall_v_normals", "basegame/res/textures/blackstone_wall_v_normals.png")
+		rn.renderer():add_texture("texture.blackstone_wall_h", "basegame/res/textures/blackstone_wall_h.png")
+		rn.renderer():add_texture("texture.blackstone_wall_h_normals", "basegame/res/textures/blackstone_wall_h_normals.png")
 	end,
 	spawn_boss = function(posx, posy)
 		local boss = rn.current_scene():add_entity("frost_elemental")
@@ -38,8 +42,22 @@ rn.mods.basegame.levels.devproc0 =
 					local ent = rn.current_scene():add_entity("wall")
 					rn.entity.prefabs.sprite.set_position(ent, x, y)
 					rn.entity.prefabs.sprite.set_scale(ent, wallscale * 0.5)
-					rn.entity.prefabs.sprite.set_texture(ent, "material.darkstone")
-					rn.entity.prefabs.sprite.set_normal_map(ent, "material.darkstone_normals")
+					rn.entity.prefabs.sprite.set_rotation(ent, -1.5708)
+					if y < (-boundy + wallscale) or y > (boundy - wallscale) then
+						if y < 0 then
+							rn.entity.prefabs.sprite.set_rotation(ent, 1.5708)
+						elseif math.random() < 0.1 then
+							rn.entity.prefabs.weapon_model_torch.spawn_on_ground(x, y - 1.0)
+						end
+						rn.entity.prefabs.sprite.set_texture(ent, "texture.blackstone_wall_v")
+						rn.entity.prefabs.sprite.set_normal_map(ent, "texture.blackstone_wall_v_normals")
+					else
+						if x > 0 then
+							rn.entity.prefabs.sprite.set_rotation(ent, 1.5708)
+						end
+						rn.entity.prefabs.sprite.set_texture(ent, "texture.blackstone_wall_h")
+						rn.entity.prefabs.sprite.set_normal_map(ent, "texture.blackstone_wall_h_normals")
+					end
 				else
 					-- randomly 10%...
 					local randval = math.random()
