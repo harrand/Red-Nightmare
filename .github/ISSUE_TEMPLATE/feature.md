@@ -2,7 +2,7 @@
 name: Feature
 about: Plan a new feature
 title: 'Feature: '
-labels: 'feature'
+labels: ['feature', 'unconfirmed']
 assignees: ''
 
 ---
