@@ -31,7 +31,6 @@ rn.mods.basegame.levels.clans_camp =
 
 		rn.mods.basegame.levels.clans_camp.load_npcs()
 
-		rn.item.equip(morb1, "peasant_shirt")
 		rn.item.equip(morb1, "peasant_pants")
 		rn.item.equip(morb1, "facial_hair_full_beard")
 

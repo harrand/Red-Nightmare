@@ -1,6 +1,6 @@
 rn.mods.basegame.spells.firestorm =
 {
-	cast_duration = 3.5,
+	cast_duration = 1.25,
 	magic_type = "fire",
 	two_handed = true,
 	cast_type = "omni",

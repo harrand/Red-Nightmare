@@ -117,7 +117,6 @@ rn.mods.basegame.levels.devproc0 =
 								rn.item.equip(ent, "basic_torch")
 							end
 						elseif pn == "zombie" then
-							rn.item.equip(ent, "peasant_shirt")
 							rn.item.equip(ent, "peasant_pants")
 						end
 						rn.entity.prefabs.faction.set_faction(ent, faction.player_enemy)
@@ -152,7 +151,7 @@ rn.mods.basegame.levels.devproc0 =
 		if difficulty < 50 then
 			local reload_portal = rn.current_scene():add_entity("portal")
 			rn.entity.prefabs.sprite.set_position(reload_portal, -boundx + wallscale, boundy - wallscale)
-			rn.entity.prefabs.portal.set_colour(reload_portal, 0.5, 0.0, 0.0)
+			rn.entity.prefabs.portal.set_colour(reload_portal, 0.6, 0.1, 0.1)
 
 			local home_portal = rn.current_scene():add_entity("portal")
 			rn.entity.prefabs.sprite.set_position(home_portal, boundx - wallscale, -boundy + wallscale)
