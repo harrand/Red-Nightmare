@@ -33,7 +33,16 @@ void main()
 	//if(out::frag_colour == vec4(0.0))
 	if(out::frag_colour.w == 0.0f)
 	{
-		out::frag_colour = unpixelised_colour;
+		if(unpixelised_colour == vec4(0.0f))
+		{
+			// no unpixelised colour to fallback to. we cant discard because that will be clear colour.
+			// we simply have to use the unpixelised colour.
+			out::frag_colour = texture(res::textures[1], uv);
+		}
+		else
+		{
+			out::frag_colour = unpixelised_colour;
+		}
 	}
 	out::frag_colour.xyz *= zoom.global_colour_multiplier;
 }
