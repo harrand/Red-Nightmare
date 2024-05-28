@@ -432,6 +432,21 @@ namespace game::messaging
 				light->power = pow;
 			}
 			break;
+			case scene_operation::renderer_light_set_shape:
+			{
+				TZ_PROFZONE("renderer light set shape", 0xFF99CC44);
+				auto [uid, shape] = std::any_cast<std::pair<std::size_t, std::uint32_t>>(msg.value);
+
+				if(light_was_deleted_this_frame(uid))
+				{
+					return;
+				}
+
+				auto* light = sc->get_renderer().get_light(uid);
+				tz::assert(light != nullptr);
+				light->shape = shape;
+			}
+			break;
 			case scene_operation::renderer_clear_lights:
 			{
 				TZ_PROFZONE("renderer clear lights", 0xFF99CC44);

@@ -42,6 +42,12 @@ rn.mods.basegame.prefabs.light_emitter =
 			rn.renderer():light_set_power(light, pow)
 		end
 	end,
+	set_shape = function(uuid, shape)
+		local light = rn.current_scene():entity_read(uuid, "attached_light")
+		if light ~= nil then
+			rn.renderer():light_set_shape(light, shape)
+		end
+	end,
 	exists = function(uuid)
 		return rn.current_scene():entity_read(uuid, "attached_light") ~= nil
 	end,

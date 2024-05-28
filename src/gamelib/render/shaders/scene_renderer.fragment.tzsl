@@ -2,6 +2,9 @@ shader(type = fragment);
 #define MAX_TEX_COUNT 8
 #define BADU ~0u
 
+#define LIGHT_SHAPE_NORMAL 0
+#define LIGHT_SHAPE_RING 1
+
 import <math>
 import <debug>
 
@@ -15,6 +18,7 @@ struct texture_locator
 struct point_light_data
 {
 	vec3 position;
+	uint shape;
 	vec3 colour;
 	float power;
 };
@@ -53,6 +57,22 @@ float diffuse_directional(vec3 normal, bool is_2d)
 	return diffuse;
 }
 
+float distort_distance(uint shape, float dst)
+{
+	// ring light:
+	if(shape == LIGHT_SHAPE_RING)
+	{
+		const float ring_radius = 2.75f;
+		const float ring_thickness = 5.0f;
+		if(dst > (ring_radius + ring_thickness))
+		{
+			return dst;
+		}
+		return log(max(dst - ring_radius, 0.0f));
+	}
+	return dst;
+}
+
 float diffuse(point_light_data l, vec3 normal, bool is_2d)
 {
 	vec3 lightDir = l.position - in::position;
@@ -67,6 +87,7 @@ float diffuse(point_light_data l, vec3 normal, bool is_2d)
 	}
 	float distance = length(lightDir.xy) + 2.0f;
 	lightDir = normalize(lightDir);
+	distance = distort_distance(l.shape, distance);
 
 	// Calculate the diffuse lighting component using the Phong diffuse lighting model
 	float diffuse = max(dot(lightDir, normal), 0.0);

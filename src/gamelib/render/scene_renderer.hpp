@@ -19,7 +19,7 @@ namespace game::render
 		struct point_light_data
 		{
 			tz::vec3 position = {std::numeric_limits<float>::max(), std::numeric_limits<float>::max(), 1.0f};
-			float pad0[1] = {};
+			std::uint32_t shape = 0;
 			tz::vec3 colour = {1.0f, 1.0f, 1.0f};
 			float power = 0.0f;
 		};
@@ -193,6 +193,7 @@ namespace game::render
 		int light_set_position(tz::lua::state& state);
 		int light_set_colour(tz::lua::state& state);
 		int light_set_power(tz::lua::state& state);
+		int light_set_shape(tz::lua::state& state);
 		int clear_lights(tz::lua::state& state);
 
 		int add_string(tz::lua::state& state);
@@ -232,6 +233,7 @@ namespace game::render
 			LUA_METHOD(impl_rn_scene_renderer, light_set_position)
 			LUA_METHOD(impl_rn_scene_renderer, light_set_colour)
 			LUA_METHOD(impl_rn_scene_renderer, light_set_power)
+			LUA_METHOD(impl_rn_scene_renderer, light_set_shape)
 			LUA_METHOD(impl_rn_scene_renderer, clear_lights)
 
 			LUA_METHOD(impl_rn_scene_renderer, add_string)

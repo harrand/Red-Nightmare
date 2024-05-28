@@ -999,6 +999,18 @@ namespace game::render
 		return 0;
 	}
 
+	int impl_rn_scene_renderer::light_set_shape(tz::lua::state& state)
+	{
+		auto [_, uid, shape] = tz::lua::parse_args<tz::lua::nil, unsigned int, std::uint32_t>(state);
+		game::messaging::scene_insert_message
+		({
+			.operation = game::messaging::scene_operation::renderer_light_set_shape,
+			.uuid = std::numeric_limits<entity_uuid>::max(),
+			.value = std::pair<std::size_t, std::uint32_t>{uid, shape}
+		});
+		return 0;
+	}
+
 	int impl_rn_scene_renderer::clear_lights(tz::lua::state& state)
 	{
 		game::messaging::scene_insert_message

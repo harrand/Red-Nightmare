@@ -52,6 +52,7 @@ namespace game::messaging
 		renderer_light_set_position,
 		renderer_light_set_colour,
 		renderer_light_set_power,
+		renderer_light_set_shape,
 		renderer_clear_lights,
 		renderer_directional_light_set_direction,
 		renderer_directional_light_set_power,
