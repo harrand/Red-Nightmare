@@ -68,7 +68,8 @@ float distort_distance(uint shape, float dst)
 		{
 			return dst;
 		}
-		return log(max(dst - ring_radius, 0.0f));
+		float amt = max(dst - ring_radius, 0.0f);
+		return log(amt);
 	}
 	return dst;
 }
@@ -106,6 +107,10 @@ float diffuse(point_light_data l, vec3 normal, bool is_2d)
 
 float specular(point_light_data l, vec3 normal, bool is_2d)
 {
+	if(l.shape == LIGHT_SHAPE_RING)
+	{
+		return 0.0f;
+	}
 	const vec3 view_dir = vec3(0.0f, 0.0f, 1.0f);
 	vec3 light_dir = l.position - in::position;
 	if(is_2d)
