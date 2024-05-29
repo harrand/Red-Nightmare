@@ -512,7 +512,7 @@ namespace game::messaging
 				TZ_PROFZONE("renderer string set position", 0xFF99CC44);
 				auto [uid, pos] = std::any_cast<std::pair<std::size_t, tz::vec2>>(msg.value);
 
-				if(string_was_deleted_this_frame(uid))
+				if(string_was_deleted_this_frame(uid) || !sc->get_renderer().contains_string(uid))
 				{
 					return;
 				}

@@ -516,6 +516,11 @@ namespace game::render
 		this->get_text_renderer().string_set_transform(handle, trs);
 	}
 
+	bool scene_renderer::contains_string(std::size_t string_uid) const
+	{
+		return this->string_uid_to_handle.contains(string_uid);
+	}
+
 	std::vector<std::size_t> scene_renderer::get_all_string_uids() const
 	{
 		std::vector<std::size_t> ret;

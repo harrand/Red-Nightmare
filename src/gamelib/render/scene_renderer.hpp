@@ -98,6 +98,7 @@ namespace game::render
 		void remove_string(std::size_t string_uid);
 		void clear_strings();
 		void string_set_position(std::size_t string_uid, tz::vec2 pos);
+		bool contains_string(std::size_t string_uid) const;
 		std::vector<std::size_t> get_all_string_uids() const;
 
 		void lua_initialise(tz::lua::state& state);
