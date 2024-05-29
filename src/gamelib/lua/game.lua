@@ -85,7 +85,7 @@ rn.player_spell_slot_override = function(spellname)
 	local cur_slot_text = rn.level.data_read("player_spell_slot_" .. tostring(slot))
 	if cur_slot_text ~= nil then
 		rn.renderer():remove_string(cur_slot_text)
-		cur_slot_text = rn.renderer():add_string(0, 0, 8, slotdata.default_keybind .. ": " .. spellname, slotdata.colour[1], slotdata.colour[2], slotdata.colour[3])
+		cur_slot_text = rn.renderer():add_string(0, 0, 8, slotdata.default_keybind .. ": " .. spellname, slotdata.colour[1] * 2, slotdata.colour[2] * 2, slotdata.colour[3] * 2)
 		rn.level.data_write("player_spell_slot_" .. tostring(slot), cur_slot_text)
 	end
 end
@@ -96,21 +96,19 @@ rn.display_player_spell_slots = function()
 
 	local w, h = tz.window():get_dimensions()
 
-	local slot_id = 0
 	for slot, slotdata in pairs(rn.spell.slot) do
 		local spellname = rn.entity.prefabs.spell_slots.get_spell(player_uuid, slot)
 		if spellname ~= nil then
 			-- we need a piece of text.
-			local xpos = (w / 2) + 150.0 + (slot_id * 100.0)
+			local xpos = (w / 2) + (slotdata.impl_id * 200.0)
 			local ypos = 60
 			local cur_slot_text = rn.level.data_read("player_spell_slot_" .. tostring(slot))
 			if cur_slot_text == nil then
-				cur_slot_text = rn.renderer():add_string(xpos, ypos, 8, slotdata.default_keybind .. ": " .. spellname, slotdata.colour[1], slotdata.colour[2], slotdata.colour[3])
+				cur_slot_text = rn.renderer():add_string(xpos, ypos, 8, slotdata.default_keybind .. ": " .. spellname, slotdata.colour[1] * 2, slotdata.colour[2] * 2, slotdata.colour[3] * 2)
 				rn.level.data_write("player_spell_slot_" .. tostring(slot), cur_slot_text)
 			else
 				rn.renderer():string_set_position(cur_slot_text, xpos, ypos)
 			end
 		end
-		slot_id = slot_id + 1
 	end
 end

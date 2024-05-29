@@ -4,6 +4,7 @@ rn.mods.basegame.spells.firestorm =
 	magic_type = "fire",
 	two_handed = true,
 	cast_type = "omni",
+	slot = "red",
 	description = "Unleash a torrent of fiery death, shooting a barrage of firebolts in all directions around you, dealing damage equal to ${fire_power*2.0} fire damage each.",
 	--[[
 	advance = function(uuid, progress)

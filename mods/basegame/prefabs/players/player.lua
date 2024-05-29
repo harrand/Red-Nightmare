@@ -26,6 +26,8 @@ rn.mods.basegame.prefabs.player =
 		rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 8, "cruel_lie")
 
 		rn.entity.prefabs.spell_slots.equip_spell(uuid, "lesser_frostbolt")
+		rn.entity.prefabs.spell_slots.equip_spell(uuid, "flash_of_light")
+		rn.entity.prefabs.spell_slots.equip_spell(uuid, "firestorm")
 
 		rn.entity.prefabs.combat_stats.set_base_max_hp(uuid, 20)
 		rn.entity.prefabs.combat_stats.set_base_fire_power(uuid, 10)
