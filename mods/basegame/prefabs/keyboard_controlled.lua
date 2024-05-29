@@ -35,6 +35,14 @@ rn.mods.basegame.prefabs.keyboard_controlled =
 					end
 				end
 			end
+
+			for slot, slotdata in pairs(rn.spell.slot) do
+				local keybind = slotdata.default_keybind
+				local spellname = rn.entity.prefabs.spell_slots.get_spell(uuid, slot)
+				if spellname ~= nil and inp:is_key_down(keybind) then
+					rn.spell.cast(uuid, spellname)
+				end
+			end
 		end
 
 		local moved = false
