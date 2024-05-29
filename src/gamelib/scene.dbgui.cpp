@@ -302,6 +302,7 @@ namespace game
 							{
 								ImGui::Text("%s", spell.description.c_str());
 								ImGui::Text("Type: %s", spell.magic_type.c_str());
+								ImGui::Text("Slot: %s", spell.slot.c_str());
 								ImGui::TreePop();
 							}
 						}

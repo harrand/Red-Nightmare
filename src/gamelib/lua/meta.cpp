@@ -42,7 +42,7 @@ namespace game::meta
 	LUA_END
 
 	LUA_BEGIN(rn_inform_spell)
-		auto [name, mod, description, magic_type] = tz::lua::parse_args<std::string, std::string, std::string, std::string>(state);
+		auto [name, mod, description, magic_type, slot] = tz::lua::parse_args<std::string, std::string, std::string, std::string, std::string>(state);
 		auto iter = std::find_if(internal_mod_list.begin(), internal_mod_list.end(),
 		[&mod](const auto& cur_mod)
 		{
@@ -50,7 +50,7 @@ namespace game::meta
 		});
 		tz::assert(iter != internal_mod_list.end());
 		std::size_t mod_id = std::distance(internal_mod_list.begin(), iter);
-		internal_spell_list.push_back({.name = name, .mod_id = mod_id, .description = description, .magic_type = magic_type});
+		internal_spell_list.push_back({.name = name, .mod_id = mod_id, .description = description, .magic_type = magic_type, .slot = slot});
 		return 0;
 	LUA_END
 
@@ -126,7 +126,7 @@ namespace game::meta
 
 			-- reflect spells
 			for spellname, spelldata in pairs(rn.spell.spells) do
-				rn.inform_spell(spellname, spelldata.mod, spelldata.description or "<No Description>", spelldata.magic_type or "Untyped")
+				rn.inform_spell(spellname, spelldata.mod, spelldata.description or "<No Description>", spelldata.magic_type or "Untyped", spelldata.slot or "<No Slot>")
 			end
 
 			-- reflect items

@@ -4,6 +4,7 @@ for schoolname, schooldata in pairs(rn.spell.schools) do
 		cast_duration = 1.0,
 		magic_type = schoolname,
 		two_handed = false,
+		slot = "green",
 		cast_type = "directed",
 		description = "Launches a small bolt of " .. schoolname .. " in the target direction. Enemies hit suffer ${" .. schoolname .. "_power*1.0} " .. schoolname .. " damage.",
 		finish = function(uuid, casterx, castery)

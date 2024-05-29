@@ -2,6 +2,30 @@ rn = rn or {}
 rn.spell = rn.spell or {}
 rn.spell.spells = rn.spell.spells or {}
 
+rn.spell.slot =
+{
+	green = 
+	{
+		default_keybind = "q",
+		colour = {0.086, 0.2, 0.086}
+	},
+	yellow =
+	{
+		default_keybind = "left_shift",
+		colour = {0.486, 0.439, 0.161}
+	},
+	blue =
+	{
+		default_keybind = "r",
+		colour = {0.086, 0.294, 0.525}
+	},
+	red =
+	{
+		default_keybind = "f",
+		colour = {0.337, 0.169, 0.169}
+	}
+}
+
 rn.spell.schools =
 {
 	physical =

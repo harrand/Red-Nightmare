@@ -35,6 +35,7 @@ namespace game::meta
 		std::size_t mod_id;
 		std::string description;
 		std::string magic_type;
+		std::string slot;
 	};
 
 	struct iteminfo_t
