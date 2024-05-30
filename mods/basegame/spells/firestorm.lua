@@ -6,13 +6,6 @@ rn.mods.basegame.spells.firestorm =
 	cast_type = "omni",
 	slot = "red",
 	description = "Unleash a torrent of fiery death, shooting a barrage of firebolts in all directions around you, dealing damage equal to ${fire_power*2.0} fire damage each.",
-	--[[
-	advance = function(uuid, progress)
-		local magic_type = rn.mods.basegame.spells.firestorm.magic_type
-		local colour = rn.spell.schools[magic_type].colour
-		rn.renderer():set_ambient_light(0.2 + colour[1] * progress * 0.5, 0.05 + colour[2] * progress * 0.5, 0.05 + colour[3] * progress * 0.5)
-	end,
-	--]]
 	finish = function(uuid, casterx, castery)
 		local sc = rn.current_scene()
 		local max_fireball_count = 18

@@ -51,11 +51,17 @@ rn.mods.basegame.prefabs.melee_swing_area =
 			end
 		else
 			-- deal some deeps
-			rn.entity.prefabs.combat_stats.dmg(other, 1, "physical", caster)
+			rn.entity.prefabs.combat_stats.dmg(other, rn.entity.prefabs.melee_swing_area.get_base_damage(me), "physical", caster)
 			sc:remove_entity(me)
 		end
 
 		return false
+	end,
+	get_base_damage = function(uuid)
+		return rn.current_scene():entity_read(uuid, "melee_strength") or 1.0
+	end,
+	set_base_damage = function(uuid, dmg)
+		rn.current_scene():entity_write(uuid, "melee_strength", dmg)
 	end,
 	set_caster = function(uuid, caster)
 		rn.current_scene():entity_write(uuid, "melee_caster", caster)

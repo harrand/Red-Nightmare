@@ -11,6 +11,7 @@ rn.mods.basegame.spells.cruel_lie =
 	cast_duration = 2.0,
 	magic_type = "shadow",
 	two_handed = true,
+	slot = "blue",
 	cast_type = "directed",
 	description = "Imbue yourself with black magic and whisper a cruel lie, producing a shadowy ally.",
 	finish = function(uuid, casterx, castery)

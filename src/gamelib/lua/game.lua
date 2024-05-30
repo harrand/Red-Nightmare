@@ -100,7 +100,7 @@ rn.display_player_spell_slots = function()
 		local spellname = rn.entity.prefabs.spell_slots.get_spell(player_uuid, slot)
 		if spellname ~= nil then
 			-- we need a piece of text.
-			local xpos = (w / 2) + (slotdata.impl_id * 200.0)
+			local xpos = (w / 2) + (slotdata.impl_id * 250.0)
 			local ypos = 60
 			local cur_slot_text = rn.level.data_read("player_spell_slot_" .. tostring(slot))
 			if cur_slot_text == nil then
