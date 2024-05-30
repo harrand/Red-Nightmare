@@ -25,7 +25,7 @@ rn.mods.basegame.prefabs.player =
 		rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 7, "summon_zombie")
 		rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 8, "cruel_lie")
 
-		rn.entity.prefabs.spell_slots.equip_spell(uuid, "lesser_frostbolt")
+		rn.entity.prefabs.spell_slots.equip_spell(uuid, "melee")
 		rn.entity.prefabs.spell_slots.equip_spell(uuid, "flash_of_light")
 		rn.entity.prefabs.spell_slots.equip_spell(uuid, "firestorm")
 		rn.entity.prefabs.spell_slots.equip_spell(uuid, "savage_kick")
