@@ -36,7 +36,7 @@ rn.mods.basegame.prefabs.spell_drop =
 
 		if rn.entity.prefabs.light_emitter.exists(uuid) then
 			rn.entity.prefabs.light_emitter.set_shape(uuid, 1)
-			rn.entity.prefabs.light_emitter.set_power(uuid, 0.01)
+			rn.entity.prefabs.light_emitter.set_power(uuid, 0.0)
 			rn.entity.prefabs.light_emitter.set_colour(uuid, colour[1], colour[2], colour[3])
 			rn.entity.prefabs.light_emitter.update(uuid, delta_seconds)
 		end
