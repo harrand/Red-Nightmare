@@ -52,6 +52,14 @@ rn.mods.basegame.prefabs.melee_swing_area =
 		else
 			-- deal some deeps
 			rn.entity.prefabs.combat_stats.dmg(other, rn.entity.prefabs.melee_swing_area.get_base_damage(me), "physical", caster)
+			local buff = rn.entity.prefabs.melee_swing_area.get_buff_on_hit(me)
+			if buff ~= nil then
+				rn.buff.apply(other, buff)
+			end
+			local stun = rn.entity.prefabs.melee_swing_area.get_stun_on_hit(me)
+			if stun ~= nil then
+				rn.entity.stun(other, stun)
+			end
 			sc:remove_entity(me)
 		end
 
@@ -68,5 +76,17 @@ rn.mods.basegame.prefabs.melee_swing_area =
 	end,
 	get_caster = function(uuid)
 		return rn.current_scene():entity_read(uuid, "melee_caster")
+	end,
+	add_buff_on_hit = function(uuid, buffname)
+		rn.current_scene():entity_write(uuid, "buff_on_hit", buffname)
+	end,
+	get_buff_on_hit = function(uuid)
+		return rn.current_scene():entity_read(uuid, "buff_on_hit")
+	end,
+	set_stun_on_hit = function(uuid, stun_duration)
+		rn.current_scene():entity_write(uuid, "stun_on_hit", stun_duration)
+	end,
+	get_stun_on_hit = function(uuid, stun_duration)
+		return rn.current_scene():entity_read(uuid, "stun_on_hit")
 	end
 }
