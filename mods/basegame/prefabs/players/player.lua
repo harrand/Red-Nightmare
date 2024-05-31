@@ -26,9 +26,9 @@ rn.mods.basegame.prefabs.player =
 		rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 8, "cruel_lie")
 
 		rn.entity.prefabs.spell_slots.equip_spell(uuid, "melee")
-		rn.entity.prefabs.spell_slots.equip_spell(uuid, "flash_of_light")
 		rn.entity.prefabs.spell_slots.equip_spell(uuid, "equivocation")
 		rn.entity.prefabs.spell_slots.equip_spell(uuid, "savage_kick")
+		rn.entity.prefabs.spell_slots.equip_spell(uuid, "charge")
 
 		rn.entity.prefabs.combat_stats.set_base_max_hp(uuid, 20)
 		rn.entity.prefabs.combat_stats.set_base_fire_power(uuid, 10)

@@ -23,6 +23,11 @@ rn.buff.apply = function(uuid, buff_name)
 	obj:set_name("Apply Buff - \"" .. buff_name .. "\"")
 	local sc = rn.current_scene()
 
+	if rn.buff.is_applied(uuid, buff_name) then
+		-- dont reapply the same buff.
+		return
+	end
+
 	local buffdata = rn.buff.buffs[buff_name]
 	sc:entity_write(uuid, rn.buff.prefix(buff_name, "duration"), buffdata.duration)
 	sc:entity_apply_buff(uuid, buff_name)
@@ -50,21 +55,31 @@ rn.buff.clear_all = function(uuid)
 end
 
 rn.buff.is_applied = function(uuid, buff_name)
-	return rn.current_scene():entity_read(uuid, (rn.buff.prefix(buff_name, "duration") or 0.0) > 0.0)
+	local buff_exists = false
+	rn.buff.iterate_buffs(uuid, function(buff_name2)
+		if buff_name == buff_name2 then
+			buff_exists = true
+		end
+	end)
+	return buff_exists
 end
 
 rn.buff.advance = function(uuid, buff_name, delta_seconds)
 	local sc = rn.current_scene()
-	local duration = sc:entity_read(uuid, rn.buff.prefix(buff_name, "duration") or 0.0)
-	duration = duration - delta_seconds
-	if duration > 0.0 then
-		sc:entity_write(uuid, rn.buff.prefix(buff_name, "duration"), duration)
-		local buffdata = rn.buff.buffs[buff_name]
-		if buffdata.on_advance ~= nil then
-			buffdata.on_advance(uuid, delta_seconds)
+	local duration = sc:entity_read(uuid, rn.buff.prefix(buff_name, "duration"))
+	if duration ~= nil then
+		duration = duration - delta_seconds
+		if duration > 0.0 then
+			sc:entity_write(uuid, rn.buff.prefix(buff_name, "duration"), duration)
+		else
+			rn.buff.remove(uuid, buff_name)
+			return
 		end
-	else
-		rn.buff.remove(uuid, buff_name)
+	end
+
+	local buffdata = rn.buff.buffs[buff_name]
+	if buffdata.on_advance ~= nil then
+		buffdata.on_advance(uuid, delta_seconds)
 	end
 end
 

@@ -50,6 +50,7 @@ require("basegame/prefabs/weapon_models/staff")
 
 require("basegame/spells/melee")
 require("basegame/spells/allure_of_flames")
+require("basegame/spells/charge")
 require("basegame/spells/savage_kick")
 require("basegame/spells/cruel_lie")
 require("basegame/spells/equivocation")
@@ -61,7 +62,7 @@ require("basegame/spells/summon_zombie")
 require("basegame/spells/zombie_devour")
 require("basegame/spells/zombie_swipe")
 
-require("basegame/buffs/charge")
+require("basegame/buffs/charge_rush")
 
 require("basegame/items/armour_sets/metal_armour_set_base")
 require("basegame/items/armour_sets/iron_armour_set")
