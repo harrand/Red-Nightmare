@@ -5,6 +5,7 @@ rn.mods.basegame.spells.flash_of_light =
 	two_handed = false,
 	cast_type = "omni",
 	slot = "yellow",
+	icon = "icon.holybolt",
 	description = "Heals the caster for amount equal to ${holy_power*2.0} + 10.",
 	finish = function(uuid, casterx, castery)
 		local magic_type = rn.spell.spells.flash_of_light.magic_type

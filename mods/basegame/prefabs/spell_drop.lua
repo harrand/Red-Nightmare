@@ -15,7 +15,7 @@ rn.mods.basegame.prefabs.spell_drop =
 		if spellname == nil then return end
 		local spelldata = rn.spell.spells[spellname]
 		local icon = spelldata.icon or "invisible"
-		local colour = rn.spell.slot[spelldata.slot].colour
+		local colour = rn.spell.slot[spelldata.slot].light_colour
 
 		local sc = rn.current_scene()
 		local t = sc:entity_read(uuid, "timer") or 0.0
@@ -26,15 +26,17 @@ rn.mods.basegame.prefabs.spell_drop =
 		-- after 2.5 seconds have passed, the blacklist is automatically cleared
 		-- note 5.0 = 2.5 * 2 coz timer moves at double speed.
 		if blacklist_timer ~= nil and t > blacklist_timer + 5.0 then
-			rn.entity.prefabs.loot_drop.clear_blacklisted(uuid)
+			rn.entity.prefabs.spell_drop.clear_blacklisted(uuid)
 		end
 
 		local x, y = rn.entity.prefabs.sprite.get_position(uuid)
 		rn.entity.prefabs.sprite.set_position(uuid, x, y + 0.01 * math.sin(t))
+		rn.entity.prefabs.sprite.set_rotation(uuid, -1.5708)
 		rn.entity.prefabs.sprite.set_texture(uuid, icon)
 
 		if rn.entity.prefabs.light_emitter.exists(uuid) then
-			rn.entity.prefabs.light_emitter.set_power(uuid, 0.1)
+			rn.entity.prefabs.light_emitter.set_shape(uuid, 1)
+			rn.entity.prefabs.light_emitter.set_power(uuid, 0.01)
 			rn.entity.prefabs.light_emitter.set_colour(uuid, colour[1], colour[2], colour[3])
 			rn.entity.prefabs.light_emitter.update(uuid, delta_seconds)
 		end
@@ -42,9 +44,10 @@ rn.mods.basegame.prefabs.spell_drop =
 	get_position = rn.mods.basegame.prefabs.sprite.get_position,
 	set_position = rn.mods.basegame.prefabs.sprite.set_position,
 	on_collision = function(me, other)
+		-- only the player can pickup a spell. would be ridiculous otherwise.
 		local should_equip_me = rn.entity.prefabs.combat_stats.is_alive(other) and rn.current_scene():entity_read(me, "spellpickup_blacklist") ~= other
 		local spellname = rn.entity.prefabs.spell_drop.get_spell(me)
-		if not should_equip_me or spellname == nil then
+		if not should_equip_me or spellname == nil or (other ~= rn.player.get())then
 			return false
 		end
 

@@ -7,6 +7,12 @@ for schoolname, schooldata in pairs(rn.spell.schools) do
 		slot = "green",
 		cast_type = "directed",
 		description = "Launches a small bolt of " .. schoolname .. " in the target direction. Enemies hit suffer ${" .. schoolname .. "_power*1.0} " .. schoolname .. " damage.",
+		icon = "icon." .. schoolname .. "bolt",
+		static_init = function()
+			if schoolname ~= "physical" then
+				rn.renderer():add_texture("icon." .. schoolname .. "bolt", "basegame/res/icons/" .. schoolname .. "bolt.png")
+			end
+		end,
 		finish = function(uuid, casterx, castery)
 			local magic_type = rn.spell.spells["lesser_" .. schoolname .. "bolt"].magic_type
 			local sc = rn.current_scene()

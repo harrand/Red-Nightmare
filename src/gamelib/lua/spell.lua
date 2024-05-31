@@ -8,24 +8,28 @@ rn.spell.slot =
 	{
 		default_keybind = "q",
 		colour = {0.086, 0.2, 0.086},
+		light_colour = {0.0, 1.0, 0.0},
 		impl_id = 0
 	},
 	yellow =
 	{
 		default_keybind = "SHIFT",
 		colour = {0.486, 0.439, 0.161},
+		light_colour = {1.0, 1.0, 0.0},
 		impl_id = 1
 	},
 	blue =
 	{
 		default_keybind = "r",
 		colour = {0.086, 0.294, 0.525},
+		light_colour = {0.0, 0.0, 1.0},
 		impl_id = 2
 	},
 	red =
 	{
 		default_keybind = "f",
 		colour = {0.337, 0.169, 0.169},
+		light_colour = {1.0, 0.0, 0.0},
 		impl_id = 3
 	}
 }

@@ -5,6 +5,7 @@ rn.mods.basegame.spells.firestorm =
 	two_handed = true,
 	cast_type = "omni",
 	slot = "red",
+	icon = "icon.firebolt",
 	description = "Unleash a torrent of fiery death, shooting a barrage of firebolts in all directions around you, dealing damage equal to ${fire_power*2.0} fire damage each.",
 	finish = function(uuid, casterx, castery)
 		local sc = rn.current_scene()
