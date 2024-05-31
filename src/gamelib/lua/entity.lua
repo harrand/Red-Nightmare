@@ -87,6 +87,7 @@ rn.entity.update = function(uuid, delta_seconds)
 
 	-- if the entity is casting a spell, that also needs to advance.
 	rn.spell.advance(uuid)
+	rn.buff.advance_buffs(uuid, delta_seconds)
 	if not moving and sc:entity_read(uuid, "moving_last_frame") == true then
 		-- entity just stopped moving.
 		rn.entity.on_stop_moving(uuid)
@@ -250,6 +251,7 @@ rn.entity.on_death = function(uuid, dmg, magic_type, enemy_uuid)
 	end
 
 	rn.spell.clear(uuid)
+	rn.buff.clear_all(uuid)
 end
 
 rn.entity.on_remove = function(uuid)

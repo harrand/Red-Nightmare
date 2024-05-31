@@ -4,6 +4,7 @@ rn.mods.basegame =
 	prefabs = {},
 	levels = {},
 	spells = {},
+	buffs = {},
 	items = {}
 }
 
@@ -59,6 +60,8 @@ require("basegame/spells/lesser_magicbolt")
 require("basegame/spells/summon_zombie")
 require("basegame/spells/zombie_devour")
 require("basegame/spells/zombie_swipe")
+
+require("basegame/buffs/charge")
 
 require("basegame/items/armour_sets/metal_armour_set_base")
 require("basegame/items/armour_sets/iron_armour_set")

@@ -41,6 +41,8 @@ namespace game::messaging
 		entity_set_subobject_texture_colour,
 		entity_set_subobject_visible,
 		entity_set_subobject_pixelated,
+		entity_apply_buff,
+		entity_remove_buff,
 		renderer_set_camera_position,
 		renderer_set_clear_colour,
 		renderer_set_global_colour_multiplier,

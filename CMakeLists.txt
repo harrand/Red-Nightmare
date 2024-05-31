@@ -82,6 +82,7 @@ add_text(
 	OUTPUT_DIR ${PROJECT_BINARY_DIR}
 	TEXT_FILES
 		res/fonts/ProggyClean.ttf
+		src/gamelib/lua/buff.lua
 		src/gamelib/lua/entity.lua
 		src/gamelib/lua/game.lua
 		src/gamelib/lua/item.lua

@@ -17,6 +17,7 @@ namespace game
 		entity_uuid uuid;
 		std::string name = "";
 		std::unordered_map<std::string, tz::lua::lua_generic> internal_variables = {};
+		std::vector<std::string> active_buffs = {};
 
 		static entity null();
 		bool is_null() const;

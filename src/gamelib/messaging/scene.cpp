@@ -325,6 +325,30 @@ namespace game::messaging
 				sc->get_renderer().get_renderer().get_object(objh).unused2[2] = pixelate;
 			}
 			break;
+			case scene_operation::entity_apply_buff:
+			{
+				TZ_PROFZONE("entity apply buff", 0xFF99CC44);
+				auto buff_name = std::any_cast<std::string>(msg.value);
+
+				auto& ent = sc->get_entity(msg.uuid);
+				auto iter = std::find(ent.active_buffs.begin(), ent.active_buffs.end(), buff_name);
+				if(iter == ent.active_buffs.end())
+				{
+					ent.active_buffs.push_back(buff_name);
+				}
+			}
+			break;
+			case scene_operation::entity_remove_buff:
+			{
+				TZ_PROFZONE("entity remove buff", 0xFF99CC44);
+				auto buff_name = std::any_cast<std::string>(msg.value);
+				std::size_t entity = msg.uuid;	
+				auto& ent = sc->get_entity(msg.uuid);
+				auto iter = std::find(ent.active_buffs.begin(), ent.active_buffs.end(), buff_name);
+				tz::assert(iter != ent.active_buffs.end(), "you want to remove buff %s but entity %zu doesn't have it applied.", buff_name.c_str(), msg.uuid);
+				ent.active_buffs.erase(iter);
+			}
+			break;
 			case scene_operation::renderer_set_camera_position:
 			{
 				TZ_PROFZONE("renderer set camera position", 0xFF99CC44);
@@ -945,6 +969,48 @@ namespace game::messaging
 			return 0;
 		}
 
+		int entity_apply_buff(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity apply buff", 0xFF99CC44);
+			auto [_, uuid, buffname] = tz::lua::parse_args<tz::lua::nil, unsigned int, std::string>(state);
+			local_scene_receiver.send_message
+			({
+				.operation = scene_operation::entity_apply_buff,
+				.uuid = static_cast<entity_uuid>(uuid),
+				.value = buffname
+			});
+			return 0;
+		}
+
+		int entity_remove_buff(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity remove buff", 0xFF99CC44);
+			auto [_, uuid, buffname] = tz::lua::parse_args<tz::lua::nil, unsigned int, std::string>(state);
+			local_scene_receiver.send_message
+			({
+				.operation = scene_operation::entity_remove_buff,
+				.uuid = static_cast<entity_uuid>(uuid),
+				.value = buffname
+			});
+			return 0;
+		}
+
+		int entity_get_buff_count(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity get buff count", 0xFF99CC44);
+			auto [_, uuid] = tz::lua::parse_args<tz::lua::nil, unsigned int>(state);
+			state.stack_push_uint(sc->get_entity(uuid).active_buffs.size());	
+			return 1;
+		}
+
+		int entity_get_buff(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity get buff count", 0xFF99CC44);
+			auto [_, uuid, buffidx] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int>(state);
+			state.stack_push_string(sc->get_entity(uuid).active_buffs[buffidx]);
+			return 1;
+		}
+
 		int entity_set_name(tz::lua::state& state)
 		{
 			TZ_PROFZONE("scene - entity set name", 0xFF99CC44);
@@ -1201,6 +1267,10 @@ namespace game::messaging
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_subobject_colour)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_subobject_visible)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_subobject_pixelated)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_apply_buff)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_remove_buff)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_get_buff_count)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_get_buff)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_name)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_name)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_local_position)

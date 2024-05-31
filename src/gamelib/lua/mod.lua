@@ -25,6 +25,11 @@ rn.load_mods = function()
 			rn.spell.spells[spellname] = spelldata
 		end
 
+		for buffname, buffdata in pairs(moddata.buffs) do
+			buffdata.mod = modname
+			rn.buff.buffs[buffname] = buffdata
+		end
+
 		for itemname, itemdata in pairs(moddata.items) do
 			itemdata.mod = modname
 			rn.item.items[itemname] = itemdata
