@@ -342,13 +342,10 @@ namespace game::messaging
 			{
 				TZ_PROFZONE("entity remove buff", 0xFF99CC44);
 				auto buff_name = std::any_cast<std::string>(msg.value);
-				std::size_t entity = msg.uuid;	
 				auto& ent = sc->get_entity(msg.uuid);
 				auto iter = std::find(ent.active_buffs.begin(), ent.active_buffs.end(), buff_name);
-				if(iter != ent.active_buffs.end())
-				{
-					ent.active_buffs.erase(iter);
-				}
+				tz::assert(iter != ent.active_buffs.end(), "attempt to remove buff %s on entity %zu but it didn't have that buff. double-remove perhaps?", buff_name.c_str(), msg.uuid);
+				ent.active_buffs.erase(iter);
 			}
 			break;
 			case scene_operation::renderer_set_camera_position:
