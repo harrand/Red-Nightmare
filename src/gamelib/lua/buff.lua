@@ -26,12 +26,16 @@ rn.buff.apply = function(uuid, buff_name)
 	local buffdata = rn.buff.buffs[buff_name]
 	sc:entity_write(uuid, rn.buff.prefix(buff_name, "duration"), buffdata.duration)
 	sc:entity_apply_buff(uuid, buff_name)
-	buffdata.on_apply(uuid)
+	if buffdata.on_apply ~= nil then
+		buffdata.on_apply(uuid)
+	end
 end
 
 rn.buff.remove = function(uuid, buff_name)
 	local buffdata = rn.buff.buffs[buff_name]
-	buffdata.on_remove(uuid)
+	if buffdata.on_remove ~= nil then
+		buffdata.on_remove(uuid)
+	end
 	rn.current_scene():entity_remove_buff(uuid, buff_name)
 end
 
@@ -56,22 +60,30 @@ rn.buff.advance = function(uuid, buff_name, delta_seconds)
 	if duration > 0.0 then
 		sc:entity_write(uuid, rn.buff.prefix(buff_name, "duration"), duration)
 		local buffdata = rn.buff.buffs[buff_name]
-		buffdata.on_advance(uuid, delta_seconds)
+		if buffdata.on_advance ~= nil then
+			buffdata.on_advance(uuid, delta_seconds)
+		end
 	else
 		rn.buff.remove(uuid, buff_name)
 	end
 end
 
 rn.buff.advance_buffs = function(uuid, delta_seconds)
-	local sc = rn.current_scene()
 	-- we need to advance all buffs.
 	-- we can either: iterate over every buff in the game, and if its applied, advance it (slow)
 	-- OR, only iterate over the buffs we know the entity has.
 	-- this is not trivial, so we add c++ side support for this.
+	rn.buff.iterate_buffs(uuid, function(buff_name)
+		rn.buff.advance(uuid, buff_name, delta_seconds)
+	end)
+end
+
+rn.buff.iterate_buffs = function(uuid, fn)
+	local sc = rn.current_scene()
 	local buff_count = sc:entity_get_buff_count(uuid)
 	if buff_count == 0 then return end
 	for i=0,buff_count - 1,1 do
 		local buff_name = sc:entity_get_buff(uuid, i)
-		rn.buff.advance(uuid, buff_name, delta_seconds)
+		fn(buff_name)
 	end
 end

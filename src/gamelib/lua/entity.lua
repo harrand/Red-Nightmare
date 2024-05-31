@@ -112,6 +112,13 @@ rn.entity.on_collision = function(uuid_a, uuid_b)
 		end
 	end
 
+	rn.buff.iterate_buffs(uuid_a, function(buff_name)
+		local buffdata = rn.buff.buffs[buff_name]
+		if buffdata.on_collision ~= nil then
+			buffdata.on_collision(uuid_a, uuid_b)
+		end
+	end)
+
 	-- b
 	local prefab_name_b = rn.current_scene():entity_read(uuid_b, ".prefab")
 	if prefab_name_b ~= nil then
@@ -121,6 +128,13 @@ rn.entity.on_collision = function(uuid_a, uuid_b)
 			ret = prefab.on_collision(uuid_b, uuid_a) and ret
 		end
 	end
+
+	rn.buff.iterate_buffs(uuid_b, function(buff_name)
+		local buffdata = rn.buff.buffs[buff_name]
+		if buffdata.on_collision ~= nil then
+			buffdata.on_collision(uuid_b, uuid_a)
+		end
+	end)
 	return ret
 end
 

@@ -8,7 +8,7 @@ rn.mods.basegame.buffs.charge =
 	on_remove = function(uuid)
 		tz.report("charge end on entity " .. uuid)
 	end,
-	on_advance = function(uuid, delta_seconds)
-
-	end,
+	on_collision = function(uuid_a, uuid_b)
+		rn.buff.remove(uuid_a, "charge")
+	end
 }
