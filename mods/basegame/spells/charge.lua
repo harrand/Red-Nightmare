@@ -5,6 +5,7 @@ rn.mods.basegame.spells.charge =
 	slot = "yellow",
 	description = "Charge at the target direction at high speed, crashing into anything that blocks your path for high physical damage.",
 	finish = function(uuid, casterx, castery)
+		if rn.buff.is_applied(uuid, "charge_rush") then return end
 		local mx, my = rn.current_scene():get_mouse_position()
 		local px, py = rn.entity.prefabs.sprite.get_position(uuid)
 		local dx = mx - px

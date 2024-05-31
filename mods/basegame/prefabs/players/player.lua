@@ -26,7 +26,7 @@ rn.mods.basegame.prefabs.player =
 		rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 8, "cruel_lie")
 
 		rn.entity.prefabs.spell_slots.equip_spell(uuid, "melee")
-		rn.entity.prefabs.spell_slots.equip_spell(uuid, "equivocation")
+		rn.entity.prefabs.spell_slots.equip_spell(uuid, "enrage")
 		rn.entity.prefabs.spell_slots.equip_spell(uuid, "savage_kick")
 		rn.entity.prefabs.spell_slots.equip_spell(uuid, "charge")
 
@@ -52,9 +52,12 @@ rn.mods.basegame.prefabs.player =
 
 		-- face towards mouse position.
 		if rn.spell.is_casting(uuid) then
-			local mx, my = rn.current_scene():get_mouse_position()
-			local x, y = rn.current_scene():entity_get_global_position(uuid)
-			rn.entity.prefabs.bipedal.face_direction(uuid, x - mx, y - my)
+			local spelldata = rn.spell.spells[rn.current_scene():entity_read(uuid, "cast.name")]
+			if spelldata.dont_face_direction ~= true then
+				local mx, my = rn.current_scene():get_mouse_position()
+				local x, y = rn.current_scene():entity_get_global_position(uuid)
+				rn.entity.prefabs.bipedal.face_direction(uuid, x - mx, y - my)
+			end
 		end
 	end,
 	on_move = rn.mods.basegame.prefabs.bipedal.on_move,
