@@ -226,3 +226,24 @@ rn.spell.clear_effect_on = function(uuid)
 		tz.error(false, "No support for model " .. tostring(model) .. " having cast effects.")
 	end
 end
+
+rn.spell.drop = function(...)
+	local args = table.pack(...)
+	if args.n == 0 then
+		return nil
+	end
+	local drop = rn.current_scene():add_entity("spell_drop")
+	for i=1,args.n do
+		local spellname = args[i]
+		rn.entity.prefabs.spell_drop.set_spell(drop, spellname)
+	end
+	return drop
+end
+
+rn.spell.drop_at = function(xpos, ypos, ...)
+	local drop = rn.spell.drop(...)
+	if drop ~= nil then
+		rn.entity.prefabs.sprite.set_position(drop, xpos, ypos)
+	end
+	return drop
+end
