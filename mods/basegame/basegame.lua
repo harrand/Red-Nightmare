@@ -66,7 +66,9 @@ require("basegame/spells/zombie_devour")
 require("basegame/spells/zombie_swipe")
 
 require("basegame/buffs/charge_rush")
+require("basegame/buffs/chilled")
 require("basegame/buffs/enraged")
+require("basegame/buffs/ignite")
 
 require("basegame/items/armour_sets/metal_armour_set_base")
 require("basegame/items/armour_sets/iron_armour_set")
