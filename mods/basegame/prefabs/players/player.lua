@@ -26,7 +26,8 @@ rn.mods.basegame.prefabs.player =
 		rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 8, "cruel_lie")
 
 		rn.entity.prefabs.spell_slots.equip_spell(uuid, "melee")
-		rn.entity.prefabs.spell_slots.equip_spell(uuid, "enrage")
+		--rn.entity.prefabs.spell_slots.equip_spell(uuid, "enrage")
+		rn.entity.prefabs.spell_slots.equip_spell(uuid, "deadly_throw")
 		rn.entity.prefabs.spell_slots.equip_spell(uuid, "savage_kick")
 		rn.entity.prefabs.spell_slots.equip_spell(uuid, "charge")
 
