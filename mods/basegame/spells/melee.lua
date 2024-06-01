@@ -1,8 +1,12 @@
 rn.mods.basegame.spells.melee =
 {
+	static_init = function()
+		rn.renderer():add_texture("icon.melee", "basegame/res/icons/melee.png")
+	end,
 	cast_duration = 0.6,
 	magic_type = "physical",
 	slot = "green",
+	icon = "icon.melee",
 	description = "Attack with your weapon, dealing 100% physical damage.",
 	finish = function(uuid)
 		local swing = rn.current_scene():add_entity("melee_swing_area")

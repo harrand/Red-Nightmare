@@ -61,8 +61,6 @@ rn.mods.basegame.prefabs.elemental_base =
 	on_death = function(uuid, dmg, magic_type, enemy_uuid)
 		rn.entity.prefabs.light_emitter.on_remove(uuid)
 		rn.mods.basegame.prefabs.bipedal.on_death(uuid, dmg, magic_type, enemy_uuid)
-		local x, y = rn.entity.prefabs.sprite.get_position(uuid)
-		rn.spell.drop_at(x, y, "lesser_" .. magic_type .. "bolt")
 	end,
 	on_equip = rn.mods.basegame.prefabs.bipedal.on_equip,
 	on_unequip = rn.mods.basegame.prefabs.bipedal.on_unequip,
@@ -90,7 +88,11 @@ for schoolname, schooldata in pairs(rn.spell.schools) do
 			on_stop_moving = rn.mods.basegame.prefabs.elemental_base.on_stop_moving,
 			on_cast_begin = rn.mods.basegame.prefabs.elemental_base.on_cast_begin,
 			on_cast_success = rn.mods.basegame.prefabs.elemental_base.on_cast_success,
-			on_death = rn.mods.basegame.prefabs.elemental_base.on_death,
+			on_death = function(uuid, dmg, magic_type, enemy_uuid)
+				rn.entity.prefabs.elemental_base.on_death(uuid, dmg, magic_type, enemy_uuid)
+				local x, y = rn.entity.prefabs.sprite.get_position(uuid)
+				rn.spell.drop_at(x, y, "lesser_" .. schoolname .. "bolt")
+			end,
 			on_equip= rn.mods.basegame.prefabs.elemental_base.on_equip,
 			on_unequip = rn.mods.basegame.prefabs.elemental_base.on_unequip,
 			on_remove = rn.mods.basegame.prefabs.elemental_base.on_remove
