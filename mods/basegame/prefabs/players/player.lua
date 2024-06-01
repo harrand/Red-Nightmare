@@ -32,8 +32,12 @@ rn.mods.basegame.prefabs.player =
 		rn.entity.prefabs.spell_slots.equip_spell(uuid, "charge")
 
 		rn.entity.prefabs.combat_stats.set_base_max_hp(uuid, 20)
-		rn.entity.prefabs.combat_stats.set_base_fire_power(uuid, 10)
-		rn.entity.prefabs.combat_stats.set_base_fire_resist(uuid, 0.1)
+		for schoolname, schooldata in pairs(rn.spell.schools) do
+			if schoolname ~= "physical" then
+				rn.entity.prefabs.combat_stats["set_base_" .. schoolname .. "_power"](uuid, 10)
+				rn.entity.prefabs.combat_stats["set_base_" .. schoolname .. "_resist"](uuid, 0.1)
+			end
+		end
 		rn.entity.prefabs.combat_stats.set_base_movement_speed(uuid, rn.entity.prefabs.bipedal.default_movement_speed)
 	end,
 	update = function(uuid, delta_seconds)
