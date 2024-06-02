@@ -5,6 +5,7 @@ for schoolname, schooldata in pairs(rn.spell.schools) do
 			static_init = function()
 				if schoolname == "fire" then
 					rn.renderer():add_texture("helm.hood", "basegame/res/skins/helms/hood.png")
+					rn.renderer():add_texture("helm.hood_normals", "basegame/res/skins/helms/hood_normals.png")
 				end
 			end,
 			on_equip = function(uuid)
@@ -20,6 +21,7 @@ for schoolname, schooldata in pairs(rn.spell.schools) do
 			slot = rn.item.slot.helm,
 			colour = schooldata.colour,
 			texture = "helm.hood",
+			normal_map = "helm.hood_normals",
 			valid_loot = false,
 			droppable = false,
 			rarity = "common"
