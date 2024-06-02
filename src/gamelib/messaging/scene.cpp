@@ -344,8 +344,10 @@ namespace game::messaging
 				auto buff_name = std::any_cast<std::string>(msg.value);
 				auto& ent = sc->get_entity(msg.uuid);
 				auto iter = std::find(ent.active_buffs.begin(), ent.active_buffs.end(), buff_name);
-				tz::assert(iter != ent.active_buffs.end(), "attempt to remove buff %s on entity %zu but it didn't have that buff. double-remove perhaps?", buff_name.c_str(), msg.uuid);
-				ent.active_buffs.erase(iter);
+				if(iter != ent.active_buffs.end())
+				{
+					ent.active_buffs.erase(iter);
+				}
 			}
 			break;
 			case scene_operation::renderer_set_camera_position:
