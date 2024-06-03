@@ -7,9 +7,8 @@ rn.mods.basegame.prefabs.player =
 	end,
 	instantiate = function(uuid)
 		rn.entity.prefabs.keyboard_controlled.instantiate(uuid)
-		rn.entity.prefabs.bipedal.instantiate(uuid)
+		rn.entity.prefabs.bipedal_maker.instantiate(uuid)
 		rn.entity.prefabs.bipedal.set_can_equip(uuid, true)
-		rn.entity.prefabs.bipedal.set_texture(uuid, "skin.man")
 		rn.entity.prefabs.bipedal.set_drop_items_on_death(uuid, false)
 		rn.entity.prefabs.faction.set_faction(uuid, faction.player_friend)
 

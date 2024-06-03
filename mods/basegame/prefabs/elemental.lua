@@ -8,7 +8,7 @@ rn.mods.basegame.prefabs.elemental_base =
 		return rn.entity.prefabs.bipedal.pre_instantiate(uuid)
 	end,
 	instantiate = function(uuid)
-		rn.entity.prefabs.bipedal.instantiate(uuid)
+		rn.entity.prefabs.bipedal_human.instantiate(uuid)
 		rn.entity.prefabs.bipedal.set_can_equip(uuid, true)
 		rn.entity.prefabs.bipedal.set_texture(uuid, "skin.just_eyes")
 		rn.entity.prefabs.bipedal.set_run_animation(uuid, "Idle")

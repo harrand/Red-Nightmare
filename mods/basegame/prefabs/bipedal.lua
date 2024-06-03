@@ -7,8 +7,6 @@ local legs_subobj = 7
 -- 11-12 left shoulder. 13 elbow. 14 hand
 -- 15-16 right shoulder, 17 elbow. 18 hand.
 
-local base_scale = 0.75
-
 rn.mods.basegame.prefabs.bipedal =
 {
 	description = "Entity is a 3D bipedal animated humanoid",
@@ -17,8 +15,6 @@ rn.mods.basegame.prefabs.bipedal =
 	default_movement_speed = 6,
 	static_init = function()
 		rn.renderer():add_model("bipedal", "basegame/res/models/bipedal.glb")
-		rn.renderer():add_texture("skin.man", "basegame/res/skins/man.png")
-		rn.renderer():add_texture("skin.maker", "basegame/res/skins/maker.png")
 	end,
 	pre_instantiate = function(uuid)
 		return "bipedal"
@@ -31,7 +27,6 @@ rn.mods.basegame.prefabs.bipedal =
 		sc:entity_set_subobject_pixelated(uuid, chest_subobj, true)
 		sc:entity_set_subobject_pixelated(uuid, legs_subobj, true)
 		rn.entity.prefabs.combat_stats.set_base_movement_speed(uuid, rn.entity.prefabs.bipedal.default_movement_speed)
-		rn.entity.prefabs.bipedal.set_scale(uuid, 1.0, 1.0, 1.0)
 		rn.entity.prefabs.bipedal.set_visible(uuid, true)
 		--rn.entity.prefabs.bipedal.set_subobject_visible(uuid, helm_subobj, true)
 		--rn.entity.prefabs.bipedal.set_subobject_visible(uuid, chest_subobj, true)
@@ -303,7 +298,7 @@ rn.mods.basegame.prefabs.bipedal =
 		end
 	end,
 	set_scale = function(uuid, sx, sy, sz)
-		rn.current_scene():entity_set_local_scale(uuid, sx * base_scale, sy * base_scale, sz * base_scale)
+		rn.current_scene():entity_set_local_scale(uuid, sx, sy, sz)
 	end,
 	get_scale = function(uuid)
 		local x, y, z = rn.current_scene():entity_get_local_scale(uuid)
