@@ -52,6 +52,7 @@ rn.mods.basegame.prefabs.player =
 			return
 		end
 		rn.entity.prefabs.bipedal.update(uuid, delta_seconds)
+		rn.entity.prefabs.spell_slots.update(uuid, delta_seconds)
 		rn.entity.prefabs.keyboard_controlled.update(uuid, delta_seconds)
 
 		-- face towards mouse position.

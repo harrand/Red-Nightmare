@@ -4,6 +4,7 @@ rn.mods.basegame.spells.summon_zombie =
 	magic_type = "shadow",
 	two_handed = false,
 	cast_type = "omni",
+	cooldown = 16.0,
 	slot = "blue",
 	description = "Summons a zombie (at the origin of the world)",
 	finish = function(uuid, casterx, castery)

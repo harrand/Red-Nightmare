@@ -5,6 +5,7 @@ rn.mods.basegame.spells.allure_of_flames =
 	two_handed = true,
 	slot = "yellow",
 	cast_type = "directed",
+	cooldown = 30.0,
 	description = "Launches a giant firebolt in the target direction. When the firebolt expires or hits something, you will be teleported to the location.",
 	finish = function(uuid, casterx, castery)
 		local magic_type = rn.spell.spells.allure_of_flames.magic_type

@@ -5,6 +5,7 @@ rn.mods.basegame.spells.equivocation =
 	two_handed = true,
 	slot = "red",
 	cast_type = "omni",
+	cooldown = 120.0,
 	description = "Enact a shadowy ritual, weaving together a horde of truths and lies to swarm your foes.",
 	finish = function(uuid, casterx, castery)
 		rn.current_scene():entity_write(uuid, "equivocate_count", 0)

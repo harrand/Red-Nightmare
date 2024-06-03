@@ -102,6 +102,10 @@ rn.display_player_spell_slots = function()
 			-- we need a piece of text.
 			local xpos = (w / 2) + (slotdata.impl_id * 250.0)
 			local ypos = 60
+			-- ypos increases by the spell cooldown (causing it to slide upwards until its off-cd)
+			local cd = rn.entity.prefabs.spell_slots.get_spell_cooldown(player_uuid, slot) or 0.0
+			local cd_progress = cd / (rn.spell.spells[spellname].cooldown or 1.0)
+			ypos = ypos + (-cd_progress * 100)
 			local cur_slot_text = rn.level.data_read("player_spell_slot_" .. tostring(slot))
 			if cur_slot_text == nil then
 				cur_slot_text = rn.renderer():add_string(xpos, ypos, 8, slotdata.default_keybind .. ": " .. spellname, slotdata.colour[1] * 2, slotdata.colour[2] * 2, slotdata.colour[3] * 2)

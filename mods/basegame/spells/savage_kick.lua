@@ -4,6 +4,7 @@ rn.mods.basegame.spells.savage_kick =
 	magic_type = "physical",
 	slot = "blue",
 	animation_override = "Melee1H_Kick",
+	cooldown = 12.0,
 	description = "Kick forward with all your might, dealing 50% physical damage to all targets in your way and stunning them for 3 seconds.",
 	finish = function(uuid)
 		local swing = rn.current_scene():add_entity("melee_swing_area")

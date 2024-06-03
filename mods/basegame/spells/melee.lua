@@ -7,6 +7,7 @@ rn.mods.basegame.spells.melee =
 	magic_type = "physical",
 	slot = "green",
 	icon = "icon.melee",
+	cooldown = 1.0,
 	description = "Attack with your weapon, dealing 100% physical damage.",
 	finish = function(uuid)
 		local swing = rn.current_scene():add_entity("melee_swing_area")
