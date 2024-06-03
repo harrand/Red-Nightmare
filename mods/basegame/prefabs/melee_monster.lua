@@ -1,8 +1,5 @@
 rn.mods.basegame.prefabs.melee_monster =
 {
-	static_init = function()
-		rn.renderer():add_texture("skin.man", "basegame/res/skins/man.png")
-	end,
 	pre_instantiate = function(uuid)
 		return rn.entity.prefabs.bipedal.pre_instantiate(uuid)
 	end,

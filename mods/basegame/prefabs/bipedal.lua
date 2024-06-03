@@ -17,6 +17,8 @@ rn.mods.basegame.prefabs.bipedal =
 	default_movement_speed = 6,
 	static_init = function()
 		rn.renderer():add_model("bipedal", "basegame/res/models/bipedal.glb")
+		rn.renderer():add_texture("skin.man", "basegame/res/skins/man.png")
+		rn.renderer():add_texture("skin.maker", "basegame/res/skins/maker.png")
 	end,
 	pre_instantiate = function(uuid)
 		return "bipedal"

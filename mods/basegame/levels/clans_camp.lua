@@ -15,6 +15,11 @@ rn.mods.basegame.levels.clans_camp =
 		rn.entity.prefabs.bipedal.set_texture(skele, "skin.skeleton")
 		rn.current_scene():entity_play_animation(skele, "Idle", true, 1.0)
 		rn.entity.prefabs.sprite.set_position(skele, -10, 5)
+
+		local maker = rn.current_scene():add_entity("bipedal")
+		rn.entity.prefabs.bipedal.set_texture(maker, "skin.maker")
+		rn.current_scene():entity_play_animation(maker, "Idle", true, 1.0)
+		rn.entity.prefabs.sprite.set_position(maker, -13, 5)
 	end,
 	on_load = function()
 		rn.renderer():set_ambient_light(0.525, 0.495, 0.495, 1.0)
