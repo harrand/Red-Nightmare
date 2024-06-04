@@ -24,11 +24,22 @@ rn.mods.basegame.prefabs.player =
 		rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 7, "summon_zombie")
 		rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 8, "cruel_lie")
 
-		rn.entity.prefabs.spell_slots.equip_spell(uuid, "melee")
-		--rn.entity.prefabs.spell_slots.equip_spell(uuid, "enrage")
-		rn.entity.prefabs.spell_slots.equip_spell(uuid, "deadly_throw")
-		rn.entity.prefabs.spell_slots.equip_spell(uuid, "savage_kick")
-		rn.entity.prefabs.spell_slots.equip_spell(uuid, "charge")
+		-- note: we could be loading the player for the first time, OR from some old stashed data.
+		-- this means the player could be loading in again e.g in a new level and its picked up some spells since.
+		-- we're gonna need to load the correct spells and use our defaults as fallbacks.
+		if not rn.data_store():contains("player_slot.green") then
+			rn.entity.prefabs.spell_slots.equip_spell(uuid, "melee")
+		end
+		if not rn.data_store():contains("player_slot.yellow") then
+			rn.entity.prefabs.spell_slots.equip_spell(uuid, "deadly_throw")
+		end
+		if not rn.data_store():contains("player_slot.blue") then
+			rn.entity.prefabs.spell_slots.equip_spell(uuid, "savage_kick")
+		end
+		if not rn.data_store():contains("player_slot.red") then
+			rn.entity.prefabs.spell_slots.equip_spell(uuid, "charge")
+		end
+		rn.data_store():remove_all_of("player_slot.")
 
 		rn.entity.prefabs.combat_stats.set_base_max_hp(uuid, 20)
 		for schoolname, schooldata in pairs(rn.spell.schools) do
