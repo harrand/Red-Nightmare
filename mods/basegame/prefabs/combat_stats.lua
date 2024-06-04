@@ -58,7 +58,7 @@ function rn_impl_create_combat_stat(stat_name)
 		local flat_inc = prfb["get_flat_increased_" .. stat_name](uuid)
 		local pct_inc = prfb["get_pct_increased_" .. stat_name](uuid)
 		local pct_more = prfb["get_pct_more_" .. stat_name](uuid)
-		--The basic damage calculation is:
+		--The basic stat calculation is:
 		-- Stat = (Base_Stat + Flat_Inc_Stat) * Pct_Increased_Stat * Pct_More_Stat 
 		-- note that pct_inc and pct_more are percentages, so `0.2` more means `1 + 0.2 = 120% more`
 		return (base + flat_inc) * (pct_inc + 1.0) * (pct_more + 1.0)
@@ -120,11 +120,7 @@ rn.mods.basegame.prefabs.combat_stats =
 		return minus_hp >= max_hp
 	end,
 	heal = function(uuid, heal, magic_type, ally_uuid)
-		local caster_power = 0.0
-		if ally_uuid ~= 0 then
-			caster_power = rn.entity.prefabs.combat_stats["get_" .. magic_type .. "_power"](ally_uuid)
-		end
-		local effective_healing = (heal * (caster_power + 1.0))
+		local effective_healing = rn.entity.prefabs.combat_stats["get_" .. magic_type .. "_damage"](ally_uuid, heal)
 		local real_healing = rn.entity.prefabs.combat_stats.heal_unmit(uuid, effective_healing)
 
 		-- display health bar on healee
@@ -145,13 +141,8 @@ rn.mods.basegame.prefabs.combat_stats =
 		-- get our resistance
 		local our_resistance = rn.entity.prefabs.combat_stats["get_" .. magic_type .. "_resist"](uuid)
 		-- get the caster's power of the given magic type
-		local caster_power = 0.0
-		if enemy_uuid ~= 0 then
-			caster_power = rn.entity.prefabs.combat_stats["get_" .. magic_type .. "_power"](enemy_uuid)
-		end
-		
-		-- dmg = (base_dmg * caster_power) * max(our_resistance - 1.0, 0.0)
-		local mitigated_dmg = (dmg * (caster_power + 1.0)) * math.max(1.0 - our_resistance, 0.0)
+		local effective_dmg = rn.entity.prefabs.combat_stats["get_" .. magic_type .. "_damage"](enemy_uuid, dmg)
+		local mitigated_dmg = effective_dmg * math.max(1.0 - our_resistance, 0.0)
 		mitigated_dmg = rn.entity.on_struck(uuid, enemy_uuid, mitigated_dmg, magic_type)
 		mitigated_dmg = rn.entity.on_hit(enemy_uuid, uuid, mitigated_dmg, magic_type)
 		local just_died = rn.entity.prefabs.combat_stats.dmg_unmit(uuid, mitigated_dmg)
@@ -182,6 +173,18 @@ rn_impl_create_combat_stat("haste")
 for schoolname, schooldata in pairs(rn.spell.schools) do
 	rn_impl_create_combat_stat(schoolname .. "_power")
 	rn_impl_create_combat_stat(schoolname .. "_resist")
+
+	local prfb = rn.mods.basegame.prefabs.combat_stats
+	prfb["get_" .. schoolname .. "_damage"] = function(uuid, base_dmg)
+		local base = prfb["get_base_" .. schoolname .. "_power"](uuid)
+		local flat_inc = prfb["get_flat_increased_" .. schoolname .. "_power"](uuid)
+		local pct_inc = prfb["get_pct_increased_" .. schoolname .. "_power"](uuid)
+		local pct_more = prfb["get_pct_more_" .. schoolname .. "_power"](uuid)
+		--The basic damage calculation is:
+		-- Stat = (base_damage + Base_Stat + Flat_Inc_Stat) * Pct_Increased_Stat * Pct_More_Stat 
+		-- note that pct_inc and pct_more are percentages, so `0.2` more means `1 + 0.2 = 120% more`
+		return (base_dmg + base + flat_inc) * (pct_inc + 1.0) * (pct_more + 1.0)
+	end
 end
 
 -- magic-type powers and resistances

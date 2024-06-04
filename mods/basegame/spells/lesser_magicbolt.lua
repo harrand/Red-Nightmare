@@ -6,7 +6,7 @@ for schoolname, schooldata in pairs(rn.spell.schools) do
 		two_handed = false,
 		slot = "green",
 		cast_type = "directed",
-		description = "Launches a small bolt of " .. schoolname .. " in the target direction. Enemies hit suffer ${" .. schoolname .. "_power*1.0} " .. schoolname .. " damage.",
+		description = "Launches a small bolt of " .. schoolname .. " in the target direction. Enemies hit suffer 5 " .. schoolname .. " damage.",
 		icon = "icon." .. schoolname .. "bolt",
 		static_init = function()
 			if schoolname ~= "physical" then
@@ -47,8 +47,7 @@ for schoolname, schooldata in pairs(rn.spell.schools) do
 			local dx = tarx - casterx
 			local dy = tary - castery
 			rn.entity.prefabs.magic_ball_base.set_target(projectile, dx * 999, dy * 999)
-			local power = rn.entity.prefabs.combat_stats["get_" .. magic_type .. "_power"](uuid)
-			rn.entity.prefabs.magic_ball_base.set_damage(projectile, power)
+			rn.entity.prefabs.magic_ball_base.set_damage(projectile, 5)
 			return projectile
 		end
 	}

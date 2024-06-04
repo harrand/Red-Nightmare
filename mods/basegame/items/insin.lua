@@ -29,8 +29,8 @@ rn.mods.basegame.items.insin =
 				-- summon minion
 				fiery_minion_uuid = sc:add_entity("fire_elemental")
 				fiery_minion_summon_icd = 10.0
-				rn.entity.prefabs.combat_stats.apply_flat_increased_max_hp(fiery_minion_uuid, rn.entity.prefabs.combat_stats.get_max_hp(uuid) * 0.5)
-				rn.entity.prefabs.combat_stats.apply_flat_increased_fire_power(fiery_minion_uuid, rn.entity.prefabs.combat_stats.get_fire_power(uuid) * 0.5)
+				rn.entity.prefabs.combat_stats.apply_flat_increased_max_hp(fiery_minion_uuid, rn.entity.prefabs.combat_stats.get_max_hp(uuid) * 100)
+				rn.entity.prefabs.combat_stats.set_base_fire_power(fiery_minion_uuid, rn.entity.prefabs.combat_stats.get_fire_power(uuid) * 0.5)
 				rn.entity.prefabs.combat_stats.apply_flat_increased_haste(fiery_minion_uuid, rn.entity.prefabs.combat_stats.get_haste(uuid) * 0.5)
 
 				sc:entity_write(fiery_minion_uuid, "owner", uuid)

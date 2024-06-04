@@ -7,7 +7,7 @@ rn.mods.basegame.spells.firestorm =
 	slot = "red",
 	icon = "icon.firebolt",
 	cooldown = 30.0,
-	description = "Unleash a torrent of fiery death, shooting a barrage of firebolts in all directions around you, dealing damage equal to ${fire_power*2.0} fire damage each.",
+	description = "Unleash a torrent of fiery death, shooting a torrent of firebolts in all directions around you, dealing 15 fire damage each.",
 	finish = function(uuid, casterx, castery)
 		local sc = rn.current_scene()
 		local max_fireball_count = 18
@@ -22,8 +22,7 @@ rn.mods.basegame.spells.firestorm =
 			local vecy = math.cos(angle_per_fireball * i) * 999
 			rn.entity.prefabs.magic_ball_base.set_target(projectile, casterx + vecx, castery + vecy)
 
-			local power = rn.entity.prefabs.combat_stats["get_fire_power"](uuid)
-			rn.entity.prefabs.magic_ball_base.set_damage(projectile, power * 2.0)
+			rn.entity.prefabs.magic_ball_base.set_damage(projectile, 15)
 		end
 	end
 }

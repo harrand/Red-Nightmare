@@ -75,7 +75,7 @@ rn.mods.basegame.prefabs.magic_ball_base =
 			-- collided with whomsoever casted me. don't do anything.
 			return false
 		end
-		rn.entity.prefabs.combat_stats.dmg(uuid_b, dmg, magic_type, uuid_a)
+		rn.entity.prefabs.combat_stats.dmg(uuid_b, dmg, magic_type, owner_id)
 		local other_is_projectile = rn.current_scene():entity_read(uuid_b, ".is_projectile")
 		if not other_is_projectile then
 			if magic_type == "frost" then
@@ -85,13 +85,12 @@ rn.mods.basegame.prefabs.magic_ball_base =
 					-- ignites stack damage and reset duration.
 					local damage = rn.current_scene():entity_read(uuid_b, "ignite_damage") or 1	
 					rn.current_scene():entity_write(uuid_b, "ignite_damage", damage + dmg)
-					rn.current_scene():entity_write(uuid_b, "ignite_cause", uuid_a)
 					local duration = rn.current_scene():entity_read(uuid_b, rn.buff.prefix("ignite", "duration"))
 					rn.current_scene():entity_write(uuid_b, rn.buff.prefix("ignite", "duration"), duration + rn.buff.buffs.ignite.duration)
 				else
 					rn.buff.apply(uuid_b, "ignite")
 					rn.current_scene():entity_write(uuid_b, "ignite_damage", dmg)
-					rn.current_scene():entity_write(uuid_b, "ignite_cause", uuid_a)
+					rn.current_scene():entity_write(uuid_b, "ignite_cause", owner_id)
 				end
 			end
 		end
