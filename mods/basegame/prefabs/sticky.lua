@@ -28,9 +28,6 @@ rn.mods.basegame.prefabs.sticky =
 		sc:entity_write(uuid, "stick_offsetz", offsetz)
 		sc:entity_write(uuid, "full_transform", full_transform)
 	end,
-	get_stuck_to = function(uuid)
-		return rn.current_scene():entity_read(uuid, "stick_to_entity")
-	end,
 	stick_to_subobject = function(uuid, uuid_to_stick_to, subobject, copy_rotation, copy_scale)
 		local sc = rn.current_scene()
 		sc:entity_write(uuid, "stick_to_entity", uuid_to_stick_to)
