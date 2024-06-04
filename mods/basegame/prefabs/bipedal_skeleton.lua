@@ -1,14 +1,14 @@
-rn.mods.basegame.prefabs.bipedal_maker =
+rn.mods.basegame.prefabs.bipedal_skeleton =
 {
-	description = "Entity is a 3D bipedal maker.",
+	description = "Entity is a 3D bipedal skeleton.",
 	static_init = function()
-		rn.renderer():add_texture("skin.maker", "basegame/res/skins/maker.png")
+		rn.renderer():add_texture("skin.skeleton", "basegame/res/skins/skeleton.png")
 	end,
 	pre_instantiate = rn.mods.basegame.prefabs.bipedal.pre_instantiate,
 	instantiate = function(uuid)
 		rn.entity.prefabs.bipedal.instantiate(uuid)
-		rn.entity.prefabs.bipedal.set_scale(uuid, 0.75, 1.05, 0.95)
-		rn.entity.prefabs.bipedal.set_texture(uuid, "skin.maker")
+		rn.entity.prefabs.bipedal.set_scale(uuid, 0.75, 0.75, 0.75)
+		rn.entity.prefabs.bipedal.set_texture(uuid, "skin.skeleton")
 	end,
 	update = rn.mods.basegame.prefabs.bipedal.update,
 	on_collision = rn.mods.basegame.prefabs.bipedal.on_collision,

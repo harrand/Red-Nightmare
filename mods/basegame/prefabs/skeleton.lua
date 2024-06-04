@@ -1,9 +1,6 @@
 rn.mods.basegame.prefabs.skeleton =
 {
 	description = "A Skeleton.",
-	static_init = function()
-		rn.renderer():add_texture("skin.skeleton", "basegame/res/skins/skeleton.png")
-	end,
 	pre_instantiate = rn.mods.basegame.prefabs.melee_monster.pre_instantiate,
 	instantiate = function(uuid)
 		rn.entity.prefabs.melee_monster.instantiate(uuid)
