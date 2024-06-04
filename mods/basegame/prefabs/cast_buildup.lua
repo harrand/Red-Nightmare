@@ -28,8 +28,13 @@ rn.mods.basegame.prefabs.cast_buildup =
 		local power_override = sc:entity_read(uuid, "power_override")
 		if magic_type ~= nil then
 			local colour = rn.spell.schools[magic_type].colour
+			local caster = rn.entity.prefabs.sticky.get_stuck_to(uuid)
+			local caster_scale_multiplier = 1.0
+			if caster ~= nil then
+				caster_scale_multiplier = rn.entity.prefabs.sprite.get_scale(caster)
+			end
 			rn.entity.prefabs.sprite.set_colour(uuid, colour[1], colour[2], colour[3])
-			rn.entity.prefabs.light_emitter.set_power(uuid, power_override or (t * 0.2))
+			rn.entity.prefabs.light_emitter.set_power(uuid, power_override or (t * 0.2 * caster_scale_multiplier * caster_scale_multiplier))
 			rn.entity.prefabs.light_emitter.set_colour(uuid, colour[1], colour[2], colour[3])
 		end
 

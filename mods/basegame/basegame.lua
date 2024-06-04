@@ -40,6 +40,7 @@ require("basegame/prefabs/skeleton")
 require("basegame/prefabs/spell_drop")
 require("basegame/prefabs/spell_slots")
 require("basegame/prefabs/elemental")
+require("basegame/prefabs/boss_pyr")
 require("basegame/prefabs/portal")
 
 require("basegame/prefabs/players/player")

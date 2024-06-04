@@ -17,6 +17,9 @@ rn.mods.basegame.levels.clans_camp =
 		local maker = rn.current_scene():add_entity("bipedal_maker")
 		rn.current_scene():entity_play_animation(maker, "Idle", true, 1.0)
 		rn.entity.prefabs.sprite.set_position(maker, -13, 5)
+
+		local pyr = rn.current_scene():add_entity("boss_pyr")
+		rn.entity.prefabs.sprite.set_position(pyr, 20, 5)
 	end,
 	on_load = function()
 		rn.renderer():set_ambient_light(0.525, 0.495, 0.495, 1.0)
