@@ -20,7 +20,9 @@ rn.player.stash = function()
 	rn.data_store():set("player.hp_lost", hp_lost or 0)
 	for slot, slotdata in pairs(rn.spell.slot) do
 		local spellname = rn.entity.prefabs.spell_slots.get_spell(player, slot)
-		rn.data_store():set("player_slot." .. tostring(slot), spellname)
+		if spellname ~= nil then
+			rn.data_store():set("player_slot." .. tostring(slot), spellname)
+		end
 	end
 end
 
