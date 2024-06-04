@@ -7,7 +7,7 @@ rn.mods.basegame.prefabs.bipedal_maker =
 	pre_instantiate = rn.mods.basegame.prefabs.bipedal.pre_instantiate,
 	instantiate = function(uuid)
 		rn.entity.prefabs.bipedal.instantiate(uuid)
-		rn.entity.prefabs.bipedal.set_scale(uuid, 0.6, 0.85, 0.75)
+		rn.entity.prefabs.bipedal.set_scale(uuid, 0.75, 1.05, 0.95)
 		rn.entity.prefabs.bipedal.set_texture(uuid, "skin.maker")
 	end
 }
