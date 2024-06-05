@@ -41,7 +41,7 @@ rn.mods.basegame.prefabs.player =
 		end
 		rn.data_store():remove_all_of("player_slot.")
 
-		rn.entity.prefabs.combat_stats.set_base_max_hp(uuid, 20)
+		rn.entity.prefabs.combat_stats.set_base_max_hp(uuid, 35)
 		for schoolname, schooldata in pairs(rn.spell.schools) do
 			if schoolname ~= "physical" then
 				rn.entity.prefabs.combat_stats["set_base_" .. schoolname .. "_power"](uuid, 0.0)
