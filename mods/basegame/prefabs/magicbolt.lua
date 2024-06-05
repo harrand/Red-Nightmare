@@ -94,8 +94,8 @@ rn.mods.basegame.prefabs.magic_ball_base =
 				end
 			end
 		end
-		if not (other_is_projectile and magic_type == "shadow") then
-			-- dont despawn shadow projectiles if it touches another.
+		if not (other_is_projectile and (magic_type == "shadow" or magic_type == "physical")) then
+			-- dont despawn shadow or physical projectiles if it touches another.
 			rn.current_scene():remove_entity(uuid_a)
 		end
 		return false

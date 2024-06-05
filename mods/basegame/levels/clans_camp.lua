@@ -31,6 +31,8 @@ rn.mods.basegame.levels.clans_camp =
 		local morb1 = rn.current_scene():add_entity("player")
 		rn.level.data_write("player", morb1)
 
+		rn.entity.prefabs.dirt_path.plot_path(1, 0, 0, "rrrddddddllllluuuu")
+
 		rn.mods.basegame.levels.clans_camp.load_npcs()
 
 		rn.item.equip(morb1, "peasant_pants")
