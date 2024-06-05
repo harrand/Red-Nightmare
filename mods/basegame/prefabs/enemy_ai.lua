@@ -66,6 +66,7 @@ rn.mods.basegame.prefabs.base_ai =
 		end
 	end,
 	update = function(uuid, delta_seconds)
+		rn.entity.prefabs.spell_slots.update(uuid, delta_seconds)
 		local target = rn.entity.prefabs.base_ai.get_target(uuid)
 		if target ~= nil
 		and rn.current_scene():contains_entity(target) then
@@ -123,7 +124,10 @@ rn.mods.basegame.prefabs.melee_ai =
 		if target == other then
 			local x, y = rn.entity.prefabs.sprite.get_position(me)
 			local tarx, tary = rn.entity.prefabs.sprite.get_position(other)
-			rn.entity.prefabs.spell_slots.cast_spell_at_slot(me, "green")
+			-- try to cast your best spell. go down the list of power until you find one thats off-cd and available.
+			local s = rn.entity.prefabs.spell_slots
+			if (s.cast_spell_at_slot(me, "red") or s.cast_spell_at_slot(me, "blue") or s.cast_spell_at_slot(me, "green")) and not rn.spell.is_casting(me) then
+			end
 			rn.entity.prefabs.bipedal.face_direction(me, x - tarx, y - tary)
 		end
 		return ret
@@ -250,7 +254,11 @@ rn.mods.basegame.prefabs.ranged_ai =
 				end
 			end
 			-- if we get to this point, cast spells.
-			rn.entity.prefabs.spell_slots.cast_spell_at_slot(uuid, "green")
+			-- try to cast your best spell. go down the list of power until you find one thats off-cd and available.
+			local s = rn.entity.prefabs.spell_slots
+			if s.cast_spell_at_slot(uuid, "red") or s.cast_spell_at_slot(uuid, "blue") or s.cast_spell_at_slot(uuid, "green") then
+				return true
+			end
 		end
 	end,
 	on_struck = rn.mods.basegame.prefabs.base_ai.on_struck,

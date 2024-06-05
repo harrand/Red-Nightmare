@@ -51,11 +51,14 @@ rn.mods.basegame.prefabs.spell_slots =
 	cast_spell_at_slot = function(uuid, slot)
 		if (rn.entity.prefabs.spell_slots.get_spell_cooldown(uuid, slot) or 0.0) <= 0.0 then
 			local spellname = rn.entity.prefabs.spell_slots.get_spell(uuid, slot)
+			if spellname == nil then return false end
 			local spelldata = rn.spell.spells[spellname]
 			rn.spell.cast(uuid, spellname)
 			if spelldata.cooldown ~= nil then
 				rn.entity.prefabs.spell_slots.set_spell_cooldown(uuid, slot, spelldata.cooldown)
 			end
+			return true
 		end
+		return false
 	end
 }
