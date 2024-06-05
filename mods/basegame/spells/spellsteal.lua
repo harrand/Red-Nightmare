@@ -1,13 +1,12 @@
-rn.mods.basegame.spells.icicle =
+rn.mods.basegame.spells.spellsteal =
 {
-	cast_duration = 0.6,
-	magic_type = "frost",
-	two_handed = false,
-	slot = "blue",
-	cooldown = 4.0,
+	cast_duration = 0.9,
+	magic_type = "shadow",
+	two_handed = true,
+	slot = "red",
 	cast_type = "directed",
-	description = "Launches an icicle in the target direction. Enemies hit suffer 9 frost damage.",
-	icon = "icon.frostbolt",
+	description = "Hurl a whispering current of void, attaching itself to the first enemy it touches. The next spell it casts will then be duplicated, replacing Spellsteal for a single time.",
+	icon = "icon.shadowbolt",
 	finish = function(uuid, casterx, castery)
 		local magic_type = rn.spell.spells.icicle.magic_type
 		local sc = rn.current_scene()
@@ -33,7 +32,7 @@ rn.mods.basegame.spells.icicle =
 			return
 		end
 
-		local projectile = sc:add_entity(magic_type .. "bolt")
+		local projectile = sc:add_entity("spellsteal_projectile")
 		rn.entity.prefabs.timed_despawn.set_duration(projectile, 5.0)
 
 		rn.entity.prefabs.sprite.set_position(projectile, casterx, castery)
@@ -43,7 +42,6 @@ rn.mods.basegame.spells.icicle =
 		local dx = tarx - casterx
 		local dy = tary - castery
 		rn.entity.prefabs.magic_ball_base.set_target(projectile, dx * 999, dy * 999)
-		rn.entity.prefabs.magic_ball_base.set_damage(projectile, 9)
 		return projectile
 	end
 }

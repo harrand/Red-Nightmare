@@ -79,8 +79,8 @@ end
 
 -- display_player_spell_slots is good at making the text if it isnt already there, but very bad at updating the text.
 -- to get around this, whenever the player equips a new spell, it just calls this function instead and we go ahead and update the text. bit of a hack, but hey hum
-rn.player_spell_slot_override = function(spellname)
-	local slot = rn.spell.spells[spellname].slot
+rn.player_spell_slot_override = function(spellname, slot_override)
+	local slot = slot_override or rn.spell.spells[spellname].slot
 	local slotdata = rn.spell.slot[slot]
 	local cur_slot_text = rn.level.data_read("player_spell_slot_" .. tostring(slot))
 	if cur_slot_text ~= nil then

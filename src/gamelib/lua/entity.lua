@@ -242,6 +242,13 @@ rn.entity.on_cast_success = function(uuid, spellname, castx, casty)
 		end
 	end
 
+	rn.buff.iterate_buffs(uuid, function(buff_name)
+		local buffdata = rn.buff.buffs[buff_name]
+		if buffdata.on_cast_success ~= nil then
+			buffdata.on_cast_success(uuid, spellname, castx, casty)
+		end
+	end)
+
 	rn.item.foreach_equipped(uuid, function(_, item_name)
 		local item = rn.item.items[item_name]
 		if item.on_cast ~= nil then

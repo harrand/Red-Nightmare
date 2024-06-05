@@ -94,7 +94,10 @@ rn.mods.basegame.prefabs.magic_ball_base =
 				end
 			end
 		end
-		rn.current_scene():remove_entity(uuid_a)
+		if not (other_is_projectile and magic_type == "shadow") then
+			-- dont despawn shadow projectiles if it touches another.
+			rn.current_scene():remove_entity(uuid_a)
+		end
 		return false
 	end,
 	on_remove = rn.mods.basegame.prefabs.light_emitter.on_remove,
