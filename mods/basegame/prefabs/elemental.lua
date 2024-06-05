@@ -90,7 +90,11 @@ for schoolname, schooldata in pairs(rn.spell.schools) do
 			on_death = function(uuid, dmg, magic_type, enemy_uuid)
 				rn.entity.prefabs.elemental_base.on_death(uuid, dmg, magic_type, enemy_uuid)
 				local x, y = rn.entity.prefabs.sprite.get_position(uuid)
-				rn.spell.drop_at(x, y, "lesser_" .. schoolname .. "bolt")
+				if schoolname == "frost" then
+					rn.spell.drop_at(x, y, "icicle")
+				else
+					rn.spell.drop_at(x, y, "lesser_" .. schoolname .. "bolt")
+				end
 			end,
 			on_equip= rn.mods.basegame.prefabs.elemental_base.on_equip,
 			on_unequip = rn.mods.basegame.prefabs.elemental_base.on_unequip,
