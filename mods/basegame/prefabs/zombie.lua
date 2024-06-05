@@ -15,7 +15,23 @@ rn.mods.basegame.prefabs.zombie =
 		rn.entity.prefabs.combat_stats.set_base_movement_speed(uuid, rn.entity.prefabs.bipedal.default_movement_speed * 0.7)
 
 		rn.entity.prefabs.spell_slots.equip_spell(uuid, "zombie_swipe")
-		rn.entity.prefabs.spell_slots.equip_spell(uuid, "enrage", nil, "yellow")
+		-- zombie subtypes
+		local rand = math.random()
+		if rand < 0.4 then
+			-- peasant zombie
+			rn.entity.prefabs.spell_slots.equip_spell(uuid, "enrage", nil, "yellow")
+		elseif rand >= 0.4 and rand <= 0.6 then
+			-- paladin zombie
+			rn.entity.prefabs.spell_slots.equip_spell(uuid, "flash_of_light", nil, "yellow")
+			rn.item.equip(uuid, "steel_platelegs")
+			rn.item.equip(uuid, "steel_platebody")
+			rn.item.equip(uuid, "steel_small_shield")
+			rn.item.equip(uuid, "holy_water_sprinkler")
+		else
+			-- berserker zombie
+			rn.item.equip(uuid, "mythril_greatsword")
+			rn.entity.prefabs.spell_slots.equip_spell(uuid, "deadly_throw", nil, "yellow")
+		end
 	end,
 	update = rn.mods.basegame.prefabs.melee_monster.update,
 	on_struck = rn.mods.basegame.prefabs.melee_monster.on_struck,
