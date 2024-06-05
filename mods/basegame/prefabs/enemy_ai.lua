@@ -1,18 +1,3 @@
-rn.ai = rn.ai or {}
-rn.ai.ability =
-{
-	-- ai will cast this spell often do deal damage to its target.
-	filler_damage = 0,
-	-- ai will cast this spell to try to kill its target. will expect a longer cast - will only use if its at a safe distance
-	rare_damage = 1,
-	-- ai will use this spell if its health gets low.
-	heal = 2,
-	-- ai will use this spell if it's trying to run away.
-	mobility = 3,
-	-- ai will drop everything to use this spell if its about to die.
-	last_resort = 4
-}
-
 rn.mods.basegame.prefabs.basic_target_field =
 {
 	pre_instantiate = function(uuid)
@@ -48,23 +33,6 @@ rn.mods.basegame.prefabs.base_ai =
 {
 	instantiate = function(uuid)
 		rn.current_scene():entity_write(uuid, ".ai", "base_ai")
-	end,
-	add_ability = function(uuid, spell_name, ability)
-		local sc = rn.current_scene()
-		local ability_count = rn.entity.prefabs.base_ai.get_ability_count(uuid, ability)
-		ability_count = math.floor(ability_count + 1)
-		sc:entity_write(uuid, "ability." .. ability .. ".count", ability_count)
-		sc:entity_write(uuid, "ability." .. ability .. "." .. ability_count, spell_name)
-	end,
-	get_ability_count = function(uuid, ability)
-		return rn.current_scene():entity_read(uuid, "ability." .. ability .. ".count") or 0.0
-	end,
-	get_ability_spell = function(uuid, ability, id)
-		return rn.current_scene():entity_read(uuid, "ability." .. ability .. "." .. id)
-	end,
-	get_random_ability_spell = function(uuid, ability)
-		local count = rn.entity.prefabs.base_ai.get_ability_count(uuid, ability)
-		return rn.entity.prefabs.base_ai.get_ability_spell(uuid, ability, math.random(count))
 	end,
 	get_target = function(uuid)
 		return rn.current_scene():entity_read(uuid, "target")
@@ -155,7 +123,7 @@ rn.mods.basegame.prefabs.melee_ai =
 		if target == other then
 			local x, y = rn.entity.prefabs.sprite.get_position(me)
 			local tarx, tary = rn.entity.prefabs.sprite.get_position(other)
-			rn.spell.cast(me, rn.entity.prefabs.melee_ai.get_melee_ability(me))
+			rn.entity.prefabs.spell_slots.cast_spell_at_slot(me, "green")
 			rn.entity.prefabs.bipedal.face_direction(me, x - tarx, y - tary)
 		end
 		return ret
@@ -200,12 +168,6 @@ rn.mods.basegame.prefabs.melee_ai =
 	on_struck = rn.mods.basegame.prefabs.base_ai.on_struck,
 	get_aggro_range = rn.mods.basegame.prefabs.base_ai.get_aggro_range,
 	set_aggro_range = rn.mods.basegame.prefabs.base_ai.set_aggro_range,
-	set_melee_ability = function(uuid, spellname)
-		rn.current_scene():entity_write(uuid, "melee_ai_spell", spellname)
-	end,
-	get_melee_ability = function(uuid)
-		return rn.current_scene():entity_read(uuid, "melee_ai_spell") or "melee"
-	end,
 }
 
 rn.mods.basegame.prefabs.ranged_ai =
@@ -258,11 +220,7 @@ rn.mods.basegame.prefabs.ranged_ai =
 				rn.entity.prefabs.ranged_ai.set_fleeing(uuid, 5.0)
 			else
 				-- otherwise, will cast spells.
-				local random_damage_ability = rn.entity.prefabs.base_ai.get_random_ability_spell(uuid, rn.ai.ability.filler_damage)
-				if random_damage_ability == nil then
-					random_damage_ability = "lesser_firebolt"
-				end
-				rn.spell.cast(uuid, random_damage_ability)
+				rn.entity.prefabs.spell_slots.cast_spell_at_slot(uuid, "green")
 			end
 		end
 	end,

@@ -75,7 +75,7 @@ for schoolname, schooldata in pairs(rn.spell.schools) do
 			pre_instantiate = rn.mods.basegame.prefabs.elemental_base.pre_instantiate,
 			instantiate = function(uuid)
 				rn.entity.prefabs.elemental_base.instantiate(uuid)
-				rn.entity.prefabs.base_ai.add_ability(uuid, "lesser_" .. schoolname .. "bolt", rn.ai.ability.filler_damage)
+				rn.entity.prefabs.spell_slots.equip_spell(uuid, "lesser_" .. schoolname .. "bolt")
 				rn.item.equip(uuid, schoolname .. "_elemental_hood")
 				rn.item.equip(uuid, schoolname .. "_elemental_robe")
 				rn.current_scene():entity_write(uuid, ".elemental_magic_type", schoolname)

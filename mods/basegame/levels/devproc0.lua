@@ -17,7 +17,7 @@ rn.mods.basegame.levels.devproc0 =
 		rn.entity.prefabs.combat_stats.apply_flat_increased_frost_power(boss, 25.0)
 		rn.entity.prefabs.combat_stats.apply_pct_increased_frost_power(boss, 2.0)
 		rn.entity.prefabs.sprite.set_position(boss, posx, posy)
-		rn.entity.prefabs.base_ai.add_ability(boss, "summon_zombie", rn.ai.ability.filler_damage)
+		rn.entity.prefabs.spell_slots.equip_spell(boss, "summon_zombie")
 		rn.entity.prefabs.faction.set_faction(boss, faction.player_enemy)
 	end,
 	on_load = function()
