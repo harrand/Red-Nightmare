@@ -15,6 +15,7 @@ rn.mods.basegame.prefabs.zombie =
 		rn.entity.prefabs.combat_stats.set_base_movement_speed(uuid, rn.entity.prefabs.bipedal.default_movement_speed * 0.7)
 
 		rn.entity.prefabs.spell_slots.equip_spell(uuid, "zombie_swipe")
+		rn.entity.prefabs.spell_slots.equip_spell(uuid, "enrage", nil, "yellow")
 	end,
 	update = rn.mods.basegame.prefabs.melee_monster.update,
 	on_struck = rn.mods.basegame.prefabs.melee_monster.on_struck,

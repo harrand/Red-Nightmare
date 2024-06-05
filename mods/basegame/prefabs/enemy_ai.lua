@@ -132,6 +132,21 @@ rn.mods.basegame.prefabs.melee_ai =
 		rn.entity.prefabs.base_ai.update(uuid, delta_seconds)
 		-- if enemy is casting, let them cast.
 		if rn.spell.is_casting(uuid) then return end
+
+		-- if we're low hp, try casting yellow
+		local max_hp = rn.entity.prefabs.combat_stats.get_max_hp(uuid)
+		local hp = rn.entity.prefabs.combat_stats.get_hp(uuid)
+		local hp_pct = hp / max_hp
+		if hp_pct < 0.4 then
+			local yellow_cd = rn.entity.prefabs.spell_slots.get_spell_cooldown(uuid, "yellow") or 0.0
+			local yellow_spell = rn.entity.prefabs.spell_slots.get_spell(uuid, "yellow")
+			if yellow_spell ~= nil and yellow_cd <= 0.0 then
+				-- cast its yellow
+				rn.entity.prefabs.spell_slots.cast_spell_at_slot(uuid, "yellow")
+				return
+			end
+		end
+
 		local target = rn.entity.prefabs.base_ai.get_target(uuid)
 
 		if target ~= nil and rn.current_scene():contains_entity(target) then
@@ -217,11 +232,25 @@ rn.mods.basegame.prefabs.ranged_ai =
 				rn.entity.on_move(uuid, dx, dy, 0.0, delta_seconds)
 			elseif hypot <= (aggro_range * 0.2) then
 				-- ranged will move away if its target is too close (upto a maximum amount of time running)
-				rn.entity.prefabs.ranged_ai.set_fleeing(uuid, 5.0)
-			else
-				-- otherwise, will cast spells.
-				rn.entity.prefabs.spell_slots.cast_spell_at_slot(uuid, "green")
+				local max_hp = rn.entity.prefabs.combat_stats.get_max_hp(uuid)
+				local hp = rn.entity.prefabs.combat_stats.get_hp(uuid)
+				local hp_pct = hp / max_hp
+				if hp_pct < 0.4 then
+					local yellow_cd = rn.entity.prefabs.spell_slots.get_spell_cooldown(uuid, "yellow") or 0.0
+					local yellow_spell = rn.entity.prefabs.spell_slots.get_spell(uuid, "yellow")
+					if yellow_spell ~= nil and yellow_cd <= 0.0 then
+						-- cast its yellow
+						rn.entity.prefabs.spell_slots.cast_spell_at_slot(uuid, "yellow")
+						return
+					elseif rn.entity.prefabs.ranged_ai.can_flee(uuid) then
+						-- uhh run away?
+						rn.entity.prefabs.ranged_ai.set_fleeing(uuid, 5.0)
+					end
+					-- fallback to normal behavior below.
+				end
 			end
+			-- if we get to this point, cast spells.
+			rn.entity.prefabs.spell_slots.cast_spell_at_slot(uuid, "green")
 		end
 	end,
 	on_struck = rn.mods.basegame.prefabs.base_ai.on_struck,
@@ -233,4 +262,13 @@ rn.mods.basegame.prefabs.ranged_ai =
 	is_fleeing = function(uuid)
 		return (rn.current_scene():entity_read(uuid, "flee_duration") or 0.0) > 0.0
 	end,
+	can_flee = function(uuid)
+		-- can flee by default. do set_can_flee(uuid, false) to disable fleeing.
+		local flee = rn.current_scene():entity_read(uuid, "can_flee")
+		if flee == false then return false end
+		return true
+	end,
+	set_can_flee = function(uuid, can_flee)
+		rn.current_scene():entity_write(uuid, "can_flee", can_flee)
+	end
 }
