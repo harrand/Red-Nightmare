@@ -1,3 +1,7 @@
-![Overview](https://github.com/harrand/Red-Nightmare/assets/15001925/ecd3c01b-ca4c-4d7f-af1a-add8baa1ae7b)
-![Plot and Setting](https://github.com/harrand/Red-Nightmare/assets/15001925/ccc3870d-894e-4f21-9d41-2fc09693ec5c)
-![Gameplay](https://github.com/harrand/Red-Nightmare/assets/15001925/fc2e18ea-87f0-4e26-9d30-2ff928201545)
+![Splash](https://github.com/harrand/Red-Nightmare/assets/15001925/e698d3b7-7b9c-46c1-89c2-1465326c09b1)
+![Overview](https://github.com/harrand/Red-Nightmare/assets/15001925/dd4724e6-5047-467a-b0fa-fceadc7e4e8f)
+![Combat](https://github.com/harrand/Red-Nightmare/assets/15001925/aea6a2c4-bd1f-4f5a-9f9a-0edc1e8756a5)
+![Loot](https://github.com/harrand/Red-Nightmare/assets/15001925/57ca4f31-89b5-4322-affc-356c1fe6e603)
+![Pixel Art Direction](https://github.com/harrand/Red-Nightmare/assets/15001925/ee414d90-a759-4c8c-bd9b-e086f6c465f0)
+
+More info soon!
