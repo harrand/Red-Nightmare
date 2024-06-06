@@ -31,15 +31,19 @@ rn.mods.basegame.levels.clans_camp =
 		local morb1 = rn.current_scene():add_entity("player")
 		rn.level.data_write("player", morb1)
 
-		rn.entity.prefabs.dirt_path.plot_path(1, 0, 0, "rrrddddddllllluuuu")
+		rn.entity.prefabs.dirt_path.plot_path(1, -2.0, 0, "rrrddddddllllluuuu")
+		rn.entity.prefabs.dirt_path.plot_path(1, -4.0, 0, "llllllllluuuuuuuuuuu")
 
 		rn.mods.basegame.levels.clans_camp.load_npcs()
 
 		rn.item.equip(morb1, "peasant_pants")
 		rn.item.equip(morb1, "facial_hair_full_beard")
 
+		-- cave entrance torches
+		rn.entity.prefabs.weapon_model_torch.spawn_on_ground(-44, 36)
+		rn.entity.prefabs.weapon_model_torch.spawn_on_ground(-36, 36)
 		local cave_portal = rn.current_scene():add_entity("portal")
-		rn.entity.prefabs.sprite.set_position(cave_portal, -10, -10)
+		rn.entity.prefabs.sprite.set_position(cave_portal, -40, 40)
 		rn.entity.prefabs.portal.set_colour(cave_portal, 0.6, 0.1, 0.1)
 		rn.entity.prefabs.portal.set_level_destination(cave_portal, "devproc0")
 
