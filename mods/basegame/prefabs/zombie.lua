@@ -29,7 +29,7 @@ rn.mods.basegame.prefabs.zombie =
 			rn.item.equip(uuid, "holy_water_sprinkler")
 		else
 			-- berserker zombie
-			rn.item.equip(uuid, "mythril_greatsword")
+			rn.item.equip(uuid, "iron_greatsword")
 			rn.entity.prefabs.spell_slots.equip_spell(uuid, "deadly_throw", nil, "yellow")
 		end
 	end,
