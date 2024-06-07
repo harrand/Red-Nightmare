@@ -2,6 +2,7 @@ rn.mods.basegame.buffs.ignite =
 {
 	name = "Alight. Taking periodic fire damage.",
 	duration = 4.0,
+	internal = false,
 	on_advance = function(uuid, delta_seconds)
 		-- stop ticking on things that are dead.
 		if rn.entity.prefabs.combat_stats.is_dead(uuid) then

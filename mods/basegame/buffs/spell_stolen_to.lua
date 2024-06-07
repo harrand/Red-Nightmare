@@ -2,6 +2,7 @@ rn.mods.basegame.buffs.spell_stolen_to =
 {
 	name = "Spell has been stolen.",
 	duration = 10.0,
+	internal = false,
 	on_advance = function(uuid, delta_seconds)
 		local spellname = rn.current_scene():entity_read(uuid, "stolen_spell")
 		local applied = rn.current_scene():entity_read(uuid, "spellsteal_applied")

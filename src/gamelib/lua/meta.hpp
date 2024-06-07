@@ -38,6 +38,15 @@ namespace game::meta
 		std::string slot;
 	};
 
+	struct buffinfo_t
+	{
+		std::string name;
+		std::size_t mod_id;
+		std::string description;
+		int duration;
+		bool is_internal;
+	};
+
 	struct iteminfo_t
 	{
 		std::string name;
@@ -52,6 +61,7 @@ namespace game::meta
 	std::span<prefabinfo_t> get_prefabs();
 	std::span<levelinfo_t> get_levels();
 	std::span<spellinfo_t> get_spells();
+	std::span<buffinfo_t> get_buffs();
 	std::span<iteminfo_t> get_items();
 	void lua_initialise(tz::lua::state& state);
 	void reflect();

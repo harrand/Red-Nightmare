@@ -2,6 +2,7 @@ rn.mods.basegame.buffs.enraged =
 {
 	name = "Enraged. Deal 50% more damage, ",
 	duration = 8.0,
+	internal = false,
 	on_apply = function(uuid)
 		rn.entity.prefabs.combat_stats.apply_flat_increased_haste(uuid, 0.3)
 		rn.entity.prefabs.combat_stats.apply_pct_increased_physical_power(uuid, 0.5)

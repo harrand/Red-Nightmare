@@ -2,6 +2,7 @@ rn.mods.basegame.buffs.chilled =
 {
 	name = "Chilled. Movement speed and haste reduced.",
 	duration = 4.0,
+	internal = false,
 	on_apply = function(uuid)
 		rn.entity.prefabs.combat_stats.apply_flat_increased_haste(uuid, -0.3)
 		rn.entity.prefabs.combat_stats.apply_pct_increased_movement_speed(uuid, -0.4)

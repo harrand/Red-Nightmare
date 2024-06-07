@@ -2,6 +2,7 @@ rn.mods.basegame.buffs.spell_stolen_from =
 {
 	name = "Your next spell will be stolen.",
 	duration = 10.0,
+	internal = false,
 	on_apply = function(uuid)
 		local r, g, b = rn.entity.prefabs.bipedal.get_colour(uuid)
 		rn.entity.prefabs.bipedal.set_colour(uuid, r * 0.5, g * 0.5, b * 0.5)

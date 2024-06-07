@@ -208,6 +208,7 @@ namespace game
 				std::vector<meta::prefabinfo_t> owned_prefabs = {};
 				std::vector<meta::levelinfo_t> owned_levels = {};
 				std::vector<meta::spellinfo_t> owned_spells = {};
+				std::vector<meta::buffinfo_t> owned_buffs = {};
 				std::vector<meta::iteminfo_t> owned_items = {};
 				for(const auto& prefab : game::meta::get_prefabs())
 				{
@@ -228,6 +229,13 @@ namespace game
 					if(spell.mod_id == i)
 					{
 						owned_spells.push_back(spell);
+					}
+				}
+				for(const auto& buff : game::meta::get_buffs())
+				{
+					if(buff.mod_id == i)
+					{
+						owned_buffs.push_back(buff);
 					}
 				}
 				for(const auto& item : game::meta::get_items())
@@ -303,6 +311,26 @@ namespace game
 								ImGui::Text("%s", spell.description.c_str());
 								ImGui::Text("Type: %s", spell.magic_type.c_str());
 								ImGui::Text("Slot: %s", spell.slot.c_str());
+								ImGui::TreePop();
+							}
+						}
+						ImGui::TreePop();
+					}
+					if(owned_spells.size() && ImGui::TreeNode("Buffs"))
+					{
+						static bool hide_internal_buffs = true;
+						ImGui::Checkbox("Hide Internal Buffs", &hide_internal_buffs);
+						for(auto buff : owned_buffs)
+						{
+							if(hide_internal_buffs && buff.is_internal)
+							{
+								continue;
+							}
+							if(ImGui::TreeNode(buff.name.c_str()))
+							{
+								ImGui::Text("%s", buff.description.c_str());
+								ImGui::Text("Duration: %d", buff.duration);
+								ImGui::Text("Internal: %s", buff.is_internal ? "true" : "false");
 								ImGui::TreePop();
 							}
 						}

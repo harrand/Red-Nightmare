@@ -2,6 +2,7 @@ rn.mods.basegame.buffs.charge_rush =
 {
 	name = "Charging at a target location...",
 	duration = nil,
+	internal = true,
 	on_apply = function(uuid)
 		print("charge begin on entity " .. uuid)
 		rn.entity.prefabs.combat_stats.apply_flat_increased_movement_speed(uuid, 10.0)
