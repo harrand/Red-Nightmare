@@ -70,9 +70,8 @@ rn.mods.basegame.prefabs.player =
 		if rn.spell.is_casting(uuid) then
 			local spelldata = rn.spell.spells[rn.current_scene():entity_read(uuid, "cast.name")]
 			if spelldata.dont_face_direction ~= true then
-				local mx, my = rn.current_scene():get_mouse_position()
-				local x, y = rn.current_scene():entity_get_global_position(uuid)
-				rn.entity.prefabs.bipedal.face_direction(uuid, x - mx, y - my)
+				local dx, dy = rn.util.entity_direction_to_mouse(uuid)
+				rn.entity.prefabs.bipedal.face_direction(uuid, -dx, -dy)
 			end
 		end
 	end,

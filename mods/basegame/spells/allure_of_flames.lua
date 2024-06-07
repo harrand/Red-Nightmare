@@ -16,11 +16,9 @@ rn.mods.basegame.spells.allure_of_flames =
 
 		rn.entity.prefabs.sprite.set_position(projectile, casterx, castery)
 		rn.entity.prefabs.sprite.set_scale(projectile, 2.0, 2.0)
-
-		local mx, my = sc:get_mouse_position()
 		sc:entity_write(projectile, "owner", uuid)
-		local dx = mx - casterx
-		local dy = my - castery
+
+		local dx, dy = rn.util.entity_direction_to_target(uuid, nil, math.random(), math.random(), casterx, castery)
 		rn.entity.prefabs.magic_ball_base.set_target(projectile, dx * 999, dy * 999)
 		local power = rn.entity.prefabs.combat_stats["get_" .. magic_type .. "_power"](uuid)
 		rn.entity.prefabs.magic_ball_base.set_damage(projectile, power)
