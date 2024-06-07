@@ -18,7 +18,7 @@ rn.mods.basegame.spells.spellsteal =
 		if player_uuid == uuid then
 			tarx, tary = sc:get_mouse_position()
 		else
-			local target = rn.entity.prefabs.base_ai.get_target(uuid)
+			local target = rn.util.entity_get_target(uuid)
 			if target ~= nil and sc:contains_entity(target) then
 				tarx, tary = rn.entity.prefabs.sprite.get_position(target)
 			else

@@ -24,7 +24,7 @@ rn.mods.basegame.spells.zombie_devour =
 		end
 	end,
 	on_cast_begin = function(me)
-		local target = rn.entity.prefabs.base_ai.get_target(me)
+		local target = rn.util.entity_get_target(me)
 		tz.assert(target ~= nil and rn.current_scene():contains_entity(target), "Attmept to precast zombie_devour on an entity that doesn't exist.")
 		-- set `target` to be stunned
 		rn.entity.stun(target, 10.0)

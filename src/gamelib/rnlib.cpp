@@ -20,6 +20,7 @@
 #include ImportedTextHeader(mod, lua)
 #include ImportedTextHeader(player, lua)
 #include ImportedTextHeader(spell, lua)
+#include ImportedTextHeader(util, lua)
 
 namespace game
 {
@@ -216,8 +217,9 @@ namespace game
 		std::string mod_lua_src{ImportedTextData(mod, lua)};
 		std::string player_lua_src{ImportedTextData(player, lua)};
 		std::string spell_lua_src{ImportedTextData(spell, lua)};
+		std::string util_lua_src{ImportedTextData(util, lua)};
 
-		tz::lua::for_all_states([&lua_require_cmd, &mod_lua_src, &level_lua_src, &spell_lua_src, &game_lua_src, &item_lua_src, &player_lua_src, buff_lua_src](tz::lua::state& state)
+		tz::lua::for_all_states([&lua_require_cmd, &mod_lua_src, &level_lua_src, &spell_lua_src, &game_lua_src, &item_lua_src, &player_lua_src, &buff_lua_src, &util_lua_src](tz::lua::state& state)
 		{
 			//state.execute(R"(
 			//)");
@@ -229,6 +231,7 @@ namespace game
 			state.execute(player_lua_src.c_str());
 			state.execute(level_lua_src.c_str());
 			state.execute(spell_lua_src.c_str());
+			state.execute(util_lua_src.c_str());
 			game::audio_lua_initialise(state);
 			game::messaging::scene_messaging_lua_initialise(state);
 			game_system->scene2.get_renderer().lua_initialise(state);

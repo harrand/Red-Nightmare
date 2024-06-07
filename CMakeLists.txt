@@ -90,4 +90,5 @@ add_text(
 		src/gamelib/lua/mod.lua
 		src/gamelib/lua/player.lua
 		src/gamelib/lua/spell.lua
+		src/gamelib/lua/util.lua
 )

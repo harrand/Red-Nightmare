@@ -34,7 +34,7 @@ rn.mods.basegame.prefabs.melee_swing_area =
 				if caster == rn.player.get() then
 					projx, projy = sc:get_mouse_position()
 				else
-					local ai_target = rn.entity.prefabs.base_ai.get_target(caster)
+					local ai_target = rn.util.entity_get_target(caster)
 					if ai_target ~= nil and sc:contains_entity(ai_target) then
 						-- shoot at ai_target
 						projx, projy = rn.entity.prefabs.sprite.get_position(ai_target)

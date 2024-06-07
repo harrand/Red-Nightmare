@@ -38,7 +38,7 @@ rn.mods.basegame.prefabs.zombie =
 	on_move = rn.mods.basegame.prefabs.melee_monster.on_move,
 	on_stop_moving = rn.mods.basegame.prefabs.melee_monster.on_stop_moving,
 	on_collision = function(me, other)
-		local target = rn.entity.prefabs.base_ai.get_target(me)
+		local target = rn.util.entity_get_target(me)
 		if rn.entity.prefabs.combat_stats.is_alive(me) and target == other and rn.entity.prefabs.faction.is_enemy(me, other) and not rn.spell.is_casting(me) then
 			local attack_power = rn.entity.prefabs.combat_stats.get_physical_power(me) * 4
 			local target_hp = rn.entity.prefabs.combat_stats.get_hp(target)
