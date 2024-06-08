@@ -16,7 +16,11 @@ rn.util =
 		return rn.util.entity_direction_to_mouse(rn.player.get())
 	end,
 	entity_get_target = function(uuid)
-		return rn.current_scene():entity_read(uuid, "target")
+		local tar = rn.current_scene():entity_read(uuid, "target")
+		if tar ~= nil and rn.current_scene():contains_entity(tar) then
+			return tar
+		end
+		return nil
 	end,
 	entity_set_target = function(uuid, target_uuid)
 		rn.current_scene():entity_write(uuid, "target", target_uuid)
