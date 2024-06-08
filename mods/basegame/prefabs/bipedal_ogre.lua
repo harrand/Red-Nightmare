@@ -2,7 +2,7 @@ rn.mods.basegame.prefabs.bipedal_ogre =
 {
 	description = "Entity is a 3D bipedal ogre.",
 	static_init = function()
-		rn.renderer():add_texture("skin.maker", "basegame/res/skins/maker.png")
+		--rn.renderer():add_texture("skin.maker", "basegame/res/skins/maker.png")
 	end,
 	pre_instantiate = rn.mods.basegame.prefabs.bipedal.pre_instantiate,
 	instantiate = function(uuid)
