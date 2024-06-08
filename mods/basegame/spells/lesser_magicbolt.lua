@@ -18,7 +18,7 @@ for schoolname, schooldata in pairs(rn.spell.schools) do
 			local sc = rn.current_scene()
 
 			local projectile = sc:add_entity(magic_type .. "bolt")
-			rn.entity.prefabs.timed_despawn.set_duration(projectile, 5.0)
+			rn.util.entity_set_despawn_timer(projectile, 5.0)
 
 			rn.entity.prefabs.sprite.set_position(projectile, casterx, castery)
 			sc:entity_write(projectile, "owner", uuid)

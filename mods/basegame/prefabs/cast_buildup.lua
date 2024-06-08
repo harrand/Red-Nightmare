@@ -37,7 +37,6 @@ rn.mods.basegame.prefabs.cast_buildup =
 		rn.entity.prefabs.sticky.update(uuid, delta_seconds)
 		-- note: by default we dont set a despawn timer here, for that reason this will never be set off.
 		-- however, external forces may want us to delete ourselves after a delay, so we give them the option by carrying it out here if its set elsewhere.
-		rn.entity.prefabs.timed_despawn.update(uuid, delta_seconds)
 	end,
 	on_remove = rn.mods.basegame.prefabs.light_emitter.on_remove,
 }

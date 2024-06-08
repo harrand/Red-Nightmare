@@ -14,7 +14,7 @@ rn.mods.basegame.spells.firestorm =
 		local angle_per_fireball = (math.pi * 2.0) / max_fireball_count
 		for i=0,max_fireball_count-1,1 do
 			local projectile = sc:add_entity("firebolt")
-			rn.entity.prefabs.timed_despawn.set_duration(projectile, 5.0)
+			rn.util.entity_set_despawn_timer(projectile, 5.0)
 			rn.entity.prefabs.sprite.set_position(projectile, casterx, castery)
 			sc:entity_write(projectile, "owner", uuid)
 			rn.entity.prefabs.faction.copy_faction(uuid, projectile)

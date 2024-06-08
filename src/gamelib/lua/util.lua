@@ -61,4 +61,8 @@ rn.util =
 		end
 		return tarx - entx, tary - enty
 	end,
+	entity_set_despawn_timer = function(uuid, duration)
+		rn.buff.apply(uuid, "timed_despawn")
+		rn.current_scene():entity_write(uuid, rn.buff.prefix("timed_despawn", "duration"), duration)
+	end
 }

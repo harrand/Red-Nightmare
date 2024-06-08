@@ -71,7 +71,6 @@ rn.mods.basegame.prefabs.health_bar =
 				rn.entity.prefabs.health_bar_impl.internal_update(child, delta_seconds)
 
 				rn.entity.prefabs.sticky.update(uuid, delta_seconds)
-				rn.entity.prefabs.timed_despawn.update(uuid, delta_seconds)
 			end
 		end
 	end,
@@ -91,7 +90,7 @@ rn.mods.basegame.prefabs.health_bar =
 		if already_has ~= nil and sc:contains_entity(already_has) then
 			-- already_has is the uuid of the existing health bar. extend its duration back.
 			print("extending duration of " .. already_has)
-			rn.entity.prefabs.timed_despawn.set_duration(already_has, duration)
+			rn.util.entity_set_despawn_timer(already_has, duration)
 			return
 		end
 
@@ -102,7 +101,7 @@ rn.mods.basegame.prefabs.health_bar =
 		local base_offsetz = 0.0
 		sc:entity_write(me, "attachment", uuid)
 		rn.entity.prefabs.sticky.stick_to(me, uuid, base_offsetx, base_offsety, base_offsetz)
-		rn.entity.prefabs.timed_despawn.set_duration(me, duration)
+		rn.util.entity_set_despawn_timer(me, duration)
 
 		local inner = sc:add_entity("health_bar_impl")
 		sc:entity_write(inner, "parent", me)

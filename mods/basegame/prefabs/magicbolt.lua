@@ -40,7 +40,6 @@ rn.mods.basegame.prefabs.magic_ball_base =
 		if tarx ~= nil and tary ~= nil then
 			rn.entity.prefabs.sprite.lookat(uuid, tarx, tary, math.pi / -2.0)
 		end
-		rn.entity.prefabs.timed_despawn.update(uuid, delta_seconds)
 
 		if rn.entity.prefabs.light_emitter.exists(uuid) then
 			if magic_type == "physical" then

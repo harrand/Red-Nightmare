@@ -46,6 +46,7 @@ end
 
 rn.buff.clear_all = function(uuid)
 	local sc = rn.current_scene()
+	if uuid == nil or not sc:contains_entity(uuid) then return end
 	local buff_count = sc:entity_get_buff_count(uuid)
 	if buff_count == 0 then return end
 	for i=0,buff_count - 1,1 do
@@ -95,6 +96,7 @@ end
 
 rn.buff.iterate_buffs = function(uuid, fn)
 	local sc = rn.current_scene()
+	if uuid == nil or not sc:contains_entity(uuid) then return end
 	local buff_count = sc:entity_get_buff_count(uuid)
 	if buff_count == 0 then return end
 	for i=0,buff_count - 1,1 do

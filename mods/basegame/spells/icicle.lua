@@ -13,7 +13,7 @@ rn.mods.basegame.spells.icicle =
 		local sc = rn.current_scene()
 
 		local projectile = sc:add_entity(magic_type .. "bolt")
-		rn.entity.prefabs.timed_despawn.set_duration(projectile, 5.0)
+		rn.util.entity_set_despawn_timer(projectile, 5.0)
 
 		rn.entity.prefabs.sprite.set_position(projectile, casterx, castery)
 		rn.current_scene():entity_set_local_scale(projectile, 0.4, 1.25, 1.0)

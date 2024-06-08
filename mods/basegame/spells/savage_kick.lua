@@ -13,7 +13,7 @@ rn.mods.basegame.spells.savage_kick =
 		rn.entity.prefabs.melee_swing_area.set_base_damage(swing, 0.5)
 		rn.entity.prefabs.melee_swing_area.set_stun_on_hit(swing, 3.0)
 		rn.entity.prefabs.sprite.set_scale(swing, 2.0)
-		rn.entity.prefabs.timed_despawn.set_duration(swing, 0.4)
+		rn.util.entity_set_despawn_timer(swing, 0.4)
 		local x, y = rn.entity.prefabs.sprite.get_position(uuid)
 		rn.entity.prefabs.sprite.set_position(swing, x, y)
 	end

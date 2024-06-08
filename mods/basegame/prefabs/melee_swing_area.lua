@@ -5,9 +5,6 @@ rn.mods.basegame.prefabs.melee_swing_area =
 		rn.entity.prefabs.sprite.instantiate(uuid)
 		rn.entity.prefabs.sprite.set_visible(uuid, false)
 	end,
-	update = function(uuid, delta_seconds)
-		rn.entity.prefabs.timed_despawn.update(uuid, delta_seconds)
-	end,
 	on_collision = function(me, other)
 		local sc = rn.current_scene()
 		local other_alive = rn.entity.prefabs.combat_stats.is_alive(other)

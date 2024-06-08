@@ -20,6 +20,6 @@ rn.mods.basegame.spells.flash_of_light =
 		local yoffset = 1.25
 		local effect_duration = 0.75
 		rn.entity.prefabs.sticky.stick_to(effect, uuid, 0.0, yoffset, 0.0)
-		rn.entity.prefabs.timed_despawn.set_duration(effect, effect_duration)
+		rn.util.entity_set_despawn_timer(effect, effect_duration)
 	end
 }

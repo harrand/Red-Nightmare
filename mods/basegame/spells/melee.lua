@@ -15,7 +15,7 @@ rn.mods.basegame.spells.melee =
 		rn.entity.prefabs.melee_swing_area.set_caster(swing, uuid)
 		rn.entity.prefabs.melee_swing_area.set_base_damage(swing, 1.0)
 		rn.entity.prefabs.sprite.set_scale(swing, 2.0)
-		rn.entity.prefabs.timed_despawn.set_duration(swing, 0.4)
+		rn.util.entity_set_despawn_timer(swing, 0.4)
 		local x, y
 		if rn.current_scene():entity_get_model(uuid) == "bipedal" then
 			x, y, _ = rn.current_scene():entity_get_global_position(uuid, rn.entity.prefabs.bipedal.right_hand)
