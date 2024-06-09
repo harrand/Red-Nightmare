@@ -117,6 +117,8 @@ namespace game::render
 
 			tz::gl::renderer_handle handle = tz::nullhand;
 			tz::gl::resource_handle dimension_buffer = tz::nullhand;
+			tz::gl::resource_handle precipitation_buffer = tz::nullhand;
+			tz::gl::resource_handle time_buffer = tz::nullhand;
 			tz::gl::resource_handle zoom_buffer = tz::nullhand;
 			tz::gl::resource_handle bg_image = tz::nullhand;
 			tz::gl::resource_handle fg_image = tz::nullhand;

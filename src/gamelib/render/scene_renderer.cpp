@@ -241,6 +241,9 @@ namespace game::render
 		});
 
 		this->pixelate_pass.handle_resize(this->renderer.get_render_pass());
+
+		// advance time buffer.
+		tz::gl::get_device().get_renderer(this->pixelate_pass.handle).get_resource(this->pixelate_pass.time_buffer)->data_as<float>().front() += delta;
 	}
 
 	void scene_renderer::block()
@@ -568,6 +571,14 @@ namespace game::render
 		}
 	}
 
+	struct precipitation_buffer_data
+	{
+		tz::vec3 colour = tz::vec3{0.2f, 0.2f, 0.7f};
+		float strength = 0.4f;
+		tz::vec2 direction = {0.15f, -1.0f};
+		float time = 0.0f;
+	};
+
 	// pixelate pass
 	scene_renderer::pixelate_pass_t::pixelate_pass_t()
 	{
@@ -587,6 +598,8 @@ namespace game::render
 			.access = tz::gl::resource_access::dynamic_access
 		}));
 		this->dimension_buffer = rinfo.add_resource(tz::gl::buffer_resource::from_many(dimension_buffer_data));
+		this->precipitation_buffer = rinfo.add_resource(tz::gl::buffer_resource::from_one(precipitation_buffer_data{}));
+		this->time_buffer = rinfo.add_resource(tz::gl::buffer_resource::from_one(0.0f, {.access = tz::gl::resource_access::dynamic_access}));
 		this->bg_image = rinfo.add_resource(tz::gl::image_resource::from_uninitialised
 		({
 			.format = tz::gl::image_format::BGRA32,
