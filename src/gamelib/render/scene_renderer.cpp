@@ -535,6 +535,50 @@ namespace game::render
 		return ret;
 	}
 
+	struct precipitation_buffer_data
+	{
+		tz::vec3 colour = tz::vec3::zero();
+		float strength = 0.0f;
+		tz::vec2 direction = tz::vec2::zero();
+		float time = 0.0f;
+	};
+
+	void scene_renderer::set_precipitation_data(tz::vec3 colour, float strength, tz::vec2 direction)
+	{
+		precipitation_buffer_data data
+		{
+			.colour = colour,
+			.strength = strength,
+			.direction = direction
+		};
+		auto& ren = tz::gl::get_device().get_renderer(this->pixelate_pass.handle);
+		ren.edit(
+			tz::gl::RendererEditBuilder{}
+			.write
+			({
+				.resource = this->pixelate_pass.precipitation_buffer,
+				.data = std::as_bytes(std::span<const precipitation_buffer_data>(&data, 1)),
+				.offset = 0,
+			})
+			.build()
+		);
+	}
+
+	tz::vec3 scene_renderer::get_precipitation_colour() const
+	{
+		return tz::gl::get_device().get_renderer(this->pixelate_pass.handle).get_resource(this->pixelate_pass.precipitation_buffer)->data_as<precipitation_buffer_data>().front().colour;
+	}
+
+	float scene_renderer::get_precipitation_strength() const
+	{
+		return tz::gl::get_device().get_renderer(this->pixelate_pass.handle).get_resource(this->pixelate_pass.precipitation_buffer)->data_as<precipitation_buffer_data>().front().strength;
+	}
+
+	tz::vec2 scene_renderer::get_precipitation_direction() const
+	{
+		return tz::gl::get_device().get_renderer(this->pixelate_pass.handle).get_resource(this->pixelate_pass.precipitation_buffer)->data_as<precipitation_buffer_data>().front().direction;
+	}
+
 	/*static*/ std::vector<tz::gl::buffer_resource> scene_renderer::evaluate_extra_buffers()
 	{
 		std::vector<tz::gl::buffer_resource> ret = {};
@@ -570,14 +614,6 @@ namespace game::render
 			this->pixelate_pass.zoom_amount() *= multiplier;
 		}
 	}
-
-	struct precipitation_buffer_data
-	{
-		tz::vec3 colour = tz::vec3{0.2f, 0.2f, 0.7f};
-		float strength = 0.4f;
-		tz::vec2 direction = {0.15f, -1.0f};
-		float time = 0.0f;
-	};
 
 	// pixelate pass
 	scene_renderer::pixelate_pass_t::pixelate_pass_t()
@@ -1089,6 +1125,41 @@ namespace game::render
 		});
 		return 0;
 
+	}
+
+	int impl_rn_scene_renderer::set_precipitation(tz::lua::state& state)
+	{
+		auto [_, r, g, b, strength, dx, dy] = tz::lua::parse_args<tz::lua::nil, float, float, float, float, float, float>(state);
+		game::messaging::scene_insert_message
+		({
+			.operation = game::messaging::scene_operation::renderer_set_precipitation,
+			.uuid = std::numeric_limits<entity_uuid>::max(),
+			.value = std::tuple<tz::vec3, float, tz::vec2>{tz::vec3{r, g, b}, strength, tz::vec2{dx, dy}}
+		});
+		return 0;
+	}
+
+	int impl_rn_scene_renderer::get_precipitation_colour(tz::lua::state& state)
+	{
+		tz::vec3 col = this->renderer->get_precipitation_colour();
+		state.stack_push_float(col[0]);
+		state.stack_push_float(col[1]);
+		state.stack_push_float(col[2]);
+		return 3;
+	}
+
+	int impl_rn_scene_renderer::get_precipitation_strength(tz::lua::state& state)
+	{
+		state.stack_push_float(this->renderer->get_precipitation_strength());
+		return 1;
+	}
+
+	int impl_rn_scene_renderer::get_precipitation_direction(tz::lua::state& state)
+	{
+		tz::vec2 dir = this->renderer->get_precipitation_direction();
+		state.stack_push_float(dir[0]);
+		state.stack_push_float(dir[1]);
+		return 2;
 	}
 
 	void scene_renderer::lua_initialise(tz::lua::state& state)

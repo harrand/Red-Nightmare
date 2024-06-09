@@ -63,6 +63,7 @@ namespace game::messaging
 		renderer_remove_string,
 		renderer_clear_strings,
 		renderer_string_set_position,
+		renderer_set_precipitation,
 		audio_play_sound,
 		audio_play_music,
 		audio_stop_music

@@ -22,6 +22,7 @@ rn.mods.basegame.levels.clans_camp =
 		rn.renderer():set_ambient_light(0.525, 0.495, 0.495, 1.0)
 		rn.renderer():directional_light_set_power(0.4)
 		rn.renderer():directional_light_set_colour(0.8, 0.8, 0.8)
+		rn.util.set_raining(0.4)
 
 		local bg = rn.current_scene():add_entity("sprite")
 		rn.entity.prefabs.sprite.set_scale(bg, 69, 69)

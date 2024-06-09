@@ -14,6 +14,7 @@ rn.level.do_load = function(skip_fadein)
 		rn.renderer():clear_lights()
 		rn.renderer():clear_strings()
 		rn.renderer():set_ambient_light(1.0, 1.0, 1.0, 1.0)
+		rn.util.clear_skies()
 		if dont_stop_music == nil then
 			rn.stop_music(0)
 		end

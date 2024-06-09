@@ -545,6 +545,14 @@ namespace game::messaging
 				sc->get_renderer().string_set_position(uid, pos);
 			}
 			break;
+			case scene_operation::renderer_set_precipitation:
+			{
+				TZ_PROFZONE("renderer set precipitation", 0xFF99CC44);
+				auto [col, strength, dir] = std::any_cast<std::tuple<tz::vec3, float, tz::vec2>>(msg.value);
+
+				sc->get_renderer().set_precipitation_data(col, strength, dir);
+			}
+			break;
 			case scene_operation::audio_play_sound:
 			{
 				TZ_PROFZONE("audio play sound", 0xFF99CC44);

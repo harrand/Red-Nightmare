@@ -68,5 +68,11 @@ rn.util =
 	entity_set_despawn_timer = function(uuid, duration)
 		rn.buff.apply(uuid, "timed_despawn")
 		rn.current_scene():entity_write(uuid, rn.buff.prefix("timed_despawn", "duration"), duration)
-	end
+	end,
+	set_raining = function(intensity)
+		rn.renderer():set_precipitation(0.2, 0.2, 0.7, intensity, 0.15, -1.0)
+	end,
+	clear_skies = function()
+		rn.renderer():set_precipitation(0.0, 0.0, 0.0, 0.0, 0.0, 0.0)
+	end,
 }

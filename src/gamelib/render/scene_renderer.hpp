@@ -101,6 +101,11 @@ namespace game::render
 		bool contains_string(std::size_t string_uid) const;
 		std::vector<std::size_t> get_all_string_uids() const;
 
+		void set_precipitation_data(tz::vec3 colour, float strength, tz::vec2 direction);
+		tz::vec3 get_precipitation_colour() const;
+		float get_precipitation_strength() const;
+		tz::vec2 get_precipitation_direction() const;
+
 		void lua_initialise(tz::lua::state& state);
 	private:
 		static std::vector<tz::gl::buffer_resource> evaluate_extra_buffers();
@@ -203,6 +208,11 @@ namespace game::render
 		int remove_string(tz::lua::state& state);
 		int clear_strings(tz::lua::state& state);
 		int string_set_position(tz::lua::state& state);
+
+		int set_precipitation(tz::lua::state& state);
+		int get_precipitation_colour(tz::lua::state& state);
+		int get_precipitation_strength(tz::lua::state& state);
+		int get_precipitation_direction(tz::lua::state& state);
 	};
 
 	LUA_CLASS_BEGIN(impl_rn_scene_renderer)
@@ -243,6 +253,11 @@ namespace game::render
 			LUA_METHOD(impl_rn_scene_renderer, remove_string)
 			LUA_METHOD(impl_rn_scene_renderer, clear_strings)
 			LUA_METHOD(impl_rn_scene_renderer, string_set_position)
+
+			LUA_METHOD(impl_rn_scene_renderer, set_precipitation)
+			LUA_METHOD(impl_rn_scene_renderer, get_precipitation_colour)
+			LUA_METHOD(impl_rn_scene_renderer, get_precipitation_strength)
+			LUA_METHOD(impl_rn_scene_renderer, get_precipitation_direction)
 		LUA_CLASS_METHODS_END
 	LUA_CLASS_END
 }

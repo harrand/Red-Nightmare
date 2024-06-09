@@ -62,7 +62,7 @@ void main()
 			out::frag_colour = unpixelised_colour;
 		}
 	}
-	do_precipitation(coord);
+	do_precipitation(uv);
 	out::frag_colour.xyz *= zoom.global_colour_multiplier;
 }
 
