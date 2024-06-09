@@ -11,18 +11,30 @@ rn.mods.basegame.levels.devproc0 =
 		rn.renderer():add_texture("texture.blackstone_wall_h_normals", "basegame/res/textures/blackstone_wall_h_normals.png")
 	end,
 	spawn_boss = function(posx, posy)
-		local boss = rn.current_scene():add_entity("frost_elemental")
-		rn.entity.prefabs.combat_stats.apply_flat_increased_haste(boss, 0.75)
-		rn.entity.prefabs.combat_stats.apply_flat_increased_max_hp(boss, 9001)
-		rn.entity.prefabs.combat_stats.apply_flat_increased_frost_power(boss, 25.0)
-		rn.entity.prefabs.combat_stats.apply_pct_increased_frost_power(boss, 2.0)
+		local boss = rn.current_scene():add_entity("shadow_elemental")
+		rn.entity.prefabs.bipedal.set_scale(boss, 1.5, 1.5, 1.5)
+		rn.entity.prefabs.combat_stats.apply_flat_increased_haste(boss, 0.2)
+		rn.entity.prefabs.combat_stats.apply_flat_increased_max_hp(boss, 250)
+		rn.entity.prefabs.combat_stats.apply_flat_increased_shadow_power(boss, 10.0)
 		rn.entity.prefabs.sprite.set_position(boss, posx, posy)
 		rn.entity.prefabs.spell_slots.equip_spell(boss, "summon_zombie")
+		rn.entity.prefabs.spell_slots.equip_spell(boss, "icicle", true, "yellow")
+		rn.entity.prefabs.spell_slots.equip_spell(boss, "firestorm")
 		rn.entity.prefabs.faction.set_faction(boss, faction.player_enemy)
+
+		local col = rn.spell.schools.frost.colour
+		rn.renderer():set_precipitation(col[1], col[2], col[3], 0.2, -0.05, 0.3)
+		rn.renderer():set_ambient_light(0.3, 0.3, 0.625, 1.0)
+		rn.renderer():directional_light_set_power(0.6)
+
+		rn.entity.prefabs.weapon_model_torch.spawn_on_ground(posx - 2, posy)
+		rn.entity.prefabs.weapon_model_torch.spawn_on_ground(posx + 2, posy)
 	end,
 	on_load = function()
 		local difficulty = rn.data_store():read("difficulty") or 0
 		rn.data_store():set("difficulty", difficulty + 1)
+
+		rn.renderer():add_string(20, 60, 10, tostring(math.floor(difficulty)), 1.0, 1.0 - (difficulty * 0.1), 1.0 - (difficulty * 0.1))
 
 		local player = rn.current_scene():add_entity("player")
 		rn.level.data_write("player", player)
@@ -148,7 +160,7 @@ rn.mods.basegame.levels.devproc0 =
 		rn.entity.prefabs.sprite.set_normal_map(bg, "background.blackrock_normals")
 		rn.current_scene():entity_set_local_position(bg, 0.0, 0.0, -2.0)
 
-		if difficulty < 50 then
+		if difficulty < 10 then
 			local reload_portal = rn.current_scene():add_entity("portal")
 			rn.entity.prefabs.sprite.set_position(reload_portal, -boundx + wallscale, boundy - wallscale)
 			rn.entity.prefabs.portal.set_colour(reload_portal, 0.6, 0.1, 0.1)
@@ -158,7 +170,7 @@ rn.mods.basegame.levels.devproc0 =
 			rn.entity.prefabs.portal.set_colour(home_portal, 0.3, 0.3, 1.0)
 			rn.entity.prefabs.portal.set_level_destination(home_portal, "clans_camp")
 		else
-			rn.mods.basegame.levels.devproc0.spawn_boss(-boundx + (wallscale * 3.0), boundy - (wallscale * 3.0))
+			rn.mods.basegame.levels.devproc0.spawn_boss(0, boundy - (wallscale * 1.25))
 		end
 	end
 }

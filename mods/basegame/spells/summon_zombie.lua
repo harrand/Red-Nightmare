@@ -12,6 +12,5 @@ rn.mods.basegame.spells.summon_zombie =
 		rn.entity.prefabs.bipedal.set_drop_items_on_death(ent, false)
 		rn.entity.prefabs.faction.copy_faction(uuid, ent)
 		rn.entity.prefabs.sprite.set_position(ent, rn.entity.prefabs.sprite.get_position(uuid))
-		rn.item.copy_equipment(uuid, ent)
 	end
 }
