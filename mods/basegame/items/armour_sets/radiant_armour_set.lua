@@ -77,6 +77,7 @@ items[metal_name .. "_greatsword"] =
 		rn.entity.prefabs.combat_stats.apply_flat_increased_haste(uuid, -0.3)
 	end,
 	on_unequip = function(uuid)
+		rn.entity.prefabs.combat_stats.apply_flat_increased_haste(uuid, -0.25)
 		rn.entity.prefabs.combat_stats.apply_flat_increased_physical_power(uuid, -physical_power_factor * sword2h_coeff)
 		rn.entity.prefabs.combat_stats.apply_flat_increased_holy_power(uuid, -radiant_power_factor * sword2h_coeff)
 		rn.entity.prefabs.combat_stats.apply_flat_increased_fire_power(uuid, -radiant_power_factor * sword2h_coeff)
