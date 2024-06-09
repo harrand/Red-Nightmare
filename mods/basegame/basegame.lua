@@ -44,6 +44,8 @@ require("basegame/prefabs/portal")
 
 require("basegame/prefabs/players/player")
 
+require("basegame/prefabs/npcs/boss_rathallus")
+
 require("basegame/prefabs/weapon_models/axe")
 require("basegame/prefabs/weapon_models/morning_star")
 require("basegame/prefabs/weapon_models/maul")
@@ -83,6 +85,7 @@ require("basegame/items/armour_sets/metal_armour_set_base")
 require("basegame/items/armour_sets/iron_armour_set")
 require("basegame/items/armour_sets/mythril_armour_set")
 require("basegame/items/armour_sets/steel_armour_set")
+require("basegame/items/armour_sets/radiant_armour_set")
 
 require("basegame/items/facial_hair/full_beard")
 require("basegame/items/facial_hair/walrus")

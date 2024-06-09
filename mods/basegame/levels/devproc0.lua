@@ -18,7 +18,7 @@ rn.mods.basegame.levels.devproc0 =
 		rn.entity.prefabs.combat_stats.apply_flat_increased_shadow_power(boss, 10.0)
 		rn.entity.prefabs.sprite.set_position(boss, posx, posy)
 		rn.entity.prefabs.spell_slots.equip_spell(boss, "summon_zombie")
-		rn.entity.prefabs.spell_slots.equip_spell(boss, "icicle", true, "yellow")
+		rn.entity.prefabs.spell_slots.equip_spell(boss, "equivocation", true, "yellow")
 		rn.entity.prefabs.spell_slots.equip_spell(boss, "firestorm")
 		rn.entity.prefabs.faction.set_faction(boss, faction.player_enemy)
 
@@ -29,6 +29,11 @@ rn.mods.basegame.levels.devproc0 =
 
 		rn.entity.prefabs.weapon_model_torch.spawn_on_ground(posx - 2, posy)
 		rn.entity.prefabs.weapon_model_torch.spawn_on_ground(posx + 2, posy)
+
+		-- put in'sin at the bottom of the map
+		local ent = rn.current_scene():add_entity("loot_chest")
+		rn.entity.prefabs.sprite.set_position(ent, posx, posy - 40)
+		rn.entity.prefabs.loot_chest.add_loot(ent, "insin")
 	end,
 	on_load = function()
 		local difficulty = rn.data_store():read("difficulty") or 0
@@ -170,7 +175,7 @@ rn.mods.basegame.levels.devproc0 =
 			rn.entity.prefabs.portal.set_colour(home_portal, 0.3, 0.3, 1.0)
 			rn.entity.prefabs.portal.set_level_destination(home_portal, "clans_camp")
 		else
-			rn.mods.basegame.levels.devproc0.spawn_boss(0, boundy - (wallscale * 1.25))
+			rn.mods.basegame.levels.devproc0.spawn_boss(0, boundy - (wallscale * 3))
 		end
 	end
 }
