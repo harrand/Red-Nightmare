@@ -7,6 +7,7 @@ local items = rn.mods.basegame.items
 -- physical resist per item level (incl. coeff)
 local physical_resist_factor = 0.02
 local physical_power_factor = 1.5
+local radiant_power_factor = 0.5
 local max_hp_factor = 0.95
 local movement_speed_factor = 0.02
 local shield_resist_all_factor = 0.025
@@ -69,11 +70,16 @@ local sword2h_coeff = item_level * 1.1
 items[metal_name .. "_greatsword"] =
 {
 	on_equip = function(uuid)
+		rn.entity.prefabs.combat_stats.apply_flat_increased_haste(uuid, 0.25)
 		rn.entity.prefabs.combat_stats.apply_flat_increased_physical_power(uuid, physical_power_factor * sword2h_coeff)
+		rn.entity.prefabs.combat_stats.apply_flat_increased_holy_power(uuid, radiant_power_factor * sword2h_coeff)
+		rn.entity.prefabs.combat_stats.apply_flat_increased_fire_power(uuid, radiant_power_factor * sword2h_coeff)
 		rn.entity.prefabs.combat_stats.apply_flat_increased_haste(uuid, -0.3)
 	end,
 	on_unequip = function(uuid)
 		rn.entity.prefabs.combat_stats.apply_flat_increased_physical_power(uuid, -physical_power_factor * sword2h_coeff)
+		rn.entity.prefabs.combat_stats.apply_flat_increased_holy_power(uuid, -radiant_power_factor * sword2h_coeff)
+		rn.entity.prefabs.combat_stats.apply_flat_increased_fire_power(uuid, -radiant_power_factor * sword2h_coeff)
 		rn.entity.prefabs.combat_stats.apply_flat_increased_haste(uuid, 0.3)
 	end,
 	slot = rn.item.slot.right_hand,
