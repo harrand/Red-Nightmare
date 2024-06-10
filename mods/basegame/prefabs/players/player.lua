@@ -22,7 +22,8 @@ rn.mods.basegame.prefabs.player =
 		rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 5, "firestorm")
 		rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 6, "allure_of_flames")
 		rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 7, "summon_zombie")
-		rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 8, "cruel_lie")
+		rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 8, "equivocation")
+		rn.entity.prefabs.keyboard_controlled.bind_spell(uuid, 9, "sacred_shield")
 
 		-- note: we could be loading the player for the first time, OR from some old stashed data.
 		-- this means the player could be loading in again e.g in a new level and its picked up some spells since.
