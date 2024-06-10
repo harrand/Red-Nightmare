@@ -12,7 +12,7 @@ rn.mods.basegame.prefabs.boss_rathallus =
 		rn.entity.prefabs.spell_slots.equip_spell(uuid, "melee")
 		rn.entity.prefabs.spell_slots.equip_spell(uuid, "savage_kick")
 		rn.entity.prefabs.spell_slots.equip_spell(uuid, "flash_of_light")
-		rn.entity.prefabs.spell_slots.equip_spell(uuid, "equivocation")
+		rn.entity.prefabs.spell_slots.equip_spell(uuid, "consecrate")
 
 		rn.item.equip(uuid, "radiant_crown")
 		rn.item.equip(uuid, "radiant_platebody")

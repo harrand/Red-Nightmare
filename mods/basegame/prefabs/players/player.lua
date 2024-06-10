@@ -32,7 +32,8 @@ rn.mods.basegame.prefabs.player =
 			rn.entity.prefabs.spell_slots.equip_spell(uuid, "melee")
 		end
 		if not rn.data_store():contains("player_slot.red") then
-			rn.entity.prefabs.spell_slots.equip_spell(uuid, "spellsteal")
+			--rn.entity.prefabs.spell_slots.equip_spell(uuid, "spellsteal")
+			rn.entity.prefabs.spell_slots.equip_spell(uuid, "consecrate")
 		end
 		if not rn.data_store():contains("player_slot.blue") then
 			rn.entity.prefabs.spell_slots.equip_spell(uuid, "savage_kick")
