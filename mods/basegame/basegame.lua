@@ -49,6 +49,7 @@ require("basegame/prefabs/players/player")
 require("basegame/prefabs/npcs/boss_rathallus")
 
 require("basegame/prefabs/weapon_models/axe")
+require("basegame/prefabs/weapon_models/lightbringer")
 require("basegame/prefabs/weapon_models/morning_star")
 require("basegame/prefabs/weapon_models/maul")
 require("basegame/prefabs/weapon_models/small_shield")

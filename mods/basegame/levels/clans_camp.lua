@@ -50,7 +50,7 @@ rn.mods.basegame.levels.clans_camp =
 
 		local helpme_chest = rn.current_scene():add_entity("loot_chest")
 		rn.entity.prefabs.sprite.set_position(helpme_chest, -5, -8)
-		rn.entity.prefabs.loot_chest.add_loot(helpme_chest, "basic_torch")
+		rn.entity.prefabs.loot_chest.add_loot(helpme_chest, "radiant_greatsword")
 		
 		local temp_rathallus = rn.current_scene():add_entity("boss_rathallus")
 		rn.entity.prefabs.sprite.set_position(temp_rathallus, 0, 45)

@@ -84,9 +84,9 @@ items[metal_name .. "_greatsword"] =
 		rn.entity.prefabs.combat_stats.apply_flat_increased_haste(uuid, 0.3)
 	end,
 	slot = rn.item.slot.right_hand,
-	two_handed = true,
+	two_handed = false,
 	colour = metal_colour,
-	weapon_prefab = "weapon_model_sword2h",
+	weapon_prefab = "weapon_model_lightbringer",
 	weapon_class = "sword2h",
 	rarity = metal_rarity
 }
