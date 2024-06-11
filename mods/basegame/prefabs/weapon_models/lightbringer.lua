@@ -38,7 +38,7 @@ rn.mods.basegame.prefabs.weapon_model_lightbringer =
 		local effect_bottom = rn.current_scene():entity_read(uuid, "sparkle_bottom")
 		local timer = rn.current_scene():entity_read(uuid, "timer") or 0.0
 		timer = timer + delta_seconds
-		local torch_min_power = 0.6
+		local torch_min_power = 0.25
 		if effect_bottom ~= nil and rn.current_scene():contains_entity(effect_bottom) then
 			-- glow flicker.
 			rn.current_scene():entity_write(effect_bottom, "power_override", math.abs(math.sin(timer * 2.0) * 0.1) + torch_min_power)
