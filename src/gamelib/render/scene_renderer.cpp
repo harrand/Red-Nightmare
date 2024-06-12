@@ -41,7 +41,7 @@ namespace game::render
 	renderer
 	({
 		.custom_fragment_spirv = ImportedShaderSource(scene_renderer, fragment),
-		.custom_options = {tz::gl::renderer_option::no_present, tz::gl::renderer_option::alpha_blending},
+		.custom_options = {tz::gl::renderer_option::no_present},
 		.texture_capacity = 128u,
 		.extra_buffers = evaluate_extra_buffers(),
 		.output = &this->pixelate_input,
@@ -277,15 +277,14 @@ namespace game::render
 
 	tz::vec3 scene_renderer::get_ambient_light() const
 	{
-		tz::gl::resource_handle light_buf_handle = this->renderer.get_extra_buffer(1);
-		std::span<const std::byte> bufdata = tz::gl::get_device().get_renderer(this->renderer.get_render_pass()).get_resource(light_buf_handle)->data();
+		std::span<const std::byte> bufdata = tz::gl::get_device().get_renderer(this->deferred_shading_pass.handle).get_resource(this->deferred_shading_pass.light_buffer)->data();
+
 		return *reinterpret_cast<const tz::vec3*>(bufdata.data());
 	}
 
 	void scene_renderer::set_ambient_light(tz::vec3 rgb_light)
 	{
-		tz::gl::resource_handle light_buf_handle = this->renderer.get_extra_buffer(1);
-		std::span<std::byte> bufdata = tz::gl::get_device().get_renderer(this->renderer.get_render_pass()).get_resource(light_buf_handle)->data();
+		std::span<std::byte> bufdata = tz::gl::get_device().get_renderer(this->deferred_shading_pass.handle).get_resource(this->deferred_shading_pass.light_buffer)->data();
 		*reinterpret_cast<tz::vec3*>(bufdata.data()) = rgb_light;
 	}
 
@@ -294,8 +293,7 @@ namespace game::render
 
 	std::span<const scene_renderer::point_light_data> scene_renderer::get_point_lights() const
 	{
-		tz::gl::resource_handle light_buf_handle = this->renderer.get_extra_buffer(1);
-		std::span<const std::byte> bufdata = tz::gl::get_device().get_renderer(this->renderer.get_render_pass()).get_resource(light_buf_handle)->data();
+		std::span<const std::byte> bufdata = tz::gl::get_device().get_renderer(this->deferred_shading_pass.handle).get_resource(this->deferred_shading_pass.light_buffer)->data();
 		std::uint32_t point_light_count = *reinterpret_cast<const std::uint32_t*>(bufdata.data() + non_point_light_bytes);
 		auto* point_lights_start = reinterpret_cast<const point_light_data*>(bufdata.data() + non_point_light_bytes + sizeof(std::uint32_t));
 		return {point_lights_start, point_light_count};
@@ -303,8 +301,7 @@ namespace game::render
 
 	std::span<scene_renderer::point_light_data> scene_renderer::get_point_lights()
 	{
-		tz::gl::resource_handle light_buf_handle = this->renderer.get_extra_buffer(1);
-		std::span<std::byte> bufdata = tz::gl::get_device().get_renderer(this->renderer.get_render_pass()).get_resource(light_buf_handle)->data();
+		std::span<std::byte> bufdata = tz::gl::get_device().get_renderer(this->deferred_shading_pass.handle).get_resource(this->deferred_shading_pass.light_buffer)->data();
 		std::uint32_t point_light_count = *reinterpret_cast<const std::uint32_t*>(bufdata.data() + non_point_light_bytes);
 		auto* point_lights_start = reinterpret_cast<point_light_data*>(bufdata.data() + non_point_light_bytes + sizeof(std::uint32_t));
 		return {point_lights_start, point_light_count};
@@ -312,7 +309,7 @@ namespace game::render
 
 	void scene_renderer::set_point_light_capacity(unsigned int num_point_lights)
 	{
-		tz::gl::resource_handle light_buf_handle = this->renderer.get_extra_buffer(1);
+		tz::gl::resource_handle light_buf_handle = this->deferred_shading_pass.light_buffer;
 		std::size_t old_count = this->get_point_lights().size();
 		std::size_t new_count = num_point_lights;
 		std::size_t old_size = non_point_light_bytes + sizeof(std::uint32_t) + sizeof(point_light_data) * old_count;
@@ -321,7 +318,7 @@ namespace game::render
 		{
 			return;
 		}
-		auto& ren = tz::gl::get_device().get_renderer(this->renderer.get_render_pass());
+		auto& ren = tz::gl::get_device().get_renderer(this->deferred_shading_pass.handle);
 		// resize buffer
 		ren.edit
 		({
@@ -465,43 +462,43 @@ namespace game::render
 
 	tz::vec3 scene_renderer::directional_light_get_direction() const
 	{
-		tz::gl::resource_handle light_buf_handle = this->renderer.get_extra_buffer(1);
-		std::span<const std::byte> directional_light_data = tz::gl::get_device().get_renderer(this->renderer.get_render_pass()).get_resource(light_buf_handle)->data().subspan(non_directional_light_bytes);
+		tz::gl::resource_handle light_buf_handle = this->deferred_shading_pass.light_buffer;
+		std::span<const std::byte> directional_light_data = tz::gl::get_device().get_renderer(this->deferred_shading_pass.handle).get_resource(light_buf_handle)->data().subspan(non_directional_light_bytes);
 		return *reinterpret_cast<const tz::vec3*>(directional_light_data.data() + sizeof(float) + sizeof(tz::vec3) + sizeof(float));
 	}
 
 	void scene_renderer::directional_light_set_direction(tz::vec3 direction)
 	{
-		tz::gl::resource_handle light_buf_handle = this->renderer.get_extra_buffer(1);
-		std::span<std::byte> directional_light_data = tz::gl::get_device().get_renderer(this->renderer.get_render_pass()).get_resource(light_buf_handle)->data().subspan(non_directional_light_bytes);
+		tz::gl::resource_handle light_buf_handle = this->deferred_shading_pass.light_buffer;
+		std::span<std::byte> directional_light_data = tz::gl::get_device().get_renderer(this->deferred_shading_pass.handle).get_resource(light_buf_handle)->data().subspan(non_directional_light_bytes);
 		*reinterpret_cast<tz::vec3*>(directional_light_data.data() + sizeof(float) + sizeof(tz::vec3) + sizeof(float)) = direction;
 	}
 
 	float scene_renderer::directional_light_get_power() const
 	{
-		tz::gl::resource_handle light_buf_handle = this->renderer.get_extra_buffer(1);
-		std::span<const std::byte> directional_light_data = tz::gl::get_device().get_renderer(this->renderer.get_render_pass()).get_resource(light_buf_handle)->data().subspan(non_directional_light_bytes);
+		tz::gl::resource_handle light_buf_handle = this->deferred_shading_pass.light_buffer;
+		std::span<const std::byte> directional_light_data = tz::gl::get_device().get_renderer(this->deferred_shading_pass.handle).get_resource(light_buf_handle)->data().subspan(non_directional_light_bytes);
 		return *reinterpret_cast<const float*>(directional_light_data.data());
 	}
 
 	void scene_renderer::directional_light_set_power(float power)
 	{
-		tz::gl::resource_handle light_buf_handle = this->renderer.get_extra_buffer(1);
-		std::span<std::byte> directional_light_data = tz::gl::get_device().get_renderer(this->renderer.get_render_pass()).get_resource(light_buf_handle)->data().subspan(non_directional_light_bytes);
+		tz::gl::resource_handle light_buf_handle = this->deferred_shading_pass.light_buffer;
+		std::span<std::byte> directional_light_data = tz::gl::get_device().get_renderer(this->deferred_shading_pass.handle).get_resource(light_buf_handle)->data().subspan(non_directional_light_bytes);
 		*reinterpret_cast<float*>(directional_light_data.data()) = power;
 	}
 
 	tz::vec3 scene_renderer::directional_light_get_colour() const
 	{
-		tz::gl::resource_handle light_buf_handle = this->renderer.get_extra_buffer(1);
-		std::span<const std::byte> directional_light_data = tz::gl::get_device().get_renderer(this->renderer.get_render_pass()).get_resource(light_buf_handle)->data().subspan(non_directional_light_bytes);
+		tz::gl::resource_handle light_buf_handle = this->deferred_shading_pass.light_buffer;
+		std::span<const std::byte> directional_light_data = tz::gl::get_device().get_renderer(this->deferred_shading_pass.handle).get_resource(light_buf_handle)->data().subspan(non_directional_light_bytes);
 		return *reinterpret_cast<const tz::vec3*>(directional_light_data.data() + sizeof(float));
 	}
 
 	void scene_renderer::directional_light_set_colour(tz::vec3 colour)
 	{
-		tz::gl::resource_handle light_buf_handle = this->renderer.get_extra_buffer(1);
-		std::span<std::byte> directional_light_data = tz::gl::get_device().get_renderer(this->renderer.get_render_pass()).get_resource(light_buf_handle)->data().subspan(non_directional_light_bytes);
+		tz::gl::resource_handle light_buf_handle = this->deferred_shading_pass.light_buffer;
+		std::span<std::byte> directional_light_data = tz::gl::get_device().get_renderer(this->deferred_shading_pass.handle).get_resource(light_buf_handle)->data().subspan(non_directional_light_bytes);
 		*reinterpret_cast<tz::vec3*>(directional_light_data.data() + sizeof(float)) = colour;
 	}
 
@@ -596,12 +593,15 @@ namespace game::render
 
 	/*static*/ std::vector<tz::gl::buffer_resource> scene_renderer::evaluate_extra_buffers()
 	{
+		return {};
+		/*
 		std::vector<tz::gl::buffer_resource> ret = {};
 		ret.push_back(tz::gl::buffer_resource::from_one(light_data{},
 		{
 			.access = tz::gl::resource_access::dynamic_access
 		}));	
 		return ret;
+		*/
 	}
 
 	void scene_renderer::update_camera(float delta)
@@ -646,6 +646,11 @@ namespace game::render
 
 		this->dimension_buffer = rinfo.add_resource(tz::gl::buffer_resource::from_many(dimension_buffer_data));
 
+		this->light_buffer = rinfo.add_resource(tz::gl::buffer_resource::from_one(light_data{},
+		{
+			.access = tz::gl::resource_access::dynamic_access
+		}));	
+
 		this->gbuffer_position = rinfo.add_resource(tz::gl::image_resource::from_uninitialised
 		({
 			.format = tz::gl::image_format::RGBA64_SFloat,
@@ -681,6 +686,11 @@ namespace game::render
 	tz::gl::icomponent* scene_renderer::deferred_shading_pass_t::get_dimension_buffer()
 	{
 		return tz::gl::get_device().get_renderer(this->handle).get_component(this->dimension_buffer);
+	}
+
+	tz::gl::icomponent* scene_renderer::deferred_shading_pass_t::get_light_buffer()
+	{
+		return tz::gl::get_device().get_renderer(this->handle).get_component(this->light_buffer);
 	}
 
 	tz::gl::icomponent* scene_renderer::deferred_shading_pass_t::get_gbuffer_position()
