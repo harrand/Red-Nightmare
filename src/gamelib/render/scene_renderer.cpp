@@ -10,6 +10,8 @@
 #include "tz/gl/imported_shaders.hpp"
 #include ImportedShaderHeader(pixelate, vertex)
 #include ImportedShaderHeader(pixelate, fragment)
+#include ImportedShaderHeader(deferred, vertex)
+#include ImportedShaderHeader(deferred, fragment)
 #include ImportedShaderHeader(scene_renderer, fragment)
 
 #include ImportedTextHeader(ProggyClean, ttf)
@@ -17,7 +19,17 @@
 namespace game::render
 {
 	scene_renderer::scene_renderer():
-	pixelate_pass(),
+	deferred_shading_pass(),
+	deferred_shading_input{tz::gl::image_output_info{
+		.colours =
+		{
+			this->deferred_shading_pass.get_gbuffer_position(),
+			this->deferred_shading_pass.get_gbuffer_normals(),
+			this->deferred_shading_pass.get_gbuffer_albedo(),
+		},
+		.depth = this->deferred_shading_pass.get_depth_image()
+	}},
+	pixelate_pass(&this->deferred_shading_input, this->deferred_shading_pass.get_dimension_buffer()),
 	pixelate_input
 	{tz::gl::image_output_info{
 		.colours =
@@ -44,6 +56,7 @@ namespace game::render
 		.render_state({.culling = tz::gl::graphics_culling::none})
 		.build());
 		tz::gl::get_device().render_graph().timeline.push_back(static_cast<tz::gl::eid_t>(static_cast<tz::hanval>(this->pixelate_pass.handle)));
+		tz::gl::get_device().render_graph().timeline.push_back(static_cast<tz::gl::eid_t>(static_cast<tz::hanval>(this->deferred_shading_pass.handle)));
 
 		this->text_renderer.append_to_render_graph();
 
@@ -51,7 +64,8 @@ namespace game::render
 		this->text_renderer.add_string(this->default_font, {.scale = tz::vec3::filled(20.0f)}, "test");
 
 		tz::gl::get_device().render_graph().add_dependencies(this->pixelate_pass.handle, this->renderer.get_render_pass());
-		tz::gl::get_device().render_graph().add_dependencies(this->text_renderer.get_render_pass(), this->pixelate_pass.handle);
+		tz::gl::get_device().render_graph().add_dependencies(this->deferred_shading_pass.handle, this->pixelate_pass.handle);
+		tz::gl::get_device().render_graph().add_dependencies(this->text_renderer.get_render_pass(), this->deferred_shading_pass.handle);
 		this->root = this->renderer.add_object
 		({
 			.mesh = tz::nullhand,
@@ -240,6 +254,7 @@ namespace game::render
 
 		});
 
+		this->deferred_shading_pass.handle_resize(this->renderer.get_render_pass());
 		this->pixelate_pass.handle_resize(this->renderer.get_render_pass());
 
 		// advance time buffer.
@@ -615,8 +630,136 @@ namespace game::render
 		}
 	}
 
+	// deferred shading pass
+	scene_renderer::deferred_shading_pass_t::deferred_shading_pass_t()
+	{
+		tz::gl::renderer_info rinfo;
+		rinfo.state().graphics.tri_count = 1;
+		rinfo.shader().set_shader(tz::gl::shader_stage::vertex, ImportedShaderSource(deferred, vertex));
+		rinfo.shader().set_shader(tz::gl::shader_stage::fragment, ImportedShaderSource(deferred, fragment));
+		rinfo.set_options({tz::gl::renderer_option::no_depth_testing, tz::gl::renderer_option::no_present});
+		auto mondims = tz::window().get_dimensions();
+
+		std::array<float, 2> dimension_buffer_data;
+		dimension_buffer_data[0] = mondims[0];
+		dimension_buffer_data[1] = mondims[1];
+
+		this->dimension_buffer = rinfo.add_resource(tz::gl::buffer_resource::from_many(dimension_buffer_data));
+
+		this->gbuffer_position = rinfo.add_resource(tz::gl::image_resource::from_uninitialised
+		({
+			.format = tz::gl::image_format::RGBA64_SFloat,
+			.dimensions = mondims,
+			.flags = {tz::gl::resource_flag::renderer_output}
+		}));
+
+		this->gbuffer_normals = rinfo.add_resource(tz::gl::image_resource::from_uninitialised
+		({
+			.format = tz::gl::image_format::RGBA64_SFloat,
+			.dimensions = mondims,
+			.flags = {tz::gl::resource_flag::renderer_output}
+		}));
+
+		this->gbuffer_albedo = rinfo.add_resource(tz::gl::image_resource::from_uninitialised
+		({
+			.format = tz::gl::image_format::BGRA32,
+			.dimensions = mondims,
+			.flags = {tz::gl::resource_flag::renderer_output}
+		}));
+
+		this->depth_image = rinfo.add_resource(tz::gl::image_resource::from_uninitialised
+		({
+			.format = tz::gl::image_format::Depth16_UNorm,
+			.dimensions = mondims,
+			.flags = {tz::gl::resource_flag::renderer_depth_output}
+		}));
+		
+		rinfo.debug_name("Deferred Shading Pass");
+		this->handle = tz::gl::get_device().create_renderer(rinfo);
+	}
+
+	tz::gl::icomponent* scene_renderer::deferred_shading_pass_t::get_dimension_buffer()
+	{
+		return tz::gl::get_device().get_renderer(this->handle).get_component(this->dimension_buffer);
+	}
+
+	tz::gl::icomponent* scene_renderer::deferred_shading_pass_t::get_gbuffer_position()
+	{
+		return tz::gl::get_device().get_renderer(this->handle).get_component(this->gbuffer_position);
+	}
+
+	tz::gl::icomponent* scene_renderer::deferred_shading_pass_t::get_gbuffer_normals()
+	{
+		return tz::gl::get_device().get_renderer(this->handle).get_component(this->gbuffer_normals);
+	}
+
+	tz::gl::icomponent* scene_renderer::deferred_shading_pass_t::get_gbuffer_albedo()
+	{
+		return tz::gl::get_device().get_renderer(this->handle).get_component(this->gbuffer_albedo);
+	}
+
+	tz::gl::icomponent* scene_renderer::deferred_shading_pass_t::get_depth_image()
+	{
+		return tz::gl::get_device().get_renderer(this->handle).get_component(this->depth_image);
+	}
+
+	void scene_renderer::deferred_shading_pass_t::handle_resize(tz::gl::renderer_handle animation_render_pass)
+	{
+		if(tz::window().get_dimensions() != this->dims_cache && tz::window().get_dimensions() != tz::vec2ui{0u, 0u})
+		{
+			// we have been resized.
+			// firstly resize our foreground and background images.
+			{
+				tz::gl::RendererEditBuilder builder;
+				auto windims = static_cast<tz::vec2>(tz::window().get_dimensions());
+				builder.write
+				({
+					.resource = this->dimension_buffer,
+					.data = std::as_bytes(windims.data()),
+					.offset = 0
+				});
+				builder.image_resize
+				({
+					.image_handle = this->gbuffer_position,
+					.dimensions = tz::window().get_dimensions()
+				});
+				builder.image_resize
+				({
+					.image_handle = this->gbuffer_normals,
+					.dimensions = tz::window().get_dimensions()
+				});
+				builder.image_resize
+				({
+					.image_handle = this->gbuffer_albedo,
+					.dimensions = tz::window().get_dimensions()
+				});
+				builder.image_resize
+				({
+					.image_handle = this->depth_image,
+					.dimensions = tz::window().get_dimensions()
+				});
+				builder.mark_dirty({.images = true});
+				tz::gl::get_device().get_renderer(this->handle).edit(builder.build());
+			}
+
+			// then tell the animation renderer to recreate its render targets.
+			/*
+			{
+				tz::gl::RendererEditBuilder builder;
+				builder.mark_dirty
+				({
+					.work_commands = true,
+					.render_targets = true,
+				});
+				tz::gl::get_device().get_renderer(animation_render_pass).edit(builder.build());
+			}
+			*/
+			this->dims_cache = tz::window().get_dimensions();
+		}
+	}
+
 	// pixelate pass
-	scene_renderer::pixelate_pass_t::pixelate_pass_t()
+	scene_renderer::pixelate_pass_t::pixelate_pass_t(tz::gl::ioutput* output, tz::gl::icomponent* existing_dimension_buffer)
 	{
 		// todo: we depend on animation renderer's render pass.
 		tz::gl::renderer_info rinfo;
@@ -626,14 +769,11 @@ namespace game::render
 		rinfo.set_options({tz::gl::renderer_option::no_depth_testing, tz::gl::renderer_option::no_present});
 		//auto mondims = tz::wsi::get_monitors().front().dimensions;
 		auto mondims = tz::window().get_dimensions();
-		std::array<float, 2> dimension_buffer_data;
-		dimension_buffer_data[0] = mondims[0];
-		dimension_buffer_data[1] = mondims[1];
 		this->zoom_buffer = rinfo.add_resource(tz::gl::buffer_resource::from_one(tz::vec4(1.0f, 1.0f, 1.0f, 7.0f),
 		{
 			.access = tz::gl::resource_access::dynamic_access
 		}));
-		this->dimension_buffer = rinfo.add_resource(tz::gl::buffer_resource::from_many(dimension_buffer_data));
+		this->dimension_buffer_reference = rinfo.ref_resource(existing_dimension_buffer);
 		this->precipitation_buffer = rinfo.add_resource(tz::gl::buffer_resource::from_one(precipitation_buffer_data{}));
 		this->time_buffer = rinfo.add_resource(tz::gl::buffer_resource::from_one(0.0f, {.access = tz::gl::resource_access::dynamic_access}));
 		this->bg_image = rinfo.add_resource(tz::gl::image_resource::from_uninitialised
@@ -649,6 +789,7 @@ namespace game::render
 			.flags = {tz::gl::resource_flag::renderer_output}
 		}));
 		rinfo.debug_name("Post-Render Pixelate");
+		rinfo.set_output(*output);
 		this->handle = tz::gl::get_device().create_renderer(rinfo);
 		this->dims_cache = tz::window().get_dimensions();
 	}
@@ -683,13 +824,6 @@ namespace game::render
 			// firstly resize our foreground and background images.
 			{
 				tz::gl::RendererEditBuilder builder;
-				auto windims = static_cast<tz::vec2>(tz::window().get_dimensions());
-				builder.write
-				({
-					.resource = this->dimension_buffer,
-					.data = std::as_bytes(windims.data()),
-					.offset = 0
-				});
 				builder.image_resize
 				({
 					.image_handle = this->bg_image,
@@ -713,8 +847,8 @@ namespace game::render
 					.render_targets = true,
 				});
 				tz::gl::get_device().get_renderer(animation_render_pass).edit(builder.build());
-				this->dims_cache = tz::window().get_dimensions();
 			}
+			this->dims_cache = tz::window().get_dimensions();
 		}
 	}
 

@@ -28,9 +28,12 @@ resource(id = 3) const buffer time_buffer
 } time;
 
 resource(id = 4) const texture res::textures[];
-output(id = 0) vec4 out::frag_colour;
+//output(id = 0) vec4 out::frag_colour;
+output(id = 0) vec4 out::position;
+output(id = 1) vec4 out::normal;
+output(id = 2) vec4 out::albedo;
 
-void do_precipitation(vec2 uv);
+void do_precipitation(vec2 uv, inout vec4 colour);
 
 void main()
 {
@@ -44,26 +47,30 @@ void main()
 	//coord *= zoom.value;
 	//coord -= vec2(-0.5, -0.5);
 
-	out::frag_colour = texture(res::textures[1], coord);
+	vec4 colour = texture(res::textures[1], coord);
+	//out::frag_colour = texture(res::textures[1], coord);
 	vec4 unpixelised_colour = texture(res::textures[0], uv);
 	// TODO: triage this. was having a bug where 2d sprites (unpixelised stuff) would become invisible if the clear colour wasnt transparent black.
 	// note: if transparency is 0.1 this would also completely ignore unpixelised. do we want this? other option: mix by amount equivalent to w (i.e manual alpha blend)
 	//if(out::frag_colour == vec4(0.0))
-	if(out::frag_colour.w == 0.0f)
+	if(colour.w == 0.0f)
 	{
 		if(unpixelised_colour == vec4(0.0f))
 		{
 			// no unpixelised colour to fallback to. we cant discard because that will be clear colour.
 			// we simply have to use the unpixelised colour.
-			out::frag_colour = texture(res::textures[1], uv);
+			colour = texture(res::textures[1], uv);
 		}
 		else
 		{
-			out::frag_colour = unpixelised_colour;
+			colour = unpixelised_colour;
 		}
 	}
-	do_precipitation(uv);
-	out::frag_colour.xyz *= zoom.global_colour_multiplier;
+	do_precipitation(uv, colour);
+	colour.xyz *= zoom.global_colour_multiplier;
+	out::position = vec4(0.0);
+	out::normal = vec4(0.0);
+	out::albedo = colour;
 }
 
 // Simplex noise function (for generating noise)
@@ -114,7 +121,7 @@ float simplexNoise(vec2 v) {
     return 130.0 * dot(m, g);
 }
 
-void do_precipitation(vec2 uv)
+void do_precipitation(vec2 uv, inout vec4 colour)
 {
 	float warp = sqrt(abs(zoom.value));
 	vec2 animated_uv = uv + precipitation.direction * time.seconds / (warp * 4);
@@ -124,5 +131,5 @@ void do_precipitation(vec2 uv)
 	float noise = simplexNoise(repeating_uv * 10.0f);
 	float drops = smoothstep(1.0f - strength, 1.0f, noise);
 
-	out::frag_colour.xyz += mix(vec3(0.0f), precipitation.colour, drops);
+	colour.xyz += mix(vec3(0.0f), precipitation.colour, drops);
 }

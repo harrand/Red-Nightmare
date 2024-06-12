@@ -1,0 +1,16 @@
+shader(type = fragment);
+
+resource(id = 0) const buffer dimension_buffer
+{
+	float w, h;
+} dimensions;
+resource(id = 1) const texture res::textures[];
+output(id = 0) vec4 out::frag_colour;
+
+void do_precipitation(vec2 uv);
+
+void main()
+{
+	vec2 uv = vec2(in::fragment_coord.xy / vec2(dimensions.w, dimensions.h));	
+	out::frag_colour = texture(res::textures[2], uv);
+}

@@ -111,9 +111,29 @@ namespace game::render
 		static std::vector<tz::gl::buffer_resource> evaluate_extra_buffers();
 		void update_camera(float delta);
 
+		struct deferred_shading_pass_t
+		{
+			deferred_shading_pass_t();
+
+			tz::gl::icomponent* get_dimension_buffer();
+			tz::gl::icomponent* get_gbuffer_position();
+			tz::gl::icomponent* get_gbuffer_normals();
+			tz::gl::icomponent* get_gbuffer_albedo();
+			tz::gl::icomponent* get_depth_image();
+			void handle_resize(tz::gl::renderer_handle animation_render_pass);
+
+			tz::gl::renderer_handle handle = tz::nullhand;
+			tz::gl::resource_handle dimension_buffer = tz::nullhand;
+			tz::gl::resource_handle gbuffer_position = tz::nullhand;
+			tz::gl::resource_handle gbuffer_normals = tz::nullhand;
+			tz::gl::resource_handle gbuffer_albedo = tz::nullhand;
+			tz::gl::resource_handle depth_image = tz::nullhand;
+			tz::vec2ui dims_cache;
+		};
+
 		struct pixelate_pass_t
 		{
-			pixelate_pass_t();
+			pixelate_pass_t(tz::gl::ioutput* output, tz::gl::icomponent* existing_dimension_buffer);
 			tz::gl::icomponent* get_background_image();
 			tz::gl::icomponent* get_foreground_image();
 			tz::vec3& global_colour_multiplier();
@@ -121,7 +141,7 @@ namespace game::render
 			void handle_resize(tz::gl::renderer_handle animation_render_pass);
 
 			tz::gl::renderer_handle handle = tz::nullhand;
-			tz::gl::resource_handle dimension_buffer = tz::nullhand;
+			tz::gl::resource_handle dimension_buffer_reference = tz::nullhand;
 			tz::gl::resource_handle precipitation_buffer = tz::nullhand;
 			tz::gl::resource_handle time_buffer = tz::nullhand;
 			tz::gl::resource_handle zoom_buffer = tz::nullhand;
@@ -130,6 +150,8 @@ namespace game::render
 			tz::vec2ui dims_cache;
 		};
 
+		deferred_shading_pass_t deferred_shading_pass;
+		tz::gl::image_output deferred_shading_input;
 		pixelate_pass_t pixelate_pass;
 		tz::gl::image_output pixelate_input;
 		tz::ren::animation_renderer renderer;

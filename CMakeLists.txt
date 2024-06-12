@@ -50,6 +50,8 @@ add_shader(
 		src/gamelib/render/shaders/scene_renderer.fragment.tzsl	
 		src/gamelib/render/shaders/pixelate.vertex.tzsl	
 		src/gamelib/render/shaders/pixelate.fragment.tzsl	
+		src/gamelib/render/shaders/deferred.vertex.tzsl	
+		src/gamelib/render/shaders/deferred.fragment.tzsl	
 )
 target_include_directories(rednightmare_gamelib PUBLIC ${PROJECT_SOURCE_DIR}/src)
 
