@@ -12,5 +12,11 @@ void do_precipitation(vec2 uv);
 void main()
 {
 	vec2 uv = vec2(in::fragment_coord.xy / vec2(dimensions.w, dimensions.h));	
-	out::frag_colour = texture(res::textures[2], uv);
+	vec3 position = texture(res::textures[0], uv).rgb;
+	vec3 normal = texture(res::textures[1], uv).rgb;
+	vec4 albedo_rgba = texture(res::textures[2], uv);
+	vec3 albedo = albedo_rgba.rgb;
+	bool affected_by_lighting = albedo_rgba.w != 1.0f;
+	//out::frag_colour = texture(res::textures[2], uv);
+	out::frag_colour = vec4(position + normal + albedo, 1.0);
 }

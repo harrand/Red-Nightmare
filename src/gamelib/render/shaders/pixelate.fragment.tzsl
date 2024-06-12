@@ -29,9 +29,7 @@ resource(id = 3) const buffer time_buffer
 
 resource(id = 4) const texture res::textures[];
 //output(id = 0) vec4 out::frag_colour;
-output(id = 0) vec4 out::position;
-output(id = 1) vec4 out::normal;
-output(id = 2) vec4 out::albedo;
+output(id = 0) vec4 out::albedo;
 
 void do_precipitation(vec2 uv, inout vec4 colour);
 
@@ -68,8 +66,6 @@ void main()
 	}
 	do_precipitation(uv, colour);
 	colour.xyz *= zoom.global_colour_multiplier;
-	out::position = vec4(0.0);
-	out::normal = vec4(0.0);
 	out::albedo = colour;
 }
 
@@ -131,5 +127,11 @@ void do_precipitation(vec2 uv, inout vec4 colour)
 	float noise = simplexNoise(repeating_uv * 10.0f);
 	float drops = smoothstep(1.0f - strength, 1.0f, noise);
 
-	colour.xyz += mix(vec3(0.0f), precipitation.colour, drops);
+	vec3 contribution = mix(vec3(0.0f), precipitation.colour, drops);
+	if(contribution != vec3(0.0))
+	{
+		colour.xyz += contribution;
+		// -1 alpha means its an overlay onto the scene in some way (e.g precipitation) and shouldn't be affected by lighting
+		colour.w = -1.0f;
+	}
 }

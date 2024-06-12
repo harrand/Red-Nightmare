@@ -23,9 +23,7 @@ namespace game::render
 	deferred_shading_input{tz::gl::image_output_info{
 		.colours =
 		{
-			this->deferred_shading_pass.get_gbuffer_position(),
-			this->deferred_shading_pass.get_gbuffer_normals(),
-			this->deferred_shading_pass.get_gbuffer_albedo(),
+			this->deferred_shading_pass.get_gbuffer_albedo()
 		},
 		.depth = this->deferred_shading_pass.get_depth_image()
 	}},
@@ -34,6 +32,8 @@ namespace game::render
 	{tz::gl::image_output_info{
 		.colours =
 		{
+			this->deferred_shading_pass.get_gbuffer_position(),
+			this->deferred_shading_pass.get_gbuffer_normals(),
 			this->pixelate_pass.get_background_image(),
 			this->pixelate_pass.get_foreground_image()
 		}
