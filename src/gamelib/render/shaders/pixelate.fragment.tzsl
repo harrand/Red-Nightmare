@@ -41,16 +41,9 @@ void main()
 	float dx = 1.0f / pixels;
 	float dy = 1.0f / pixels;
 	vec2 coord = vec2(dx * floor(uv.x / dx), dy * floor(uv.y / dy));
-	//coord += vec2(-0.5, -0.5);
-	//coord *= zoom.value;
-	//coord -= vec2(-0.5, -0.5);
 
 	vec4 colour = texture(res::textures[1], coord);
-	//out::frag_colour = texture(res::textures[1], coord);
 	vec4 unpixelised_colour = texture(res::textures[0], uv);
-	// TODO: triage this. was having a bug where 2d sprites (unpixelised stuff) would become invisible if the clear colour wasnt transparent black.
-	// note: if transparency is 0.1 this would also completely ignore unpixelised. do we want this? other option: mix by amount equivalent to w (i.e manual alpha blend)
-	//if(out::frag_colour == vec4(0.0))
 	if(colour.w == 0.0f)
 	{
 		if(unpixelised_colour == vec4(0.0f))
@@ -82,7 +75,7 @@ vec3 permute(vec3 x) {
     return mod289((x * 34.0 + 1.0) * x);
 }
 
-float simplexNoise(vec2 v) {
+float simplex_noise(vec2 v) {
     const vec4 C = vec4(0.211324865405187, // (3.0-sqrt(3.0))/6.0
                         0.366025403784439, // 0.5*(sqrt(3.0)-1.0)
                         -0.577350269189626, // -1.0 + 2.0 * C.x
@@ -124,7 +117,7 @@ void do_precipitation(vec2 uv, inout vec4 colour)
 	float strength = min(precipitation.strength * warp, 1.0);
 
 	vec2 repeating_uv = fract(animated_uv * 10.0f);
-	float noise = simplexNoise(repeating_uv * 10.0f);
+	float noise = simplex_noise(repeating_uv * 10.0f);
 	float drops = smoothstep(1.0f - strength, 1.0f, noise);
 
 	vec3 contribution = mix(vec3(0.0f), precipitation.colour, drops);

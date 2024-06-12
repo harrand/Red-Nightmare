@@ -8,11 +8,10 @@
 #include <limits>
 
 #include "tz/gl/imported_shaders.hpp"
-#include ImportedShaderHeader(pixelate, vertex)
 #include ImportedShaderHeader(pixelate, fragment)
-#include ImportedShaderHeader(deferred, vertex)
 #include ImportedShaderHeader(deferred, fragment)
 #include ImportedShaderHeader(scene_renderer, fragment)
+#include ImportedShaderHeader(fullscreen_triangle, vertex)
 
 #include ImportedTextHeader(ProggyClean, ttf)
 
@@ -635,7 +634,7 @@ namespace game::render
 	{
 		tz::gl::renderer_info rinfo;
 		rinfo.state().graphics.tri_count = 1;
-		rinfo.shader().set_shader(tz::gl::shader_stage::vertex, ImportedShaderSource(deferred, vertex));
+		rinfo.shader().set_shader(tz::gl::shader_stage::vertex, ImportedShaderSource(fullscreen_triangle, vertex));
 		rinfo.shader().set_shader(tz::gl::shader_stage::fragment, ImportedShaderSource(deferred, fragment));
 		rinfo.set_options({tz::gl::renderer_option::no_depth_testing, tz::gl::renderer_option::no_present});
 		auto mondims = tz::window().get_dimensions();
@@ -774,7 +773,7 @@ namespace game::render
 		// todo: we depend on animation renderer's render pass.
 		tz::gl::renderer_info rinfo;
 		rinfo.state().graphics.tri_count = 1;
-		rinfo.shader().set_shader(tz::gl::shader_stage::vertex, ImportedShaderSource(pixelate, vertex));
+		rinfo.shader().set_shader(tz::gl::shader_stage::vertex, ImportedShaderSource(fullscreen_triangle, vertex));
 		rinfo.shader().set_shader(tz::gl::shader_stage::fragment, ImportedShaderSource(pixelate, fragment));
 		rinfo.set_options({tz::gl::renderer_option::no_depth_testing, tz::gl::renderer_option::no_present});
 		//auto mondims = tz::wsi::get_monitors().front().dimensions;

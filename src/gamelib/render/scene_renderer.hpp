@@ -30,8 +30,8 @@ namespace game::render
 			tz::vec3 directional_light_colour = tz::vec3::filled(1.0f);
 			float pad0;
 			tz::vec3 directional_light_direction = {-1.0f, -0.3f, 0.0f};
-			std::uint32_t point_light_count = 256u;
-			std::array<point_light_data, 256u> point_lights = {};
+			std::uint32_t point_light_count = 32u;
+			std::array<point_light_data, 32u> point_lights = {};
 		};
 
 		struct entry
