@@ -79,14 +79,43 @@ rn.mods.basegame.prefabs.combat_stats =
 		local hp_lost = math.min(math.max(hp - max_hp, 0), max_hp)
 		rn.current_scene():entity_write(uuid, "hp_lost", hp_lost)
 	end,
+	get_absorb = function(uuid)
+		local absorb = rn.current_scene():entity_read(uuid, "absorb") or 0.0
+		-- if its gone negative, treat it as zero.
+		if absorb < 0.0 then absorb = 0.0 end
+		return absorb
+	end,
+	set_absorb = function(uuid, amt)
+		rn.current_scene():entity_write(uuid, "absorb", amt)
+	end,
+	add_absorb = function(uuid, amt)
+		rn.current_scene():entity_write_add(uuid, "absorb", amt)
+
+		if amt > 0.0 then
+			rn.entity.prefabs.health_bar.display(uuid, 5.0)
+
+			-- floating combat text
+			local sc = rn.current_scene()
+			local text = sc:add_entity("floating_combat_text")
+			local x, y = rn.entity.prefabs.sprite.get_position(uuid)
+			rn.entity.prefabs.floating_combat_text.set(text, x, y, "+" .. tostring(math.floor(amt)), {1.0, 0.7, 0.0})
+		end
+	end,
 	dmg_unmit = function(uuid, dmg)
 		tz.assert(dmg >= 0.0, "Damage dealt cannot be negative.")
 		local just_died = false
 		local minus_hp = rn.current_scene():entity_read(uuid, "hp_lost") or 0.0
 		local max_hp = rn.mods.basegame.prefabs.combat_stats.get_max_hp(uuid) or 0.0
+		local absorb = rn.mods.basegame.prefabs.combat_stats.get_absorb(uuid)
 		if minus_hp >= max_hp then
 			-- bloke is already dead. dont bother doing anything.
 			return false
+		end
+		if absorb >= 0.0 then
+			local absorbed_dmg = math.min(absorb, dmg)
+			absorb = absorb - absorbed_dmg
+			rn.mods.basegame.prefabs.combat_stats.set_absorb(uuid, absorb - absorbed_dmg)
+			dmg = dmg - absorbed_dmg
 		end
 		-- clamp minus_hp between 0 and max_hp
 		minus_hp = math.min(math.max(minus_hp + dmg, 0.0), max_hp)

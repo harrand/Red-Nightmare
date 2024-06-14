@@ -55,6 +55,9 @@ rn.mods.basegame.prefabs.health_bar =
 	instantiate = function(uuid)
 		rn.entity.prefabs.sprite.instantiate(uuid)
 		rn.current_scene():entity_set_local_scale(uuid, 1.0, 0.2, 1.0)
+		local text = rn.current_scene():add_entity("text")
+		rn.entity.prefabs.text.init(text, 9.0, 1.0, 0.7, 0.0)
+		rn.current_scene():entity_write(uuid, "absorb_text", text)
 	end,
 	update = function(uuid, delta_seconds)
 		local sc = rn.current_scene()
@@ -71,6 +74,15 @@ rn.mods.basegame.prefabs.health_bar =
 				rn.entity.prefabs.health_bar_impl.internal_update(child, delta_seconds)
 
 				rn.entity.prefabs.sticky.update(uuid, delta_seconds)
+				-- absorb text
+				local x, y = rn.entity.prefabs.sprite.get_position(uuid)
+
+				local absorb_text = sc:entity_read(uuid, "absorb_text")
+				if absorb_text ~= nil then
+					rn.entity.prefabs.text.set_position(absorb_text, x - 1.0, y - 1.0)
+					rn.entity.prefabs.text.set_string(absorb_text, tostring(math.floor(rn.entity.prefabs.combat_stats.get_absorb(attachment))))
+				end
+
 			end
 		end
 	end,
@@ -79,6 +91,10 @@ rn.mods.basegame.prefabs.health_bar =
 		local attachment = sc:entity_read(uuid, "attachment")
 		if attachment ~= nil and sc:contains_entity(attachment) then
 			sc:entity_write(attachment, "health_bar_active", nil)
+		end
+		local absorb_text = sc:entity_read(uuid, "absorb_text")
+		if absorb_text ~= nil then
+			sc:remove_entity(absorb_text)
 		end
 	end,
 	display = function(uuid, duration)
