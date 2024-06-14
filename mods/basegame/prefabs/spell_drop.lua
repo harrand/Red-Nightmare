@@ -1,14 +1,13 @@
 rn.mods.basegame.prefabs.spell_drop =
 {
 	description = "Meta Entity representing a dropped spell",
+	static_init = function()
+		rn.renderer():add_texture("icon.border", "basegame/res/icons/icon_border.png")
+	end,
 	pre_instantiate = rn.mods.basegame.prefabs.sprite.pre_instantiate,
 	instantiate = function(uuid)
 		rn.entity.prefabs.sprite.instantiate(uuid)
 		rn.entity.prefabs.sprite.set_scale(uuid, 0.75)
-		rn.entity.prefabs.light_emitter.instantiate(uuid)
-	end,
-	on_remove = function(uuid)
-		rn.entity.prefabs.light_emitter.on_remove(uuid)
 	end,
 	update = function(uuid, delta_seconds)
 		local spellname = rn.entity.prefabs.spell_drop.get_spell(uuid)
@@ -33,13 +32,9 @@ rn.mods.basegame.prefabs.spell_drop =
 		rn.entity.prefabs.sprite.set_position(uuid, x, y + 0.01 * math.sin(t))
 		rn.entity.prefabs.sprite.set_rotation(uuid, -1.5708)
 		rn.entity.prefabs.sprite.set_texture(uuid, icon)
+		rn.entity.prefabs.sprite.set_emissive_map(uuid, "icon.border")
+		rn.entity.prefabs.sprite.set_emissive_tint(uuid, colour[1], colour[2], colour[3])
 
-		if rn.entity.prefabs.light_emitter.exists(uuid) then
-			rn.entity.prefabs.light_emitter.set_shape(uuid, 1)
-			rn.entity.prefabs.light_emitter.set_power(uuid, 0.0)
-			rn.entity.prefabs.light_emitter.set_colour(uuid, colour[1], colour[2], colour[3])
-			rn.entity.prefabs.light_emitter.update(uuid, delta_seconds)
-		end
 	end,
 	get_position = rn.mods.basegame.prefabs.sprite.get_position,
 	set_position = rn.mods.basegame.prefabs.sprite.set_position,
