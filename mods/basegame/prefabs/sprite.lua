@@ -25,6 +25,12 @@ rn.mods.basegame.prefabs.sprite =
 	set_normal_map = function(uuid, texname)
 		rn.current_scene():entity_set_subobject_texture(uuid, 2, texname, 1)
 	end,
+	set_emissive_map = function(uuid, texname)
+		rn.current_scene():entity_set_subobject_texture(uuid, 2, texname, 2)
+	end,
+	set_emissive_tint = function(uuid, r, g, b)
+		rn.current_scene():entity_set_subobject_colour(uuid, 2, r, g, b, 2)
+	end,
 	--get_normal_map = function(uuid)
 	--	return rn.current_scene():entity_get_subobject_texture(uuid, 2, 1)
 	--end,

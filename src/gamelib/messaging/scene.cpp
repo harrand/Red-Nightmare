@@ -292,15 +292,15 @@ namespace game::messaging
 			case scene_operation::entity_set_subobject_texture_colour:
 			{
 				TZ_PROFZONE("entity set global subobject texture colour", 0xFF99CC44);
-				std::pair<std::size_t, tz::vec3> val = std::any_cast<std::pair<std::size_t, tz::vec3>>(msg.value);
+				const auto [subobject_id, bound_texture_id, col] = std::any_cast<std::tuple<std::size_t, std::size_t, tz::vec3>>(msg.value);
 				auto cmp = sc->get_entity_render_component(msg.uuid);
 				render::scene_element elem = sc->get_renderer().get_element(cmp);
 				auto subobjects = sc->get_renderer().get_renderer().animated_object_get_subobjects(cmp.obj);
-				auto objh = subobjects[val.first];
+				auto objh = subobjects[subobject_id];
 				//sc->get_renderer().get_renderer().object_set_visible(objh, true);
-				auto texloc = elem.object_get_texture(objh, 0);
-				texloc.colour_tint = val.second;
-				elem.object_set_texture(objh, 0, texloc);
+				auto texloc = elem.object_get_texture(objh, bound_texture_id);
+				texloc.colour_tint = col;
+				elem.object_set_texture(objh, bound_texture_id, texloc);
 			}
 			break;
 			case scene_operation::entity_set_subobject_visible:
@@ -943,11 +943,16 @@ namespace game::messaging
 		{
 			TZ_PROFZONE("scene - entity set subobject colour", 0xFF99CC44);
 			auto [_, uuid, subobject, r, g, b] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int, float, float, float>(state);
+			std::size_t bound_texture_id = 0;
+			if(state.stack_size() >= 7)
+			{
+				bound_texture_id = state.stack_get_uint(7);
+			}
 			local_scene_receiver.send_message
 			({
 				.operation = scene_operation::entity_set_subobject_texture_colour,
 				.uuid = static_cast<entity_uuid>(uuid),
-				.value = std::pair<std::size_t, tz::vec3>{subobject, tz::vec3{r, g, b}}
+				.value = std::tuple<std::size_t, std::size_t, tz::vec3>{subobject, bound_texture_id, tz::vec3{r, g, b}}
 			});
 			return 0;
 		}

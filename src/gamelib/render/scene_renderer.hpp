@@ -120,6 +120,7 @@ namespace game::render
 			tz::gl::icomponent* get_gbuffer_position();
 			tz::gl::icomponent* get_gbuffer_normals();
 			tz::gl::icomponent* get_gbuffer_albedo();
+			tz::gl::icomponent* get_gbuffer_emissive();
 			tz::gl::icomponent* get_depth_image();
 			void handle_resize(tz::gl::renderer_handle animation_render_pass);
 
@@ -129,6 +130,7 @@ namespace game::render
 			tz::gl::resource_handle gbuffer_position = tz::nullhand;
 			tz::gl::resource_handle gbuffer_normals = tz::nullhand;
 			tz::gl::resource_handle gbuffer_albedo = tz::nullhand;
+			tz::gl::resource_handle gbuffer_emissive = tz::nullhand;
 			tz::gl::resource_handle depth_image = tz::nullhand;
 			tz::vec2ui dims_cache;
 		};

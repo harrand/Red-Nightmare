@@ -33,6 +33,7 @@ namespace game::render
 		{
 			this->deferred_shading_pass.get_gbuffer_position(),
 			this->deferred_shading_pass.get_gbuffer_normals(),
+			this->deferred_shading_pass.get_gbuffer_emissive(),
 			this->pixelate_pass.get_background_image(),
 			this->pixelate_pass.get_foreground_image()
 		}
@@ -671,6 +672,13 @@ namespace game::render
 			.flags = {tz::gl::resource_flag::renderer_output}
 		}));
 
+		this->gbuffer_emissive = rinfo.add_resource(tz::gl::image_resource::from_uninitialised
+		({
+			.format = tz::gl::image_format::BGRA32,
+			.dimensions = mondims,
+			.flags = {tz::gl::resource_flag::renderer_output}
+		}));
+
 		this->depth_image = rinfo.add_resource(tz::gl::image_resource::from_uninitialised
 		({
 			.format = tz::gl::image_format::Depth16_UNorm,
@@ -705,6 +713,11 @@ namespace game::render
 	tz::gl::icomponent* scene_renderer::deferred_shading_pass_t::get_gbuffer_albedo()
 	{
 		return tz::gl::get_device().get_renderer(this->handle).get_component(this->gbuffer_albedo);
+	}
+
+	tz::gl::icomponent* scene_renderer::deferred_shading_pass_t::get_gbuffer_emissive()
+	{
+		return tz::gl::get_device().get_renderer(this->handle).get_component(this->gbuffer_emissive);
 	}
 
 	tz::gl::icomponent* scene_renderer::deferred_shading_pass_t::get_depth_image()

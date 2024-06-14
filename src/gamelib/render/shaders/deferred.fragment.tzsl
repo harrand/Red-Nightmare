@@ -126,6 +126,7 @@ void main()
 	bool should_pixelate = bool(normal_rgba.w);
 	vec4 albedo_rgba = texture(res::textures[2], uv);
 	vec3 albedo = albedo_rgba.rgb;
+	vec4 emissive_rgba = texture(res::textures[3], uv);
 	bool affected_by_lighting = albedo_rgba.w != -1.0f;
 	//out::frag_colour = texture(res::textures[2], uv);
 	vec3 outcol = albedo;

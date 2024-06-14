@@ -7,6 +7,7 @@ rn.mods.basegame.prefabs.consecration_effect =
 	instantiate = function(uuid)
 		rn.entity.prefabs.sprite.instantiate(uuid)
 		rn.entity.prefabs.sprite.set_texture(uuid, "sprite.consecration")
+		rn.entity.prefabs.sprite.set_emissive_map(uuid, "sprite.consecration")
 		rn.entity.prefabs.light_emitter.instantiate(uuid)
 	end,
 	update = function(uuid, delta_seconds)
@@ -22,6 +23,7 @@ rn.mods.basegame.prefabs.consecration_effect =
 		if magic_type ~= nil then
 			local colour = rn.spell.schools[magic_type].colour
 			rn.entity.prefabs.sprite.set_colour(uuid, colour[1], colour[2], colour[3])
+			rn.entity.prefabs.sprite.set_emissive_tint(uuid, colour[1], colour[2], colour[3])
 			rn.entity.prefabs.light_emitter.set_power(uuid, rn.entity.prefabs.sprite.get_scale(uuid) * 0.5)
 			rn.entity.prefabs.light_emitter.set_colour(uuid, colour[1], colour[2], colour[3])
 			rn.entity.prefabs.light_emitter.set_shape(uuid, 1)
