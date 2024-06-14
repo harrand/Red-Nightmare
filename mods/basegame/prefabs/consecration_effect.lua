@@ -26,7 +26,6 @@ rn.mods.basegame.prefabs.consecration_effect =
 			rn.entity.prefabs.sprite.set_emissive_tint(uuid, colour[1], colour[2], colour[3])
 			rn.entity.prefabs.light_emitter.set_power(uuid, rn.entity.prefabs.sprite.get_scale(uuid) * 0.5)
 			rn.entity.prefabs.light_emitter.set_colour(uuid, colour[1], colour[2], colour[3])
-			rn.entity.prefabs.light_emitter.set_shape(uuid, 1)
 		end
 
 		rn.entity.prefabs.light_emitter.update(uuid, delta_seconds)

@@ -10,6 +10,7 @@ rn.mods.basegame.prefabs.magic_barrier =
 	instantiate = function(uuid)
 		rn.entity.prefabs.sprite.instantiate(uuid)
 		rn.entity.prefabs.sprite.set_texture(uuid, "sprite.magic_barrier")
+		rn.entity.prefabs.sprite.set_emissive_map(uuid, "sprite.magic_barrier")
 		rn.entity.prefabs.light_emitter.instantiate(uuid)
 		rn.entity.prefabs.sprite.set_rotation(uuid, -1.5708)
 end,
@@ -26,6 +27,7 @@ end,
 		if magic_type ~= nil then
 			local colour = rn.spell.schools[magic_type].colour
 			rn.entity.prefabs.sprite.set_colour(uuid, colour[1], colour[2], colour[3])
+			rn.entity.prefabs.sprite.set_emissive_tint(uuid, colour[1], colour[2], colour[3])
 			rn.entity.prefabs.light_emitter.set_power(uuid, scale * 0.3)
 			rn.entity.prefabs.light_emitter.set_colour(uuid, colour[1], colour[2], colour[3])
 		end

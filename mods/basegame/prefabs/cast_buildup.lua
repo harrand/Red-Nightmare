@@ -13,6 +13,7 @@ rn.mods.basegame.prefabs.cast_buildup =
 	instantiate = function(uuid)
 		rn.entity.prefabs.sprite.instantiate(uuid)
 		rn.entity.prefabs.sprite.set_texture(uuid, "sprite.cast_buildup0")
+		rn.entity.prefabs.sprite.set_emissive_map(uuid, "sprite.cast_buildup0")
 		rn.entity.prefabs.light_emitter.instantiate(uuid)
 	end,
 	update = function(uuid, delta_seconds)
@@ -22,6 +23,7 @@ rn.mods.basegame.prefabs.cast_buildup =
 		t = t + (delta_seconds * time_warp)
 		local frame_id = math.floor((t * 10.0) % rn.entity.prefabs.cast_buildup.frame_count)
 		rn.entity.prefabs.sprite.set_texture(uuid, "sprite.cast_buildup" .. frame_id)
+		rn.entity.prefabs.sprite.set_emissive_map(uuid, "sprite.cast_buildup" .. frame_id)
 		sc:entity_write(uuid, "timer", t)
 
 		local magic_type = sc:entity_read(uuid, "magic_type")
@@ -29,6 +31,7 @@ rn.mods.basegame.prefabs.cast_buildup =
 		if magic_type ~= nil then
 			local colour = rn.spell.schools[magic_type].colour
 			rn.entity.prefabs.sprite.set_colour(uuid, colour[1], colour[2], colour[3])
+			rn.entity.prefabs.sprite.set_emissive_tint(uuid, colour[1], colour[2], colour[3])
 			rn.entity.prefabs.light_emitter.set_power(uuid, power_override or (t * 0.2))
 			rn.entity.prefabs.light_emitter.set_colour(uuid, colour[1], colour[2], colour[3])
 		end
