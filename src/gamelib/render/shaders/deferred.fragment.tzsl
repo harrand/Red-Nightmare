@@ -132,13 +132,13 @@ void main()
 
 	if(affected_by_lighting)
 	{
-		vec4 directional_light_contribution = vec4(light.directional_light_colour * diffuse_directional(normal, !should_pixelate), 0.0f);
+		vec4 directional_light_contribution = max(vec4(light.directional_light_colour * diffuse_directional(normal, !should_pixelate), 0.0f), vec4(0.0f));
 		outcol.xyz += directional_light_contribution.xyz;
 		outcol.xyz *= light.ambient_light_colour;
 		for(uint i = 0; i < light.point_light_count; i++)
 		{
 			point_light_data l = light.point_lights[i];
-			vec4 light_contribution = vec4(l.colour * min(diffuse(l, normal, position, !should_pixelate) + specular(l, normal, position, !should_pixelate), 2.0f), 0.0f); 
+			vec4 light_contribution = max(vec4(l.colour * min(diffuse(l, normal, position, !should_pixelate) + specular(l, normal, position, !should_pixelate), 2.0f), 0.0f), vec4(0.0f)); 
 			outcol.xyz += light_contribution.xyz;
 		}
 	}

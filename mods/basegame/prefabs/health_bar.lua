@@ -46,6 +46,54 @@ rn.mods.basegame.prefabs.health_bar_impl =
 	end
 }
 
+rn.mods.basegame.prefabs.absorb_bar_impl =
+{
+	description = "Absorb Bar on an entity",
+	pre_instantiate = function(uuid)
+		return rn.entity.prefabs.sprite.pre_instantiate(uuid)
+	end,
+	instantiate = function(uuid)
+		rn.entity.prefabs.sprite.instantiate(uuid)
+	end,
+	update = function(uuid, delta_seconds)
+		local sc = rn.current_scene()
+		local parent = sc:entity_read(uuid, "parent")
+		if parent == nil then return end
+		if not sc:contains_entity(parent) then
+			-- parent is despawned. internal update is no longer being invoked - we are orphaned.
+			-- we gotta just despawn ourselves.
+			sc:remove_entity(uuid)
+		end
+	end,
+	internal_update = function(uuid, delta_seconds)
+		local sc = rn.current_scene()
+		local parent = sc:entity_read(uuid, "parent")
+		if parent ~= nil and sc:contains_entity(parent) then
+			local base_ox = sc:entity_read(uuid, "base_offsetx")
+			local base_oy = sc:entity_read(uuid, "base_offsety")
+			local offsetx = 0.0
+			local offsety = 0.0
+
+			local attachment = sc:entity_read(parent, "attachment")
+
+			local max_hp = rn.entity.prefabs.combat_stats.get_max_hp(attachment)
+			local absorb = rn.entity.prefabs.combat_stats.get_absorb(attachment)
+			local hp_pct = math.min(absorb / max_hp, 1.0)
+			rn.entity.prefabs.sprite.set_colour(uuid, 1.0, 0.5, 0.0)
+
+			local health_bar_middle_scale = 0.8
+			local padding = 1.1
+			local scalex = 1.0 * health_bar_middle_scale * hp_pct * padding
+			offsetx = ((1.0 - hp_pct) * -health_bar_middle_scale) * padding
+
+			rn.entity.prefabs.sticky.set_offset(uuid, offsetx + base_ox, offsety + base_oy)
+			rn.entity.prefabs.sticky.update(uuid, delta_seconds)
+			rn.current_scene():entity_set_global_scale(uuid, health_bar_middle_scale, 0.075 * health_bar_middle_scale, scalex)
+			rn.entity.prefabs.sprite.set_visible(uuid, true)
+		end
+	end
+}
+
 rn.mods.basegame.prefabs.health_bar = 
 {
 	description = "Health-bar background display on an entity, showing their current health against their maximum health.",
@@ -55,9 +103,6 @@ rn.mods.basegame.prefabs.health_bar =
 	instantiate = function(uuid)
 		rn.entity.prefabs.sprite.instantiate(uuid)
 		rn.current_scene():entity_set_local_scale(uuid, 1.0, 0.2, 1.0)
-		local text = rn.current_scene():add_entity("text")
-		rn.entity.prefabs.text.init(text, 9.0, 1.0, 0.7, 0.0)
-		rn.current_scene():entity_write(uuid, "absorb_text", text)
 	end,
 	update = function(uuid, delta_seconds)
 		local sc = rn.current_scene()
@@ -77,10 +122,9 @@ rn.mods.basegame.prefabs.health_bar =
 				-- absorb text
 				local x, y = rn.entity.prefabs.sprite.get_position(uuid)
 
-				local absorb_text = sc:entity_read(uuid, "absorb_text")
-				if absorb_text ~= nil then
-					rn.entity.prefabs.text.set_position(absorb_text, x - 1.0, y - 1.0)
-					rn.entity.prefabs.text.set_string(absorb_text, tostring(math.floor(rn.entity.prefabs.combat_stats.get_absorb(attachment))))
+				local absorb_child = sc:entity_read(uuid, "absorb_child")
+				if absorb_child ~= nil and sc:contains_entity(absorb_child) then
+					rn.entity.prefabs.absorb_bar_impl.internal_update(absorb_child, delta_seconds)
 				end
 
 			end
@@ -91,10 +135,6 @@ rn.mods.basegame.prefabs.health_bar =
 		local attachment = sc:entity_read(uuid, "attachment")
 		if attachment ~= nil and sc:contains_entity(attachment) then
 			sc:entity_write(attachment, "health_bar_active", nil)
-		end
-		local absorb_text = sc:entity_read(uuid, "absorb_text")
-		if absorb_text ~= nil then
-			sc:remove_entity(absorb_text)
 		end
 	end,
 	display = function(uuid, duration)
@@ -126,6 +166,15 @@ rn.mods.basegame.prefabs.health_bar =
 		rn.entity.prefabs.sticky.stick_to(inner, uuid, base_offsetx, base_offsety, base_offsetz + 0.01)
 		sc:entity_write(inner, "base_offsetx", base_offsetx)
 		sc:entity_write(inner, "base_offsety", base_offsety)
+
+		local absorb_inner = sc:add_entity("absorb_bar_impl")
+		sc:entity_write(absorb_inner, "parent", me)
+		sc:entity_write(me, "absorb_child", absorb_inner)
+		-- teeny tiny Z offset to guarantee absorb_inner always displays over `uuid` (or it will be completely occluded!)
+		local absorb_offsety = -0.1
+		rn.entity.prefabs.sticky.stick_to(absorb_inner, uuid, base_offsetx, base_offsety + absorb_offsety, base_offsetz + 0.015)
+		sc:entity_write(absorb_inner, "base_offsetx", base_offsetx)
+		sc:entity_write(absorb_inner, "base_offsety", base_offsety + absorb_offsety)
 	end,
 	never_display_on = function(uuid)
 		rn.current_scene():entity_write(uuid, "nohealthbar", true)

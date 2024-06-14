@@ -26,7 +26,7 @@ end,
 		if magic_type ~= nil then
 			local colour = rn.spell.schools[magic_type].colour
 			rn.entity.prefabs.sprite.set_colour(uuid, colour[1], colour[2], colour[3])
-			rn.entity.prefabs.light_emitter.set_power(uuid, scale * 0.75)
+			rn.entity.prefabs.light_emitter.set_power(uuid, scale * 0.3)
 			rn.entity.prefabs.light_emitter.set_colour(uuid, colour[1], colour[2], colour[3])
 		end
 
