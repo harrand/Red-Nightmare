@@ -23,7 +23,7 @@ rn.mods.basegame.levels.devproc0 =
 		rn.entity.prefabs.faction.set_faction(boss, faction.player_enemy)
 
 		local col = rn.spell.schools.frost.colour
-		rn.renderer():set_precipitation(col[1], col[2], col[3], 0.2, -0.05, 0.3)
+		rn.renderer():set_precipitation(col[1], col[2], col[3], 0.3, -0.05, 0.3)
 		rn.renderer():set_ambient_light(0.3, 0.3, 0.625, 1.0)
 		rn.renderer():directional_light_set_power(0.6)
 
