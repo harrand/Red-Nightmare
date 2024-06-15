@@ -6,6 +6,7 @@ for schoolname, schooldata in pairs(rn.spell.schools) do
 				if schoolname == "fire" then
 					rn.renderer():add_texture("helm.hood", "basegame/res/skins/helms/hood.png")
 					rn.renderer():add_texture("helm.hood_normals", "basegame/res/skins/helms/hood_normals.png")
+					rn.renderer():add_texture("helm.hood_emissive", "basegame/res/skins/helms/hood_emissive.png")
 				end
 			end,
 			on_equip = function(uuid)
@@ -22,6 +23,8 @@ for schoolname, schooldata in pairs(rn.spell.schools) do
 			colour = schooldata.colour,
 			texture = "helm.hood",
 			normal_map = "helm.hood_normals",
+			emissive_map = "helm.hood_emissive",
+			emissive_tint = schooldata.colour,
 			valid_loot = false,
 			droppable = false,
 			rarity = "common"
@@ -32,6 +35,7 @@ for schoolname, schooldata in pairs(rn.spell.schools) do
 			static_init = function()
 				if schoolname == "fire" then
 					rn.renderer():add_texture("chest.elemental_robes", "basegame/res/skins/chests/elemental_robes.png")
+					rn.renderer():add_texture("chest.elemental_robes_emissive", "basegame/res/skins/chests/elemental_robes_emissive.png")
 				end
 			end,
 			on_equip = function(uuid)
@@ -46,6 +50,8 @@ for schoolname, schooldata in pairs(rn.spell.schools) do
 			end,
 			slot = rn.item.slot.chest,
 			colour = schooldata.colour,
+			emissive_map = "chest.elemental_robes_emissive",
+			emissive_tint = schooldata.colour,
 			texture = "chest.elemental_robes",
 			valid_loot = false,
 			droppable = false,

@@ -134,6 +134,13 @@ rn.mods.basegame.prefabs.bipedal =
 			if itemdata.normal_map ~= nil then
 				rn.entity.prefabs.bipedal.set_subobject_normal_map(uuid, subobject, itemdata.normal_map)
 			end
+			if itemdata.emissive_map ~= nil then
+				rn.entity.prefabs.bipedal.set_subobject_emissive_map(uuid, subobject, itemdata.emissive_map)
+				local tint = itemdata.emissive_tint;
+				if tint ~= nil then
+					rn.entity.prefabs.bipedal.set_subobject_emissive_tint(uuid, subobject, tint[1], tint[2], tint[3])
+				end
+			end
 		else
 			-- weapon
 			local prefab_name = itemdata.weapon_prefab
@@ -190,6 +197,12 @@ rn.mods.basegame.prefabs.bipedal =
 	end,
 	set_subobject_normal_map = function(uuid, subobject, texname)
 		rn.current_scene():entity_set_subobject_texture(uuid, subobject, texname, 1)
+	end,
+	set_subobject_emissive_map = function(uuid, subobject, texname)
+		rn.current_scene():entity_set_subobject_texture(uuid, subobject, texname, 2)
+	end,
+	set_subobject_emissive_tint = function(uuid, subobject, r, g, b)
+		rn.current_scene():entity_set_subobject_colour(uuid, subobject, r, g, b, 2)
 	end,
 	set_subobject_colour = function(uuid, subobject, r, g, b)
 		rn.current_scene():entity_set_subobject_colour(uuid, subobject, r, g, b)
