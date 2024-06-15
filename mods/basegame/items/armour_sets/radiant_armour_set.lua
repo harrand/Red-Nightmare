@@ -67,6 +67,7 @@ items[metal_name .. "_platelegs"] =
 }
 
 local sword2h_coeff = item_level * 1.1
+rn.renderer():add_texture("texture.solid_white", "basegame/res/textures/solid_white.png")
 items[metal_name .. "_greatsword"] =
 {
 	on_equip = function(uuid)
@@ -88,5 +89,7 @@ items[metal_name .. "_greatsword"] =
 	colour = metal_colour,
 	weapon_prefab = "weapon_model_lightbringer",
 	weapon_class = "sword2h",
+	emissive_map = "texture.solid_white",
+	emissive_tint = rn.spell.schools.holy.colour,
 	rarity = metal_rarity
 }

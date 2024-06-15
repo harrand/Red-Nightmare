@@ -2,6 +2,7 @@ rn.mods.basegame.items.elemental_circlet_base =
 {
 	static_init = function()
 		rn.renderer():add_texture("helm.circlet", "basegame/res/skins/helms/circlet.png")
+		rn.renderer():add_texture("helm.circlet_emissive", "basegame/res/skins/helms/circlet_emissive.png")
 	end,
 	tooltip = [[
 		+20% Physical Resist
@@ -11,6 +12,7 @@ rn.mods.basegame.items.elemental_circlet_base =
 	colour = {1.0, 1.0, 1.0},
 	rarity = "common",
 	texture = "helm.circlet",
+	emissive_map = "helm.circlet_emissive",
 	valid_loot = false
 }
 
@@ -33,6 +35,8 @@ for schoolname, schooldata in pairs(rn.spell.schools) do
 			colour = rn.spell.schools[schoolname].colour,
 			rarity = "epic",
 			texture = rn.mods.basegame.items.elemental_circlet_base.texture,
+			emissive_map = rn.mods.basegame.items.elemental_circlet_base.emissive_map,
+			emissive_tint = rn.spell.schools[schoolname].colour,
 			valid_loot = false
 		}
 	end

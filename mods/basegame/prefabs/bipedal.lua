@@ -148,6 +148,16 @@ rn.mods.basegame.prefabs.bipedal =
 			tz.assert(prefab_name ~= nil, "no weapon_prefab specified by item " .. itemname)
 
 			local weapon_entity = sc:add_entity(prefab_name)
+			if itemdata.texture ~= nil then
+				rn.entity.prefabs.bipedal.set_subobject_texture(weapon_entity, 2, itemdata.texture)
+			end
+			if itemdata.emissive_map ~= nil then
+				rn.entity.prefabs.bipedal.set_subobject_emissive_map(weapon_entity, 2, itemdata.emissive_map)
+				if itemdata.emissive_tint ~= nil then
+					local tint = itemdata.emissive_tint
+					rn.entity.prefabs.bipedal.set_subobject_emissive_tint(weapon_entity, 2, tint[1], tint[2], tint[3])
+				end
+			end
 			rn.entity.prefabs.sprite.set_colour(weapon_entity, itemdata.colour[1], itemdata.colour[2], itemdata.colour[3])
 			rn.entity.prefabs.sticky.stick_to_subobject(weapon_entity, uuid, subobject, true, false)
 			sc:entity_write(uuid, "weapon_entity" .. itemdata.slot, weapon_entity)

@@ -9,14 +9,14 @@ rn.mods.basegame.prefabs.weapon_model_lightbringer =
 		sc:entity_set_subobject_visible(uuid, 2, true)
 
 		local effect_bottom = sc:add_entity("cast_buildup")
-		sc:entity_write(effect_bottom, "magic_type", "holy")
+		sc:entity_write(effect_bottom, "magic_type", "fire")
 		sc:entity_write(effect_bottom, "time_warp", 2.5)
 		rn.entity.prefabs.sprite.set_scale(effect_bottom, 0.75)
 		rn.entity.prefabs.sticky.stick_to_subobject(effect_bottom, uuid, 3, false, false)
 		sc:entity_write(uuid, "sparkle_bottom", effect_bottom)
 
 		local effect_top = sc:add_entity("cast_buildup")
-		sc:entity_write(effect_top, "magic_type", "holy")
+		sc:entity_write(effect_top, "magic_type", "fire")
 		sc:entity_write(effect_top, "time_warp", 2.5)
 		rn.entity.prefabs.sprite.set_scale(effect_top, 0.75)
 		rn.entity.prefabs.sticky.stick_to_subobject(effect_top, uuid, 4, false, false)
