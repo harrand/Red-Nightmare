@@ -48,6 +48,13 @@ rn.mods.basegame.levels.clans_camp =
 		rn.entity.prefabs.portal.set_colour(cave_portal, 0.6, 0.1, 0.1)
 		rn.entity.prefabs.portal.set_level_destination(cave_portal, "devproc0")
 
+		local allergiax = -10
+		local allergiay = -8
+		local allergia_portal = rn.current_scene():add_entity("portal")
+		rn.entity.prefabs.sprite.set_position(allergia_portal, allergiax, allergiay)
+		rn.entity.prefabs.portal.set_colour(allergia_portal, 0.2, 1.0, 0.4)
+		rn.entity.prefabs.portal.set_level_destination(allergia_portal, "gardens_of_allergia")
+
 		local helpme_chest = rn.current_scene():add_entity("loot_chest")
 		rn.entity.prefabs.sprite.set_position(helpme_chest, -5, -8)
 		rn.entity.prefabs.loot_chest.add_loot(helpme_chest, "radiant_greatsword")

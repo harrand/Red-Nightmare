@@ -110,5 +110,6 @@ require("basegame/items/elemental_circlet")
 
 require("basegame/levels/startscreen")
 require("basegame/levels/clans_camp")
+require("basegame/levels/gardens_of_allergia")
 require("basegame/levels/dev0")
 require("basegame/levels/devproc0")
