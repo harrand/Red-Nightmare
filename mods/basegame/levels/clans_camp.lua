@@ -34,6 +34,7 @@ rn.mods.basegame.levels.clans_camp =
 
 		rn.entity.prefabs.dirt_path.plot_path(1, -2.0, 0, "rrrddddddllllluuuu")
 		rn.entity.prefabs.dirt_path.plot_path(1, -4.0, 0, "llllllllluuuuuuuuuuu")
+		rn.entity.prefabs.dirt_path.plot_path(1, 10.0, -26, "dddddd")
 
 		rn.mods.basegame.levels.clans_camp.load_npcs()
 
@@ -48,8 +49,8 @@ rn.mods.basegame.levels.clans_camp =
 		rn.entity.prefabs.portal.set_colour(cave_portal, 0.6, 0.1, 0.1)
 		rn.entity.prefabs.portal.set_level_destination(cave_portal, "devproc0")
 
-		local allergiax = -10
-		local allergiay = -8
+		local allergiax = 10
+		local allergiay = -45
 		local allergia_portal = rn.current_scene():add_entity("portal")
 		rn.entity.prefabs.sprite.set_position(allergia_portal, allergiax, allergiay)
 		rn.entity.prefabs.portal.set_colour(allergia_portal, 0.2, 1.0, 0.4)
