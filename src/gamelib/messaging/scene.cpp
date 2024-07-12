@@ -325,6 +325,28 @@ namespace game::messaging
 				sc->get_renderer().get_renderer().get_object(objh).unused2[2] = pixelate;
 			}
 			break;
+			case scene_operation::entity_set_subobject_parent:
+			{
+				TZ_PROFZONE("entity set subobject parent", 0xFF99CC44);
+				auto [subobject_id, parent_uuid, parent_subobject] = std::any_cast<std::tuple<std::size_t, entity_uuid, std::size_t>>(msg.value);
+				auto cmp = sc->get_entity_render_component(msg.uuid);
+				auto subobjects = sc->get_renderer().get_renderer().animated_object_get_subobjects(cmp.obj);
+				auto objh = subobjects[subobject_id];
+
+				if(parent_uuid == tz::nullhand)
+				{
+					sc->get_renderer().get_renderer().object_set_parent(objh, tz::nullhand);
+				}
+				else
+				{		
+					auto parent_cmp = sc->get_entity_render_component(parent_uuid);
+					auto parent_subobjects = sc->get_renderer().get_renderer().animated_object_get_subobjects(parent_cmp.obj);
+					auto parent_objh = parent_subobjects[parent_subobject];
+
+					sc->get_renderer().get_renderer().object_set_parent(objh, parent_objh);
+				}
+			}
+			break;
 			case scene_operation::entity_apply_buff:
 			{
 				TZ_PROFZONE("entity apply buff", 0xFF99CC44);
@@ -983,6 +1005,36 @@ namespace game::messaging
 			return 0;
 		}
 
+		int entity_set_subobject_parent(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity set subobject parent", 0xFF99CC44);
+			//size_t, uuid, size_t
+			auto [_, uuid, subobject, parent_uuid, parent_subobject] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int, unsigned int, unsigned int>(state);
+			local_scene_receiver.send_message
+			({
+				.operation = scene_operation::entity_set_subobject_parent,
+				.uuid = static_cast<entity_uuid>(uuid),
+				.value = std::tuple<std::size_t, entity_uuid, std::size_t>(subobject, static_cast<entity_uuid>(parent_uuid), parent_subobject)
+			});
+			return 0;
+		}
+
+
+		int entity_clear_subobject_parent(tz::lua::state& state)
+		{
+			TZ_PROFZONE("scene - entity clear subobject parent", 0xFF99CC44);
+			//size_t, uuid, size_t
+			auto [_, uuid, subobject] = tz::lua::parse_args<tz::lua::nil, unsigned int, unsigned int>(state);
+			local_scene_receiver.send_message
+			({
+				.operation = scene_operation::entity_set_subobject_parent,
+				.uuid = static_cast<entity_uuid>(uuid),
+				.value = std::tuple<std::size_t, entity_uuid, std::size_t>(subobject, static_cast<entity_uuid>(static_cast<tz::hanval>(tz::ren::animation_renderer::object_handle{tz::nullhand})), 0)
+			});
+			return 0;
+
+		}
+
 		int entity_apply_buff(tz::lua::state& state)
 		{
 			TZ_PROFZONE("scene - entity apply buff", 0xFF99CC44);
@@ -1281,6 +1333,8 @@ namespace game::messaging
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_subobject_colour)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_subobject_visible)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_set_subobject_pixelated)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_set_subobject_parent)
+			LUA_METHOD(lua_local_scene_message_receiver, entity_clear_subobject_parent)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_apply_buff)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_remove_buff)
 			LUA_METHOD(lua_local_scene_message_receiver, entity_get_buff_count)
