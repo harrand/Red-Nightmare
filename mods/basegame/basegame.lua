@@ -1,6 +1,6 @@
 rn.mods.basegame =
 {
-	description = "Base game content for Red Nightmare",
+	description = "Base game content for Red Nightmare (OLD)",
 	prefabs = {},
 	levels = {},
 	spells = {},

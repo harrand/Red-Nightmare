@@ -24,7 +24,7 @@ int main()
 		game::initialise();
 
 		tz::lua::get_state().execute(R"(
-			rn.level.load("startscreen")
+			rn.level.load("startscreen2")
 			--for i=1,64,1 do
 			--	rn.current_scene():add_entity("morbius")
 			--end
