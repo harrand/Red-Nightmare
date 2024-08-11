@@ -56,25 +56,7 @@ rn.camera_follow_player = function(delta_seconds)
 
 	local camx, camy = rn.renderer():get_camera_position()
 	local px, py = rn.entity.prefabs.sprite.get_position(player_uuid)
-	local dstx = px - camx
-	local dsty = py - camy
-	local avgdst = (math.abs(dstx) + math.abs(dsty)) / 2.0
-
-	local viewx, viewy = rn.renderer():get_view_bounds()
-	local avgview = (viewx + viewy) / 2.0
-	-- if the tracked player is at least half the screen away from the middle.
-	local is_nearly_out = (avgdst >= (avgview * 0.25 * 0.5))
-	local is_absolutely_miles_out = (avgdst >= (avgview * 0.5))
-	if is_absolutely_miles_out == true then
-		-- we're super far out. just teleport camera to the player.
-		rn.renderer():set_camera_position(px, py)
-	elseif is_nearly_out == true then
-		-- we kinda need to catch up
-		-- lerp based on delta_seconds
-		camx = camx + (dstx * delta_seconds)
-		camy = camy + (dsty * delta_seconds)
-		rn.renderer():set_camera_position(camx, camy)
-	end
+	rn.renderer():set_camera_position(px, py)
 end
 
 -- display_player_spell_slots is good at making the text if it isnt already there, but very bad at updating the text.
