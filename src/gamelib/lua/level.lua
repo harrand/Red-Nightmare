@@ -31,6 +31,7 @@ rn.level.do_load = function(skip_fadein)
 		rn.level.data_write("fadein", 0.0)
 	end
 	rn.player.unstash()
+	rn.renderer():set_camera_position(0, 10.0, 0)
 end
 
 rn.level.load = function(name, dont_stop_music)

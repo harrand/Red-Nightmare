@@ -59,7 +59,7 @@ rn.mods.basegame2.prefabs.model_humanoid =
 		if math.abs(xdiff) >= math.abs(ydiff) then
 			ydiff = 0
 		end
-		rn.entity.prefabs.model_humanoid.face_direction(uuid, -xdiff, -ydiff)
+		rn.entity.prefabs.model_humanoid.face_direction(uuid, -xdiff, zdiff)
 	end,
 	on_stop_moving = function(uuid)
 		if not rn.spell.is_casting(uuid) then
@@ -188,9 +188,9 @@ rn.mods.basegame2.prefabs.model_humanoid =
 		elseif itemslot == rn.item.slot.legs then
 			return legs_subobj
 		elseif itemslot == rn.item.slot.left_hand then
-			return rn.mods.basegame.prefabs.model_humanoid.left_hand
+			return rn.mods.basegame2.prefabs.model_humanoid.left_hand
 		elseif itemslot == rn.item.slot.right_hand then
-			return rn.mods.basegame.prefabs.model_humanoid.right_hand
+			return rn.mods.basegame2.prefabs.model_humanoid.right_hand
 		else
 			tz.assert(false, "Unknown item slot " .. itemslot)
 		end

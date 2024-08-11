@@ -235,6 +235,18 @@ namespace game::render
 		this->renderer.set_camera_transform(trs);
 	}
 
+	tz::vec2 scene_renderer::get_camera_rotation() const
+	{
+		return this->renderer.get_camera_transform().rotate.swizzle<0, 1>();
+	}
+
+	void scene_renderer::set_camera_rotation(tz::vec2 cam_rot)
+	{
+		tz::trs trs = this->renderer.get_camera_transform();
+		trs.rotate = tz::quat::from_euler_angles(cam_rot.with_more(0.0f));
+		this->renderer.set_camera_transform(trs);
+	}
+
 	void scene_renderer::update(float delta)
 	{
 		TZ_PROFZONE("scene renderer - update", 0xFFFF4488);
@@ -992,6 +1004,25 @@ namespace game::render
 		game::messaging::scene_insert_message
 		({
 			.operation = game::messaging::scene_operation::renderer_set_camera_position,
+			.value = tz::vec2{camx, camy}
+		});
+		return 0;
+	}
+
+	int impl_rn_scene_renderer::get_camera_rotation(tz::lua::state& state)
+	{
+		tz::vec2 ret = this->renderer->get_camera_rotation();
+		state.stack_push_float(ret[0]);
+		state.stack_push_float(ret[1]);
+		return 2;
+	}
+	
+	int impl_rn_scene_renderer::set_camera_rotation(tz::lua::state& state)
+	{
+		auto [_, camx, camy] = tz::lua::parse_args<tz::lua::nil, float, float>(state);
+		game::messaging::scene_insert_message
+		({
+			.operation = game::messaging::scene_operation::renderer_set_camera_rotation,
 			.value = tz::vec2{camx, camy}
 		});
 		return 0;

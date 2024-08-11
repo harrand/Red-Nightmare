@@ -183,7 +183,7 @@ rn.spell.create_effect_on = function(uuid, spell_name)
 		sc:entity_write(uuid, "cast.location", "cast_buildup0")
 		-- stick the effect to the caster
 		rn.entity.prefabs.sticky.stick_to(effect, uuid)
-	elseif model == "bipedal" then
+	elseif model == "bipedal" or model == "humanoid" then
 		-- do left hand:
 		local effect = sc:add_entity("cast_buildup")
 		sc:entity_write(effect, "magic_type", magic_type)
@@ -214,7 +214,7 @@ rn.spell.clear_effect_on = function(uuid)
 			-- delete the buildup effect coz we're done casting.
 			sc:remove_entity(buildup0)
 		end
-	elseif model == "bipedal" then
+	elseif model == "bipedal" or model == "humanoid" then
 		local buildup0 = sc:entity_read(uuid, "cast_buildup0")
 		if buildup0 ~= nil and sc:contains_entity(buildup0) then
 			-- delete the buildup effect coz we're done casting.

@@ -63,6 +63,8 @@ namespace game::render
 		const tz::vec2& get_view_bounds() const;
 		tz::vec2 get_camera_position() const;
 		void set_camera_position(tz::vec2 cam_pos);
+		tz::vec2 get_camera_rotation() const;
+		void set_camera_rotation(tz::vec2 cam_rot);
 		void update(float delta);
 		void block();
 		void dbgui();
@@ -200,6 +202,8 @@ namespace game::render
 		scene_renderer* renderer = nullptr;
 		int get_camera_position(tz::lua::state& state);
 		int set_camera_position(tz::lua::state& state);
+		int get_camera_rotation(tz::lua::state& state);
+		int set_camera_rotation(tz::lua::state& state);
 
 		int get_clear_colour(tz::lua::state& state);
 		int set_clear_colour(tz::lua::state& state);
@@ -245,6 +249,8 @@ namespace game::render
 		LUA_CLASS_METHODS_BEGIN
 			LUA_METHOD(impl_rn_scene_renderer, get_camera_position)
 			LUA_METHOD(impl_rn_scene_renderer, set_camera_position)
+			LUA_METHOD(impl_rn_scene_renderer, get_camera_rotation)
+			LUA_METHOD(impl_rn_scene_renderer, set_camera_rotation)
 
 			LUA_METHOD(impl_rn_scene_renderer, get_clear_colour)
 			LUA_METHOD(impl_rn_scene_renderer, set_clear_colour)

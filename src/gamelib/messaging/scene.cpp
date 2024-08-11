@@ -379,6 +379,13 @@ namespace game::messaging
 				sc->get_renderer().set_camera_position(cam_pos);
 			}
 			break;
+			case scene_operation::renderer_set_camera_rotation:
+			{
+				TZ_PROFZONE("renderer set camera rotation", 0xFF99CC44);
+				tz::vec2 cam_rot = std::any_cast<tz::vec2>(msg.value);
+				sc->get_renderer().set_camera_rotation(cam_rot);
+			}
+			break;
 			case scene_operation::renderer_set_clear_colour:
 			{
 				TZ_PROFZONE("renderer set clear colour", 0xFF99CC44);
