@@ -243,6 +243,14 @@ namespace game::render
 		this->text_renderer.update();
 		const tz::vec2ui mondims = tz::wsi::get_monitors().front().dimensions;
 		const float aspect_ratio = static_cast<float>(mondims[0]) / mondims[1];
+		this->renderer.camera_perspective
+		({
+			.aspect_ratio = aspect_ratio,
+			.fov = 1.5701f,
+			.near_clip = 0.01f,
+			.far_clip = 1000.0f
+		});
+		/*
 		this->renderer.camera_orthographic
 		({
 			.left = -this->view_bounds[0],
@@ -253,6 +261,7 @@ namespace game::render
 			.far_plane = depth_max
 
 		});
+		*/
 
 		this->deferred_shading_pass.handle_resize(this->renderer.get_render_pass());
 		this->pixelate_pass.handle_resize(this->renderer.get_render_pass());

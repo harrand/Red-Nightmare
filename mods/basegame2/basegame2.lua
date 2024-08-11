@@ -7,6 +7,7 @@ rn.mods.basegame2 =
 	buffs = {},
 	items = {}
 }
-require("basegame2/prefabs/quad")
+require("basegame2/prefabs/model_quad")
+require("basegame2/prefabs/model_humanoid")
 require("basegame2/levels/empty")
 require("basegame2/levels/startscreen2")

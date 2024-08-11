@@ -1,4 +1,4 @@
-rn.mods.basegame2.prefabs.quad =
+rn.mods.basegame2.prefabs.model_quad =
 {
 	static_init = function()
 		rn.renderer():add_model("quad", "basegame/res/models/plane.glb")

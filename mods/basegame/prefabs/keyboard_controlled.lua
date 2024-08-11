@@ -48,7 +48,7 @@ rn.mods.basegame.prefabs.keyboard_controlled =
 		local moved = false
 
 		local xdiff = 0
-		local ydiff = 0
+		local zdiff = 0
 		if control_enabled and control_left ~= nil and inp:is_key_down(control_left) then
 			xdiff = -1
 			moved = true
@@ -58,16 +58,16 @@ rn.mods.basegame.prefabs.keyboard_controlled =
 			moved = true
 		end
 		if control_enabled and control_forward ~= nil and inp:is_key_down(control_forward) then
-			ydiff = 1
+			zdiff = -1
 			moved = true
 		end
 		if control_enabled and control_backward ~= nil and inp:is_key_down(control_backward) then
-			ydiff = -1
+			zdiff = 1
 			moved = true
 		end
 		
 		if moved then
-			rn.entity.on_move(uuid, xdiff, ydiff, 0.0, delta_seconds)
+			rn.entity.on_move(uuid, xdiff, 0.0, zdiff, delta_seconds)
 		end
 	end,
 	bind_spell = function(uuid, action_id, spell_name)
