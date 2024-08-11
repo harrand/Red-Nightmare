@@ -12,7 +12,7 @@ rn.mods.basegame.prefabs.bipedal =
 	description = "Entity is a 3D bipedal animated humanoid",
 	left_hand = 20,
 	right_hand = 24,
-	default_movement_speed = 6,
+	default_movement_speed = 7,
 	static_init = function()
 		rn.renderer():add_model("bipedal", "basegame/res/models/bipedal.glb")
 	end,
@@ -50,7 +50,7 @@ rn.mods.basegame.prefabs.bipedal =
 	on_move = function(uuid, xdiff, ydiff, zdiff)
 		local sc = rn.current_scene()
 		local currently_playing = sc:entity_get_playing_animation(uuid)
-		local movement_anim_multiplier = 0.9 * rn.entity.prefabs.combat_stats.get_movement_speed(uuid) / rn.entity.prefabs.bipedal.default_movement_speed
+		local movement_anim_multiplier = 1.1 * rn.entity.prefabs.combat_stats.get_movement_speed(uuid) / rn.entity.prefabs.bipedal.default_movement_speed
 		local anim = rn.entity.prefabs.bipedal.get_run_animation(uuid)
 		if currently_playing ~= anim then
 			rn.current_scene():entity_play_animation(uuid, anim, false, movement_anim_multiplier)
