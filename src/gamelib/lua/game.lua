@@ -55,8 +55,9 @@ rn.camera_follow_player = function(delta_seconds)
 	if player_uuid == nil or not rn.current_scene():contains_entity(player_uuid) then return end
 
 	local camx, camy = rn.renderer():get_camera_position()
-	local px, py = rn.entity.prefabs.sprite.get_position(player_uuid)
-	rn.renderer():set_camera_position(px, py)
+	local px, py, pz = rn.current_scene():entity_get_global_position(player_uuid, rn.entity.prefabs.bipedal.head)
+	rn.renderer():set_camera_position(px, py, pz + 10.0)
+	rn.renderer():set_camera_rotation(0.3, 0, 0)
 end
 
 -- display_player_spell_slots is good at making the text if it isnt already there, but very bad at updating the text.

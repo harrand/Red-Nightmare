@@ -88,7 +88,7 @@ namespace game::render
 			this->light_uid_to_index[i] = std::numeric_limits<std::size_t>::max();
 		}
 
-		this->set_camera_position({0.0f, 0.0f});
+		this->set_camera_position({0.0f, 0.0f, 0.0f});
 	}
 
 	void scene_renderer::add_model(std::string model_name, tz::io::gltf model)
@@ -226,12 +226,10 @@ namespace game::render
 
 	constexpr float depth_max = 10.0f;
 
-	void scene_renderer::set_camera_position(tz::vec2 cam_pos)
+	void scene_renderer::set_camera_position(tz::vec3 cam_pos)
 	{
 		tz::trs trs = this->renderer.get_camera_transform();
-		trs.translate[0] = cam_pos[0];
-		trs.translate[1] = cam_pos[1];
-		trs.translate[2] = depth_max / 2.0f;
+		trs.translate = cam_pos;
 		this->renderer.set_camera_transform(trs);
 	}
 
@@ -1000,11 +998,11 @@ namespace game::render
 	
 	int impl_rn_scene_renderer::set_camera_position(tz::lua::state& state)
 	{
-		auto [_, camx, camy] = tz::lua::parse_args<tz::lua::nil, float, float>(state);
+		auto [_, camx, camy, camz] = tz::lua::parse_args<tz::lua::nil, float, float, float>(state);
 		game::messaging::scene_insert_message
 		({
 			.operation = game::messaging::scene_operation::renderer_set_camera_position,
-			.value = tz::vec2{camx, camy}
+			.value = tz::vec3{camx, camy, camz}
 		});
 		return 0;
 	}

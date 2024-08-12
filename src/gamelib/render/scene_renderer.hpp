@@ -62,7 +62,7 @@ namespace game::render
 
 		const tz::vec2& get_view_bounds() const;
 		tz::vec2 get_camera_position() const;
-		void set_camera_position(tz::vec2 cam_pos);
+		void set_camera_position(tz::vec3 cam_pos);
 		tz::vec2 get_camera_rotation() const;
 		void set_camera_rotation(tz::vec2 cam_rot);
 		void update(float delta);

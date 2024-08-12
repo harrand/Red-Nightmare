@@ -375,7 +375,7 @@ namespace game::messaging
 			case scene_operation::renderer_set_camera_position:
 			{
 				TZ_PROFZONE("renderer set camera position", 0xFF99CC44);
-				tz::vec2 cam_pos = std::any_cast<tz::vec2>(msg.value);
+				tz::vec3 cam_pos = std::any_cast<tz::vec3>(msg.value);
 				sc->get_renderer().set_camera_position(cam_pos);
 			}
 			break;
