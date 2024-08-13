@@ -1,7 +1,7 @@
-local base_subobj = 9
-local chest_subobj = 3
-local helm_subobj = 5
-local legs_subobj = 7
+local base_subobj = 3
+local chest_subobj = 1
+local helm_subobj = 1
+local legs_subobj = 1
 
 -- new model:
 -- 11-12 left shoulder. 13 elbow. 14 hand
@@ -10,11 +10,11 @@ local legs_subobj = 7
 rn.mods.basegame2.prefabs.model_humanoid =
 {
 	description = "Entity is a 3D model_humanoid animated humanoid",
-	left_hand = 20,
-	right_hand = 24,
-	default_movement_speed = 7,
+	left_hand = 14,
+	right_hand = 18,
+	default_movement_speed = 10,
 	static_init = function()
-		rn.renderer():add_model("humanoid", "basegame/res/models/bipedal.glb")
+		rn.renderer():add_model("humanoid", "basegame2/res/models/humanoid.glb")
 	end,
 	pre_instantiate = function(uuid)
 		return "humanoid"

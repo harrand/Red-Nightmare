@@ -50,7 +50,7 @@ void main()
 			colour = unpixelised_colour;
 		}
 	}
-	precipitation::do(uv, colour, precipitation.data, zoom.value, time.seconds);
+	precipitation::do(uv, colour, precipitation.data, 0.3f, time.seconds);
 	colour.xyz *= zoom.global_colour_multiplier;
 	out::albedo = colour;
 }

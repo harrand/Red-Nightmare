@@ -190,7 +190,7 @@ rn.spell.create_effect_on = function(uuid, spell_name)
 		sc:entity_write(uuid, "cast_buildup0", effect)
 		sc:entity_write(uuid, "cast.location", "cast_buildup0")
 		-- stick the effect to the caster's left hand
-		rn.entity.prefabs.sticky.stick_to_subobject(effect, uuid, rn.entity.prefabs.bipedal.right_hand)
+		rn.entity.prefabs.sticky.stick_to_subobject(effect, uuid, rn.entity.prefabs.model_humanoid.right_hand)
 		-- do right hand if spell is marked as two-handed:
 		if spelldata.two_handed == true then
 			local effect2 = sc:add_entity("cast_buildup")
@@ -198,7 +198,7 @@ rn.spell.create_effect_on = function(uuid, spell_name)
 			sc:entity_write(uuid, "cast_buildup1", effect2)
 			sc:entity_write(uuid, "cast.location", "cast_buildup0")
 			-- stick the effect to the caster's right hand
-			rn.entity.prefabs.sticky.stick_to_subobject(effect2, uuid, rn.entity.prefabs.bipedal.left_hand)
+			rn.entity.prefabs.sticky.stick_to_subobject(effect2, uuid, rn.entity.prefabs.model_humanoid.left_hand)
 		end
 	else
 		tz.error(false, "No support for model " .. tostring(model) .. " having cast effects.")

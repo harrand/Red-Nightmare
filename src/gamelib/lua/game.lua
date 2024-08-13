@@ -56,7 +56,7 @@ rn.camera_follow_player = function(delta_seconds)
 
 	local camx, camy = rn.renderer():get_camera_position()
 	local px, py, pz = rn.current_scene():entity_get_global_position(player_uuid, rn.entity.prefabs.bipedal.head)
-	rn.renderer():set_camera_position(px, py + 18, pz + 15)
+	rn.renderer():set_camera_position(px, py + 12, pz + 15)
 	rn.renderer():set_camera_rotation(-0.8, 0, 0)
 end
 

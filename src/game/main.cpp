@@ -12,7 +12,7 @@ int main()
 	tz::initialise
 	({
 		.name = "Red Nightmare",
-		.version = {5u, 0u, 0u, tz::version_type::alpha}
+		.version = {4u, 0u, 0u, tz::version_type::alpha}
 	});
 	{
 		tz::dbgui::game_menu().add_callback(game::dbgui);
