@@ -309,7 +309,6 @@ rn.mods.basegame2.prefabs.model_humanoid =
 		-- face in a directional vector. useful for calculating casting directions.
 		rn.current_scene():entity_write(uuid, "facedirx", dx)
 		rn.current_scene():entity_write(uuid, "facediry", dy)
-		local tilt_factor = 0.125
 		if math.abs(dx) > math.abs(dy) then
 			local signx = math.abs(dx)/dx
 			-- if face right, rx and rz is positive
@@ -317,7 +316,7 @@ rn.mods.basegame2.prefabs.model_humanoid =
 			rn.entity.prefabs.model_humanoid.set_rotation(uuid, 0.0, -signx * math.pi / 2.0, 0.0)
 		else
 			local signy = math.abs(dy)/dy
-			rn.entity.prefabs.model_humanoid.set_rotation(uuid, 0.0, math.max(-signy, 0.0) * math.pi, math.pi * signy * tilt_factor)
+			rn.entity.prefabs.model_humanoid.set_rotation(uuid, 0.0, math.max(-signy, 0.0) * math.pi, 0)
 		end
 	end,
 	set_scale = function(uuid, sx, sy, sz)
