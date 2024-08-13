@@ -1,7 +1,4 @@
 local base_subobj = 3
-local chest_subobj = 1
-local helm_subobj = 1
-local legs_subobj = 1
 
 -- new model:
 -- 11-12 left shoulder. 13 elbow. 14 hand
@@ -23,14 +20,8 @@ rn.mods.basegame2.prefabs.model_humanoid =
 		local sc = rn.current_scene()
 		sc:entity_write(uuid, ".boundary_scale", 1.0)
 		sc:entity_set_subobject_pixelated(uuid, base_subobj, true)
-		sc:entity_set_subobject_pixelated(uuid, helm_subobj, true)
-		sc:entity_set_subobject_pixelated(uuid, chest_subobj, true)
-		sc:entity_set_subobject_pixelated(uuid, legs_subobj, true)
 		rn.entity.prefabs.combat_stats.set_base_movement_speed(uuid, rn.entity.prefabs.model_humanoid.default_movement_speed)
 		rn.entity.prefabs.model_humanoid.set_visible(uuid, true)
-		--rn.entity.prefabs.model_humanoid.set_subobject_visible(uuid, helm_subobj, true)
-		--rn.entity.prefabs.model_humanoid.set_subobject_visible(uuid, chest_subobj, true)
-		--rn.entity.prefabs.model_humanoid.set_subobject_visible(uuid, legs_subobj, true)
 		rn.entity.prefabs.model_humanoid.face_direction(uuid, 0.0, 1.0)
 	end,
 	update = function(uuid, delta_seconds)
@@ -181,18 +172,12 @@ rn.mods.basegame2.prefabs.model_humanoid =
 	item_slot_to_subobject = function(itemslot)
 		if itemslot == rn.item.slot.none then
 			return nil
-		elseif itemslot == rn.item.slot.helm then
-			return helm_subobj
-		elseif itemslot == rn.item.slot.chest then
-			return chest_subobj
-		elseif itemslot == rn.item.slot.legs then
-			return legs_subobj
 		elseif itemslot == rn.item.slot.left_hand then
 			return rn.mods.basegame2.prefabs.model_humanoid.left_hand
 		elseif itemslot == rn.item.slot.right_hand then
 			return rn.mods.basegame2.prefabs.model_humanoid.right_hand
 		else
-			tz.assert(false, "Unknown item slot " .. itemslot)
+			tz.assert(false, "Unsupported item slot " .. itemslot)
 		end
 	end,
 	play_animation = function(uuid, animation_name, loop, time_warp)
@@ -232,44 +217,6 @@ rn.mods.basegame2.prefabs.model_humanoid =
 	get_colour = function(uuid)
 		return rn.current_scene():entity_get_subobject_colour(uuid, base_subobj)
 	end,
-
-	set_chest_visible = function(uuid, visible)
-		rn.entity.prefabs.model_humanoid.set_subobject_visible(uuid, chest_subobj, visible)
-	end,
-	set_chest_texture = function(uuid, texname)
-		rn.entity.prefabs.model_humanoid.set_subobject_texture(uuid, chest_subobj, texname)
-	end,
-	get_chest_colour = function(uuid)
-		return rn.current_scene():entity_get_subobject_colour(uuid, chest_subobj)
-	end,
-	set_chest_colour = function(uuid, r, g, b)
-		rn.entity.prefabs.model_humanoid.set_subobject_colour(uuid, chest_subobj, r, g, b)
-	end,
-	set_helm_visible = function(uuid, visible)
-		rn.entity.prefabs.model_humanoid.set_subobject_visible(uuid, helm_subobj, visible)
-	end,
-	set_helm_texture = function(uuid, texname)
-		rn.entity.prefabs.model_humanoid.set_subobject_texture(uuid, helm_subobj, texname)
-	end,
-	get_helm_colour = function(uuid)
-		return rn.current_scene():entity_get_subobject_colour(uuid, helm_subobj)
-	end,
-	set_helm_colour = function(uuid, r, g, b)
-		rn.entity.prefabs.model_humanoid.set_subobject_colour(uuid, helm_subobj, r, g, b)
-	end,
-	set_legs_visible = function(uuid, visible)
-		rn.entity.prefabs.model_humanoid.set_subobject_visible(uuid, legs_subobj, visible)
-	end,
-	set_legs_texture = function(uuid, texname)
-		rn.entity.prefabs.model_humanoid.set_subobject_texture(uuid, legs_subobj, texname)
-	end,
-	get_legs_colour = function(uuid)
-		return rn.current_scene():entity_get_subobject_colour(uuid, legs_subobj)
-	end,
-	set_legs_colour = function(uuid, r, g, b)
-		rn.entity.prefabs.model_humanoid.set_subobject_colour(uuid, legs_subobj, r, g, b)
-	end,
-
 	set_position = function(uuid, x, y)
 		rn.entity.prefabs.sprite.set_position(uuid, x, y)
 	end,
