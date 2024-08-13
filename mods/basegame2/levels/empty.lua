@@ -5,7 +5,7 @@ rn.mods.basegame2.levels.empty =
 		rn.entity.prefabs.model_humanoid.set_texture(p, "skin.man")
 		rn.level.data_write("player", p)
 
-		rn.item.drop_at(-10, 0, "mythril_platebody", "mythril_helm", "mythril_platelegs", "mythril_small_shield", "mythril_mace")
+		rn.item.drop_at(-10, 0, "mythril_small_shield", "mythril_mace")
 		rn.util.set_raining(0.4)
 
 		local bg = rn.current_scene():add_entity("sprite")
