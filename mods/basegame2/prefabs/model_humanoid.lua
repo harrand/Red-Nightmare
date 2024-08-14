@@ -256,7 +256,17 @@ rn.mods.basegame2.prefabs.model_humanoid =
 		-- face in a directional vector. useful for calculating casting directions.
 		rn.current_scene():entity_write(uuid, "facedirx", dx)
 		rn.current_scene():entity_write(uuid, "facediry", dy)
-		rn.entity.prefabs.model_humanoid.set_rotation(uuid, 0.0, math.atan(dy, dx) - 1.5701, 0.0)
+		local old_angle = rn.current_scene():entity_read(uuid, "faceangle")
+		local angle = math.atan(dy, dx) - 1.5701
+
+		if old_angle ~= nil then
+			local lerpval = 0.15
+			local delta = angle - old_angle
+			delta = (delta + math.pi) % (2 * math.pi) - math.pi
+			angle = old_angle + lerpval * (delta)
+		end
+		rn.entity.prefabs.model_humanoid.set_rotation(uuid, 0.0, angle, 0.0)
+		rn.current_scene():entity_write(uuid, "faceangle", angle)
 	end,
 	set_scale = function(uuid, sx, sy, sz)
 		rn.current_scene():entity_set_local_scale(uuid, sx, sy, sz)
