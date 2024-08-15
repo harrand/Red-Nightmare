@@ -64,16 +64,7 @@ float distort_distance(uint shape, float dst)
 float diffuse(point_light_data l, vec3 normal, vec3 position, bool is_2d)
 {
 	vec3 lightDir = l.position - position;
-	if(is_2d)
-	{
-		lightDir.z = normal.z;
-	}
-	else
-	{
-		// ignore far z distances for 3d.
-		lightDir.z = clamp(lightDir.z, -1.0, 1.0);
-	}
-	float distance = length(lightDir.xy) + 2.0f;
+	float distance = length(lightDir) + 2.0f;
 	lightDir = normalize(lightDir);
 	distance = distort_distance(l.shape, distance);
 
@@ -98,18 +89,8 @@ float specular(point_light_data l, vec3 normal, vec3 position, bool is_2d)
 	{
 		return 0.0f;
 	}
-	const vec3 view_dir = vec3(0.0f, 0.0f, 1.0f);
 	vec3 light_dir = l.position - position;
-	if(is_2d)
-	{
-		light_dir.z = normal.z;
-	}
-	else
-	{
-		// ignore far z distances for 3d.
-		light_dir.z = clamp(light_dir.z, -1.0, 1.0);
-	}
-	float distance = length(light_dir.xy) + 0.1f;
+	float distance = length(light_dir) + 0.1f;
 	light_dir = normalize(light_dir);
 
 	float specular = pow(max(dot(normal, light_dir), 0.0), 8);
@@ -151,7 +132,7 @@ void main()
 vec3 blur(vec2 uv)
 {
 	// basic box blur
-	const float blur_radius = 6.0f;
+	const float blur_radius = 5.0f;
 	vec2 tex_offset = 1.0f / textureSize(res::textures[3], 0);	
 	vec3 result = vec3(0.0f);
 
@@ -160,11 +141,11 @@ vec3 blur(vec2 uv)
 	{
         for(float y = -blur_radius; y <= blur_radius; y++) {
             vec2 offset = vec2(x, y) * tex_offset;
-            result += texture(res::textures[3], uv + offset).rgb;
+            result += texture(res::textures[3], uv + offset).rgb * (1.0 - abs(x / blur_radius));
             count += 1.0;
         }
     }
 
     result /= count; // average the color values	
-	return result;
+	return result * 8;
 }
